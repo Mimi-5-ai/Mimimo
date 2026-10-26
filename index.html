@@ -221,12 +221,25 @@
     .viewer-title { margin: 0; font-size: clamp(20px, 3vw, 27px); }
     .iframe-wrap { min-height: 520px; overflow: hidden; border: 1px solid var(--line); border-radius: 15px; background: #fff; }
     iframe { display: block; width: 100%; height: min(78vh, 810px); min-height: 520px; border: 0; background: #fff; }
-    .viewer-controls { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-top: 17px; }
-    .viewer-controls-group, .rating { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
-    .rating-label { color: var(--muted); font-size: 14px; }
-    .star { width: 35px; height: 35px; padding: 0; border: 0; border-radius: 50%; color: #94a3b8; background: transparent; font-size: 23px; }
-    .star.active, .star:hover { color: #ec9c17; background: #fff5d9; }
-    .viewer-tip { margin: 18px 0 0; color: var(--muted); font-size: 13px; }
+
+    body.reading-mode .site-header,
+    body.reading-mode .brand,
+    body.reading-mode #themeToggle { display: none; }
+    body.reading-mode main.shell { width: 100%; max-width: none; margin: 0; }
+    body.reading-mode main { padding: 0; }
+    body.reading-mode .hero, body.reading-mode .breadcrumb,
+    body.reading-mode .info-grid, body.reading-mode .site-footer { display: none; }
+    body.reading-mode #viewerPanel .panel-card { padding: 0; border: 0; border-radius: 0; box-shadow: none; }
+    body.reading-mode .viewer-top { min-height: 42px; justify-content: space-between; gap: 8px; margin: 0; padding: 4px 8px; background: transparent; }
+    body.reading-mode .viewer-title { display: none; }
+    body.reading-mode #backToChapters,
+    body.reading-mode #completeChapter,
+    body.reading-mode #chapterThemeToggle { min-height: 32px; padding: 4px 10px; border-radius: 8px; font-size: 13px; }
+    body.reading-mode #backToChapters { order: 0; }
+    body.reading-mode #completeChapter { order: 1; }
+    body.reading-mode #chapterThemeToggle { order: 2; }
+    body.reading-mode .iframe-wrap { height: calc(100dvh - 42px); min-height: 240px; border: 0; border-radius: 0; background: transparent; }
+    body.reading-mode iframe { height: 100%; min-height: 0; }
 
     .info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 27px; }
     .info-card { padding: 17px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
@@ -260,20 +273,9 @@
       .subject-head, .viewer-top { align-items: stretch; flex-direction: column; }
       .subject-progress { align-self: flex-start; }
       .info-grid { grid-template-columns: 1fr; }
-      #viewerPanel .panel-card { padding: 12px; }
-      #viewerPanel .breadcrumb { margin-bottom: 10px; }
-      #viewerPanel .viewer-top { gap: 10px; margin-bottom: 10px; }
-      #viewerPanel .iframe-wrap { min-height: 70svh; border: 0; border-radius: 10px; }
-      #viewerPanel iframe { height: 70svh; min-height: 420px; }
-      body.reading-mode main.shell { width: 100%; margin: 0; }
-      body.reading-mode main { padding: 12px 0 28px; }
-      body.reading-mode .hero, body.reading-mode #viewerPanel .breadcrumb { display: none; }
-      body.reading-mode #viewerPanel .panel-card { padding: 12px 10px; border-right: 0; border-left: 0; border-radius: 0; }
-      body.reading-mode #viewerPanel .iframe-wrap { width: calc(100% + 20px); margin-inline: -10px; border-radius: 0; }
-      body.reading-mode #viewerPanel iframe { height: calc(100svh - 250px); min-height: min(420px, calc(100svh - 250px)); }
-      body.reading-mode .info-grid, body.reading-mode .site-footer { display: none; }
-      .viewer-controls { align-items: stretch; flex-direction: column; }
-      .viewer-controls-group { justify-content: space-between; }
+      body.reading-mode .viewer-top { align-items: center; flex-direction: row; }
+      body.reading-mode #viewerPanel .iframe-wrap { height: calc(100svh - 42px); min-height: 240px; }
+      body.reading-mode #viewerPanel iframe { height: 100%; min-height: 0; }
     }
     @media (max-width: 390px) {
       .shell { width: min(100% - 20px, 1120px); }
@@ -346,29 +348,15 @@
 
     <section id="viewerPanel" class="panel" hidden aria-labelledby="viewerTitle">
       <div class="panel-card">
-        <nav class="breadcrumb" aria-label="مسار الصفحة">
-          <button type="button" data-action="home">الرئيسية</button><span aria-hidden="true">/</span>
-          <button id="backToSubject" type="button">المادة</button><span aria-hidden="true">/</span><span id="breadcrumbChapter">الفصل</span>
-        </nav>
         <div class="viewer-top">
           <h2 id="viewerTitle" class="viewer-title">عنوان الفصل</h2>
-          <button id="backToChapters" class="button-ghost" type="button">← كل الفصول</button>
+          <button id="backToChapters" class="button-ghost" type="button">رجوع</button>
+          <button id="completeChapter" class="button-primary" type="button" aria-pressed="false">اكتمل</button>
+          <button id="chapterThemeToggle" class="icon-button" type="button" aria-label="تفعيل الوضع الليلي" title="الوضع الليلي">☾</button>
         </div>
         <div class="iframe-wrap">
           <iframe id="chapterFrame" title="محتوى الفصل" loading="lazy"></iframe>
         </div>
-        <div class="viewer-controls">
-          <div class="viewer-controls-group">
-            <button id="previousChapter" class="button-ghost" type="button">الفصل السابق →</button>
-            <button id="completeChapter" class="button-primary" type="button">✓ علّميه كمكتمل</button>
-            <button id="nextChapter" class="button-ghost" type="button">← الفصل التالي</button>
-          </div>
-          <div class="rating" aria-label="تقييم الفصل">
-            <span class="rating-label">هل كان مفيدًا؟</span>
-            <span id="ratingStars" role="group" aria-label="قيّمي هذا الفصل"></span>
-          </div>
-        </div>
-        <p class="viewer-tip">يُحفظ الإنجاز والتقييم في المتصفح على هذا الجهاز فقط، ولا يتم إرسال أي معلومات للخارج.</p>
       </div>
     </section>
 
@@ -414,8 +402,6 @@
     </div>
   </dialog>
 
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
-
   <script>
 
     const subjects = {
@@ -458,15 +444,11 @@
 
     const STORAGE_KEYS = {
       progress: "interactive-summaries-progress-v1",
-      ratings: "interactive-summaries-ratings-v1",
       theme: "interactive-summaries-theme-v1"
     };
 
     const state = { subjectKey: null, chapterIndex: null };
     let progress = readStorage(STORAGE_KEYS.progress, {});
-    let ratings = readStorage(STORAGE_KEYS.ratings, {});
-    let toastTimer;
-
     const $ = (selector) => document.querySelector(selector);
     const allChapters = () => Object.entries(subjects).flatMap(([key, subject]) => subject.chapters.map((chapter, index) => ({ key, subject, chapter, index })));
     const chapterId = (key, index) => `${key}:${index}`;
@@ -483,14 +465,6 @@
     }
     function percentage(done, total) { return total ? Math.round((done / total) * 100) : 0; }
     function escapeHtml(value) { return String(value).replace(/[&<>'"]/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[character]); }
-
-    function showToast(message) {
-      const toast = $("#toast");
-      toast.textContent = message;
-      toast.classList.add("show");
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => toast.classList.remove("show"), 3000);
-    }
 
     function updateStats() {
       const total = allChapters().length;
@@ -540,17 +514,12 @@
       if (!subject || state.chapterIndex === null) return;
       const [chapterName, fileName] = subject.chapters[state.chapterIndex];
       const id = chapterId(state.subjectKey, state.chapterIndex);
-      $("#backToSubject").textContent = subject.name;
-      $("#breadcrumbChapter").textContent = chapterName;
       $("#viewerTitle").textContent = `${subject.name} — ${chapterName}`;
       $("#chapterFrame").title = `ملخص ${chapterName} من مادة ${subject.name}`;
       $("#chapterFrame").src = `${subject.folder}/${encodeURIComponent(fileName)}`;
-      $("#completeChapter").textContent = isCompleted(state.subjectKey, state.chapterIndex) ? "↶ إلغاء علامة الإكمال" : "✓ علّميه كمكتمل";
-      $("#previousChapter").disabled = state.chapterIndex === 0;
-      $("#nextChapter").disabled = state.chapterIndex === subject.chapters.length - 1;
-      $("#previousChapter").style.opacity = state.chapterIndex === 0 ? ".5" : "1";
-      $("#nextChapter").style.opacity = state.chapterIndex === subject.chapters.length - 1 ? ".5" : "1";
-      renderRating(id);
+      const completed = isCompleted(state.subjectKey, state.chapterIndex);
+      $("#completeChapter").textContent = completed ? "مكتمل" : "اكتمل";
+      $("#completeChapter").setAttribute("aria-pressed", completed);
     }
 
     function adaptChapterForMobile() {
@@ -565,7 +534,10 @@
       }
       viewport.content = "width=device-width, initial-scale=1";
 
-      if (chapterDocument.getElementById("mobile-reading-styles")) return;
+      if (chapterDocument.getElementById("mobile-reading-styles")) {
+        setChapterTheme(document.body.dataset.theme);
+        return;
+      }
       const mobileStyles = chapterDocument.createElement("style");
       mobileStyles.id = "mobile-reading-styles";
       mobileStyles.textContent = `
@@ -588,19 +560,43 @@
           img, svg, video, canvas { max-width: 100% !important; height: auto; }
           .flashcard { min-height: 170px !important; padding: 16px !important; }
         }
+        :root[data-reader-theme="dark"] {
+          color-scheme: dark;
+          --bg: #101a2d !important;
+          --card: #172238 !important;
+          --ink: #edf4ff !important;
+          --muted: #b3c0d4 !important;
+          --line: #35445d !important;
+          --accent: #8ca7ff !important;
+          --accent-dark: #c9d8ff !important;
+          --accent2: #263754 !important;
+          --good: #7bdcc8 !important;
+          --good-bg: #173d2b !important;
+          --bad: #ff9999 !important;
+          --bad-bg: #482629 !important;
+          --warn: #ffd17c !important;
+          --warn-bg: #493a20 !important;
+        }
+        :root[data-reader-theme="dark"] body,
+        :root[data-reader-theme="dark"] details,
+        :root[data-reader-theme="dark"] .qbox,
+        :root[data-reader-theme="dark"] .option,
+        :root[data-reader-theme="dark"] .flashcard,
+        :root[data-reader-theme="dark"] .flashcard .answer,
+        :root[data-reader-theme="dark"] table { color: var(--ink) !important; background: var(--card) !important; }
+        :root[data-reader-theme="dark"] header { background: #111a30 !important; }
+        :root[data-reader-theme="dark"] summary,
+        :root[data-reader-theme="dark"] th { color: var(--ink) !important; background: #202e47 !important; }
       `;
       chapterDocument.head.append(mobileStyles);
+      setChapterTheme(document.body.dataset.theme);
     }
 
-    function renderRating(id) {
-      const rating = ratings[id] || 0;
-      $("#ratingStars").innerHTML = [1, 2, 3, 4, 5].map(value => `<button class="star ${value <= rating ? "active" : ""}" type="button" data-rating="${value}" aria-label="${value} من 5" aria-pressed="${value === rating}">★</button>`).join("");
-      document.querySelectorAll("[data-rating]").forEach(button => button.addEventListener("click", () => {
-        ratings[id] = Number(button.dataset.rating);
-        saveStorage(STORAGE_KEYS.ratings, ratings);
-        renderRating(id);
-        showToast("شكرًا لتقييمك! حُفظ على جهازك.");
-      }));
+    function setChapterTheme(theme) {
+      const chapterDocument = $("#chapterFrame").contentDocument;
+      if (chapterDocument?.documentElement) {
+        chapterDocument.documentElement.dataset.readerTheme = theme;
+      }
     }
 
     function showPanel(panelName) {
@@ -639,14 +635,14 @@
       const id = chapterId(state.subjectKey, state.chapterIndex);
       if (progress[id]) {
         delete progress[id];
-        showToast("أزيلت علامة الإكمال من هذا الفصل.");
       } else {
         progress[id] = { completedAt: new Date().toISOString() };
-        showToast("أحسنتِ! حُفظ الفصل كمكتمل.");
       }
       saveStorage(STORAGE_KEYS.progress, progress);
       updateStats();
-      renderViewer();
+      const completed = isCompleted(state.subjectKey, state.chapterIndex);
+      $("#completeChapter").textContent = completed ? "مكتمل" : "اكتمل";
+      $("#completeChapter").setAttribute("aria-pressed", completed);
     }
     function applyHash() {
       const parts = location.hash.slice(1).split("/");
@@ -659,9 +655,13 @@
       document.body.dataset.theme = theme;
       localStorage.setItem(STORAGE_KEYS.theme, theme);
       const dark = theme === "dark";
-      $("#themeToggle").textContent = dark ? "☀" : "☾";
-      $("#themeToggle").setAttribute("aria-label", dark ? "تفعيل الوضع الفاتح" : "تفعيل الوضع الليلي");
-      $("#themeToggle").title = dark ? "الوضع الفاتح" : "الوضع الليلي";
+      ["#themeToggle", "#chapterThemeToggle"].forEach(selector => {
+        const button = $(selector);
+        button.textContent = dark ? "☀" : "☾";
+        button.setAttribute("aria-label", dark ? "تفعيل الوضع الفاتح" : "تفعيل الوضع الليلي");
+        button.title = dark ? "الوضع الفاتح" : "الوضع الليلي";
+      });
+      setChapterTheme(theme);
     }
     function openModal(id) { const modal = document.getElementById(id); if (modal && !modal.open) modal.showModal(); }
     document.addEventListener("click", event => {
@@ -672,13 +672,12 @@
       if (modal) openModal(modal);
       if (event.target.closest("[data-close-modal]")) event.target.closest("dialog").close();
     });
-    $("#backToSubject").addEventListener("click", () => showSubject(state.subjectKey));
     $("#backToChapters").addEventListener("click", () => showSubject(state.subjectKey));
     $("#chapterFrame").addEventListener("load", adaptChapterForMobile);
     $("#completeChapter").addEventListener("click", toggleCompletion);
-    $("#previousChapter").addEventListener("click", () => { if (state.chapterIndex > 0) openChapter(state.chapterIndex - 1); });
-    $("#nextChapter").addEventListener("click", () => { if (state.chapterIndex < subjects[state.subjectKey].chapters.length - 1) openChapter(state.chapterIndex + 1); });
-    $("#themeToggle").addEventListener("click", () => setTheme(document.body.dataset.theme === "dark" ? "light" : "dark"));
+    ["#themeToggle", "#chapterThemeToggle"].forEach(selector => {
+      $(selector).addEventListener("click", () => setTheme(document.body.dataset.theme === "dark" ? "light" : "dark"));
+    });
     window.addEventListener("hashchange", applyHash);
 
     $("#lastUpdated").textContent = new Intl.DateTimeFormat("ar-SA", { year: "numeric", month: "long", day: "numeric" }).format(new Date());
