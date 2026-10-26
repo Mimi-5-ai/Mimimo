@@ -535,7 +535,6 @@
       viewport.content = "width=device-width, initial-scale=1";
 
       if (chapterDocument.getElementById("mobile-reading-styles")) {
-        setChapterTheme(document.body.dataset.theme);
         return;
       }
       const mobileStyles = chapterDocument.createElement("style");
@@ -560,55 +559,8 @@
           img, svg, video, canvas { max-width: 100% !important; height: auto; }
           .flashcard { min-height: 170px !important; padding: 16px !important; }
         }
-        :root[data-reader-theme="dark"] {
-          color-scheme: dark;
-          --bg: #101a2d !important;
-          --card: #172238 !important;
-          --ink: #edf4ff !important;
-          --muted: #b3c0d4 !important;
-          --line: #35445d !important;
-          --accent: #8ca7ff !important;
-          --accent-dark: #c9d8ff !important;
-          --accent2: #263754 !important;
-          --good: #7bdcc8 !important;
-          --good-bg: #173d2b !important;
-          --bad: #ff9999 !important;
-          --bad-bg: #482629 !important;
-          --warn: #ffd17c !important;
-          --warn-bg: #493a20 !important;
-        }
-        :root[data-reader-theme="dark"] body,
-        :root[data-reader-theme="dark"] details,
-        :root[data-reader-theme="dark"] .qbox,
-        :root[data-reader-theme="dark"] .option,
-        :root[data-reader-theme="dark"] .flashcard,
-        :root[data-reader-theme="dark"] .flashcard .answer,
-        :root[data-reader-theme="dark"] table { color: var(--ink) !important; background: var(--card) !important; }
-        :root[data-reader-theme="dark"] header { background: #111a30 !important; }
-        :root[data-reader-theme="dark"] summary,
-        :root[data-reader-theme="dark"] th { color: var(--ink) !important; background: #202e47 !important; }
-        :root[data-reader-theme="dark"] a,
-        :root[data-reader-theme="dark"] h2,
-        :root[data-reader-theme="dark"] h3,
-        :root[data-reader-theme="dark"] .score,
-        :root[data-reader-theme="dark"] .tag { color: var(--accent-dark) !important; }
-        :root[data-reader-theme="dark"] .tag { background: var(--accent2) !important; }
-        :root[data-reader-theme="dark"] nav button,
-        :root[data-reader-theme="dark"] .btn,
-        :root[data-reader-theme="dark"] .option { color: var(--ink) !important; background: #263754 !important; border-color: #465979 !important; }
-        :root[data-reader-theme="dark"] nav button.active,
-        :root[data-reader-theme="dark"] .btn.primary,
-        :root[data-reader-theme="dark"] main .btn.primary { color: #fff !important; background: #36558a !important; }
       `;
       chapterDocument.head.append(mobileStyles);
-      setChapterTheme(document.body.dataset.theme);
-    }
-
-    function setChapterTheme(theme) {
-      const chapterDocument = $("#chapterFrame").contentDocument;
-      if (chapterDocument?.documentElement) {
-        chapterDocument.documentElement.dataset.readerTheme = theme;
-      }
     }
 
     function showPanel(panelName) {
@@ -673,7 +625,6 @@
         button.setAttribute("aria-label", dark ? "تفعيل الوضع الفاتح" : "تفعيل الوضع الليلي");
         button.title = dark ? "الوضع الفاتح" : "الوضع الليلي";
       });
-      setChapterTheme(theme);
     }
     function openModal(id) { const modal = document.getElementById(id); if (modal && !modal.open) modal.showModal(); }
     document.addEventListener("click", event => {
