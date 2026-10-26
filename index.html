@@ -27,6 +27,7 @@
     }
 
     body[data-theme="dark"] {
+      --primary: #a9c4ff;
       --ink: #edf4ff;
       --muted: #b3c0d4;
       --line: #2d3c57;
@@ -34,6 +35,9 @@
       --surface-soft: #202e47;
       --page: #101a2d;
       --shadow: 0 16px 42px rgba(0, 0, 0, .28);
+    }
+    body[data-theme="dark"] .hero {
+      background: radial-gradient(circle at 15% 20%, rgba(113, 170, 255, .2), transparent 31%), linear-gradient(135deg, #0b1d40, #173b78);
     }
 
     * { box-sizing: border-box; }
@@ -104,14 +108,15 @@
       font-weight: 800;
     }
     .brand-mark {
-      display: grid;
-      place-items: center;
-      width: 36px;
-      height: 36px;
-      border-radius: 11px;
-      color: #fff;
-      background: linear-gradient(135deg, var(--primary), #346bc0);
-      box-shadow: 0 6px 15px rgba(23, 59, 120, .23);
+      display: inline-block;
+      flex: 0 0 auto;
+      color: var(--primary);
+      font-family: "Bodoni MT", "Didot", "Times New Roman", serif;
+      font-size: 24px;
+      font-weight: 400;
+      letter-spacing: .12em;
+      direction: ltr;
+      line-height: 1.2;
     }
     .top-actions { display: flex; align-items: center; gap: 6px; }
     .text-button, .icon-button {
@@ -138,6 +143,7 @@
       background: radial-gradient(circle at 15% 20%, rgba(113, 170, 255, .38), transparent 31%), linear-gradient(135deg, var(--primary-dark), var(--primary));
       box-shadow: var(--shadow);
     }
+    .hero-brand { margin: 0 0 10px; color: #dce8ff; font-size: 17px; font-weight: 800; }
     .eyebrow { margin: 0 0 8px; color: #bcd4ff; font-size: 14px; font-weight: 700; }
     h1, h2, h3, p { margin-top: 0; }
     h1 { margin-bottom: 12px; font-size: clamp(29px, 5vw, 45px); line-height: 1.25; }
@@ -291,8 +297,7 @@
   <header class="site-header">
     <div class="shell header-row">
       <button class="brand" type="button" data-action="home" aria-label="العودة للرئيسية">
-        <span class="brand-mark" aria-hidden="true">✦</span>
-        <span>ملخصاتي التفاعلية</span>
+        <span class="brand-mark" aria-hidden="true">SOUL</span>
       </button>
       <nav class="top-actions" aria-label="التنقل الرئيسي">
         <button class="text-button" type="button" data-action="subjects">المواد</button>
@@ -305,16 +310,11 @@
   <main id="main-content" class="shell">
     <section class="hero" aria-labelledby="hero-title">
       <div>
-        <p class="eyebrow">منظم للمراجعة — بسيط للدراسة</p>
+        <p class="hero-brand">ملخصاتي التفاعلية</p>
         <h1 id="hero-title">رتّبي مذاكرتك وكمّلي تقدّمك فصلًا بعد فصل.</h1>
-        <p class="hero-copy">ملخصات تفاعلية لمواد الجامعة، مع حفظ التقدم والتقييم على جهازك حتى تعرفي من أين تتابعين.</p>
-        <div class="hero-actions">
-          <button class="button-primary" type="button" data-action="subjects">ابدئي المذاكرة</button>
-          <button class="button-secondary" type="button" data-modal="rightsModal">حقوق الاستخدام</button>
-        </div>
       </div>
       <div class="hero-stats" aria-label="إحصاءات المحتوى">
-        <div class="hero-stat"><strong id="totalChapters">0</strong><span>فصل متاح</span></div>
+        <div class="hero-stat"><strong id="totalSubjects">0</strong><span>مواد متاحة</span></div>
         <div class="hero-stat"><strong id="completedChapters">0</strong><span>فصل مكتمل</span></div>
         <div class="hero-stat"><strong id="completionPercent">0%</strong><span>نسبة التقدم</span></div>
       </div>
@@ -430,7 +430,7 @@
       },
       topics: {
         name: "موضوعات مختارة",
-        description: "مراجعة مركزة للموضوعات المختارة.",
+        description: "ملخصات مرتبة لفصول مقرر موضوعات مختارة.",
         folder: "Select_Topics",
         icon: "◈",
         color: "#8c5b18",
@@ -469,7 +469,7 @@
     function updateStats() {
       const total = allChapters().length;
       const done = completedCount();
-      $("#totalChapters").textContent = total;
+      $("#totalSubjects").textContent = Object.keys(subjects).length;
       $("#completedChapters").textContent = done;
       $("#completionPercent").textContent = `${percentage(done, total)}%`;
     }
@@ -587,6 +587,18 @@
         :root[data-reader-theme="dark"] header { background: #111a30 !important; }
         :root[data-reader-theme="dark"] summary,
         :root[data-reader-theme="dark"] th { color: var(--ink) !important; background: #202e47 !important; }
+        :root[data-reader-theme="dark"] a,
+        :root[data-reader-theme="dark"] h2,
+        :root[data-reader-theme="dark"] h3,
+        :root[data-reader-theme="dark"] .score,
+        :root[data-reader-theme="dark"] .tag { color: var(--accent-dark) !important; }
+        :root[data-reader-theme="dark"] .tag { background: var(--accent2) !important; }
+        :root[data-reader-theme="dark"] nav button,
+        :root[data-reader-theme="dark"] .btn,
+        :root[data-reader-theme="dark"] .option { color: var(--ink) !important; background: #263754 !important; border-color: #465979 !important; }
+        :root[data-reader-theme="dark"] nav button.active,
+        :root[data-reader-theme="dark"] .btn.primary,
+        :root[data-reader-theme="dark"] main .btn.primary { color: #fff !important; background: #36558a !important; }
       `;
       chapterDocument.head.append(mobileStyles);
       setChapterTheme(document.body.dataset.theme);
