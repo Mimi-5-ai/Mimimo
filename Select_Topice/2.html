@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الفصل الثامن الشامل (100%) | موضوعات مختارة - تعلم الآلة (2)</title>
+<style>
+:root{
+  --bg:#f4f6fb;
+  --card:#ffffff;
+  --ink:#1b263b;
+  --muted:#637085;
+  --accent:#0f766e;
+  --accent-dark:#115e59;
+  --accent2:#ccfbf1;
+  --line:#e2e8f0;
+  --good:#059669;
+  --good-bg:#ecfdf5;
+  --bad:#dc2626;
+  --bad-bg:#fef2f2;
+  --warn:#d97706;
+  --warn-bg:#fffbeb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
+header{background:linear-gradient(135deg,#134e4a,#0f766e,#0284c7);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(19,78,74,0.18)}
+.wrap{max-width:1060px;margin:auto;padding:0 16px}
+.eyebrow{opacity:.92;font-size:.9rem;background:rgba(255,255,255,0.15);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
+h1{margin:5px 0;font-size:clamp(1.55rem,4vw,2.3rem)}
+header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
+nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:rgba(255,255,255,0.18);color:#ffffff;font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
+nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
+nav button.active{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+main .btn{background:var(--accent2);color:var(--accent-dark)}
+main .btn.primary{background:var(--accent);color:white}
+main{padding:22px 0 48px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(36,52,91,0.04)}
+h2{font-size:1.35rem;margin:0 0 12px;color:#134e4a}
+h3{font-size:1.06rem;margin:10px 0 6px;color:var(--accent-dark)}
+small,.muted{color:var(--muted)}
+ul,ol{padding-right:22px;margin:8px 0}
+li{margin:6px 0}
+details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
+summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f0fdfa;color:#134e4a;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
+details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
+.details-body{padding:16px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#f1f5f9;color:#134e4a;font-weight:bold}
+tr:last-child td{border-bottom:0}
+.note{border-right:4px solid var(--accent);padding:10px 14px;background:#f0fdfa;border-radius:8px;margin:10px 0}
+.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
+.formula-box{background:#134e4a;color:#fff;padding:12px 16px;border-radius:12px;text-align:center;font-size:1.05rem;margin:10px 0;direction:ltr;font-family:monospace}
+.step-card{border:1px solid var(--line);border-radius:12px;padding:14px;background:#f8fafc}
+.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
+.options{display:grid;gap:8px;margin-top:12px}
+.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
+.option:hover:not(:disabled){border-color:var(--accent);background:#f0fdfa}
+.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
+.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
+.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
+.feedback.good{color:var(--good);background:var(--good-bg)}
+.feedback.bad{color:var(--bad);background:var(--bad-bg)}
+.progress{height:10px;background:#e2e8f0;border-radius:9px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
+.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#ccfbf1);border:2px solid #99f6e4;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
+.flashcard:hover{transform:scale(1.005)}
+.flashcard .term{font-size:1.35rem;font-weight:bold;color:#134e4a}
+.flashcard .answer{margin-top:16px;font-size:1.08rem;color:var(--accent-dark);background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
+@media(max-width:600px){
+  .card{padding:14px}
+  nav button{flex:1 1 calc(50% - 8px);text-align:center}
+  .flashcard{min-height:200px;padding:18px}
+  th,td{padding:8px 10px;font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">مقرر موضوعات مختارة • تغطية شاملة 100% (صفحات PDF من 16 إلى 29)</div>
+    <h1>الفصل الثامن: تعلم الآلة (2)</h1>
+    <p>يغطي طرق اختيار الميزة (Filter, Wrapper, Embedded)، خطوات بناء وصلاحية النموذج، الانحياز والتباين، ومقاييس تقييم الانحدار والتصنيف ومصفوفة الارتباك</p>
+    <nav>
+      <button class="active" data-tab="summary">الشرح الشامل</button>
+      <button data-tab="tables">جداول المقارنات والمعادلات (4)</button>
+      <button data-tab="terms">المصطلحات والمفاهيم (28)</button>
+      <button data-tab="cards">البطاقات (28)</button>
+      <button data-tab="quiz">الاختبار الشامل (25)</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- ================= التبويب الأول: الشرح الشامل ================= -->
+  <section id="summary" class="panel active">
+    <div class="card">
+      <h2>خريطة الفصل الثامن: تعلم الآلة (2) (صفحات PDF من 16 إلى 29)</h2>
+      <div class="grid">
+        <div>
+          <span class="tag">الوحدة التعليمية 1 (ص 16 - 20)</span>
+          <h3>اختيار الميزة وطرقها الثلاث</h3>
+          <p>ضرورة اختيار الميزة (الأسباب الأربعة)، وطرق اختيار الميزة: التصفية (Filter)، التغليف (Wrapper)، والطريقة المضمنة (Embedded & Regularization).</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة التعليمية 2 (ص 20 - 25)</span>
+          <h3>بناء النموذج وصلاحيته والخطأ</h3>
+          <p>الإجراء العام لبناء النموذج (6 خطوات)، صفات النموذج الجيد، التعميم، نقص وفرط التجهيز، قدرة النموذج، ومعادلة الانحياز والتباين (Bias & Variance).</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة التعليمية 3 (ص 26 - 29)</span>
+          <h3>تقييم أداء الانحدار والتصنيف</h3>
+          <p>مقاييس الانحدار (MAE, MSE, R2)، ومقاييس التصنيف ومصفوفة الارتباك (TP, TN, FP, FN, Accuracy, Precision, Recall, F1, Fβ) والمثال الحسابي.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- الوحدة الأولى -->
+    <details open>
+      <summary>1) الوحدة التعليمية (1): ضرورة اختيار الميزة وطرقها الثلاث (Filter, Wrapper, Embedded) (ص 16 - 20)</summary>
+      <div class="details-body">
+        <h3>أولاً: ضرورة اختيار الميزة (<span dir="ltr">Necessity of Feature Selection</span>) (ص 17)</h3>
+        <p>تحتوي مجموعة البيانات عادةً على العديد من الميزات، قد يكون بعضها <b>زائداً عن الحاجة (<span dir="ltr">Redundant</span>)</b> أو <b>غير ذي صلة (<span dir="ltr">Irrelevant</span>)</b> بالقيمة المراد التنبؤ بها. ويعد اختيار الميزة ضرورياً في <b>4 جوانب أساسية</b>:</p>
+        <ol>
+          <li><b>تقليل وقت التدريب (<span dir="ltr">Reducing training time</span>).</b></li>
+          <li><b>تبسيط النماذج لتسهيل تفسيرها على المستخدمين.</b></li>
+          <li><b>تحسين تعميم النموذج وتجنب الإفراط في التجهيز (<span dir="ltr">Overfitting</span>).</b></li>
+          <li><b>تجنب انفجار الأبعاد (<span dir="ltr">Dimension explosion</span>).</b></li>
+        </ol>
+
+        <div class="exam-alert">
+          <h3>ثانياً: طرق اختيار الميزة الثلاث (<span dir="ltr">Feature Selection Methods</span>) (ص 17 - 20) - موضع أسئلة مؤكدة:</h3>
+          
+          <h4>1. طريقة التصفية (<span dir="ltr">Filter Method</span>) (ص 17 - 18):</h4>
+          <ul>
+            <li><b>خصائصها:</b> تُعتبر <b>مستقلة عن النموذج (<span dir="ltr">Independent of the model</span>)</b> أثناء اختيار الميزة (يتم اختيار الميزات أولاً قبل تدريب النموذج).</li>
+            <li><b>مسار عملها:</b> اجتياز جميع الميزات (<span dir="ltr">Traverse all features</span>) &rarr; تحديد مجموعة فرعية مثالية من الميزات &rarr; تدريب النماذج &rarr; تقييم الأداء.</li>
+            <li><b>طريقة عملها:</b> تقيس <b>الارتباط بين كل ميزة والسمة المستهدفة</b> من خلال تطبيق <b>قياس إحصائي لتسجيل نقاط كل ميزة</b>.</li>
+            <li><b>المقاييس الإحصائية الثلاثة المستخدمة عادةً في التصفية (ص 18):</b>
+              <ol>
+                <li>معامل ارتباط بيرسون (<b dir="ltr">Pearson's correlation coefficient</b>).</li>
+                <li>معامل كاي تربيع (<b dir="ltr">Chi-Square coefficient</b>).</li>
+                <li>المعلومات المتبادلة (<b dir="ltr">Mutual information</b>).</li>
+              </ol>
+            </li>
+            <li><b>القيود (العيوب):</b> لا يأخذ الفلتر في الاعتبار <b>العلاقة بين الميزات نفسها</b>، فهو يميل فقط إلى <b>اختيار المتغيرات المكررة</b>.</li>
+          </ul>
+
+          <hr style="border:0;border-top:1px solid #fcd34d;margin:12px 0">
+
+          <h4>2. طريقة التغليف (<span dir="ltr">Wrapper Method</span>) (ص 18 - 19):</h4>
+          <ul>
+            <li><b>طريقة عملها:</b> تستخدم <b>نموذجاً تنبؤياً لتسجيل نقاط مجموعة فرعية من الميزات</b>، وتنظر إلى مشكلة اختيار الميزة كـ <b>مشكلة بحث (<span dir="ltr">Search problem</span>)</b>؛ حيث يقيم الغلاف ويقارن مجموعات الميزات المختلفة باستخدام النموذج التنبؤي كأداة تقييم (وكلما زادت دقة نموذج التنبؤ، زادت ضرورة الاحتفاظ بمجموعة الميزات).</li>
+            <li><b>مسار عملها:</b> اجتياز جميع الميزات &rarr; [حلقة تكرارية: إنشاء مجموعة فرعية من الميزات &rarr; تدريب النماذج &rarr; تقييم النماذج] &rarr; تحديد مجموعة الميزات المثالية.</li>
+            <li><b>أشهر طرق التغليف الشائعة:</b> خوارزمية <b>إزالة الميزة المتكررة (<span dir="ltr">Recursive Feature Elimination - RFE</span>)</b>.</li>
+            <li><b>القيود (العيوب):</b> رغم أنها توفر مجموعة الميزات الأفضل أداءً لفئة معينة من النموذج، إلا أنها <b>تحتاج إلى تدريب نموذج جديد لكل مجموعة فرعية من الميزات</b>، وبالتالي فإن <b>كمية العمليات الحسابية تكون واسعة النطاق (مكلفة جداً)</b>.</li>
+          </ul>
+
+          <hr style="border:0;border-top:1px solid #fcd34d;margin:12px 0">
+
+          <h4>3. الطريقة المضمنة / التضمين (<span dir="ltr">Embedded Method</span>) (ص 19 - 20):</h4>
+          <ul>
+            <li><b>طريقة عملها:</b> تستخدم اختيار الميزة <b>كجزء من بناء النموذج نفسه</b>؛ فعلى عكس التصفية والتغليف، يتعلم النموذج بشكل نشط كيفية إجراء اختيار الميزة <b>أثناء عملية التدريب</b> (دمج تدريب النماذج وتقييم التأثيرات في خطوة واحدة).</li>
+            <li><b>الطريقة الأكثر شيوعاً لاختيار الميزات المضمنة:</b> هي <b>التنظيم (<span dir="ltr">Regularization</span>)</b>، ويُطلق عليه أيضاً <b>طريقة العقوبة (<span dir="ltr">Penalty method</span>)</b>.</li>
+            <li><b>تعريف التنظيم (<span dir="ltr">Regularization</span>):</b> تقديم <b>قيود إضافية</b> عند تحسين خوارزمية التنبؤ، مما يؤدي إلى <b>تقليل تعقيد النموذج (أي تقليل عدد الميزات)</b>.</li>
+            <li><b>طرق التنظيم الشائعة (ص 20):</b>
+              <ol>
+                <li><b>الانحدار التلالي (<span dir="ltr">Ridge regression</span>).</b></li>
+                <li><b>انحدار اللاسو (<span dir="ltr">Lasso regression</span>).</b></li>
+              </ol>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </details>
+
+    <!-- الوحدة الثانية -->
+    <details open>
+      <summary>2) الوحدة التعليمية (2): بناء النموذج، صلاحيته، التجهيز، ومعادلة الانحياز والتباين (ص 20 - 25)</summary>
+      <div class="details-body">
+        <h3>أولاً: الإجراء العام لبناء النموذج (6 خطوات بالترتيب - ص 21)</h3>
+        <div class="grid">
+          <div class="step-card">
+            <span class="tag">الخطوة 1</span>
+            <h3>تقسيم البيانات (<span dir="ltr">Data splitting</span>)</h3>
+            <p>تقسيم البيانات إلى 3 مجموعات: مجموعة تدريب، ومجموعة اختبار، ومجموعة تحقق.</p>
+          </div>
+          <div class="step-card">
+            <span class="tag">الخطوة 2</span>
+            <h3>تدريب النموذج (<span dir="ltr">Model Training</span>)</h3>
+            <p>استخدام البيانات التي تم تنظيفها وهندسة الميزات لتدريب النموذج.</p>
+          </div>
+          <div class="step-card">
+            <span class="tag">الخطوة 3</span>
+            <h3>التحقق من النموذج (<span dir="ltr">Model Verification</span>)</h3>
+            <p>استخدام <b>مجموعة التحقق</b> للتحقق من صحة النموذج وتغذيته الراجعة (<span dir="ltr">Feedback</span>).</p>
+          </div>
+          <div class="step-card">
+            <span class="tag">الخطوة 4</span>
+            <h3>اختبار النموذج (<span dir="ltr">Model test</span>)</h3>
+            <p>استخدام <b>بيانات الاختبار</b> لتقييم قدرات التعميم للنموذج في بيئة حقيقية.</p>
+          </div>
+          <div class="step-card">
+            <span class="tag">الخطوة 5</span>
+            <h3>نشر النموذج (<span dir="ltr">Model deployment</span>)</h3>
+            <p>نشر النموذج في سيناريو الإنتاج الفعلي.</p>
+          </div>
+          <div class="step-card">
+            <span class="tag">الخطوة 6</span>
+            <h3>الضبط الدقيق (<span dir="ltr">Model fine-tuning</span>)</h3>
+            <p>ضبط النموذج بشكل مستمر استناداً إلى البيانات الفعلية لسيناريو الخدمة.</p>
+          </div>
+        </div>
+
+        <h3>ثانياً: مرحلتا التعلم والتنبؤ، ومعايير النموذج الجيد الأربعة (ص 21 - 22)</h3>
+        <ul>
+          <li><b>في مثال التنبؤ بلاعب كرة السلة (ص 21 - 22):</b>
+            <ul>
+              <li><b>مرحلة التعلم:</b> تُقسم البيانات إلى <b>مجموعة تدريب</b> (يبحث فيها النموذج عن علاقة بين الميزات كالعمر والمدينة وبين الهدف <span dir="ltr">Label</span>) و<b>مجموعة اختبار</b> (بيانات جديدة للتحقق من صحة النموذج).</li>
+              <li><b>مرحلة التنبؤ:</b> يُطبق النموذج القواعد الاحتمالية المتعلمة على بيانات غير معروفة لإخراج احتمالية كون الشخص لاعب كرة سلة.</li>
+            </ul>
+          </li>
+          <li><b>ما هو النموذج الجيد؟ (المعايير الأربعة - ص 22):</b>
+            <ol>
+              <li><b>القدرة على التعميم (<span dir="ltr">Generalization</span>):</b> هل يمكنه التنبؤ بدقة ببيانات الخدمة الفعلية؟</li>
+              <li><b>القابلية للتفسير (<span dir="ltr">Interpretability</span>):</b> هل نتيجة التنبؤ سهلة التفسير؟</li>
+              <li><b>سرعة التنبؤ (<span dir="ltr">Prediction rate</span>):</b> ما الوقت المستغرق للتنبؤ بكل جزء من البيانات؟</li>
+              <li><b>قابلية التطبيق (<span dir="ltr">Practicability</span>):</b> هل لا يزال معدل التنبؤ مقبولاً عند زيادة حجم الخدمة مع حجم البيانات الضخم؟</li>
+            </ol>
+          </li>
+        </ul>
+
+        <h3>ثالثاً: صلاحية النموذج، أنواع الخطأ، وقدرة النموذج (ص 23 - 24)</h3>
+        <ul>
+          <li><b>القدرة على التعميم (<span dir="ltr">Generalization capability</span>):</b> قدرة النموذج المدرب على أداء جيد على <b>العينات الجديدة</b> (وليس فقط عينات التدريب)، وتُسمى أيضاً <b>التعميم أو المتانة (<span dir="ltr">Robustness</span>)</b>.</li>
+          <li><b>الخطأ (<span dir="ltr">Error</span>):</b> هو الفرق بين نتيجة العينة التي تنبأ بها النموذج ونتيجة العينة الفعلية، وينقسم إلى:
+            <ul>
+              <li><b>خطأ التدريب (<span dir="ltr">Training error</span>):</b> الخطأ الذي يحدث عند تشغيل النموذج على <b>بيانات التدريب</b>.</li>
+              <li><b>خطأ التعميم (<span dir="ltr">Generalization error</span>):</b> الخطأ الذي يحدث عند تشغيل النموذج على <b>عينات جديدة</b> (ونحن نفضل دائماً نموذجاً ذا <b>خطأ تعميمي أصغر</b>).</li>
+            </ul>
+          </li>
+          <li><b>حالات ملاءمة وتجهيز النموذج الثلاث (ص 23 - 24):</b>
+            <ol>
+              <li><b>عدم التجهيز / نقص التجهيز (<span dir="ltr">Underfitting</span>):</b> يحدث عندما لا يتناسب النموذج مع البيانات بشكل كافٍ (<b>لم يتم تعلم جميع الميزات</b>).</li>
+              <li><b>التجهيز الجيد (<span dir="ltr">Good fitting</span>):</b> التوازن المثالي في تعلم الميزات.</li>
+              <li><b>الإفراط في التجهيز (<span dir="ltr">Overfitting</span>):</b> يحدث عندما يكون <b>خطأ التدريب صغيراً ولكن خطأ التعميم كبير</b> (قدرة تعميم ضعيفة؛ لأن النموذج <b>يتعلم التشويش/الضوضاء</b>).</li>
+            </ol>
+          </li>
+          <li><b>قدرة النموذج (<span dir="ltr">Model capacity</span>) أو تعقيد النموذج (<span dir="ltr">Model complexity</span>) (ص 23):</b>
+            <ul>
+              <li>هي قدرة النموذج على ملاءمة الوظائف/الدوال.</li>
+              <li>إذا كانت قدرة النموذج <b>غير كافية</b> لحل المهام المعقدة &rarr; يحدث <b>نقص في التجهيز (<span dir="ltr">Underfitting</span>)</b>.</li>
+              <li>إذا كانت سعة النموذج <b>أعلى من المطلوبة</b> للمهمة &rarr; يحدث <b>فرط في التجهيز (<span dir="ltr">Overfitting</span>)</b>.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <div class="exam-alert">
+          <h3>رابعاً: معادلة الخطأ الكلي، الانحياز (<span dir="ltr">Bias</span>)، والتباين (<span dir="ltr">Variance</span>) (ص 24 - 25) - مهم جداً:</h3>
+          <div class="formula-box">Total Error = Bias² + Variance + Irreducible Error</div>
+          <p style="text-align:center;font-weight:bold;margin-top:4px">الخطأ الكلي للتنبؤ النهائي = (الانحياز)² + التباين + خطأ لا يمكن إنقاصه</p>
+          <ul>
+            <li><b>الانحياز (<span dir="ltr">Bias</span>):</b> هو <b>الفرق بين قيمة التنبؤ المتوقعة (أو المتوسطة) والقيمة الصحيحة</b> التي نحاول التنبؤ بها.</li>
+            <li><b>التباين (<span dir="ltr">Variance</span>):</b> هو إزاحة نتيجة التنبؤ عن القيمة المتوسطة؛ أي <b>خطأ ناتج عن حساسية النموذج للتقلبات الصغيرة في مجموعة التدريب</b>.</li>
+            <li><b>مجموعات التباين والانحياز الأربعة (ص 25):</b>
+              <ol>
+                <li><b>انحياز منخفض وتباين منخفض:</b> <b>نموذج جيد (<span dir="ltr">Good model</span>)</b> (جميع النقاط في مركز الهدف).</li>
+                <li><b>انحياز منخفض وتباين عالٍ:</b> النقاط حول المركز لكنها متفرقة ومشتتة (يمثل حالة <span dir="ltr">Overfitting</span> عند زيادة التعقيد).</li>
+                <li><b>انحياز عالٍ وتباين منخفض:</b> النقاط متجمعة معاً لكنها بعيدة عن المركز (يمثل حالة <span dir="ltr">Underfitting</span> عند نقص التعقيد).</li>
+                <li><b>انحياز عالٍ وتباين عالٍ:</b> <b>نموذج سيئ (<span dir="ltr">Bad model</span>)</b> (النقاط متفرقة وبعيدة عن المركز).</li>
+              </ol>
+            </li>
+            <li><b>العلاقة بين تعقيد النموذج (<span dir="ltr">Model Complexity</span>) والخطأ (ص 25):</b>
+              <ul>
+                <li>كلما زاد تعقيد النموذج &rarr; <b>انخفض خطأ التدريب باستمرار</b>.</li>
+                <li>كلما زاد تعقيد النموذج &rarr; <b>ينخفض خطأ الاختبار إلى نقطة معينة، وبعد ذلك يزيد في الاتجاه المعاكس، مشكلاً منحنى محدباً (<span dir="ltr">Convex curve</span>)</b>.</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </details>
+
+    <!-- الوحدة الثالثة -->
+    <details open>
+      <summary>3) الوحدة التعليمية (3): تقييم أداء التعلم الآلي في الانحدار والتصنيف ومصفوفة الارتباك (ص 26 - 29)</summary>
+      <div class="details-body">
+        <h3>أولاً: مقاييس تقييم أداء الانحدار (<span dir="ltr">Regression Evaluation Metrics</span>) (ص 26 - 27)</h3>
+        <ul>
+          <li><b>1. متوسط الخطأ المطلق (<span dir="ltr">Mean Absolute Error - MAE</span>):</b>
+            <div class="formula-box">MAE = (1 / m) * Σ |yᵢ - ŷᵢ|</div>
+            <p><b>قاعدة هامة:</b> كلما اقترب متوسط الخطأ المطلق (<span dir="ltr">MAE</span>) من <b>الصفر (0)</b>، كان النموذج أكثر ملاءمة لبيانات التدريب.</p>
+          </li>
+          <li><b>2. متوسط الخطأ المربع (<span dir="ltr">Mean Square Error - MSE</span>):</b>
+            <div class="formula-box">MSE = (1 / m) * Σ (yᵢ - ŷᵢ)²</div>
+          </li>
+          <li><b>3. معامل التحديد (<span dir="ltr">R² - R-Squared</span>) (ص 27):</b>
+            <div class="formula-box">R² = 1 - (RSS / TSS) = 1 - [ Σ(yᵢ - ŷᵢ)² / Σ(yᵢ - ȳ)² ]</div>
+            <ul>
+              <li><b>نطاق قيمة <span dir="ltr">R²</span>:</b> يتراوح بين <b>[0 و 1]</b>، وتشير <b>القيمة الأكبر (الأقرب إلى 1)</b> إلى أن النموذج يناسب بيانات التدريب بشكل أفضل.</li>
+              <li><b><span dir="ltr">TSS</span> (مجموع المربعات الكلي):</b> يشير إلى <b>الفرق بين العينات</b> $\sum(y_i - \bar{y}_i)^2$.</li>
+              <li><b><span dir="ltr">RSS</span> (مجموع مربعات البواقي):</b> يشير إلى <b>الفرق بين القيمة المتوقعة وقيمة العينة</b> $\sum(y_i - \hat{y}_i)^2$.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h3>ثانياً: تقييم أداء التصنيف (<span dir="ltr">Classification</span>) ومصفوفة الارتباك (ص 27 - 28)</h3>
+        <ul>
+          <li><b>المصطلحات والتعاريف الستة للتصنيف (ص 27):</b>
+            <ol>
+              <li><b>إيجابي (<span dir="ltr">Positive - P</span>):</b> عدد الحالات الإيجابية الحقيقية (الفعلية) في البيانات ($P = TP + FN$).</li>
+              <li><b>سلبي (<span dir="ltr">Negative - N</span>):</b> عدد الحالات السلبية الحقيقية (الفعلية) في البيانات ($N = FP + TN$).</li>
+              <li><b>إيجابي حقيقي (<span dir="ltr">True Positive - TP</span>):</b> عدد الحالات الإيجابية التي تم تصنيفها <b>بشكل صحيح</b> بواسطة النموذج.</li>
+              <li><b>سلبي حقيقي (<span dir="ltr">True Negative - TN</span>):</b> عدد الحالات السلبية التي تم تصنيفها <b>بشكل صحيح</b> من قِبل النموذج.</li>
+              <li><b>إيجابية كاذبة (<span dir="ltr">False Positive - FP</span>):</b> عدد الحالات السلبية التي تم تصنيفها <b>بشكل غير صحيح كإيجابية</b>.</li>
+              <li><b>سلبية كاذبة (<span dir="ltr">False Negative - FN</span>):</b> عدد الحالات الإيجابية التي تم تصنيفها <b>بشكل غير صحيح كسلبية</b>.</li>
+            </ol>
+          </li>
+          <li><b>خصائص مصفوفة الارتباك (<span dir="ltr">Confusion Matrix</span>) (ص 28):</b>
+            <ul>
+              <li>هي جدول بقياسات $m \times m$، حيث يشير العنصر $CM_{i,j}$ إلى عدد الحالات التي تنتمي فعلياً إلى الفئة $i$ ولكن تم تصنيفها في الفئة $j$ بواسطة النموذج.</li>
+              <li><b>في المصنف المثالي عالي الدقة:</b> تتركز معظم قيم التنبؤ في <b>القطر الرئيسي</b> للجدول ($CM_{1,1}$ إلى $CM_{m,m}$ أي $TP$ و $TN$)، بينما تكون القيم خارج القطر ($FP$ و $FN$) <b>صفراً أو قريبة من الصفر (0)</b>.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <div class="exam-alert">
+          <h3>ثالثاً: القوانين السبعة لمقاييس التصنيف + المثال الحسابي لصور القطط (ص 28 - 29) - هام جداً:</h3>
+          <ul>
+            <li><b>1. الدقة ومعدل التعرف (<span dir="ltr">Accuracy & Recognition rate</span>):</b> $\frac{TP + TN}{P + N}$</li>
+            <li><b>2. معدل الخطأ وسوء التصنيف (<span dir="ltr">Error rate & Misclassification rate</span>):</b> $\frac{FP + FN}{P + N}$</li>
+            <li><b>3. الحساسية / معدل الإيجابية الحقيقية / الاستدعاء (<span dir="ltr">Sensitivity, TPR, Recall</span>):</b> $\frac{TP}{P} = \frac{TP}{TP + FN}$</li>
+            <li><b>4. الخصوصية / معدل السلبية الحقيقية (<span dir="ltr">Specificity & TNR</span>):</b> $\frac{TN}{N} = \frac{TN}{FP + TN}$</li>
+            <li><b>5. الدقة الإيجابية / الإحكام (<span dir="ltr">Precision</span>):</b> $\frac{TP}{TP + FP}$</li>
+            <li><b>6. مقياس <span dir="ltr">F1</span> (المتوسط التوافقي للاستدعاء والدقة):</b> $F_1 = \frac{2 \times precision \times recall}{precision + recall}$</li>
+            <li><b>7. مقياس <span dir="ltr">Fβ</span> العام:</b> $F_\beta = \frac{(1 + \beta^2) \times precision \times recall}{\beta^2 \times precision + recall}$</li>
+          </ul>
+          <hr style="border:0;border-top:1px solid #fcd34d;margin:12px 0">
+          <h4>المثال الحسابي المحلول (تصنيف 200 صورة قطة - ص 29):</h4>
+          <p>تم اختبار نموذج على <b>200 صورة</b>: فعلياً توجد قطط في <b>170 صورة ($P=170$)</b> ولا توجد في <b>30 صورة ($N=30$)</b>. وتوقع النموذج وجود قطط في <b>160 صورة</b> ($TP=140$ و $FP=20$)، وعدم وجودها في <b>40 صورة</b> ($FN=30$ و $TN=10$):</p>
+          <ul>
+            <li><b>الدقة الإيجابية (<span dir="ltr">Precision</span>):</b> $P = \frac{TP}{TP + FP} = \frac{140}{140 + 20} = \frac{140}{160} = \mathbf{87.5\%}$</li>
+            <li><b>الاستدعاء (<span dir="ltr">Recall</span>):</b> $R = \frac{TP}{P} = \frac{140}{170} = \mathbf{82.4\%}$</li>
+            <li><b>الدقة العامة (<span dir="ltr">Accuracy</span>):</b> $ACC = \frac{TP + TN}{P + N} = \frac{140 + 10}{170 + 30} = \frac{150}{200} = \mathbf{75\%}$</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= التبويب الثاني: جداول المقارنات والمعادلات ================= -->
+  <section id="tables" class="panel">
+    <div class="card">
+      <h2>1. مقارنة شاملة بين طرق اختيار الميزة الثلاث (Filter vs Wrapper vs Embedded) (ص 17 - 20)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>وجه المقارنة</th>
+            <th>1. طريقة التصفية (Filter)</th>
+            <th>2. طريقة التغليف (Wrapper)</th>
+            <th>3. الطريقة المضمنة (Embedded)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>العلاقة بالنموذج</b></td>
+            <td><b>مستقلة عن النموذج</b> أثناء اختيار الميزة (تتم قبل تدريب النموذج).</td>
+            <td>تستخدم <b>نموذجاً تنبؤياً كأداة تقييم</b> لتسجيل نقاط مجموعات الميزات.</td>
+            <td>تتم <b>كجزء من بناء النموذج نفسه</b> (يتعلم اختيار الميزة بنشاط أثناء التدريب).</td>
+          </tr>
+          <tr>
+            <td><b>آلية العمل</b></td>
+            <td>تقيس الارتباط بين كل ميزة والسمة المستهدفة عبر مقياس إحصائي.</td>
+            <td>تتعامل معها كـ <b>مشكلة بحث</b> وتقارن مجموعات الميزات المختلفة حسب دقة التنبؤ.</td>
+            <td>تفرض قيوداً إضافية عند تحسين الخوارزمية لتقليل تعقيد النموذج وعدد الميزات.</td>
+          </tr>
+          <tr>
+            <td><b>الأمثلة والخوارزميات الشائعة</b></td>
+            <td>• معامل ارتباط بيرسون (<span dir="ltr">Pearson</span>)<br>• معامل كاي تربيع (<span dir="ltr">Chi-Square</span>)<br>• المعلومات المتبادلة (<span dir="ltr">Mutual Info</span>)</td>
+            <td>• إزالة الميزة المتكررة (<b dir="ltr">RFE</b> - <span dir="ltr">Recursive Feature Elimination</span>)</td>
+            <td>• <b>التنظيم (<span dir="ltr">Regularization</span> / طريقة العقوبة)</b>:<br>1) الانحدار التلالي (<b dir="ltr">Ridge</b>)<br>2) انحدار اللاسو (<b dir="ltr">Lasso</b>)</td>
+          </tr>
+          <tr>
+            <td><b>القيود والعيوب</b></td>
+            <td>لا تأخذ في الاعتبار العلاقة بين الميزات، وتميل لاختيار المتغيرات المكررة.</td>
+            <td>تحتاج لتدريب نموذج جديد لكل مجموعة فرعية، فالعمليات الحسابية واسعة النطاق.</td>
+            <td>مرتبطة بطبيعة خوارزمية النموذج المستخدم.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>2. مقارنة حالات تجهيز النموذج وعلاقتها بالانحياز والتباين وتعقيد النموذج (ص 23 - 25)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>الحالة / المفهوم</th>
+            <th>سعة وتعقيد النموذج</th>
+            <th>خطأ التدريب وخطأ التعميم (الاختبار)</th>
+            <th>حالة الانحياز (Bias) والتباين (Variance)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>نقص التجهيز<br>(Underfitting)</b></td>
+            <td>قدرة/سعة غير كافية (نموذج بسيط جداً لم يتعلم جميع الميزات).</td>
+            <td>خطأ التدريب مرتفع + خطأ التعميم مرتفع.</td>
+            <td><b>انحياز مرتفع (<span dir="ltr">High Bias</span>)</b> وتباين منخفض.</td>
+          </tr>
+          <tr>
+            <td><b>التجهيز الجيد<br>(Good Fitting)</b></td>
+            <td>السعة تتناسب مع تعقيد المهمة وكمية بيانات التدريب.</td>
+            <td>خطأ تدريب منخفض + خطأ تعميم منخفض (أدنى نقطة في المنحنى المحدب).</td>
+            <td><b>انحياز منخفض وتباين منخفض</b> (نموذج جيد مثالي).</td>
+          </tr>
+          <tr>
+            <td><b>الإفراط في التجهيز<br>(Overfitting)</b></td>
+            <td>سعة عالية جداً أكبر من المطلوبة للمهمة (يتعلم التشويش/الضوضاء).</td>
+            <td><b>خطأ التدريب صغير جداً</b>، ولكن <b>خطأ التعميم (الاختبار) كبير</b>.</td>
+            <td>انحياز منخفض و<b>تباين مرتفع (<span dir="ltr">High Variance</span>)</b> بسبب الحساسية للتقلبات.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>3. جدول القوانين الرياضية لتقييم الانحدار والتصنيف (ص 26 - 28)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>المقياس</th>
+            <th>المهمة</th>
+            <th>المعادلة الرياضية</th>
+            <th>ملاحظات ودلالات هامة</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>متوسط الخطأ المطلق (MAE)</b></td>
+            <td>انحدار</td>
+            <td dir="ltr"><code>MAE = (1/m) Σ |yᵢ - ŷᵢ|</code></td>
+            <td>كلما اقترب من <b>0</b> كان النموذج أكثر ملاءمة.</td>
+          </tr>
+          <tr>
+            <td><b>متوسط الخطأ المربع (MSE)</b></td>
+            <td>انحدار</td>
+            <td dir="ltr"><code>MSE = (1/m) Σ (yᵢ - ŷᵢ)²</code></td>
+            <td>يربّع الفروق بين القيم الفعلية والمتوقعة.</td>
+          </tr>
+          <tr>
+            <td><b>معامل التحديد (R²)</b></td>
+            <td>انحدار</td>
+            <td dir="ltr"><code>R² = 1 - (RSS / TSS)</code></td>
+            <td>نطاقه <b>[0, 1]</b>؛ القيمة الأكبر (الأقرب لـ 1) هي الأفضل.</td>
+          </tr>
+          <tr>
+            <td><b>الدقة ومعدل التعرف (Accuracy)</b></td>
+            <td>تصنيف</td>
+            <td dir="ltr"><code>(TP + TN) / (P + N)</code></td>
+            <td>نسبة جميع التوقعات الصحيحة من الإجمالي الكلي.</td>
+          </tr>
+          <tr>
+            <td><b>معدل الخطأ (Error Rate)</b></td>
+            <td>تصنيف</td>
+            <td dir="ltr"><code>(FP + FN) / (P + N)</code></td>
+            <td>نسبة التوقعات الخاطئة ($1 - Accuracy$).</td>
+          </tr>
+          <tr>
+            <td><b>الحساسية / الاستدعاء (Recall / Sensitivity)</b></td>
+            <td>تصنيف</td>
+            <td dir="ltr"><code>TP / P = TP / (TP + FN)</code></td>
+            <td>يُسمى أيضاً معدل الإيجابية الحقيقية (<span dir="ltr">TPR</span>).</td>
+          </tr>
+          <tr>
+            <td><b>الخصوصية (Specificity)</b></td>
+            <td>تصنيف</td>
+            <td dir="ltr"><code>TN / N = TN / (FP + TN)</code></td>
+            <td>يُسمى أيضاً معدل السلبية الحقيقية (<span dir="ltr">TNR</span>).</td>
+          </tr>
+          <tr>
+            <td><b>الدقة الإيجابية (Precision)</b></td>
+            <td>تصنيف</td>
+            <td dir="ltr"><code>TP / (TP + FP)</code></td>
+            <td>نسبة الإيجابيات الصحيحة من كل ما توقعه النموذج كإيجابي.</td>
+          </tr>
+          <tr>
+            <td><b>مقياس F1 (F1 Score)</b></td>
+            <td>تصنيف</td>
+            <td dir="ltr"><code>(2 × Precision × Recall) / (Precision + Recall)</code></td>
+            <td>المتوسط التوافقي (<span dir="ltr">Harmonic mean</span>) للاستدعاء والدقة.</td>
+          </tr>
+          <tr>
+            <td><b>مقياس Fβ العام</b></td>
+            <td>تصنيف</td>
+            <td dir="ltr"><code>((1 + β²) × Precision × Recall) / (β² × Precision + Recall)</code></td>
+            <td>حيث $\beta$ عدد حقيقي غير سالب يحدد وزن الاستدعاء مقابل الدقة.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>4. جدول مصفوفة الارتباك وتطبيقها على مثال الـ 200 صورة قطة (ص 28 - 29)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>الفعلي (Actual) \ المتوقع (Estimated)</th>
+            <th>متوقع: نعم (Yes)</th>
+            <th>متوقع: لا (No)</th>
+            <th>المجموع الفعلي (Total)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>فعلي: نعم (Yes - قطة)</b></td>
+            <td><b dir="ltr">TP = 140</b><br><small>(قطة وصُنفَت قطة بصحة)</small></td>
+            <td><b dir="ltr">FN = 30</b><br><small>(قطة وصُنفَت غير قطة خطأً)</small></td>
+            <td><b dir="ltr">P = 170</b><br><small>(إجمالي القطط الحقيقية)</small></td>
+          </tr>
+          <tr>
+            <td><b>فعلي: لا (No - ليست قطة)</b></td>
+            <td><b dir="ltr">FP = 20</b><br><small>(ليست قطة وصُنفَت قطة خطأً)</small></td>
+            <td><b dir="ltr">TN = 10</b><br><small>(ليست قطة وصُنفَت غير قطة بصحة)</small></td>
+            <td><b dir="ltr">N = 30</b><br><small>(إجمالي غير القطط الحقيقي)</small></td>
+          </tr>
+          <tr>
+            <td><b>مجموع التوقعات (Total)</b></td>
+            <td><b dir="ltr">P' = 160</b><br><small>($TP + FP = 140 + 20$)</small></td>
+            <td><b dir="ltr">N' = 40</b><br><small>($FN + TN = 30 + 10$)</small></td>
+            <td><b dir="ltr">P + N = 200</b><br><small>(إجمالي الصور الكلي)</small></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الثالث: المصطلحات ================= -->
+  <section id="terms" class="panel">
+    <div class="card">
+      <h2>قاموس المصطلحات والمفاهيم الشامل للفصل الثامن (28 مصطلحاً)</h2>
+      <p class="muted">جميع المصطلحات والمعادلات الواردة في شرائح الفصل الثامن (تعلم الآلة 2) مع أرقام صفحاتها:</p>
+      <div id="termsGrid" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الرابع: البطاقات التعليمية ================= -->
+  <section id="cards" class="panel">
+    <div class="card">
+      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
+      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
+      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
+        <div class="term" id="flashTerm"></div>
+        <div class="answer" id="flashAnswer" hidden></div>
+        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="prevCard">السابق</button>
+        <span id="cardCount" class="muted"></span>
+        <button class="btn primary" id="nextCard">التالي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الخامس: الاختبار الشامل ================= -->
+  <section id="quiz" class="panel">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2>الاختبار الشامل للفصل الثامن - موضوعات مختارة (25 سؤالاً)</h2>
+          <p class="muted">يغطي كافة طرق اختيار الميزة وصلاحية النموذج والانحياز والتباين والمسائل الحسابية (ص 16 - 29) مع تصحيح فوري.</p>
+        </div>
+        <div class="score" id="score">النتيجة: 0 / 25</div>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="quizArea"></div>
+      <div class="row">
+        <button class="btn" id="resetQuiz">إعادة الاختبار</button>
+        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+      </div>
+      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
+    </div>
+  </section>
+</main>
+
+<footer>مبني بالكامل (100%) على شرائح الفصل الثامن: تعلم الآلة (2) من مقرر موضوعات مختارة - جامعة الملك فيصل (صفحات PDF من 16 إلى 29)</footer>
+
+<script>
+const terms = [
+  ["Feature Selection", "اختيار الميزة: انتقاء الميزات المهمة وحذف الزائدة عن الحاجة لتقليل وقت التدريب، وتبسيط النموذج، وتجنب Overfitting وانفجار الأبعاد (ص 17)."],
+  ["Dimension Explosion", "انفجار الأبعاد: مشكلة تحدث عند زيادة عدد الميزات بشكل مفرط، ويتم تجنبها عبر اختيار الميزات وتقليل الأبعاد (ص 17)."],
+  ["Filter Method (طريقة التصفية)", "طريقة لاختيار الميزة تكون مستقلة عن النموذج، وتطبق مقياساً إحصائياً لقياس ارتباط كل ميزة بالسمة المستهدفة (ص 17)."],
+  ["Pearson's Correlation", "معامل ارتباط بيرسون: أحد المقاييس الإحصائية الشائعة المستخدمة في طريقة التصفية (Filter) لاختيار الميزات (ص 18)."],
+  ["Chi-Square & Mutual Info", "معامل كاي تربيع والمعلومات المتبادلة: مقاييس إحصائية تُستخدم في طريقة التصفية (Filter) لتقييم نقاط كل ميزة (ص 18)."],
+  ["Wrapper Method (طريقة التغليف)", "طريقة تستخدم نموذجاً تنبؤياً لتسجيل نقاط مجموعة فرعية من الميزات وتتعامل مع اختيار الميزة كمشكلة بحث (ص 18)."],
+  ["RFE (إزالة الميزة المتكررة)", "Recursive Feature Elimination: إحدى طرق التغليف (Wrapper) الشائعة لاختيار الميزات (ص 19)."],
+  ["Embedded Method (الطريقة المضمنة)", "طريقة تجعل اختيار الميزة جزءاً من بناء النموذج، حيث يتعلم النموذج بنشاط اختيار الميزة أثناء التدريب (ص 19)."],
+  ["Regularization (التنظيم)", "يُسمى أيضاً طريقة العقوبة (Penalty method)؛ وهو الطريقة الأكثر شيوعاً في الاختيار المضمن عبر فرض قيود إضافية لتقليل تعقيد النموذج (ص 20)."],
+  ["Ridge & Lasso Regression", "الانحدار التلالي (Ridge) وانحدار اللاسو (Lasso): من أشهر طرق التنظيم (Regularization) المستخدمة في الاختيار المضمن للميزات (ص 20)."],
+  ["Data Splitting (تقسيم البيانات)", "الخطوة الأولى في بناء النموذج؛ وتشمل تقسيم البيانات إلى مجموعة تدريب، ومجموعة اختبار، ومجموعة تحقق (ص 21)."],
+  ["Model Verification (التحقق)", "استخدام مجموعة التحقق (Validation set) للتحقق من صحة النموذج قبل اختباره النهائي (ص 21)."],
+  ["Model Fine-tuning (الضبط الدقيق)", "الخطوة السادسة في بناء النموذج؛ وتعني ضبط النموذج بشكل مستمر استناداً إلى البيانات الفعلية لسيناريو الخدمة (ص 21)."],
+  ["Interpretability & Practicability", "القابلية للتفسير (سهولة تفسير النتيجة) وقابلية التطبيق (بقاء سرعة التنبؤ مقبولة مع البيانات الضخمة) من معايير النموذج الجيد (ص 22)."],
+  ["Generalization Capability", "القدرة على التعميم (أو المتانة): قدرة النموذج المدرب على الأداء الجيد على العينات الجديدة غير المرئية سابقاً (ص 22-23)."],
+  ["Training vs Generalization Error", "خطأ التدريب يحدث على بيانات التدريب، بينما خطأ التعميم يحدث على العينات الجديدة (ونفضل دائماً خطأ تعميم أصغر) (ص 23)."],
+  ["Underfitting (نقص/عدم التجهيز)", "يحدث عندما لا يتناسب النموذج مع البيانات بشكل كافٍ (لم يتم تعلم جميع الميزات) بسبب ضعف سعة النموذج (ص 23-24)."],
+  ["Overfitting (الإفراط في التجهيز)", "يحدث عندما يكون خطأ التدريب صغيراً ولكن خطأ التعميم كبيراً (تعميم ضعيف) لأن النموذج تعلم التشويش والضوضاء (ص 23-24)."],
+  ["Model Capacity / Complexity", "قدرة أو تعقيد النموذج: قدرة النموذج على ملاءمة الدوال؛ نقصها يسبب Underfitting وزيادتها المفرطة تسبب Overfitting (ص 23)."],
+  ["Bias (الانحياز)", "الفرق بين قيمة التنبؤ المتوقعة (أو المتوسطة) والقيمة الصحيحة التي نحاول التنبؤ بها (ص 24)."],
+  ["Variance (التباين)", "إزاحة نتيجة التنبؤ عن القيمة المتوسطة؛ وهو خطأ ناتج عن حساسية النموذج للتقلبات الصغيرة في مجموعة التدريب (ص 24)."],
+  ["MAE & MSE", "مقاييس تقييم الانحدار: متوسط الخطأ المطلق (MAE) ومتوسط الخطأ المربع (MSE)، وكلما اقترب MAE من 0 كان النموذج أفضل (ص 26)."],
+  ["R² (RSS & TSS)", "معامل التحديد لتقييم الانحدار: R² = 1 - (RSS/TSS)، نطاقه بين 0 و 1، والقيمة الأكبر تدل على ملاءمة أفضل للنموذج (ص 27)."],
+  ["TP & TN", "إيجابي حقيقي (TP) وسلبي حقيقي (TN): الحالات الإيجابية والسلبية التي صنفها النموذج بشكل صحيح، وتقع على القطر الرئيسي لمصفوفة الارتباك (ص 27-28)."],
+  ["FP & FN", "إيجابية كاذبة (FP) وسلبية كاذبة (FN): الحالات المصنفة بشكل خاطئ، وتقع خارج القطر الرئيسي ويجب أن تكون قريبة من الصفر (ص 27-28)."],
+  ["Accuracy & Error Rate", "الدقة = (TP+TN)/(P+N)، ومعدل الخطأ = (FP+FN)/(P+N) (ص 28)."],
+  ["Recall (Sensitivity) vs Specificity", "الاستدعاء/الحساسية = TP/P (معدل الإيجابية الحقيقية)، بينما الخصوصية (Specificity) = TN/N (معدل السلبية الحقيقية) (ص 28)."],
+  ["Precision & F1 / Fβ Score", "الدقة الإيجابية Precision = TP/(TP+FP)، ومقياس F1 هو المتوسط التوافقي للدقة والاستدعاء (ص 28)."]
+];
+
+const cards = [
+  ["لماذا يُعد اختيار الميزة (Feature Selection) ضرورياً في تعلم الآلة؟ (4 أسباب)", "1) تقليل وقت التدريب، 2) تبسيط النماذج لتسهيل تفسيرها، 3) تحسين تعميم النموذج وتجنب الإفراط في التجهيز (Overfitting)، 4) تجنب انفجار الأبعاد (Dimension explosion) (ص 17)."],
+  ["ما هي طرق اختيار الميزة الثلاث في الفصل الثامن؟", "1) طريقة التصفية (Filter)، 2) طريقة التغليف (Wrapper)، 3) الطريقة المضمنة (Embedded) (ص 17-19)."],
+  ["كيف تعمل طريقة التصفية (Filter)؟ وما علاقتها بالنموذج؟", "تُعتبر مستقلة تماماً عن النموذج أثناء اختيار الميزة، وتعمل عبر قياس الارتباط بين كل ميزة والسمة المستهدفة باستخدام مقياس إحصائي لتسجيل نقاط كل ميزة (ص 17)."],
+  ["ما هي المقاييس الإحصائية الثلاثة المستخدمة في طريقة التصفية (Filter)؟ وما عيبها؟", "• المقاييس: 1) معامل ارتباط بيرسون، 2) معامل كاي تربيع (Chi-Square)، 3) المعلومات المتبادلة.\n• العيب (القيد): لا تأخذ في الاعتبار العلاقة بين الميزات، وتميل لاختيار المتغيرات المكررة (ص 18)."],
+  ["كيف تعمل طريقة التغليف (Wrapper)؟ وما أشهر خوارزمياتها؟ وما عيبها؟", "• عملها: تنظر لاختيار الميزة كمشكلة بحث وتستخدم نموذجاً تنبؤياً لتقييم ومقارنة مجموعات الميزات.\n• أشهر طرقها: إزالة الميزة المتكررة (RFE).\n• عيبها: تحتاج لتدريب نموذج جديد لكل مجموعة فرعية فالعمليات الحسابية واسعة النطاق (ص 18-19)."],
+  ["بماذا تتميز الطريقة المضمنة (Embedded) عن التصفية والتغليف؟", "تستخدم اختيار الميزة كجزء من بناء النموذج نفسه، حيث يتعلم النموذج بشكل نشط كيفية اختيار الميزة أثناء عملية التدريب (ص 19)."],
+  ["ما هي الطريقة الأكثر شيوعاً لاختيار الميزات المضمنة؟ وما اسمها الآخر؟ وما أمثلتها؟", "هي التنظيم (Regularization) ويُطلق عليها أيضاً (طريقة العقوبة Penalty method)، وتقدم قيوداً إضافية لتقليل تعقيد النموذج. أمثلتها: الانحدار التلالي (Ridge) وانحدار اللاسو (Lasso) (ص 20)."],
+  ["ما هي الخطوات الست للإجراء العام لبناء النموذج بالترتيب (ص 21)؟", "1) تقسيم البيانات (تدريب، اختبار، تحقق)، 2) تدريب النموذج، 3) التحقق من النموذج (بمجموعة التحقق)، 4) اختبار النموذج (لتقييم التعميم)، 5) نشر النموذج، 6) الضبط الدقيق المستمر للنموذج (ص 21)."],
+  ["ما هي المعايير الأربعة التي تحدد (ما هو النموذج الجيد) (ص 22)؟", "1) القدرة على التعميم (Generalization)، 2) القابلية للتفسير (Interpretability)، 3) سرعة التنبؤ (Prediction rate)، 4) قابلية التطبيق (Practicability) مع البيانات الضخمة (ص 22)."],
+  ["ما الفرق بين خطأ التدريب (Training error) وخطأ التعميم (Generalization error)؟", "• خطأ التدريب: يحدث عند تشغيل النموذج على بيانات التدريب.\n• خطأ التعميم: يحدث عند تشغيل النموذج على عينات جديدة، ونحن نفضل دائماً نموذجاً ذا خطأ تعميمي أصغر (ص 23)."],
+  ["قارني بين نقص التجهيز (Underfitting) والإفراط في التجهيز (Overfitting).", "• نقص التجهيز (Underfitting): لا يتناسب النموذج مع البيانات بشكل كافٍ (لم يتعلم جميع الميزات) بسبب ضعف سعته.\n• الإفراط في التجهيز (Overfitting): خطأ التدريب صغير جداً ولكن خطأ التعميم كبير (يتعلم التشويش) بسبب زيادة سعته عن المطلوب (ص 23-24)."],
+  ["ما هي قدرة النموذج (Model capacity) وما الاسم الآخر لها؟", "تُسمى أيضاً تعقيد النموذج (Model complexity)، وهي قدرة النموذج على ملاءمة الوظائف؛ وتكون مثالية عندما تتناسب مع تعقيد المهمة وكمية بيانات التدريب (ص 23)."],
+  ["ما هي معادلة الخطأ الكلي للتنبؤ النهائي (Total Error)؟", "الخطأ الكلي للتنبؤ النهائي = (الانحياز)² + التباين + خطأ لا يمكن إنقاصه\nTotal error = Bias² + Variance + Irreducible error (ص 24)."],
+  ["ما الفرق بين تعريف الانحياز (Bias) وتعريف التباين (Variance) (ص 24)؟", "• الانحياز (Bias): الفرق بين قيمة التنبؤ المتوقعة (أو المتوسطة) والقيمة الصحيحة التي نحاول التنبؤ بها.\n• التباين (Variance): إزاحة نتيجة التنبؤ عن القيمة المتوسطة، وهو خطأ ناتج عن حساسية النموذج للتقلبات الصغيرة في مجموعة التدريب (ص 24)."],
+  ["متى يكون النموذج جيداً ومتى يكون سيئاً وفق مجموعات التباين والانحياز (ص 25)؟", "• انحياز منخفض + تباين منخفض = نموذج جيد.\n• انحياز عالٍ + تباين عالٍ = نموذج سيئ (ص 25)."],
+  ["ما هي العلاقة بين تعقيد النموذج (Model Complexity) وكل من خطأ التدريب وخطأ الاختبار؟", "كلما زاد تعقيد النموذج، ينخفض خطأ التدريب باستمرار؛ بينما ينخفض خطأ الاختبار إلى نقطة معينة ثم يزيد في الاتجاه المعاكس مشكلاً (منحنى محدباً) (ص 25)."],
+  ["ما هي معادلة متوسط الخطأ المطلق (MAE) ومتوسط الخطأ المربع (MSE)؟", "• MAE = (1/m) Σ |yᵢ - ŷᵢ| (وكلما اقترب من 0 كان النموذج أكثر ملاءمة).\n• MSE = (1/m) Σ (yᵢ - ŷᵢ)² (ص 26)."],
+  ["ما هي معادلة معامل التحديد (R²)؟ وما نطاق قيمته؟", "R² = 1 - (RSS / TSS). نطاق قيمته بين 0 و 1، وتشير القيمة الأكبر (الأقرب لـ 1) إلى أن النموذج يناسب بيانات التدريب بشكل أفضل (ص 27)."],
+  ["إلى ماذا يشير كل من TSS و RSS في معادلة معامل التحديد R²؟", "• TSS: يشير إلى الفرق بين العينات Σ(yᵢ - ȳ)².\n• RSS: يشير إلى الفرق بين القيمة المتوقعة وقيمة العينة Σ(yᵢ - ŷᵢ)² (ص 27)."],
+  ["ما الفرق بين P و N و TP و TN و FP و FN في تقييم التصنيف؟", "• P و N: الحالات الإيجابية والسلبية الحقيقية في البيانات.\n• TP و TN: الإيجابيات والسلبيات المصنفة بشكل صحيح.\n• FP و FN: الإيجابيات الكاذبة والسلبيات الكاذبة المصنفة بشكل غير صحيح (ص 27)."],
+  ["كيف تبدو مصفوفة الارتباك (Confusion Matrix) لمصنف مثالي عالي الدقة؟", "تكون معظم قيم التنبؤ موجودة في القطر الرئيسي للجدول (من CM₁,₁ إلى CMm,m)، بينما تكون القيم خارج القطر (أي FP و FN) صفراً أو قريبة من الصفر (0) (ص 28)."],
+  ["ما هي معادلة كل من الدقة (Accuracy) ومعدل الخطأ (Error rate)؟", "• الدقة (Accuracy) = (TP + TN) / (P + N).\n• معدل الخطأ (Error rate) = (FP + FN) / (P + N) (ص 28)."],
+  ["ما الفرق بين معادلة الحساسية/الاستدعاء (Sensitivity / Recall) ومعادلة الخصوصية (Specificity)؟", "• الحساسية / الاستدعاء (TPR / Recall) = TP / P.\n• الخصوصية (Specificity / TNR) = TN / N (ص 28)."],
+  ["ما الفرق بين معادلة الدقة الإيجابية (Precision) ومعادلة الاستدعاء (Recall)؟", "• Precision = TP / (TP + FP) (من إجمالي ما توقعه النموذج كإيجابي).\n• Recall = TP / P = TP / (TP + FN) (من إجمالي الإيجابي الفعلي في البيانات) (ص 28-29)."],
+  ["ما هو مقياس F1 وما معادلته؟ وما معادلة مقياس Fβ العام؟", "• F1 هو المتوسط التوافقي للاستدعاء والدقة: F1 = (2 × Precision × Recall) / (Precision + Recall).\n• Fβ = ((1 + β²) × Precision × Recall) / (β² × Precision + Recall) (ص 28)."],
+  ["في مثال الـ 200 صورة قطة (TP=140, FN=30, FP=20, TN=10)، كيف نحسب Precision؟", "Precision = TP / (TP + FP) = 140 / (140 + 20) = 140 / 160 = 87.5% (ص 29)."],
+  ["في مثال الـ 200 صورة قطة (TP=140, P=170, FP=20, TN=10)، كيف نحسب Recall؟", "Recall = TP / P = 140 / 170 = 82.4% (ص 29)."],
+  ["في مثال الـ 200 صورة قطة (TP=140, TN=10, P=170, N=30)، كيف نحسب Accuracy؟", "Accuracy = (TP + TN) / (P + N) = (140 + 10) / (170 + 30) = 150 / 200 = 75% (ص 29)."]
+];
+
+const questions = [
+  {q:"أي مما يلي يُعد من الأسباب الأربعة الضرورية لاختيار الميزة (Feature Selection) في تعلم الآلة؟", o:["تقليل وقت التدريب، تبسيط النماذج، تجنب الإفراط في التجهيز (Overfitting)، وتجنب انفجار الأبعاد","زيادة وقت التدريب، تعقيد النماذج، وزيادة انفجار الأبعاد","حذف جميع البيانات الصحيحة من مجموعة التدريب","تحويل مسائل التصنيف إلى مسائل تجميع"], a:0, e:"اختيار الميزة ضروري لتقليل وقت التدريب، تبسيط النماذج لتسهيل تفسيرها، تحسين التعميم وتجنب Overfitting، وتجنب انفجار الأبعاد (ص 17)."},
+  {q:"أي طريقة من طرق اختيار الميزة تُعتبر (مستقلة عن النموذج) وتطبق مقياساً إحصائياً لقياس الارتباط بين كل ميزة والسمة المستهدفة؟", o:["طريقة التصفية (Filter)","طريقة التغليف (Wrapper)","الطريقة المضمنة (Embedded)","انحدار اللاسو (Lasso)"], a:0, e:"طريقة التصفية (Filter) مستقلة عن النموذج أثناء اختيار الميزة، وتقيس الارتباط بمقياس إحصائي لتسجيل نقاط كل ميزة (ص 17)."},
+  {q:"أي من المقاييس التالية يُستخدم عادةً كمقياس إحصائي في طريقة التصفية (Filter) لاختيار الميزات؟", o:["معامل ارتباط بيرسون، معامل Chi-Square، والمعلومات المتبادلة (Mutual information)","إزالة الميزة المتكررة (RFE) فقط","الانحدار التلالي (Ridge) وانحدار اللاسو (Lasso)","مصفوفة الارتباك ومنحنى ROC"], a:0, e:"المقاييس الإحصائية في التصفية تشمل: معامل ارتباط بيرسون، معامل كاي تربيع، والمعلومات المتبادلة (ص 18)."},
+  {q:"ما هو القيد (العيب) الرئيسي لاستخدام طريقة التصفية (Filter) في اختيار الميزات؟", o:["لا يأخذ الفلتر في الاعتبار العلاقة بين الميزات، ويميل فقط إلى اختيار المتغيرات المكررة","تحتاج لتدريب نموذج جديد لكل مجموعة فرعية من الميزات","لا تعمل إلا مع الشبكات العصبية العميقة","تقوم بحذف السمة المستهدفة"], a:0, e:"قيد طريقة التصفية هو أنها لا تأخذ في الاعتبار العلاقة بين الميزات، وتميل فقط إلى اختيار المتغيرات المكررة (ص 18)."},
+  {q:"الطريقة التي تستخدم نموذجاً تنبؤياً لتسجيل مجموعة فرعية من الميزات، وتنظر لمشكلة اختيار الميزة كـ (مشكلة بحث) هي:", o:["طريقة التغليف (Wrapper)","طريقة التصفية (Filter)","الطريقة المضمنة (Embedded)","تطبيع البيانات"], a:0, e:"طريقة التغليف (Wrapper) تستخدم نموذجاً تنبؤياً لتقييم ومقارنة مجموعات الميزات كعملية بحث (ص 18)."},
+  {q:"تُعد خوارزمية إزالة الميزة المتكررة (Recursive Feature Elimination - RFE) إحدى الطرق الشائعة التابعة لـ:", o:["طريقة التغليف (Wrapper)","طريقة التصفية (Filter)","الطريقة المضمنة (Embedded)","طريقة التجميع (Clustering)"], a:0, e:"إزالة الميزة المتكررة (RFE) هي إحدى طرق التغليف (Wrapper) الشائعة (ص 19)."},
+  {q:"ما هو القيد (العيب) الرئيسي لطريقة التغليف (Wrapper) رغم إعطائها أفضل مجموعة ميزات؟", o:["تحتاج إلى تدريب نموذج جديد لكل مجموعة فرعية من الميزات، وبالتالي فإن كمية العمليات الحسابية تكون واسعة النطاق","أنها مستقلة تماماً عن النموذج التنبؤي","أنها تعتمد على معامل ارتباط بيرسون فقط","أنها لا تصلح لأي نموذج تنبؤي"], a:0, e:"تحتاج طريقة التغليف لتدريب نموذج جديد لكل مجموعة فرعية من الميزات مما يجعل كمية العمليات واسعة النطاق (ص 19)."},
+  {q:"أي طريقة تجعل اختيار الميزة جزءاً من بناء النموذج، حيث يتعلم النموذج بشكل نشط كيفية اختيار الميزة أثناء التدريب؟", o:["الطريقة المضمنة (Embedded)","طريقة التصفية (Filter)","طريقة التغليف (Wrapper)","طريقة التقسيم العشوائي"], a:0, e:"الطريقة المضمنة (Embedded) تستخدم اختيار الميزة كجزء من بناء النموذج أثناء التدريب (ص 19)."},
+  {q:"ما هي الطريقة الأكثر شيوعاً لاختيار الميزات المضمنة (Embedded) والتي يُطلق عليها أيضاً (طريقة العقوبة Penalty method)؟", o:["التنظيم (Regularization) مثل الانحدار التلالي (Ridge) وانحدار اللاسو (Lasso)","معامل ارتباط بيرسون ومعامل Chi-Square","إزالة الميزة المتكررة (RFE)","مصفوفة الارتباك"], a:0, e:"الطريقة الأكثر شيوعاً في التضمين هي التنظيم (Regularization / طريقة العقوبة) ومن طرقها Ridge و Lasso (ص 20)."},
+  {q:"في الإجراء العام لبناء النموذج (ص 21)، في أي خطوة نستخدم (مجموعة التحقق Validation set) للتحقق من صحة النموذج؟", o:["في خطوة التحقق من النموذج (Model Verification) التي تلي تدريب النموذج وتسبق اختباره","في خطوة نشر النموذج النهائي فقط","قبل تقسيم البيانات","بعد حذف النموذج"], a:0, e:"تُستخدم مجموعة التحقق في الخطوة 3 (التحقق من النموذج Model Verification) بعد التدريب وقبل الاختبار النهائي (ص 21)."},
+  {q:"في معايير النموذج الجيد (ص 22)، ماذا نُسمي المعيار الذي يسأل: (هل لا يزال معدل التنبؤ مقبولاً عند زيادة حجم الخدمة مع حجم البيانات الضخم؟)؟", o:["قابلية التطبيق (Practicability)","القابلية للتفسير (Interpretability)","نقص التجهيز (Underfitting)","معامل ارتباط بيرسون"], a:0, e:"قابلية التطبيق (Practicability) تقيس بقاء معدل التنبؤ مقبولاً عند زيادة حجم الخدمة مع البيانات الضخمة (ص 22)."},
+  {q:"تُسمى القدرة على تطبيق النموذج الذي تم الحصول عليه بعد التعلم ليؤدي أداءً جيداً على (عينات جديدة) بـ:", o:["القدرة على التعميم أو المتانة (Generalization capability)","خطأ التدريب (Training error)","نقص التجهيز (Underfitting)","انفجار الأبعاد"], a:0, e:"القدرة على تطبيق النموذج على عينات جديدة تُسمى بالتعميم أو المتانة (Generalization capability) (ص 23)."},
+  {q:"متى تحدث مشكلة (الإفراط في التجهيز - Overfitting) كما ورد في صلاحية النموذج (ص 23-24)؟", o:["عندما يكون خطأ تدريب النموذج صغيراً ولكن خطأ التعميم كبير (حيث يتم تعلم التشويش وتكون سعة النموذج أعلى من المطلوب)","عندما لا يتناسب النموذج مع البيانات بشكل كافٍ وتكون سعته ضعيفة جداً","عندما يكون خطأ التعميم صفراً وخطأ التدريب 100%","عندما يتعلم النموذج الميزات الأساسية فقط بتوازن"], a:0, e:"يحدث الإفراط في التجهيز (Overfitting) عندما يكون خطأ التدريب صغيراً ولكن خطأ التعميم كبيراً، حيث يتعلم النموذج التشويش (ص 23-24)."},
+  {q:"ما هي المعادلة الصحيحة لـ (الخطأ الكلي للتنبؤ النهائي - Total error of final prediction) (ص 24)؟", o:["Total error = Bias² + Variance + Irreducible error","Total error = TP + TN + FP","Total error = 1 - (RSS / TSS)","Total error = Bias - Variance"], a:0, e:"الخطأ الكلي للتنبؤ النهائي = (الانحياز)² + التباين + خطأ لا يمكن إنقاصه (ص 24)."},
+  {q:"الفرق بين قيمة التنبؤ المتوقعة (أو المتوسطة) والقيمة الصحيحة التي نحاول التنبؤ بها يُعرّف بـ:", o:["الانحياز (Bias)","التباين (Variance)","المتانة (Robustness)","الخصوصية (Specificity)"], a:0, e:"الانحياز (Bias) هو الفرق بين قيمة التنبؤ المتوقعة أو المتوسطة والقيمة الصحيحة التي نحاول التنبؤ بها (ص 24)."},
+  {q:"الخطأ الناتج عن حساسية النموذج للتقلبات الصغيرة في مجموعة التدريب (إزاحة نتيجة التنبؤ عن القيمة المتوسطة) يُعرّف بـ:", o:["التباين (Variance)","الانحياز (Bias)","خطأ التدريب الصفري","معامل التحديد"], a:0, e:"التباين (Variance) هو إزاحة نتيجة التنبؤ عن القيمة المتوسطة وينتج عن حساسية النموذج للتقلبات الصغيرة في مجموعة التدريب (ص 24)."},
+  {q:"وفق مجموعات التباين والانحياز (ص 25)، أي مجموعة مما يلي تمثل (نموذجاً جيداً)؟", o:["انحياز منخفض وتباين منخفض","انحياز عالٍ وتباين عالٍ","انحياز عالٍ وتباين منخفض","انحياز منخفض وتباين عالٍ"], a:0, e:"انحياز منخفض وتباين منخفض يعطي نموذجاً جيداً، بينما انحياز عالٍ وتباين عالٍ يعطي نموذجاً سيئاً (ص 25)."},
+  {q:"ماذا يحدث لـ (خطأ الاختبار) كلما زاد تعقيد النموذج (Model Complexity) وفق المنحنى في ص 25؟", o:["ينخفض خطأ الاختبار إلى نقطة معينة وبعد ذلك يزيد في الاتجاه المعاكس، مشكلاً منحنى محدباً","ينخفض خطأ الاختبار إلى ما لا نهاية ولا يرتفع أبداً","يبقى خطأ الاختبار ثابتاً كخط مستقيم أفقي","يرتفع خطأ التدريب وينخفض خطأ الاختبار دائماً"], a:0, e:"كلما زاد تعقيد النموذج انخفض خطأ الاختبار إلى نقطة معينة ثم يزيد في الاتجاه المعاكس مشكلاً منحنى محدباً (ص 25)."},
+  {q:"في تقييم أداء الانحدار، كلما اقترب مقياس متوسط الخطأ المطلق (MAE) من أي رقم كان النموذج أكثر ملاءمة لبيانات التدريب؟", o:["من الصفر (0)","من 100","من ما لا نهاية","من -1"], a:0, e:"كلما اقترب متوسط الخطأ المطلق MAE من 0، كان النموذج أكثر ملاءمة لبيانات التدريب (ص 26)."},
+  {q:"في معادلة معامل التحديد R² = 1 - (RSS / TSS) لتقييم الانحدار (ص 27)، ما هو نطاق قيمة R² وإلى ماذا يشير كل من TSS و RSS؟", o:["نطاقه [0, 1] (والأكبر أفضل)؛ حيث يشير TSS للفرق بين العينات، ويشير RSS للفرق بين القيمة المتوقعة وقيمة العينة","نطاقه [10, 100]؛ حيث يشير TSS للوقت و RSS للسرعة","نطاقه سالب دائماً؛ والأصغر هو الأفضل","يُستخدم لتقييم التصنيف الثنائي فقط"], a:0, e:"نطاق R² هو [0, 1] والقيمة الأكبر أفضل، و TSS هو الفرق بين العينات بينما RSS هو الفرق بين القيمة المتوقعة وقيمة العينة (ص 27)."},
+  {q:"في مصفوفة الارتباك لمصنف مثالي عالي الدقة، أين تتركز معظم قيم التنبؤ، وما قيمة FP و FN؟", o:["تتركز معظم القيم في القطر الرئيسي للجدول، بينما تكون القيم خارج القطر (FP و FN) صفراً أو قريبة من 0","تتركز جميع القيم في FP و FN وتكون قيم القطر الرئيسي صفراً","تتساوى جميع الأرقام في المصفوفة","تكون قيمة TP مساوية للصفر دائماً"], a:0, e:"في المصنف عالي الدقة تقع معظم القيم على القطر الرئيسي (CM₁,₁ إلى CMm,m) وتكون FP و FN قريبة من 0 (ص 28)."},
+  {q:"ما هي المعادلة الرياضية الصحيحة لمقياس (الخصوصية ومعدل السلبية الحقيقية - Specificity and true negative rate) (ص 28)؟", o:["TN / N","TP / P","TP / (TP + FP)","(FP + FN) / (P + N)"], a:0, e:"الخصوصية (Specificity) ومعدل السلبية الحقيقية = TN / N، بينما الحساسية والاستدعاء (Recall) = TP / P (ص 28)."},
+  {q:"المقياس الذي يمثل المتوسط التوافقي (Harmonic mean) لمعدل الاستدعاء (Recall) والدقة الإيجابية (Precision) ويعطى بالمعادلة (2×Precision×Recall)/(Precision+Recall) هو:", o:["مقياس F1","معدل الخطأ Error rate","معامل التحديد R²","متوسط الخطأ المربع MSE"], a:0, e:"مقياس F1 هو المتوسط التوافقي للاستدعاء والدقة الإيجابية (ص 28)."},
+  {q:"في مثال الـ 200 صورة لتصنيف القطط (ص 29)، إذا كان TP = 140 و FP = 20 و FN = 30 و TN = 10، فكم تبلغ قيمة الدقة الإيجابية (Precision)؟", o:["87.5% (لأن 140 / (140 + 20) = 140 / 160)","82.4% (لأن 140 / 170)","75% (لأن 150 / 200)","50%"], a:0, e:"Precision = TP / (TP + FP) = 140 / (140 + 20) = 140 / 160 = 87.5% (ص 29)."},
+  {q:"في نفس مثال الـ 200 صورة لتصنيف القطط (حيث TP = 140، TN = 10، إجمالي القطط الفعلي P = 170، وإجمالي غير القطط الفعلي N = 30)، كم تبلغ قيمة كل من الاستدعاء (Recall) والدقة العامة (Accuracy)؟", o:["الاستدعاء Recall = 82.4% (140/170)، والدقة العامة Accuracy = 75% (150/200)","الاستدعاء = 75%، والدقة العامة = 82.4%","كلاهما يساويان 100%","الاستدعاء = 50%، والدقة العامة = 90%"], a:0, e:"Recall = TP / P = 140 / 170 = 82.4%، بينما Accuracy = (TP + TN) / (P + N) = (140 + 10) / 200 = 75% (ص 29)."}
+];
+
+// بناء شبكة المصطلحات
+const termsGrid = document.getElementById("termsGrid");
+terms.forEach(([en, ar]) => {
+  const d = document.createElement("div");
+  d.className = "card";
+  d.style.margin = "0";
+  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
+  termsGrid.appendChild(d);
+});
+
+// إدارة البطاقات التعليمية
+let ci = 0, showAnswer = false;
+function renderCard() {
+  document.getElementById("flashTerm").textContent = cards[ci][0];
+  const ansEl = document.getElementById("flashAnswer");
+  ansEl.innerHTML = cards[ci][1].replace(/\n/g, "<br>");
+  ansEl.hidden = !showAnswer;
+  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
+  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+}
+document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
+document.getElementById("flashcard").addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
+});
+document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
+document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
+renderCard();
+
+// التنقل بين التبويبات
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+// إدارة الاختبار
+let answers = {};
+function renderQuiz() {
+  const area = document.getElementById("quizArea");
+  area.innerHTML = "";
+  const letters = ["أ", "ب", "ج", "د"];
+  questions.forEach((item, i) => {
+    const box = document.createElement("div");
+    box.className = "qbox";
+    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
+    const opts = box.querySelector(".options");
+    item.o.forEach((opt, j) => {
+      const btn = document.createElement("button");
+      btn.className = "option";
+      btn.textContent = `${letters[j]}) ${opt}`;
+      btn.onclick = () => {
+        answers[i] = j;
+        [...opts.children].forEach((x, k) => {
+          x.classList.remove("correct", "wrong");
+          x.disabled = true;
+          if (k === item.a) x.classList.add("correct");
+          if (k === j && j !== item.a) x.classList.add("wrong");
+        });
+        const fb = document.getElementById("fb" + i);
+        fb.hidden = false;
+        fb.className = "feedback " + (j === item.a ? "good" : "bad");
+        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
+        updateScore();
+      };
+      opts.appendChild(btn);
+    });
+    area.appendChild(box);
+  });
+  updateScore();
+}
+
+function updateScore() {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
+  document.getElementById("score").textContent = `النتيجة: ${correct} / ${questions.length}`;
+  document.getElementById("progressBar").style.width = (Object.keys(answers).length / questions.length * 100) + "%";
+}
+
+document.getElementById("resetQuiz").onclick = () => {
+  answers = {};
+  document.getElementById("finalResult").textContent = "";
+  renderQuiz();
+};
+
+document.getElementById("finishQuiz").onclick = () => {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
+  const pct = Math.round(correct / questions.length * 100);
+  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${questions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! إتقان كامل للفصل الثامن من موضوعات مختارة." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
+};
+
+renderQuiz();
+</script>
+</body>
+</html>

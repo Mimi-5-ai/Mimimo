@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الفصل الرابع عشر الشامل (100%) | تعلم الآلة التطبيقي</title>
+<style>
+:root{
+  --bg:#f4f6fb;
+  --card:#ffffff;
+  --ink:#1b263b;
+  --muted:#637085;
+  --accent:#4f46e5;
+  --accent-dark:#3730a3;
+  --accent2:#eef2ff;
+  --line:#e2e8f0;
+  --good:#0d9488;
+  --good-bg:#e6fffa;
+  --bad:#dc2626;
+  --bad-bg:#fef2f2;
+  --warn:#d97706;
+  --warn-bg:#fffbeb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
+header{background:linear-gradient(135deg,#1e1b4b,#4f46e5);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(30,27,75,0.15)}
+.wrap{max-width:1040px;margin:auto;padding:0 16px}
+.eyebrow{opacity:.88;font-size:.9rem;background:rgba(255,255,255,0.14);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
+h1{margin:5px 0;font-size:clamp(1.55rem,4vw,2.3rem)}
+header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
+nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:var(--accent2);color:var(--accent-dark);font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
+nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
+nav button.active,.btn.primary{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+main .btn.primary{background:var(--accent);color:white}
+main{padding:22px 0 48px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(36,52,91,0.04)}
+h2{font-size:1.35rem;margin:0 0 12px;color:#1e1b4b}
+h3{font-size:1.06rem;margin:10px 0 6px;color:var(--accent-dark)}
+h4{font-size:.98rem;margin:8px 0 4px;color:#1e1b4b}
+small,.muted{color:var(--muted)}
+ul,ol{padding-right:22px;margin:8px 0}
+li{margin:6px 0}
+details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
+summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f8faff;color:#1e1b4b;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
+details[open] summary{border-bottom-color:var(--line);background:#eef2ff;color:var(--accent-dark)}
+.details-body{padding:16px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#f1f5f9;color:#1e1b4b;font-weight:bold}
+tr:last-child td{border-bottom:0}
+.note{border-right:4px solid var(--accent);padding:10px 14px;background:#f5f7ff;border-radius:8px;margin:10px 0}
+.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
+.formula-box{background:#1e1b4b;color:#fff;padding:14px 18px;border-radius:12px;text-align:center;font-size:1.06rem;margin:10px 0;direction:ltr;font-family:monospace}
+.step-card{border:1px solid var(--line);border-radius:12px;padding:14px;background:#fafbff}
+.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
+.options{display:grid;gap:8px;margin-top:12px}
+.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
+.option:hover:not(:disabled){border-color:var(--accent);background:#f8faff}
+.option.correct{background:var(--good-bg);border-color:#5eead4;color:#115e59;font-weight:bold}
+.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
+.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
+.feedback.good{color:var(--good);background:var(--good-bg)}
+.feedback.bad{color:var(--bad);background:var(--bad-bg)}
+.progress{height:10px;background:#e2e8f0;border-radius:9px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
+.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#eef2ff);border:2px solid #c7d2fe;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
+.flashcard:hover{transform:scale(1.005)}
+.flashcard .term{font-size:1.35rem;font-weight:bold;color:#1e1b4b}
+.flashcard .answer{margin-top:16px;font-size:1.08rem;color:var(--accent-dark);background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
+@media(max-width:600px){
+  .card{padding:14px}
+  nav button{flex:1 1 calc(50% - 8px);text-align:center}
+  .flashcard{min-height:200px;padding:18px}
+  th,td{padding:8px 10px;font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">نسخة شاملة ومحدثة 100% • صفحات الملخص (158 إلى 167)</div>
+    <h1>الفصل الرابع عشر: خوارزمية بايز الساذجة (Naive Bayes)</h1>
+    <p>يغطي مبدأ استقلالية الميزات، سبب التسمية، قانون بايز الاحتمالي، مثال رمي العملتين، الأنواع الثلاثة، الفوائد والحدود، والمثال العملي لتحديد جنس الاسم "براء"</p>
+    <nav>
+      <button class="active" data-tab="summary">الشرح الشامل</button>
+      <button data-tab="tables">جداول المقارنات والمسائل (4)</button>
+      <button data-tab="terms">المصطلحات والقوانين (25)</button>
+      <button data-tab="cards">البطاقات (28)</button>
+      <button data-tab="quiz">الاختبار الشامل (25)</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- ================= التبويب الأول: الشرح الشامل ================= -->
+  <section id="summary" class="panel active">
+    <div class="card">
+      <h2>خريطة الفصل الرابع عشر والأخير (من ص 158 إلى ص 167 في الملخص)</h2>
+      <div class="grid">
+        <div>
+          <span class="tag">الوحدة 1 (ص 158 - 160)</span>
+          <h3>مفهوم وتسمية Naive Bayes</h3>
+          <p>مفهوم خوارزمية بايز في التصنيف، مبدأ استقلالية الخصائص (Independence Assumptions)، سبب التسمية بـ Naive و Bayes، ومثال التفاحة.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة 2 (ص 161 - 164)</span>
+          <h3>النظرية، الأنواع، والفوائد والحدود</h3>
+          <p>مثال رمي عملتين معدنيتين، صيغة قانون بايز، الأنواع الثلاثة (متعدد الحدود، برنولي، غاوسي)، الفوائد الخمس، الحدود، والتطبيقات.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة 3 (ص 165 - 167)</span>
+          <h3>قانون بايز والمثال العملي ("براء")</h3>
+          <p>مصطلحات القانون (Prior, Likelihood, Evidence, Posterior)، والخطوات الأربع لحل مسألة تحديد جنس الاسم "براء" بالتفصيل.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- الوحدة الأولى -->
+    <details open>
+      <summary>1) الوحدة (1): مفهوم خوارزمية Naive Bayes، فرضية الاستقلالية، وسبب التسمية (ص 158 - 160)</summary>
+      <div class="details-body">
+        <h3>أولاً: مفهوم خوارزمية بايز في التعلم الآلي (ص 158 - 159)</h3>
+        <ul>
+          <li><b>تعريفها وموقعها في تعلم الآلة:</b> تُعد خوارزمية <b dir="ltr">Naive Bayes Classifier</b> من أشهر أساليب <b>التعلم الآلي الخاضع للإشراف (<span dir="ltr">Supervised Learning</span>)</b> ومهام <b>التصنيف (<span dir="ltr">Classification</span>)</b> على وجه التحديد، وتُعرف أيضاً باسم <b>"مصنف الاحتمالية"</b>.</li>
+          <li><b>بماذا تتميز؟</b> تتميز بـ <b>البساطة، السرعة العالية في المعالجة والتدريب، والكفاءة في عمليات التنبؤ</b> بالفئات المختلفة (مثل تصنيف النصوص، تصفية البريد الإلكتروني كعشوائي أو غير عشوائي، وتحليل البيانات الطبية).</li>
+          <li><b>المبدأ الإحصائي الأساسي (<span dir="ltr">Independence Assumptions</span>):</b> تعتمد على المفهوم الإحصائي لنظرية بايز (<span dir="ltr">Bayes theorem</span>) الذي يحسب احتمالية حدوث نتيجة معينة بتحقق ما هو متاح ومعروف، وتستند إلى مبدأ <b>افتراض الاستقلالية (<span dir="ltr">Independence Assumptions</span>)</b> حيث تنظر للعلاقة بين جميع الخصائص أو الميزات (<span dir="ltr">Features, Attributes</span>) على أنها <b>مستقلة تماماً عن بعضها البعض</b>.</li>
+        </ul>
+
+        <div class="exam-alert">
+          <h3>ثانياً: سبب تسمية المصنف بـ <span dir="ltr">Naive Bayes</span> ومثال التفاحة (ص 159 - 160) - موضع سؤال مؤكد:</h3>
+          <p>يتكون اسم المصنف من كلمتين هما <b dir="ltr">Naive</b> و <b dir="ltr">Bayes</b>:</p>
+          <ol>
+            <li><b>لماذا سُميت <span dir="ltr">Naive</span> (ساذج)؟</b> لأن الخوارزمية تفترض أن كل الكلمات في الجملة أو الميزات في العينة <b>مستقلة عن بعضها بغض النظر عن سياقها</b>:
+              <ul>
+                <li><b>مثال الجمل (ص 159):</b> تعتبر الخوارزمية عبارة <b>"أنت"</b> وعبارة <b>"هل أنت"</b> نفس الشيء دون النظر للسياق.</li>
+                <li><b>مثال فاكهة التفاح (ص 160):</b> للتعرف على التفاحة نحتاج إلى 3 ميزات: <b>(اللون الأحمر، الشكل الكروي، والطعم الحلو)</b>؛ ورغم أن هذه الميزات مرتبطة ببعضها في الواقع، إلا أن مصنف <span dir="ltr">Naive Bayes</span> يفترض أنها <b>مستقلة تماماً عن بعضها البعض</b> بغض النظر عن العلاقات بينها.</li>
+              </ul>
+            </li>
+            <li><b>لماذا سُميت <span dir="ltr">Bayes</span>؟</b> نسبةً إلى <b>نظرية بايز</b> (للعالم توماس بايز) التي تعتمد على حساب الاحتمالات الشرطية.</li>
+          </ol>
+        </div>
+      </div>
+    </details>
+
+    <!-- الوحدة الثانية -->
+    <details open>
+      <summary>2) الوحدة (2): نظرية بايز، مثال رمي العملتين، الأنواع الثلاثة، الفوائد والحدود والتطبيقات (ص 161 - 164)</summary>
+      <div class="details-body">
+        <h3>أولاً: نظرية بايز ومثال رمي عملتين معدنيتين (ص 161)</h3>
+        <ul>
+          <li>تُستخدم نظرية بايز (المسماة باسم <b>توماس بايز</b>) لإيجاد <b>احتمالية فرضية ذات احتمالات مشروطة تعتمد على المعرفة السابقة</b>.</li>
+          <li><b>مثال رمي قطعتين من العملات المعدنية (ص 161):</b>
+            <p>فضاء العينة يتكون من 4 احتمالات هي: <code dir="ltr">{HH, HT, TH, TT}</code> (حيث H رأس، و T ذيل):</p>
+            <ul>
+              <li>احتمال الحصول على رأسين (<code dir="ltr">HH</code>) = <b>1/4</b></li>
+              <li>احتمال الحصول على ذيل واحد على الأقل (<code dir="ltr">HT, TH, TT</code>) = <b>3/4</b></li>
+              <li>احتمال أن العملة الثانية هي الرأس نظراً لأن العملة الأولى هي الذيل = <b>1/2</b></li>
+              <li>احتمال الحصول على رأسين بالنظر إلى أن العملة الأولى هي رأس = <b>1/2</b></li>
+            </ul>
+          </li>
+          <li><b>الصيغة الرياضية لنظرية بايز (ص 161):</b>
+            <div class="formula-box">P(A | B) = [ P(B | A) * P(A) ] / P(B)</div>
+            <ul>
+              <li><b dir="ltr">P(A|B):</b> احتمال حدوث الفرضية $A$ عندما يكون الدليل $B$ قد حدث بالفعل (ويُسمى <b>الاحتمال الخلفي / اللاحق</b> بعد النظر إلى الأدلة).</li>
+              <li><b dir="ltr">P(A):</b> قيمة مسبقة قبلية (احتمالية وقوع الحدث $A$ قبل الإثبات).</li>
+              <li><b dir="ltr">P(B|A):</b> الاحتمال الشرطي لوقوع الدليل $B$ علماً بأن $A$ صحيح.</li>
+              <li><b dir="ltr">P(B):</b> احتمال الدليل $B$، و<b>لا ينبغي أن يكون صفراً أبداً</b>.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <div class="exam-alert">
+          <h3>ثانياً: أنواع مصنفات <span dir="ltr">Naive Bayes</span> الثلاثة (ص 161 - 162) - مهمة جداً في الاختبار:</h3>
+          <ol>
+            <li><b>بايز المتعددة الحدود (<span dir="ltr">Multinomial Naive Bayes</span>):</b>
+              <ul>
+                <li>يُستخدم لحل مشكلات <b>تصنيف المستندات</b>.</li>
+                <li>يعمل مع الميزات التي تمثل <b>تكرار الكلمات وعدد مرات حدوثها في المستند</b> لتحديد احتمالية انتماء المستند لفئة معينة (مثل: الرياضة، السياسة، أو التكنولوجيا).</li>
+              </ul>
+            </li>
+            <li><b>برنولي نايف بايز (<span dir="ltr">Bernoulli Naive Bayes</span>):</b>
+              <ul>
+                <li>مشابه لمتعدد الحدود في استخدامه لمهام <b>تصنيف المستندات</b>، ولكنه يستخدم <b>تنبؤات منطقية (<span dir="ltr">Boolean</span>)</b>.</li>
+                <li>يمثل ما إذا كانت الكلمة <b>موجودة في النص أم لا</b>، ويأخذ فقط القيم <b>(نعم أو لا)</b>.</li>
+              </ul>
+            </li>
+            <li><b>غاوسي نايف بايز (<span dir="ltr">Gaussian Naive Bayes</span>):</b>
+              <ul>
+                <li>يُستخدم في حالة <b>القيم المستمرة (<span dir="ltr">Continuous values</span>)</b> وليس القيم المنفصلة.</li>
+                <li>يحسب الاحتمالات باستخدام معلمات توزيع جاوس (التوزيع الطبيعي <span dir="ltr">Normal Distribution</span>)، أي: <b>المتوسط ($\mu$) والتباين</b>.</li>
+              </ul>
+            </li>
+          </ol>
+        </div>
+
+        <h3>ثالثاً: فوائد (مزايا) وحدود (عيوب) مصنف <span dir="ltr">Naive Bayes</span> (ص 162 - 163)</h3>
+        <div class="grid">
+          <div class="step-card">
+            <span class="tag" style="background:var(--good-bg);color:var(--good)">الفوائد الخمس (ص 162-163)</span>
+            <ol>
+              <li><b>البساطة والكفاءة:</b> سهل التدريب والتنفيذ، منخفض التكلفة الحسابية، وكفؤ مع البيانات الكبيرة.</li>
+              <li><b>التدريب السريع والتنبؤ:</b> لا يتطلب الكثير من بيانات التدريب بسبب استقلال الميزات، ويتنبأ بسرعة (مناسب للوقت الفعلي).</li>
+              <li><b>التدرجية (<span dir="ltr">Scalability</span>):</b> يتعامل مع البيانات عالية الأبعاد، ويعمل جيداً حتى عندما يكون <b>عدد الميزات أكبر من عدد أمثلة التدريب</b>، ويتعامل مع البيانات المستمرة والمنفصلة.</li>
+              <li><b>المتانة للميزات غير ذات الصلة:</b> <b>ليس حساساً</b> للميزات غير ذات الصلة.</li>
+              <li><b>يعمل جيداً مع مجموعات التدريب الصغيرة:</b> يعطي نتائج معقولة حتى مع بيانات تدريب محدودة.</li>
+            </ol>
+          </div>
+          <div class="step-card">
+            <span class="tag" style="background:var(--bad-bg);color:var(--bad)">الحدود والعيوب والحلول (ص 163)</span>
+            <ul>
+              <li><b>العيب الأساسي:</b> يفترض أن جميع الميزات مستقلة عن بعضها البعض (وهو افتراض نادر في الحياة الواقعية)، ولذلك <b>لا يمكنه تعلم العلاقات والتبعيات بين الميزات المختلفة</b>، ويعامل كل ميزة على قدم المساواة بغض النظر عن تفاعلاتها.</li>
+              <li><b>كيف نتغلب على هذه المشكلة؟</b> باستخدام خوارزميات قادرة على تعلم العلاقات المعقدة بين الميزات مثل:
+                <br>1) <b>أشجار القرار (<span dir="ltr">Decision Tree</span>)</b>
+                <br>2) <b>الغابات العشوائية (<span dir="ltr">Random Forest</span>)</b>
+                <br>3) <b>آلة المتجهات الداعمة (<span dir="ltr">SVM</span>)</b>
+                <br>4) <b>الشبكات العصبية (<span dir="ltr">Neural Networks</span>)</b>.</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>رابعاً: تطبيقات مصنف <span dir="ltr">Naive Bayes</span> وتنفيذه في بايثون (ص 163 - 164)</h3>
+        <ul>
+          <li>نظراً لسرعته وفعاليته، يُستخدم لإجراء <b>تنبؤات في الوقت الفعلي (<span dir="ltr">Real-time</span>)</b> في المجالات التالية:
+            <br>1) <b>كشف البريد العشوائي (<span dir="ltr">Spam</span>):</b> مثل خدمة <span dir="ltr">Gmail</span> • 2) <b>تحليل المشاعر:</b> تصنيف النص لإيجابي أو سلبي أو محايد • 3) <b>تصنيف الوثائق والأخبار:</b> إلى رياضة، سياسة، تكنولوجيا، تمويل • 4) <b>نظم التوصية (<span dir="ltr">Recommender Systems</span>):</b> التوصية بالمنتجات والأفلام والمقالات • 5) <b>التعرف على الوجوه، التنبؤ بالطقس، والتشخيص الطبي</b>.</li>
+          <li><b>الوحدة البرمجية في بايثون:</b> يُنفذ باستخدام مكتبة <span dir="ltr">scikit-learn</span> عبر الوحدة <code dir="ltr">sklearn.naive_bayes</code>.</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- الوحدة الثالثة -->
+    <details open>
+      <summary>3) الوحدة (3): مصطلحات قانون بايز والمثال العملي المحلول (تحديد جنس الاسم "براء") (ص 165 - 167)</summary>
+      <div class="details-body">
+        <h3>أولاً: صيغة قانون بايز بالمصطلحات الإحصائية الأربعة (ص 165)</h3>
+        <div class="formula-box">Posterior Probability = (Prior * Likelihood) / Evidence</div>
+        <ul>
+          <li><b dir="ltr">Prior Probabilities:</b> الاحتمالات الأساسية (القبلية).</li>
+          <li><b dir="ltr">Likelihood:</b> الاحتمالات الشرطية.</li>
+          <li><b dir="ltr">Evidence:</b> الاحتمال الأدنى (الدليل).</li>
+          <li><b dir="ltr">Posterior Probabilities:</b> الاحتمالات المشروطة (اللاحقة / النهائية).</li>
+        </ul>
+
+        <div class="exam-alert">
+          <h3>ثانياً: المثال العملي المحلول خطوة بخطوة - تحديد جنس الاسم "براء" (ص 165 - 166) - موضع أسئلة حسابية مباشرة:</h3>
+          <p><b>المعطيات في قاعدة البيانات (إجمالي 8 أشخاص):</b></p>
+          <table>
+            <thead>
+              <tr>
+                <th>الاسم</th>
+                <th>براء</th>
+                <th>نورة</th>
+                <th>براء</th>
+                <th>براء</th>
+                <th>سعد</th>
+                <th>هديل</th>
+                <th>صالح</th>
+                <th>ساره</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>الجنس</b></td>
+                <td>ذكر</td>
+                <td>أنثى</td>
+                <td>أنثى</td>
+                <td>أنثى</td>
+                <td>ذكر</td>
+                <td>أنثى</td>
+                <td>ذكر</td>
+                <td>أنثى</td>
+              </tr>
+            </tbody>
+          </table>
+          <p><b>المطلوب:</b> لدينا سجل جديد باسم <b>"براء"</b>، ونرغب في معرفة ما إذا كان هذا الاسم يشير إلى <b>ذكر</b> أو <b>أنثى</b> باستخدام مصنف <span dir="ltr">Naive Bayes</span>:</p>
+
+          <div class="grid">
+            <div class="step-card">
+              <span class="tag">الخطوة 1 (ص 165)</span>
+              <h4>حساب الاحتمالات الأساسية (Prior Probabilities)</h4>
+              <ul>
+                <li>عدد جميع الأشخاص = <b>8</b></li>
+                <li>عدد الذكور = <b>3</b> (براء، سعد، صالح)</li>
+                <li>عدد الإناث = <b>5</b> (نورة، براء، براء، هديل، ساره)</li>
+                <li><code dir="ltr">P(ذكر) = 3 / 8 = 0.375</code></li>
+                <li><code dir="ltr">P(أنثى) = 5 / 8 = 0.625</code></li>
+              </ul>
+            </div>
+
+            <div class="step-card">
+              <span class="tag">الخطوة 2 (ص 166)</span>
+              <h4>حساب الاحتمالات الشرطية (Likelihood)</h4>
+              <ul>
+                <li>عدد الأشخاص الذين اسمهم "براء" = <b>3</b></li>
+                <li>عدد الذكور باسم "براء" = <b>1</b> (من أصل 3 ذكور)</li>
+                <li>عدد الإناث باسم "براء" = <b>2</b> (من أصل 5 إناث)</li>
+                <li><code dir="ltr">P(براء | ذكر) = 1 / 3</code></li>
+                <li><code dir="ltr">P(براء | أنثى) = 2 / 5</code></li>
+              </ul>
+            </div>
+
+            <div class="step-card">
+              <span class="tag">الخطوة 3 (ص 166)</span>
+              <h4>حساب الاحتمال الأدنى (Evidence)</h4>
+              <ul>
+                <li>عدد الأشخاص الذين اسمهم "براء" = <b>3</b></li>
+                <li>إجمالي عدد الأشخاص = <b>8</b></li>
+                <li><code dir="ltr">P(براء) = 3 / 8</code></li>
+              </ul>
+            </div>
+
+            <div class="step-card">
+              <span class="tag">الخطوة 4 (ص 166)</span>
+              <h4>حساب الاحتمالات اللاحقة (Posterior)</h4>
+              <ul>
+                <li><b>احتمالية أن يكون "براء" ذكراً:</b><br>
+                  <code dir="ltr">P(ذكر|براء) = [(3/8) * (1/3)] / (3/8) = (1/8) / (3/8) = 1/3 ≈ 0.333 (33.3%)</code>
+                </li>
+                <li><b>احتمالية أن تكون "براء" أنثى:</b><br>
+                  <code dir="ltr">P(أنثى|براء) = [(5/8) * (2/5)] / (3/8) = (2/8) / (3/8) = 2/3 ≈ 0.667 (66.7%)</code>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <p class="note" style="margin-top:12px;margin-bottom:0"><b>النتيجة النهائية (ص 166):</b> بما أن احتمالية أن تكون "براء" أنثى (<b>66.7%</b>) أكبر من احتمالية أن يكون ذكراً (<b>33.3%</b>)، فمن المرجح أن يكون السجل الجديد باسم "براء" <b>لأنثى</b> بناءً على البيانات المتاحة في قاعدة البيانات.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= التبويب الثاني: جداول المقارنات والمسائل ================= -->
+  <section id="tables" class="panel">
+    <div class="card">
+      <h2>1. مقارنة أنواع مصنفات Naive Bayes الثلاثة (ص 161 - 162)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>نوع المصنف</th>
+            <th>المصطلح الإنجليزي</th>
+            <th>طبيعة البيانات والميزات</th>
+            <th>آلية العمل والاستخدام</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1. بايز المتعددة الحدود</b></td>
+            <td dir="ltr"><b>Multinomial Naive Bayes</b></td>
+            <td>ميزات منفصلة تمثل <b>تكرار الكلمات وعدد مرات ظهورها</b>.</td>
+            <td>يُستخدم لتصنيف المستندات (رياضة، سياسة، تكنولوجيا) بأخذ <b>حدوث الكلمات وعددها</b> في الاعتبار.</td>
+          </tr>
+          <tr>
+            <td><b>2. برنولي نايف بايز</b></td>
+            <td dir="ltr"><b>Bernoulli Naive Bayes</b></td>
+            <td>تنبؤات منطقية ثنائية (<span dir="ltr">Boolean</span>): <b>نعم أو لا (1 أو 0)</b>.</td>
+            <td>يُستخدم لتصنيف المستندات بناءً على <b>ما إذا كانت الكلمة موجودة في النص أم لا</b> (دون النظر لعدد تكرارها).</td>
+          </tr>
+          <tr>
+            <td><b>3. غاوسي نايف بايز</b></td>
+            <td dir="ltr"><b>Gaussian Naive Bayes</b></td>
+            <td>يتعامل مع <b>القيم المستمرة (<span dir="ltr">Continuous</span>)</b> وليس القيم المنفصلة.</td>
+            <td>يفترض أن البيانات تتبع التوزيع الطبيعي (توزيع جاوس)، ويحسب الاحتمالات باستخدام <b>المتوسط ($\mu$) والتباين</b>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>2. جدول ملخص قوانين وخطوات مسألة تحديد جنس الاسم "براء" (ص 165 - 166)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>الخطوة والمفهوم</th>
+            <th>المصطلح الإنجليزي</th>
+            <th>حساب فئة (ذكر)</th>
+            <th>حساب فئة (أنثى)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1. الاحتمالات الأساسية</b></td>
+            <td dir="ltr"><b>Prior Probabilities</b></td>
+            <td dir="ltr"><code>P(ذكر) = 3 / 8 = 0.375</code></td>
+            <td dir="ltr"><code>P(أنثى) = 5 / 8 = 0.625</code></td>
+          </tr>
+          <tr>
+            <td><b>2. الاحتمالات الشرطية</b></td>
+            <td dir="ltr"><b>Likelihood</b></td>
+            <td dir="ltr"><code>P(براء | ذكر) = 1 / 3</code></td>
+            <td dir="ltr"><code>P(براء | أنثى) = 2 / 5</code></td>
+          </tr>
+          <tr>
+            <td><b>3. الاحتمال الأدنى (الدليل)</b></td>
+            <td dir="ltr"><b>Evidence</b></td>
+            <td colspan="2" style="text-align:center" dir="ltr"><code>P(براء) = 3 / 8</code> (لأن اسم "براء" تكرر 3 مرات من أصل 8 أشخاص)</td>
+          </tr>
+          <tr>
+            <td><b>4. الاحتمالات المشروطة اللاحقة</b></td>
+            <td dir="ltr"><b>Posterior Probabilities</b></td>
+            <td dir="ltr"><code>[(3/8)×(1/3)] / (3/8) = 1/3 ≈ 33.3%</code></td>
+            <td dir="ltr"><code>[(5/8)×(2/5)] / (3/8) = 2/3 ≈ 66.7%</code></td>
+          </tr>
+          <tr>
+            <td><b>القرار النهائي للمصنف</b></td>
+            <td dir="ltr"><b>Final Classification</b></td>
+            <td colspan="2">يُصنف السجل الجديد باسم "براء" على أنه <b>أنثى</b> لأن $66.7\% > 33.3\%$.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>3. مقارنة فوائد (مزايا) وحدود (عيوب) خوارزمية Naive Bayes (ص 162 - 163 و 167)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>الفوائد والمزايا الخمس</th>
+            <th>الحدود (العيوب) وكيفية التغلب عليها</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1) <b>البساطة والكفاءة:</b> سهلة التدريب والتنفيذ ومنخفضة التكلفة الحسابية.</td>
+            <td rowspan="5">
+              • <b>العيب الرئيسي:</b> تفترض أن جميع الميزات <b>مستقلة عن بعضها البعض</b>، وهو افتراض نادر في الحياة الواقعية.<br>
+              • لا تستطيع تعلم العلاقات والتبعيات بين الميزات المختلفة، وتعامل كل ميزة على قدم المساواة.<br><br>
+              • <b>البدائل للتغلب على هذا العيب:</b> استخدام مصنفات أكثر تعقيداً تتعلم التبعيات مثل:<br>
+              1) شجرة القرار (<span dir="ltr">Decision Tree</span>)<br>
+              2) الغابة العشوائية (<span dir="ltr">Random Forest</span>)<br>
+              3) آلة المتجهات الداعمة (<span dir="ltr">SVM</span>)<br>
+              4) الشبكات العصبية (<span dir="ltr">Neural Networks</span>).
+            </td>
+          </tr>
+          <tr>
+            <td>2) <b>التدريب السريع والتنبؤ الفوري:</b> مناسبة للتنبؤات في الوقت الفعلي (<span dir="ltr">Real-time</span>).</td>
+          </tr>
+          <tr>
+            <td>3) <b>التدرجية (<span dir="ltr">Scalability</span>):</b> تتعامل مع البيانات عالية الأبعاد وتعمل جيداً حتى عندما يكون <b>عدد الميزات أكبر من عدد أمثلة التدريب</b>.</td>
+          </tr>
+          <tr>
+            <td>4) <b>المتانة للميزات غير ذات الصلة:</b> ليست حساسة للميزات غير المهمة.</td>
+          </tr>
+          <tr>
+            <td>5) <b>تعمل جيداً مع مجموعات التدريب الصغيرة:</b> تعطي نتائج معقولة ببيانات تدريب قليلة.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>4. جدول احتمالات رمي عملتين معدنيتين في الوحدة الثانية (ص 161)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>الحدث المطلوب حساب احتماله عند رمي عملتين <code dir="ltr">{HH, HT, TH, TT}</code></th>
+            <th>قيمة الاحتمال</th>
+            <th>التوضيح</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1. الحصول على رأسين (HH)</b></td>
+            <td dir="ltr"><b>1 / 4</b></td>
+            <td>حالة واحدة فقط (<code dir="ltr">HH</code>) من أصل 4 حالات ممكنة.</td>
+          </tr>
+          <tr>
+            <td><b>2. الحصول على ذيل واحد على الأقل</b></td>
+            <td dir="ltr"><b>3 / 4</b></td>
+            <td>ثلاث حالات (<code dir="ltr">HT, TH, TT</code>) من أصل 4 حالات.</td>
+          </tr>
+          <tr>
+            <td><b>3. العملة الثانية هي الرأس نظراً لأن العملة الأولى هي الذيل</b></td>
+            <td dir="ltr"><b>1 / 2</b></td>
+            <td>احتمال شرطي: من بين حالتي الذيل الأول (<code dir="ltr">TH, TT</code>) توجد حالة واحدة رأس (<code dir="ltr">TH</code>).</td>
+          </tr>
+          <tr>
+            <td><b>4. الحصول على رأسين بالنظر إلى أن العملة الأولى هي رأس</b></td>
+            <td dir="ltr"><b>1 / 2</b></td>
+            <td>احتمال شرطي: من بين حالتي الرأس الأول (<code dir="ltr">HH, HT</code>) توجد حالة واحدة برأسين (<code dir="ltr">HH</code>).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الثالث: المصطلحات ================= -->
+  <section id="terms" class="panel">
+    <div class="card">
+      <h2>قاموس المصطلحات والقوانين الشامل للفصل الرابع عشر (25 مصطلحاً)</h2>
+      <p class="muted">جميع المصطلحات والقوانين والأنواع الواردة في الوحدات الثلاث للفصل الرابع عشر مع أرقام صفحاتها:</p>
+      <div id="termsGrid" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الرابع: البطاقات التعليمية ================= -->
+  <section id="cards" class="panel">
+    <div class="card">
+      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
+      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
+      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
+        <div class="term" id="flashTerm"></div>
+        <div class="answer" id="flashAnswer" hidden></div>
+        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="prevCard">السابق</button>
+        <span id="cardCount" class="muted"></span>
+        <button class="btn primary" id="nextCard">التالي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الخامس: الاختبار الشامل ================= -->
+  <section id="quiz" class="panel">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2>الاختبار الشامل للفصل الرابع عشر (25 سؤالاً)</h2>
+          <p class="muted">يغطي كافة مفاهيم Naive Bayes وأنواعها الثلاثة ومسألة "براء" الحسابية (ص 158 - 167) مع تصحيح وتعليل فوري.</p>
+        </div>
+        <div class="score" id="score">النتيجة: 0 / 25</div>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="quizArea"></div>
+      <div class="row">
+        <button class="btn" id="resetQuiz">إعادة الاختبار</button>
+        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+      </div>
+      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
+    </div>
+  </section>
+</main>
+
+<footer>مبني بالكامل (100%) على محتوى الفصل الرابع عشر والأخير من ملخص مقرر تعلم الآلة التطبيقي (صفحات 158 - 167)</footer>
+
+<script>
+const terms = [
+  ["Naive Bayes Classifier", "مصنف بايز الساذج: خوارزمية تعلم آلي خاضع للإشراف لمهام التصنيف تعتمد على نظرية بايز الاحتمالية وتفترض استقلالية الميزات (ص 158-159)."],
+  ["Independence Assumptions", "افتراضات الاستقلالية: المبدأ الذي ينظر للعلاقة بين جميع الخصائص والميزات (Features, Attributes) على أنها مستقلة تماماً عن بعضها البعض (ص 158)."],
+  ["Probabilistic Classifier", "مصنف الاحتمالية: الاسم الآخر لمصنف Naive Bayes نظراً لاعتماده على نظرية بايز وحساب احتمالات وجود العناصر (ص 159)."],
+  ["Why 'Naive'?", "سُميت Naive (ساذجة) لأنها تفترض أن جميع الكلمات في الجملة أو الميزات مستقلة بغض النظر عن سياقها (تعتبر 'أنت' و'هل أنت' نفس الشيء) (ص 159)."],
+  ["Why 'Bayes'?", "سُميت Bayes نسبةً إلى العالم توماس بايز ونظريته الإحصائية التي تعتمد على حساب الاحتمالات الشرطية (ص 159 و 161)."],
+  ["Conditional Probability", "الاحتمال الشرطي: حساب احتمال وقوع حدث ما (A) بناءً على احتمال وقوع حدث آخر (B) قد حدث بالفعل (ص 161)."],
+  ["Sample Space {HH, HT, TH, TT}", "فضاء العينة عند رمي قطعتين من العملات المعدنية؛ حيث احتمال رأسين = 1/4، وذيل واحد على الأقل = 3/4 (ص 161)."],
+  ["P(A|B) = [P(B|A)*P(A)] / P(B)", "الصيغة الرياضية لنظرية بايز؛ حيث يُشترط أن الاحتمال P(B) لا ينبغي أن يكون صفراً (ص 161)."],
+  ["Prior Probabilities P(A)", "الاحتمالات الأساسية (القبلية): القيمة المسبقة أو احتمالية وقوع الحدث الملاحظ قبل النظر إلى الدليل الجديد (ص 161 و 165)."],
+  ["Likelihood P(B|A)", "الاحتمالات الشرطية: احتمالية تحقق الدليل (مثل اسم براء) بشرط الانتماء لفئة معينة (ذكر أو أنثى) (ص 165-166)."],
+  ["Evidence P(B)", "الاحتمال الأدنى (الدليل): احتمالية ظهور الميزة أو الدليل بشكل عام في كامل قاعدة البيانات (مثل نسبة اسم براء الكلية 3/8) (ص 165-166)."],
+  ["Posterior Probabilities P(A|B)", "الاحتمالات المشروطة (اللاحقة/البعدية): احتمال الفئة بعد النظر إلى الأدلة، وتُحسب بقسمة (Prior × Likelihood) على Evidence (ص 161 و 165)."],
+  ["Multinomial Naive Bayes", "بايز المتعددة الحدود: نوع يُستخدم لتصنيف المستندات ويعمل مع الميزات التي تمثل تكرار الكلمات وعدد مرات ظهورها في المستند (ص 161)."],
+  ["Bernoulli Naive Bayes", "برنولي نايف بايز: نوع يُستخدم لتصنيف المستندات عبر تنبؤات منطقية (نعم أو لا) تمثل ما إذا كانت الكلمة موجودة في النص أم لا (ص 162)."],
+  ["Gaussian Naive Bayes", "غاوسي نايف بايز: نوع يُستخدم في حالة القيم المستمرة (وليس المنفصلة)، ويحسب الاحتمالات بمعلمات توزيع جاوس أي المتوسط والتباين (ص 162)."],
+  ["Normal Distribution (μ, σ²)", "التوزيع الطبيعي (توزيع جاوس): التوزيع الإحصائي المعتمد على المتوسط والتباين والذي يستخدمه مصنف غاوسي نايف بايز (ص 162)."],
+  ["Scalability (التدرجية)", "قدرة Naive Bayes على التعامل مع البيانات عالية الأبعاد والعمل جيداً حتى عندما يكون عدد الميزات أكبر من عدد أمثلة التدريب (ص 162)."],
+  ["Irrelevant Features Robustness", "المتانة للميزات غير ذات الصلة: ميزة في Naive Bayes تجعلها غير حساسة للميزات غير المهمة في البيانات (ص 162)."],
+  ["Small Training Sets", "مجموعات التدريب الصغيرة: يستطيع مصنف Naive Bayes تقديم نتائج معقولة حتى مع بيانات تدريب محدودة وقليلة (ص 163)."],
+  ["Naive Bayes Limitation", "الحد أو العيب الرئيسي لـ Naive Bayes هو افتراض استقلالية الميزات، مما يمنعه من تعلم العلاقات والتبعيات بين الميزات المترابطة (ص 163 و 167)."],
+  ["Real-time Predictions", "التنبؤات في الوقت الفعلي: ميزة تطبيقية لـ Naive Bayes نظراً لسرعتها الفائقة في التدريب والتنبؤ (ص 163 و 167)."],
+  ["Spam Filtering (Gmail)", "كشف وتصفية البريد العشوائي: من أشهر تطبيقات Naive Bayes المستخدمة في خدمات البريد مثل Gmail (ص 160 و 163)."],
+  ["Document Classification", "تصنيف الوثائق: تصنيف المستندات إلى فئات مثل الرياضة أو السياسة أو التكنولوجيا أو التمويل بناءً على الكلمات (ص 161 و 163)."],
+  ["sklearn.naive_bayes", "الوحدة البرمجية في مكتبة scikit-learn بلغة بايثون التي تُستخدم لتنفيذ خوارزمية Naive Bayes (ص 164)."],
+  ["Baraa Example Result", "نتيجة مثال اسم 'براء': احتمال ذكر = 1/3 (33.3%)، واحتمال أنثى = 2/3 (66.7%)، لذا يُصنف السجل الجديد كأنثى (ص 165-166)."]
+];
+
+const cards = [
+  ["في أي فرع من فروع تعلم الآلة تُصنف خوارزمية Naive Bayes؟ وبماذا تُعرف أيضاً؟", "تُصنف ضمن التعلم الآلي الخاضع للإشراف (Supervised Learning) لمهام التصنيف (Classification)، وتُعرف أيضاً باسم (مصنف الاحتمالية) (ص 159)."],
+  ["ما هو المبدأ الإحصائي الأساسي (Independence Assumptions) الذي تقوم عليه خوارزمية Naive Bayes؟", "تعتمد على نظرية بايز الاحتمالية وتفترض أن جميع الخصائص أو الميزات (Features, Attributes) مستقلة تماماً عن بعضها البعض (ص 158)."],
+  ["لماذا سُميت خوارزمية Naive Bayes بهذا الاسم (الكلمتان Naive و Bayes)؟", "• Naive (ساذج): لأنها تعتبر كل الكلمات في الجملة أو الميزات مستقلة بغض النظر عن سياقها (تعتبر 'أنت' و'هل أنت' نفس الشيء).\n• Bayes: نسبةً إلى نظرية توماس بايز لحساب الاحتمالات (ص 159 و 161)."],
+  ["كيف يوضح (مثال فاكهة التفاح) فرضية الاستقلالية في مصنف Naive Bayes؟", "للتعرف على التفاحة نحتاج لثلاث ميزات (اللون الأحمر، الشكل الكروي، الطعم الحلو)؛ ورغم أنها مرتبطة ببعضها في الواقع، يفترض المصنف أنها مستقلة تماماً عن بعضها (ص 160)."],
+  ["ما هو فضاء العينة عند رمي عملتين معدنيتين؟ وما احتمال الحصول على رأسين، وذيل واحد على الأقل؟", "• فضاء العينة: {HH, HT, TH, TT}.\n• احتمال الحصول على رأسين (HH) = 1/4.\n• احتمال الحصول على ذيل واحد على الأقل = 3/4 (ص 161)."],
+  ["عند رمي عملتين معدنيتين، ما احتمال أن تكون العملة الثانية رأساً علماً بأن الأولى ذيل؟ وما احتمال رأسين علماً بأن الأولى رأس؟", "• العملة الثانية رأس علماً بأن الأولى ذيل = 1/2.\n• الحصول على رأسين بالنظر إلى أن العملة الأولى رأس = 1/2 (ص 161)."],
+  ["ما هي الصيغة الرياضية لنظرية بايز؟ وما الشرط الخاص بالمقام P(B)؟", "الصيغة: P(A|B) = [P(B|A) * P(A)] / P(B).\nالشرط الأساسي: أن الاحتمال P(B) لا ينبغي أن يكون صفراً أبداً (ص 161)."],
+  ["إلى ماذا يرمز كل من P(A) و P(A|B) في صيغة نظرية بايز؟", "• P(A): قيمة مسبقة قبلية (Prior) أي احتمالية وقوع الحدث A قبل الإثبات.\n• P(A|B): الاحتمال الخلفي/اللاحق (Posterior) لوقوع A بعد النظر إلى الدليل B (ص 161)."],
+  ["ما هي الأنواع الثلاثة لمصنفات Naive Bayes الواردة في الوحدة الثانية؟", "1) بايز المتعددة الحدود (Multinomial Naive Bayes).\n2) برنولي نايف بايز (Bernoulli Naive Bayes).\n3) غاوسي نايف بايز (Gaussian Naive Bayes) (ص 161-162)."],
+  ["فيمَ يُستخدم مصنف (بايز المتعددة الحدود Multinomial Naive Bayes) وكيف يعمل؟", "يُستخدم لحل مشكلات تصنيف المستندات (كالرياضة أو السياسة أو التكنولوجيا)، ويعمل مع الميزات التي تمثل (تكرار الكلمات وعدد مرات ظهورها) في المستند (ص 161)."],
+  ["ما الفرق بين (برنولي نايف بايز Bernoulli) و(بايز المتعددة الحدود Multinomial) في تصنيف المستندات؟", "متعدد الحدود يأخذ في الاعتبار (تكرار الكلمات وعددها)، بينما برنولي يستخدم تنبؤات منطقية ويمثل فقط (ما إذا كانت الكلمة موجودة في النص أم لا) ويأخذ القيم (نعم أو لا) (ص 161-162)."],
+  ["متى نستخدم مصنف (غاوسي نايف بايز Gaussian Naive Bayes)؟ وكيف يحسب الاحتمالات؟", "يُستخدم في حالة (القيم المستمرة) وليس القيم المنفصلة؛ ويحسب الاحتمالات باستخدام معلمات توزيع جاوس (التوزيع الطبيعي) أي: المتوسط والتباين (ص 162)."],
+  ["اذكري الفوائد والمزايا الخمس لخوارزمية Naive Bayes في التعلم الآلي.", "1) البساطة والكفاءة وانخفاض التكلفة الحسابية، 2) التدريب السريع والتنبؤ، 3) التدرجية، 4) المتانة للميزات غير ذات الصلة، 5) العمل جيداً مع مجموعات التدريب الصغيرة (ص 162-163)."],
+  ["ما المقصود بميزة (التدرجية Scalability) في مصنف Naive Bayes؟", "قدرته على التعامل مع البيانات عالية الأبعاد ذات العدد الكبير من الميزات، والعمل بشكل جيد حتى عندما يكون (عدد الميزات أكبر من عدد أمثلة التدريب) (ص 162)."],
+  ["هل يتأثر مصنف Naive Bayes بوجود ميزات غير ذات صلة أو بصغر حجم بيانات التدريب؟", "لا يتأثر؛ فهو يتمتع بالمتانة للميزات غير ذات الصلة (ليس حساساً لها)، ويعمل بشكل جيد ويعطي نتائج معقولة حتى مع مجموعات التدريب الصغيرة والمحدودة (ص 162-163)."],
+  ["ما هو الحد (العيب الأساسي) لمصنف Naive Bayes؟", "أنه يفترض أن جميع الميزات مستقلة عن بعضها البعض (وهو افتراض نادر في الواقع)، ولذلك لا يمكنه تعلم العلاقات والتبعيات بين الميزات المختلفة في البيانات (ص 163 و 167)."],
+  ["ما هي الخوارزميات البديلة التي يمكن استخدامها للتغلب على عيب استقلالية الميزات في Naive Bayes؟", "أشجار القرار (Decision Tree)، الغابات العشوائية (Random Forest)، آلة المتجهات الداعمة (SVM)، والشبكات العصبية؛ لأنها قادرة على تعلم العلاقات المعقدة بين الميزات (ص 163 و 167)."],
+  ["اذكري 6 تطبيقات عملية لمصنف Naive Bayes.", "1) كشف البريد العشوائي (مثل Gmail)، 2) تحليل المشاعر، 3) تصنيف الوثائق والأخبار، 4) نظم التوصية، 5) التعرف على الوجوه، 6) التنبؤ بالطقس والتشخيص الطبي (ص 163-164)."],
+  ["ما اسم الوحدة البرمجية المستخدمة لتنفيذ مصنف Naive Bayes في لغة بايثون؟", "الوحدة sklearn.naive_bayes في مكتبة scikit-learn (ص 164)."],
+  ["ما هي الصيغة العامة لقانون بايز بالمصطلحات الإنجليزية الأربعة (ص 165)؟", "Posterior Probability = (Prior * Likelihood) / Evidence\nحيث Prior: الاحتمالات الأساسية، Likelihood: الاحتمالات الشرطية، Evidence: الاحتمال الأدنى، Posterior: الاحتمالات اللاحقة (ص 165)."],
+  ["في مسألة تحديد جنس الاسم 'براء' (من أصل 8 أشخاص: 3 ذكور و 5 إناث)، كيف نحسب الاحتمالات الأساسية (Prior)؟", "• احتمال ذكر: P(ذكر) = عدد الذكور / عدد الأشخاص = 3 / 8 = 0.375.\n• احتمال أنثى: P(أنثى) = عدد الإناث / عدد الأشخاص = 5 / 8 = 0.625 (ص 165)."],
+  ["في مسألة الاسم 'براء' (ظهر الاسم 3 مرات: مرة لذكر ومرتين لأنثى)، كيف نحسب الاحتمالات الشرطية (Likelihood)؟", "• P(براء | ذكر) = عدد ذكور باسم براء / إجمالي الذكور = 1 / 3.\n• P(براء | أنثى) = عدد إناث باسم براء / إجمالي الإناث = 2 / 5 (ص 166)."],
+  ["في مسألة الاسم 'براء'، كيف نحسب الاحتمال الأدنى (Evidence) أي P(براء)؟", "P(براء) = عدد الأشخاص الذين اسمهم براء / إجمالي عدد الأشخاص = 3 / 8 (ص 166)."],
+  ["في مسألة الاسم 'براء'، كيف نحسب الاحتمال اللاحق لكونه ذكراً P(ذكر | براء)؟", "P(ذكر | براء) = [P(براء | ذكر) × P(ذكر)] / P(براء) = [(1/3) × (3/8)] / (3/8) = (1/8) / (3/8) = 1/3 ≈ 0.333 (أي 33.3%) (ص 166)."],
+  ["في مسألة الاسم 'براء'، كيف نحسب الاحتمال اللاحق لكونها أنثى P(أنثى | براء)؟", "P(أنثى | براء) = [P(براء | أنثى) × P(أنثى)] / P(براء) = [(2/5) × (5/8)] / (3/8) = (2/8) / (3/8) = 2/3 ≈ 0.667 (أي 66.7%) (ص 166)."],
+  ["ما هو القرار النهائي لمصنف Naive Bayes حول جنس الاسم 'براء' ولماذا؟", "من المرجح أن يكون السجل الجديد باسم 'براء' لأنثى؛ لأن احتمالية الأنثى (66.7%) أعلى من احتمالية الذكر (33.3%) بناءً على قاعدة البيانات (ص 166)."],
+  ["لماذا يُعد مصنف Naive Bayes مناسباً جداً للتطبيقات التي تتطلب استجابات في الوقت الفعلي (Real-time)؟", "نظراً لسرعته العالية في التدريب والتنبؤ وانخفاض تكلفته الحسابية بسبب افتراض استقلالية الميزات (ص 162-163 و 167)."],
+  ["كيف يتعامل مصنف Naive Bayes مع الميزات المتفاعلة في الحياة الواقعية؟", "يعامل كل ميزة على قدم المساواة بغض النظر عن تفاعلاتها المحتملة مع الميزات الأخرى (ص 167)."]
+];
+
+const questions = [
+  {q:"يندرج مصنف بايز الساذج (Naive Bayes Classifier) في شجرة تعلم الآلة تحت فئة:", o:["التعلم الآلي الخاضع للإشراف (Supervised Learning) لمهام التصنيف (Classification)","التعلم غير الخاضع للإشراف لمهام التجميع (Clustering)","التعلم المعزز للروبوتات فقط","خوارزميات تقليل الأبعاد للصور"], a:0, e:"يُعد Naive Bayes Classifier في التعلم الآلي خوارزمية تعلم آلي خاضع للإشراف لمهام التصنيف (ص 159)."},
+  {q:"ما هو المبدأ الإحصائي الأساسي (Independence Assumptions) الذي تعتمد عليه خوارزمية Naive Bayes؟", o:["افتراض أن جميع الخصائص أو الميزات (Features) مستقلة تماماً عن بعضها البعض","افتراض أن جميع الميزات متطابقة ومعتمدة كلياً على بعضها","عدم استخدام أي احتمالات إحصائية","حذف جميع الميزات قبل التدريب"], a:0, e:"تعتمد الخوارزمية على نظرية بايز ومبدأ Independence Assumptions حيث تنظر للعلاقة بين جميع الخصائص بأنها مستقلة عن بعضها البعض (ص 158)."},
+  {q:"لماذا أُطلقت كلمة (Naive - ساذج) على مصنف Naive Bayes كما ورد في ص 159؟", o:["لأن الخوارزمية تعتبر كل الكلمات في الجملة أو الميزات مستقلة بغض النظر عن سياقها (تعتبر 'أنت' و'هل أنت' نفس الشيء)","لأن الخوارزمية بطيئة جداً ومعقدة التنفيذ","لأنها لا تستطيع تصنيف النصوص أو البريد الإلكتروني","لأنها صُممت قبل اختراع الرياضيات"], a:0, e:"تأتي كلمة Naive من فكرة أن الخوارزمية تعتبر كل الكلمات في الجملة وكأنها مستقلة بغض النظر عن سياقها (ص 159)."},
+  {q:"في مثال التعرف على (فاكهة التفاح) من خلال اللون الأحمر والشكل الكروي والطعم الحلو، كيف يتعامل مصنف Naive Bayes مع هذه الميزات الثلاث؟", o:["يفترض أن هذه الميزات الثلاث مستقلة تماماً عن بعضها بغض النظر عن العلاقات الواقعية بينها","يرفض تصنيف التفاحة لأن لها أكثر من ميزة واحدة","يدمج الميزات الثلاث في ميزة لونية فقط","يستخدم الشبكات التلافيفية لرسم التفاحة"], a:0, e:"رغم أن هذه الميزات مرتبطة ببعضها في الواقع، يفترض مصنف Naive Bayes أنها مستقلة بغض النظر عن العلاقات بينها (ص 160)."},
+  {q:"عند رمي قطعتين من العملات المعدنية {HH, HT, TH, TT}، ما هو احتمال (الحصول على رأسين HH) وما احتمال (الحصول على ذيل واحد على الأقل) (ص 161)؟", o:["احتمال رأسين = 1/4، واحتمال ذيل واحد على الأقل = 3/4","احتمال رأسين = 1/2، واحتمال ذيل واحد على الأقل = 1/2","احتمال رأسين = 3/4، واحتمال ذيل واحد على الأقل = 1/4","كلاهما يساويان 1"], a:0, e:"من فضاء العينة {HH, HT, TH, TT}، الحصول على رأسين = 1/4، وذيل واحد على الأقل = 3/4 (ص 161)."},
+  {q:"عند رمي قطعتين من العملات المعدنية، ما هو احتمال (الحصول على رأسين بالنظر إلى أن العملة الأولى هي رأس) (ص 161)؟", o:["1/2","1/4","3/4","0"], a:0, e:"الحصول على رأسين بالنظر إلى أن العملة الأولى هي رأس يساوي 1/2 (ص 161)."},
+  {q:"ما هي الصيغة الرياضية الصحيحة لنظرية بايز، وما الشرط الأساسي للمقام P(B) (ص 161)؟", o:["P(A|B) = [P(B|A) * P(A)] / P(B)، ويشترط أن الاحتمال P(B) لا ينبغي أن يكون صفراً","P(A|B) = P(A) + P(B)، ويشترط أن يكون P(B) صفراً","P(A|B) = P(A) - P(B)","P(A|B) = 0 دائماً"], a:0, e:"صيغة نظرية بايز هي P(A|B) = (P(B|A) * P(A)) / P(B)، والاحتمال P(B) لا ينبغي أن يكون صفراً (ص 161)."},
+  {q:"في معادلة نظرية بايز، ماذا يُسمى كل من P(A) و P(A|B)؟", o:["P(A) هو القيمة المسبقة القبلية (Prior)، و P(A|B) هو الاحتمال الخلفي/اللاحق (Posterior) بعد النظر إلى الأدلة","P(A) هو الاحتمال الخلفي، و P(A|B) هو القيمة المسبقة","كلاهما يمثلان معدل التعلم في الشبكة العصبية","كلاهما يمثلان المسافة الإقليدية"], a:0, e:"P(A) هي قيمة مسبقة قبلية قبل الإثبات، بينما P(A|B) هو الاحتمال الخلفي/اللاحق بعد النظر إلى الأدلة (ص 161 و 165)."},
+  {q:"أي نوع من أنواع مصنفات Naive Bayes يُستخدم لحل مشكلات تصنيف المستندات ويعمل مع الميزات التي تمثل (تكرار الكلمات وعددها في المستند)؟", o:["بايز المتعددة الحدود (Multinomial Naive Bayes)","برنولي نايف بايز (Bernoulli Naive Bayes)","غاوسي نايف بايز (Gaussian Naive Bayes)","انحدار المتجه الداعم (SVR)"], a:0, e:"بايز المتعددة الحدود يعمل مع الميزات التي تمثل تكرار الكلمات وعددها لتحديد احتمالية انتماء المستند لفئة كالرياضة أو السياسة (ص 161)."},
+  {q:"أي نوع من مصنفات Naive Bayes يُستخدم لتصنيف المستندات ولكنه يعتمد على (تنبؤات منطقية: نعم أو لا) ليمثل فقط ما إذا كانت الكلمة موجودة في النص أم لا؟", o:["برنولي نايف بايز (Bernoulli Naive Bayes)","غاوسي نايف بايز (Gaussian Naive Bayes)","بايز المتعددة الحدود (Multinomial)","خوارزمية K-Means"], a:0, e:"مصنف برنولي (Bernoulli Naive Bayes) يستخدم تنبؤات منطقية (نعم أو لا) بناءً على ما إذا كانت الكلمة موجودة في النص أم لا (ص 162)."},
+  {q:"في حالة البيانات ذات (القيم المستمرة Continuous) وليست المنفصلة، أي مصنف نستخدم وكيف يحسب الاحتمالات (ص 162)؟", o:["نستخدم غاوسي نايف بايز (Gaussian Naive Bayes)، ويحسب الاحتمالات باستخدام معلمات توزيع جاوس (المتوسط والتباين)","نستخدم برنولي نايف بايز، ويحسبها بعدد الحروف","نستخدم بايز المتعددة الحدود فقط","لا يمكن لمصنفات بايز التعامل مع القيم المستمرة أبداً"], a:0, e:"يُستخدم غاوسي نايف بايز في حالة القيم المستمرة، ويحسب الاحتمالات باستخدام معلمات توزيع جاوس أي المتوسط والتباين (ص 162)."},
+  {q:"أي مما يلي يُعد من (فوائد ومزايا) مصنف Naive Bayes المذكورة في الملخص (ص 162-163)؟", o:["البساطة والكفاءة، سرعة التدريب والتنبؤ، التدرجية مع الأبعاد العالية، عدم الحساسية للميزات غير ذات الصلة، والعمل جيداً مع مجموعات التدريب الصغيرة","أنه يحتاج لملايين العينات ولا يعمل مع البيانات الصغيرة","أنه شديد الحساسية لأي ميزة غير ذات صلة","أنه يتطلب وقتاً طويلاً جداً وتكلفة حسابية باهظة"], a:0, e:"هذه هي المزايا الخمس المذكورة لمصنف Naive Bayes في الصفحتين 162 و 163."},
+  {q:"ماذا يحدث لأداء مصنف Naive Bayes عندما يكون (عدد الميزات أكبر من عدد أمثلة التدريب)؟", o:["يعمل بشكل جيد بفضل ميزة التدرجية (Scalability) وقدرته على التعامل مع البيانات عالية الأبعاد","يتوقف عن العمل تماماً ويعطي خطأ برمجياً","يحتاج إلى حذف جميع الميزات","يتحول إلى خوارزمية تجميع غير موجه"], a:0, e:"ضمن ميزة التدرجية في ص 162: يعمل Naive Bayes بشكل جيد حتى عندما يكون عدد الميزات أكبر من عدد أمثلة التدريب."},
+  {q:"ما هو الحد (العيب الرئيسي) لمصنف Naive Bayes، وكيف يمكن التغلب عليه (ص 163 و 167)؟", o:["عيبه افتراض استقلالية الميزات فلا يتعلم العلاقات بينها؛ ونتغلب عليه باستخدام أشجار القرار أو الغابات العشوائية أو SVM أو الشبكات العصبية","عيبه أنه بطيء جداً؛ ونتغلب عليه بحذف البيانات","عيبه أنه لا يعمل مع النصوص؛ ونتغلب عليه ببرنامج إكسل","لا يوجد أي عيب أو حد لمصنف Naive Bayes"], a:0, e:"يفترض أن جميع الميزات مستقلة فلا يتعلم العلاقات بينها، وللتغلب على ذلك نستخدم أشجار القرار أو الغابات العشوائية أو SVM أو الشبكات العصبية (ص 163 و 167)."},
+  {q:"ما هي الوحدة البرمجية في مكتبة scikit-learn بلغة بايثون التي تُستخدم لتنفيذ خوارزمية Naive Bayes (ص 164)؟", o:["sklearn.naive_bayes","sklearn.cluster","keras.layers","nltk.stem"], a:0, e:"يوجد مصنف Naive Bayes في بايثون داخل الوحدة sklearn.naive_bayes (ص 164)."},
+  {q:"في قانون بايز: Posterior = (Prior * Likelihood) / Evidence (ص 165)، إلى ماذا يشير كل من Prior و Likelihood و Evidence؟", o:["Prior: الاحتمالات الأساسية، Likelihood: الاحتمالات الشرطية، Evidence: الاحتمال الأدنى","Prior: النتيجة النهائية، Likelihood: الخطأ، Evidence: الوزن","جميعها تشير إلى عدد الطبقات الخفية","تشير إلى مقاييس الانحدار الخطي"], a:0, e:"Prior Probabilities هي الاحتمالات الأساسية، و Likelihood هي الاحتمالات الشرطية، و Evidence هو الاحتمال الأدنى (ص 165)."},
+  {q:"في المثال العملي لتحديد جنس الاسم 'براء' (ص 165)، إذا كانت قاعدة البيانات تضم 8 أشخاص (3 ذكور و 5 إناث)، فما هي قيمة الاحتمالات الأساسية (Prior)؟", o:["P(ذكر) = 3/8 = 0.375 ، و P(أنثى) = 5/8 = 0.625","P(ذكر) = 1/2 ، و P(أنثى) = 1/2","P(ذكر) = 5/8 ، و P(أنثى) = 3/8","P(ذكر) = 1/3 ، و P(أنثى) = 2/5"], a:0, e:"في الخطوة 1 (ص 165): P(ذكر) = عدد الذكور / عدد الأشخاص = 3/8 = 0.375، و P(أنثى) = 5/8 = 0.625."},
+  {q:"في نفس مسألة الاسم 'براء' (حيث يوجد 3 ذكور بينهم 1 اسمه براء، و 5 إناث بينهن 2 اسمهن براء)، ما هي قيمة الاحتمالات الشرطية (Likelihood) (ص 166)؟", o:["P(براء | ذكر) = 1/3 ، و P(براء | أنثى) = 2/5","P(براء | ذكر) = 3/8 ، و P(براء | أنثى) = 5/8","P(براء | ذكر) = 1/8 ، و P(براء | أنثى) = 2/8","كلاهما يساويان 3/8"], a:0, e:"في الخطوة 2 (ص 166): P(براء | ذكر) = عدد ذكور باسم براء / عدد الذكور = 1/3، و P(براء | أنثى) = 2/5."},
+  {q:"في مسألة الاسم 'براء' (تكرر اسم براء 3 مرات في قاعدة البيانات المكونة من 8 أشخاص)، ما هي قيمة الاحتمال الأدنى (Evidence) أي P(براء) (ص 166)؟", o:["3 / 8","1 / 3","2 / 5","5 / 8"], a:0, e:"في الخطوة 3 (ص 166): P(براء) = عدد الأشخاص الذين اسمهم براء / عدد الأشخاص الكلي = 3/8."},
+  {q:"بتطبيق قانون بايز في الخطوة 4 (ص 166)، كم تبلغ احتمالية أن يكون حامل الاسم 'براء' ذكراً P(ذكر | براء)؟", o:["1/3 أي حوالي 0.333 (33.3%)","2/3 أي حوالي 0.667 (66.7%)","3/8 أي 37.5%","100%"], a:0, e:"P(ذكر | براء) = [(3/8) * (1/3)] / (3/8) = (1/8) / (3/8) = 1/3 ≈ 0.333 أي 33.3% (ص 166)."},
+  {q:"بتطبيق قانون بايز في الخطوة 4 (ص 166)، كم تبلغ احتمالية أن تكون حاملة الاسم 'براء' أنثى P(أنثى | براء)؟", o:["2/3 أي حوالي 0.667 (66.7%)","1/3 أي حوالي 0.333 (33.3%)","2/5 أي 40%","5/8 أي 62.5%"], a:0, e:"P(أنثى | براء) = [(5/8) * (2/5)] / (3/8) = (2/8) / (3/8) = 2/3 ≈ 0.667 أي 66.7% (ص 166)."},
+  {q:"بناءً على الحسابات النهائية في مثال مصنف Naive Bayes (ص 166)، ما هو الجنس الأكثر احتمالاً للسجل الجديد باسم 'براء'؟", o:["أنثى (لأن احتمالية الأنثى 66.7% أكبر من احتمالية الذكر 33.3%)","ذكر (لأن احتمالية الذكر 66.7%)","متساويان تماماً بنسبة 50% لكل منهما","لا يمكن تحديد الجنس باستخدام قانون بايز"], a:0, e:"بما أن احتمالية أن تكون براء أنثى = 66.7% واحتمالية ذكر = 33.3%، فمن المرجح أن يكون السجل الجديد لأنثى (ص 166)."},
+  {q:"أي من التطبيقات التالية يُعد من الاستخدامات الشهيرة لمصنف Naive Bayes نظراً لسرعته في إجراء تنبؤات في الوقت الفعلي؟", o:["كشف وتصفية البريد العشوائي (Spam في Gmail)، تحليل المشاعر، تصنيف الوثائق والأخبار، ونظم التوصية","تحريك الروبوتات الجراحية وتوليد الصور ثلاثية الأبعاد","ضغط الفيديو وتلوين الصور القديمة","بناء شبكات التوليد التنافسية"], a:0, e:"يُستخدم Naive Bayes بكفاءة في تصفية البريد العشوائي، تحليل المشاعر، تصنيف الوثائق والأخبار، ونظم التوصية (ص 163-164)."},
+  {q:"لماذا يُعرف مصنف Naive Bayes أيضاً باسم (مصنف الاحتمالية) (ص 159)؟", o:["لأنه يعتمد على نظرية بايز الاحتمالية ويتنبأ بوجود عنصر ما بناءً على احتمالات وجوده","لأنه يختار الفئات بالقرعة العشوائية دون بيانات","لأنه لا يتطلب أي تدريب مسبق","لأنه يستخدم المسافة الإقليدية فقط"], a:0, e:"نظراً لاعتماده على نظرية Bayes، فهو يُعرف أيضاً باسم مصنف الاحتمالية ويتنبأ بوجود عنصر بناءً على احتمالات وجوده (ص 159)."},
+  {q:"كيف يعامل نموذج Naive Bayes كل ميزة من الميزات عند اتخاذ قرار التصنيف (ص 167)؟", o:["يعامل كل ميزة على قدم المساواة وبشكل مستقل بغض النظر عن تفاعلاتها المحتملة مع الميزات الأخرى","يختار ميزة واحدة فقط ويحذف بقية الميزات","يربط جميع الميزات في شبكة عصبية عميقة","يرفض التعامل مع أكثر من ميزتين"], a:0, e:"يعامل هذا النموذج كل ميزة على قدم المساواة بغض النظر عن تفاعلاتها المحتملة مع الميزات الأخرى لافتراضه استقلالية الميزات (ص 167)."}
+];
+
+// بناء شبكة المصطلحات
+const termsGrid = document.getElementById("termsGrid");
+terms.forEach(([en, ar]) => {
+  const d = document.createElement("div");
+  d.className = "card";
+  d.style.margin = "0";
+  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
+  termsGrid.appendChild(d);
+});
+
+// إدارة البطاقات التعليمية
+let ci = 0, showAnswer = false;
+function renderCard() {
+  document.getElementById("flashTerm").textContent = cards[ci][0];
+  const ansEl = document.getElementById("flashAnswer");
+  ansEl.innerHTML = cards[ci][1].replace(/\n/g, "<br>");
+  ansEl.hidden = !showAnswer;
+  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
+  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+}
+document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
+document.getElementById("flashcard").addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
+});
+document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
+document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
+renderCard();
+
+// التنقل بين التبويبات
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+// إدارة الاختبار
+let answers = {};
+function renderQuiz() {
+  const area = document.getElementById("quizArea");
+  area.innerHTML = "";
+  const letters = ["أ", "ب", "ج", "د"];
+  questions.forEach((item, i) => {
+    const box = document.createElement("div");
+    box.className = "qbox";
+    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
+    const opts = box.querySelector(".options");
+    item.o.forEach((opt, j) => {
+      const btn = document.createElement("button");
+      btn.className = "option";
+      btn.textContent = `${letters[j]}) ${opt}`;
+      btn.onclick = () => {
+        answers[i] = j;
+        [...opts.children].forEach((x, k) => {
+          x.classList.remove("correct", "wrong");
+          x.disabled = true;
+          if (k === item.a) x.classList.add("correct");
+          if (k === j && j !== item.a) x.classList.add("wrong");
+        });
+        const fb = document.getElementById("fb" + i);
+        fb.hidden = false;
+        fb.className = "feedback " + (j === item.a ? "good" : "bad");
+        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
+        updateScore();
+      };
+      opts.appendChild(btn);
+    });
+    area.appendChild(box);
+  });
+  updateScore();
+}
+
+function updateScore() {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
+  document.getElementById("score").textContent = `النتيجة: ${correct} / ${questions.length}`;
+  document.getElementById("progressBar").style.width = (Object.keys(answers).length / questions.length * 100) + "%";
+}
+
+document.getElementById("resetQuiz").onclick = () => {
+  answers = {};
+  document.getElementById("finalResult").textContent = "";
+  renderQuiz();
+};
+
+document.getElementById("finishQuiz").onclick = () => {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
+  const pct = Math.round(correct / questions.length * 100);
+  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${questions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! أنتِ متقنة تماماً للفصل الرابع عشر والأخير." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
+};
+
+renderQuiz();
+</script>
+</body>
+</html>

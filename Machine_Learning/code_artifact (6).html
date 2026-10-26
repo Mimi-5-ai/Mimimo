@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الفصل العاشر الشامل (100%) | تعلم الآلة التطبيقي</title>
+<style>
+:root{
+  --bg:#f4f6fb;
+  --card:#ffffff;
+  --ink:#1b263b;
+  --muted:#637085;
+  --accent:#4f46e5;
+  --accent-dark:#3730a3;
+  --accent2:#eef2ff;
+  --line:#e2e8f0;
+  --good:#0d9488;
+  --good-bg:#e6fffa;
+  --bad:#dc2626;
+  --bad-bg:#fef2f2;
+  --warn:#d97706;
+  --warn-bg:#fffbeb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
+header{background:linear-gradient(135deg,#1e1b4b,#4f46e5);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(30,27,75,0.15)}
+.wrap{max-width:1040px;margin:auto;padding:0 16px}
+.eyebrow{opacity:.88;font-size:.9rem;background:rgba(255,255,255,0.14);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
+h1{margin:5px 0;font-size:clamp(1.55rem,4vw,2.3rem)}
+header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
+nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:var(--accent2);color:var(--accent-dark);font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
+nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
+nav button.active,.btn.primary{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+main .btn.primary{background:var(--accent);color:white}
+main{padding:22px 0 48px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(36,52,91,0.04)}
+h2{font-size:1.35rem;margin:0 0 12px;color:#1e1b4b}
+h3{font-size:1.06rem;margin:10px 0 6px;color:var(--accent-dark)}
+small,.muted{color:var(--muted)}
+ul,ol{padding-right:22px;margin:8px 0}
+li{margin:6px 0}
+details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
+summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f8faff;color:#1e1b4b;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
+details[open] summary{border-bottom-color:var(--line);background:#eef2ff;color:var(--accent-dark)}
+.details-body{padding:16px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#f1f5f9;color:#1e1b4b;font-weight:bold}
+tr:last-child td{border-bottom:0}
+.note{border-right:4px solid var(--accent);padding:10px 14px;background:#f5f7ff;border-radius:8px;margin:10px 0}
+.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
+.code-box{background:#1e1b4b;color:#f8fafc;padding:12px 16px;border-radius:12px;font-family:monospace;font-size:.9rem;margin:10px 0;direction:ltr;text-align:left;overflow-x:auto}
+.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
+.options{display:grid;gap:8px;margin-top:12px}
+.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
+.option:hover:not(:disabled){border-color:var(--accent);background:#f8faff}
+.option.correct{background:var(--good-bg);border-color:#5eead4;color:#115e59;font-weight:bold}
+.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
+.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
+.feedback.good{color:var(--good);background:var(--good-bg)}
+.feedback.bad{color:var(--bad);background:var(--bad-bg)}
+.progress{height:10px;background:#e2e8f0;border-radius:9px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
+.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#eef2ff);border:2px solid #c7d2fe;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
+.flashcard:hover{transform:scale(1.005)}
+.flashcard .term{font-size:1.35rem;font-weight:bold;color:#1e1b4b}
+.flashcard .answer{margin-top:16px;font-size:1.08rem;color:var(--accent-dark);background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
+@media(max-width:600px){
+  .card{padding:14px}
+  nav button{flex:1 1 calc(50% - 8px);text-align:center}
+  .flashcard{min-height:200px;padding:18px}
+  th,td{padding:8px 10px;font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">نسخة شاملة ومحدثة 100% • صفحات الملخص (114 إلى 125)</div>
+    <h1>الفصل العاشر: تحليل المشاعر (Sentiment Analysis)</h1>
+    <p>يغطي مفهوم وتحديات تحليل المشاعر، كلمات القطبية، سحابة الكلمات، تنظيف النصوص والترميز، مشروع IMDB ببايثون، الغابات العشوائية، ومصفوفة الارتباك</p>
+    <nav>
+      <button class="active" data-tab="summary">الشرح الشامل</button>
+      <button data-tab="tables">جداول المقارنات والأكواد (4)</button>
+      <button data-tab="terms">المصطلحات والمكتبات (26)</button>
+      <button data-tab="cards">البطاقات (28)</button>
+      <button data-tab="quiz">الاختبار الشامل (25)</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- ================= التبويب الأول: الشرح الشامل ================= -->
+  <section id="summary" class="panel active">
+    <div class="card">
+      <h2>خريطة الفصل العاشر (من ص 114 إلى ص 125 في الملخص)</h2>
+      <div class="grid">
+        <div>
+          <span class="tag">الوحدة 1 (ص 114 - 118)</span>
+          <h3>مفهوم تحليل المشاعر ومشروع IMDB</h3>
+          <p>تعريف تحليل المشاعر، أهميته وتحدياته، المشاريع الخمسة المعتمدة عليه، كلمات الرأي/القطبية، وتنظيف بيانات تقييمات الأفلام (RE و PorterStemmer).</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة 2 (ص 119 - 121)</span>
+          <h3>الكلمات القطبية، سحابة الكلمات، والانحدار</h3>
+          <p>الكلمات الإيجابية والسلبية، خطوات بناء سحابة الكلمات (Wordcloud)، تحويل النصوص بـ TF-IDF، وخطوات تدريب نموذج الانحدار اللوجستي الخمس.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة 3 (ص 122 - 125)</span>
+          <h3>تنظيف البيانات، الترميز، ومصفوفة الارتباك</h3>
+          <p>خطوات تنظيف البيانات الأربع، الترميز (Tokenization) بـ Keras، خوارزمية الغابات العشوائية، مصفوفة الارتباك (TP, TN, FP, FN)، ومقاييس التقييم.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- الوحدة الأولى -->
+    <details open>
+      <summary>1) الوحدة (1): مفهوم تحليل المشاعر، تحدياته، مشاريعه، وبداية مشروع بايثون (ص 114 - 118)</summary>
+      <div class="details-body">
+        <h3>أولاً: مفهوم وأهمية واستخدامات تحليل المشاعر (<span dir="ltr">Sentiment Analysis</span>) (ص 114 - 115)</h3>
+        <ul>
+          <li><b>تعريف تحليل المشاعر (<span dir="ltr">Sentiment Analysis</span>):</b> عملية تقنية حديثة في علوم البيانات والذكاء الاصطناعي تُستخدم <b>لتحديد وتصنيف المشاعر والعواطف المعبر عنها في النصوص</b>، ويشمل ذلك تحديد ما إذا كانت المشاعر <b>(إيجابية، أو سلبية، أو محايدة)</b> تجاه موضوع معين.</li>
+          <li><b>مصادر بياناته ومجالاته:</b> تُجمع البيانات من مواقع التواصل الاجتماعي، المدونات، ومواقع التقييم والمراجعات؛ ويُستخدم في: <b>التسويق، خدمات العملاء، رصد الرأي العام، وتحليل السوق</b>.</li>
+          <li><b>كيف تستفيد منه الشركات والمستهلكون؟</b>
+            <ul>
+              <li><b>للشركات:</b> مراقبة ردود الفعل على حملات التسويق وتحديد مواضع التحسين، وفهم ما يُقال عن <b>منافسيهم</b> واستجابة الجمهور لهم لتحسين استراتيجياتهم التنافسية.</li>
+              <li><b>للمستهلكين:</b> معرفة آراء الآخرين وتجاربهم حول المنتجات والخدمات قبل اتخاذ قرارات الشراء.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <div class="exam-alert">
+          <h3>ثانياً: قطبية الكلمات والتحديات الأربعة التي تواجه تحليل المشاعر الآلي (ص 115) - مهم للاختبار:</h3>
+          <p>لإجراء تحليل المشاعر يجب فهم <b>قطبية الكلمات</b> وتصنيفها (إيجابية، سلبية، محايدة)، ولكن تواجه الأنظمة الآلية تحديات تجعل <b>الحكم البشري لا يزال أكثر دقة كمقياس</b>، ومن أبرز هذه التحديات:</p>
+          <ol>
+            <li><b>عدم القدرة على التمييز بين السخرية والنص الصادق:</b> لا تستطيع الأنظمة الآلية اكتشاف أسلوب السخرية أو التهكم بسهولة.</li>
+            <li><b>صعوبة تحليل المعنى السياقي المحدد للكلمة:</b> لا يمكنها دائماً فهم معنى الكلمة المتغير حسب سياق الجملة بشكل صحيح.</li>
+            <li><b>مشكلة الاختصارات:</b> يطرح استخدام الاختصارات مثل <b dir="ltr">"lol"</b> أو اختصارات الكلمات مشاكل في التفسير.</li>
+            <li><b>تفاوت قوة المشاعر:</b> تعبر الكلمات عن مشاعر قد تكون إيجابية أو سلبية أو <b>قوية أو ضعيفة</b>.</li>
+          </ol>
+        </div>
+
+        <h3>ثالثاً: مشاريع تعتمد على تحليل المشاعر وكلمات الرأي (ص 116)</h3>
+        <ul>
+          <li><b>أبرز 5 مشاريع تعتمد على تحليل المشاعر (ص 116):</b>
+            <br>1) التنبؤ بنتائج الانتخابات الرئاسية باستخدام التغريدات • 2) نموذج كشف الكلام الذي يحض على الكراهية • 3) تحليل مراجعات الفيلم • 4) تحليل مراجعات منتجات أمازون • 5) نموذج كشف الأخبار الكاذبة.</li>
+          <li><b>تحليل المشاعر باستخدام بايثون وكلمات الرأي (ص 116):</b>
+            <ul>
+              <li>يهدف إلى تطبيق معالجة اللغة الطبيعية (<span dir="ltr">NLP</span>) واللغويات الحاسوبية لتحديد موقف الكاتب (حكمه، تقييمه، حالته العاطفية) أو <b>القطبية السياقية العامة للمستند</b>.</li>
+              <li><b>المهمة الرئيسية:</b> هي تحديد <b>كلمات الرأي (<span dir="ltr">Opinion Words</span>)</b>، وتُعرف أيضاً باسم <b>"كلمات القطبية" أو "كلمات المشاعر"</b>، وتشمل: <b>(الصفات، والظروف، والأفعال)</b>؛ مثل: <i>"أحب هذه الكاميرا. إنها رائعة"</i>.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h3>رابعاً: مشروع التعلم الآلي لتحليل المشاعر باستخدام بايثون - تقييمات أفلام IMDB (ص 116 - 118)</h3>
+        <ol>
+          <li><b>استيراد المكتبات وقراءة البيانات (ص 116):</b> استيراد مكتبات <code dir="ltr">pandas, numpy, matplotlib.pyplot, seaborn</code>، وأداة <code dir="ltr">CountVectorizer</code> من <code dir="ltr">sklearn.feature_extraction.text</code>، وقراءة ملف التدريب <code dir="ltr">pd.read_csv("Train.csv")</code>.</li>
+          <li><b>وصف مجموعة البيانات (ص 117):</b> تتكون من <b>40 ألف (40,000) تقييم للأفلام من موقع <span dir="ltr">IMDB</span></b>، وتحتوي على عمودين بارزين:
+            <ul>
+              <li>عمود <b dir="ltr">TEXT</b>: يحتوي على نص النقد أو المراجعة.</li>
+              <li>عمود <b dir="ltr">LABEL</b>: يحتوي على القيم <b dir="ltr">0</b> و <b dir="ltr">1</b>، حيث <b>(0 = سلبي)</b> و <b>(1 = إيجابي)</b>، وموزعة بالتساوي (50% إيجابي و 50% سلبي).</li>
+            </ul>
+          </li>
+          <li><b>إزالة علامات HTML بالتعبير المنتظم (ص 117 - 118):</b> استيراد مكتبة <b dir="ltr">re</b> (<span dir="ltr">Regular Expression</span> - التعبير المنتظم) لإزالة وسوم وعلامات HTML مثل <code dir="ltr">"&lt;a&gt;"</code> أو <code dir="ltr">"&gt;"</code> واستبدالها بسلسلة نصية فارغة.</li>
+          <li><b>معالجة الرموز التعبيرية والتجذير بـ <span dir="ltr">PorterStemmer</span> (ص 118):</b>
+            <ul>
+              <li>الاحتفاظ بالرموز التعبيرية (<span dir="ltr">Emojis</span>) مثل الوجوه الضاحكة <code dir="ltr">:)</code> أو الحزينة <code dir="ltr">:(</code> ونقلها إلى نهاية النص للحصول على نص نظيف.</li>
+              <li>استخدام أداة <b dir="ltr">PorterStemmer</b> من مكتبة <b dir="ltr">nltk</b> (<code dir="ltr">from nltk.stem.porter import PorterStemmer</code>) لتبسيط البيانات وإزالة التعقيدات غير الضرورية عبر إرجاع الكلمات إلى جذورها.</li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+    </details>
+
+    <!-- الوحدة الثانية -->
+    <details open>
+      <summary>2) الوحدة (2): الكلمات السلبية والإيجابية، سحابة الكلمات (Wordcloud)، وتدريب الانحدار اللوجستي (ص 119 - 121)</summary>
+      <div class="details-body">
+        <h3>أولاً: الكلمات الإيجابية والسلبية في تحليل المشاعر (ص 119 - 120)</h3>
+        <p>يعتمد تحليل المشاعر على تقييم <b>تردد واستخدام</b> الكلمات الإيجابية والسلبية في النص لتوليد معايير أو نماذج تصنيف:</p>
+        <div class="grid">
+          <div class="card" style="margin:0;border-right:4px solid var(--good)">
+            <span class="tag" style="background:var(--good-bg);color:var(--good)">1. الكلمات الإيجابية</span>
+            <p>تُستخدم للتعبير عن المشاعر الإيجابية والتفاؤل، وترتبط بـ <b>الموافقة والإعجاب والسعادة</b>.</p>
+            <small><b>أمثلة الملخص:</b> "حب، ممتاز، رائع، جميل، طيب" | بالإنجليزية: <span dir="ltr">"beautiful, perfect, excellent, love, kind"</span>.</small>
+          </div>
+          <div class="card" style="margin:0;border-right:4px solid var(--bad)">
+            <span class="tag" style="background:var(--bad-bg);color:var(--bad)">2. الكلمات السلبية</span>
+            <p>تعبر عن المشاعر السلبية والتشاؤم أو عدم الرضا، وترتبط بـ <b>الانتقاد والاعتراض والغضب</b>.</p>
+            <small><b>أمثلة الملخص:</b> "فظيع، ضائع، مشكلة، غبي، سيء" | بالإنجليزية: <span dir="ltr">"stupid, problem, wasteful, horrible, poor, bad"</span>.</small>
+          </div>
+        </div>
+
+        <div class="exam-alert">
+          <h3>ثانياً: سحابة الكلمات (<span dir="ltr">Wordcloud</span>) وخطوات إنشائها الأربع (ص 119 - 120):</h3>
+          <p>لتصوير الكلمات السلبية والإيجابية بصرياً باستخدام مكتبة <b dir="ltr">WordCloud</b> في بايثون نتبع الخطوات التالية بالترتيب:</p>
+          <ol>
+            <li><b>إزالة كلمات التوقف (<span dir="ltr">Stopwords</span>):</b> إزالة الكلمات الشائعة التي لا تحمل الكثير من المعنى مثل <b>("و"، "أو"، "في")</b> باستخدام قائمة <code dir="ltr">stopwords</code> من مكتبة <code dir="ltr">nltk.corpus</code> (مع استبعاد الكلمات المحايدة المتكررة مثل <code dir="ltr">'movie'</code> و <code dir="ltr">'film'</code>).</li>
+            <li><b>تحديد الكلمات الإيجابية والسلبية:</b> فصل البيانات الإيجابية (<code dir="ltr">label == 1</code>) والسلبية (<code dir="ltr">label == 0</code>) المراد إبرازها.</li>
+            <li><b>إنشاء سحابة الكلمات:</b> توليد السحابة باستخدام الدالة <code dir="ltr">WordCloud().generate()</code>.</li>
+            <li><b>عرض سحابة الكلمات:</b> تُعرض السحابة بحجم وألوان تعبر عن تردد كل كلمة، حيث <b>تظهر الكلمات الأكثر تكراراً بحجم أكبر</b>.</li>
+          </ol>
+        </div>
+
+        <h3>ثالثاً: تحويل النصوص بـ <span dir="ltr">TF-IDF</span> وتدريب نموذج الانحدار اللوجستي (ص 120 - 121)</h3>
+        <ul>
+          <li><b>تحويل المستندات إلى مصفوفة ميزات (<span dir="ltr">Feature Matrix</span>):</b> نستخدم أداة <b dir="ltr">TfidfVectorizer</b> (من <code dir="ltr">sklearn.feature_extraction.text</code>) والدالة <code dir="ltr">fit_transform</code> لتحويل النصوص الأولية إلى مصفوفة ميزات رقمية.</li>
+          <li><b>تقسيم البيانات في المشروع (ص 121):</b> تم تقسيم البيانات باستخدام <code dir="ltr">train_test_split</code> إلى <b>50% للتدريب و 50% للاختبار</b> (<code dir="ltr">test_size=0.5</code>).</li>
+          <li><b>الخطوات الخمس لتدريب نموذج الانحدار اللوجستي لتحليل المشاعر (ص 121):</b>
+            <ol>
+              <li><b>تحميل مجموعة البيانات:</b> تحميل النصوص وتصنيفاتها (إيجابية وسلبية).</li>
+              <li><b>تقسيم البيانات:</b> تقسيمها إلى بيانات تدريب وبيانات اختبار لتقييم الأداء.</li>
+              <li><b>معالجة البيانات:</b> تنظيف البيانات وتحويل النصوص إلى متجهات ميزات (<span dir="ltr">Feature Vectors</span>).</li>
+              <li><b>تدريب النموذج:</b> تدريب نموذج الانحدار اللوجستي (<code dir="ltr">LogisticRegressionCV</code>) باستخدام بيانات التدريب.</li>
+              <li><b>تقييم النموذج:</b> استخدام بيانات الاختبار ومقاييس مثل دقة التصنيف (<code dir="ltr">metrics.accuracy_score</code>) لتحديد كفاءة النموذج.</li>
+            </ol>
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- الوحدة الثالثة -->
+    <details open>
+      <summary>3) الوحدة (3): تنظيف البيانات، الترميز (Tokenization)، الغابات العشوائية، ومصفوفة الارتباك (ص 122 - 125)</summary>
+      <div class="details-body">
+        <h3>أولاً: تحليل المشاعر الكمي وخطوات تنظيف البيانات النصية الأربع (ص 122)</h3>
+        <ul>
+          <li>يقيس تحليل المشاعر المحتوى النصي لتمثيل آراء ومعتقدات ومشاعر الجمهور <b>بشكل كمي</b>، ويُعد أداة أساسية في البرمجة اللغوية العصبية (<span dir="ltr">NLP</span>) باستخدام مكتبات مثل <b dir="ltr">Pandas</b> للاستكشاف الأولي.</li>
+          <li class="note"><b>خطوات عملية تنظيف البيانات (<span dir="ltr">Data Cleaning</span>) الأربع في تحليل المشاعر (ص 122):</b>
+            <ol>
+              <li><b>إزالة الروابط التشعبية (<span dir="ltr">Hyperlinks</span>):</b> حذف روابط المواقع الخارجية من التغريدات أو المراجعات لتبسيط النص والتركيز على المحتوى الرئيسي للرسالة.</li>
+              <li><b>استبدال الاختصارات (<span dir="ltr">Contractions</span>):</b> تحويل الاختصارات اللغوية مثل <b dir="ltr">"I'm"</b> إلى <b dir="ltr">"I am"</b> لتوحيد الكلمات وتسهيل فهم النص وتحليله.</li>
+              <li><b>إزالة علامات الترقيم (<span dir="ltr">Punctuation</span>):</b> حذف النقاط والفواصل وعلامات التعجب لتبسيط النص.</li>
+              <li><b>تعيين تسميات المشاعر:</b> تحديد تسميات المشاعر لكل نص بعد تنظيفه (إيجابي أو سلبي) بناءً على الكلمات المستخدمة والسياق العام.</li>
+            </ol>
+          </li>
+        </ul>
+
+        <h3>ثانياً: الترميز (<span dir="ltr">Tokenization</span>) وتحويل النصوص إلى تمثيل رقمي (ص 123)</h3>
+        <ul>
+          <li><b>تعريف الترميز (<span dir="ltr">Tokenization</span>):</b> هو <b>عملية تقسيم النص إلى وحدات صغيرة قابلة للمعالجة تُسمى "توكنز" (<span dir="ltr">Tokens</span>) أو رموز</b> (مثل الكلمات أو الجمل الفردية)، ويُمثل كل توكن بمفرده وفقاً للسياق.</li>
+          <li><b>كيف نحول التوكنات إلى تمثيل رقمي؟</b>
+            <ul>
+              <li>باستخدام مفهوم <b dir="ltr">TF-IDF</b>: وهو <b>تردد الظهور في النص المقابل لتردد الظهور في كل النصوص</b>، لتحويل التوكنات إلى متجهات رقمية تمثل كل تغريدة.</li>
+              <li>باستخدام أداة <b dir="ltr">Tokenizer</b> المدمجة في مكتبة <b dir="ltr">Keras</b> (<code dir="ltr">from keras.preprocessing.text import Tokenizer</code> والدالة <code dir="ltr">texts_to_matrix(..., mode='tfidf')</code>) لتقسيم التغريدات إلى توكنات وتحويلها إلى متجهات معينة الطول.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h3>ثالثاً: خوارزمية تصنيف الغابات العشوائية (<span dir="ltr">Random Forest Classification</span>) (ص 123 - 124)</h3>
+        <ul>
+          <li>تُستخدم لتعلم العلاقة بين المدخلات (التغريدات) والمخرجات (التصنيف الإيجابي أو السلبي).</li>
+          <li><b>فكرتها وميزتها:</b> تعتمد على <b>بناء مجموعة من الأشجار القرارية ودمج توقعاتها</b> للحصول على تصنيف نهائي؛ وتمتاز بقوتها في التعامل مع البيانات الكبيرة والمتنوعة.</li>
+        </ul>
+
+        <div class="exam-alert">
+          <h3>رابعاً: مصفوفة الارتباك (<span dir="ltr">Confusion Matrix</span>) ومتى لا تكفي الدقة (Accuracy)؟ (ص 124 - 125) - موضع أسئلة مؤكدة:</h3>
+          <ul>
+            <li><b>وظيفة مصفوفة الارتباك:</b> تقييم أداء النموذج بشكل شامل في مجموعة الاختبار عن طريق مقارنة <b>التصنيفات الفعلية</b> بالتصنيفات التي <b>تنبأ بها النموذج</b>.</li>
+            <li><b>المصطلحات الأربعة الأساسية في مصفوفة الارتباك (ص 124):</b>
+              <ol>
+                <li><b dir="ltr">TP (True Positives):</b> عدد العينات التي تم تصنيفها <b>بشكل صحيح كإيجابية</b>.</li>
+                <li><b dir="ltr">TN (True Negatives):</b> عدد العينات التي تم تصنيفها <b>بشكل صحيح كسلبية</b>.</li>
+                <li><b dir="ltr">FP (False Positives):</b> عدد العينات التي تم تصنيفها <b>بشكل خاطئ كإيجابية</b>.</li>
+                <li><b dir="ltr">FN (False Negatives):</b> عدد العينات التي تم تصنيفها <b>بشكل خاطئ كسلبية</b>.</li>
+              </ol>
+            </li>
+            <li><b>لماذا قد يكون معدل الدقة (<span dir="ltr">Accuracy</span>) غير كافٍ في تحليل المشاعر؟ (ص 125):</b>
+              <br>لأن النموذج قد يكون دقيقاً جداً في التمييز بين المشاعر القطبية (الإيجابية والسلبية)، ولكنه <b>يفشل في التعرف على الحالات التي تحتوي على مشاعر محايدة بشكل صحيح</b>؛ ولذلك يكون من الأفضل استخدام مقاييس أخرى مشتقة من مصفوفة الارتباك مثل: <b>الدقة الإيجابية (<span dir="ltr">Precision</span>)، والاسترجاع (<span dir="ltr">Recall</span>)، ومعامل (<span dir="ltr">F1 Score</span>)</b> لتقديم صورة أدق عن أداء النموذج في جميع التصنيفات.</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= التبويب الثاني: جداول المقارنات والأكواد ================= -->
+  <section id="tables" class="panel">
+    <div class="card">
+      <h2>1. مقارنة مكونات مصفوفة الارتباك الأربعة ومقاييس التقييم (ص 124 - 125)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>المصطلح / المقياس</th>
+            <th>الاختصار</th>
+            <th>المعنى الدقيق والدور في تقييم نموذج تحليل المشاعر</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>إيجابيات صحيحة</b></td>
+            <td dir="ltr"><b>TP (True Positives)</b></td>
+            <td>عدد العينات التي تم تصنيفها <b>بشكل صحيح كإيجابية</b>.</td>
+          </tr>
+          <tr>
+            <td><b>سلبيات صحيحة</b></td>
+            <td dir="ltr"><b>TN (True Negatives)</b></td>
+            <td>عدد العينات التي تم تصنيفها <b>بشكل صحيح كسلبية</b>.</td>
+          </tr>
+          <tr>
+            <td><b>إيجابيات كاذبة (خاطئة)</b></td>
+            <td dir="ltr"><b>FP (False Positives)</b></td>
+            <td>عدد العينات التي تم تصنيفها <b>بشكل خاطئ كإيجابية</b>.</td>
+          </tr>
+          <tr>
+            <td><b>سلبيات كاذبة (خاطئة)</b></td>
+            <td dir="ltr"><b>FN (False Negatives)</b></td>
+            <td>عدد العينات التي تم تصنيفها <b>بشكل خاطئ كسلبية</b>.</td>
+          </tr>
+          <tr>
+            <td><b>معدل الدقة العامة</b></td>
+            <td dir="ltr"><b>Accuracy</b></td>
+            <td>يقيس نسبة التصنيفات الصحيحة الإجمالية، لكنه <b>قد يكون غير كافٍ</b> إذا فشل النموذج في التنبؤ بالتصنيفات <b>المحايدة</b> (ص 125).</td>
+          </tr>
+          <tr>
+            <td><b>المقاييس البديلة الأدق</b></td>
+            <td dir="ltr"><b>Precision, Recall, F1 Score</b></td>
+            <td>تُحسب من مصفوفة الارتباك وتُفضل على <span dir="ltr">Accuracy</span> لتقديم صورة شاملة ودقيقة عن أداء النموذج في التعرف على جميع التصنيفات (الإيجابية والسلبية والمحايدة).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>2. مقارنة خطوات تنظيف البيانات، سحابة الكلمات، وتدريب الانحدار اللوجستي (ص 119 - 122)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>العملية</th>
+            <th>الخطوات المرتبة كما وردت في الملخص</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>خطوات تنظيف البيانات النصية<br>(Data Cleaning - ص 122)</b></td>
+            <td>
+              1) <b>إزالة الروابط التشعبية (<span dir="ltr">Hyperlinks</span>):</b> حذف روابط المواقع الخارجية.<br>
+              2) <b>استبدال الاختصارات (<span dir="ltr">Contractions</span>):</b> مثل تحويل <span dir="ltr">"I'm"</span> إلى <span dir="ltr">"I am"</span> لتوحيد الكلمات.<br>
+              3) <b>إزالة علامات الترقيم (<span dir="ltr">Punctuation</span>):</b> كالنقاط والفواصل وعلامات التعجب.<br>
+              4) <b>تعيين تسميات المشاعر:</b> تصنيف النصوص إلى فئات إيجابية وسلبية حسب الكلمات والسياق.
+            </td>
+          </tr>
+          <tr>
+            <td><b>خطوات إنشاء سحابة الكلمات<br>(Wordcloud - ص 119)</b></td>
+            <td>
+              1) <b>إزالة كلمات التوقف (<span dir="ltr">Stopwords</span>):</b> مثل ("و"، "أو"، "في") التي لا تحمل معنى.<br>
+              2) <b>تحديد الكلمات الإيجابية والسلبية:</b> التي نريد إبرازها في السحابة.<br>
+              3) <b>إنشاء سحابة الكلمات:</b> باستخدام هذه الكلمات عبر مكتبة <span dir="ltr">WordCloud</span>.<br>
+              4) <b>عرض سحابة الكلمات:</b> بحجم وألوان تعبر عن التردد (الكلمات الأكثر تكراراً تظهر بحجم أكبر).
+            </td>
+          </tr>
+          <tr>
+            <td><b>خطوات تدريب نموذج الانحدار اللوجستي<br>(Logistic Regression - ص 121)</b></td>
+            <td>
+              1) <b>تحميل مجموعة البيانات</b> (النصوص وتصنيفاتها).<br>
+              2) <b>تقسيم البيانات</b> إلى تدريب واختبار (50% تدريب و 50% اختبار في المشروع).<br>
+              3) <b>معالجة البيانات</b> (تنظيفها وتحويلها إلى متجهات ميزات).<br>
+              4) <b>تدريب النموذج</b> باستخدام بيانات التدريب.<br>
+              5) <b>تقييم النموذج</b> باستخدام بيانات الاختبار ومقياس دقة التصنيف.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>3. جدول المكتبات والأدوات البرمجية في بايثون الواردة في الفصل العاشر (ص 116 - 124)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>المكتبة / الأداة في بايثون</th>
+            <th>الوظيفة الدقيقة في مشاريع تحليل المشاعر</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td dir="ltr"><b>pandas (pd)</b></td>
+            <td>قراءة ملفات البيانات (<code dir="ltr">pd.read_csv("Train.csv")</code>) والتحليل والاستكشاف الأولي للبيانات (<code dir="ltr">data.head()</code>) (ص 116 و 122).</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>re (Regular Expression)</b></td>
+            <td>مكتبة التعبير المنتظم؛ استُخدمت لإزالة علامات HTML مثل <code dir="ltr">"&lt;a&gt;"</code> أو <code dir="ltr">"&gt;"</code> واستخراج الرموز التعبيرية (Emojis) (ص 117-118).</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>PorterStemmer (nltk.stem.porter)</b></td>
+            <td>أداة لتبسيط البيانات النصية وإزالة التعقيدات غير الضرورية عبر إرجاع الكلمات إلى جذورها (<code dir="ltr">porter.stem(word)</code>) (ص 118).</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>stopwords (nltk.corpus)</b></td>
+            <td>قائمة كلمات التوقف الشائعة (في اللغة الإنجليزية أو العربية) لإزالتها قبل إنشاء سحابة الكلمات (ص 119-120).</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>WordCloud</b></td>
+            <td>إنشاء وعرض سحابة الكلمات الإيجابية والسلبية بحيث يظهر حجم الكلمة حسب تكرارها (ص 120).</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>CountVectorizer & TfidfVectorizer</b></td>
+            <td>أدوات من <code dir="ltr">sklearn.feature_extraction.text</code> لتحويل المستندات النصية الأولية إلى مصفوفة ميزات رقمية (<span dir="ltr">feature matrix</span>) (ص 116 و 120).</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>Tokenizer (keras.preprocessing.text)</b></td>
+            <td>أداة مدمجة في مكتبة <span dir="ltr">Keras</span> لتقسيم التغريدات إلى توكنات وتحويلها لمتجهات رقمية بطول معين عبر <code dir="ltr">texts_to_matrix(..., mode='tfidf')</code> (ص 123).</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>LogisticRegressionCV & RandomForestClassifier</b></td>
+            <td>نماذج التصنيف المستخدمة لتدريب آلة تحليل المشاعر وتوقع الفئة الإيجابية أو السلبية (ص 121 و 124).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>4. ملخص بيانات مشروع IMDB ومصطلحات الكلمات في الفصل العاشر (ص 116 - 120)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>البند</th>
+            <th>التفاصيل الدقيقة في الملخص</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>مجموعة بيانات الأفلام (IMDB)</b></td>
+            <td>تضم <b>40,000 (40 ألف)</b> تقييم للأفلام مقسمة في عمودين: <b dir="ltr">TEXT</b> (النقد) و <b dir="ltr">LABEL</b> (التصنيف: <b>0 = سلبي</b>، <b>1 = إيجابي</b>)، بنسبة 50% إيجابي و 50% سلبي (ص 117).</td>
+          </tr>
+          <tr>
+            <td><b>كلمات الرأي (Opinion Words)</b></td>
+            <td>تُعرف أيضاً باسم <b>"كلمات القطبية"</b> أو <b>"كلمات المشاعر"</b>، وهي المؤشرات السائدة على المشاعر، وتشمل 3 أقسام نحوية: <b>(الصفات، الظروف، والأفعال)</b> (ص 116).</td>
+          </tr>
+          <tr>
+            <td><b>مفهوم TF-IDF</b></td>
+            <td>يعني <b>تردد الظهور في النص المقابل لتردد الظهور في كل النصوص</b>، ويُستخدم لتحويل التوكنات إلى متجهات رقمية (ص 123).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الثالث: المصطلحات ================= -->
+  <section id="terms" class="panel">
+    <div class="card">
+      <h2>قاموس المصطلحات والمكتبات البرمجية للفصل العاشر (26 مصطلحاً)</h2>
+      <p class="muted">جميع المصطلحات والمكتبات والدوال الواردة في الوحدات الثلاث للفصل العاشر مع أرقام صفحاتها:</p>
+      <div id="termsGrid" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الرابع: البطاقات التعليمية ================= -->
+  <section id="cards" class="panel">
+    <div class="card">
+      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
+      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
+      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
+        <div class="term" id="flashTerm"></div>
+        <div class="answer" id="flashAnswer" hidden></div>
+        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="prevCard">السابق</button>
+        <span id="cardCount" class="muted"></span>
+        <button class="btn primary" id="nextCard">التالي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الخامس: الاختبار الشامل ================= -->
+  <section id="quiz" class="panel">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2>الاختبار الشامل للفصل العاشر (25 سؤالاً)</h2>
+          <p class="muted">يغطي كافة المفاهيم وتحديات تحليل المشاعر وأكواد بايثون ومصفوفة الارتباك (ص 114 - 125) مع تصحيح وتعليل فوري.</p>
+        </div>
+        <div class="score" id="score">النتيجة: 0 / 25</div>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="quizArea"></div>
+      <div class="row">
+        <button class="btn" id="resetQuiz">إعادة الاختبار</button>
+        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+      </div>
+      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
+    </div>
+  </section>
+</main>
+
+<footer>مبني بالكامل (100%) على محتوى الفصل العاشر من ملخص مقرر تعلم الآلة التطبيقي (صفحات 114 - 125)</footer>
+
+<script>
+const terms = [
+  ["Sentiment Analysis", "تحليل المشاعر: عملية تقنية لتحديد وتصنيف المشاعر والعواطف المعبر عنها في النصوص إلى إيجابية أو سلبية أو محايدة (ص 114)."],
+  ["Opinion / Polarity Words", "كلمات الرأي (كلمات القطبية أو كلمات المشاعر): مؤشرات سائدة على المشاعر في النصوص وتشمل الصفات والظروف والأفعال (ص 116)."],
+  ["Sarcasm & Context", "السخرية والمعنى السياقي: من أبرز التحديات التي تفشل الأنظمة الآلية في تمييزها مقارنة بالحكم البشري (ص 115)."],
+  ["IMDB Dataset (40,000)", "مجموعة بيانات في مشروع بايثون تضم 40 ألف تقييم للأفلام بعمودين: TEXT (النقد) و LABEL (0 سلبي و 1 إيجابي) (ص 117)."],
+  ["re (Regular Expression)", "مكتبة التعبير المنتظم في بايثون؛ تُستخدم لإزالة علامات HTML مثل <a> أو > واستخراج الرموز التعبيرية (ص 117-118)."],
+  ["PorterStemmer", "أداة من مكتبة nltk لتبسيط البيانات النصية وإزالة التعقيدات غير الضرورية عبر إرجاع الكلمات لجذورها (ص 118)."],
+  ["Positive Words", "الكلمات الإيجابية: تعبر عن التفاؤل والموافقة والإعجاب والسعادة مثل (حب، ممتاز، رائع، beautiful, perfect) (ص 119-120)."],
+  ["Negative Words", "الكلمات السلبية: تعبر عن التشاؤم وعدم الرضا والانتقاد والغضب مثل (فظيع، مشكلة، سيء، stupid, horrible) (ص 119-120)."],
+  ["Wordcloud", "سحابة الكلمات: تصوير بصري للكلمات الإيجابية والسلبية بحجم وألوان تعبر عن ترددها، حيث تظهر الأكثر تكراراً بحجم أكبر (ص 119)."],
+  ["Stopwords", "كلمات التوقف: الكلمات الشائعة التي لا تحمل الكثير من المعنى مثل (و، أو، في) ويتم إزالتها قبل بناء سحابة الكلمات (ص 119)."],
+  ["TF-IDF Vectorizer", "أداة لتحويل المستندات النصية الأولية إلى مصفوفة ميزات رقمية (feature matrix) لتدريب نموذج التعلم الآلي (ص 120)."],
+  ["TF-IDF Concept", "مفهوم يعني: تردد الظهور في النص المقابل لتردد الظهور في كل النصوص، ويحول التوكنات إلى متجهات رقمية (ص 123)."],
+  ["train_test_split (50/50)", "دالة من مكتبة sklearn استُخدمت في مشروع الوحدة الثانية لتقسيم البيانات إلى 50% للتدريب و 50% للاختبار (ص 121)."],
+  ["LogisticRegressionCV", "نموذج الانحدار اللوجستي مع التحقق المتقاطع المستخدم لتدريب آلة تحليل المشاعر وتصنيف النصوص (ص 121)."],
+  ["Data Cleaning", "تنظيف البيانات النصية: يشمل إزالة الروابط التشعبية، استبدال الاختصارات، إزالة علامات الترقيم، وتعيين تسميات المشاعر (ص 122)."],
+  ["Hyperlinks Removal", "إزالة الروابط التشعبية: حذف روابط المواقع الخارجية من التغريدات لتركيز التحليل على المحتوى الرئيسي للرسالة (ص 122)."],
+  ["Contractions Replacement", "استبدال الاختصارات اللغوية: مثل تحويل 'I'm' إلى 'I am' لتوحيد الكلمات وتسهيل فهم النص وتحليله (ص 122)."],
+  ["Punctuation Removal", "إزالة علامات الترقيم: حذف النقاط والفواصل وعلامات التعجب لتبسيط النص (ص 122)."],
+  ["Tokenization", "الترميز: عملية تقسيم النص إلى وحدات صغيرة قابلة للمعالجة تُسمى توكنز (Tokens) أو رموز كالكلمات أو الجمل الفردية (ص 123)."],
+  ["Keras Tokenizer", "أداة مدمجة في مكتبة Keras تقسم التغريدات إلى توكنات وتحولها إلى متجهات معينة الطول باستخدام وضع tfidf (ص 123)."],
+  ["Random Forest Classifier", "خوارزمية تصنيف الغابات العشوائية: تبني مجموعة من الأشجار القرارية وتدمج توقعاتها، وتمتاز بقوتها مع البيانات الكبيرة والمتنوعة (ص 123-124)."],
+  ["Confusion Matrix", "مصفوفة الارتباك: أداة لتقييم أداء النموذج بشكل شامل عبر مقارنة التصنيفات الفعلية بالتصنيفات التي تنبأ بها النموذج (ص 124)."],
+  ["TP (True Positives)", "إيجابيات صحيحة: عدد العينات التي تم تصنيفها بشكل صحيح كإيجابية في مصفوفة الارتباك (ص 124)."],
+  ["TN (True Negatives)", "سلبيات صحيحة: عدد العينات التي تم تصنيفها بشكل صحيح كسلبية في مصفوفة الارتباك (ص 124)."],
+  ["FP (False Positives)", "إيجابيات خاطئة: عدد العينات التي تم تصنيفها بشكل خاطئ كإيجابية في مصفوفة الارتباك (ص 124)."],
+  ["FN (False Negatives)", "سلبيات خاطئة: عدد العينات التي تم تصنيفها بشكل خاطئ كسلبية في مصفوفة الارتباك (ص 124)."]
+];
+
+const cards = [
+  ["ما هو تعريف تحليل المشاعر (Sentiment Analysis)؟", "هو عملية تقنية حديثة في علوم البيانات والذكاء الاصطناعي تُستخدم لتحديد وتصنيف المشاعر والعواطف المعبر عنها في النصوص إلى (إيجابية، أو سلبية، أو محايدة) تجاه موضوع معين (ص 114)."],
+  ["ما هي أبرز المجالات ومصادر البيانات لتحليل المشاعر؟", "• المجالات: التسويق، خدمات العملاء، رصد الرأي العام، وتحليل السوق.\n• المصادر: مواقع التواصل الاجتماعي، المدونات، ومواقع التقييم والمراجعات (ص 114)."],
+  ["كيف يفيد تحليل المشاعر كلاً من الشركات والمستهلكين؟", "• الشركات: مراقبة ردود الفعل على حملاتها التسويقية، وفهم ما يقال عن منافسيها لتحسين استراتيجياتها التنافسية.\n• المستهلكين: معرفة آراء الآخرين قبل اتخاذ قرار الشراء (ص 115)."],
+  ["ما هي التحديات الأربعة التي تواجه أنظمة تحليل المشاعر الآلية؟", "1) الحكم البشري لا يزال أكثر دقة، 2) عدم القدرة على التمييز بين السخرية والنص الصادق، 3) صعوبة تحليل المعنى السياقي المحدد للكلمة دائماً، 4) مشاكل تفسير الاختصارات مثل 'lol' (ص 115)."],
+  ["اذكري 5 مشاريع عملية تعتمد على تحليل المشاعر.", "1) التنبؤ بنتائج الانتخابات الرئاسية بالتغريدات، 2) كشف الكلام الذي يحض على الكراهية، 3) تحليل مراجعات الأفلام، 4) تحليل مراجعات منتجات أمازون، 5) كشف الأخبار الكاذبة (ص 116)."],
+  ["ما هي المهمة الرئيسية في تحليل المشاعر باستخدام بايثون؟ وماذا تشمل نحوياً؟", "المهمة الرئيسية هي تحديد (كلمات الرأي Opinion Words) وتُعرف أيضاً بكلمات القطبية أو كلمات المشاعر؛ وتشمل نحوياً: الصفات، والظروف، والأفعال (ص 116)."],
+  ["ممَ تتكون مجموعة بيانات IMDB في مشروع بايثون (ص 117)؟", "تحتوي على 40 ألف (40,000) تقييم للأفلام من موقع IMDB في عمودين بارزين:\n1) TEXT: يحتوي على نص النقد.\n2) LABEL: يحتوي على 0 (سلبي) و 1 (إيجابي) (ص 117)."],
+  ["لماذا نستخدم مكتبة التعبير المنتظم (re) في مشروع تحليل المشاعر؟", "لإزالة علامات ووسوم HTML مثل '<a>' أو '>' واستبدالها بسلسلة فارغة، وكذلك لاستخراج الرموز التعبيرية (Emojis) وتنظيمها (ص 117-118)."],
+  ["ما وظيفة أداة PorterStemmer من مكتبة nltk؟", "تُستخدم لتبسيط البيانات النصية وإزالة التعقيدات غير الضرورية عن طريق إرجاع الكلمات إلى جذورها (ص 118)."],
+  ["قارني بين الكلمات الإيجابية والكلمات السلبية في تحليل المشاعر.", "• الإيجابية: تعبر عن التفاؤل والموافقة والإعجاب والسعادة (مثل: حب، ممتاز، رائع).\n• السلبية: تعبر عن التشاؤم وعدم الرضا والانتقاد والغضب (مثل: فظيع، ضائع، مشكلة، غبي، سيء) (ص 119)."],
+  ["ما هي الخطوات الأربع لتصوير الكلمات باستخدام سحابة الكلمات (Wordcloud)؟", "1) إزالة كلمات التوقف (Stopwords)، 2) تحديد الكلمات الإيجابية والسلبية، 3) إنشاء سحابة الكلمات، 4) عرض سحابة الكلمات بحجم وألوان تعبر عن تردد كل كلمة (ص 119)."],
+  ["ما هي كلمات التوقف (Stopwords)؟ ولماذا نزيلها؟", "هي الكلمات الشائعة التي لا تحمل الكثير من المعنى بمفردها مثل ('و'، 'أو'، 'في')، ونزيلها لتبسيط النص وإبراز الكلمات المهمة فقط في سحابة الكلمات (ص 119)."],
+  ["علامَ يدل حجم الكلمة داخل سحابة الكلمات (Wordcloud)؟", "يعبر عن تردد وتكرار الكلمة في النص؛ حيث تظهر الكلمات الأكثر تكراراً بحجم أكبر (ص 119)."],
+  ["ما وظيفة أداة TF-IDF Vectorizer في تدريب نموذج التعلم الآلي؟", "تحويل المستندات النصية الأولية إلى مصفوفة ميزات رقمية (feature matrix)، وهو أمر ضروري لتدريب نموذج التعلم الآلي (ص 120)."],
+  ["ما هي نسبة تقسيم البيانات إلى تدريب واختبار في مشروع الوحدة الثانية (ص 121)؟", "تم تقسيم البيانات إلى 50% للتدريب و 50% للاختبار (test_size=0.5) باستخدام دالة train_test_split (ص 121)."],
+  ["اذكري الخطوات الخمس لتدريب نموذج الانحدار اللوجستي لتحليل المشاعر.", "1) تحميل مجموعة البيانات، 2) تقسيم البيانات لتدريب واختبار، 3) معالجة البيانات وتحويلها لمتجهات ميزات، 4) تدريب النموذج ببيانات التدريب، 5) تقييم النموذج ببيانات الاختبار (ص 121)."],
+  ["كيف يمثل تحليل المشاعر آراء ومعتقدات الجمهور؟ وما الأداة المستخدمة للاستكشاف الأولي؟", "يمثلها ويقيسها (بشكل كمي)، ويُستخدم مع مجموعات البيانات وأدوات مثل مكتبة (Pandas) للتحليل والاستكشاف الأولي (ص 122)."],
+  ["ما هي الخطوات الأربع لعملية تنظيف البيانات (Data Cleaning) في تحليل المشاعر (ص 122)؟", "1) إزالة الروابط التشعبية (Hyperlinks)، 2) استبدال الاختصارات (Contractions)، 3) إزالة علامات الترقيم (Punctuation)، 4) تعيين تسميات المشاعر (ص 122)."],
+  ["لماذا نقوم بإزالة الروابط التشعبية واستبدال الاختصارات أثناء تنظيف النص؟", "• إزالة الروابط: لتبسيط النص وتركيز التحليل على المحتوى الرئيسي للرسالة.\n• استبدال الاختصارات (مثل تحويل I'm إلى I am): لتوحيد الكلمات وتسهيل فهم النص وتحليله (ص 122)."],
+  ["ما هو تعريف الترميز (Tokenization) في تحليل المشاعر؟", "هو عملية تقسيم النص إلى وحدات صغيرة قابلة للمعالجة تُسمى 'توكنز' (Tokens) أو رموز، مثل الكلمات أو الجمل الفردية (ص 123)."],
+  ["ما المقصود بمفهوم TF-IDF عند تحويل النصوص إلى تمثيل رقمي؟", "يعني (تردد الظهور في النص المقابل لتردد الظهور في كل النصوص)، ويُستخدم لتحويل التوكنات إلى متجهات رقمية تمثل كل تغريدة بشكل فردي (ص 123)."],
+  ["كيف تُستخدم مكتبة Keras في عملية الترميز وتحويل النصوص لتمثيل رقمي؟", "باستخدام أداة Tokenizer المدمجة في Keras لتقسيم التغريدات إلى توكنات وتحويلها إلى متجهات معينة الطول عبر الدالة texts_to_matrix بوضع tfidf (ص 123)."],
+  ["علامَ تعتمد خوارزمية تصنيف الغابات العشوائية (Random Forest)؟ وبماذا تمتاز؟", "تعتمد على فكرة بناء مجموعة من الأشجار القرارية ودمج توقعاتها للحصول على تصنيف نهائي؛ وتمتاز بقوتها في التعامل مع البيانات الكبيرة والمتنوعة (ص 123)."],
+  ["ما هي مصفوفة الارتباك (Confusion Matrix)؟", "أداة لتقييم أداء النموذج بشكل شامل في مجموعة الاختبار عن طريق مقارنة التصنيفات الفعلية بالتصنيفات التي تنبأ بها النموذج (ص 124)."],
+  ["ما الفرق بين TP و TN في مصفوفة الارتباك؟", "• TP (True Positives): عدد العينات التي تم تصنيفها بشكل صحيح كإيجابية.\n• TN (True Negatives): عدد العينات التي تم تصنيفها بشكل صحيح كسلبية (ص 124)."],
+  ["ما الفرق بين FP و FN في مصفوفة الارتباك؟", "• FP (False Positives): عدد العينات التي تم تصنيفها بشكل خاطئ كإيجابية.\n• FN (False Negatives): عدد العينات التي تم تصنيفها بشكل خاطئ كسلبية (ص 124)."],
+  ["ما هي المقاييس الأربعة التي يمكن حسابها باستخدام قيم مصفوفة الارتباك؟", "1) دقة التصنيف (Accuracy)، 2) الاسترجاع (Recall)، 3) الدقة الإيجابية (Precision)، 4) معامل F1 (F1 Score) (ص 124)."],
+  ["لماذا قد يكون مقياس الدقة (Accuracy) غير كافٍ لوحده في تقييم نموذج تحليل المشاعر؟ وما البديل؟", "لأن النموذج قد ينجح في التنبؤ بالتصنيفات الإيجابية والسلبية لكنه يفشل في التعرف على (المشاعر المحايدة)؛ لذا يُفضل استخدام Precision و Recall و F1 Score (ص 125)."]
+];
+
+const questions = [
+  {q:"العملية التقنية التي تُستخدم في علوم البيانات والذكاء الاصطناعي لتحديد وتصنيف المشاعر والعواطف المعبر عنها في النصوص (إيجابية، سلبية، أو محايدة) تُسمى:", o:["تحليل المشاعر (Sentiment Analysis)","ضغط الصور الرقمية","تصميم الشبكات السلكية","إدارة قواعد البيانات العلائقية"], a:0, e:"تحليل المشاعر (Sentiment Analysis) هو عملية تقنية لتحديد وتصنيف المشاعر في النصوص إلى إيجابية أو سلبية أو محايدة (ص 114)."},
+  {q:"أي مما يلي يُعد من التحديات الرئيسية التي تواجه الأنظمة الآلية في تحليل المشاعر وتجعل الحكم البشري أكثر دقة؟", o:["عدم قدرتها على التمييز بين السخرية والنص الصادق، وصعوبة تفسير الاختصارات مثل 'lol' والمعنى السياقي","عدم قدرتها على قراءة الحروف الإنجليزية","عدم وجود بيانات نصية على الإنترنت","أنها تستغرق عشر سنوات لتحليل جملة واحدة"], a:0, e:"لا تستطيع الأنظمة الآلية التمييز بين السخرية والنص الصادق، ولا تحليل المعنى السياقي دائماً، وتواجه مشاكل مع الاختصارات مثل lol (ص 115)."},
+  {q:"أي مما يلي يُعد من المشاريع المعتمدة على تحليل المشاعر المذكورة في الفصل العاشر؟", o:["التنبؤ بنتائج الانتخابات الرئاسية بالتغريدات، وكشف خطاب الكراهية، وتحليل مراجعات الأفلام ومنتجات أمازون، وكشف الأخبار الكاذبة","تصميم محركات السيارات الكهربائية","حساب المساحات تحت المنحنيات بالتكامل","تركيب أجهزة الاستشعار في البيوت المحمية"], a:0, e:"هذه هي المشاريع الخمسة المذكورة نصاً في ص 116 كمشاريع تعتمد على تحليل المشاعر."},
+  {q:"في تحليل المشاعر باستخدام بايثون، ماذا نُطلق على الكلمات التي تُعتبر مؤشرات سائدة على المشاعر وتشمل (الصفات والظروف والأفعال)؟", o:["كلمات الرأي (وتُعرف أيضاً بكلمات القطبية أو كلمات المشاعر)","كلمات التوقف (Stopwords)","الروابط التشعبية (Hyperlinks)","علامات الترقيم (Punctuation)"], a:0, e:"كلمات الرأي هي مؤشرات سائدة على المشاعر وتشمل الصفات والظروف والأفعال، وتُعرف أيضاً بكلمات القطبية أو كلمات المشاعر (ص 116)."},
+  {q:"في مشروع تحليل المشاعر لتقييمات أفلام IMDB (ص 117)، كم عدد التقييمات في مجموعة البيانات وما دلالة القيم 0 و 1 في عمود LABEL؟", o:["40 ألف تقييم؛ حيث 0 يعني سلبي و 1 يعني إيجابي","100 تقييم فقط؛ حيث 0 يعني إيجابي و 1 يعني سلبي","مليون تقييم؛ حيث 0 يعني محايد","500 تقييم بدون أي تصنيفات"], a:0, e:"تحتوي مجموعة بيانات IMDB على 40 ألف تقييم، وفي عمود LABEL يرمز 0 إلى سلبي و 1 إلى إيجابي (ص 117)."},
+  {q:"لماذا قمنا باستيراد مكتبة التعبير المنتظم (re - Regular Expression) في مشروع تحليل المشاعر ببايثون؟", o:["لإزالة علامات ووسوم HTML مثل '<a>' أو '>' واستبدالها بسلسلة فارغة","لرسم المخطط الدائري Pie Chart","لتدريب نموذج الغابات العشوائية","لحساب دقة التصنيف Accuracy"], a:0, e:"تُستخدم مكتبة التعبير المنتظم (re) لإزالة علامات HTML مثل '<a>' أو '>' واستبدالها بسلسلة فارغة (ص 117)."},
+  {q:"أي أداة من مكتبة nltk تم استخدامها في مشروع بايثون لتبسيط البيانات النصية وإزالة التعقيدات غير الضرورية عبر إرجاع الكلمات لجذورها؟", o:["PorterStemmer","WordCloud","CountVectorizer","Seaborn"], a:0, e:"استُخدمت أداة PorterStemmer لتبسيط البيانات وإزالة التعقيدات غير الضرورية في البيانات النصية (ص 118)."},
+  {q:"بماذا ترتبط (الكلمات السلبية) في تحليل المشاعر، وما الأمثلة عليها؟", o:["ترتبط بالانتقاد والاعتراض والغضب والتشاؤم؛ مثل (فظيع، ضائع، مشكلة، غبي، سيء)","ترتبط بالموافقة والإعجاب والسعادة؛ مثل (ممتاز، رائع، جميل)","ترتبط بحروف الجر والعطف فقط","ترتبط بالأرقام والمعادلات الرياضية"], a:0, e:"الكلمات السلبية تعبر عن التشاؤم أو عدم الرضا وترتبط بالانتقاد والاعتراض والغضب مثل: فظيع، ضائع، مشكلة، غبي، سيء (ص 119)."},
+  {q:"ما هي الخطوة الأولى عند إنشاء (سحابة الكلمات Wordcloud) لتصوير الكلمات الإيجابية والسلبية؟", o:["إزالة كلمات التوقف (Stopwords) الشائعة التي لا تحمل الكثير من المعنى مثل (و، أو، في)","تدريب نموذج الشبكات العصبية","حذف جميع الصفات والأفعال من النص","تحويل الصور إلى أبيض وأسود"], a:0, e:"الخطوة الأولى في بناء سحابة الكلمات هي إزالة كلمات التوقف (Stopwords) التي لا تحمل الكثير من المعنى (ص 119)."},
+  {q:"عند عرض سحابة الكلمات (Wordcloud)، علامَ يدل ظهور كلمة معينة بحجم أكبر من غيرها؟", o:["أنها أكثر تردداً وتكراراً في النص","أن عدد حروفها قليل","أنها كلمة توقف لا معنى لها","أنها ظهرت مرة واحدة فقط في النص"], a:0, e:"تُعرض سحابة الكلمات بحجم وألوان تعبر عن تردد كل كلمة، حيث تظهر الكلمات الأكثر تكراراً بحجم أكبر (ص 119)."},
+  {q:"ما هي الأداة المستخدمة لتحويل المستندات النصية الأولية إلى مصفوفة ميزات (feature matrix) قبل تدريب نموذج التعلم الآلي؟", o:["TF-IDF Vectorizer","plt.pie","PorterStemmer","dropna"], a:0, e:"نستخدم TF-IDF Vectorizer لتحويل المستندات الأولية إلى مصفوفة ميزات (feature matrix) لتدريب النموذج (ص 120)."},
+  {q:"في مشروع تدريب نموذج التعلم الآلي لتحليل المشاعر (ص 121)، بأي نسبة تم تقسيم البيانات باستخدام train_test_split؟", o:["50% للتدريب و 50% للاختبار","99% للتدريب و 1% للاختبار","10% للتدريب و 90% للاختبار","لم يتم تقسيم البيانات مطلقاً"], a:0, e:"ذكر الملخص في ص 121: سأقسم البيانات إلى مجموعات تدريب بنسبة 50 بالمائة واختبار بنسبة 50 بالمائة (test_size=0.5)."},
+  {q:"ما هو الترتيب الصحيح لخطوات تدريب نموذج الانحدار اللوجستي لتحليل المشاعر (ص 121)؟", o:["1) تحميل البيانات ← 2) تقسيم البيانات ← 3) معالجة البيانات ← 4) تدريب النموذج ← 5) تقييم النموذج","1) تقييم النموذج ← 2) تدريب النموذج ← 3) تحميل البيانات","1) تدريب النموذج قبل تحميل البيانات ← 2) تقسيم البيانات","1) حذف البيانات ← 2) إغلاق البرنامج"], a:0, e:"الخطوات الخمس بالترتيب في ص 121 هي: تحميل مجموعة البيانات، تقسيم البيانات، معالجة البيانات، تدريب النموذج، وتقييم النموذج."},
+  {q:"في عملية تنظيف البيانات النصية (Data Cleaning) لتحليل التغريدات، لماذا نقوم بإزالة الروابط التشعبية (Hyperlinks)؟", o:["لتبسيط النص وتركيز التحليل على المحتوى الرئيسي للرسالة بدلاً من روابط المواقع الخارجية","لزيادة طول التغريدة","لتحويل النص إلى لغة برمجية","لحذف الكلمات الإيجابية من النص"], a:0, e:"إزالة الروابط التشعبية للمواقع الخارجية تساعد في تبسيط النص وتركيز التحليل على المحتوى الرئيسي للرسالة (ص 122)."},
+  {q:"تحويل العبارة المختصرة (I'm) إلى (I am) لتوحيد الكلمات وتسهيل فهم النص وتحليله يندرج ضمن خطوة:", o:["استبدال الاختصارات (Contractions)","إزالة الروابط التشعبية (Hyperlinks)","إزالة علامات الترقيم (Punctuation)","تعيين تسميات المشاعر"], a:0, e:"استبدال الاختصارات اللغوية (Contractions) مثل تحويل I'm إلى I am يهدف لتوحيد الكلمات وتسهيل فهم النص (ص 122)."},
+  {q:"عملية تقسيم النص إلى وحدات صغيرة قابلة للمعالجة تُسمى (توكنز Tokens أو رموز) مثل الكلمات أو الجمل الفردية هي:", o:["الترميز (Tokenization)","الانحدار اللوجستي","مصفوفة الارتباك","التحقق المتقاطع"], a:0, e:"الترميز (Tokenization) هو عملية تقسيم النص إلى وحدات صغيرة تسمى توكنز أو رموز (ص 123)."},
+  {q:"ما المقصود بمفهوم (TF-IDF) المستخدم لتحويل التوكنات إلى متجهات رقمية؟", o:["تردد الظهور في النص المقابل لتردد الظهور في كل النصوص","عدد الصور الملونة في المستند","سرعة معالج الحاسوب بالثانية","حجم الذاكرة العشوائية"], a:0, e:"مفهوم TF-IDF يعني تردد الظهور في النص المقابل لتردد الظهور في كل النصوص (ص 123)."},
+  {q:"في الوحدة الثالثة (ص 123)، أي مكتبة تحتوي على أداة (Tokenizer) المدمجة التي استُخدمت لتقسيم التغريدات وتحويلها لمتجهات عبر texts_to_matrix؟", o:["مكتبة Keras","مكتبة Seaborn","مكتبة Matplotlib","مكتبة Re"], a:0, e:"باستخدام Tokenizer المدمج في Keras (keras.preprocessing.text) يمكننا تقسيم التغريدات إلى توكنات وتحويلها لمتجهات (ص 123)."},
+  {q:"أي خوارزمية تعتمد على بناء مجموعة من الأشجار القرارية ودمج توقعاتها للحصول على تصنيف نهائي وتمتاز بقوتها مع البيانات الكبيرة والمتنوعة؟", o:["خوارزمية تصنيف الغابات العشوائية (Random Forest Classification)","خوارزمية K-Means للتجميع","خوارزمية Apriori","خوارزمية PCA"], a:0, e:"خوارزمية تصنيف الغابات العشوائية تبني مجموعة من الأشجار القرارية وتدمج توقعاتها للحصول على تصنيف نهائي (ص 123)."},
+  {q:"الأداة التي تقيّم أداء النموذج في مجموعة الاختبار بشكل شامل عن طريق مقارنة التصنيفات الفعلية بالتصنيفات التي تنبأ بها النموذج هي:", o:["مصفوفة الارتباك (Confusion Matrix)","سحابة الكلمات (Wordcloud)","التعبير المنتظم (Regular Expression)","أداة PorterStemmer"], a:0, e:"مصفوفة الارتباك (Confusion Matrix) تقارن التصنيفات الفعلية بالتصنيفات التي تنبأ بها النموذج (ص 124)."},
+  {q:"في مصفوفة الارتباك، إلى ماذا يرمز المصطلح TP (True Positives)؟", o:["عدد العينات التي تم تصنيفها بشكل صحيح كإيجابية","عدد العينات التي تم تصنيفها بشكل صحيح كسلبية","عدد العينات التي تم تصنيفها بشكل خاطئ كإيجابية","عدد العينات التي تم تصنيفها بشكل خاطئ كسلبية"], a:0, e:"TP (True Positives) هو عدد العينات التي تم تصنيفها بشكل صحيح كإيجابية (ص 124)."},
+  {q:"في مصفوفة الارتباك، إلى ماذا يرمز المصطلح TN (True Negatives)؟", o:["عدد العينات التي تم تصنيفها بشكل صحيح كسلبية","عدد العينات التي تم تصنيفها بشكل صحيح كإيجابية","عدد العينات التي تم تصنيفها بشكل خاطئ كسلبية","إجمالي عدد الكلمات في النص"], a:0, e:"TN (True Negatives) هو عدد العينات التي تم تصنيفها بشكل صحيح كسلبية (ص 124)."},
+  {q:"في مصفوفة الارتباك، ماذا نُسمي عدد العينات التي تم تصنيفها (بشكل خاطئ كإيجابية)؟", o:["FP (False Positives)","FN (False Negatives)","TP (True Positives)","TN (True Negatives)"], a:0, e:"FP (False Positives) هو عدد العينات التي تم تصنيفها بشكل خاطئ كإيجابية (ص 124)."},
+  {q:"في مصفوفة الارتباك، ماذا نُسمي عدد العينات التي تم تصنيفها (بشكل خاطئ كسلبية)؟", o:["FN (False Negatives)","FP (False Positives)","TP (True Positives)","TN (True Negatives)"], a:0, e:"FN (False Negatives) هو عدد العينات التي تم تصنيفها بشكل خاطئ كسلبية (ص 124)."},
+  {q:"لماذا قد يكون استخدام معدل الدقة (Accuracy) وحده غير كافٍ لتقييم نموذج تحليل المشاعر، وما المقاييس الأفضل في هذه الحالة؟", o:["لأنه قد يفشل في التنبؤ بالتصنيفات المحايدة رغم نجاحه في الإيجابية والسلبية؛ والأفضل استخدام Precision و Recall و F1 Score","لأن Accuracy لا يعمل مع لغة بايثون","لأن Accuracy يقيس سرعة الإنترنت فقط","لأنه يعطي دائماً نتيجة 0%"], a:0, e:"قد يكون النموذج دقيقاً في التنبؤ بالتصنيفات الإيجابية والسلبية لكنه يفشل في المحايدة، لذا يُفضل استخدام Precision و Recall و F1 Score (ص 125)."}
+];
+
+// بناء شبكة المصطلحات
+const termsGrid = document.getElementById("termsGrid");
+terms.forEach(([en, ar]) => {
+  const d = document.createElement("div");
+  d.className = "card";
+  d.style.margin = "0";
+  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
+  termsGrid.appendChild(d);
+});
+
+// إدارة البطاقات التعليمية
+let ci = 0, showAnswer = false;
+function renderCard() {
+  document.getElementById("flashTerm").textContent = cards[ci][0];
+  const ansEl = document.getElementById("flashAnswer");
+  ansEl.innerHTML = cards[ci][1].replace(/\n/g, "<br>");
+  ansEl.hidden = !showAnswer;
+  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
+  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+}
+document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
+document.getElementById("flashcard").addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
+});
+document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
+document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
+renderCard();
+
+// التنقل بين التبويبات
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+// إدارة الاختبار
+let answers = {};
+function renderQuiz() {
+  const area = document.getElementById("quizArea");
+  area.innerHTML = "";
+  const letters = ["أ", "ب", "ج", "د"];
+  questions.forEach((item, i) => {
+    const box = document.createElement("div");
+    box.className = "qbox";
+    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
+    const opts = box.querySelector(".options");
+    item.o.forEach((opt, j) => {
+      const btn = document.createElement("button");
+      btn.className = "option";
+      btn.textContent = `${letters[j]}) ${opt}`;
+      btn.onclick = () => {
+        answers[i] = j;
+        [...opts.children].forEach((x, k) => {
+          x.classList.remove("correct", "wrong");
+          x.disabled = true;
+          if (k === item.a) x.classList.add("correct");
+          if (k === j && j !== item.a) x.classList.add("wrong");
+        });
+        const fb = document.getElementById("fb" + i);
+        fb.hidden = false;
+        fb.className = "feedback " + (j === item.a ? "good" : "bad");
+        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
+        updateScore();
+      };
+      opts.appendChild(btn);
+    });
+    area.appendChild(box);
+  });
+  updateScore();
+}
+
+function updateScore() {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
+  document.getElementById("score").textContent = `النتيجة: ${correct} / ${questions.length}`;
+  document.getElementById("progressBar").style.width = (Object.keys(answers).length / questions.length * 100) + "%";
+}
+
+document.getElementById("resetQuiz").onclick = () => {
+  answers = {};
+  document.getElementById("finalResult").textContent = "";
+  renderQuiz();
+};
+
+document.getElementById("finishQuiz").onclick = () => {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
+  const pct = Math.round(correct / questions.length * 100);
+  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${questions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! أنتِ متقنة تماماً للفصل العاشر." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
+};
+
+renderQuiz();
+</script>
+</body>
+</html>

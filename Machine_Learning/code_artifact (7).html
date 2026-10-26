@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الفصل الحادي عشر الشامل (100%) | تعلم الآلة التطبيقي</title>
+<style>
+:root{
+  --bg:#f4f6fb;
+  --card:#ffffff;
+  --ink:#1b263b;
+  --muted:#637085;
+  --accent:#4f46e5;
+  --accent-dark:#3730a3;
+  --accent2:#eef2ff;
+  --line:#e2e8f0;
+  --good:#0d9488;
+  --good-bg:#e6fffa;
+  --bad:#dc2626;
+  --bad-bg:#fef2f2;
+  --warn:#d97706;
+  --warn-bg:#fffbeb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
+header{background:linear-gradient(135deg,#1e1b4b,#4f46e5);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(30,27,75,0.15)}
+.wrap{max-width:1040px;margin:auto;padding:0 16px}
+.eyebrow{opacity:.88;font-size:.9rem;background:rgba(255,255,255,0.14);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
+h1{margin:5px 0;font-size:clamp(1.55rem,4vw,2.3rem)}
+header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
+nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:var(--accent2);color:var(--accent-dark);font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
+nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
+nav button.active,.btn.primary{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+main .btn.primary{background:var(--accent);color:white}
+main{padding:22px 0 48px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(36,52,91,0.04)}
+h2{font-size:1.35rem;margin:0 0 12px;color:#1e1b4b}
+h3{font-size:1.06rem;margin:10px 0 6px;color:var(--accent-dark)}
+small,.muted{color:var(--muted)}
+ul,ol{padding-right:22px;margin:8px 0}
+li{margin:6px 0}
+details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
+summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f8faff;color:#1e1b4b;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
+details[open] summary{border-bottom-color:var(--line);background:#eef2ff;color:var(--accent-dark)}
+.details-body{padding:16px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#f1f5f9;color:#1e1b4b;font-weight:bold}
+tr:last-child td{border-bottom:0}
+.note{border-right:4px solid var(--accent);padding:10px 14px;background:#f5f7ff;border-radius:8px;margin:10px 0}
+.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
+.code-box{background:#1e1b4b;color:#f8fafc;padding:12px 16px;border-radius:12px;font-family:monospace;font-size:.9rem;margin:10px 0;direction:ltr;text-align:left;overflow-x:auto}
+.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
+.options{display:grid;gap:8px;margin-top:12px}
+.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
+.option:hover:not(:disabled){border-color:var(--accent);background:#f8faff}
+.option.correct{background:var(--good-bg);border-color:#5eead4;color:#115e59;font-weight:bold}
+.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
+.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
+.feedback.good{color:var(--good);background:var(--good-bg)}
+.feedback.bad{color:var(--bad);background:var(--bad-bg)}
+.progress{height:10px;background:#e2e8f0;border-radius:9px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
+.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#eef2ff);border:2px solid #c7d2fe;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
+.flashcard:hover{transform:scale(1.005)}
+.flashcard .term{font-size:1.35rem;font-weight:bold;color:#1e1b4b}
+.flashcard .answer{margin-top:16px;font-size:1.08rem;color:var(--accent-dark);background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
+@media(max-width:600px){
+  .card{padding:14px}
+  nav button{flex:1 1 calc(50% - 8px);text-align:center}
+  .flashcard{min-height:200px;padding:18px}
+  th,td{padding:8px 10px;font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">نسخة شاملة ومحدثة 100% • صفحات الملخص (126 إلى 137)</div>
+    <h1>الفصل الحادي عشر: تطبيقات عملية في تحليل المشاعر</h1>
+    <p>يغطي المشاريع التطبيقية الثلاثة ببايثون: تحليل مراجعات تطبيق TikTok، نموذج اكتشاف خطاب الكراهية والبيانات غير المتوازنة، وتحليل المشاعر على منصة X (تويتر)</p>
+    <nav>
+      <button class="active" data-tab="summary">الشرح الشامل</button>
+      <button data-tab="tables">جداول المقارنات والأكواد (4)</button>
+      <button data-tab="terms">المصطلحات والمكتبات (26)</button>
+      <button data-tab="cards">البطاقات (28)</button>
+      <button data-tab="quiz">الاختبار الشامل (25)</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- ================= التبويب الأول: الشرح الشامل ================= -->
+  <section id="summary" class="panel active">
+    <div class="card">
+      <h2>خريطة الفصل الحادي عشر (من ص 126 إلى ص 137 في الملخص)</h2>
+      <div class="grid">
+        <div>
+          <span class="tag">الوحدة 1 (ص 126 - 129)</span>
+          <h3>مشروع مراجعات TikTok</h3>
+          <p>خطوات تحليل مراجعات تطبيق TikTok من Google Play، تنظيف عمود المحتوى، نسب التقييمات، حساب درجات المشاعر بـ VADER، والنتيجة النهائية.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة 2 (ص 130 - 133)</span>
+          <h3>نموذج اكتشاف خطاب الكراهية</h3>
+          <p>مفهوم خطاب الكراهية، بيانات تويتر، معالجة البيانات غير المتوازنة (Oversampling & Downsampling)، بناء المسار (Pipeline) بـ SGD، والتقييم بـ F1 Score.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة 3 (ص 134 - 137)</span>
+          <h3>تحليل المشاعر على منصة X (تويتر)</h3>
+          <p>أهمية مراقبة النقاشات على تويتر، الخطوات الخمس باستخدام مكتبة Tweepy و API تويتر، تنظيف التغريدات، وتفسير تفوق الآراء السلبية على الإيجابية.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- الوحدة الأولى -->
+    <details open>
+      <summary>1) الوحدة (1): مشروع تحليل مشاعر مراجعات تطبيق TikTok باستخدام بايثون (ص 126 - 129)</summary>
+      <div class="details-body">
+        <h3>أولاً: فكرة المشروع والهدف منه (ص 126 - 127)</h3>
+        <ul>
+          <li><b>الهدف الأساسي:</b> استخدام لغة البرمجة <b dir="ltr">Python</b> لفهم المشاعر والآراء التي يعبر عنها مستخدمو تطبيق <b dir="ltr">TikTok</b> على نطاق واسع، واستخراج معلومات قيمة من مراجعاتهم المتاحة على متجر <b dir="ltr">Google Play</b> لاتخاذ قرارات مستنيرة.</li>
+          <li><b>الأدوات المستخدمة:</b> مكتبة <b dir="ltr">nltk</b> لمعالجة اللغة الطبيعية وتحديد الكلمات المفتاحية والمشاعر (إيجابية، سلبية، أو محايدة)، ومكتبة السحابة الكلمية <b dir="ltr">Wordcloud</b> لإنشاء تصور بصري يوضح الكلمات الأكثر استخداماً أو تميزاً في المراجعات.</li>
+          <li><b>مقاييس التقييم الإضافية (ص 127):</b> لتقييم قدرة النموذج على التعرف على المشاعر الصحيحة بدقة، يمكن استخدام مقاييس مثل: <b dir="ltr">Precision</b>، و<b dir="ltr">Recall</b>، و<b dir="ltr">F1-Score</b>.</li>
+        </ul>
+
+        <div class="exam-alert">
+          <h3>ثانياً: الخطوات الخمس لتحليل مشاعر مراجعات TikTok بالترتيب (ص 126):</h3>
+          <ol>
+            <li><b>جمع البيانات:</b> تجميع مراجعات المستخدمين لتطبيق TikTok من مصادر مثل متجر <span dir="ltr">Google Play</span> أو مواقع الاستعراض (تم تنزيل مجموعة البيانات <code dir="ltr">tiktok.csv</code> من موقع <b dir="ltr">Kaggle</b>).</li>
+            <li><b>تنظيف البيانات:</b> إزالة النصوص غير الضرورية (مثل الرموز، الوصلات/الروابط، والكلمات الفارغة) وتنظيف البيانات من الأخطاء الإملائية والنحوية.</li>
+            <li><b>معالجة اللغة الطبيعية (<span dir="ltr">NLP</span>):</b> استخدام تقنيات NLP لتحليل النصوص، مثل تقسيم النصوص إلى جمل فردية وكلمات، وتحديد أنماط وأنواع الكلمات.</li>
+            <li><b>تحديد المشاعر:</b> استخدام الخوارزميات المناسبة لتحديد المشاعر الموجودة في كل مراجعة (إيجابية، سلبية، أو محايدة).</li>
+            <li><b>إنشاء تقرير:</b> تحليل النتائج وإنشاء تقارير توضح مدى انتشار المشاعر الإيجابية والسلبية بين مراجعات التطبيق.</li>
+          </ol>
+        </div>
+
+        <h3>ثالثاً: التنفيذ العملي في بايثون ونتائج مشروع TikTok (ص 127 - 129)</h3>
+        <ol>
+          <li><b>تحديد الأعمدة المطلوبة ومعالجة القيم الفارغة (ص 127):</b>
+            <ul>
+              <li>لتحليل تقييمات TikTok نحتاج فقط إلى <b>عمودين اثنين</b> هما: عمود <b>المحتوى (<span dir="ltr">content</span>)</b> وعمود <b>النتيجة (<span dir="ltr">score</span>)</b>: <code dir="ltr">data = data[["content", "score"]]</code>.</li>
+              <li>عند فحص القيم الفارغة بالدالة <code dir="ltr">data.isnull().sum()</code> تبيّن وجود <b>أربع (4) قيم فارغة في عمود المحتوى (<span dir="ltr">content</span>)</b> وصفر في عمود النتيجة.</li>
+              <li>تمت إزالة القيم الخالية باستخدام الدالة: <code dir="ltr">data = data.dropna()</code>.</li>
+            </ul>
+          </li>
+          <li><b>تنظيف النص وإرجاع الكلمات لجذورها (ص 127 - 128):</b>
+            <ul>
+              <li>تم استخدام المجذّر <b dir="ltr">SnowballStemmer("english")</b> من مكتبة <code dir="ltr">nltk</code>، ومكتبة التعبير المنتظم <code dir="ltr">re</code>، وقائمة <code dir="ltr">stopwords</code> لتنظيف عمود المحتوى (<code dir="ltr">content</code>) من الروابط وعلامات الترقيم والأرقام وكلمات التوقف.</li>
+            </ul>
+          </li>
+          <li><b>تحليل نسب التقييمات على متجر Google Play (ص 128):</b>
+            <ul>
+              <li>تم رسم مخطط دائري مجوف (<span dir="ltr">Donut Pie Chart</span>) باستخدام مكتبة <b dir="ltr">plotly.express</b> (<code dir="ltr">px.pie(..., hole=0.5)</code>).</li>
+              <li>أظهرت النتائج أن <b>75.7% من المستخدمين أعطوا 5 نجوم (خمس تقييمات)</b> لتطبيق TikTok، بينما <b>12.1% صنفوه بنجمة واحدة (1)</b>.</li>
+            </ul>
+          </li>
+          <li><b>حساب درجات المشاعر وإنشاء التقرير النهائي (ص 128 - 129):</b>
+            <ul>
+              <li>تم استخدام أداة <b dir="ltr">SentimentIntensityAnalyzer()</b> (من <code dir="ltr">nltk.sentiment.vader</code> مع قاموس <code dir="ltr">vader_lexicon</code>) لإضافة <b>3 أعمدة جديدة</b> للبيانات هي: <b dir="ltr">Positive</b>، و<b dir="ltr">Negative</b>، و<b dir="ltr">Neutral</b>.</li>
+              <li><b>النتيجة الإجمالية:</b> يكتب معظم المستخدمين تعليقات <b>محايدة (<span dir="ltr">Neutral: 334,258.34</span>)</b>، ولكن عند مقارنة الإيجابي بالسلبي نجد أن <b>الإيجابي (<span dir="ltr">158,277.42</span>) أكثر بكثير من السلبي (<span dir="ltr">55,438.14</span>)</b>؛ وبالتالي نستنتج أن <b>معظم المستخدمين سعداء بتطبيق TikTok</b>.</li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+    </details>
+
+    <!-- الوحدة الثانية -->
+    <details open>
+      <summary>2) الوحدة (2): نموذج اكتشاف خطاب الكراهية والبيانات غير المتوازنة (ص 130 - 133)</summary>
+      <div class="details-body">
+        <h3>أولاً: مفهوم خطاب الكراهية ونموذج اكتشافه (ص 130)</h3>
+        <ul>
+          <li><b>تعريف خطاب الكراهية (<span dir="ltr">Hate Speech</span>):</b> هو <b>أي نوع من أنواع التواصل اللفظي أو الكتابي أو السلوكي يستخدم لغة مهينة أو تمييزية للهجوم على شخص أو مجموعة معينة بناءً على خصائصهم الشخصية، أو الدينية، أو العرقية، أو الجنسية، أو الجنس، أو أي عامل آخر يميزهم</b>.</li>
+          <li><b>نموذج اكتشاف خطاب الكراهية:</b> استخدام التعلم الآلي ولغة <span dir="ltr">Python</span> للكشف عن خطاب الكراهية في النصوص، ويُعد جزءاً من عملية تصنيف المشاعر، حيث يُدرب النموذج على بيانات مصنفة مسبقاً لتصنيف النصوص الجديدة ومكافحة ظاهرة الكراهية على الإنترنت.</li>
+          <li><b>وصف مجموعة بيانات المشروع (بيانات Twitter - ص 130):</b>
+            <ul>
+              <li>تُقرأ البيانات باستخدام حزمة <b dir="ltr">Pandas</b>، وتتألف من مجموعتين (تدريب <code dir="ltr">train.csv</code> واختبار <code dir="ltr">test.csv</code>):</li>
+              <li><b>حزمة التدريب (<span dir="ltr">Training Set</span>):</b> تتضمن <b>31,962 تغريدة</b> (أبعادها <code dir="ltr">(31962, 3)</code>)، ولكل تغريدة معرّف مطابق وعلامة تصنيف: <b>(0 = عدم وجود خطاب كراهية)</b>، و<b>(1 = وجود خطاب كراهية)</b>.</li>
+              <li><b>مجموعة الاختبار (<span dir="ltr">Test Set</span>):</b> أبعادها <b dir="ltr">(17197, 2)</b>، أي تتكون من <b>17,197 صفاً (تغريدة) وعمودين (2 عمود)</b>.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <div class="exam-alert">
+          <h3>ثانياً: تنظيف البيانات ومشكلة البيانات غير المتوازنة (<span dir="ltr">Imbalanced Data</span>) (ص 131) - مهم جداً للاختبار:</h3>
+          <ul>
+            <li><b>عملية تنظيف البيانات:</b> تهدف لتهيئة البيانات للتحليل بإزالة أو تعديل البيانات غير المناسبة أو غير الضرورية التي تعيق التحليل أو تؤدي لنتائج غير دقيقة، وتتم باستخدام مكتبة <b dir="ltr">re</b> في بايثون.</li>
+            <li><b>تعريف البيانات غير المتوازنة (<span dir="ltr">Imbalanced Data</span>):</b> تعني أن هناك <b>تفاوتاً كبيراً في عدد العينات بين الفئات المختلفة في البيانات</b>، حيث يكون عدد التغريدات المتعلقة بخطاب الكراهية (فئة الأقلية) أقل بكثير من التغريدات الإيجابية/العادية (فئة الأغلبية).</li>
+            <li><b>الطريقتان الشائعتان للتعامل مع البيانات غير المتوازنة:</b>
+              <ol>
+                <li><b>الإفراط في أخذ العينات (<span dir="ltr">Oversampling</span>):</b> نستخدم دالة (<code dir="ltr">resample</code> من <code dir="ltr">sklearn.utils</code> مع <code dir="ltr">replace=True</code>) تقوم بشكل متكرر بأخذ عينات إضافية <b>مع الاستبدال</b> من <b>فئة الأقلية (<span dir="ltr">minority class</span> - خطاب الكراهية)</b> حتى تصبح الفئة بنفس حجم فئة الأغلبية (أصبحت كل فئة 29,720 عينة).</li>
+                <li><b>الاختزال (<span dir="ltr">Downsampling</span>):</b> تقليل عينات فئة الأغلبية لتتوازن مع الأقلية.</li>
+              </ol>
+            </li>
+          </ul>
+        </div>
+
+        <h3>ثالثاً: إنشاء المسار (<span dir="ltr">Pipeline</span>)، تقسيم البيانات، والتقييم بمقياس <span dir="ltr">F1 Score</span> (ص 132 - 133)</h3>
+        <ul>
+          <li><b>إنشاء المسار (<span dir="ltr">Pipeline</span>) (ص 132):</b>
+            <ul>
+              <li>عملية هامة في تطوير نموذج التعلم الآلي تتيح <b>تسلسل تنفيذ عدة خطوات متسلسلة تلقائياً في عملية المعالجة</b> (مثل تنظيف البيانات وتحويلها وتصنيفها).</li>
+              <li>تم إنشاء المسار باستخدام مكتبة <b dir="ltr">Scikit-Learn</b>، ويتكون من 3 خطوات متتالية: <code dir="ltr">CountVectorizer()</code> &rarr; <code dir="ltr">TfidfTransformer()</code> &rarr; ومصنف <b dir="ltr">SGDClassifier</b> (<span dir="ltr">Stochastic Gradient Descent</span> - تصنيف التدرج العشوائي) كموديل لتصنيف البيانات.</li>
+            </ul>
+          </li>
+          <li><b>تقسيم البيانات (ص 132):</b> تقسيم البيانات إلى تدريب واختبار (مثلاً 80% للتدريب و 20% للاختبار) باستخدام <code dir="ltr">train_test_split</code>، ويجب أن تكون عملية التقسيم <b>عشوائية</b> لضمان تمثيلية جيدة لكل فئة في المجموعتين.</li>
+          <li class="note"><b>تقييم النموذج باستخدام مقياس <span dir="ltr">F1 Score</span> (ص 133):</b>
+            <ul>
+              <li><b>تعريف <span dir="ltr">F1 Score</span>:</b> مقياس يجمع ويعطي توازناً بين <b>الدقة (<span dir="ltr">Precision</span>)</b> و<b>الاستدعاء / الانتقالية (<span dir="ltr">Recall</span>)</b>، وهو مفيد خاصة عندما تكون هناك عدة فئات وتكون <b>البيانات غير متوازنة</b>.</li>
+              <li><b>الدقة (<span dir="ltr">Precision</span>):</b> تقيس النسبة المئوية للتصنيفات الصحيحة بين جميع التصنيفات التي قام بها النموذج.</li>
+              <li><b>الانتقالية / الاستدعاء (<span dir="ltr">Recall</span>):</b> تقيس النسبة المئوية للعناصر الفعلية التي تم التنبؤ بها بشكل صحيح.</li>
+              <li><b>نطاق قيمة <span dir="ltr">F1 Score</span>:</b> تتراوح قيمته بين <b>0 و 1</b>، ويكون الأداء الأفضل عندما تكون القيمة <b>أقرب إلى 1</b> (حقق النموذج في المشروع درجة ممتازة بلغت <b>0.9696</b> أي <b>0.96</b>).</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- الوحدة الثالثة -->
+    <details open>
+      <summary>3) الوحدة (3): تحليل المشاعر على منصة Twitter (منصة X) باستخدام بايثون (ص 134 - 137)</summary>
+      <div class="details-body">
+        <h3>أولاً: أهمية مراقبة المشاعر على منصة X (تويتر) والخطوات الخمس (ص 134)</h3>
+        <ul>
+          <li>يجب على جميع منصات التواصل الاجتماعي مراقبة مشاعر المشاركين في المناقشات للعثور على الأشخاص الذين ينشرون الكراهية والسلبية؛ إذ غالباً ما نرى آراء سلبية على تويتر عند احتدام النقاش في مجال ما.</li>
+          <li class="exam-alert"><b>الخطوات الخمس لإجراء تحليل المشاعر على منصة X (تويتر) باستخدام بايثون (ص 134):</b>
+            <ol>
+              <li><b>استيراد المكتبات:</b> تحميل المكتبات اللازمة في بايثون، مثل مكتبة <b dir="ltr">tweepy</b> للوصول إلى <span dir="ltr">API</span> تويتر، ومكتبة <b dir="ltr">nltk</b> لمعالجة اللغة الطبيعية وتحليل المشاعر.</li>
+              <li><b>الوصول إلى تويتر <span dir="ltr">API</span>:</b> استخدام مكتبة <b dir="ltr">tweepy</b> للاتصال بخدمة <span dir="ltr">Twitter API</span> واسترجاع التغريدات.</li>
+              <li><b>تجميع التغريدات:</b> جمع عدد من التغريدات المتاحة على منصة X حول موضوع معين (في الكود التطبيقي تم جلب ملف <code dir="ltr">twitter.csv</code> لمناقشة طويلة من موقع <span dir="ltr">Kaggle</span>).</li>
+              <li><b>تحليل المشاعر:</b> تحليل التغريدات المجمعة لفهم ما إذا كانت تحمل مشاعر إيجابية أم سلبية باستخدام تقنيات معالجة اللغة الطبيعية (<span dir="ltr">NLP</span>).</li>
+              <li><b>تقديم النتائج:</b> عرض النتائج وتوضيح ما إذا كانت التغريدات تميل إلى المشاعر الإيجابية أو السلبية.</li>
+            </ol>
+          </li>
+        </ul>
+
+        <h3>ثانياً: التنفيذ البرمجي وتفسير نتائج مشروع منصة X (تويتر) (ص 135 - 137)</h3>
+        <ul>
+          <li><b>عمود التغريدات وتنظيفه (ص 135 - 136):</b> يحتوي عمود التغريدات (<b dir="ltr">tweet column</b>) في مجموعة البيانات على النصوص المطلوبة، ولكنه يضم الكثير من الأخطاء اللغوية والرموز الخاصة، لذا تم تنظيفه باستخدام دالة <code dir="ltr">clean(text)</code> مع <code dir="ltr">SnowballStemmer</code> و <code dir="ltr">stopwords</code> و <code dir="ltr">re</code>.</li>
+          <li><b>حساب درجات المشاعر (ص 136):</b> باستخدام <code dir="ltr">SentimentIntensityAnalyzer()</code> من <code dir="ltr">nltk.sentiment.vader</code>، تم حساب درجات المشاعر لكل تغريدة وتوزيعها في 3 أعمدة: <code dir="ltr">Positive</code> و <code dir="ltr">Negative</code> و <code dir="ltr">Neutral</code>.</li>
+          <li class="note"><b>النتيجة النهائية للمشروع وتفسيرها الدقيق (ص 136 - 137) - انتبهي للفرق عن مشروع TikTok:</b>
+            <ul>
+              <li>مجموع درجات المشاعر في نقاش تويتر كان كالتالي:
+                <br>• المحايدة (<b dir="ltr">Neutral</b>): <code dir="ltr">14696.88</code> (الأعلى إجمالاً، لذلك طبعت الدالة <code dir="ltr">Neutral 😐</code>).
+                <br>• السلبية (<b dir="ltr">Negative</b>): <code dir="ltr">7201.02</code>.
+                <br>• الإيجابية (<b dir="ltr">Positive</b>): <code dir="ltr">2880.08</code>.
+              </li>
+              <li><b>الاستنتاج النهائي:</b> على الرغم من أن معظم التغريدات محايدة، إلا أنه عند مقارنة التغريدات السلبية بالإيجابية نجد أن <b>عدد التغريدات السلبية أكبر بكثير من الإيجابية</b>؛ وبناءً على ذلك نستنتج أن <b>معظم الآراء على منصة X تجاه الموضوع كانت سلبية</b> (عكس مشروع مراجعات TikTok الذي كانت فيه الإيجابية أعلى من السلبية).</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= التبويب الثاني: جداول المقارنات والأكواد ================= -->
+  <section id="tables" class="panel">
+    <div class="card">
+      <h2>1. مقارنة شاملة بين المشاريع التطبيقية الثلاثة في الفصل الحادي عشر (ص 126 - 137)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>وجه المقارنة</th>
+            <th>المشروع 1: مراجعات TikTok (الوحدة 1)</th>
+            <th>المشروع 2: كشف خطاب الكراهية (الوحدة 2)</th>
+            <th>المشروع 3: نقاش منصة X / تويتر (الوحدة 3)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>مصدر ووصف البيانات</b></td>
+            <td>مراجعات TikTok من متجر <b>Google Play</b> (من Kaggle)، ونستخدم عمودين فقط: <b dir="ltr">content</b> و <b dir="ltr">score</b> (مع حذف <b>4 قيم فارغة</b> بـ <code dir="ltr">dropna</code>).</td>
+            <td>بيانات <b>Twitter</b> مقسمة إلى:<br>• تدريب: <b>31,962 تغريدة</b> (0 = لا يوجد كراهية، 1 = يوجد كراهية).<br>• اختبار: أبعادها <b>(17197, 2)</b>.</td>
+            <td>تغريدات نقاش طويل على منصة <b>X (تويتر)</b> من Kaggle (أو عبر <b dir="ltr">tweepy</b> و Twitter API)، والعمود المستهدف هو <b dir="ltr">tweet</b>.</td>
+          </tr>
+          <tr>
+            <td><b>الأداة / النموذج الرئيسي</b></td>
+            <td>قاموس <b dir="ltr">VADER</b> (<code dir="ltr">SentimentIntensityAnalyzer</code>) + <b dir="ltr">WordCloud</b> + مخطط <b dir="ltr">plotly.express</b>.</td>
+            <td>إعادة التوازن بـ <b dir="ltr">resample</b> (Oversampling) + مسار <b dir="ltr">Pipeline</b> يضم مصنف <b dir="ltr">SGDClassifier</b>.</td>
+            <td>مكتبة <b dir="ltr">tweepy</b> (للاتصال بـ API) + <b dir="ltr">SnowballStemmer</b> + قاموس <b dir="ltr">VADER</b> (<code dir="ltr">SentimentIntensityAnalyzer</code>).</td>
+          </tr>
+          <tr>
+            <td><b>النتيجة الرقمية والختامية</b></td>
+            <td>• <b>75.7%</b> أعطوا 5 نجوم، و<b>12.1%</b> نجمة واحدة.<br>• المحايد هو الأعلى، ولكن <b>الإيجابي أكبر بكثير من السلبي</b> &rarr; <b>معظم المستخدمين سعداء بـ TikTok</b>.</td>
+            <td>حقق النموذج درجة <b dir="ltr">F1 Score</b> عالية جداً بلغت <b>0.96 (أو 0.9696)</b>، مما يدل على كفاءته العالية في كشف خطاب الكراهية.</td>
+            <td>المحايد هو الأعلى (<code dir="ltr">14696.8</code>)، ولكن <b>السلبي (<code dir="ltr">7201.0</code>) أكبر بكثير من الإيجابي (<code dir="ltr">2880.0</code>)</b> &rarr; <b>معظم الآراء على منصة X تجاه الموضوع كانت سلبية</b>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>2. مقارنة طرق معالجة البيانات غير المتوازنة ومقاييس التقييم (ص 131 - 133)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>المفهوم / المقياس</th>
+            <th>المصطلح الإنجليزي</th>
+            <th>الشرح الدقيق ودوره في مشاريع الفصل الحادي عشر</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>البيانات غير المتوازنة</b></td>
+            <td dir="ltr"><b>Imbalanced Data</b></td>
+            <td>وجود <b>تفاوت كبير في عدد العينات بين الفئات المختلفة</b> (حيث تكون تغريدات خطاب الكراهية أقل بكثير من التغريدات الإيجابية) (ص 131).</td>
+          </tr>
+          <tr>
+            <td><b>الإفراط في أخذ العينات</b></td>
+            <td dir="ltr"><b>Oversampling</b></td>
+            <td>أخذ عينات إضافية بشكل متكرر <b>مع الاستبدال</b> من <b>فئة الأقلية (<span dir="ltr">minority class</span>)</b> حتى يتساوى حجمها مع فئة الأغلبية (ص 131).</td>
+          </tr>
+          <tr>
+            <td><b>الاختزال</b></td>
+            <td dir="ltr"><b>Downsampling</b></td>
+            <td>الطريقة الثانية لمعالجة عدم التوازن عبر تقليص عدد عينات فئة الأغلبية لتتناسب مع فئة الأقلية (ص 131).</td>
+          </tr>
+          <tr>
+            <td><b>الدقة الإيجابية</b></td>
+            <td dir="ltr"><b>Precision</b></td>
+            <td>تقيس النسبة المئوية للتصنيفات الصحيحة بين جميع التصنيفات التي قام بها النموذج (ص 133).</td>
+          </tr>
+          <tr>
+            <td><b>الانتقالية (الاستدعاء)</b></td>
+            <td dir="ltr"><b>Recall</b></td>
+            <td>تقيس النسبة المئوية للعناصر الفعلية التي تم التنبؤ بها بشكل صحيح (ص 133).</td>
+          </tr>
+          <tr>
+            <td><b>مقياس F1</b></td>
+            <td dir="ltr"><b>F1 Score</b></td>
+            <td>يجمع ويعطي توازناً بين الدقة (<span dir="ltr">Precision</span>) والانتقالية (<span dir="ltr">Recall</span>)، وهو مفيد جداً في <b>البيانات غير المتوازنة</b>، وتتراوح قيمته بين <b>0 و 1</b> (الأفضل أقرب إلى 1) (ص 133).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>3. جدول المكتبات والدوال البرمجية في بايثون الواردة في الفصل الحادي عشر (ص 126 - 136)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>المكتبة / الدالة في بايثون</th>
+            <th>الوظيفة الدقيقة كما وردت في مشاريع الفصل الحادي عشر</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td dir="ltr"><b>data.isnull().sum() & data.dropna()</b></td>
+            <td>فحص عدد القيم الفارغة في الأعمدة (كشفت 4 قيم فارغة في عمود <code dir="ltr">content</code>)، وحذف الصفوف الفارغة بـ <code dir="ltr">dropna()</code> (ص 127).</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>SnowballStemmer("english")</b></td>
+            <td>أداة من مكتبة <code dir="ltr">nltk</code> لإرجاع الكلمات الإنجليزية إلى جذورها أثناء تنظيف مراجعات TikTok وتغريدات تويتر (ص 127 و 136).</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>plotly.express (px.pie)</b></td>
+            <td>مكتبة استُخدمت لرسم المخطط الدائري المجوف (<code dir="ltr">hole=0.5</code>) لتوضيح النسب المئوية لتقييمات TikTok (ص 128).</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>SentimentIntensityAnalyzer (VADER)</b></td>
+            <td>أداة من <code dir="ltr">nltk.sentiment.vader</code> لحساب درجات المشاعر (<code dir="ltr">polarity_scores</code>) وتقسيمها إلى <code dir="ltr">Positive, Negative, Neutral</code> (ص 128 و 136).</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>resample (sklearn.utils)</b></td>
+            <td>دالة استُخدمت لتنفيذ الإفراط في أخذ العينات (<span dir="ltr">Oversampling</span>) من فئة الأقلية مع الاستبدال (<code dir="ltr">replace=True</code>) لموازنة البيانات (ص 131).</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>Pipeline (sklearn.pipeline)</b></td>
+            <td>إنشاء مسار عمل متسلسل يدمج <code dir="ltr">CountVectorizer</code> و <code dir="ltr">TfidfTransformer</code> و <code dir="ltr">SGDClassifier</code> لتنفيذها تلقائياً (ص 132).</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>SGDClassifier (sklearn.linear_model)</b></td>
+            <td>مصنف التدرج العشوائي (<span dir="ltr">Stochastic Gradient Descent</span>) المستخدم كموديل لتصنيف التغريدات في مسار كشف خطاب الكراهية (ص 132).</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>tweepy</b></td>
+            <td>مكتبة بايثون تُستخدم للاتصال بخدمة <b dir="ltr">Twitter API</b> واسترجاع التغريدات من منصة X لتحليل مشاعرها (ص 134).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>4. مقارنة خطوات مشروع مراجعات TikTok وخطوات مشروع منصة X (تويتر) (ص 126 و ص 134)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>الترتيب</th>
+            <th>خطوات تحليل مشاعر مراجعات TikTok (ص 126)</th>
+            <th>خطوات تحليل المشاعر على منصة X / تويتر (ص 134)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>الخطوة 1</b></td>
+            <td><b>جمع البيانات:</b> تجميع مراجعات المستخدمين من متجر Google Play أو مواقع الاستعراض.</td>
+            <td><b>استيراد المكتبات:</b> تحميل مكتبة <code dir="ltr">tweepy</code> (للوصول لـ API تويتر) ومكتبة <code dir="ltr">nltk</code>.</td>
+          </tr>
+          <tr>
+            <td><b>الخطوة 2</b></td>
+            <td><b>تنظيف البيانات:</b> إزالة الرموز والوصلات والكلمات الفارغة والأخطاء الإملائية والنحوية.</td>
+            <td><b>الوصول إلى تويتر API:</b> استخدام <code dir="ltr">tweepy</code> للاتصال بخدمة <span dir="ltr">Twitter API</span> واسترجاع التغريدات.</td>
+          </tr>
+          <tr>
+            <td><b>الخطوة 3</b></td>
+            <td><b>معالجة اللغة الطبيعية (NLP):</b> تقسيم النصوص لجمل وكلمات وتحديد أنماط وأنواع الكلمات.</td>
+            <td><b>تجميع التغريدات:</b> جمع عدد من التغريدات المتاحة على منصة X حول موضوع معين.</td>
+          </tr>
+          <tr>
+            <td><b>الخطوة 4</b></td>
+            <td><b>تحديد المشاعر:</b> استخدام الخوارزميات لتحديد المشاعر في كل مراجعة (إيجابية، سلبية، محايدة).</td>
+            <td><b>تحليل المشاعر:</b> تحليل التغريدات لفهم ما إذا كانت تحمل مشاعر إيجابية أم سلبية بتقنيات NLP.</td>
+          </tr>
+          <tr>
+            <td><b>الخطوة 5</b></td>
+            <td><b>إنشاء تقرير:</b> تحليل النتائج وإنشاء تقارير توضح مدى انتشار المشاعر الإيجابية والسلبية.</td>
+            <td><b>تقديم النتائج:</b> توضيح ما إذا كانت التغريدات تميل للمشاعر الإيجابية أو السلبية.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الثالث: المصطلحات ================= -->
+  <section id="terms" class="panel">
+    <div class="card">
+      <h2>قاموس المصطلحات والمكتبات البرمجية للفصل الحادي عشر (26 مصطلحاً)</h2>
+      <p class="muted">جميع المصطلحات والمكتبات والدوال الواردة في الوحدات الثلاث للفصل الحادي عشر مع أرقام صفحاتها:</p>
+      <div id="termsGrid" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الرابع: البطاقات التعليمية ================= -->
+  <section id="cards" class="panel">
+    <div class="card">
+      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
+      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
+      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
+        <div class="term" id="flashTerm"></div>
+        <div class="answer" id="flashAnswer" hidden></div>
+        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="prevCard">السابق</button>
+        <span id="cardCount" class="muted"></span>
+        <button class="btn primary" id="nextCard">التالي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الخامس: الاختبار الشامل ================= -->
+  <section id="quiz" class="panel">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2>الاختبار الشامل للفصل الحادي عشر (25 سؤالاً)</h2>
+          <p class="muted">يغطي مشاريع TikTok وخطاب الكراهية وتويتر والبيانات غير المتوازنة والأكواد (ص 126 - 137) مع تصحيح وتعليل فوري.</p>
+        </div>
+        <div class="score" id="score">النتيجة: 0 / 25</div>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="quizArea"></div>
+      <div class="row">
+        <button class="btn" id="resetQuiz">إعادة الاختبار</button>
+        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+      </div>
+      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
+    </div>
+  </section>
+</main>
+
+<footer>مبني بالكامل (100%) على محتوى الفصل الحادي عشر من ملخص مقرر تعلم الآلة التطبيقي (صفحات 126 - 137)</footer>
+
+<script>
+const terms = [
+  ["TikTok Reviews Analysis", "مشروع تحليل مراجعات TikTok: استخدام Python و nltk لتحليل آراء المستخدمين من متجر Google Play وتصنيفها لإيجابية وسلبية ومحايدة (ص 126)."],
+  ["Google Play & Kaggle", "متجر Google Play هو المصدر الأصلي لمراجعات TikTok، وموقع Kaggle هو المنصة التي تم تنزيل ملف البيانات منها (ص 126-127)."],
+  ["content & score Columns", "العمودان الوحيدان المطلوبان لتحليل تقييمات TikTok: المحتوى (content) والنتيجة/التقييم الرقمي (score) (ص 127)."],
+  ["data.isnull().sum()", "دالة في Pandas لفحص عدد القيم الفارغة في كل عمود؛ أظهرت وجود 4 قيم فارغة في عمود content (ص 127)."],
+  ["data.dropna()", "دالة في Pandas تُستخدم لإزالة وحذف الصفوف التي تحتوي على قيم خالية/فارغة من مجموعة البيانات (ص 127)."],
+  ["SnowballStemmer", "أداة تجذير من مكتبة nltk (nltk.SnowballStemmer) تُستخدم لإرجاع الكلمات الإنجليزية إلى جذورها أثناء تنظيف النصوص (ص 127 و 136)."],
+  ["plotly.express (px.pie)", "مكتبة بايثون استُخدمت لرسم مخطط دائري مجوف (hole=0.5) لعرض نسب تقييمات TikTok (75.7% خمس نجوم) (ص 128)."],
+  ["SentimentIntensityAnalyzer", "أداة من nltk.sentiment.vader (تعتمد على قاموس vader_lexicon) لحساب درجات المشاعر الإيجابية والسلبية والمحايدة (ص 128-129)."],
+  ["Hate Speech", "خطاب الكراهية: أي تواصل لفظي أو كتابي أو سلوكي يستخدم لغة مهينة أو تمييزية للهجوم على شخص أو مجموعة بسبب الدين أو العرق أو الجنس (ص 130)."],
+  ["Training Set (31,962)", "حزمة التدريب في مشروع خطاب الكراهية: تضم 31,962 تغريدة و 3 أعمدة، حيث يرمز 0 لعدم وجود كراهية و 1 لوجود خطاب كراهية (ص 130)."],
+  ["Test Set (17,197, 2)", "مجموعة الاختبار في مشروع خطاب الكراهية: تتكون من 17,197 صفاً (تغريدة) و 2 عمود (ص 130)."],
+  ["Imbalanced Data", "البيانات غير المتوازنة: وجود تفاوت كبير في عدد العينات بين الفئات، حيث تكون تغريدات خطاب الكراهية أقل بكثير من الإيجابية (ص 131)."],
+  ["Oversampling", "الإفراط في أخذ العينات: أخذ عينات إضافية بشكل متكرر مع الاستبدال من فئة الأقلية حتى تتساوى في الحجم مع فئة الأغلبية (ص 131)."],
+  ["Downsampling", "الاختزال: تقليل عدد عينات فئة الأغلبية لمعالجة مشكلة البيانات غير المتوازنة (ص 131)."],
+  ["Minority Class", "فئة الأقلية: الفئة ذات العدد الأقل من العينات في البيانات غير المتوازنة (مثل فئة خطاب الكراهية label==1) (ص 131)."],
+  ["sklearn.utils.resample", "دالة في Scikit-Learn تُستخدم لتنفيذ عملية Oversampling بأخذ عينات مع الاستبدال (replace=True) (ص 131)."],
+  ["Pipeline", "المسار في Scikit-Learn: أداة تتيح تسلسل تنفيذ عدة خطوات معالجة وتصنيف تلقائياً (مثل التحويل والتصنيف) (ص 132)."],
+  ["SGDClassifier", "Stochastic Gradient Descent: مصنف التدرج العشوائي المستخدم كموديل تصنيف داخل الـ Pipeline لكشف خطاب الكراهية (ص 132)."],
+  ["TfidfTransformer", "أداة تحويل داخل مسار Pipeline تتبع CountVectorizer لتحويل تكرارات الكلمات إلى أوزان TF-IDF (ص 132)."],
+  ["Precision (الدقة)", "تقيس النسبة المئوية للتصنيفات الصحيحة بين جميع التصنيفات التي قام بها النموذج (ص 133)."],
+  ["Recall (الاستدعاء / الانتقالية)", "تقيس النسبة المئوية للعناصر الفعلية التي تم التنبؤ بها بشكل صحيح من قِبل النموذج (ص 133)."],
+  ["F1 Score (0.9696)", "مقياس يجمع ويعطي توازناً بين الدقة والانتقالية، قيمته بين 0 و 1، ومفيد جداً للبيانات غير المتوازنة (حقق النموذج 0.96) (ص 133)."],
+  ["tweepy Library", "مكتبة في بايثون تُستخدم للاتصال بخدمة Twitter API واسترجاع التغريدات من منصة X (تويتر) (ص 134)."],
+  ["Twitter API", "واجهة برمجة تطبيقات تويتر التي يتم الاتصال بها عبر مكتبة tweepy لجمع واسترجاع التغريدات حول موضوع معين (ص 134)."],
+  ["tweet Column", "عمود التغريدات في بيانات مشروع منصة X (twitter.csv) الذي يحتوي على نصوص النقاشات المطلوب تنظيفها وتحليل مشاعرها (ص 135)."],
+  ["DecisionTreeClassifier", "مصنف شجرة القرار من sklearn.tree الذي تم استيراده ضمن مكتبات مشروع تحليل تغريدات تويتر (ص 135)."]
+];
+
+const cards = [
+  ["ما الهدف من مشروع تحليل مشاعر مراجعات تطبيق TikTok باستخدام بايثون؟", "استخراج المعلومات القيمة من مراجعات المستخدمين على متجر Google Play وفهم كيفية تقييمهم لتطبيق TikTok لاتخاذ قرارات مستنيرة (ص 126)."],
+  ["ما هي الخطوات الخمس لتحليل مشاعر مراجعات TikTok بالترتيب؟", "1) جمع البيانات، 2) تنظيف البيانات، 3) معالجة اللغة الطبيعية (NLP)، 4) تحديد المشاعر، 5) إنشاء تقرير (ص 126)."],
+  ["من أين تم جمع وتنزيل مجموعة بيانات مراجعات TikTok؟ وما العمودان المطلوبان فقط؟", "جُمعت من مراجعات متجر Google Play وتم تنزيلها من منصة Kaggle؛ ونحتاج فقط إلى عمودين هما: المحتوى (content) والنتيجة (score) (ص 127)."],
+  ["كم عدد القيم الفارغة التي ظهرت في عمود المحتوى (content) لمراجعات TikTok؟ وكيف أُزيلت؟", "ظهرت 4 قيم فارغة عند الفحص بـ data.isnull().sum()، وتمت إزالتها باستخدام الدالة data.dropna() (ص 127)."],
+  ["ما النسب المئوية لتقييمات المستخدمين لتطبيق TikTok على متجر Google Play (ص 128)؟", "75.7% من المستخدمين أعطوا 5 تقييمات (5 نجوم) لـ TikTok، بينما 12.1% من المستخدمين صنفوه بنجمة واحدة (1) (ص 128)."],
+  ["كيف تم حساب درجات المشاعر لمراجعات TikTok في بايثون؟ وما الأعمدة الثلاثة المضافة؟", "باستخدام أداة SentimentIntensityAnalyzer() من مكتبة nltk.sentiment.vader (قاموس vader_lexicon)، وأُضيفت 3 أعمدة: Positive و Negative و Neutral (ص 128-129)."],
+  ["ما هي النتيجة النهائية لتقرير مشاعر مستخدمي TikTok (ص 129)؟", "معظم المستخدمين يكتبون تعليقات محايدة، ولكن مجموع الدرجات الإيجابية أكثر بكثير من السلبية، لذا نستنتج أن (معظم المستخدمين سعداء بـ TikTok) (ص 129)."],
+  ["ما هو تعريف خطاب الكراهية (Hate Speech)؟", "أي نوع من التواصل اللفظي أو الكتابي أو السلوكي يستخدم لغة مهينة أو تمييزية للهجوم على شخص أو مجموعة بناءً على خصائصهم الشخصية أو الدينية أو العرقية أو الجنسية أو الجنس (ص 130)."],
+  ["ممَ تتألف مجموعة بيانات Twitter في مشروع اكتشاف خطاب الكراهية؟ وما دلالة 0 و 1؟", "• حزمة التدريب: 31,962 تغريدة (حيث 0 = عدم وجود خطاب كراهية، و 1 = وجود خطاب كراهية).\n• مجموعة الاختبار: أبعادها (17197, 2) أي 17,197 صفاً وعمودين (ص 130)."],
+  ["ما الهدف من عملية تنظيف البيانات في مشروع خطاب الكراهية؟ وبأي مكتبة تمت؟", "تهدف لتهيئة البيانات للتحليل بإزالة أو تعديل البيانات غير المناسبة أو غير الضرورية التي تعيق التحليل، وتمت باستخدام مكتبة التعبير المنتظم (re) (ص 131)."],
+  ["ما المقصود بالبيانات غير المتوازنة (Imbalanced Data) في مشروع خطاب الكراهية؟", "تعني وجود تفاوت كبير في عدد العينات بين الفئات المختلفة، حيث يكون عدد التغريدات المتعلقة بخطاب الكراهية أقل بكثير من التغريدات الإيجابية/العادية (ص 131)."],
+  ["ما هما الطريقتان الشائعتان للتعامل مع البيانات غير المتوازنة؟", "1) الإفراط في أخذ العينات (oversampling).\n2) الاختزال (downsampling) (ص 131)."],
+  ["كيف تعمل طريقة الإفراط في أخذ العينات (Oversampling)؟ وما الدالة المستخدمة لها؟", "نستخدم دالة (resample من sklearn.utils مع replace=True) لأخذ عينات إضافية بشكل متكرر مع الاستبدال من فئة الأقلية (خطاب الكراهية) حتى تصبح بنفس حجم فئة الأغلبية (ص 131)."],
+  ["ما هو المسار (Pipeline) في Scikit-Learn؟ وما أهميته؟", "عملية تتيح تسلسل تنفيذ عدة خطوات متسلسلة تلقائياً في عملية المعالجة (مثل تنظيف البيانات وتحويلها وتصنيفها) لتبسيط تطوير وتدريب النموذج (ص 132)."],
+  ["ما هي المكونات الثلاثة داخل المسار (pipeline_sgd) في مشروع كشف خطاب الكراهية؟", "1) CountVectorizer، 2) TfidfTransformer، 3) مصنف التدرج العشوائي SGDClassifier (Stochastic Gradient Descent) (ص 132)."],
+  ["لماذا نقسم البيانات إلى تدريب واختبار؟ ولماذا يجب أن يكون التقسيم عشوائياً؟", "لتقييم أداء النموذج بشكل مستقل على بيانات لم يتدرب عليها؛ ويجب أن يكون عشوائياً لضمان تمثيلية جيدة لكل فئة في مجموعتي التدريب والاختبار (بنسبة مثل 80% تدريب و20% اختبار) (ص 132)."],
+  ["ما الفرق بين الدقة (Precision) والانتقالية/الاستدعاء (Recall) (ص 133)؟", "• الدقة (Precision): تقيس النسبة المئوية للتصنيفات الصحيحة بين جميع التصنيفات التي قام بها النموذج.\n• الانتقالية (Recall): تقيس النسبة المئوية للعناصر الفعلية التي تم التنبؤ بها بشكل صحيح (ص 133)."],
+  ["لماذا نستخدم مقياس F1 Score في مشروع خطاب الكراهية؟ وما نطاق قيمته؟ وكم حقق النموذج؟", "لأنه يعطي توازناً بين الدقة والانتقالية وهو مفيد جداً عندما تكون البيانات غير متوازنة. تتراوح قيمته بين 0 و 1 (الأفضل أقرب لـ 1)، وحقق النموذج 0.96 (أو 0.9696) (ص 133)."],
+  ["لماذا يجب على منصات التواصل الاجتماعي مثل تويتر (منصة X) الاستمرار في تحليل المشاعر؟", "لمراقبة مشاعر المشاركين في المناقشات والعثور على الأشخاص الذين ينشرون الكراهية والسلبية، حيث غالباً ما تظهر آراء سلبية عند النقاش في مجال ما (ص 134)."],
+  ["ما هي الخطوات الخمس لإجراء تحليل المشاعر على منصة X (تويتر) باستخدام بايثون؟", "1) استيراد المكتبات (tweepy و nltk)، 2) الوصول إلى تويتر API، 3) تجميع التغريدات، 4) تحليل المشاعر بـ NLP، 5) تقديم النتائج (ص 134)."],
+  ["ما وظيفة مكتبة tweepy في مشروع تحليل مشاعر تويتر؟", "تُستخدم للاتصال بخدمة Twitter API والوصول إليها لاسترجاع وتجميع التغريدات من منصة X (ص 134)."],
+  ["ما اسم العمود الذي يحتوي على نصوص التغريدات في بيانات مشروع منصة X؟ ولماذا ننظفه؟", "عمود التغريدات (tweet column)؛ وننظفه لأنه يحتوي على الكثير من الأخطاء اللغوية والرموز الخاصة والروابط (ص 135)."],
+  ["ما هي النتيجة النهائية لتحليل درجات المشاعر في نقاش منصة X (تويتر) (ص 137)؟", "عدد التغريدات المحايدة هو الأعلى إجمالاً (14,696)، ولكن عدد التغريدات السلبية (7,201) أكبر بكثير من الإيجابية (2,880)؛ لذا نستنتج أن معظم الآراء على منصة X تجاه الموضوع كانت سلبية (ص 137)."],
+  ["قارني بين الاستنتاج النهائي لمشروع مراجعات TikTok ومشروع نقاش منصة X (تويتر).", "• في TikTok: الإيجابي أكبر بكثير من السلبي ← معظم المستخدمين سعداء بالتطبيق.\n• في منصة X (تويتر): السلبي أكبر بكثير من الإيجابي ← معظم الآراء تجاه الموضوع كانت سلبية (ص 129 و 137)."],
+  ["ما وظيفة السحابة الكلمية (Wordcloud) في مشروع مراجعات TikTok؟", "إنشاء تصور بصري لنتائج التحليل يوضح الكلمات الأكثر استخداماً أو تميزاً في المراجعات الإيجابية والسلبية (ص 126 و 129)."],
+  ["ماذا تعني القيم (0) و (1) في عمود التصنيف (label) لمشروع اكتشاف خطاب الكراهية؟", "يرمز الرقم (0) إلى عدم وجود خطاب كراهية، ويرمز الرقم (1) إلى وجود خطاب كراهية (ص 130)."],
+  ["ما هي المكتبة المستخدمة لرسم المخطط الدائري لتقييمات TikTok؟ وما الدالة المستخدمة؟", "مكتبة plotly.express (تم استيرادها كـ px)، والدالة هي px.pie مع المعامل hole = 0.5 لرسم دائرة مجوفة (ص 128)."],
+  ["ما هي أداة التجذير (Stemmer) المستخدمة في تنظيف نصوص مراجعات TikTok وتغريدات تويتر؟", "أداة nltk.SnowballStemmer('english') لإرجاع الكلمات الإنجليزية إلى جذورها (ص 127 و 136)."]
+];
+
+const questions = [
+  {q:"في مشروع تحليل مشاعر مراجعات تطبيق TikTok باستخدام بايثون، من أين تم تجميع المراجعات وما المكتبة المستخدمة لإنشاء تصور بصري للكلمات الأكثر استخداماً؟", o:["جُمعت من متجر Google Play، واستُخدمت السحابة الكلمية (Wordcloud) للتصور البصري","جُمعت من الرسائل النصية القصيرة SMS، واستُخدمت مكتبة Tweepy","جُمعت من أجهزة الاستشعار الصناعية، واستُخدمت خوارزمية K-Means","جُمعت من الكتب الورقية، واستُخدمت أداة OpenCV"], a:0, e:"تُجمع مراجعات TikTok من متجر Google Play (وتم تنزيلها من Kaggle)، وتُستخدم السحابة الكلمية Wordcloud لتوضيح الكلمات الأكثر استخداماً (ص 126-127)."},
+  {q:"ما هو الترتيب الصحيح للخطوات الخمس لتحليل مشاعر مراجعات تطبيق TikTok (ص 126)؟", o:["1) جمع البيانات ← 2) تنظيف البيانات ← 3) معالجة اللغة الطبيعية NLP ← 4) تحديد المشاعر ← 5) إنشاء تقرير","1) إنشاء تقرير ← 2) جمع البيانات ← 3) تحديد المشاعر","1) تحديد المشاعر قبل جمع البيانات ← 2) تنظيف البيانات","1) حذف البيانات ← 2) إغلاق التطبيق"], a:0, e:"الخطوات الخمس بالترتيب في ص 126 هي: جمع البيانات، تنظيف البيانات، معالجة اللغة الطبيعية NLP، تحديد المشاعر، وإنشاء تقرير."},
+  {q:"لتحليل تقييمات TikTok في الوحدة الأولى (ص 127)، ما هما العمودان الوحيدان اللذان نحتاجهما من مجموعة البيانات؟", o:["عمود المحتوى (content) وعمود النتيجة (score)","عمود الاسم (name) وعمود العمر (age)","عمود الموقع الجغرافي وعمود رقم الهاتف","عمود السعر وعمود الضريبة"], a:0, e:"ذكر الملخص في ص 127: لتحليل تقييمات TikTok نحتاج فقط إلى عمودين: المحتوى content والنتيجة score."},
+  {q:"عند فحص القيم الفارغة في بيانات TikTok باستخدام data.isnull().sum()، كم قيمة فارغة وُجدت في عمود المحتوى (content) وأي دالة استُخدمت لإزالتها؟", o:["4 قيم فارغة، وتمت إزالتها باستخدام دالة data.dropna()","1000 قيمة فارغة، وتمت إزالتها بدالة plt.show()","لم توجد أي قيم فارغة إطلاقاً","50 قيمة فارغة، وتمت إزالتها بدالة px.pie()"], a:0, e:"وُجدت أربع قيم فارغة في عمود المحتوى (content: 4)، وتم حذفها باستخدام data = data.dropna() (ص 127)."},
+  {q:"وفق المخطط الدائري لنسب التقييمات الممنوحة لتطبيق TikTok على متجر Google Play (ص 128)، كم نسبة المستخدمين الذين أعطوا 5 نجوم (خمس تقييمات)؟", o:["75.7% (بينما 12.1% صنفوها بنجمة واحدة)","12.1% فقط أعطوا خمس نجوم","50% أعطوا خمس نجوم و 50% نجمة واحدة","2.55% فقط أعطوا خمس نجوم"], a:0, e:"يوضح الملخص والمخطط في ص 128 أن 75.7% من المستخدمين أعطوا خمس تقييمات لـ TikTok، و12.1% صنفوها بـ 1."},
+  {q:"ما هي الأداة المستخدمة من مكتبة nltk.sentiment.vader لحساب درجات المشاعر وإضافة أعمدة (Positive, Negative, Neutral)؟", o:["SentimentIntensityAnalyzer()","CountVectorizer()","SGDClassifier()","train_test_split()"], a:0, e:"تُستخدم أداة SentimentIntensityAnalyzer() المعتمدة على قاموس vader_lexicon لحساب درجات المشاعر القطبية (ص 128-129)."},
+  {q:"في نهاية مشروع تحليل مراجعات TikTok (ص 129)، ماذا كانت النتيجة الإجمالية لدرجات المشاعر وماذا نستنتج منها؟", o:["معظم التعليقات محايدة، ولكن الإيجابي أكثر بكثير من السلبي، مما يعني أن معظم المستخدمين سعداء بـ TikTok","السلبي أكثر بكثير من الإيجابي، مما يعني أن الجميع يكرهون التطبيق","جميع التعليقات كانت سلبية بنسبة 100%","لم يتمكن الكود من حساب أي درجات للمشاعر"], a:0, e:"في مشروع TikTok كانت التعليقات المحايدة هي الأعلى، ولكن الإيجابي (158,277) أكثر بكثير من السلبي (55,438)، لذا نستنتج أن معظم المستخدمين سعداء بـ TikTok (ص 129)."},
+  {q:"أي نوع من التواصل اللفظي أو الكتابي أو السلوكي يستخدم لغة مهينة أو تمييزية للهجوم على شخص أو مجموعة بناءً على الدين أو العرق أو الجنس يُسمى:", o:["خطاب الكراهية (Hate Speech)","الإحصاء الوصفي","التلخيص النحوي","الترميز التلقائي"], a:0, e:"هذا هو التعريف الدقيق لخطاب الكراهية كما ورد في بداية الوحدة الثانية (ص 130)."},
+  {q:"في مشروع بناء نموذج اكتشاف خطاب الكراهية من بيانات Twitter (ص 130)، كم عدد التغريدات في حزمة التدريب وما دلالة الرمزين 0 و 1؟", o:["31,962 تغريدة؛ حيث يرمز 0 لعدم وجود خطاب كراهية ويرمز 1 لوجود خطاب كراهية","500 تغريدة؛ حيث يرمز 0 لوجود كراهية و 1 لعدم وجودها","40 ألف تقييم أفلام","100 تغريدة بدون أي أرقام تصنيف"], a:0, e:"تتضمن الحزمة التدريبية 31962 تغريدة، ويرمز الرقم 0 لعدم وجود خطاب كراهية والرقم 1 لوجود خطاب كراهية (ص 130)."},
+  {q:"ما هي أبعاد مجموعة الاختبار (Test Set) في مشروع اكتشاف خطاب الكراهية كما أظهرها الكود (ص 130)؟", o:["(17197, 2) أي تتكون من 17,197 صفاً و 2 عمود","(31962, 3) أي تتكون من 31,962 صفاً و 3 أعمدة","(100, 100)","(5, 5)"], a:0, e:"تم تحديد أبعاد مجموعة الاختبار Test Set على أنها (17197, 2) أي 17197 صفاً و 2 عمود (ص 130)."},
+  {q:"وجود تفاوت كبير في عدد العينات بين الفئات المختلفة في البيانات (حيث يكون عدد تغريدات خطاب الكراهية أقل بكثير من التغريدات الإيجابية) يُعرّف بـ:", o:["البيانات غير المتوازنة (Imbalanced Data)","البيانات المثالية المتوازنة","التكامل الرقمي","الانحدار الخطي البسيط"], a:0, e:"البيانات غير المتوازنة تعني وجود تفاوت كبير في عدد العينات بين الفئات المختلفة في البيانات (ص 131)."},
+  {q:"ما هما الطريقتان الشائعتان المذكورتان في الفصل الحادي عشر للتعامل مع مشكلة (البيانات غير المتوازنة)؟", o:["الإفراط في أخذ العينات (oversampling) أو الاختزال (downsampling)","الحذف الكامل للبيانات (dropna) أو الرسم الدائري (pie)","التفاضل (differentiation) أو التكامل (integration)","الترميز (Encoder) أو فك الترميز (Decoder)"], a:0, e:"يمكن استخدام طريقتين شائعتين للتعامل مع البيانات غير المتوازنة وهما: الإفراط في أخذ العينات oversampling أو الاختزال downsampling (ص 131)."},
+  {q:"كيف تعمل طريقة (الإفراط في أخذ العينات - Oversampling) التي تم تطبيقها بالدالة resample في مشروع خطاب الكراهية؟", o:["تقوم بشكل متكرر بأخذ عينات إضافية مع الاستبدال من فئة الأقلية (خطاب الكراهية) حتى تصبح بنفس حجم فئة الأغلبية","تقوم بحذف جميع تغريدات خطاب الكراهية من البيانات","تقوم بترجمة التغريدات إلى اللغة الصينية","تقوم بتحويل النصوص إلى صور ملونة"], a:0, e:"في الإفراط في أخذ العينات نأخذ عينات إضافية من الفئة الأقلية (minority class) بشكل متكرر مع الاستبدال (replace=True) حتى يتساوى عددها مع الفئة الأكبر (ص 131)."},
+  {q:"في مكتبة Scikit-Learn، ما هي الأداة التي تتيح لنا تسلسل تنفيذ عدة خطوات متسلسلة تلقائياً في عملية المعالجة (مثل التحويل والتصنيف)؟", o:["المسار (Pipeline)","السحابة الكلمية (WordCloud)","المخطط الدائري (px.pie)","قاموس (vader_lexicon)"], a:0, e:"إنشاء المسار (Pipeline) يتيح تسلسل تنفيذ عدة خطوات متسلسلة تلقائياً في عملية المعالجة والتصنيف (ص 132)."},
+  {q:"أي مصنف تم استخدامه كموديل لتصنيف البيانات داخل المسار (pipeline_sgd) في مشروع اكتشاف خطاب الكراهية (ص 132)؟", o:["مصنف SGD (Stochastic Gradient Descent - SGDClassifier)","خوارزمية K-Means للتجميع","خوارزمية Apriori","شبكة CNN التلافيفية"], a:0, e:"تم إنشاء المسار باستخدام مكتبة Scikit-Learn واستخدام تصنيف SGD (Stochastic Gradient Descent) كموديل لتصنيف البيانات (ص 132)."},
+  {q:"لماذا يجب أن تكون عملية تقسيم البيانات إلى مجموعة تدريب ومجموعة اختبار (عشوائية)؟", o:["لضمان تمثيلية جيدة لكل فئة في كل من مجموعة التدريب ومجموعة الاختبار","لجعل مجموعة الاختبار تحتوي على فئة واحدة فقط","لإبطاء سرعة تدريب النموذج","لمنع النموذج من التعلم"], a:0, e:"عملية التقسيم يجب أن تكون عشوائية لضمان تمثيلية جيدة لكل فئة في كل من مجموعة التدريب ومجموعة الاختبار (ص 132)."},
+  {q:"أي مقياس تقييم يجمع بين الدقة (Precision) والانتقالية/الاستدعاء (Recall) ويعطي توازناً بينهما، ويكون مفيداً خاصة عندما تكون البيانات غير متوازنة؟", o:["مقياس F1 score","مقياس المتوسط الحسابي","مقياس الانحراف المعياري","مقياس المساحة تحت المنحنى التكاملي"], a:0, e:"مقياس F1 score يجمع بين الدقة والانتقالية ويعطي توازناً بينهما، وهو مفيد خاصة مع تعدد الفئات والبيانات غير المتوازنة (ص 133)."},
+  {q:"في تقييم نموذج التصنيف (ص 133)، ما الذي تقيسه كل من الدقة (Precision) والانتقالية/الاستدعاء (Recall)؟", o:["الدقة تقيس نسبة التصنيفات الصحيحة بين كل تصنيفات النموذج، والانتقالية تقيس نسبة العناصر الفعلية التي تم التنبؤ بها بشكل صحيح","كلاهما يقيسان سرعة المعالج بالثواني","الدقة تقيس حجم الملف، والانتقالية تقيس عدد الأعمدة","الدقة تقيس القيم الفارغة فقط"], a:0, e:"الدقة تقيس النسبة المئوية للتصنيفات الصحيحة بين جميع تصنيفات النموذج، والانتقالية (الاستدعاء) تقيس النسبة المئوية للعناصر الفعلية التي تم التنبؤ بها بشكل صحيح (ص 133)."},
+  {q:"ما هو النطاق الرقمي لقيمة مقياس (F1 score)، وكم بلغت قيمته في مشروع اكتشاف خطاب الكراهية؟", o:["يتراوح بين 0 و 1 (والأفضل أقرب إلى 1)؛ وحقق النموذج 0.96 (أو 0.9696)","يتراوح بين 100 و 1000؛ وحقق النموذج 500","يتراوح بين -10 و 0؛ وحقق النموذج -5","يكون دائماً صفراً في جميع النماذج"], a:0, e:"قيمة F1 score تتراوح بين 0 و 1 حيث يكون الأداء الأفضل أقرب إلى 1، وحصل النموذج على درجة 0.9696 (0.96) (ص 133)."},
+  {q:"في الوحدة الثالثة (تحليل المشاعر على منصة X / تويتر)، ما هي المكتبة التي يتم تحميلها للوصول والاتصال بخدمة (Twitter API) واسترجاع التغريدات؟", o:["مكتبة tweepy","مكتبة WordCloud","مكتبة Seaborn","مكتبة OpenCV"], a:0, e:"نستخدم مكتبة tweepy للاتصال بخدمة Twitter API واسترجاع التغريدات (ص 134)."},
+  {q:"ما هو الترتيب الصحيح للخطوات الخمس لإجراء تحليل المشاعر على منصة X (تويتر) باستخدام بايثون (ص 134)؟", o:["1) استيراد المكتبات ← 2) الوصول إلى تويتر API ← 3) تجميع التغريدات ← 4) تحليل المشاعر ← 5) تقديم النتائج","1) تقديم النتائج ← 2) تحليل المشاعر ← 3) استيراد المكتبات","1) تجميع التغريدات قبل استيراد المكتبات والاتصال بـ API","1) حذف حساب تويتر ← 2) إغلاق البرنامج"], a:0, e:"الخطوات الخمس بالترتيب في ص 134 هي: استيراد المكتبات، الوصول إلى تويتر API، تجميع التغريدات، تحليل المشاعر، وتقديم النتائج."},
+  {q:"في مجموعة بيانات مشروع منصة X (twitter.csv - ص 135)، ما اسم العمود الذي يحتوي على التغريدات المطلوب تنظيفها وتحليل مشاعر المشاركين فيها؟", o:["عمود التغريدات (tweet column)","عمود السعر (price column)","عمود التاريخ (date column)","عمود المعرف (id column)"], a:0, e:"يحتوي عمود التغريدات (tweet column) في مجموعة البيانات على التغريدات التي نحتاج لاستخدامها لتحليل مشاعر المشاركين (ص 135)."},
+  {q:"لماذا يتعين علينا تنظيف عمود التغريدات (tweet) قبل إجراء تحليل المشاعر في مشروع تويتر (ص 135)؟", o:["لأن هذه التغريدات تحتوي على الكثير من الأخطاء اللغوية والرموز الخاصة والروابط","لأن التغريدات مكتوبة بلغة الآلة الثنائية (0 و 1)","لزيادة حجم الملف ومضاعفة الأخطاء","لتحويل التغريدات إلى مقاطع فيديو"], a:0, e:"يتعين علينا تنظيف الكثير من الأخطاء والرموز الخاصة لأن التغريدات تحتوي على الكثير من الأخطاء اللغوية (ص 135)."},
+  {q:"في نهاية مشروع تحليل المشاعر على منصة X (تويتر - ص 137)، ماذا أظهرت مقارنة مجموع الدرجات الإيجابية (2880) والدرجات السلبية (7201) والمحايدة (14696)؟", o:["أن المحايدة هي الأعلى، ولكن عدد التغريدات السلبية أكبر بكثير من الإيجابية، لذا نستنتج أن معظم الآراء على منصة X تجاه الموضوع كانت سلبية","أن التغريدات الإيجابية أكبر بكثير من السلبية، لذا الجميع سعداء","أن عدد التغريدات السلبية يساوي صفراً","أن جميع التغريدات كانت إيجابية بنسبة 100%"], a:0, e:"عدد التغريدات المحايدة أعلى بكثير، ولكن من بين السلبية والإيجابية يبدو أن السلبية (7201) أكبر بكثير من الإيجابية (2880)، لذا نستنتج أن معظم الآراء على منصة X تجاه الموضوع كانت سلبية (ص 137)."},
+  {q:"ما الفرق الجوهري بين النتيجة الختامية لمشروع مراجعات TikTok (الوحدة 1) والنتيجة الختامية لمشروع نقاش منصة X / تويتر (الوحدة 3)؟", o:["في مراجعات TikTok تفوقت المشاعر الإيجابية على السلبية (المستخدمون سعداء)، بينما في نقاش منصة X تفوقت المشاعر السلبية على الإيجابية (معظم الآراء سلبية)","في كلا المشروعين كانت المشاعر السلبية هي المتفوقة دائماً","في كلا المشروعين لم توجد أي تغريدات أو مراجعات محايدة","في TikTok تم استخدامSGDClassifier وفي تويتر لم تُستخدم لغة بايثون"], a:0, e:"في TikTok الإيجابي (158 ألف) أكبر بكثير من السلبي (55 ألف) فالمستخدمون سعداء (ص 129)، أما في نقاش منصة X فالسلبي (7201) أكبر من الإيجابي (2880) فمعظم الآراء تجاه الموضوع كانت سلبية (ص 137)."}
+];
+
+// بناء شبكة المصطلحات
+const termsGrid = document.getElementById("termsGrid");
+terms.forEach(([en, ar]) => {
+  const d = document.createElement("div");
+  d.className = "card";
+  d.style.margin = "0";
+  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
+  termsGrid.appendChild(d);
+});
+
+// إدارة البطاقات التعليمية
+let ci = 0, showAnswer = false;
+function renderCard() {
+  document.getElementById("flashTerm").textContent = cards[ci][0];
+  const ansEl = document.getElementById("flashAnswer");
+  ansEl.innerHTML = cards[ci][1].replace(/\n/g, "<br>");
+  ansEl.hidden = !showAnswer;
+  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
+  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+}
+document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
+document.getElementById("flashcard").addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
+});
+document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
+document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
+renderCard();
+
+// التنقل بين التبويبات
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+// إدارة الاختبار
+let answers = {};
+function renderQuiz() {
+  const area = document.getElementById("quizArea");
+  area.innerHTML = "";
+  const letters = ["أ", "ب", "ج", "د"];
+  questions.forEach((item, i) => {
+    const box = document.createElement("div");
+    box.className = "qbox";
+    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
+    const opts = box.querySelector(".options");
+    item.o.forEach((opt, j) => {
+      const btn = document.createElement("button");
+      btn.className = "option";
+      btn.textContent = `${letters[j]}) ${opt}`;
+      btn.onclick = () => {
+        answers[i] = j;
+        [...opts.children].forEach((x, k) => {
+          x.classList.remove("correct", "wrong");
+          x.disabled = true;
+          if (k === item.a) x.classList.add("correct");
+          if (k === j && j !== item.a) x.classList.add("wrong");
+        });
+        const fb = document.getElementById("fb" + i);
+        fb.hidden = false;
+        fb.className = "feedback " + (j === item.a ? "good" : "bad");
+        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
+        updateScore();
+      };
+      opts.appendChild(btn);
+    });
+    area.appendChild(box);
+  });
+  updateScore();
+}
+
+function updateScore() {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
+  document.getElementById("score").textContent = `النتيجة: ${correct} / ${questions.length}`;
+  document.getElementById("progressBar").style.width = (Object.keys(answers).length / questions.length * 100) + "%";
+}
+
+document.getElementById("resetQuiz").onclick = () => {
+  answers = {};
+  document.getElementById("finalResult").textContent = "";
+  renderQuiz();
+};
+
+document.getElementById("finishQuiz").onclick = () => {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
+  const pct = Math.round(correct / questions.length * 100);
+  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${questions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! أنتِ متقنة تماماً للفصل الحادي عشر." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
+};
+
+renderQuiz();
+</script>
+</body>
+</html>

@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ملخصات جامعية تفاعلية منظمة للمراجعة والدراسة.">
+  <meta name="theme-color" content="#173b78">
+  <title>ملخصاتي التفاعلية</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #173b78;
+      --primary-dark: #0f2855;
+      --secondary: #208253;
+      --secondary-dark: #15613c;
+      --ink: #172033;
+      --muted: #64748b;
+      --line: #dbe4f0;
+      --surface: #ffffff;
+      --surface-soft: #f5f8fc;
+      --page: #eef4fb;
+      --shadow: 0 16px 42px rgba(20, 48, 93, .12);
+      --radius: 20px;
+    }
+
+    body[data-theme="dark"] {
+      --ink: #edf4ff;
+      --muted: #b3c0d4;
+      --line: #2d3c57;
+      --surface: #172238;
+      --surface-soft: #202e47;
+      --page: #101a2d;
+      --shadow: 0 16px 42px rgba(0, 0, 0, .28);
+    }
+
+    * { box-sizing: border-box; }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--ink);
+      background: var(--page);
+      font-family: "Tajawal", Arial, sans-serif;
+      line-height: 1.6;
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, input:focus-visible, a:focus-visible {
+      outline: 3px solid #f1b64d;
+      outline-offset: 3px;
+    }
+    .skip-link {
+      position: fixed;
+      top: -70px;
+      right: 18px;
+      z-index: 20;
+      padding: 8px 14px;
+      border-radius: 9px;
+      color: #fff;
+      background: var(--primary);
+      transition: top .2s ease;
+    }
+    .skip-link:focus { top: 18px; }
+    .shell { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid color-mix(in srgb, var(--line) 85%, transparent);
+      background: color-mix(in srgb, var(--surface) 92%, transparent);
+      backdrop-filter: blur(16px);
+    }
+    .header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 72px;
+      gap: 14px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0;
+      color: var(--primary);
+      background: none;
+      border: 0;
+      font-size: 19px;
+      font-weight: 800;
+    }
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 11px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), #346bc0);
+      box-shadow: 0 6px 15px rgba(23, 59, 120, .23);
+    }
+    .top-actions { display: flex; align-items: center; gap: 6px; }
+    .text-button, .icon-button {
+      padding: 8px 10px;
+      border: 0;
+      border-radius: 10px;
+      color: var(--muted);
+      background: transparent;
+      font-weight: 700;
+    }
+    .text-button:hover, .icon-button:hover { color: var(--primary); background: var(--surface-soft); }
+    .icon-button { min-width: 39px; font-size: 18px; }
+
+    main { padding: 28px 0 52px; }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(240px, .7fr);
+      gap: 26px;
+      align-items: stretch;
+      padding: clamp(24px, 4vw, 44px);
+      overflow: hidden;
+      border-radius: 28px;
+      color: #fff;
+      background: radial-gradient(circle at 15% 20%, rgba(113, 170, 255, .38), transparent 31%), linear-gradient(135deg, var(--primary-dark), var(--primary));
+      box-shadow: var(--shadow);
+    }
+    .eyebrow { margin: 0 0 8px; color: #bcd4ff; font-size: 14px; font-weight: 700; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { margin-bottom: 12px; font-size: clamp(29px, 5vw, 45px); line-height: 1.25; }
+    .hero-copy { max-width: 610px; margin-bottom: 22px; color: #e1ebff; font-size: 17px; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .button-primary, .button-secondary, .button-ghost {
+      min-height: 44px;
+      padding: 10px 17px;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      font-weight: 800;
+      transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
+    }
+    .button-primary:hover, .button-secondary:hover, .button-ghost:hover { transform: translateY(-2px); }
+    .button-primary { color: #fff; background: var(--secondary); box-shadow: 0 8px 18px rgba(5, 49, 29, .22); }
+    .button-primary:hover { background: var(--secondary-dark); }
+    .button-secondary { color: var(--primary-dark); background: #fff; }
+    .button-ghost { color: var(--primary); border-color: var(--line); background: var(--surface); }
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      align-content: center;
+    }
+    .hero-stat {
+      padding: 17px 12px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 16px;
+      text-align: center;
+      background: rgba(255,255,255,.09);
+    }
+    .hero-stat strong { display: block; font-size: 27px; line-height: 1.15; }
+    .hero-stat span { color: #dfe9fc; font-size: 13px; }
+
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 15px; margin: 28px 0 15px; }
+    .section-heading h2 { margin: 0; font-size: clamp(23px, 3vw, 30px); }
+    .section-heading p { margin: 0; color: var(--muted); }
+    .subject-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 17px; }
+    .subject-card {
+      position: relative;
+      min-height: 190px;
+      padding: 22px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      text-align: right;
+      color: var(--ink);
+      background: var(--surface);
+      box-shadow: 0 8px 26px rgba(31, 49, 83, .06);
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    .subject-card:hover { transform: translateY(-4px); border-color: #95b4e5; box-shadow: var(--shadow); }
+    .subject-card::after { content: ""; position: absolute; bottom: -52px; left: -34px; width: 150px; height: 150px; border-radius: 50%; background: color-mix(in srgb, var(--card-color) 16%, transparent); }
+    .subject-icon { display: grid; place-items: center; width: 48px; height: 48px; margin-bottom: 20px; border-radius: 14px; color: #fff; background: var(--card-color); font-size: 24px; }
+    .subject-card h3 { margin-bottom: 3px; font-size: 21px; }
+    .subject-card p { position: relative; z-index: 1; margin-bottom: 13px; color: var(--muted); }
+    .progress-line { position: relative; z-index: 1; display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; }
+    .bar { flex: 1; height: 7px; overflow: hidden; border-radius: 50px; background: var(--line); }
+    .bar > span { display: block; height: 100%; border-radius: inherit; background: var(--card-color); transition: width .25s ease; }
+
+    .panel[hidden] { display: none; }
+    .panel-card { padding: clamp(18px, 3vw, 30px); border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: 0 8px 26px rgba(31, 49, 83, .06); }
+    .breadcrumb { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; margin-bottom: 16px; color: var(--muted); font-size: 14px; }
+    .breadcrumb button { padding: 0; color: var(--primary); border: 0; background: transparent; text-decoration: underline; }
+    .subject-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 15px; margin-bottom: 20px; }
+    .subject-head h2 { margin-bottom: 3px; }
+    .subject-head p { margin: 0; color: var(--muted); }
+    .subject-progress { min-width: 125px; padding: 8px 12px; border-radius: 10px; color: var(--secondary-dark); background: #e9f8ef; text-align: center; font-size: 14px; font-weight: 800; }
+    body[data-theme="dark"] .subject-progress { color: #a5edbf; background: #173d2b; }
+    .chapter-list { display: grid; gap: 10px; }
+    .chapter-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; padding: 15px; border: 1px solid var(--line); border-radius: 14px; text-align: right; color: var(--ink); background: var(--surface-soft); transition: border-color .16s ease, transform .16s ease; }
+    .chapter-item:hover { border-color: #91b1e4; transform: translateX(-3px); }
+    .chapter-item-main { display: flex; align-items: center; gap: 12px; }
+    .chapter-number { display: grid; place-items: center; flex: 0 0 31px; width: 31px; height: 31px; border-radius: 50%; color: var(--primary); background: #dfeaff; font-size: 13px; font-weight: 800; }
+    body[data-theme="dark"] .chapter-number { color: #c9dcff; background: #2b4674; }
+    .chapter-state { flex: 0 0 auto; color: var(--muted); font-size: 13px; }
+    .chapter-state.done { color: var(--secondary-dark); font-weight: 800; }
+    .empty-state { padding: 32px; border: 1px dashed var(--line); border-radius: 14px; color: var(--muted); text-align: center; }
+
+    .viewer-top { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 17px; }
+    .viewer-title { margin: 0; font-size: clamp(20px, 3vw, 27px); }
+    .iframe-wrap { min-height: 520px; overflow: hidden; border: 1px solid var(--line); border-radius: 15px; background: #fff; }
+    iframe { display: block; width: 100%; height: min(78vh, 810px); min-height: 520px; border: 0; background: #fff; }
+    .viewer-controls { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-top: 17px; }
+    .viewer-controls-group, .rating { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+    .rating-label { color: var(--muted); font-size: 14px; }
+    .star { width: 35px; height: 35px; padding: 0; border: 0; border-radius: 50%; color: #94a3b8; background: transparent; font-size: 23px; }
+    .star.active, .star:hover { color: #ec9c17; background: #fff5d9; }
+    .viewer-tip { margin: 18px 0 0; color: var(--muted); font-size: 13px; }
+
+    .info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 27px; }
+    .info-card { padding: 17px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+    .info-card h3 { margin-bottom: 5px; color: var(--primary); font-size: 17px; }
+    .info-card p { margin: 0; color: var(--muted); font-size: 14px; }
+
+    .site-footer { padding: 35px 0 23px; border-top: 1px solid var(--line); background: var(--surface); }
+    .copyright { margin: 0; color: var(--muted); font-size: 13px; text-align: center; }
+
+    dialog { width: min(620px, calc(100% - 30px)); max-height: min(720px, calc(100% - 40px)); padding: 0; overflow: auto; border: 0; border-radius: 20px; color: var(--ink); background: var(--surface); box-shadow: 0 20px 60px rgba(0,0,0,.3); }
+    dialog::backdrop { background: rgba(5, 16, 37, .54); backdrop-filter: blur(3px); }
+    .modal-content { padding: 27px; }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-bottom: 16px; }
+    .modal-header h2 { margin: 0; color: var(--primary); }
+    .modal-close { display: grid; place-items: center; width: 37px; height: 37px; border: 0; border-radius: 50%; color: var(--ink); background: var(--surface-soft); font-size: 22px; }
+    .modal-content p, .modal-content li { color: var(--muted); }
+    .modal-content li + li { margin-top: 7px; }
+    .modal-content strong { color: var(--ink); }
+    .toast { position: fixed; right: 50%; bottom: 22px; z-index: 30; min-width: min(410px, calc(100% - 30px)); padding: 12px 17px; border-radius: 12px; color: #fff; background: #15243d; box-shadow: 0 10px 28px rgba(0,0,0,.22); text-align: center; transform: translate(50%, 90px); opacity: 0; pointer-events: none; transition: transform .24s ease, opacity .24s ease; }
+    .toast.show { transform: translate(50%, 0); opacity: 1; }
+
+    @media (max-width: 700px) {
+      .header-row { min-height: 62px; }
+      .top-actions { gap: 0; }
+      .top-actions .text-button { display: none; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-stats { grid-template-columns: repeat(3, 1fr); }
+      .hero-stat { padding: 12px 6px; }
+      .hero-stat strong { font-size: 21px; }
+      .hero-stat span { font-size: 11px; }
+      .subject-head, .viewer-top { align-items: stretch; flex-direction: column; }
+      .subject-progress { align-self: flex-start; }
+      .info-grid { grid-template-columns: 1fr; }
+      .iframe-wrap, iframe { min-height: 450px; }
+      .viewer-controls { align-items: stretch; flex-direction: column; }
+      .viewer-controls-group { justify-content: space-between; }
+    }
+    @media (max-width: 390px) {
+      .shell { width: min(100% - 20px, 1120px); }
+      .brand { font-size: 16px; }
+      .hero { padding: 22px 17px; }
+      .button-primary, .button-secondary, .button-ghost { padding: 9px 12px; }
+    }
+  </style>
+</head>
+<body data-theme="light">
+  <a class="skip-link" href="#main-content">انتقل إلى المحتوى</a>
+
+  <header class="site-header">
+    <div class="shell header-row">
+      <button class="brand" type="button" data-action="home" aria-label="العودة للرئيسية">
+        <span class="brand-mark" aria-hidden="true">✦</span>
+        <span>ملخصاتي التفاعلية</span>
+      </button>
+      <nav class="top-actions" aria-label="التنقل الرئيسي">
+        <button class="text-button" type="button" data-action="subjects">المواد</button>
+        <button class="text-button" type="button" data-modal="aboutModal">عن الموقع</button>
+        <button class="icon-button" id="themeToggle" type="button" aria-label="تفعيل الوضع الليلي" title="الوضع الليلي">☾</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content" class="shell">
+    <section class="hero" aria-labelledby="hero-title">
+      <div>
+        <p class="eyebrow">منظم للمراجعة — بسيط للدراسة</p>
+        <h1 id="hero-title">رتّبي مذاكرتك وكمّلي تقدّمك فصلًا بعد فصل.</h1>
+        <p class="hero-copy">ملخصات تفاعلية لمواد الجامعة، مع حفظ التقدم والتقييم على جهازك حتى تعرفي من أين تتابعين.</p>
+        <div class="hero-actions">
+          <button class="button-primary" type="button" data-action="subjects">ابدئي المذاكرة</button>
+          <button class="button-secondary" type="button" data-modal="rightsModal">حقوق الاستخدام</button>
+        </div>
+      </div>
+      <div class="hero-stats" aria-label="إحصاءات المحتوى">
+        <div class="hero-stat"><strong id="totalChapters">0</strong><span>فصل متاح</span></div>
+        <div class="hero-stat"><strong id="completedChapters">0</strong><span>فصل مكتمل</span></div>
+        <div class="hero-stat"><strong id="completionPercent">0%</strong><span>نسبة التقدم</span></div>
+      </div>
+    </section>
+
+    <section id="homePanel" class="panel" aria-labelledby="subjects-title">
+      <div class="section-heading">
+        <div>
+          <h2 id="subjects-title">المواد الدراسية</h2>
+          <p>اختاري مادة لعرض فصولها.</p>
+        </div>
+      </div>
+      <div id="subjectGrid" class="subject-grid"></div>
+    </section>
+
+    <section id="chaptersPanel" class="panel" hidden aria-labelledby="subjectTitle">
+      <div class="panel-card">
+        <nav class="breadcrumb" aria-label="مسار الصفحة">
+          <button type="button" data-action="home">الرئيسية</button><span aria-hidden="true">/</span><span id="breadcrumbSubject">المادة</span>
+        </nav>
+        <div class="subject-head">
+          <div>
+            <h2 id="subjectTitle">الفصول</h2>
+            <p id="subjectDescription"></p>
+          </div>
+          <div id="subjectProgress" class="subject-progress">0 من 0 مكتمل</div>
+        </div>
+        <div id="chapterList" class="chapter-list"></div>
+      </div>
+    </section>
+
+    <section id="viewerPanel" class="panel" hidden aria-labelledby="viewerTitle">
+      <div class="panel-card">
+        <nav class="breadcrumb" aria-label="مسار الصفحة">
+          <button type="button" data-action="home">الرئيسية</button><span aria-hidden="true">/</span>
+          <button id="backToSubject" type="button">المادة</button><span aria-hidden="true">/</span><span id="breadcrumbChapter">الفصل</span>
+        </nav>
+        <div class="viewer-top">
+          <h2 id="viewerTitle" class="viewer-title">عنوان الفصل</h2>
+          <button id="backToChapters" class="button-ghost" type="button">← كل الفصول</button>
+        </div>
+        <div class="iframe-wrap">
+          <iframe id="chapterFrame" title="محتوى الفصل" loading="lazy"></iframe>
+        </div>
+        <div class="viewer-controls">
+          <div class="viewer-controls-group">
+            <button id="previousChapter" class="button-ghost" type="button">الفصل السابق →</button>
+            <button id="completeChapter" class="button-primary" type="button">✓ علّميه كمكتمل</button>
+            <button id="nextChapter" class="button-ghost" type="button">← الفصل التالي</button>
+          </div>
+          <div class="rating" aria-label="تقييم الفصل">
+            <span class="rating-label">هل كان مفيدًا؟</span>
+            <span id="ratingStars" role="group" aria-label="قيّمي هذا الفصل"></span>
+          </div>
+        </div>
+        <p class="viewer-tip">يُحفظ الإنجاز والتقييم في المتصفح على هذا الجهاز فقط، ولا يتم إرسال أي معلومات للخارج.</p>
+      </div>
+    </section>
+
+    <section class="info-grid" aria-label="معلومات الموقع">
+      <article class="info-card">
+        <h3>✓ تابعي تقدمك</h3>
+        <p>علّمي الفصول التي أنهيتها، وسيُحفظ تقدمك تلقائيًا في هذا المتصفح.</p>
+      </article>
+      <article class="info-card">
+        <h3>📚 تنقّل سهل</h3>
+        <p>اختاري المادة للوصول إلى فصولها وملخصاتها بسهولة.</p>
+      </article>
+      <article class="info-card">
+        <h3>© محتوى منسوب بوضوح</h3>
+        <p>حقوق صياغة الملخصات وتصميم الموقع محفوظة لصاحبة الموقع، مع احترام المصادر الأصلية.</p>
+      </article>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell">
+      <p class="copyright">© 2026 [Mimi ] — جميع الحقوق محفوظة.</p>
+    </div>
+  </footer>
+
+  <dialog id="aboutModal" aria-labelledby="aboutTitle">
+    <div class="modal-content">
+      <div class="modal-header"><h2 id="aboutTitle">عن الموقع</h2><button class="modal-close" type="button" data-close-modal aria-label="إغلاق">×</button></div>
+      <p>منصة دراسية شخصية تساعد الطلبة على مراجعة مواد الجامعة بطريقة مرتبة وبسيطة. اختاري المادة ثم الفصل، واحفظي تقدّمك من داخل الموقع.</p>
+      <p><strong>إعداد:</strong> [Mimi ] <br><strong>آخر تحديث:</strong> <span id="lastUpdated"></span></p>
+    </div>
+  </dialog>
+
+  <dialog id="rightsModal" aria-labelledby="rightsTitle">
+    <div class="modal-content">
+      <div class="modal-header"><h2 id="rightsTitle">الحقوق والاستخدام</h2><button class="modal-close" type="button" data-close-modal aria-label="إغلاق">×</button></div>
+      <ul>
+        <li>حقوق تصميم الموقع، وترتيب المحتوى، وصياغة الملخصات الأصلية محفوظة لصاحبة الموقع.</li>
+        <li>يسمح بالاطلاع والاستخدام الشخصي والتعليمي فقط.</li>
+        <li>يمنع إعادة النشر أو النسخ التجاري أو إزالة اسم صاحبة المحتوى دون إذن مكتوب.</li>
+        <li>لا يُنسب للموقع ما يخص الكتب أو الشرائح أو الاقتباسات؛ يجب ذكر مرجعها الأصلي داخل الفصل.</li>
+      </ul>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+
+    const subjects = {
+      machine: {
+        name: "تعلم الآلةالتطبيقي",
+        description: "ملخصات مرتبة لفصول مقرر تعلم الآلة.",
+        folder: "Machine_Learning",
+        icon: "⌘",
+        color: "#287747",
+        chapters: [
+          ["الفصل الأول", "code_artifact (12).html"],
+          ["الفصل الثاني", "code_artifact (13).html"],
+          ["الفصل الثالث", "code_artifact (14).html"],
+          ["الفصل الرابع", "code_artifact.html"],
+          ["الفصل الخامس", "code_artifact (1).html"],
+          ["الفصل السادس", "code_artifact (2).html"],
+          ["الفصل السابع", "code_artifact (3).html"],
+          ["الفصل الثامن", "code_artifact (4).html"],
+          ["الفصل التاسع", "code_artifact (5).html"],
+          ["الفصل العاشر", "code_artifact (6).html"],
+          ["الفصل الحادي عشر", "code_artifact (7).html"],
+          ["الفصل الثاني عشر", "code_artifact (9).html"],
+          ["الفصل الثالث عشر", "code_artifact (10).html"],
+          ["الفصل الرابع عشر", "code_artifact (11).html"]
+        ]
+      },
+      topics: {
+        name: "موضوعات مختارة",
+        description: "مراجعة مركزة للموضوعات المختارة.",
+        folder: "Select_Topics",
+        icon: "◈",
+        color: "#8c5b18",
+        chapters: [
+          ["الفصل السابع", "1.html"],
+          ["الفصل الثامن", "2.html"],
+          ["الفصل التاسع", "3.html"]
+        ]
+      }
+    };
+
+    const STORAGE_KEYS = {
+      progress: "interactive-summaries-progress-v1",
+      ratings: "interactive-summaries-ratings-v1",
+      theme: "interactive-summaries-theme-v1"
+    };
+
+    const state = { subjectKey: null, chapterIndex: null };
+    let progress = readStorage(STORAGE_KEYS.progress, {});
+    let ratings = readStorage(STORAGE_KEYS.ratings, {});
+    let toastTimer;
+
+    const $ = (selector) => document.querySelector(selector);
+    const allChapters = () => Object.entries(subjects).flatMap(([key, subject]) => subject.chapters.map((chapter, index) => ({ key, subject, chapter, index })));
+    const chapterId = (key, index) => `${key}:${index}`;
+
+    function readStorage(key, fallback) {
+      try { return JSON.parse(localStorage.getItem(key)) ?? fallback; }
+      catch { return fallback; }
+    }
+    function saveStorage(key, value) { localStorage.setItem(key, JSON.stringify(value)); }
+    function isCompleted(key, index) { return Boolean(progress[chapterId(key, index)]); }
+    function completedCount(subjectKey) {
+      const entries = subjectKey ? subjects[subjectKey].chapters.map((_, index) => ({ key: subjectKey, index })) : allChapters();
+      return entries.filter(({ key, index }) => isCompleted(key, index)).length;
+    }
+    function percentage(done, total) { return total ? Math.round((done / total) * 100) : 0; }
+    function escapeHtml(value) { return String(value).replace(/[&<>'"]/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[character]); }
+
+    function showToast(message) {
+      const toast = $("#toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove("show"), 3000);
+    }
+
+    function updateStats() {
+      const total = allChapters().length;
+      const done = completedCount();
+      $("#totalChapters").textContent = total;
+      $("#completedChapters").textContent = done;
+      $("#completionPercent").textContent = `${percentage(done, total)}%`;
+    }
+
+    function renderSubjects() {
+      const cards = Object.entries(subjects).map(([key, subject]) => {
+        const done = completedCount(key);
+        const total = subject.chapters.length;
+        return `<button type="button" class="subject-card" style="--card-color: ${subject.color}" data-subject="${key}">
+          <span class="subject-icon" aria-hidden="true">${subject.icon}</span>
+          <h3>${escapeHtml(subject.name)}</h3>
+          <p>${escapeHtml(subject.description)}</p>
+          <span class="progress-line"><span class="bar"><span style="width:${percentage(done, total)}%"></span></span>${done}/${total} مكتمل</span>
+        </button>`;
+      }).join("");
+      $("#subjectGrid").innerHTML = cards;
+      document.querySelectorAll("[data-subject]").forEach(button => button.addEventListener("click", () => showSubject(button.dataset.subject)));
+    }
+
+    function renderChapters() {
+      const subject = subjects[state.subjectKey];
+      if (!subject) return;
+      const done = completedCount(state.subjectKey);
+      $("#breadcrumbSubject").textContent = subject.name;
+      $("#subjectTitle").textContent = subject.name;
+      $("#subjectDescription").textContent = subject.description;
+      $("#subjectProgress").textContent = `${done} من ${subject.chapters.length} مكتمل`;
+      const rows = subject.chapters.map(([name], index) => ({ name, index })).map(({ name, index }) => {
+        const doneText = isCompleted(state.subjectKey, index) ? "✓ مكتمل" : "غير مكتمل";
+        const doneClass = isCompleted(state.subjectKey, index) ? "done" : "";
+        return `<button class="chapter-item" type="button" data-chapter="${index}">
+          <span class="chapter-item-main"><span class="chapter-number">${index + 1}</span><span>${escapeHtml(name)}</span></span>
+          <span class="chapter-state ${doneClass}">${doneText}</span>
+        </button>`;
+      }).join("");
+      $("#chapterList").innerHTML = rows;
+      document.querySelectorAll("[data-chapter]").forEach(button => button.addEventListener("click", () => openChapter(Number(button.dataset.chapter))));
+    }
+
+    function renderViewer() {
+      const subject = subjects[state.subjectKey];
+      if (!subject || state.chapterIndex === null) return;
+      const [chapterName, fileName] = subject.chapters[state.chapterIndex];
+      const id = chapterId(state.subjectKey, state.chapterIndex);
+      $("#backToSubject").textContent = subject.name;
+      $("#breadcrumbChapter").textContent = chapterName;
+      $("#viewerTitle").textContent = `${subject.name} — ${chapterName}`;
+      $("#chapterFrame").title = `ملخص ${chapterName} من مادة ${subject.name}`;
+      $("#chapterFrame").src = `${subject.folder}/${encodeURIComponent(fileName)}`;
+      $("#completeChapter").textContent = isCompleted(state.subjectKey, state.chapterIndex) ? "↶ إلغاء علامة الإكمال" : "✓ علّميه كمكتمل";
+      $("#previousChapter").disabled = state.chapterIndex === 0;
+      $("#nextChapter").disabled = state.chapterIndex === subject.chapters.length - 1;
+      $("#previousChapter").style.opacity = state.chapterIndex === 0 ? ".5" : "1";
+      $("#nextChapter").style.opacity = state.chapterIndex === subject.chapters.length - 1 ? ".5" : "1";
+      renderRating(id);
+    }
+
+    function renderRating(id) {
+      const rating = ratings[id] || 0;
+      $("#ratingStars").innerHTML = [1, 2, 3, 4, 5].map(value => `<button class="star ${value <= rating ? "active" : ""}" type="button" data-rating="${value}" aria-label="${value} من 5" aria-pressed="${value === rating}">★</button>`).join("");
+      document.querySelectorAll("[data-rating]").forEach(button => button.addEventListener("click", () => {
+        ratings[id] = Number(button.dataset.rating);
+        saveStorage(STORAGE_KEYS.ratings, ratings);
+        renderRating(id);
+        showToast("شكرًا لتقييمك! حُفظ على جهازك.");
+      }));
+    }
+
+    function showPanel(panelName) {
+      ["homePanel", "chaptersPanel", "viewerPanel"].forEach(id => { $(`#${id}`).hidden = id !== panelName; });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    function writeHash() {
+      const hash = state.chapterIndex !== null ? `#${state.subjectKey}/${state.chapterIndex}` : state.subjectKey ? `#${state.subjectKey}` : "";
+      history.replaceState(null, "", `${location.pathname}${location.search}${hash}`);
+    }
+    function showHome(updateUrl = true) {
+      state.subjectKey = null;
+      state.chapterIndex = null;
+      renderSubjects();
+      showPanel("homePanel");
+      if (updateUrl) writeHash();
+    }
+    function showSubject(key, updateUrl = true) {
+      if (!subjects[key]) return;
+      state.subjectKey = key;
+      state.chapterIndex = null;
+      renderChapters();
+      showPanel("chaptersPanel");
+      if (updateUrl) writeHash();
+    }
+    function openChapter(index, updateUrl = true) {
+      const subject = subjects[state.subjectKey];
+      if (!subject || !subject.chapters[index]) return;
+      state.chapterIndex = index;
+      renderViewer();
+      showPanel("viewerPanel");
+      if (updateUrl) writeHash();
+    }
+    function toggleCompletion() {
+      const id = chapterId(state.subjectKey, state.chapterIndex);
+      if (progress[id]) {
+        delete progress[id];
+        showToast("أزيلت علامة الإكمال من هذا الفصل.");
+      } else {
+        progress[id] = { completedAt: new Date().toISOString() };
+        showToast("أحسنتِ! حُفظ الفصل كمكتمل.");
+      }
+      saveStorage(STORAGE_KEYS.progress, progress);
+      updateStats();
+      renderViewer();
+    }
+    function applyHash() {
+      const parts = location.hash.slice(1).split("/");
+      const [key, indexValue] = parts;
+      if (!key || !subjects[key]) return showHome(false);
+      showSubject(key, false);
+      if (indexValue !== undefined && /^\d+$/.test(indexValue) && subjects[key].chapters[Number(indexValue)]) openChapter(Number(indexValue), false);
+    }
+    function setTheme(theme) {
+      document.body.dataset.theme = theme;
+      localStorage.setItem(STORAGE_KEYS.theme, theme);
+      const dark = theme === "dark";
+      $("#themeToggle").textContent = dark ? "☀" : "☾";
+      $("#themeToggle").setAttribute("aria-label", dark ? "تفعيل الوضع الفاتح" : "تفعيل الوضع الليلي");
+      $("#themeToggle").title = dark ? "الوضع الفاتح" : "الوضع الليلي";
+    }
+    function openModal(id) { const modal = document.getElementById(id); if (modal && !modal.open) modal.showModal(); }
+    document.addEventListener("click", event => {
+      const action = event.target.closest("[data-action]")?.dataset.action;
+      if (action === "home") showHome();
+      if (action === "subjects") { showHome(); setTimeout(() => $("#subjects-title").scrollIntoView({ behavior: "smooth", block: "start" }), 50); }
+      const modal = event.target.closest("[data-modal]")?.dataset.modal;
+      if (modal) openModal(modal);
+      if (event.target.closest("[data-close-modal]")) event.target.closest("dialog").close();
+    });
+    $("#backToSubject").addEventListener("click", () => showSubject(state.subjectKey));
+    $("#backToChapters").addEventListener("click", () => showSubject(state.subjectKey));
+    $("#completeChapter").addEventListener("click", toggleCompletion);
+    $("#previousChapter").addEventListener("click", () => { if (state.chapterIndex > 0) openChapter(state.chapterIndex - 1); });
+    $("#nextChapter").addEventListener("click", () => { if (state.chapterIndex < subjects[state.subjectKey].chapters.length - 1) openChapter(state.chapterIndex + 1); });
+    $("#themeToggle").addEventListener("click", () => setTheme(document.body.dataset.theme === "dark" ? "light" : "dark"));
+    window.addEventListener("hashchange", applyHash);
+
+    $("#lastUpdated").textContent = new Intl.DateTimeFormat("ar-SA", { year: "numeric", month: "long", day: "numeric" }).format(new Date());
+    setTheme(localStorage.getItem(STORAGE_KEYS.theme) || "light");
+    updateStats();
+    applyHash();
+  </script>
+</body>
+</html>

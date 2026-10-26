@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الفصل السابع الشامل (100%) | موضوعات مختارة - تعلم الآلة (1)</title>
+<style>
+:root{
+  --bg:#f4f6fb;
+  --card:#ffffff;
+  --ink:#1b263b;
+  --muted:#637085;
+  --accent:#0f766e;
+  --accent-dark:#115e59;
+  --accent2:#ccfbf1;
+  --line:#e2e8f0;
+  --good:#059669;
+  --good-bg:#ecfdf5;
+  --bad:#dc2626;
+  --bad-bg:#fef2f2;
+  --warn:#d97706;
+  --warn-bg:#fffbeb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
+header{background:linear-gradient(135deg,#134e4a,#0f766e,#0284c7);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(19,78,74,0.18)}
+.wrap{max-width:1060px;margin:auto;padding:0 16px}
+.eyebrow{opacity:.92;font-size:.9rem;background:rgba(255,255,255,0.15);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
+h1{margin:5px 0;font-size:clamp(1.55rem,4vw,2.3rem)}
+header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
+nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:rgba(255,255,255,0.18);color:#ffffff;font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
+nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
+nav button.active{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+main .btn{background:var(--accent2);color:var(--accent-dark)}
+main .btn.primary{background:var(--accent);color:white}
+main{padding:22px 0 48px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(36,52,91,0.04)}
+h2{font-size:1.35rem;margin:0 0 12px;color:#134e4a}
+h3{font-size:1.06rem;margin:10px 0 6px;color:var(--accent-dark)}
+h4{font-size:.98rem;margin:8px 0 4px;color:#0f172a}
+small,.muted{color:var(--muted)}
+ul,ol{padding-right:22px;margin:8px 0}
+li{margin:6px 0}
+details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
+summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f0fdfa;color:#134e4a;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
+details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
+.details-body{padding:16px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#f1f5f9;color:#134e4a;font-weight:bold}
+tr:last-child td{border-bottom:0}
+.note{border-right:4px solid var(--accent);padding:10px 14px;background:#f0fdfa;border-radius:8px;margin:10px 0}
+.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
+.formula-box{background:#134e4a;color:#fff;padding:12px 16px;border-radius:12px;text-align:center;font-size:1.05rem;margin:10px 0;direction:ltr;font-family:monospace}
+.step-card{border:1px solid var(--line);border-radius:12px;padding:14px;background:#f8fafc}
+.stat-box{background:#f0fdfa;border:1px solid #99f6e4;border-radius:12px;padding:12px;text-align:center}
+.stat-box .num{font-size:1.45rem;font-weight:bold;color:#134e4a;display:block}
+.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
+.options{display:grid;gap:8px;margin-top:12px}
+.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
+.option:hover:not(:disabled){border-color:var(--accent);background:#f0fdfa}
+.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
+.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
+.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
+.feedback.good{color:var(--good);background:var(--good-bg)}
+.feedback.bad{color:var(--bad);background:var(--bad-bg)}
+.progress{height:10px;background:#e2e8f0;border-radius:9px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
+.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#ccfbf1);border:2px solid #99f6e4;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
+.flashcard:hover{transform:scale(1.005)}
+.flashcard .term{font-size:1.35rem;font-weight:bold;color:#134e4a}
+.flashcard .answer{margin-top:16px;font-size:1.08rem;color:var(--accent-dark);background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
+@media(max-width:600px){
+  .card{padding:14px}
+  nav button{flex:1 1 calc(50% - 8px);text-align:center}
+  .flashcard{min-height:200px;padding:18px}
+  th,td{padding:8px 10px;font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">مقرر موضوعات مختارة • تغطية شاملة 100% (صفحات PDF من 1 إلى 16)</div>
+    <h1>الفصل السابع: تعلم الآلة (1)</h1>
+    <p>يغطي مفهوم تعلم الآلة (P, T, E)، المقارنة مع الخوارزميات المعتمدة على القواعد، دالة الفرضية، أنواع التعلم الأربعة، وعملية معالجة وتعقيم البيانات وهندسة الميزات</p>
+    <nav>
+      <button class="active" data-tab="summary">الشرح الشامل</button>
+      <button data-tab="tables">جداول المقارنات والإحصائيات (4)</button>
+      <button data-tab="terms">المصطلحات والمفاهيم (28)</button>
+      <button data-tab="cards">البطاقات (28)</button>
+      <button data-tab="quiz">الاختبار الشامل (25)</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- ================= التبويب الأول: الشرح الشامل ================= -->
+  <section id="summary" class="panel active">
+    <div class="card">
+      <h2>خريطة الفصل السابع: تعلم الآلة (1) (صفحات PDF من 1 إلى 16)</h2>
+      <div class="grid">
+        <div>
+          <span class="tag">الوحدة التعليمية 1 (ص 1 - 5)</span>
+          <h3>مفهوم وسيناريوهات ومشاكل تعلم الآلة</h3>
+          <p>تعريف التعلم الآلي ($P, T, E$)، الفرق مع الخوارزميات المعتمدة على القواعد، سيناريوهات التطبيق، دالة الفرضية ($g \approx f$)، والتصنيف والانحدار والتجميع.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة التعليمية 2 (ص 5 - 11)</span>
+          <h3>تصنيف وأنواع التعلم الآلي الأربعة</h3>
+          <p>التعلم الخاضع للإشراف (انحدار وتصنيف)، غير الخاضع للإشراف (التجميع)، شبه الخاضع للإشراف، والتعلم التعزيزي (المكافأة التراكمية وإشارة المعلم).</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة التعليمية 3 (ص 11 - 16)</span>
+          <h3>عملية التعلم الآلي ومعالجة البيانات</h3>
+          <p>مراحل عملية التعلم الآلي، مجموعات البيانات، المعالجة المسبقة، نسب عمل علماء البيانات (60% تعقيم)، مشكلات البيانات غير النظيفة، وتحويل وهندسة الميزات.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- الوحدة الأولى -->
+    <details open>
+      <summary>1) الوحدة التعليمية (1): تعريف تعلم الآلة، المقارنة مع القواعد، دالة الفرضية، والمشاكل الرئيسية (ص 1 - 5)</summary>
+      <div class="details-body">
+        <h3>أولاً: تعريف تعلم الآلة وعناصره الثلاثة (P, T, E) (ص 1)</h3>
+        <ul>
+          <li><b>التعلم الآلي (<span dir="ltr">Machine Learning</span>):</b> (بما في ذلك فرعه التعلم العميق) هو <b>دراسة "خوارزميات التعلم"</b>.</li>
+          <li><b>ماذا يعني مصطلح "التعلم"؟</b> يشير إلى الموقف الذي يتحسن فيه أداء برنامج كمبيوتر يُقاس بـ <b>مقياس الأداء (<span dir="ltr">Performance - P</span>)</b> في <b>مهمة معينة (<span dir="ltr">Task - T</span>)</b> من خلال <b>الخبرة / البيانات (<span dir="ltr">Experience - E</span>)</b>.</li>
+          <li><b>مخطط الفهم الأساسي:</b> البيانات (الخبرة $E$) + المهمة ($T$) &rarr; <b>خوارزمية التعلم</b> &rarr; مقياس الأداء ($P$).</li>
+        </ul>
+
+        <h3>ثانياً: الفرق بين خوارزميات تعلم الآلة والخوارزميات المعتمدة على القواعد (ص 2)</h3>
+        <div class="grid">
+          <div class="step-card">
+            <span class="tag">خوارزميات تعتمد على القواعد (Rule-based)</span>
+            <ul>
+              <li>تستخدم <b>البرمجة الصريحة (<span dir="ltr">Explicit programming</span>)</b> لحل المشكلات.</li>
+              <li>يمكن <b>تحديد القواعد يدوياً</b>.</li>
+              <li>مسارها: شرط محدد &rarr; إذا كان صحيحاً نفذ (كود 1)، وإذا كان خاطئاً نفذ (كود 2).</li>
+            </ul>
+          </div>
+          <div class="step-card">
+            <span class="tag">خوارزميات تعلم الآلة (Machine Learning)</span>
+            <ul>
+              <li>تستخدم <b>العينات للتدريب (<span dir="ltr">Samples for training</span>)</b>.</li>
+              <li>تُستخدم عندما تكون <b>قواعد اتخاذ القرار معقدة أو يصعب وصفها</b>.</li>
+              <li><b>تتعلم الآلات القواعد تلقائياً</b> (بيانات تدريب &rarr; تعلم الآلة &rarr; نموذج + بيانات جديدة &rarr; التنبؤ).</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>ثالثاً: سيناريوهات تطبيق التعلم الآلي (ص 3)</h3>
+        <p>يُستخدم التعلم الآلي عندما يكون حل المشكلة معقداً، أو تتضمن المشكلة كمية كبيرة من البيانات دون وجود دالة واضحة لتوزيع البيانات، وتحديداً في <b>3 سيناريوهات رئيسية</b>:</p>
+        <ol>
+          <li><b>القواعد معقدة أو لا يمكن وصفها:</b> مثل <b>التعرف على الصوت (<span dir="ltr">Speech recognition</span>)</b>.</li>
+          <li><b>تتغير قواعد المهمة بمرور الوقت:</b> مثل مهمة <b>وضع علامات على أجزاء الكلام</b>، حيث يتم إنشاء كلمات أو معانٍ جديدة في أي وقت.</li>
+          <li><b>يتغير توزيع البيانات بمرور الوقت:</b> مما يتطلب إعادة تكييف البرامج باستمرار، مثل <b>التنبؤ باتجاه مبيعات السلع</b>.</li>
+        </ol>
+        <div class="note">
+          <b>مصفوفة (حجم المشكلة × تعقيد القاعدة) (ص 3):</b>
+          <ul>
+            <li>حجم المشكلة <b>صغير</b> + تعقيد القاعدة <b>بسيط</b> &rarr; <b>مشاكل بسيطة (قواعد يدوية)</b>.</li>
+            <li>حجم المشكلة <b>كبير</b> + تعقيد القاعدة <b>بسيط</b> &rarr; <b>خوارزميات تعتمد على القواعد</b>.</li>
+            <li>حجم المشكلة <b>كبير</b> + تعقيد القاعدة <b>معقد</b> &rarr; <b>خوارزميات تعلم الآلة</b>.</li>
+          </ul>
+        </div>
+
+        <div class="exam-alert">
+          <h3>رابعاً: الفهم العقلاني لخوارزميات التعلم الآلي (دالة الفرضية والدالة المستهدفة) (ص 4) - مهم جداً:</h3>
+          <ul>
+            <li><b>الدالة المستهدفة (<span dir="ltr">Target function</span>) [المثالي <span dir="ltr">Ideal</span>]:</b> هي $f: X \rightarrow Y$، وتكون <b>غير معروفة (<span dir="ltr">Unknown</span>)</b>.</li>
+            <li><b>بيانات التدريب (<span dir="ltr">Training data</span>):</b> $D: \{(x_1, y_1), \dots, (x_n, y_n)\}$.</li>
+            <li><b>دالة الفرضية (<span dir="ltr">Hypothesis function</span>) [الفعلي <span dir="ltr">Actual</span>]:</b> تُنتجها خوارزميات التعلم وتُعطى بالصيغة $g \approx f$.</li>
+            <li><b>القواعد الثلاث المهمة:</b>
+              <ol>
+                <li>الدالة المستهدفة $f$ <b>غير معروفة</b>.</li>
+                <li><b>لا تستطيع</b> خوارزميات التعلم الحصول على دالة مثالية $f$.</li>
+                <li>نفترض أن دالة الفرضية $g$ <b>تقترب من الدالة $f$، ولكنها قد تختلف عنها</b> ($g \approx f$).</li>
+              </ol>
+            </li>
+          </ul>
+        </div>
+
+        <h3>خامساً: المشاكل الرئيسية الثلاث التي يحلها التعلم الآلي (ص 4 - 5)</h3>
+        <ul>
+          <li><b>1. التصنيف (<span dir="ltr">Classification</span>):</b>
+            <ul>
+              <li>تحديد أي من الفئات $k$ ينتمي إليها بعض المدخلات.</li>
+              <li>الدالة الرياضية للمخرجات: <code dir="ltr">f: Rⁿ &rarr; {1, 2, ..., k}</code> (قيم فئة منفصلة).</li>
+              <li><b>مثال:</b> خوارزمية تصنيف الصور في الرؤية الحاسوبية.</li>
+            </ul>
+          </li>
+          <li><b>2. الانحدار (<span dir="ltr">Regression</span>):</b>
+            <ul>
+              <li>التنبؤ بمخرجات لمدخلات محددة (أرقام متصلة).</li>
+              <li>الدالة الرياضية للمخرجات: <code dir="ltr">f: Rⁿ &rarr; R</code>.</li>
+              <li><b>مثال:</b> التنبؤ بمبلغ المطالبة للشخص المؤمن عليه لتحديد قسط التأمين، أو التنبؤ بسعر الضمان.</li>
+            </ul>
+          </li>
+          <li><b>3. التجميع (<span dir="ltr">Clustering</span>):</b>
+            <ul>
+              <li>تقسيم كمية كبيرة من البيانات من <b>مجموعة بيانات غير مصنفة</b> إلى فئات متعددة وفقاً لـ <b>التشابه الداخلي للبيانات</b> (تكون البيانات في نفس الفئة أكثر تشابهاً من الموجودة في فئات مختلفة).</li>
+              <li><b>مثال:</b> استرجاع الصور (<span dir="ltr">Image retrieval</span>) وإدارة ملف تعريف المستخدم (<span dir="ltr">User profile management</span>).</li>
+            </ul>
+          </li>
+          <li class="note"><b>معلومة اختبارية مؤكدة (ص 5):</b> التصنيف والانحدار نوعان رئيسيان من التنبؤ، ويمثلان ما بين <b>80% و 90%</b> من المهام؛ ويكون ناتج التصنيف عبارة عن <b>قيم فئة منفصلة</b>، بينما يكون ناتج الانحدار عبارة عن <b>أرقام متصلة</b>.</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- الوحدة الثانية -->
+    <details open>
+      <summary>2) الوحدة التعليمية (2): تصنيف التعلم الآلي وأنواعه الأربعة وأمثلة أسئلتها (ص 5 - 11)</summary>
+      <div class="details-body">
+        <h3>1. التعلم الخاضع للإشراف (<span dir="ltr">Supervised Learning</span>) (ص 6 - 7)</h3>
+        <ul>
+          <li><b>مفهومه:</b> الحصول على نموذج مثالي بالأداء المطلوب من خلال التدريب والتعلم بناءً على <b>عينات الفئات المعروفة (بيانات مصنفة تحتوي على ميزات <span dir="ltr">Features</span> وصنف/هدف <span dir="ltr">Label / Goal</span>)</b>، ثم استخدام النموذج لربط المدخلات بالمخرجات وتصنيف البيانات غير المعروفة.</li>
+          <li><b>ينقسم إلى مسألتين رئيسيتين (ص 7):</b>
+            <ul>
+              <li><b>أ) مسألة الانحدار (<span dir="ltr">Regression</span>):</b> يعكس الصفات التي تتمتع بها سمات العينات، ويكتشف علاقة التبعية بين قيم السمات بتطبيق دوال تربط بين العينات.
+                <br><b>أمثلة أسئلته:</b> <i>"كم سأستفيد من السهم الأسبوع المقبل؟"</i> • <i>"ما هي درجة الحرارة يوم الثلاثاء؟"</i></li>
+              <li><b>ب) مسألة التصنيف (<span dir="ltr">Classification</span>):</b> ربط عينات في مجموعة البيانات لفئة محددة باستخدام نموذج التصنيف.
+                <br><b>أمثلة أسئلته:</b> <i>"هل سيكون هناك ازدحام مروري على طريق X خلال ساعة الذروة الصباحية غداً؟"</i> • <i>"أي طريقة أكثر جاذبية للعملاء: قسيمة بقيمة 200 ريال أم خصم بنسبة 25%؟"</i></li>
+            </ul>
+          </li>
+        </ul>
+
+        <h3>2. التعلم غير الخاضع للإشراف (<span dir="ltr">Unsupervised Learning</span>) (ص 8 - 9)</h3>
+        <ul>
+          <li><b>مفهومه:</b> بالنسبة للعينات <b>غير المصنفة</b> (تحتوي على ميزات البيانات فقط بدون عمود <span dir="ltr">Label/Goal</span>)، تقوم خوارزميات التعلم بإنشاء نماذج مباشرة لمجموعات البيانات المدخلة بالاعتماد على <b>التشابه الداخلي (<span dir="ltr">Internal similarity</span>)</b>.</li>
+          <li><b>التجميع (<span dir="ltr">Clustering</span>):</b> هو شكل شائع من التعلم غير الخاضع للإشراف، يضع العينات المتشابهة للغاية معاً في عناقيد (<span dir="ltr">Cluster 1, Cluster 2</span>)، ويكون التشابه بين العينات التي تنتمي لنفس الفئة <b>مرتفعاً</b>.</li>
+          <li><b>أمثلة أسئلة التجميع (ص 9):</b>
+            <ul>
+              <li><i>"ما هي الجماهير التي تحب مشاهدة الأفلام التي تتناول نفس الموضوع؟"</i></li>
+              <li><i>"أي من هذه المكونات تضررت بطريقة مماثلة؟"</i></li>
+            </ul>
+          </li>
+        </ul>
+
+        <h3>3. التعلم شبه الخاضع للإشراف (<span dir="ltr">Semi-supervised Learning</span>) (ص 9 - 10)</h3>
+        <ul>
+          <li><b>مفهومه:</b> نموذج التعلم الآلي الذي يستخدم تلقائياً <b>كمية كبيرة من البيانات غير المصنفة (<span dir="ltr">Unknown</span>)</b> للمساعدة في التعلم مباشرة من <b>كمية صغيرة من البيانات المصنفة</b> في نفس المهمة.</li>
+        </ul>
+
+        <div class="exam-alert">
+          <h3>4. التعلم التعزيزي (<span dir="ltr">Reinforcement Learning</span>) (ص 10 - 11) - موضع أسئلة مهمة:</h3>
+          <ul>
+            <li><b>تعريفه:</b> مجال من مجالات التعلم الآلي يهتم بكيفية قيام الوكلاء (<span dir="ltr">Agents</span>) باتخاذ إجراءات (<span dir="ltr">Actions</span> $a_t$) في بيئة (<span dir="ltr">Environment</span>) لتعظيم فكرة <b>المكافأة التراكمية (<span dir="ltr">Cumulative reward</span>)</b>.</li>
+            <li><b>ما الفرق الجوهري بين التعلم التعزيزي والتعلم الخاضع للإشراف؟</b>
+              <br>الفرق هو <b>إشارة المعلم (<span dir="ltr">Teacher signal</span>)</b>؛ حيث يتم استخدام <b>إشارة التعزيز</b> التي توفرها البيئة في التعلم المعزز لتقييم الفعل (إشارة قياسية: مكافأة أو عقوبة $r_t$) بدلاً من إخبار نظام التعلم بكيفية تنفيذ الإجراءات الصحيحة مسبقاً.</li>
+            <li><b>هدفه ومجاله:</b> يبحث دائماً عن <b>أفضل السلوكيات</b>، ويستهدف <b>الآلات أو الروبوتات</b>.</li>
+            <li><b>أمثلة أسئلة التعلم التعزيزي (ص 11):</b>
+              <ul>
+                <li><b>القيادة الآلية:</b> <i>"هل يجب أن تتوقف أو تتسارع عندما يبدأ الضوء الأصفر في الوميض؟"</i></li>
+                <li><b>روبوت التنظيف:</b> <i>"هل يجب أن يستمر في العمل أم يعود للشحن؟"</i></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </details>
+
+    <!-- الوحدة الثالثة -->
+    <details open>
+      <summary>3) الوحدة التعليمية (3): عملية التعلم الآلي، معالجة وتعقيم البيانات، وهندسة الميزات (ص 11 - 16)</summary>
+      <div class="details-body">
+        <h3>أولاً: مراحل عملية التعلم الآلي ومفاهيم مجموعة البيانات (ص 12 - 13)</h3>
+        <ul>
+          <li><b>مراحل عملية التعلم الآلي بالترتيب (ص 12):</b>
+            <br>1) تجميع البيانات (<span dir="ltr">Data Collection</span>) &rarr; 2) تنظيف البيانات (<span dir="ltr">Data Cleansing</span>) &rarr; 3) استخلاص واختيار الميزات (<span dir="ltr">Feature extraction & selection</span>) &rarr; 4) تدريب النموذج (<span dir="ltr">Model training</span>) &rarr; 5) تقييم النموذج (<span dir="ltr">Model evaluation</span>) &rarr; 6) نشر النموذج وتكامله (<span dir="ltr">Model deployment & integration</span>)، مع حلقة مستمرة من <b>التعليقات والتكرار (<span dir="ltr">Feedback and Iteration</span>)</b>.</li>
+          <li><b>مفاهيم مجموعة البيانات الأساسية (ص 12):</b>
+            <ul>
+              <li><b>مجموعة البيانات (<span dir="ltr">Dataset</span>):</b> مجموعة البيانات المستخدمة في مهام التعلم الآلي. كل سجل بيانات يُسمى <b>عينة (<span dir="ltr">Sample</span>)</b>، والأحداث أو السمات التي تعكس أداء أو طبيعة العينة في جانب معين تُسمى <b>الميزات (<span dir="ltr">Features</span>)</b>.</li>
+              <li><b>مجموعة التدريب (<span dir="ltr">Training set</span>):</b> مجموعة بيانات تُستخدم في عملية التدريب (إنشاء النموذج)، وتُسمى كل عينة فيها <b>عينة تدريب</b>.</li>
+              <li><b>مجموعة الاختبار (<span dir="ltr">Test set</span>):</b> مجموعة البيانات المستخدمة لاختبار النموذج بعد التعلم للتنبؤ، وتُسمى كل عينة فيها <b>عينة اختبار</b>.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h3>ثانياً: أهمية المعالجة المسبقة للبيانات ونسب عمل علماء البيانات (ص 13 - 14)</h3>
+        <ul>
+          <li><b>قاعدة أساسية:</b> "البيانات مهمة جداً للنماذج، فهي تشكل <b>سقف قدرات النماذج</b>؛ فبدون بيانات جيدة، لن يكون هناك نموذج جيد."</li>
+          <li><b>الأقسام الثلاثة للمعالجة المسبقة للبيانات (<span dir="ltr">Data Preprocessing</span>) (ص 13):</b>
+            <ol>
+              <li><b>تعقيم البيانات (<span dir="ltr">Data Cleansing</span>):</b> تعبئة البيانات المفقودة، واستكشاف وحذف مسببات الاستثناءات في مجموعات البيانات.</li>
+              <li><b>تخفيض حجم/أبعاد البيانات (<span dir="ltr">Data dimension reduction</span>):</b> تبسيط ميزات البيانات لتجنب <b>انفجار الأبعاد</b>.</li>
+              <li><b>تطبيع البيانات (<span dir="ltr">Data Normalization</span>):</b> تطبيع البيانات لتقليل التشويش وتحسين دقة النموذج.</li>
+            </ol>
+          </li>
+        </ul>
+
+        <div class="exam-alert">
+          <h4>إحصائيات حجم العمل في تعقيم البيانات لدى علماء البيانات (ص 14) - موضع سؤال رقمي مؤكد:</h4>
+          <div class="grid" style="margin:10px 0">
+            <div class="stat-box"><span class="num">60%</span>تعقيم وفرز البيانات (النسبة الأكبر)</div>
+            <div class="stat-box"><span class="num">19%</span>تجميع وإنشاء مجموعات البيانات</div>
+            <div class="stat-box"><span class="num">9%</span>طرق التنقيب عن البيانات</div>
+            <div class="stat-box"><span class="num">4%</span>تحسين النماذج ( و 3% إعادة تصميم، 5% أخرى)</div>
+          </div>
+          <p style="margin:0"><b>العمليات الخمس لتعقيم البيانات (<span dir="ltr">Data Cleansing</span>) (ص 14):</b>
+            <br>1) تصفية البيانات (<span dir="ltr">Data filtering</span>) • 2) معالجة البيانات المفقودة • 3) معالجة الاستثناءات أو الأخطاء أو القيم غير الطبيعية المحتملة • 4) دمج البيانات من مصادر متعددة • 5) توحيد البيانات (<span dir="ltr">Data consolidation</span>).</p>
+        </div>
+
+        <h3>ثالثاً: البيانات غير النظيفة (<span dir="ltr">Dirty Data</span>) ومشكلاتها (ص 15)</h3>
+        <ul>
+          <li><b>المشكلات الثلاث الرئيسية في جودة البيانات الحقيقية:</b>
+            <ol>
+              <li><b>عدم الاكتمال (<span dir="ltr">Incompleteness</span>):</b> تحتوي على قيم مفقودة أو بيانات تفتقر إلى بعض الخصائص.</li>
+              <li><b>التشويش (<span dir="ltr">Noise</span>):</b> تحتوي على سجلات غير صحيحة أو استثناءات.</li>
+              <li><b>عدم الاتساق (<span dir="ltr">Inconsistency</span>):</b> تحتوي على سجلات غير متسقة.</li>
+            </ol>
+          </li>
+          <li><b>الأمثلة السبعة لمشكلات البيانات غير النظيفة في الجداول (ص 15):</b>
+            <br>1) بيانات مفقودة • 2) بيانات غير صالحة • 3) قيمة يجب أن تكون في عمود ثانٍ • 4) خطأ إملائي (مثل <span dir="ltr">Ytali</span>) • 5) سمات تعتمد على بعض • 6) تنسيق خاطئ (مثل اختلاف صيغة التاريخ) • 7) تكرار بيانات غير مقبول.</li>
+        </ul>
+
+        <h3>رابعاً: تحويل البيانات (<span dir="ltr">Data Conversion</span>) وهندسة الميزة (<span dir="ltr">Feature Engineering</span>) (ص 16)</h3>
+        <ul>
+          <li><b>أشكال تحويل البيانات الأربعة الشائعة بعد المعالجة المسبقة:</b>
+            <ol>
+              <li><b>في التصنيف:</b> يتم ترميز البيانات المصنفة إلى <b>تمثيل رقمي مقابل</b>.</li>
+              <li><b>تحويل بيانات القيمة إلى بيانات الفئة:</b> لتقليل قيمة المتغيرات (مثال: <b>تجزئة العمر إلى فئات</b>).</li>
+              <li><b>في النص:</b> يتم تحويل الكلمة إلى <b>متجه كلمة (<span dir="ltr">Word vector</span>)</b> من خلال تضمين الكلمات باستخدام نموذج <b dir="ltr">word2vec</b> بشكل عام، ونموذج <b dir="ltr">BERT</b>، وما إلى ذلك.</li>
+              <li><b>معالجة بيانات الصورة:</b> تشمل (مساحة اللون، التدرج الرمادي، التغيير الهندسي، وتحسين الصورة).</li>
+            </ol>
+          </li>
+          <li><b>قسما هندسة الميزة (<span dir="ltr">Feature Engineering</span>):</b>
+            <ol>
+              <li><b>تطبيع الميزات (<span dir="ltr">Feature normalization</span>):</b> لضمان نفس نطاقات القيمة لمتغيرات الإدخال لنفس النموذج.</li>
+              <li><b>توسيع الميزة (<span dir="ltr">Feature expansion</span>):</b> دمج أو تحويل المتغيرات الموجودة لتوليد ميزات جديدة، مثل المتوسط.</li>
+            </ol>
+          </li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= التبويب الثاني: جداول المقارنات والإحصائيات ================= -->
+  <section id="tables" class="panel">
+    <div class="card">
+      <h2>1. مقارنة بين الخوارزميات المعتمدة على القواعد وخوارزميات تعلم الآلة (ص 2 - 3)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>وجه المقارنة</th>
+            <th>خوارزميات تعتمد على القواعد (Rule-based)</th>
+            <th>خوارزميات تعلم الآلة (Machine Learning)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>طريقة الحل</b></td>
+            <td>تستخدم <b>البرمجة الصريحة</b> لحل المشكلات.</td>
+            <td>تستخدم <b>العينات (بيانات التدريب)</b> للتدريب.</td>
+          </tr>
+          <tr>
+            <td><b>تحديد القواعد</b></td>
+            <td>يمكن تحديد القواعد <b>يدوياً</b> (الشرط: صحيح &rarr; كود 1، خاطئ &rarr; كود 2).</td>
+            <td>تتعلم الآلات القواعد <b>تلقائياً</b>؛ لأن قواعد اتخاذ القرار معقدة أو يصعب وصفها.</td>
+          </tr>
+          <tr>
+            <td><b>متى نستخدمها؟<br>(حجم المشكلة × تعقيد القاعدة)</b></td>
+            <td>عندما يكون حجم المشكلة <b>كبيراً</b> ولكن تعقيد القاعدة <b>بسيط</b> (وإذا كان الحجم صغيراً والقاعدة بسيطة نستخدم قواعد يدوية).</td>
+            <td>عندما يكون حجم المشكلة <b>كبيراً</b> وتعقيد القاعدة <b>معقداً</b>، أو تتغير القواعد أو توزيع البيانات بمرور الوقت.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>2. مقارنة شاملة بين أنواع التعلم الآلي الأربعة والمشاكل التي تحلها (ص 4 - 11)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>نوع التعلم / المهمة</th>
+            <th>طبيعة البيانات والآلية</th>
+            <th>الدالة / المخرجات</th>
+            <th>الأمثلة والأسئلة النموذجية في الشرائح</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1. خاضع للإشراف:<br>أ) التصنيف (Classification)</b></td>
+            <td>بيانات مصنفة مسبقاً (ميزات + هدف <span dir="ltr">Label</span>) لربط العينات بفئة محددة.</td>
+            <td><code dir="ltr">f: Rⁿ &rarr; {1, 2, ..., k}</code><br><b>قيم فئة منفصلة</b></td>
+            <td>• تصنيف الصور في الرؤية الحاسوبية.<br>• هل سيكون هناك ازدحام مروري غداً؟<br>• أيهما أكثر جاذبية: قسيمة 200 ريال أم خصم 25%؟</td>
+          </tr>
+          <tr>
+            <td><b>1. خاضع للإشراف:<br>ب) الانحدار (Regression)</b></td>
+            <td>بيانات مصنفة مسبقاً لاكتشاف علاقة التبعية بين قيم السمات.</td>
+            <td><code dir="ltr">f: Rⁿ &rarr; R</code><br><b>أرقام متصلة</b></td>
+            <td>• التنبؤ بمبلغ مطالبة التأمين أو سعر الضمان.<br>• كم سأستفيد من السهم الأسبوع المقبل؟<br>• ما هي درجة الحرارة يوم الثلاثاء؟</td>
+          </tr>
+          <tr>
+            <td><b>2. غير خاضع للإشراف:<br>التجميع (Clustering)</b></td>
+            <td>بيانات <b>غير مصنفة</b>؛ تُقسم إلى عناقيد وفقاً لـ <b>التشابه الداخلي</b> المرتفع.</td>
+            <td>عناقيد / فئات متشابهة<br>(<span dir="ltr">Cluster 1, Cluster 2</span>)</td>
+            <td>• استرجاع الصور وإدارة ملف تعريف المستخدم.<br>• ما الجماهير التي تحب أفلاماً بنفس الموضوع؟<br>• أي من هذه المكونات تضررت بطريقة مماثلة؟</td>
+          </tr>
+          <tr>
+            <td><b>3. شبه خاضع للإشراف<br>(Semi-supervised)</b></td>
+            <td>يستخدم تلقائياً <b>كمية كبيرة من البيانات غير المصنفة</b> للمساعدة في التعلم من <b>كمية صغيرة مصنفة</b>.</td>
+            <td>تنبؤ بالفئات للبيانات غير المعروفة</td>
+            <td>جدول بيانات الطقس والرياضة حيث بعض الصفوف مصنفة (<span dir="ltr">Yes</span>) والبقية غير معروفة (<span dir="ltr">Unknown</span>).</td>
+          </tr>
+          <tr>
+            <td><b>4. التعلم التعزيزي<br>(Reinforcement)</b></td>
+            <td>يتفاعل الوكيل مع <b>البيئة</b> عبر إشارة تعزيز قياسية (مكافأة أو عقوبة $r_t$) بدون إشارة معلم صريحة.</td>
+            <td>تعظيم <b>المكافأة التراكمية</b> وإيجاد أفضل سلوك للروبوتات</td>
+            <td>• القيادة الآلية: هل تتوقف أم تتسارع عند وميض الضوء الأصفر؟<br>• روبوت التنظيف: هل يستمر في العمل أم يعود للشحن؟</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>3. جدول المعالجة المسبقة، مشكلات البيانات غير النظيفة، وتحويل وهندسة الميزات (ص 13 - 16)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>المحور</th>
+            <th>الأقسام والتفاصيل الدقيقة في الشرائح</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>ركائز المعالجة المسبقة للبيانات<br>(Data Preprocessing)</b></td>
+            <td>
+              1) <b>تعقيم البيانات (<span dir="ltr">Data Cleansing</span>):</b> تعبئة المفقود وحذف مسببات الاستثناءات.<br>
+              2) <b>تخفيض حجم البيانات (<span dir="ltr">Dimension reduction</span>):</b> تبسيط الميزات لتجنب انفجار الأبعاد.<br>
+              3) <b>تطبيع البيانات (<span dir="ltr">Data Normalization</span>):</b> لتقليل التشويش وتحسين دقة النموذج.
+            </td>
+          </tr>
+          <tr>
+            <td><b>مشكلات البيانات غير النظيفة<br>(Dirty Data)</b></td>
+            <td>
+              • <b>الفئات الثلاث الكبرى:</b> 1) عدم الاكتمال (<span dir="ltr">Incompleteness</span>)، 2) التشويش (<span dir="ltr">Noise</span>)، 3) عدم الاتساق (<span dir="ltr">Inconsistency</span>).<br>
+              • <b>الأمثلة السبعة في الجداول:</b> بيانات مفقودة، بيانات غير صالحة، قيمة في عمود خاطئ، خطأ إملائي، سمات تعتمد على بعض، تنسيق خاطئ، وتكرار بيانات غير مقبول.
+            </td>
+          </tr>
+          <tr>
+            <td><b>تحويل البيانات<br>(Data Conversion)</b></td>
+            <td>
+              1) <b>التصنيف:</b> ترميز البيانات المصنفة إلى تمثيل رقمي.<br>
+              2) <b>القيم الرقمية:</b> تحويل بيانات القيمة إلى بيانات فئة (مثل تجزئة العمر إلى فئات).<br>
+              3) <b>النصوص:</b> تحويل الكلمات إلى متجه كلمة (<span dir="ltr">Word vector</span>) عبر نماذج <b dir="ltr">word2vec</b> و <b dir="ltr">BERT</b>.<br>
+              4) <b>الصور:</b> معالجة مساحة اللون، التدرج الرمادي، التغيير الهندسي، وتحسين الصورة.
+            </td>
+          </tr>
+          <tr>
+            <td><b>هندسة الميزة<br>(Feature Engineering)</b></td>
+            <td>
+              1) <b>تطبيع الميزات:</b> لضمان نفس نطاقات القيمة لمتغيرات الإدخال لنفس النموذج.<br>
+              2) <b>توسيع الميزة:</b> دمج أو تحويل المتغيرات الموجودة لتوليد ميزات جديدة (مثل المتوسط).
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>4. جدول النسب المئوية لعمل علماء البيانات في مجال التعلم الآلي (ص 14)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>المهمة التي يقوم بها عالم البيانات</th>
+            <th>النسبة المئوية</th>
+            <th>ملاحظات هامة للاختبار</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1. تعقيم وفرز البيانات (Data cleansing and sorting)</b></td>
+            <td><b>60%</b></td>
+            <td><b>النسبة الأكبر على الإطلاق</b> من عمل عالم البيانات.</td>
+          </tr>
+          <tr>
+            <td><b>2. تجميع وإنشاء مجموعات البيانات (Collecting datasets)</b></td>
+            <td><b>19%</b></td>
+            <td>ثاني أكبر مهمة (مجموع التجميع والتعقيم = <b>79%</b> من الوقت).</td>
+          </tr>
+          <tr>
+            <td><b>3. طرق التنقيب عن البيانات (Data mining methods)</b></td>
+            <td><b>9%</b></td>
+            <td>تأتي في المرتبة الثالثة.</td>
+          </tr>
+          <tr>
+            <td><b>4. أشياء أخرى (Others)</b></td>
+            <td><b>5%</b></td>
+            <td>مهام مساندة متفرقة.</td>
+          </tr>
+          <tr>
+            <td><b>5. تحسين النماذج (Optimizing models)</b></td>
+            <td><b>4%</b></td>
+            <td>نسبة صغيرة مقارنة بتجهيز البيانات.</td>
+          </tr>
+          <tr>
+            <td><b>6. إعادة تصميم مجموعة بيانات التدريب</b></td>
+            <td><b>3%</b></td>
+            <td>أقل نسبة في المخطط الدائري.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الثالث: المصطلحات ================= -->
+  <section id="terms" class="panel">
+    <div class="card">
+      <h2>قاموس المصطلحات والمفاهيم الشامل للفصل السابع (28 مصطلحاً)</h2>
+      <p class="muted">جميع المصطلحات والرموز والنماذج الواردة في شرائح الفصل السابع (تعلم الآلة 1) مع أرقام صفحاتها:</p>
+      <div id="termsGrid" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الرابع: البطاقات التعليمية ================= -->
+  <section id="cards" class="panel">
+    <div class="card">
+      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
+      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
+      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
+        <div class="term" id="flashTerm"></div>
+        <div class="answer" id="flashAnswer" hidden></div>
+        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="prevCard">السابق</button>
+        <span id="cardCount" class="muted"></span>
+        <button class="btn primary" id="nextCard">التالي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الخامس: الاختبار الشامل ================= -->
+  <section id="quiz" class="panel">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2>الاختبار الشامل للفصل السابع - موضوعات مختارة (25 سؤالاً)</h2>
+          <p class="muted">يغطي كافة المفاهيم والدوال وأنواع التعلم ومعالجة البيانات في الفصل السابع (ص 1 - 16) مع تصحيح فوري.</p>
+        </div>
+        <div class="score" id="score">النتيجة: 0 / 25</div>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="quizArea"></div>
+      <div class="row">
+        <button class="btn" id="resetQuiz">إعادة الاختبار</button>
+        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+      </div>
+      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
+    </div>
+  </section>
+</main>
+
+<footer>مبني بالكامل (100%) على شرائح الفصل السابع: تعلم الآلة (1) من مقرر موضوعات مختارة - جامعة الملك فيصل (صفحات PDF من 1 إلى 16)</footer>
+
+<script>
+const terms = [
+  ["Machine Learning (P, T, E)", "تعلم الآلة: دراسة خوارزميات التعلم؛ حيث يتحسن أداء البرنامج المقاس بمقياس الأداء (P) في مهمة معينة (T) من خلال الخبرة/البيانات (E) (ص 1)."],
+  ["Rule-based Algorithms", "الخوارزميات المعتمدة على القواعد: تستخدم البرمجة الصريحة لحل المشكلات ويتم فيها تحديد القواعد يدوياً (ص 2)."],
+  ["Target Function (f: X → Y)", "الدالة المستهدفة (المثالية Ideal): الدالة الحقيقية التي تربط المدخلات بالمخرجات، وتكون غير معروفة ولا يمكن للخوارزمية الوصول إليها تماماً (ص 4)."],
+  ["Hypothesis Function (g ≈ f)", "دالة الفرضية (الفعلية Actual): الدالة التقريبية التي تنتجها خوارزمية التعلم الآلي بعد التدريب بحيث تقترب من الدالة المستهدفة f (ص 4)."],
+  ["Classification (f: Rⁿ → {1..k})", "التصنيف: مهمة تحديد أي من الفئات k ينتمي إليها المدخل، ويكون ناتجه قيم فئة منفصلة (مثل تصنيف الصور) (ص 4-5)."],
+  ["Regression (f: Rⁿ → R)", "الانحدار: مهمة التنبؤ بمخرجات رقمية لمدخلات محددة، ويكون ناتجه أرقاماً متصلة (مثل التنبؤ بقسط التأمين أو درجة الحرارة) (ص 4-5)."],
+  ["Clustering (التجميع)", "تقسيم بيانات غير مصنفة إلى فئات متعددة (عناقيد) وفقاً للتشابه الداخلي للبيانات (مثل استرجاع الصور وإدارة ملف المستخدم) (ص 5 و 8)."],
+  ["Supervised Learning", "التعلم الخاضع للإشراف: التدريب والتعلم بناءً على عينات الفئات المعروفة (المصنفة) لربط المدخلات بالمخرجات (ص 6)."],
+  ["Data Features & Label/Goal", "ميزات البيانات (Features) هي سمات المدخلات، والصنف أو الهدف (Label / Goal) هو المخرج المعروف في التعلم الخاضع للإشراف (ص 6)."],
+  ["Unsupervised Learning", "التعلم غير الخاضع للإشراف: إنشاء نماذج مباشرة للعينات غير المصنفة بالاعتماد على التشابه الداخلي، ومن أشهر أشكاله التجميع (ص 8)."],
+  ["Internal Similarity", "التشابه الداخلي: المعيار الذي تعتمد عليه خوارزميات التجميع غير الخاضعة للإشراف بحيث يكون التشابه داخل نفس الفئة مرتفعاً (ص 5 و 8-9)."],
+  ["Semi-supervised Learning", "التعلم شبه الخاضع للإشراف: يستخدم تلقائياً كمية كبيرة من البيانات غير المصنفة للمساعدة في التعلم من كمية صغيرة من البيانات المصنفة (ص 9)."],
+  ["Reinforcement Learning", "التعلم التعزيزي: يهتم بكيفية قيام الوكلاء باتخاذ إجراءات في بيئة لتعظيم فكرة المكافأة التراكمية (ص 10)."],
+  ["Teacher Signal vs Scalar Signal", "الفرق بين الإشراف والتعزيز هو إشارة المعلم؛ فالتعزيز يستخدم إشارة تعزيز قياسية (مكافأة/عقوبة) لتقييم الفعل بدلاً من إخباره بالإجراء الصحيح (ص 10)."],
+  ["Feedback and Iteration", "التعليقات والتكرار: الحلقة الراجعة المستمرة بين تدريب النموذج وتقييمه ونشره في عملية التعلم الآلي (ص 12)."],
+  ["Dataset & Sample", "مجموعة البيانات (Dataset) هي البيانات المستخدمة في التعلم الآلي، وكل سجل بيانات فيها يُسمى عينة (Sample) (ص 12)."],
+  ["Training Set vs Test Set", "مجموعة التدريب تُستخدم في عملية التدريب لإنشاء النموذج، بينما مجموعة الاختبار تُستخدم بعد التعلم للتنبؤ وتقييم النموذج (ص 12)."],
+  ["Data Preprocessing", "المعالجة المسبقة للبيانات: تشمل تعقيم البيانات، تخفيض حجم/أبعاد البيانات، وتطبيع البيانات (ص 13)."],
+  ["Data Cleansing (60%)", "تعقيم البيانات: يستحوذ على 60% من عمل علماء البيانات، ويشمل تعبئة المفقود وحذف الاستثناءات وتصفية ودمج وتوحيد البيانات (ص 13-14)."],
+  ["Data Dimension Reduction", "تخفيض حجم البيانات: تبسيط ميزات البيانات لتجنب مشكلة انفجار الأبعاد (dimension explosion) (ص 13)."],
+  ["Data Normalization", "تطبيع البيانات: تقنية في المعالجة المسبقة تُستخدم لتقليل التشويش وتحسين دقة النموذج (ص 13)."],
+  ["Data Consolidation & Filtering", "تصفية البيانات وتوحيد البيانات: من العمليات الأساسية الخمس في تعقيم البيانات ومعالجتها مسبقاً (ص 14)."],
+  ["Incompleteness (عدم الاكتمال)", "إحدى مشكلات البيانات غير النظيفة؛ وتعني احتواء البيانات على قيم مفقودة أو افتقارها لبعض الخصائص (ص 15)."],
+  ["Noise (التشويش)", "إحدى مشكلات البيانات غير النظيفة؛ وتعني احتواء البيانات على سجلات غير صحيحة أو استثناءات (ص 15)."],
+  ["Inconsistency (عدم الاتساق)", "إحدى مشكلات البيانات غير النظيفة؛ وتعني احتواء البيانات على سجلات متعارضة أو غير متسقة في التنسيق أو المنطق (ص 15)."],
+  ["Word Vector (word2vec & BERT)", "متجه الكلمة: تحويل الكلمات في النصوص إلى متجهات رقمية عبر تضمين الكلمات باستخدام نماذج مثل word2vec و BERT (ص 16)."],
+  ["Feature Normalization", "تطبيع الميزات: أحد قسمي هندسة الميزة، ويهدف لضمان نفس نطاقات القيمة لمتغيرات الإدخال لنفس النموذج (ص 16)."],
+  ["Feature Expansion", "توسيع الميزة: أحد قسمي هندسة الميزة، ويعني دمج أو تحويل المتغيرات الموجودة لتوليد ميزات جديدة مثل المتوسط (ص 16)."]
+];
+
+const cards = [
+  ["ما هو تعريف التعلم الآلي وفق مفهومه الأساسي (P, T, E)؟", "هو دراسة خوارزميات التعلم؛ ويشير (التعلم) إلى الموقف الذي يتحسن فيه أداء برنامج كمبيوتر يُقاس بمقياس الأداء (P) في مهمة معينة (T) من خلال الخبرة/البيانات (E) (ص 1)."],
+  ["ما الفرق بين الخوارزميات المعتمدة على القواعد وخوارزميات تعلم الآلة؟", "• المعتمدة على القواعد: تستخدم البرمجة الصريحة ويتم تحديد القواعد فيها يدوياً.\n• تعلم الآلة: تستخدم العينات للتدريب وتتعلم القواعد تلقائياً عندما تكون القواعد معقدة أو يصعب وصفها (ص 2)."],
+  ["ما هي السيناريوهات الثلاثة لتطبيق التعلم الآلي (ص 3)؟", "1) القواعد معقدة أو لا يمكن وصفها (كالتعرف على الصوت).\n2) تتغير قواعد المهمة بمرور الوقت (كوضع علامات أجزاء الكلام).\n3) يتغير توزيع البيانات بمرور الوقت (كالتنبؤ باتجاه مبيعات السلع) (ص 3)."],
+  ["متى نستخدم كلاً من: القواعد اليدوية، الخوارزميات المعتمدة على القواعد، وخوارزميات تعلم الآلة؟", "• قواعد يدوية: حجم المشكلة صغير + القاعدة بسيطة.\n• خوارزميات تعتمد على القواعد: حجم المشكلة كبير + القاعدة بسيطة.\n• تعلم الآلة: حجم المشكلة كبير + القاعدة معقدة (ص 3)."],
+  ["ما الفرق بين الدالة المستهدفة (f) ودالة الفرضية (g) في الفهم العقلاني لتعلم الآلة؟", "• الدالة المستهدفة (f: X → Y): هي الدالة المثالية ولكنها (غير معروفة) ولا تستطيع خوارزميات التعلم الوصول إليها تماماً.\n• دالة الفرضية (g ≈ f): هي الدالة الفعلية التي تنتجها خوارزمية التعلم وتقترب من f ولكن قد تختلف عنها (ص 4)."],
+  ["قارني بين التصنيف (Classification) والانحدار (Regression) من حيث الدالة ونوع الناتج.", "• التصنيف: دالته f: Rⁿ → {1, 2, ..., k}، وناتجه عبارة عن (قيم فئة منفصلة).\n• الانحدار: دالته f: Rⁿ → R، وناتجه عبارة عن (أرقام متصلة) (ص 4-5)."],
+  ["كم تبلغ نسبة مهام التصنيف والانحدار معاً من مهام التنبؤ في التعلم الآلي؟", "يمثلان ما بين 80% و 90% من مهام التنبؤ في التعلم الآلي (ص 5)."],
+  ["ما هو التجميع (Clustering)؟ واذكري مثالين على سيناريوهات استخدامه.", "هو تقسيم كمية كبيرة من بيانات غير مصنفة إلى فئات متعددة وفقاً للتشابه الداخلي للبيانات. من أمثلته: 1) استرجاع الصور، 2) إدارة ملف تعريف المستخدم (ص 5)."],
+  ["ما هو التعلم الخاضع للإشراف (Supervised Learning)؟", "الحصول على نموذج مثالي بالأداء المطلوب من خلال التدريب والتعلم بناءً على عينات الفئات المعروفة (بيانات مصنفة)، ثم استخدامه لتصنيف البيانات غير المعروفة (ص 6)."],
+  ["اذكري مثالين على أسئلة الانحدار ومثالين على أسئلة التصنيف في التعلم الخاضع للإشراف.", "• أسئلة الانحدار: كم سأستفيد من السهم الأسبوع المقبل؟ ما درجة الحرارة يوم الثلاثاء؟\n• أسئلة التصنيف: هل سيكون هناك ازدحام مروري غداً؟ أي طريقة أكثر جاذبية: قسيمة بـ 200 ريال أم خصم 25%؟ (ص 7)."],
+  ["كيف يعمل التعلم غير الخاضع للإشراف؟ وما أشهر أشكاله؟", "ينشئ نماذج مباشرة للعينات غير المصنفة بالاعتماد على (التشابه الداخلي)، وأشهر أشكاله هو التجميع (Clustering) حيث توضع العينات المتشابهة للغاية معاً (ص 8)."],
+  ["اذكري مثالين على الأسئلة التي يجيب عنها التجميع (Clustering) (ص 9).", "1) ما هي الجماهير التي تحب مشاهدة الأفلام التي تتناول نفس الموضوع؟\n2) أي من هذه المكونات تضررت بطريقة مماثلة؟ (ص 9)."],
+  ["ما هو التعلم شبه الخاضع للإشراف (Semi-supervised Learning)؟", "هو نموذج التعلم الآلي الذي يستخدم تلقائياً كمية كبيرة من البيانات غير المصنفة للمساعدة في التعلم مباشرة من كمية صغيرة من البيانات المصنفة في نفس المهمة (ص 9)."],
+  ["ما هو التعلم التعزيزي (Reinforcement Learning)؟", "مجال من مجالات التعلم الآلي يهتم بكيفية قيام الوكلاء باتخاذ إجراءات في بيئة لتعظيم فكرة المكافأة التراكمية (ص 10)."],
+  ["ما الفرق الجوهري بين التعلم التعزيزي والتعلم الخاضع للإشراف؟", "الفرق هو (إشارة المعلم)؛ ففي التعلم التعزيزي تُستخدم إشارة التعزيز القياسية (مكافأة أو عقوبة) التي توفرها البيئة لتقييم الفعل بدلاً من إخبار النظام بكيفية تنفيذ الإجراءات الصحيحة (ص 10)."],
+  ["من يستهدف التعلم التعزيزي؟ وما الأمثلة على أسئلته (ص 11)؟", "يبحث دائماً عن أفضل السلوكيات ويستهدف (الآلات أو الروبوتات).\nأمثلته: 1) القيادة الآلية: هل تتوقف أم تتسارع عند وميض الضوء الأصفر؟ 2) روبوت التنظيف: هل يستمر في العمل أم يعود للشحن؟ (ص 11)."],
+  ["ما هي المراحل الست لعملية التعلم الآلي بالترتيب (ص 12)؟", "1) تجميع البيانات، 2) تنظيف البيانات، 3) استخلاص واختيار الميزات، 4) تدريب النموذج، 5) تقييم النموذج، 6) نشر النموذج وتكامله (مع حلقة التعليقات والتكرار) (ص 12)."],
+  ["ما الفرق بين العينة (Sample) والميزة (Feature) في مجموعة البيانات؟", "• العينة (Sample): هي كل سجل بيانات مفرد في مجموعة البيانات.\n• الميزة (Feature): هي الأحداث أو السمات التي تعكس أداء أو طبيعة العينة في جانب معين (ص 12)."],
+  ["ما الفرق بين مجموعة التدريب (Training set) ومجموعة الاختبار (Test set)؟", "• مجموعة التدريب: تُستخدم في عملية التدريب لإنشاء النموذج.\n• مجموعة الاختبار: تُستخدم بعد التعلم للتنبؤ وتقييم أداء النموذج (ص 12)."],
+  ["لماذا تُعد معالجة البيانات مهمة جداً للنماذج؟ وما ركائز المعالجة المسبقة الثلاث؟", "لأن البيانات تشكل (سقف قدرات النماذج) وبدون بيانات جيدة لن يكون هناك نموذج جيد.\nركائزها الثلاث: 1) تعقيم البيانات، 2) تخفيض حجم البيانات، 3) تطبيع البيانات (ص 13)."],
+  ["ما الهدف من كل من: تعقيم البيانات، تخفيض حجم البيانات، وتطبيع البيانات؟", "• تعقيم البيانات: تعبئة المفقود وحذف مسببات الاستثناءات.\n• تخفيض حجم البيانات: تبسيط الميزات لتجنب انفجار الأبعاد.\n• تطبيع البيانات: تقليل التشويش وتحسين دقة النموذج (ص 13)."],
+  ["كم تبلغ نسبة (تعقيم وفرز البيانات) و(تجميع البيانات) من إجمالي عمل علماء البيانات؟", "• تعقيم وفرز البيانات: 60% (النسبة الأكبر).\n• تجميع وإنشاء مجموعات البيانات: 19% (مجموعهما معاً 79% من العمل!) (ص 14)."],
+  ["ما هي العمليات الخمس التي تتضمنها المعالجة المسبقة وتعقيم البيانات (ص 14)؟", "1) تصفية البيانات (Data filtering)، 2) معالجة البيانات المفقودة، 3) معالجة الاستثناءات أو الأخطاء أو القيم غير الطبيعية، 4) دمج البيانات من مصادر متعددة، 5) توحيد البيانات (Data consolidation) (ص 14)."],
+  ["ما هي المشكلات الثلاث الرئيسية في جودة البيانات غير النظيفة (Dirty Data)؟", "1) عدم الاكتمال (قيم مفقودة أو نقص خصائص).\n2) التشويش (سجلات غير صحيحة أو استثناءات).\n3) عدم الاتساق (سجلات غير متسقة أو متعارضة) (ص 15)."],
+  ["اذكري 6 أمثلة على أخطاء الجداول في البيانات غير النظيفة (ص 15).", "1) بيانات مفقودة، 2) بيانات غير صالحة، 3) قيمة وضعت في عمود ثانٍ خاطئ، 4) خطأ إملائي، 5) سمات تعتمد على بعض وتتعارض منطقياً، 6) تنسيق خاطئ وتكرار غير مقبول (ص 15)."],
+  ["كيف يتم تحويل البيانات النصية وبيانات القيمة في مرحلة تحويل البيانات (ص 16)؟", "• في النص: تحويل الكلمة إلى متجه كلمة (Word vector) عبر تضمين الكلمات باستخدام نموذج word2vec أو BERT.\n• في بيانات القيمة: تحويلها إلى بيانات فئة لتقليل قيمة المتغيرات مثل (تجزئة العمر إلى فئات) (ص 16)."],
+  ["ما هي العمليات الأربع لمعالجة بيانات الصورة في مرحلة تحويل البيانات؟", "1) مساحة اللون، 2) التدرج الرمادي، 3) التغيير الهندسي، 4) تحسين الصورة (ص 16)."],
+  ["ما الفرق بين (تطبيع الميزات) و(توسيع الميزة) في هندسة الميزة (ص 16)؟", "• تطبيع الميزات: لضمان نفس نطاقات القيمة لمتغيرات الإدخال لنفس النموذج.\n• توسيع الميزة: دمج أو تحويل المتغيرات الموجودة لتوليد ميزات جديدة مثل المتوسط (ص 16)."]
+];
+
+const questions = [
+  {q:"في التعريف الأساسي لتعلم الآلة، إلى ماذا تشير الرموز الثلاثة (P و T و E)؟", o:["P: مقياس الأداء (Performance)، و T: المهمة (Task)، و E: الخبرة/البيانات (Experience)","P: البرمجة، و T: الوقت، و E: الخطأ","P: المعالج، و T: الاختبار، و E: التقييم","P: الاحتمال، و T: الجدول، و E: المعادلة"], a:0, e:"يتحسن أداء البرنامج المقاس بمقياس الأداء (P) في مهمة معينة (T) من خلال الخبرة/البيانات (E) (ص 1)."},
+  {q:"ما الفرق الصحيح بين الخوارزميات المعتمدة على القواعد وخوارزميات تعلم الآلة (ص 2)؟", o:["المعتمدة على القواعد تستخدم البرمجة الصريحة وتحدد القواعد يدوياً، بينما تعلم الآلة تستخدم العينات للتدريب وتتعلم القواعد تلقائياً","تعلم الآلة تحدد القواعد يدوياً، والمعتمدة على القواعد تتعلم تلقائياً","كلاهما لا يحتاجان إلى أي بيانات أو قواعد","المعتمدة على القواعد تُستخدم عندما يستحيل وصف القواعد يدوياً"], a:0, e:"الخوارزميات المعتمدة على القواعد تستخدم البرمجة الصريحة وتحدد القواعد يدوياً، أما تعلم الآلة فتستخدم العينات وتتعلم القواعد تلقائياً (ص 2)."},
+  {q:"أي مما يلي يُعد من السيناريوهات الثلاثة التي تستدعي استخدام (التعلم الآلي) بدلاً من البرمجة التقليدية (ص 3)؟", o:["عندما تكون القواعد معقدة لا يمكن وصفها (كالتعرف على الصوت)، أو تتغير القواعد أو توزيع البيانات بمرور الوقت","عندما تكون المشكلة صغيرة جداً والقاعدة بسيطة وثابتة","عندما لا تتوفر أي بيانات أو عينات للتدريب","عند إجراء عمليات الجمع والطرح البسيطة"], a:0, e:"يُستخدم التعلم الآلي عندما تكون القواعد معقدة (كالتعرف على الصوت)، أو تتغير القواعد بمرور الوقت، أو يتغير توزيع البيانات بمرور الوقت (ص 3)."},
+  {q:"وفق مصفوفة (حجم المشكلة × تعقيد القاعدة) في ص 3، متى نستخدم (خوارزميات تعلم الآلة)؟", o:["عندما يكون حجم المشكلة كبيراً وتعقيد القاعدة معقداً","عندما يكون حجم المشكلة صغيراً وتعقيد القاعدة بسيطاً","عندما يكون حجم المشكلة كبيراً وتعقيد القاعدة بسيطاً","عندما لا توجد مشكلة أصلاً"], a:0, e:"عندما يكون حجم المشكلة كبيراً وتعقيد القاعدة معقداً نستخدم خوارزميات تعلم الآلة، أما إذا كان كبيراً والقاعدة بسيطة فنستخدم خوارزميات تعتمد على القواعد (ص 3)."},
+  {q:"في الفهم العقلاني لخوارزميات التعلم الآلي (ص 4)، أي العبارات التالية صحيحة حول الدالة المستهدفة (f) ودالة الفرضية (g)؟", o:["الدالة المستهدفة f غير معروفة، ولا تستطيع خوارزميات التعلم الحصول عليها تماماً، بل تنتج دالة فرضية g تقترب من f (g ≈ f)","الدالة المستهدفة f معروفة دائماً قبل التدريب","دالة الفرضية g تساوي الصفر دائماً","تستطيع خوارزميات التعلم دائماً إيجاد الدالة المثالية f بنسبة 100%"], a:0, e:"الدالة المستهدفة f غير معروفة، ولا تستطيع الخوارزميات الحصول على دالة مثالية f، بل تنتج دالة الفرضية g التي تقترب منها (ص 4)."},
+  {q:"في مهام (التصنيف - Classification)، ما هي الصيغة الرياضية للدالة التي تخرجها خوارزمية التعلم، وما نوع ناتجها؟", o:["الدالة هي f: Rⁿ → {1, 2, ..., k}، ويكون ناتجها قيم فئة منفصلة","الدالة هي f: Rⁿ → R، ويكون ناتجها أرقاماً متصلة","ليس لها دالة رياضية وناتجها صور فقط","ناتجها دائماً عناقيد غير مصنفة"], a:0, e:"في التصنيف تخرج الخوارزمية دالة f: Rⁿ → {1, 2, ..., k} لتحديد أي من الفئات k ينتمي إليها المدخل، ويكون ناتجها قيم فئة منفصلة (ص 4-5)."},
+  {q:"التنبؤ بمبلغ المطالبة للشخص المؤمن عليه لتحديد قسط التأمين، أو التنبؤ بسعر الضمان، هما مثالان على مهام:", o:["الانحدار (Regression) ذات المخرجات الرقمية المتصلة f: Rⁿ → R","التجميع (Clustering) غير الخاضع للإشراف","التصنيف الثنائي للم الصور","التعلم التعزيزي للروبوتات"], a:0, e:"التنبؤ بمبلغ المطالبة أو سعر الضمان من أمثلة الانحدار (Regression) الذي يتنبأ بأرقام متصلة (ص 4-5)."},
+  {q:"كم تبلغ النسبة التي يمثلها كل من (التصنيف والانحدار) معاً من مهام التنبؤ في التعلم الآلي (ص 5)؟", o:["ما بين 80% و 90%","ما بين 5% و 10%","100% ولا يوجد أي نوع آخر","أقل من 20%"], a:0, e:"نصت الشريحة في ص 5 على أن التصنيف والانحدار نوعان رئيسيان من التنبؤ ويمثلان ما بين 80% و 90%."},
+  {q:"تقسيم كمية كبيرة من البيانات من (مجموعة بيانات غير مصنفة) إلى فئات متعددة وفقاً للتشابه الداخلي للبيانات (مثل استرجاع الصور وإدارة ملف تعريف المستخدم) يُسمى:", o:["التجميع (Clustering)","الانحدار (Regression)","التصنيف الخاضع للإشراف","التعلم التعزيزي"], a:0, e:"هذا هو تعريف التجميع (Clustering) وأمثلته المذكورة في ص 5 وص 8."},
+  {q:"أي من الأسئلة التالية يُعد مثالاً على مسائل (التصنيف Classification) في التعلم الخاضع للإشراف (ص 7)؟", o:["هل سيكون هناك ازدحام مروري على طريق X غداً؟ وأي طريقة أكثر جاذبية: قسيمة بـ 200 ريال أم خصم 25%؟","كم سأستفيد من السهم الأسبوع المقبل؟ وما هي درجة الحرارة يوم الثلاثاء؟","أي من هذه المكونات تضررت بطريقة مماثلة؟","هل يجب أن يعود روبوت التنظيف للشحن؟"], a:0, e:"الازدحام المروري والمقارنة بين القسيمة والخصم من أمثلة التصنيف، بينما ربح السهم ودرجة الحرارة من أمثلة الانحدار (ص 7)."},
+  {q:"أي من الأسئلة التالية يُعد مثالاً على مسائل (التجميع Clustering) في التعلم غير الخاضع للإشراف (ص 9)؟", o:["ما هي الجماهير التي تحب مشاهدة الأفلام التي تتناول نفس الموضوع؟ وأي من هذه المكونات تضررت بطريقة مماثلة؟","ما هي درجة الحرارة يوم الثلاثاء؟","كم سأستفيد من السهم الأسبوع المقبل؟","هل يجب أن تتوقف السيارة عند الضوء الأصفر؟"], a:0, e:"تجميع الجماهير حسب اهتمامات الأفلام وتجميع المكونات المتضررة بطريقة مماثلة هما مثالا أسئلة التجميع في ص 9."},
+  {q:"نموذج التعلم الآلي الذي يستخدم تلقائياً (كمية كبيرة من البيانات غير المصنفة) للمساعدة في التعلم مباشرة من (كمية صغيرة من البيانات المصنفة) في نفس المهمة هو:", o:["التعلم شبه الخاضع للإشراف (Semi-supervised learning)","التعلم الخاضع للإشراف الكامل","التعلم التعزيزي","البرمجة المعتمدة على القواعد"], a:0, e:"هذا هو التعريف الدقيق للتعلم شبه الخاضع للإشراف كما ورد في ص 9."},
+  {q:"ما هو الفرق الجوهري بين التعلم التعزيزي (Reinforcement) والتعلم الخاضع للإشراف (Supervised) كما ورد في ص 10؟", o:["إشارة المعلم؛ حيث يستخدم التعلم التعزيزي إشارة تعزيز قياسية (مكافأة أو عقوبة) توفرها البيئة لتقييم الفعل بدلاً من إخبار النظام بكيفية تنفيذ الإجراءات الصحيحة","التعلم التعزيزي لا يتفاعل مع البيئة إطلاقاً","التعلم الخاضع للإشراف لا يستخدم أي بيانات مصنفة","لا يوجد أي فرق بينهما"], a:0, e:"الفرق بينهما هو إشارة المعلم؛ فالتعلم التعزيزي يعتمد على إشارة التعزيز القياسية (المكافأة أو العقوبة) من البيئة لتعظيم المكافأة التراكمية (ص 10)."},
+  {q:"سؤال القيادة الآلية: (هل يجب أن تتوقف أو تتسارع عندما يبدأ الضوء الأصفر في الوميض؟) وسؤال روبوت التنظيف: (هل يستمر في العمل أم يعود للشحن؟) هما مثالان على:", o:["التعلم التعزيزي (Reinforcement Learning)","التجميع (Clustering)","الانحدار الخطي","تعقيم البيانات"], a:0, e:"كلاهما من أمثلة التعلم التعزيزي الذي يبحث دائماً عن أفضل السلوكيات ويستهدف الآلات أو الروبوتات (ص 11)."},
+  {q:"في مفاهيم مجموعة البيانات الأساسية (ص 12)، ماذا نُسمي كل سجل بيانات مفرد، وماذا نُسمي السمات التي تعكس طبيعة هذا السجل؟", o:["يُسمى كل سجل بيانات (عينة Sample)، وتُسمى السمات (الميزات Features)","يُسمى كل سجل (خوارزمية)، وتُسمى السمات (بيئة)","يُسمى كل سجل (اختباراً)، وتُسمى السمات (ضوضاء)","يُسمى كل سجل (مكافأة)، وتُسمى السمات (عقوبة)"], a:0, e:"كل سجل بيانات في مجموعة البيانات يُسمى عينة (Sample)، والأحداث أو السمات التي تعكس طبيعتها تُسمى الميزات (Features) (ص 12)."},
+  {q:"في جدول مثال أسعار المنازل (ص 13) الذي يضم الأعمدة (Area, School Districts, Direction, House Price)، ماذا يمثل عمود (House Price)؟", o:["يمثل الصنف / الهدف (Label) المراد التنبؤ به، بينما تمثل الأعمدة الثلاثة الأخرى الميزات (Features 1, 2, 3)","يمثل الميزة الأولى فقط","يمثل بيانات غير نظيفة يجب حذفها","يمثل خوارزمية تجميع"], a:0, e:"مساحة المنزل والمنطقة التعليمية والاتجاه هي الميزات (Features 1, 2, 3)، بينما سعر المنزل (House Price) هو الـ Label (ص 13)."},
+  {q:"ما هي الركائز الثلاث لعملية (المعالجة المسبقة للبيانات - Data Preprocessing) كما وردت في مخطط ص 13؟", o:["تعقيم البيانات (Data Cleansing)، تخفيض حجم البيانات (Dimension reduction)، وتطبيع البيانات (Data Normalization)","نشر النموذج، بيع البيانات، وحذف الخوارزمية","كتابة الكود اليدوي، رسم المخططات، وإغلاق النظام","التعلم التعزيزي، القواعد اليدوية، والانحدار"], a:0, e:"تشمل المعالجة المسبقة للبيانات في ص 13: تعقيم البيانات، تخفيض حجم البيانات (لتجنب انفجار الأبعاد)، وتطبيع البيانات (لتقليل التشويش)."},
+  {q:"وفق إحصائيات عمل علماء البيانات في مجال التعلم الآلي (ص 14)، ما هي المهمة التي تستحوذ على النسبة الأكبر (60%) من وقت وعمل عالم البيانات؟", o:["تعقيم وفرز البيانات (Data cleansing and sorting)","تحسين النماذج (4% فقط)","إعادة تصميم مجموعة بيانات التدريب (3% فقط)","طرق التنقيب عن البيانات (9% فقط)"], a:0, e:"يستحوذ تعقيم وفرز البيانات على 60% من حجم العمل، يليه تجميع وإنشاء مجموعات البيانات بنسبة 19% (ص 14)."},
+  {q:"أي مما يلي يُعد من العمليات الخمس لتعقيم البيانات ومعالجتها مسبقاً (ص 14)؟", o:["تصفية البيانات، معالجة البيانات المفقودة، معالجة الاستثناءات والأخطاء، دمج البيانات من مصادر متعددة، وتوحيد البيانات","إضافة أخطاء إملائية للبيانات وحذف الميزات المهمة","تحويل النماذج إلى قواعد يدوية","تقليل دقة النموذج عمداً"], a:0, e:"هذه هي العمليات الخمس المذكورة نصاً في شريحة تعقيم البيانات (Data Cleansing) (ص 14)."},
+  {q:"ما هي المشكلات الثلاث الرئيسية التي تندرج تحت مفهوم (البيانات غير النظيفة - Dirty Data) في ص 15؟", o:["عدم الاكتمال (Incompleteness)، التشويش (Noise)، وعدم الاتساق (Inconsistency)","السرية، السلامة، والتوافر","التصنيف، الانحدار، والتجميع","التدريب، التحقق، والاختبار"], a:0, e:"قد تحتوي البيانات الحقيقية على ثلاث مشكلات رئيسية في الجودة هي: عدم الاكتمال، والتشويش، وعدم الاتساق (ص 15)."},
+  {q:"في جدول أمثلة البيانات غير النظيفة (ص 15)، عندما تحتوي البيانات على سجلات غير صحيحة أو استثناءات (قيم شاذة)، فإن هذه المشكلة تُصنف تحت:", o:["التشويش (Noise)","عدم الاكتمال (Incompleteness)","تطبيع الميزات","توسيع الميزة"], a:0, e:"التشويش يعني احتواء البيانات على سجلات غير صحيحة أو استثناءات، بينما عدم الاكتمال يعني وجود قيم مفقودة (ص 15)."},
+  {q:"في جدول البيانات غير النظيفة (ص 15)، كتابة اسم الدولة (Italy) داخل عمود المدينة (City)، أو كتابة (Ytali) بدلاً من (Italy) هما مثالان على:", o:["قيمة يجب أن تكون في عمود ثانٍ، وخطأ إملائي","بيانات مثالية نظيفة","تخفيض أبعاد البيانات","تضمين الكلمات بـ BERT"], a:0, e:"أشارت الشريحة 11 في ص 15 إلى وجود قيمة في عمود خاطئ (Italy في عمود City) وخطأ إملائي (Ytali)."},
+  {q:"في مرحلة (تحويل البيانات - Data Conversion) (ص 16)، كيف يتم التعامل مع (البيانات النصية) لتصبح مناسبة لنموذج التعلم الآلي؟", o:["يتم تحويل الكلمة إلى متجه كلمة (Word vector) من خلال تضمين الكلمات باستخدام نماذج مثل word2vec و BERT","يتم تحويل النص إلى تدرج رمادي ومساحة لون","يتم حذف جميع الكلمات والاكتفاء بالأرقام","لا يمكن لنماذج التعلم الآلي التعامل مع النصوص أبداً"], a:0, e:"في النص يتم تحويل الكلمة إلى متجه كلمة (Word vector) من خلال تضمين الكلمات باستخدام نموذج word2vec أو BERT (ص 16)."},
+  {q:"تجزئة متغير (العمر) إلى فئات عمرية لتقليل قيمة المتغيرات يُعد مثالاً على أي شكل من أشكال تحويل البيانات (ص 16)؟", o:["تحويل بيانات القيمة إلى بيانات الفئة","معالجة بيانات الصورة","تضمين الكلمات النصية","التعلم التعزيزي"], a:0, e:"يتم تحويل بيانات القيمة إلى بيانات الفئة لتقليل قيمة المتغيرات، ومثاله تجزئة العمر إلى فئات (ص 16)."},
+  {q:"في (هندسة الميزة - Feature Engineering) (ص 16)، ما الفرق بين تطبيع الميزات (Normalization) وتوسيع الميزة (Expansion)؟", o:["تطبيع الميزات يضمن نفس نطاقات القيمة لمتغيرات الإدخال، بينما توسيع الميزة يدمج أو يحول المتغيرات الموجودة لتوليد ميزات جديدة مثل المتوسط","تطبيع الميزات يحذف المتغيرات، وتوسيع الميزة يضيف ضوضاء للبيانات","كلاهما يُستخدمان لمعالجة الصور فقط","توسيع الميزة يقلل عدد الميزات إلى الصفر"], a:0, e:"تطبيع الميزات يضمن نفس نطاقات القيمة لمتغيرات الإدخال، وتوسيع الميزة يدمج أو يحول المتغيرات الموجودة لتوليد ميزات جديدة كالمتوسط (ص 16)."}
+];
+
+// بناء شبكة المصطلحات
+const termsGrid = document.getElementById("termsGrid");
+terms.forEach(([en, ar]) => {
+  const d = document.createElement("div");
+  d.className = "card";
+  d.style.margin = "0";
+  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
+  termsGrid.appendChild(d);
+});
+
+// إدارة البطاقات التعليمية
+let ci = 0, showAnswer = false;
+function renderCard() {
+  document.getElementById("flashTerm").textContent = cards[ci][0];
+  const ansEl = document.getElementById("flashAnswer");
+  ansEl.innerHTML = cards[ci][1].replace(/\n/g, "<br>");
+  ansEl.hidden = !showAnswer;
+  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
+  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+}
+document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
+document.getElementById("flashcard").addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
+});
+document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
+document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
+renderCard();
+
+// التنقل بين التبويبات
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+// إدارة الاختبار
+let answers = {};
+function renderQuiz() {
+  const area = document.getElementById("quizArea");
+  area.innerHTML = "";
+  const letters = ["أ", "ب", "ج", "د"];
+  questions.forEach((item, i) => {
+    const box = document.createElement("div");
+    box.className = "qbox";
+    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
+    const opts = box.querySelector(".options");
+    item.o.forEach((opt, j) => {
+      const btn = document.createElement("button");
+      btn.className = "option";
+      btn.textContent = `${letters[j]}) ${opt}`;
+      btn.onclick = () => {
+        answers[i] = j;
+        [...opts.children].forEach((x, k) => {
+          x.classList.remove("correct", "wrong");
+          x.disabled = true;
+          if (k === item.a) x.classList.add("correct");
+          if (k === j && j !== item.a) x.classList.add("wrong");
+        });
+        const fb = document.getElementById("fb" + i);
+        fb.hidden = false;
+        fb.className = "feedback " + (j === item.a ? "good" : "bad");
+        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
+        updateScore();
+      };
+      opts.appendChild(btn);
+    });
+    area.appendChild(box);
+  });
+  updateScore();
+}
+
+function updateScore() {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
+  document.getElementById("score").textContent = `النتيجة: ${correct} / ${questions.length}`;
+  document.getElementById("progressBar").style.width = (Object.keys(answers).length / questions.length * 100) + "%";
+}
+
+document.getElementById("resetQuiz").onclick = () => {
+  answers = {};
+  document.getElementById("finalResult").textContent = "";
+  renderQuiz();
+};
+
+document.getElementById("finishQuiz").onclick = () => {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
+  const pct = Math.round(correct / questions.length * 100);
+  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${questions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! إتقان كامل للفصل السابع من موضوعات مختارة." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
+};
+
+renderQuiz();
+</script>
+</body>
+</html>
