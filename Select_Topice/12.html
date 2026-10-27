@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الفصل الثاني عشر الشامل (100%) | موضوعات مختارة - أنواع الشبكات العصبية</title>
+<style>
+:root{
+  --bg:#f4f6fb;
+  --card:#ffffff;
+  --ink:#1b263b;
+  --muted:#637085;
+  --accent:#0f766e;
+  --accent-dark:#115e59;
+  --accent2:#ccfbf1;
+  --line:#e2e8f0;
+  --good:#059669;
+  --good-bg:#ecfdf5;
+  --bad:#dc2626;
+  --bad-bg:#fef2f2;
+  --warn:#d97706;
+  --warn-bg:#fffbeb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
+header{background:linear-gradient(135deg,#134e4a,#0f766e,#0284c7);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(19,78,74,0.18)}
+.wrap{max-width:1060px;margin:auto;padding:0 16px}
+.eyebrow{opacity:.92;font-size:.9rem;background:rgba(255,255,255,0.15);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
+h1{margin:5px 0;font-size:clamp(1.55rem,4vw,2.25rem)}
+header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
+nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:rgba(255,255,255,0.18);color:#ffffff;font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
+nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
+nav button.active{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+main .btn{background:var(--accent2);color:var(--accent-dark)}
+main .btn.primary{background:var(--accent);color:white}
+main{padding:22px 0 48px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(36,52,91,0.04)}
+h2{font-size:1.35rem;margin:0 0 12px;color:#134e4a}
+h3{font-size:1.06rem;margin:10px 0 6px;color:var(--accent-dark)}
+h4{font-size:.98rem;margin:8px 0 4px;color:#0f172a}
+small,.muted{color:var(--muted)}
+ul,ol{padding-right:22px;margin:8px 0}
+li{margin:6px 0}
+details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
+summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f0fdfa;color:#134e4a;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
+details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
+.details-body{padding:16px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#f1f5f9;color:#134e4a;font-weight:bold}
+tr:last-child td{border-bottom:0}
+.note{border-right:4px solid var(--accent);padding:10px 14px;background:#f0fdfa;border-radius:8px;margin:10px 0}
+.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
+.formula-box{background:#134e4a;color:#fff;padding:12px 16px;border-radius:12px;text-align:center;font-size:1.03rem;margin:10px 0;direction:ltr;font-family:monospace}
+.step-card{border:1px solid var(--line);border-radius:12px;padding:14px;background:#f8fafc}
+.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
+.options{display:grid;gap:8px;margin-top:12px}
+.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
+.option:hover:not(:disabled){border-color:var(--accent);background:#f0fdfa}
+.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
+.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
+.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
+.feedback.good{color:var(--good);background:var(--good-bg)}
+.feedback.bad{color:var(--bad);background:var(--bad-bg)}
+.progress{height:10px;background:#e2e8f0;border-radius:9px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
+.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#ccfbf1);border:2px solid #99f6e4;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
+.flashcard:hover{transform:scale(1.005)}
+.flashcard .term{font-size:1.35rem;font-weight:bold;color:#134e4a}
+.flashcard .answer{margin-top:16px;font-size:1.08rem;color:var(--accent-dark);background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
+@media(max-width:600px){
+  .card{padding:14px}
+  nav button{flex:1 1 calc(50% - 8px);text-align:center}
+  .flashcard{min-height:200px;padding:18px}
+  th,td{padding:8px 10px;font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">مقرر موضوعات مختارة في علوم البيانات • تغطية شاملة 100% (صفحات PDF من 153 إلى 165)</div>
+    <h1>الفصل الثاني عشر: أنواع الشبكات العصبية</h1>
+    <p>يغطي الشبكة العصبية التلافيفية (CNN)، الشبكة العصبية المتكررة (RNN, BPTT, LSTM, GRU)، وشبكة الخصومة التوليدية (GAN)</p>
+    <nav>
+      <button class="active" data-tab="summary">الشرح الشامل</button>
+      <button data-tab="tables">جداول المقارنات والمعادلات (4)</button>
+      <button data-tab="terms">المصطلحات والمفاهيم (28)</button>
+      <button data-tab="cards">البطاقات (28)</button>
+      <button data-tab="quiz">الاختبار الشامل (25)</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- ================= التبويب الأول: الشرح الشامل ================= -->
+  <section id="summary" class="panel active">
+    <div class="card">
+      <h2>خريطة الفصل الثاني عشر (صفحات PDF من 153 إلى 165)</h2>
+      <div class="grid">
+        <div>
+          <span class="tag">الوحدة التعليمية 1 (ص 153 - 157)</span>
+          <h3>الشبكة العصبية التلافيفية (CNN)</h3>
+          <p>مفهوم ونشأة CNN (هابل وويزل)، المجال الاستقبالي المحلي ومشاركة المحددات، حساب الالتواء، والطبقة التلافيفية وطبقة التجميع والطبقة المتصلة بالكامل.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة التعليمية 2 (ص 158 - 162)</span>
+          <h3>الشبكة العصبية المتكررة (RNN)</h3>
+          <p>مفهوم وبناء ومعادلات RNN، أنواعها الخمسة، الانتشار العكسي عبر الزمن (BPTT) ومصدرا الخطأ، مشكلة الذاكرة طويلة المدى، وشبكتا LSTM و GRU.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة التعليمية 3 (ص 163 - 165)</span>
+          <h3>شبكة الخصومة التوليدية (GAN)</h3>
+          <p>مفهوم وتطبيقات GAN، المولد (Generator G) والمميز (Discriminator D)، النموذج التوليدي والتمييزي، وقواعد تدريب GAN ودالة القيمة.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- الوحدة الأولى -->
+    <details open>
+      <summary>1) الوحدة التعليمية (1): الشبكة العصبية التلافيفية (CNN) ومفاهيمها وطبقاتها الثلاث (ص 153 - 157)</summary>
+      <div class="details-body">
+        <h3>أولاً: تعريف ونشأة ومكونات الشبكة العصبية التلافيفية (<span dir="ltr">CNN</span>) (ص 153)</h3>
+        <ul>
+          <li><b>تعريفها:</b> الشبكة العصبية التلافيفية (<span dir="ltr">Convolutional Neural Network - CNN</span>) هي <b>شبكة عصبية مغذية للأمام (<span dir="ltr">feedforward</span>)</b>، قد تستجيب خلاياها العصبية الاصطناعية للوحدات المحيطة ضمن نطاق التغطية، وتتفوق في <b>معالجة الصور</b>.</li>
+          <li><b>الطبقات الثلاث التي تتضمنها <span dir="ltr">CNN</span>:</b>
+            <ol>
+              <li><b>طبقة تلافيفية (<span dir="ltr">Convolutional layers</span>).</b></li>
+              <li><b>طبقة تجميع (<span dir="ltr">Pooling layers</span>).</b></li>
+              <li><b>طبقة متصلة بالكامل (<span dir="ltr">Fully connected layers</span>).</b></li>
+            </ol>
+          </li>
+          <li><b>النشأة التاريخية (تجربة القشرة البصرية للقطط - ص 153):</b>
+            <ul>
+              <li>في <b>ستينيات القرن الماضي (1960s)</b>، درس العالمان <b>هابل وويزل (<span dir="ltr">David Hubel and Torsten Wiesel</span>)</b> الخلايا العصبية في <b>القشرة البصرية للقطط</b> المستخدمة في الحساسية المحلية واختيار الاتجاه، ووجدا أن بنية شبكتها الفريدة يمكن أن تبسط الشبكات العصبية المرتدة، ثم اقترحوا شبكة <span dir="ltr">CNN</span>.</li>
+            </ul>
+          </li>
+          <li><b>سبب انتشارها الواسع في تصنيف الأنماط:</b> لأنها <b>تتجنب المعالجة المسبقة المعقدة للصور</b> وتسمح بـ <b>إدخال الصور الأصلية مباشرة</b>.</li>
+        </ul>
+
+        <div class="exam-alert">
+          <h3>ثانياً: المفاهيم الرئيسية لـ <span dir="ltr">CNN</span> (المجال الاستقبالي المحلي ومشاركة المحددات) (ص 154) - موضع أسئلة مؤكدة:</h3>
+          <ol>
+            <li><b>المجال الاستقبالي المحلي (<span dir="ltr">Local Receptive Field</span>):</b>
+              <ul>
+                <li>إدراك الإنسان للعالم الخارجي يكون <b>من المحلي إلى العالمي (<span dir="ltr">Local to Global</span>)</b>.</li>
+                <li>تكون الارتباطات المكانية بين وحدات البكسل <b>المحلية</b> للصورة أقرب من تلك الموجودة بين وحدات البكسل البعيدة؛ لذلك <b>لا تحتاج كل خلية عصبية إلى معرفة الصورة الشاملة</b>، بل تحتاج فقط لمعرفة <b>الصورة المحلية</b>، ثم يتم دمج المعلومات المحلية على مستوى أعلى لتوليد معلومات عالمية.</li>
+              </ul>
+            </li>
+            <li><b>مشاركة المحددات / مشاركة الوزن (<span dir="ltr">Parameter / Weight Sharing</span>):</b>
+              <ul>
+                <li>يمكن استخدام مرشح (<span dir="ltr">Filter</span>) / نواة واحدة أو أكثر لمسح الصور المدخلة، والمحددات التي تحملها المرشحات هي <b>الأوزان</b>.</li>
+                <li>في الطبقة الممسوحة ضوئياً بواسطة المرشحات، <b>يستخدم كل مرشح نفس المعلمات أثناء الحساب الموزون</b>؛ وتعني مشاركة الوزن أنه عندما يقوم كل مرشح بمسح صورة بأكملها، يتم <b>إصلاح (تثبيت) محددات المرشح</b>.</li>
+              </ul>
+            </li>
+          </ol>
+        </div>
+
+        <h3>ثالثاً: حساب الالتواء والـ 3 طبقات الأساسية في <span dir="ltr">CNN</span> (ص 155 - 157)</h3>
+        <ul>
+          <li><b>حساب المرشح الفردي وعملية الالتواء (<span dir="ltr">Single-filter calculation & Convolution</span>) (ص 155):</b>
+            <p>في مثال الشرائح: صورة إدخال بحجم $5 \times 5$ يتم مسحها بمرشح (<span dir="ltr">Filter</span>) بحجم $3 \times 3$ (مع انحياز $\text{Bias}=0$) عن طريق ضرب العناصر المتقابلة وجمعها لإنتاج خريطة ميزات (<span dir="ltr">Feature map / Convolved Feature</span>) بحجم $3 \times 3$.</p>
+          </li>
+          <li><b>1. الطبقة التلافيفية (<span dir="ltr">Convolutional Layer</span>) (ص 156):</b>
+            <ul>
+              <li>البنية الأساسية لشبكة <span dir="ltr">CNN</span> عبارة عن <b>تلافيفات متعددة القنوات</b> تتكون من عدة تلافيفات فردية.</li>
+              <li>تُستخدم مخرجات الطبقة السابقة (أو الصورة الأصلية للطبقة الأولى) كمدخل للطبقة الحالية، وتُدمج مع المرشح الموجود في الطبقة لتعمل كمخرج لها.</li>
+              <li><b>الوزن الذي يجب تعلمه هو نواة الالتواء (<span dir="ltr">Convolution kernel</span>) لكل طبقة</b>. وبعد اكتمال عملية الالتفاف، يجب أن تكون النتيجة <b>متحيزة (يُضاف لها انحياز) ويتم تنشيطها من خلال دوال التنشيط</b> قبل إدخالها للطبقة التالية.</li>
+            </ul>
+          </li>
+          <li><b>2. طبقة التجميع (<span dir="ltr">Pooling Layer</span>) (ص 156):</b>
+            <ul>
+              <li>تجمع الوحدات القريبة <b>لتقليل حجم المدخلات على الطبقة التالية، مما يقلل الأبعاد</b>.</li>
+              <li><b>نوعا التجميع الشائعان:</b>
+                <br>• <b>الحد الأقصى للتجميع (<span dir="ltr">Max pooling</span>):</b> تحديد <b>القيمة القصوى</b> في منطقة مربعة صغيرة كممثل لهذه المنطقة (مثال الشريحة: نافذة تجميع بحجم $2 \times 2$ تختار أكبر رقم في كل مربع).
+                <br>• <b>التجميع المتوسط (<span dir="ltr">Average pooling</span>):</b> تحديد <b>القيمة المتوسطة</b> كممثل للمنطقة.
+              </li>
+              <li>الجانب الثالث من هذه المنطقة الصغيرة يُسمى <b>حجم نافذة التجمع (<span dir="ltr">Pooling window size</span>)</b>.</li>
+            </ul>
+          </li>
+          <li><b>3. طبقة متصلة بالكامل (<span dir="ltr">Fully Connected Layer</span>) (ص 157):</b>
+            <ul>
+              <li>هي في الأساس <b>مصنف (<span dir="ltr">Classifier</span>)</b>؛ حيث يتم تسوية الميزات المستخرجة من الطبقة التلافيفية وطبقة التجميع ووضعها في الطبقة المتصلة بالكامل لإخراج النتائج وتصنيفها.</li>
+              <li>بشكل عام، يتم استخدام <b>دالة <span dir="ltr">Softmax</span></b> كوظيفة تنشيط لطبقة الإخراج النهائية المتصلة بالكامل لدمج جميع <b>الميزات المحلية (<span dir="ltr">Local</span>) في الميزات الشاملة (<span dir="ltr">Global</span>)</b> وحساب درجة كل نوع:
+                <div class="formula-box">σ(z)_j = e^(z_j) / Σ_k e^(z_k)</div>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- الوحدة الثانية -->
+    <details open>
+      <summary>2) الوحدة التعليمية (2): الشبكة العصبية المتكررة (RNN)، الانتشار عبر الزمن (BPTT)، و LSTM و GRU (ص 158 - 162)</summary>
+      <div class="details-body">
+        <h3>أولاً: مفهوم وطريقة بناء الشبكة العصبية المتكررة (<span dir="ltr">RNN</span>) وأنواعها (ص 158 - 159)</h3>
+        <ul>
+          <li><b>تعريفها وميزتها:</b> الشبكة العصبية المتكررة (<span dir="ltr">Recurrent Neural Network - RNN</span>) هي شبكة عصبية تلتقط <b>المعلومات الديناميكية في البيانات المتسلسلة</b> من خلال <b>الاتصالات الدورية لعقد الطبقة المخفية</b>، ويمكنها تصنيف البيانات المتسلسلة.</li>
+          <li><b>الفرق بينها وبين الشبكات الأمامية التقليدية:</b>
+            <ul>
+              <li>يمكن لـ <span dir="ltr">RNN</span> <b>الاحتفاظ بحالة السياق</b> وتخزين المعلومات ذات الصلة وتعلمها والتعبير عنها في نوافذ السياق بأي طول.</li>
+              <li>لا تقتصر على حدود الفضاء، بل <b>تدعم أيضاً التسلسل الزمني</b> (يوجد اتصال بين الطبقة المخفية للحظة الحالية $t$ والطبقة المخفية للحظة التالية $t+1$).</li>
+            </ul>
+          </li>
+          <li><b>سيناريوهات استخدامها:</b> مقاطع الفيديو (تتكون من إطارات صور)، الصوت (يتكون من مقاطع)، والجمل (تتكون من كلمات).</li>
+          <li><b>طريقة بناء ومعادلات <span dir="ltr">RNN</span> في الوقت $t$ (ص 158):</b>
+            <ul>
+              <li><b dir="ltr">X_t:</b> هو مدخل تسلسل الإدخال في الوقت $t$.</li>
+              <li><b dir="ltr">S_t:</b> هي <b>وحدة الذاكرة للتسلسل</b> في الوقت $t$ وتقوم بتخزين المعلومات السابقة مؤقتاً:
+                <div class="formula-box">S_t = tanh(U X_t + W S_{t-1})</div>
+              </li>
+              <li><b dir="ltr">O_t:</b> هو مخرج الطبقة المخفية للتسلسل في الوقت $t$:
+                <div class="formula-box">O_t = tanh(V S_t)   [or softmax(V S_t)]</div>
+              </li>
+              <li>تشترك جميع الخطوات الزمنية في نفس مصفوفات الأوزان الثلاث (<b dir="ltr">U, W, V</b>).</li>
+            </ul>
+          </li>
+          <li><b>أنواع الشبكات العصبية المتكررة الخمسة (حسب المدخلات والمخرجات - ص 159):</b>
+            <br>1) <b>واحد لواحد (<span dir="ltr">One to One</span>)</b> • 2) <b>واحد للكثيرين (<span dir="ltr">One to Many</span>)</b> • 3) <b>كثير لواحد (<span dir="ltr">Many to One</span>)</b> • 4) <b>كثير لكثير غير متزامن (<span dir="ltr">Many to Many</span>)</b> • 5) <b>كثير لكثير متزامن (<span dir="ltr">Many to Many</span>)</b>.</li>
+        </ul>
+
+        <div class="exam-alert">
+          <h3>ثانياً: الانتشار العكسي عبر الزمن (<span dir="ltr">BPTT</span>) ومشكلة <span dir="ltr">RNN</span> (ص 160 - 161) - موضع أسئلة مؤكدة:</h3>
+          <ul>
+            <li><b>مفهوم <span dir="ltr">BPTT (Backpropagation Through Time)</span>:</b> هو امتداد للانتشار العكسي التقليدي على التسلسل الزمني.</li>
+            <li><b>مصدرا الأخطاء في التسلسل في وقت وحدة الذاكرة $t$ (ص 160):</b>
+              <ol>
+                <li>الأول: من <b>خطأ إخراج الطبقة المخفية في التسلسل الزمني الحالي $t$</b>.</li>
+                <li>الثاني: من <b>الخطأ القادم من خلية الذاكرة في التسلسل الزمني التالي $t + 1$</b>.</li>
+              </ol>
+            </li>
+            <li><b>لماذا يحدث التدرج المتلاشي أو المتفجر في <span dir="ltr">BPTT</span>؟</b>
+              <br>لأن التدرج الكلي للوزن $w$ هو تراكم تدرج الوزن في كل التسلسل الزمني؛ وكلما زاد طول التسلسل الزمني، <b>زاد احتمال فقدان التسلسل الزمني الأخير لتدرج $w$ الأول في التسلسل الزمني</b>، مما يؤدي إلى مشكلة التدرج المتلاشي أو المتفجر.</li>
+            <li><b>الخطوات الثلاث لخوارزمية <span dir="ltr">BPTT</span> (ص 160):</b>
+              <ol>
+                <li>حساب قيمة الإخراج لكل خلية عصبية من خلال <b>الانتشار الأمامي</b>.</li>
+                <li>حساب قيمة الخطأ لكل خلية عصبية من خلال <b>الانتشار العكسي</b>.</li>
+                <li>حساب <b>تدرج كل وزن</b> (ثم تحديث الأوزان باستخدام خوارزمية <b dir="ltr">SGD</b>).</li>
+              </ol>
+            </li>
+            <li><b>مشكلة الشبكة العصبية المتكررة القياسية (ص 161):</b> على الرغم من أنها تحل مشكلة ذاكرة المعلومات، إلا أن <b>المعلومات تضعف أثناء الذاكرة طويلة المدى</b> بسبب سعة وحدة الذاكرة المحدودة (مثلاً: عدم القدرة على ربط تلميح في بداية قصة تأملية بنهايتها).</li>
+          </ul>
+        </div>
+
+        <h3>ثالثاً: شبكتا <span dir="ltr">LSTM</span> و <span dir="ltr">GRU</span> لحل مشكلة الذاكرة طويلة المدى (ص 161 - 162)</h3>
+        <div class="grid">
+          <div class="step-card">
+            <span class="tag">1. شبكة LSTM (ص 161)</span>
+            <h4>Long Short-Term Memory Network</h4>
+            <p>شبكة الذاكرة طويلة المدى وقصيرة المدى: تعالج ضعف الذاكرة طويلة المدى في RNN القياسية عبر خط حالة الخلية (<span dir="ltr">Cell state</span> $c_t$) و<b>ثلاث بوابات</b> تتحكم في تدفق المعلومات بدوال <span dir="ltr">Sigmoid</span> و <span dir="ltr">tanh</span> لتذكر المعلومات الأساسية لفترات طويلة.</p>
+          </div>
+          <div class="step-card">
+            <span class="tag">2. وحدة GRU (ص 162)</span>
+            <h4>Gated Recurrent Unit</h4>
+            <p>الوحدة المتكررة المبوبة: بنية مطورة ومبسطة تدمج حالة الخلية وحالة الطبقة المخفية وتستخدم <b>بوابتين فقط</b> (<span dir="ltr">Update gate & Reset gate</span>) لتقليل الحسابات مع الحفاظ على الذاكرة طويلة المدى.</p>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- الوحدة الثالثة -->
+    <details open>
+      <summary>3) الوحدة التعليمية (3): شبكة الخصومة التوليدية (GAN) ومكوناتها وقواعد تدريبها (ص 163 - 165)</summary>
+      <div class="details-body">
+        <h3>أولاً: مفهوم وتطبيقات شبكة الخصومة التوليدية (<span dir="ltr">GAN</span>) (ص 163)</h3>
+        <ul>
+          <li><b>تعريفها:</b> شبكة الخصومة التوليدية (<span dir="ltr">Generative Adversarial Network - GAN</span>) هي إطار عمل يقوم بتدريب <b>المولد (<span dir="ltr">Generator - G</span>)</b> و<b>المميز (<span dir="ltr">Discriminator - D</span>)</b> من خلال <b>عملية الخصومة (المنافسة)</b>.</li>
+          <li>من خلال عملية الخصومة، يستطيع المميز $D$ معرفة ما إذا كانت العينة المأخوذة من المولد <b>مزيفة أم حقيقية</b>.</li>
+          <li><b>خوارزمية التدريب المعتمدة:</b> تتبنى <span dir="ltr">GAN</span> خوارزمية <b>الانتشار العكسي (<span dir="ltr">Backpropagation</span>)</b> المدروسة.</li>
+          <li><b>السيناريوهات التطبيقية الأربعة لـ <span dir="ltr">GAN</span> (ص 163):</b>
+            <ol>
+              <li><b>إنشاء الصور (<span dir="ltr">Image generation</span>).</b></li>
+              <li><b>إنشاء النص (<span dir="ltr">Text generation</span>).</b></li>
+              <li><b>تحسين الكلام (<span dir="ltr">Speech enhancement</span>).</b></li>
+              <li><b>الدقة الفائقة للصورة (<span dir="ltr">Image super-resolution</span>).</b></li>
+            </ol>
+          </li>
+        </ul>
+
+        <div class="exam-alert">
+          <h3>ثانياً: مقارنة تفصيلية بين المولد (<span dir="ltr">G</span>) والمميز (<span dir="ltr">D</span>) في <span dir="ltr">GAN</span> (ص 163 - 164) - مهم جداً:</h3>
+          <div class="grid">
+            <div class="step-card">
+              <span class="tag">1. المولد G (الشبكة التوليدية)</span>
+              <ul>
+                <li><b>الوظيفة:</b> يولد بيانات العينة المزيفة $G(z)$ لمحاكاة البيانات الحقيقية.</li>
+                <li><b>الإدخال:</b> التشويش / الضوضاء البيضاء $z$، والذي يتوافق مع توزيع احتمالات مسبق محدد يدوياً مثل <b>التوزيع المنتظم أو التوزيع الغاوسي (<span dir="ltr">Gaussian</span>)</b>.</li>
+                <li><b>الإخراج:</b> نموذج متجه البيانات المشتق $x = G(z)$ (من مساحة الإدخال لمساحة العينة).</li>
+                <li><b>الهيكلية:</b> يعتمد هيكلية شبكة الإدراك متعدد الطبقات (<b dir="ltr">MLP</b>)، ويستخدم معلمات <b>تقدير الاحتمالية القصوى (<span dir="ltr">MLE</span>)</b>.</li>
+              </ul>
+            </div>
+            <div class="step-card">
+              <span class="tag">2. المميز D (شبكة التمييز)</span>
+              <ul>
+                <li><b>الوظيفة:</b> يحدد ما إذا كانت بيانات العينة حقيقية أم مزيفة.</li>
+                <li><b>الإدخال:</b> يتلقى نوعين من المدخلات: <b>العينة الحقيقية ($x_{real}$)</b> و<b>العينة المزيفة التي أنشأها المولد ($G(z)$)</b>.</li>
+                <li><b>الإخراج:</b> الاحتمال $D(G(z))$ أو $D(x)$ الذي يحدد ما إذا كانت العينة حقيقية أم مزيفة.</li>
+                <li><b>الهيكلية:</b> يمكن لشبكة المميز أيضاً استخدام معلمات تحمل هيكلية <b dir="ltr">MLP</b>.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <h3>ثالثاً: قواعد تدريب <span dir="ltr">GAN</span> ودالة القيمة ومشكلة التشبع المبكر (ص 165)</h3>
+        <ul>
+          <li><b>هدف التحسين (دالة القيمة <span dir="ltr">Value Function</span>):</b>
+            <div class="formula-box">min_G max_D V(D, G) = E_{x~p_data(x)}[log D(x)] + E_{z~p_z(z)}[log(1 - D(G(z)))]</div>
+            <p class="muted" style="margin:4px 0">حيث يسعى المميز $D$ إلى تعظيم ($\max_D$) قدرته على التمييز الصحيح، بينما يسعى المولد $G$ إلى تقليل ($\min_G$) قدرة المميز على كشف العينات المزيفة.</p>
+          </li>
+          <li class="note"><b>قاعدة مهمة جداً في مرحلة التدريب المبكرة لـ <span dir="ltr">GAN</span> (ص 165):</b>
+            <ul>
+              <li>في مرحلة التدريب المبكرة، عندما تكون نتيجة المولد $G$ <b>سيئة للغاية</b>، يحدد المميز $D$ بثقة عالية أن العينة التي تم إنشاؤها <b>مزيفة</b> (لأنها تختلف بوضوح عن بيانات التدريب).</li>
+              <li>في هذه الحالة، يكون المقدار $\log(1 - D(G(z)))$ <b>مشبعاً (<span dir="ltr">Saturated</span>) حيث يكون التدرج $0$، ولا يمكن إجراء التكرار!</b></li>
+              <li><b>الحل العملي:</b> لذلك، نختار تدريب المولد $G$ فقط عن طريق <b>تصغير المقدار $[-\log(D(G(z)))]$</b>.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= التبويب الثاني: جداول المقارنات والمعادلات ================= -->
+  <section id="tables" class="panel">
+    <div class="card">
+      <h2>1. جدول ملخص مفاهيم وطبقات الشبكة العصبية التلافيفية (CNN) (ص 153 - 157)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>المكون / المفهوم في CNN</th>
+            <th>الوظيفة والتفاصيل الدقيقة في الشرائح</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>المجال الاستقبالي المحلي<br>(Local Receptive Field)</b></td>
+            <td>الإدراك البشري يبدأ من المحلي إلى العالمي؛ فالارتباط المكاني بين البكسلات المحلية أقرب من البعيدة، لذا تكتفي كل خلية بمعرفة <b>الصورة المحلية</b> ثم تُدمج في مستوى أعلى لتوليد معلومات عالمية.</td>
+          </tr>
+          <tr>
+            <td><b>مشاركة المحددات / الوزن<br>(Parameter / Weight Sharing)</b></td>
+            <td>عندما يقوم كل مرشح (<span dir="ltr">Filter/Kernel</span>) بمسح الصورة بأكملها، يتم <b>تثبيت (إصلاح) محددات وأوزان المرشح</b> واستخدام نفس المعلمات أثناء الحساب الموزون، مما يقلل عدد المعلمات بشكل هائل.</td>
+          </tr>
+          <tr>
+            <td><b>1. الطبقة التلافيفية<br>(Convolutional Layer)</b></td>
+            <td>تدمج مدخلات الطبقة مع المرشح (نواة الالتواء هي الوزن المطلوب تعلمه)، ثم يُضاف <b>الانحياز (<span dir="ltr">Bias</span>)</b> وتُمرر النتيجة عبر <b>دالة تنشيط</b> لإنتاج خريطة الميزات (<span dir="ltr">Feature map</span>).</td>
+          </tr>
+          <tr>
+            <td><b>2. طبقة التجميع<br>(Pooling Layer)</b></td>
+            <td>تجمع الوحدات القريبة ضمن نافذة التجميع (مثل $2 \times 2$) <b>لتقليل حجم المدخلات وتقليل الأبعاد</b>، ومن أشهر أنواعها: <b>الحد الأقصى للتجميع (<span dir="ltr">Max pooling</span>)</b> و<b>التجميع المتوسط (<span dir="ltr">Average pooling</span>)</b>.</td>
+          </tr>
+          <tr>
+            <td><b>3. الطبقة المتصلة بالكامل<br>(Fully Connected Layer)</b></td>
+            <td>تعمل كمصنف (<span dir="ltr">Classifier</span>)؛ حيث تُسوّى الميزات المستخرجة وتُمرر في النهاية لدالة <b dir="ltr">Softmax</b> لدمج الميزات المحلية في <b>الميزات الشاملة (<span dir="ltr">Global</span>)</b> وحساب احتمالية كل فئة.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>2. جدول مقارنة الشبكة المتكررة (RNN)، الانتشار عبر الزمن (BPTT)، و LSTM و GRU (ص 158 - 162)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>المفهوم / البنية</th>
+            <th>المعادلات والخصائص الأساسية</th>
+            <th>المزايا أو المشكلات المرتبطة بها</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>الشبكة المتكررة القياسية<br>(Standard RNN)</b></td>
+            <td>• وحدة الذاكرة: $S_t = \tanh(U X_t + W S_{t-1})$<br>• المخرج: $O_t = \tanh(V S_t)$ أو $\text{softmax}(V S_t)$</td>
+            <td>تحتفظ بحالة السياق وتدعم التسلسل الزمني (للفيديو والصوت والجمل)، لكن <b>المعلومات تضعف فيها أثناء الذاكرة طويلة المدى</b>.</td>
+          </tr>
+          <tr>
+            <td><b>الانتشار العكسي عبر الزمن<br>(BPTT)</b></td>
+            <td>يمر بـ 3 خطوات: 1) حساب الإخراج بالانتشار الأمامي، 2) حساب الخطأ بالانتشار العكسي، 3) حساب تدرج كل وزن وتحديثه بـ <b dir="ltr">SGD</b>.</td>
+            <td>للخطأ مصدران في الوقت $t$ (من مخرج $t$ ومن ذاكرة $t+1$). ومع طول التسلسل يحدث <b>التدرج المتلاشي أو المتفجر</b>.</td>
+          </tr>
+          <tr>
+            <td><b>شبكة الذاكرة الطويلة والقصيرة<br>(LSTM)</b></td>
+            <td>تستخدم حالة الخلية (<span dir="ltr">Cell state</span> $c_t$) مع <b>3 بوابات</b> (بوابة النسيان، بوابة الإدخال، وبوابة الإخراج).</td>
+            <td>تحل مشكلة ضعف الذاكرة طويلة المدى ومشكلة التدرج المتلاشي في شبكات RNN القياسية.</td>
+          </tr>
+          <tr>
+            <td><b>الوحدة المتكررة المبوبة<br>(GRU)</b></td>
+            <td>تدمج حالة الخلية وحالة الطبقة المخفية وتعتمد على <b>بوابتين فقط</b> (بوابة التحديث $z_t$ وبوابة إعادة الضبط $r_t$).</td>
+            <td>بنية أبسط وأسرع حسابياً من LSTM مع الحفاظ على القدرة على تذكر المعلومات الأساسية طويلة المدى.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>3. جدول مقارنة بين المولد (Generator G) والمميز (Discriminator D) في شبكة GAN (ص 163 - 165)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>وجه المقارنة</th>
+            <th>المولد G (الشبكة التوليدية Generative Network)</th>
+            <th>المميز D (شبكة التمييز Discriminative Network)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>الهدف الرئيسي</b></td>
+            <td>توليد عينات بيانات جديدة مزيفة $G(z)$ تحاكي البيانات الحقيقية لخداع المميز.</td>
+            <td>تحديد وتمييز ما إذا كانت العينة المدخلة إليه <b>حقيقية أم مزيفة</b>.</td>
+          </tr>
+          <tr>
+            <td><b>المدخلات (Input)</b></td>
+            <td>التشويش / الضوضاء البيضاء $z$ (من توزيع احتمالي مسبق مثل التوزيع المنتظم أو الغاوسي <span dir="ltr">Gaussian</span>).</td>
+            <td>مدخلان: <b>بيانات العينة الحقيقية ($x_{real}$)</b> و<b>بيانات العينة المولدة ($x = G(z)$)</b>.</td>
+          </tr>
+          <tr>
+            <td><b>المخرجات (Output)</b></td>
+            <td>نموذج متجه البيانات المولد $x = G(z)$ في مساحة العينة.</td>
+            <td>قيمة احتمالية $D(x)$ أو $D(G(z))$ تحدد مدى كون العينة حقيقية.</td>
+          </tr>
+          <tr>
+            <td><b>البنية وطريقة التدريب</b></td>
+            <td>يعتمد هيكلية <b dir="ltr">MLP</b> وتقدير الاحتمالية القصوى (<b dir="ltr">MLE</b>). وفي بداية التدريب عند تشبع $\log(1-D(G(z)))$ يتم تدريبه بتصغير $[-\log(D(G(z)))]$.</td>
+            <td>يعتمد هيكلية <b dir="ltr">MLP</b> وخوارزمية <b dir="ltr">Backpropagation</b> لتعظيم دالة القيمة $\max_D V(D,G)$.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>4. مقارنة شاملة بين عائلات الشبكات العصبية الثلاث في الفصل الثاني عشر (CNN vs RNN vs GAN)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>نوع الشبكة</th>
+            <th>طبيعة الاتصالات والبيانات</th>
+            <th>الميزة الجوهرية</th>
+            <th>أبرز التطبيقات في الشرائح</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>التلافيفية<br>(CNN)</b></td>
+            <td>شبكة مغذية للأمام (<span dir="ltr">Feedforward</span>) للبيانات المكانية ثنائية/ثلاثية الأبعاد.</td>
+            <td>المجال الاستقبالي المحلي، مشاركة الأوزان، وتجنب المعالجة المسبقة المعقدة للصور.</td>
+            <td>معالجة الصور، تصنيف الأنماط، والرؤية الحاسوبية.</td>
+          </tr>
+          <tr>
+            <td><b>المتكررة<br>(RNN / LSTM / GRU)</b></td>
+            <td>اتصالات دورية في الطبقة المخفية للبيانات <b>المتسلسلة زمنياً</b>.</td>
+            <td>الاحتفاظ بحالة السياق وتخزين المعلومات السابقة في وحدة الذاكرة $S_t$ عبر الزمن.</td>
+            <td>مقاطع الفيديو (إطارات صور)، الصوت (مقاطع)، والجمل اللغوية (كلمات).</td>
+          </tr>
+          <tr>
+            <td><b>الخصومة التوليدية<br>(GAN)</b></td>
+            <td>شبكتان متنافستان: مولد ($G$) ومميز ($D$) يتدربان بالخصومة.</td>
+            <td>القدرة على توليد بيانات اصطناعية جديدة عالية الواقعية من متجه الضوضاء $z$.</td>
+            <td>إنشاء الصور، إنشاء النص، تحسين الكلام، والدقة الفائقة للصورة (<span dir="ltr">Super-resolution</span>).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الثالث: المصطلحات ================= -->
+  <section id="terms" class="panel">
+    <div class="card">
+      <h2>قاموس المصطلحات والمفاهيم الشامل للفصل الثاني عشر (28 مصطلحاً)</h2>
+      <p class="muted">جميع المصطلحات والمفاهيم والمعادلات الواردة في شرائح الفصل الثاني عشر (ص 153 - 165):</p>
+      <div id="termsGrid" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الرابع: البطاقات التعليمية ================= -->
+  <section id="cards" class="panel">
+    <div class="card">
+      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
+      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
+      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
+        <div class="term" id="flashTerm"></div>
+        <div class="answer" id="flashAnswer" hidden></div>
+        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="prevCard">السابق</button>
+        <span id="cardCount" class="muted"></span>
+        <button class="btn primary" id="nextCard">التالي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الخامس: الاختبار الشامل ================= -->
+  <section id="quiz" class="panel">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2>الاختبار الشامل للفصل الثاني عشر - موضوعات مختارة (25 سؤالاً)</h2>
+          <p class="muted">يغطي كافة تفاصيل شبكات CNN و RNN و BPTT و LSTM و GRU و GAN (ص 153 - 165) مع تصحيح وتعليل فوري.</p>
+        </div>
+        <div class="score" id="score">النتيجة: 0 / 25</div>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="quizArea"></div>
+      <div class="row">
+        <button class="btn" id="resetQuiz">إعادة الاختبار</button>
+        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+      </div>
+      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
+    </div>
+  </section>
+</main>
+
+<footer>مبني بالكامل (100%) على شرائح الفصل الثاني عشر: أنواع الشبكات العصبية - مقرر موضوعات مختارة في علوم البيانات (صفحات PDF من 153 إلى 165)</footer>
+
+<script>
+const terms = [
+  ["CNN (الشبكة العصبية التلافيفية)", "Convolutional Neural Network: شبكة عصبية مغذية للأمام (feedforward) تتفوق في معالجة الصور وتصنيف الأنماط دون معالجة مسبقة معقدة (ص 153)."],
+  ["Hubel and Wiesel (هابل وويزل)", "العالمان اللذان درسا في الستينيات القشرة البصرية للقطط في الحساسية المحلية واختيار الاتجاه واقترحا بنية شبكة CNN (ص 153)."],
+  ["Local Receptive Field", "المجال الاستقبالي المحلي: مفهوم في CNN يعني أن كل خلية عصبية تحتاج فقط لمعرفة الصورة المحلية ثم تُدمج لتوليد معلومات عالمية (ص 154)."],
+  ["Parameter / Weight Sharing", "مشاركة المحددات (مشاركة الوزن): استخدام كل مرشح لنفس المعلمات والأوزان وتثبيتها أثناء مسح الصورة بأكملها في CNN (ص 154)."],
+  ["Filter / Convolution Kernel", "المرشح أو نواة الالتواء: المصفوفة التي تمسح الصورة المدخلة، وتُمثّل المحددات التي تحملها الأوزان التي يجب تعلمها في كل طبقة تلافيفية (ص 154-156)."],
+  ["Feature Map / Convolved Feature", "خريطة الميزات: المصفوفة الناتجة عن عملية الالتواء (ضرب المرشح في مناطق الصورة وجمعها) (ص 155)."],
+  ["Convolutional Layer (الطبقة التلافيفية)", "البنية الأساسية لـ CNN؛ تتكون من تلافيفات متعددة القنوات تدمج المدخلات مع المرشح ثم تضيف الانحياز وتطبق دالة التنشيط (ص 156)."],
+  ["Pooling Layer (طبقة التجميع)", "طبقة تجمع الوحدات القريبة لتقليل حجم المدخلات على الطبقة التالية وتقليل الأبعاد (ص 156)."],
+  ["Max Pooling (الحد الأقصى للتجميع)", "تحديد القيمة القصوى في منطقة مربعة صغيرة (نافذة التجميع) كممثل لهذه المنطقة (ص 156)."],
+  ["Average Pooling (التجميع المتوسط)", "تحديد القيمة المتوسطة في نافذة التجميع كممثل لهذه المنطقة الصغيرة (ص 156)."],
+  ["Pooling Window Size", "حجم نافذة التجمع: أبعاد المنطقة المربعة الصغيرة التي يتم التجميع داخلها (مثل نافذة بحجم 2×2) (ص 156)."],
+  ["Fully Connected Layer", "الطبقة المتصلة بالكامل: تعمل كمصنف (Classifier) في نهاية CNN حيث تُسوّى الميزات المستخرجة وتُصنف عبر دالة Softmax (ص 157)."],
+  ["Softmax in CNN", "دالة تنشيط لطبقة الإخراج النهائية المتصلة بالكامل تدمج جميع الميزات المحلية (Local) في الميزات الشاملة (Global) وتحسب درجة كل فئة (ص 157)."],
+  ["RNN (الشبكة العصبية المتكررة)", "Recurrent Neural Network: شبكة تلتقط المعلومات الديناميكية في البيانات المتسلسلة عبر الاتصالات الدورية لعقد الطبقة المخفية (ص 158)."],
+  ["Memory Unit S_t", "وحدة الذاكرة للتسلسل في الوقت t داخل RNN؛ تخزن المعلومات السابقة مؤقتاً بالمعادلة S_t = tanh(U X_t + W S_{t-1}) (ص 158)."],
+  ["RNN Types (أنواع RNN الخمسة)", "تُصنف حسب علاقة المدخلات بالمخرجات إلى: واحد لواحد، واحد للكثيرين، كثير لواحد، وكثير لكثير (بنوعيه المتزامن وغير المتزامن) (ص 159)."],
+  ["BPTT (الانتشار العكسي عبر الزمن)", "Backpropagation Through Time: امتداد للانتشار العكسي التقليدي لتدريب شبكات RNN عبر التسلسل الزمني وحساب تدرج الأوزان (ص 160)."],
+  ["Two Error Sources in BPTT", "مصدرا الخطأ في وحدة الذاكرة بالوقت t: 1) خطأ إخراج الطبقة المخفية في الوقت t، و 2) الخطأ القادم من خلية الذاكرة في الوقت التالي t+1 (ص 160)."],
+  ["Long-Term Memory Decay", "ضعف الذاكرة طويلة المدى: المشكلة الأساسية لبنية RNN القياسية حيث تفقد القدرة على حفظ المعلومات لفترة طويلة بسبب سعة الذاكرة المحدودة (ص 161)."],
+  ["LSTM", "Long Short-Term Memory: شبكة الذاكرة طويلة المدى وقصيرة المدى التي تحل مشكلة ضعف الذاكرة طويلة المدى في RNN عبر البوابات وحالة الخلية (ص 161)."],
+  ["GRU (الوحدة المتكررة المبوبة)", "Gated Recurrent Unit: بنية متكررة مبوبة مبسطة من LSTM تستخدم بوابتي التحديث وإعادة الضبط لحفظ الذاكرة طويلة المدى بكفاءة (ص 162)."],
+  ["GAN (شبكة الخصومة التوليدية)", "Generative Adversarial Network: إطار عمل يدرب المولد (G) والمميز (D) من خلال عملية الخصومة والمنافسة باستخدام Backpropagation (ص 163)."],
+  ["Generator G (المولد)", "الشبكة التوليدية في GAN: تأخذ التشويش العشوائي z (المنتظم أو الغاوسي) وتولد عينات بيانات مزيفة G(z) لمحاكاة البيانات الحقيقية (ص 163-164)."],
+  ["Discriminator D (المميز)", "شبكة التمييز في GAN: تأخذ العينات الحقيقية x والعينات المولدة G(z) وتخرج احتمالاً يحدد ما إذا كانت العينة حقيقية أم مزيفة (ص 163-164)."],
+  ["MLE in Generator", "Maximum Likelihood Estimation (تقدير الاحتمالية القصوى): المعلمات التي يستخدمها المولد G ذو هيكلية MLP لتمثيل التعيين المشتق G(z) (ص 163)."],
+  ["Gaussian Noise z (التشويش الأبيض)", "متجه الضوضاء العشوائي المدخل إلى الشبكة التوليدية (المولد G) لإنشاء عينات جديدة (ص 163-164)."],
+  ["GAN Value Function V(D,G)", "دالة القيمة في تدريب GAN: min_G max_D V(D,G) التي تمثل لعبة التنافس بين تعظيم تمييز D وتقليل اكتشاف G (ص 165)."],
+  ["Early Saturation in GAN", "تشبع المقدار log(1 - D(G(z))) في بداية التدريب عندما تكون نتائج G سيئة فيصبح التدرج 0؛ ويُحل بتدريب G عبر تصغير [-log(D(G(z)))] (ص 165)."]
+];
+
+const cards = [
+  ["ما هي الشبكة العصبية التلافيفية (CNN)؟ وما الطبقات الثلاث التي تتضمنها؟", "هي شبكة عصبية مغذية للأمام (feedforward) تتفوق في معالجة الصور.\nتتضمن 3 طبقات: 1) طبقة تلافيفية (Convolutional)، 2) طبقة تجميع (Pooling)، 3) طبقة متصلة بالكامل (Fully connected) (ص 153)."],
+  ["كيف نشأت فكرة شبكة CNN تاريخياً في ستينيات القرن الماضي؟", "درس العالمان هابل وويزل (Hubel and Wiesel) الخلايا العصبية في القشرة البصرية للقطط المستخدمة في الحساسية المحلية واختيار الاتجاه، ووجدا أن بنيتها تبسط الشبكات العصبية واقترحا شبكة CNN (ص 153)."],
+  ["لماذا تُستخدم شبكة CNN على نطاق واسع في مجال تصنيف الأنماط؟", "لأنها يمكن أن تتجنب المعالجة المسبقة المعقدة للصور وتسمح بإدخال الصور الأصلية مباشرة (ص 153)."],
+  ["ما المقصود بمفهوم (المجال الاستقبالي المحلي Local Receptive Field) في CNN؟", "إدراك الإنسان يكون من المحلي إلى العالمي، والارتباط المكاني بين البكسلات المحلية أقرب من البعيدة؛ لذا لا تحتاج كل خلية لمعرفة الصورة الشاملة بل تعرف الصورة المحلية فقط ثم تُدمج في مستوى أعلى لتوليد معلومات عالمية (ص 154)."],
+  ["ما المقصود بمفهوم (مشاركة المحددات / مشاركة الوزن) في CNN؟", "في الطبقة الممسوحة ضوئياً بواسطة المرشحات، يستخدم كل مرشح نفس المعلمات (الأوزان) أثناء الحساب الموزون، وعندما يمسح المرشح الصورة بأكملها يتم تثبيت (إصلاح) محددات المرشح (ص 154)."],
+  ["كيف تعمل الطبقة التلافيفية (Convolutional Layer)؟ وما هو الوزن الذي يجب تعلمه فيها؟", "تستخدم مخرجات الطبقة السابقة كمدخل وتدمجه مع المرشح. والوزن الذي يجب تعلمه هو (نواة الالتواء) لكل طبقة، وبعد الالتفاف تُضاف قيمة الانحياز وتُمرر عبر دالة تنشيط (ص 156)."],
+  ["ما وظيفة طبقة التجميع (Pooling Layer) في CNN؟ وما أشهر نوعيها؟", "تجمع الوحدات القريبة لتقليل حجم المدخلات على الطبقة التالية مما يقلل الأبعاد.\nأشهر نوعيها: 1) الحد الأقصى للتجميع (Max pooling)، 2) التجميع المتوسط (Average pooling) (ص 156)."],
+  ["ما الفرق بين الحد الأقصى للتجميع (Max pooling) والتجميع المتوسط (Average pooling)؟", "• الحد الأقصى للتجميع: يحدد القيمة القصوى في منطقة مربعة صغيرة (نافذة التجميع) كممثل للمنطقة.\n• التجميع المتوسط: يحدد القيمة المتوسطة كممثل للمنطقة (ص 156)."],
+  ["ما هي وظيفة الطبقة المتصلة بالكامل (Fully Connected Layer) ودالة Softmax في نهاية CNN؟", "الطبقة المتصلة بالكامل هي في الأساس مصنف (Classifier) تُوضع فيها الميزات بعد تسويتها؛ وتُستخدم دالة Softmax لدمج جميع الميزات المحلية (Local) في الميزات الشاملة (Global) وحساب درجة كل نوع (ص 157)."],
+  ["ما هي الشبكة العصبية المتكررة (RNN)؟ وبماذا تختلف عن الشبكات الأمامية التقليدية؟", "شبكة تلتقط المعلومات الديناميكية في البيانات المتسلسلة عبر الاتصالات الدورية لعقد الطبقة المخفية. وتختلف عن الشبكات التقليدية بقدرتها على الاحتفاظ بحالة السياق ودعم التسلسل الزمني وليس الفضاء فقط (ص 158)."],
+  ["ما هي أبرز السيناريوهات المتعلقة بالتسلسلات التي تُستخدم فيها شبكات RNN؟", "1) مقاطع الفيديو (تتكون من إطارات صور).\n2) الصوت (يتكون من مقاطع).\n3) الجمل اللغوية (تتكون من كلمات) (ص 158)."],
+  ["إلى ماذا يرمز كل من X_t و S_t و O_t في بناء الشبكة العصبية المتكررة RNN؟", "• X_t: مدخل تسلسل الإدخال في الوقت t.\n• S_t: وحدة الذاكرة للتسلسل في الوقت t وتخزن المعلومات السابقة مؤقتاً: S_t = tanh(U X_t + W S_{t-1}).\n• O_t: مخرج الطبقة المخفية للتسلسل في الوقت t (ص 158)."],
+  ["ما هي الأنواع الخمسة للشبكات العصبية المتكررة (RNN) الموضحة في ص 159؟", "1) واحد لواحد (One to One)، 2) واحد للكثيرين (One to Many)، 3) كثير لواحد (Many to One)، 4) كثير لكثير غير متزامن، 5) كثير لكثير متزامن (ص 159)."],
+  ["ما هو الانتشار العكسي عبر الزمن (BPTT)؟ وما هما مصدرا الأخطاء في وحدة الذاكرة في الوقت t؟", "BPTT هو امتداد للانتشار العكسي التقليدي على التسلسل الزمني.\nمصدرا الخطأ في الوقت t هما:\n1) خطأ إخراج الطبقة المخفية في التسلسل الزمني t.\n2) الخطأ القادم من خلية الذاكرة في التسلسل الزمني التالي t + 1 (ص 160)."],
+  ["لماذا تحدث مشكلة التدرج المتلاشي أو المتفجر في BPTT مع زيادة طول التسلسل الزمني؟", "لأن التدرج الكلي للوزن w هو تراكم تدرج الوزن في كل التسلسل الزمني؛ وكلما زاد التسلسل الزمني زاد احتمال فقدان التسلسل الزمني الأخير لتدرج w الأول في التسلسل (ص 160)."],
+  ["ما هي الخطوات الثلاث لخوارزمية الانتشار العكسي عبر الزمن (BPTT)؟ وبأي خوارزمية تُحدّث الأوزان؟", "1) حساب قيمة الإخراج لكل خلية عصبية بالانتشار الأمامي.\n2) حساب قيمة الخطأ لكل خلية عصبية بالانتشار العكسي.\n3) حساب تدرج كل وزن.\nويتم تحديث الأوزان باستخدام خوارزمية SGD (ص 160)."],
+  ["ما هي المشكلة الأساسية لبنية RNN القياسية؟ ولماذا تحدث؟", "المشكلة هي أن المعلومات تضعف أثناء الذاكرة طويلة المدى (عدم القدرة على حفظ المعلومات لفترة طويلة كربط بداية القصة بنهايتها) بسبب سعة وحدة الذاكرة المحدودة (ص 161)."],
+  ["ما هما البنيتان اللتان تم تطويرهما لحل مشكلة الذاكرة طويلة المدى في شبكات RNN؟", "1) شبكة الذاكرة طويلة المدى وقصيرة المدى (LSTM - Long Short-Term Memory).\n2) الوحدة المتكررة المبوبة (GRU - Gated Recurrent Unit) (ص 161-162)."],
+  ["ما هي شبكة الخصومة التوليدية (GAN)؟ وما خوارزمية التدريب التي تتبناها؟", "إطار عمل يقوم بتدريب المولد (Generator G) والمميز (Discriminator D) من خلال عملية الخصومة، بحيث يحاول المميز معرفة ما إذا كانت عينة المولد مزيفة أم حقيقية. وتتبنى خوارزمية Backpropagation (ص 163)."],
+  ["ما هي السيناريوهات التطبيقية الأربعة لشبكة الخصومة التوليدية (GAN) المذكورة في ص 163؟", "1) إنشاء الصور، 2) إنشاء النص، 3) تحسين الكلام، 4) الدقة الفائقة للصورة (Super-resolution) (ص 163)."],
+  ["ما هي مدخلات ومخرجات وهيكلية المولد (Generator G) في شبكة GAN؟", "• المدخلات: التشويش العشوائي z (يتوافق مع التوزيع المنتظم أو الغاوسي Gaussian).\n• المخرجات: العينة المولدة المشتقة G(z).\n• الهيكلية: يعتمد شبكة MLP ويستخدم معلمات تقدير الاحتمالية القصوى (MLE) (ص 163-164)."],
+  ["ما هي مدخلات ومخرجات وهيكلية المميز (Discriminator D) في شبكة GAN؟", "• المدخلات: العينة الحقيقية (x_real) والعينة المزيفة المولدة G(z).\n• المخرجات: الاحتمال الذي يحدد ما إذا كانت العينة حقيقية أم مزيفة.\n• الهيكلية: يمكنه استخدام معلمات تحمل هيكلية MLP (ص 163-164)."],
+  ["قارني بين الشبكة التوليدية وشبكة التمييز في GAN من حيث الوظيفة الأساسية.", "• الشبكة التوليدية (G): تولد بيانات العينة من متجه الضوضاء البيضاء Gaussian z.\n• شبكة التمييز (D): تحدد ما إذا كانت بيانات العينة حقيقية أم مزيفة (ص 164)."],
+  ["ما هي معادلة دالة القيمة (هدف التحسين) في قواعد تدريب GAN؟", "min_G max_D V(D, G) = E_{x~p_data}[log D(x)] + E_{z~p_z}[log(1 - D(G(z)))] (ص 165)."],
+  ["ماذا يحدث في مرحلة التدريب المبكرة لـ GAN عندما تكون نتيجة المولد G سيئة للغاية؟", "يحدد المميز D بثقة عالية أن العينة التي تم إنشاؤها مزيفة لأنها تختلف بوضوح عن بيانات التدريب، فيصبح المقدار log(1 - D(G(z))) مشبعاً ويكون التدرج 0 ولا يمكن إجراء التكرار (ص 165)."],
+  ["كيف نحل مشكلة تشبع log(1 - D(G(z))) في مرحلة التدريب المبكرة للمولد G في GAN؟", "نختار تدريب المولد G فقط عن طريق تصغير المقدار [-log(D(G(z)))] بدلاً من log(1 - D(G(z))) (ص 165)."],
+  ["في حساب المرشح الفردي بـ CNN (ص 155)، إذا كانت الصورة 5×5 والمرشح 3×3 بدون حشو وبخطوة 1، فما حجم خريطة الميزات الناتجة؟", "ينتج عنها خريطة ميزات (Feature map) بحجم 3×3 (ص 155)."],
+  ["ما دور الاتصالات الدورية في عقد الطبقة المخفية داخل شبكة RNN؟", "تمكّن الشبكة من التقاط المعلومات الديناميكية في البيانات المتسلسلة ونقل حالة الذاكرة من اللحظة الحالية t إلى اللحظة التالية t+1 (ص 158)."]
+];
+
+const questions = [
+  {q:"أي العبارات التالية تصف الشبكة العصبية التلافيفية (CNN) ومكوناتها بشكل صحيح كما ورد في ص 153؟", o:["هي شبكة عصبية مغذية للأمام (feedforward) تتفوق في معالجة الصور، وتتضمن طبقة تلافيفية وطبقة تجميع وطبقة متصلة بالكامل","هي شبكة غير خاضعة للإشراف تتكون من مولد ومميز فقط","هي شجرة قرارات تقليدية لا تحتوي على أوزان","هي شبكة مخصصة للبيانات الجدولية الصغيرة فقط"], a:0, e:"الشبكة التلافيفية CNN هي شبكة عصبية مغذية للأمام تتفوق في معالجة الصور وتتضمن: طبقة تلافيفية، طبقة تجميع، وطبقة متصلة بالكامل (ص 153)."},
+  {q:"من هما العالمان اللذان درسا في ستينيات القرن الماضي الخلايا العصبية في القشرة البصرية للقطط واقترحا بنية شبكة CNN، ولماذا تُستخدم CNN بكثرة؟", o:["هابل وويزل (Hubel and Wiesel)؛ وتُستخدم بكثرة لأنها تتجنب المعالجة المسبقة المعقدة للصور وتسمح بإدخال الصور الأصلية مباشرة","تورينج ومينسكي؛ وتُستخدم لأنها تعمل بدون حاسوب","نيوتن ولايبنتز؛ وتُستخدم لحساب التكامل فقط","بيرسون وسبيرمان؛ وتُستخدم لحساب الارتباط فقط"], a:0, e:"درس هابل وويزل القشرة البصرية للقطط واقترحا CNN، وتُستخدم واسعاً لأنها تتجنب المعالجة المسبقة المعقدة للصور وتقبل الصور الأصلية مباشرة (ص 153)."},
+  {q:"في المفاهيم الرئيسية لـ CNN (ص 154)، ما المفهوم الذي ينص على أن الارتباطات المكانية بين البكسلات المحلية أقرب من البعيدة، لذا لا تحتاج كل خلية عصبية لمعرفة الصورة الشاملة بل الصورة المحلية فقط؟", o:["المجال الاستقبالي المحلي (Local Receptive Field)","الانتشار العكسي عبر الزمن (BPTT)","الخصومة التوليدية (Adversarial Training)","الانحدار اللوجستي الثنائي"], a:0, e:"في المجال الاستقبالي المحلي، لا تحتاج كل خلية عصبية إلى معرفة الصورة الشاملة بل تحتاج فقط لمعرفة الصورة المحلية ثم تُدمج لتوليد معلومات عالمية (ص 154)."},
+  {q:"ما المقصود بمفهوم (مشاركة المحددات / مشاركة الوزن) في الشبكة العصبية التلافيفية CNN (ص 154)؟", o:["أنه عندما يقوم كل مرشح (Filter) بمسح صورة بأكملها، يتم إصلاح (تثبيت) محددات المرشح ويستخدم نفس المعلمات أثناء الحساب الموزون","حذف جميع الأوزان من الشبكة العصبية","إعطاء كل بكسل في الصورة مرشحاً مختلفاً تماماً","مشاركة الأوزان بين المولد والمميز"], a:0, e:"تعني مشاركة الوزن أنه عندما يقوم كل مرشح بمسح صورة بأكملها يتم إصلاح محددات المرشح ويستخدم نفس المعلمات أثناء الحساب الموزون (ص 154)."},
+  {q:"في الطبقة التلافيفية (Convolutional Layer) (ص 156)، ما هو الوزن الذي يجب تعلمه، وماذا يحدث للنتيجة بعد اكتمال عملية الالتفاف؟", o:["الوزن الذي يجب تعلمه هو نواة الالتواء لكل طبقة؛ وبعد الالتفاف يجب أن تكون النتيجة متحيزة (يضاف لها انحياز) ويتم تنشيطها بدوال التنشيط","الوزن هو حجم الصورة؛ ولا تُستخدم أي دالة تنشيط","الوزن ثابت لا يتعلم؛ وتُحذف النتيجة بعد الالتفاف","الوزن هو عدد الفئات النهائية فقط"], a:0, e:"الوزن الذي يجب تعلمه هو نواة الالتواء لكل طبقة، وبعد اكتمال عملية الالتفاف يجب أن تكون النتيجة متحيزة ويتم تنشيطها بدوال التنشيط قبل إدخالها للطبقة التالية (ص 156)."},
+  {q:"ما الوظيفة الأساسية لـ (طبقة التجميع - Pooling Layer) في CNN، وما الفرق بين Max pooling و Average pooling (ص 156)؟", o:["تجمع الوحدات القريبة لتقليل حجم المدخلات وتقليل الأبعاد؛ حيث يحدد Max pooling القيمة القصوى في المنطقة المربعة بينما يحدد Average pooling القيمة المتوسطة","تزيد أبعاد الصورة عشرة أضعاف؛ ولا فرق بين النوعين","تحول الصورة إلى نص مكتوب","تولد صوراً مزيفة من التشويش"], a:0, e:"يجمع التجميع الوحدات القريبة لتقليل حجم المدخلات وتقليل الأبعاد، ويختار Max pooling القيمة القصوى بينما يختار Average pooling القيمة المتوسطة (ص 156)."},
+  {q:"ما الدور الذي تلعبه (الطبقة المتصلة بالكامل - Fully Connected Layer) ودالة (Softmax) في نهاية شبكة CNN (ص 157)؟", o:["تعمل الطبقة المتصلة بالكامل كمصنف بعد تسوية الميزات، وتُستخدم دالة Softmax لدمج جميع الميزات المحلية (Local) في الميزات الشاملة (Global) وحساب درجة كل نوع","تقوم بمسح الصورة بمرشح 3×3 فقط","تقوم بتخزين السلاسل الزمنية الصوتية","تعمل كنافذة تجميع بحجم 2×2"], a:0, e:"الطبقة المتصلة بالكامل هي في الأساس مصنف، وتُستخدم Softmax كوظيفة تنشيط لطبقة الإخراج النهائية لدمج الميزات المحلية في الشاملة وحساب درجة كل نوع (ص 157)."},
+  {q:"أي نوع من الشبكات العصبية يلتقط المعلومات الديناميكية في البيانات المتسلسلة (كالفيديو والصوت والجمل) من خلال الاتصالات الدورية لعقد الطبقة المخفية ويحتفظ بحالة السياق (ص 158)؟", o:["الشبكة العصبية المتكررة (Recurrent Neural Network - RNN)","الشبكة العصبية التلافيفية (CNN)","مدرك الطبقة الواحدة (Single-layer Perceptron)","شبكة الخصومة التوليدية (GAN)"], a:0, e:"الشبكة العصبية المتكررة RNN تلتقط المعلومات الديناميكية في البيانات المتسلسلة عبر الاتصالات الدورية لعقد الطبقة المخفية وتحتفظ بحالة السياق (ص 158)."},
+  {q:"في معادلات بناء الشبكة العصبية المتكررة RNN في الوقت t (ص 158)، ماذا تمثل المعادلة S_t = tanh(U X_t + W S_{t-1})؟", o:["تمثل وحدة الذاكرة للتسلسل في الوقت t التي تقوم بتخزين المعلومات السابقة مؤقتاً","تمثل طبقة التجميع الأقصى للصور","تمثل دالة القيمة في شبكة GAN","تمثل معادلة الانحدار الخطي البسيط"], a:0, e:"S_t هي وحدة الذاكرة للتسلسل في الوقت t وتقوم بتخزين المعلومات السابقة مؤقتاً بالمعادلة S_t = tanh(U X_t + W S_{t-1}) (ص 158)."},
+  {q:"أي مما يلي يمثل الأنواع الخمسة لهياكل الشبكات العصبية المتكررة (RNN) الموضحة في ص 159؟", o:["واحد لواحد، واحد للكثيرين، كثير لواحد، وكثير لكثير (بنوعيه المتزامن وغير المتزامن)","تلافيفي، تجميعي، ومتصل بالكامل","مولد، مميز، ومشفر","خطي، تربيعي، وتكعيبي"], a:0, e:"أنواع الشبكات العصبية المتكررة في ص 159 هي: واحد لواحد، واحد للكثيرين، كثير لواحد، وكثير لكثير (بنوعيه)."},
+  {q:"في خوارزمية الانتشار العكسي عبر الزمن (BPTT) لتدريب شبكات RNN (ص 160)، ما هما مصدرا الأخطاء في التسلسل في وقت وحدة الذاكرة t؟", o:["الأول من خطأ إخراج الطبقة المخفية في التسلسل الزمني t، والثاني هو الخطأ من خلية الذاكرة في التسلسل الزمني التالي t + 1","الأول من طبقة التجميع، والثاني من مرشح الصورة","الأول من المولد G، والثاني من المميز D","لا يوجد سوى مصدر واحد فقط للخطأ في BPTT"], a:0, e:"هناك مصدران للأخطاء في وقت وحدة الذاكرة t: الأول من خطأ إخراج الطبقة المخفية في الوقت t، والثاني من خلية الذاكرة في التسلسل الزمني التالي t+1 (ص 160)."},
+  {q:"ماذا يحدث في خوارزمية BPTT كلما زاد طول التسلسل الزمني (ص 160)؟", o:["يزداد احتمال فقدان التسلسل الزمني الأخير لتدرج الوزن w الأول في التسلسل الزمني، مما يؤدي إلى مشكلة التدرج المتلاشي أو التدرج المتفجر","تزداد دقة الذاكرة إلى ما لا نهاية دون أي مشاكل","يتحول التسلسل الزمني إلى صورة ثابتة","تتوقف الحاجة لحساب التدرجات"], a:0, e:"كلما زاد التسلسل الزمني، زاد احتمال فقدان التسلسل الزمني الأخير لتدرج w الأول في التسلسل الزمني، مما يؤدي لمشكلة التدرج المتلاشي أو المتفجر (ص 160)."},
+  {q:"ما هي الخطوات الثلاث لخوارزمية الانتشار العكسي عبر الزمن (BPTT) قبل تحديث الأوزان بخوارزمية SGD (ص 160)؟", o:["1) حساب الإخراج لكل خلية بالانتشار الأمامي، 2) حساب الخطأ لكل خلية بالانتشار العكسي، 3) حساب تدرج كل وزن","1) تدوير الصورة، 2) تجميع البكسلات، 3) تطبيق Softmax","1) توليد التشويش، 2) خداع المميز، 3) حساب MLE","1) حذف الذاكرة، 2) تصفير الأوزان، 3) إيقاف التدريب"], a:0, e:"ثلاث خطوات لـ BPTT: حساب الإخراج بالانتشار الأمامي، حساب الخطأ بالانتشار العكسي، وحساب تدرج كل وزن، ثم تحديث الأوزان بـ SGD (ص 160)."},
+  {q:"ما هي المشكلة الرئيسية لبنية الشبكة العصبية المتكررة (RNN) القياسية التي دعت إلى ابتكار شبكتي LSTM و GRU (ص 161-162)؟", o:["أن المعلومات تضعف أثناء الذاكرة طويلة المدى ولا تتمكن من حفظ المعلومات لفترة طويلة بسبب سعة وحدة الذاكرة المحدودة","أنها لا تقبل أي بيانات متسلسلة إطلاقاً","أنها لا تحتوي على أي طبقة مخفية","أنها تعمل فقط على الصور الثابتة"], a:0, e:"على الرغم من أن بنية RNN القياسية تحل مشكلة ذاكرة المعلومات، إلا أن المعلومات تضعف أثناء الذاكرة طويلة المدى بسبب سعة وحدة الذاكرة المحدودة (ص 161)."},
+  {q:"إلى ماذا يرمز الاختصاران (LSTM) و (GRU) في الشبكات العصبية المتكررة المطورة (ص 161-162)؟", o:["LSTM: شبكة الذاكرة طويلة المدى وقصيرة المدى (Long Short-Term Memory)، و GRU: الوحدة المتكررة المبوبة (Gated Recurrent Unit)","LSTM: النموذج الخطي البسيط، و GRU: وحدة الرسومات العامة","كلاهما يرمزان إلى مرشحات الصور في CNN","يرمزان إلى المولد والمميز في شبكات الخصومة"], a:0, e:"LSTM هي Long Short-Term Memory Network (ص 161)، و GRU هي Gated Recurrent Unit (ص 162)."},
+  {q:"ما هو إطار العمل الذي يقوم بتدريب المولد (Generator G) والمميز (Discriminator D) من خلال عملية الخصومة لمعرفة ما إذا كانت العينة مزيفة أم حقيقية (ص 163)؟", o:["شبكة الخصومة التوليدية (Generative Adversarial Network - GAN)","الشبكة العصبية التلافيفية (CNN)","الانتشار العكسي عبر الزمن (BPTT)","انحدار المتجه الداعم (SVR)"], a:0, e:"شبكة الخصومة التوليدية GAN هي إطار عمل يدرب المولد G والمميز D من خلال عملية الخصومة (ص 163)."},
+  {q:"أي مما يلي يمثل السيناريوهات التطبيقية الأربعة لشبكة الخصومة التوليدية (GAN) المذكورة نصاً في ص 163؟", o:["إنشاء الصور، وإنشاء النص، وتحسين الكلام، والدقة الفائقة للصورة","تجميع العملاء، وتقليل الأبعاد، وحساب الارتباط","تصنيف البريد المزعج فقط","التحقق المتقاطع والبحث الشبكي"], a:0, e:"يمكن تطبيق GAN على سيناريوهات مثل: إنشاء الصور، وإنشاء النص، وتحسين الكلام، والدقة الفائقة للصورة (ص 163)."},
+  {q:"في شبكة الخصومة التوليدية (GAN) (ص 163-164)، ما هو الإدخال والإخراج لكل من المولد (G)؟", o:["الإدخال هو التشويش العشوائي z (المنتظم أو الغاوسي Gaussian)، والإخراج هو نموذج متجه البيانات المشتق G(z)","الإدخال هو العينة الحقيقية x، والإخراج هو احتمالية كونها حقيقية","الإدخال هو ملف صوتي، والإخراج هو مصفوفة التباس","لا يوجد إدخال للمولد G"], a:0, e:"مدخلات المولد G هي التشويش الأبيض z (من توزيع منتظم أو غاوسي Gaussian)، وإخراجه هو نموذج متجه البيانات المولد G(z) (ص 163-164)."},
+  {q:"في شبكة الخصومة التوليدية (GAN) (ص 163)، ما الهيكلية والمعلمات التي يعتمدها المولد (G) لتمثيل التعيين المشتق G(z) من مساحة الإدخال لمساحة العينة؟", o:["يعتمد هيكلية شبكة الإدراك متعدد الطبقات (MLP)، ويستخدم معلمات تقدير الاحتمالية القصوى (MLE)","يعتمد هيكلية شجرة القرار ومؤشر جيني","يعتمد طبقة التجميع الأقصى فقط","يعتمد خوارزمية K-means"], a:0, e:"يعتمد المولد G هيكلية شبكة الإدراك متعدد الطبقات MLP، ويستخدم معلمات تقدير الاحتمالية القصوى MLE لتمثيل التعيين المشتق G(z) (ص 163)."},
+  {q:"في شبكة الخصومة التوليدية (GAN) (ص 163-164)، ما هي مدخلات ومخرجات شبكة المميز (Discriminator D)؟", o:["الإدخال هو العينة الحقيقية x_real والعينة المزيفة G(z)، والمخرجات هي الاحتمال الذي يحدد ما إذا كانت العينة حقيقية أم مزيفة","الإدخال هو التشويش الأبيض z فقط، والمخرجات هي صورة جديدة","الإدخال هو معدل التعلم، والمخرجات هي دالة التنشيط","المميز D لا يتلقى العينات الحقيقية أبداً"], a:0, e:"إدخال المميز D هو العينة الحقيقية x والعينة المزيفة G(z)، والناتج هو الاحتمال الذي يحدد ما إذا كانت العينة حقيقية أم مزيفة (ص 163-164)."},
+  {q:"في قواعد تدريب GAN (ص 165)، ماذا تعني صيغة دالة القيمة min_G max_D V(D, G)؟", o:["أن المميز D يسعى لتعظيم (max) قدرته على التمييز الصحيح بين الحقيقي والمزيف، بينما يسعى المولد G لتقليل (min) قدرة المميز على كشف عيناته المزيفة","أن كلاً من G و D يسعيان لزيادة الخطأ إلى ما لا نهاية","أن المولد والمميز لا يتنافسان أبداً","أن التدريب يتم بدون دالة قيمة"], a:0, e:"تصف دالة القيمة min_G max_D V(D,G) عملية الخصومة حيث يعظم D احتمالية التمييز الصحيح ويقلل G من قدرة D على اكتشاف تزييفه (ص 165)."},
+  {q:"في مرحلة التدريب المبكرة لشبكة GAN، عندما تكون نتيجة المولد G سيئة للغاية ويحدد المميز D بثقة عالية أنها مزيفة، ما المشكلة الرياضية التي تحدث وكيف نحلها (ص 165)؟", o:["يكون المقدار log(1 - D(G(z))) مشبعاً (حيث يكون التدرج 0 ولا يمكن إجراء التكرار)؛ ولذلك نختار تدريب G عن طريق تصغير [-log(D(G(z)))]","ينفجر التدرج إلى ما لا نهاية؛ ونحله بحذف المميز D","تصبح العينة المزيفة حقيقية فوراً دون تدريب","نتوقف عن استخدام الانتشار العكسي"], a:0, e:"في البداية يكون log(1 - D(G(z))) مشبعاً والتدرج 0، لذلك نختار تدريب G فقط عن طريق تصغير [-log(D(G(z)))] (ص 165)."},
+  {q:"في الشكل التوضيحي لطبقة التجميع الأقصى (Max Pooling) في ص 156، إذا كانت منطقة التجميع تحتوي على الأرقام (1, 1, 5, 6) داخل نافذة بحجم 2×2، فما الرقم الذي يتم اختياره كممثل لهذه المنطقة؟", o:["6 (لأنه القيمة القصوى في هذه المنطقة المربعة الصغيرة)","1 (لأنه القيمة الصغرى)","3.25 (لأنه المتوسط الحسابي)","13 (لأنه مجموع الأرقام)"], a:0, e:"عند استخدام الحد الأقصى للتجميع (Max pooling)، يتم تحديد القيمة القصوى في منطقة مربعة صغيرة كممثل لهذه المنطقة، وأكبر رقم في (1, 1, 5, 6) هو 6 (ص 156)."},
+  {q:"أي نوع من الشبكات العصبية المتكررة (RNN) في ص 159 يأخذ مدخلاً واحداً ويخرج تسلسلاً من المخرجات (مثل إدخال صورة واحدة وإخراج جملة تصفها)؟", o:["واحد للكثيرين (One to Many)","كثير لواحد (Many to One)","واحد لواحد (One to One)","شبكة التلافيف الثنائية"], a:0, e:"النوع الثاني في مخطط ص 159 هو (واحد للكثيرين One to Many) حيث يستقبل مدخلاً واحداً وينتج سلسلة مخرجات متتالية."},
+  {q:"ما هي الخوارزمية الأساسية التي تتبناها شبكة الخصومة التوليدية (GAN) لتحديث أوزان ومعلمات شبكتيها أثناء التدريب (ص 163)؟", o:["خوارزمية الانتشار العكسي (Backpropagation)","خوارزمية التجميع الهرمي","خوارزمية شجرة القرار ID3","خوارزمية Apriori"], a:0, e:"نصت الشريحة 5 في ص 163 على أن: تتبنى GAN خوارزمية Backpropagation المدروسة."}
+];
+
+// بناء شبكة المصطلحات
+const termsGrid = document.getElementById("termsGrid");
+terms.forEach(([en, ar]) => {
+  const d = document.createElement("div");
+  d.className = "card";
+  d.style.margin = "0";
+  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
+  termsGrid.appendChild(d);
+});
+
+// إدارة البطاقات التعليمية
+let ci = 0, showAnswer = false;
+function renderCard() {
+  document.getElementById("flashTerm").textContent = cards[ci][0];
+  const ansEl = document.getElementById("flashAnswer");
+  ansEl.innerHTML = cards[ci][1].replace(/\n/g, "<br>");
+  ansEl.hidden = !showAnswer;
+  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
+  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+}
+document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
+document.getElementById("flashcard").addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
+});
+document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
+document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
+renderCard();
+
+// التنقل بين التبويبات
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+// إدارة الاختبار
+let answers = {};
+function renderQuiz() {
+  const area = document.getElementById("quizArea");
+  area.innerHTML = "";
+  const letters = ["أ", "ب", "ج", "د"];
+  questions.forEach((item, i) => {
+    const box = document.createElement("div");
+    box.className = "qbox";
+    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
+    const opts = box.querySelector(".options");
+    item.o.forEach((opt, j) => {
+      const btn = document.createElement("button");
+      btn.className = "option";
+      btn.textContent = `${letters[j]}) ${opt}`;
+      btn.onclick = () => {
+        answers[i] = j;
+        [...opts.children].forEach((x, k) => {
+          x.classList.remove("correct", "wrong");
+          x.disabled = true;
+          if (k === item.a) x.classList.add("correct");
+          if (k === j && j !== item.a) x.classList.add("wrong");
+        });
+        const fb = document.getElementById("fb" + i);
+        fb.hidden = false;
+        fb.className = "feedback " + (j === item.a ? "good" : "bad");
+        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
+        updateScore();
+      };
+      opts.appendChild(btn);
+    });
+    area.appendChild(box);
+  });
+  updateScore();
+}
+
+function updateScore() {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
+  document.getElementById("score").textContent = `النتيجة: ${correct} / ${questions.length}`;
+  document.getElementById("progressBar").style.width = (Object.keys(answers).length / questions.length * 100) + "%";
+}
+
+document.getElementById("resetQuiz").onclick = () => {
+  answers = {};
+  document.getElementById("finalResult").textContent = "";
+  renderQuiz();
+};
+
+document.getElementById("finishQuiz").onclick = () => {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
+  const pct = Math.round(correct / questions.length * 100);
+  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${questions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! إتقان كامل للفصل الثاني عشر من موضوعات مختارة." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
+};
+
+renderQuiz();
+</script>
+</body>
+</html>

@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الفصل الحادي عشر الشامل (100%) | موضوعات مختارة - المكونات الأساسية لبناء نماذج التعلم العميق</title>
+<style>
+:root{
+  --bg:#f4f6fb;
+  --card:#ffffff;
+  --ink:#1b263b;
+  --muted:#637085;
+  --accent:#0f766e;
+  --accent-dark:#115e59;
+  --accent2:#ccfbf1;
+  --line:#e2e8f0;
+  --good:#059669;
+  --good-bg:#ecfdf5;
+  --bad:#dc2626;
+  --bad-bg:#fef2f2;
+  --warn:#d97706;
+  --warn-bg:#fffbeb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
+header{background:linear-gradient(135deg,#134e4a,#0f766e,#0284c7);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(19,78,74,0.18)}
+.wrap{max-width:1060px;margin:auto;padding:0 16px}
+.eyebrow{opacity:.92;font-size:.9rem;background:rgba(255,255,255,0.15);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
+h1{margin:5px 0;font-size:clamp(1.55rem,4vw,2.25rem)}
+header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
+nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:rgba(255,255,255,0.18);color:#ffffff;font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
+nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
+nav button.active{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+main .btn{background:var(--accent2);color:var(--accent-dark)}
+main .btn.primary{background:var(--accent);color:white}
+main{padding:22px 0 48px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(36,52,91,0.04)}
+h2{font-size:1.35rem;margin:0 0 12px;color:#134e4a}
+h3{font-size:1.06rem;margin:10px 0 6px;color:var(--accent-dark)}
+h4{font-size:.98rem;margin:8px 0 4px;color:#0f172a}
+small,.muted{color:var(--muted)}
+ul,ol{padding-right:22px;margin:8px 0}
+li{margin:6px 0}
+details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
+summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f0fdfa;color:#134e4a;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
+details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
+.details-body{padding:16px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#f1f5f9;color:#134e4a;font-weight:bold}
+tr:last-child td{border-bottom:0}
+.note{border-right:4px solid var(--accent);padding:10px 14px;background:#f0fdfa;border-radius:8px;margin:10px 0}
+.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
+.formula-box{background:#134e4a;color:#fff;padding:12px 16px;border-radius:12px;text-align:center;font-size:1.03rem;margin:10px 0;direction:ltr;font-family:monospace}
+.step-card{border:1px solid var(--line);border-radius:12px;padding:14px;background:#f8fafc}
+.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
+.options{display:grid;gap:8px;margin-top:12px}
+.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
+.option:hover:not(:disabled){border-color:var(--accent);background:#f0fdfa}
+.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
+.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
+.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
+.feedback.good{color:var(--good);background:var(--good-bg)}
+.feedback.bad{color:var(--bad);background:var(--bad-bg)}
+.progress{height:10px;background:#e2e8f0;border-radius:9px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
+.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#ccfbf1);border:2px solid #99f6e4;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
+.flashcard:hover{transform:scale(1.005)}
+.flashcard .term{font-size:1.35rem;font-weight:bold;color:#134e4a}
+.flashcard .answer{margin-top:16px;font-size:1.08rem;color:var(--accent-dark);background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
+@media(max-width:600px){
+  .card{padding:14px}
+  nav button{flex:1 1 calc(50% - 8px);text-align:center}
+  .flashcard{min-height:200px;padding:18px}
+  th,td{padding:8px 10px;font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">مقرر موضوعات مختارة في علوم البيانات • تغطية شاملة 100% (صفحات PDF من 140 إلى 152)</div>
+    <h1>الفصل الحادي عشر: المكونات الأساسية لبناء نماذج التعلم العميق</h1>
+    <p>يغطي التنظيم (L1, L2، توسيع البيانات، التسرب Dropout، التوقف المبكر)، المحسنات (Momentum, AdaGrad, RMSProp, Adam)، وخلل توازن البيانات ومشكلات التدرج</p>
+    <nav>
+      <button class="active" data-tab="summary">الشرح الشامل</button>
+      <button data-tab="tables">جداول المقارنات والمعادلات (4)</button>
+      <button data-tab="terms">المصطلحات والمفاهيم (28)</button>
+      <button data-tab="cards">البطاقات (28)</button>
+      <button data-tab="quiz">الاختبار الشامل (25)</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- ================= التبويب الأول: الشرح الشامل ================= -->
+  <section id="summary" class="panel active">
+    <div class="card">
+      <h2>خريطة الفصل الحادي عشر (صفحات PDF من 140 إلى 152)</h2>
+      <div class="grid">
+        <div>
+          <span class="tag">الوحدة التعليمية 1 (ص 140 - 144)</span>
+          <h3>تقنيات التنظيم (Regularization)</h3>
+          <p>مفهوم التنظيم ومعايير الجزاء، الفرق الدقيق بين تنظيم L1 و L2، توسيع مجموعة البيانات، التسرب (Dropout)، والتوقف المبكر (Early Stopping).</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة التعليمية 2 (ص 145 - 149)</span>
+          <h3>المُحسِّنات (Optimizers)</h3>
+          <p>الغرض من المحسنات وأنواعها التسعة، محسن الزخم (Momentum)، محسن AdaGrad، محسن RMSProp، ومحسن Adam وتصحيح التحيز.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة التعليمية 3 (ص 150 - 152)</span>
+          <h3>توازن البيانات ومشكلات التدرج</h3>
+          <p>خلل توازن البيانات (Imbalanced Data) وطرق علاجه الأربع (بما فيها SMOTE)، اختفاء وانفجار التدرج، والتجهيز الزائد (Overfitting).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- الوحدة الأولى -->
+    <details open>
+      <summary>1) الوحدة التعليمية (1): التنظيم (Regularization)، معايير الجزاء (L1 & L2)، توسيع البيانات، التسرب، والتوقف المبكر (ص 140 - 144)</summary>
+      <div class="details-body">
+        <h3>أولاً: مفهوم التنظيم (<span dir="ltr">Regularization</span>) ومعايير الجزاء (ص 141)</h3>
+        <ul>
+          <li><b>أهمية التنظيم:</b> يُعد التنظيم تقنية مهمة وفعالة <b>لتقليل أخطاء التعميم (<span dir="ltr">Generalization errors</span>)</b> في التعلم الآلي، وهو مفيد بشكل خاص لنماذج التعلم العميق التي تميل إلى <b>الإفراط في الملاءمة والتجهيز (<span dir="ltr">Overfitting</span>)</b> بسبب العدد الكبير من المحددات (المعلمات).</li>
+          <li><b>التقنيات الأربع الفعالة لمنع أو تجنب الإفراط في التجهيز (<span dir="ltr">Overfitting</span>) (ص 141):</b>
+            <ol>
+              <li>إضافة قيود على المحددات، مثل معايير <b dir="ltr">L1</b> و <b dir="ltr">L2</b>.</li>
+              <li>توسيع مجموعة التدريب، مثل إضافة التشويش وتحويل البيانات.</li>
+              <li>التسرب (<b dir="ltr">Dropout</b>).</li>
+              <li>التوقف المبكر (<b dir="ltr">Early stopping</b>).</li>
+            </ol>
+          </li>
+          <li><b>معادلة معايير الجزاء (<span dir="ltr">Penalty Norms</span>) (ص 141):</b>
+            <p>تقيد العديد من طرق التنظيم قدرة النموذج على التعلم عن طريق إضافة معيار الجزاء $\Omega(\theta)$ إلى دالة الهدف $J$:</p>
+            <div class="formula-box">J̃(θ; X, y) = J(θ; X, y) + α Ω(θ)</div>
+            <ul>
+              <li><b dir="ltr">J(θ; X, y):</b> الدالة الموضوعية القياسية (دالة الخسارة الأصلية).</li>
+              <li><b dir="ltr">Ω(θ):</b> مصطلح العقوبة المعيار (معيار الجزاء).</li>
+              <li><b dir="ltr">α ∈ [0, ∞):</b> <b>محددة فائقة (<span dir="ltr">Hyperparameter</span>)</b> تزن المساهمة النسبية لمصطلح العقوبة المعيار $\Omega$.</li>
+              <li><b>ملاحظتان هامتان:</b> إذا تم إعطاء $\alpha$ قيمة <b>0</b> فلن يتم تنفيذ أي تسوية (تنظيم)، وتزداد العقوبة في التنظيم بزيادة قيمة $\alpha$.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <div class="exam-alert">
+          <h3>ثانياً: تنظيم L1 مقابل تنظيم L2 والفروق الجوهرية بينهما (ص 142 - 143) - موضع أسئلة مؤكدة:</h3>
+          <div class="grid">
+            <div class="step-card">
+              <span class="tag">1. تنظيم L1 (L1 Regularization) (ص 142)</span>
+              <ul>
+                <li>يضيف القيد المعياري $L_1$ إلى محددات النموذج:
+                  <div class="formula-box">J̃(w; X, y) = J(w; X, y) + α ||w||₁</div>
+                </li>
+                <li>معادلة التدرج لحل القيمة:
+                  <div class="formula-box">∇_w J̃(w; X, y) = α sign(w) + ∇_w J(w)</div>
+                </li>
+              </ul>
+            </div>
+            <div class="step-card">
+              <span class="tag">2. تنظيم L2 (L2 Regularization) (ص 142)</span>
+              <ul>
+                <li>يضيف القيد المعياري $L_2$ لمنع الإفراط في التجهيز:
+                  <div class="formula-box">J̃(w; X, y) = J(w; X, y) + (1/2) α ||w||₂²</div>
+                </li>
+                <li>صيغة تحديث الوزن بطريقة التدرج (حيث $\epsilon$ معدل التعلم):
+                  <div class="formula-box">w ← (1 - εα)w - ε ∇_w J(w)</div>
+                </li>
+                <li>تقوم هذه الصيغة بـ <b>ضرب المحددة $w$ بعامل تخفيض $(1 - \epsilon\alpha)$</b> في كل خطوة.</li>
+              </ul>
+            </div>
+          </div>
+
+          <h4>الاختلافات الرئيسية الثلاثة بين L1 و L2 (ص 143):</h4>
+          <ol>
+            <li><b>التناثر (<span dir="ltr">Sparsity</span>):</b> يمكن لـ <b dir="ltr">L1</b> إنشاء نموذج <b>أكثر تناثراً (<span dir="ltr">more sparse</span>)</b> من <b dir="ltr">L2</b>.</li>
+            <li><b>اختيار الميزة (<span dir="ltr">Feature Selection</span>):</b> عندما تكون قيمة المحددة $w$ صغيرة، يمكن أن يؤدي تنظيم <b dir="ltr">L1</b> إلى تقليل قيمة المحددة <b>مباشرة إلى 0</b>، وبالتالي يمكن استخدام <b dir="ltr">L1</b> لعملية <b>اختيار الميزة</b>.</li>
+            <li><b>التوزيع الاحتمالي السابق (<span dir="ltr">Prior Probability Distribution</span>):</b>
+              <ul>
+                <li>في تنظيم <b dir="ltr">L2</b>، تتوافق قيمة المحددة مع قاعدة <b>التوزيع الغاوسي (<span dir="ltr">Gaussian distribution</span>)</b>.</li>
+                <li>في تنظيم <b dir="ltr">L1</b>، تتوافق قيمة المحددة مع قاعدة <b>توزيع لابلاس (<span dir="ltr">Laplace distribution</span>)</b>.</li>
+              </ul>
+            </li>
+          </ol>
+        </div>
+
+        <h3>ثالثاً: توسيع مجموعة البيانات، التسرب (Dropout)، والتوقف المبكر (ص 143 - 144)</h3>
+        <ul>
+          <li><b>1. توسيع مجموعة البيانات (<span dir="ltr">Dataset Expansion / Augmentation</span>) (ص 143):</b>
+            <ul>
+              <li>الطريقة <b>الأكثر فعالية</b> لمنع الإفراط في التجهيز (<span dir="ltr">Overfitting</span>) هي <b>زيادة مجموعة التدريب</b> (فمجموعة التدريب الأكبر لديها احتمالية أقل للإفراط في التجهيز).</li>
+              <li>تختلف طرق توسيع البيانات باختلاف المجالات:
+                <br>• <b>في مجال التعرف على الكائنات (الصور):</b> تدوير الصور أو تغيير حجمها. <b>(الشرط الأساسي لتحويل الصورة هو أن نوع/فئة الصورة لا يمكن تغييره من خلال التحويل؛ فمثلاً في أرقام الكتابة اليدوية يمكن أن تتغير الفئتان 6 و 9 بسهولة بعد التدوير!)</b>.
+                <br>• <b>في مجال التعرف على الكلام:</b> إضافة <b>تشويش عشوائي</b> إلى بيانات الإدخال.
+                <br>• <b>في مجال معالجة اللغة الطبيعية (<span dir="ltr">NLP</span>):</b> <b>استبدال الكلمات بمرادفاتها</b>.
+              </li>
+            </ul>
+          </li>
+          <li><b>2. التسرب (<span dir="ltr">Dropout</span>) (ص 144):</b>
+            <ul>
+              <li>طريقة تنظيم شائعة وبسيطة استُخدمت على نطاق واسع منذ عام <b>2014</b>.</li>
+              <li><b>آلية عملها:</b> أثناء عملية التدريب، يتجاهل التسرب <b>بعض المدخلات/الوحدات بشكل عشوائي</b>، وفي هذه الحالة <b>لا يتم تحديث المحددات المقابلة للمدخلات المهملة</b>.</li>
+              <li><b>كطريقة تكامل (<span dir="ltr">Ensemble</span>):</b> يجمع <span dir="ltr">Dropout</span> جميع نتائج الشبكات الفرعية التي يحصل عليها عن طريق إسقاط المدخلات بشكل عشوائي.</li>
+            </ul>
+          </li>
+          <li><b>3. التوقف المبكر (<span dir="ltr">Early Stopping</span>) (ص 144):</b>
+            <ul>
+              <li>إدخال اختبار على بيانات <b>مجموعة التحقق (<span dir="ltr">Validation set</span>)</b> أثناء التدريب؛ بحيث <b>عندما تزداد خسارة البيانات في خطوة التحقق</b> (رغم استمرار انخفاض خسارة التدريب)، نقوم بإجراء <b>إيقاف مبكر</b> للتدريب لمنع <span dir="ltr">Overfitting</span>.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- الوحدة الثانية -->
+    <details open>
+      <summary>2) الوحدة التعليمية (2): المُحسِّنات (Optimizers): الزخم (Momentum)، AdaGrad، RMSProp، و Adam (ص 145 - 149)</summary>
+      <div class="details-body">
+        <h3>أولاً: مفهوم المُحسِّن (<span dir="ltr">Optimizer</span>) وأغراضه الثلاثة (ص 145)</h3>
+        <ul>
+          <li>في البرمجة الكائنية التوجه، غالباً ما يتم تغليف الإصدارات المحسنة لخوارزميات الانحدار التدريجي في كائنات تُسمى <b>المُحسِّنات (<span dir="ltr">Optimizers</span>)</b>.</li>
+          <li><b>الأغراض الثلاثة لتحسين الخوارزمية:</b>
+            <ol>
+              <li><b>تسريع تقارب الخوارزميات.</b></li>
+              <li><b>منع أو القفز من القيم المتطرفة المحلية (<span dir="ltr">Local extrema</span>).</b></li>
+              <li><b>تبسيط إعداد المعلمات اليدوية، وخاصة معدل التعلم (<span dir="ltr">LR</span>).</b></li>
+            </ol>
+          </li>
+          <li><b>أدوات تحسين الأداء التسع الشائعة:</b> مُحسِّن <span dir="ltr">GD</span> الشائع، مُحسِّن الزخم (<span dir="ltr">Momentum</span>)، <span dir="ltr">Nesterov</span>، <span dir="ltr">AdaGrad</span>، <span dir="ltr">AdaDelta</span>، <span dir="ltr">RMSProp</span>، <span dir="ltr">Adam</span>، <span dir="ltr">AdaMax</span>، و <span dir="ltr">Nadam</span>.</li>
+        </ul>
+
+        <h3>ثانياً: محسن الزخم (<span dir="ltr">Momentum Optimizer</span>) (ص 146)</h3>
+        <ul>
+          <li><b>فكرته ومعادلته:</b> التحسين الأساسي هو إضافة شروط الزخم لـ $\Delta w_i$. وإذا كان تصحيح الوزن للتكرار $n$ هو $\Delta w_{ij}(n)$ فإن قاعدة تصحيح الوزن هي:
+            <div class="formula-box">Δw_ij(n) = -η (∂E / ∂w_ij(n)) + α Δw_ij(n - 1)</div>
+            حيث $\alpha$ ثابت ($0 \le \alpha < 1$) يُسمى <b>معامل الزخم</b>، والمقدار $\alpha \Delta w_{ij}(n-1)$ هو <b>مصطلح الزخم</b>.
+          </li>
+          <li><b>تشبيه الكرة المتدحرجة:</b> إدخال مصطلح الزخم يعادل إعطاء الكرة الصغيرة المتدحرجة على سطح الخطأ <b>الجمود / القصور الذاتي (<span dir="ltr">Inertia</span>)</b>.</li>
+          <li><b>المزايا الثلاث لمحسن الزخم:</b>
+            <ol>
+              <li>يعزز ثبات اتجاه تصحيح التدرج ويقلل الطفرات (التذبذبات).</li>
+              <li>في المناطق ذات التدرج المستقر تتدحرج الكرة أسرع فأسرع (بحد أقصى للسرعة لأن $\alpha < 1$)، مما يساعد على <b>تجاوز المنطقة المسطحة بسرعة وتسريع التقارب</b>.</li>
+              <li>تتدحرج الكرة ذات القصور الذاتي عبر بعض <b>الحدود القصوى/الدنيا المحلية الضيقة</b>.</li>
+            </ol>
+          </li>
+          <li><b>العيوب:</b> يجب ضبط <b>معدل التعلم ($\eta$) والزخم ($\alpha$) يدوياً</b>، مما يتطلب المزيد من التجارب لتحديد القيمة المناسبة.</li>
+        </ul>
+
+        <div class="exam-alert">
+          <h3>ثالثاً: محسنات معدلات التعلم التكيفية (AdaGrad و RMSProp و Adam) (ص 147 - 149) - مهمة جداً:</h3>
+
+          <h4>1. محسن <span dir="ltr">AdaGrad</span> (ص 147):</h4>
+          <ul>
+            <li><b>الفرق عن الطرق السابقة:</b> في <span dir="ltr">SGD</span> و <span dir="ltr">MBGD</span> ومحسن الزخم، يتم تحديث كل معلمة <b>بنفس معدل التعلم (<span dir="ltr">LR</span>)</b>؛ أما في منهج <span dir="ltr">AdaGrad</span> فيجب <b>تحديد معدلات تعلم مختلفة لمعايير (معلمات) مختلفة</b>.</li>
+            <li><b>المعادلة:</b> يراكم مربعات التدرج $r_t = r_{t-1} + g_t^2$، ويحدث الوزن بالصيغة:
+              <div class="formula-box">Δw_t = - [ ε / (δ + √r_t) ] · g_t</div>
+              (حيث $g_t$ التدرج، $r_0 = 0$، $\epsilon$ معدل التعلم العام المضبوط يدوياً، و $\delta \approx 10^{-7}$ ثابت صغير لتحقيق الاستقرار العددي).
+            </li>
+            <li><b>الإيجابيات:</b> يتم تحديث معدل التعلم تلقائياً، ومع زيادة عدد التحديثات والاقتراب من الحل الأمثل ينخفض معدل التعلم.</li>
+            <li><b>السلبيات:</b> يستمر المقام ($\sqrt{r_t}$) في التراكم والزيادة بحيث <b>يصبح معدل التعلم في النهاية صغيراً جداً، وتصبح الخوارزمية غير فعالة (تنهي التحسين في وقت مبكر جداً)</b>.</li>
+          </ul>
+
+          <hr style="border:0;border-top:1px solid #fcd34d;margin:12px 0">
+
+          <h4>2. محسن <span dir="ltr">RMSProp</span> (انتشار الجذر التربيعي المتوسط) (ص 148):</h4>
+          <ul>
+            <li>هو <b>نسخة مطورة من <span dir="ltr">AdaGrad</span></b>؛ يقدم <b>معامل توهين (<span dir="ltr">Attenuation coefficient</span> $\rho$)</b> لضمان نسبة توهين معينة لـ $r_t$ في كل جولة:
+              <div class="formula-box">r_t = ρ r_{t-1} + (1 - ρ) g_t²   ,   Δw_t = - [ ε / √(δ + r_t) ] · g_t</div>
+            </li>
+            <li><b>ميزته وأهميته:</b> يحل مشكلة قيام <span dir="ltr">AdaGrad</span> بإنهاء عملية التحسين في وقت مبكر جداً، وهو <b>مناسب للتعامل مع الأهداف غير المستقرة وله تأثيرات جيدة على الشبكات العصبية المتكررة (<span dir="ltr">RNN</span>)</b>.</li>
+          </ul>
+
+          <hr style="border:0;border-top:1px solid #fcd34d;margin:12px 0">
+
+          <h4>3. محسن <span dir="ltr">Adam</span> (تقدير اللحظات التكيفية <span dir="ltr">Adaptive Moment Estimation</span>) (ص 148 - 149):</h4>
+          <ul>
+            <li>تم تطويره استناداً إلى <b dir="ltr">AdaGrad</b> و <b dir="ltr">AdaDelta</b>، ويحتفظ بمتغيرين إضافيين ($m_t$ و $v_t$) لكل متغير يتم تدريبه:
+              <div class="formula-box">m_t = β₁ m_{t-1} + (1 - β₁) g_t   ,   v_t = β₂ v_{t-1} + (1 - β₂) g_t²</div>
+            </li>
+            <li><b>سبب تسميته بـ <span dir="ltr">Adam</span> (من المنظور الإحصائي):</b> لأن $m_t$ و $v_t$ هما متوسطان متحركان يمثلان تقديرات لـ <b>اللحظة الأولى (متوسط القيمة <span dir="ltr">Mean</span>)</b> و<b>اللحظة الثانية (التباين غير المتمركز <span dir="ltr">Uncentered Variance</span>)</b> للتدرجات على التوالي.</li>
+            <li><b>تصحيح التحيز (<span dir="ltr">Bias Correction</span>):</b> عند تهيئة $m_t$ و $v_t$ بالمتجه الصفري يكونان قريبين من $0$ في التكرارات الأولية (خاصة عندما تكون $\beta_1, \beta_2$ قريبة من $1$)، ولحل ذلك نستخدم:
+              <div class="formula-box">m̂_t = m_t / (1 - β₁^t)   ,   v̂_t = v_t / (1 - β₂^t)   ,   w_{t+1} = w_t - [ η / (√v̂_t + ε) ] m̂_t</div>
+            </li>
+            <li><b>ميزته العملية:</b> إعداداته أبسط بكثير ويتقارب بسرعة عالية، وعند الوصول لتشبع التقارب يكفي تقليل $\eta$ عدة مرات للوصول لحد أقصى محلي مرضٍ دون الحاجة لتعديل المعلمات الأخرى.</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+
+    <!-- الوحدة الثالثة -->
+    <details open>
+      <summary>3) الوحدة التعليمية (3): خلل توازن البيانات، اختفاء وانفجار التدرج، والتجهيز الزائد (ص 150 - 152)</summary>
+      <div class="details-body">
+        <h3>أولاً: خلل في توازن البيانات (<span dir="ltr">Imbalanced Data</span>) وطرق معالجته الأربع (ص 150 - 151)</h3>
+        <ul>
+          <li><b>وصف المشكلة:</b> مشكلة في مجموعات بيانات التصنيف حيث يختلف عدد العينات بشكل كبير من فئة لأخرى، وتحتوي فئة واحدة أو أكثر على عدد قليل جداً من العينات (<b>مثال الشرائح:</b> في مجموعة تضم <b>4251 صورة تدريب</b>، قد يكون هناك أكثر من <b>2000 فئة</b> تحتوي على صورة واحدة فقط، وبعض الفئات تحتوي على 2 إلى 5 صور!).</li>
+          <li><b>التأثيرات السلبية لعدم توازن البيانات (ص 150):</b>
+            <ol>
+              <li>لا يمكن الحصول على النتيجة المثلى في الوقت الفعلي لأن الخوارزمية <b>لا تقوم أبداً بفحص الفئات ذات العدد القليل جداً من العينات بشكل كافٍ</b>.</li>
+              <li>قد نفشل في <b>الحصول على عينات كافية للتحقق والاختبار</b> لأن بعض كائنات المراقبة لا تمثل الفئة.</li>
+            </ol>
+          </li>
+          <li><b>الطرق الأربع لمعالجة خلل توازن البيانات (ص 151):</b>
+            <ol>
+              <li><b>تقليل عينات عشوائية (<span dir="ltr">Random Undersampling</span>):</b> حذف العينات الزائدة عن الحاجة في فئة الأغلبية.</li>
+              <li><b>زيادة عينات عشوائية (<span dir="ltr">Random Oversampling</span>):</b> نسخ وتكرار العينات في فئة الأقلية.</li>
+              <li><b>تقنية الإفراط في أخذ عينات الأقلية الاصطناعية (<span dir="ltr">SMOTE</span>):</b> توليد عينات اصطناعية جديدة لفئة الأقلية.</li>
+              <li><b>أخذ العينات ودمج العينات (<span dir="ltr">Sampling & Combining</span>):</b> دمج طرق أخذ العينات لبناء نماذج متوازنة.</li>
+            </ol>
+          </li>
+        </ul>
+
+        <div class="exam-alert">
+          <h3>ثانياً: مشكلة اختفاء التدرج (<span dir="ltr">Vanishing</span>) وانفجار التدرج (<span dir="ltr">Exploding</span>) (ص 151 - 152) - موضع سؤال مؤكد:</h3>
+          <ul>
+            <li><b>التدرج المتلاشي (<span dir="ltr">Vanishing Gradient</span>):</b> مع تزايد طبقات الشبكة، <b>تنخفض القيمة المشتقة للانتشار العكسي</b> بشكل كبير.</li>
+            <li><b>التدرج المتفجر (<span dir="ltr">Exploding Gradient</span>):</b> مع تزايد طبقات الشبكة، <b>تزداد القيمة المشتقة للانتشار العكسي</b> بشكل مفرط.</li>
+            <li><b>السبب الرياضي (معادلات الانتشار الخلفي وقاعدة السلسلة - ص 152):</b>
+              <ul>
+                <li>الحد الأقصى لقيمة مشتقة دالة التنشيط سيجمويد $\sigma'(x)$ هو $\frac{1}{4}$ ($0.25$)، وعادة ما يكون وزن الشبكة $w < 1$، وبالتالي فإن حاصل الضرب $|w \cdot \sigma'(u)| \le \frac{1}{4}$. ووفقاً <b>لقاعدة السلسلة</b>، بزيادة الطبقات تتناقص نتيجة الاشتقاق أسياً فتحدث مشكلة <b>التدرج المتلاشي</b>.</li>
+                <li>أما عندما يكون وزن الشبكة $w$ كبيراً بحيث يكون $|w \cdot \sigma'(u)| > 1$، فتتضاعف المشتقات وتحدث مشكلة <b>التدرج المتفجر</b>.</li>
+              </ul>
+            </li>
+            <li><b>الحلول المعتمدة في الشرائح (ص 152):</b>
+              <ul>
+                <li>للتخفيف من مشكلة <b>التدرج المتفجر</b>: يتم استخدام <b>قص التدرج (<span dir="ltr">Gradient Clipping</span>)</b>.</li>
+                <li>للتخفيف من مشكلة <b>التدرج المتلاشي</b>: يتم استخدام <b>دالة التنشيط <span dir="ltr">ReLU</span></b> وشبكات <b><span dir="ltr">LSTM</span></b>.</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        <h3>ثالثاً: مشكلة التجهيز الزائد (<span dir="ltr">Overfitting</span>) وجذورها وحلولها (ص 152)</h3>
+        <ul>
+          <li><b>وصف المشكلة:</b> يعمل النموذج <b>بشكل جيد في مجموعة التدريب، ولكنه سيئ في مجموعة الاختبار</b> (الإفراط في تجهيز بيانات التدريب دون النظر إلى قدرات التعميم).</li>
+          <li><b>السبب الجذري:</b> وجود <b>عدد كبير جداً من أبعاد الميزات، وافتراضات النماذج، والمعلمات، والكثير من الضوضاء، ولكن بيانات التدريب قليلة جداً</b>.</li>
+          <li><b>الحلول الأربعة:</b> 1) <b>زيادة البيانات (<span dir="ltr">Data Augmentation</span>)</b>، 2) <b>التنظيم (<span dir="ltr">Regularization</span>)</b>، 3) <b>التوقف المبكر (<span dir="ltr">Early Stopping</span>)</b>، 4) <b>التسرب (<span dir="ltr">Dropout</span>)</b>.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= التبويب الثاني: جداول المقارنات والمعادلات ================= -->
+  <section id="tables" class="panel">
+    <div class="card">
+      <h2>1. جدول المقارنة الجوهرية بين تنظيم L1 وتنظيم L2 (ص 142 - 143)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>وجه المقارنة</th>
+            <th>تنظيم L1 (L1 Regularization)</th>
+            <th>تنظيم L2 (L2 Regularization)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>معادلة دالة الهدف</b></td>
+            <td dir="ltr"><code>J̃(w; X, y) = J(w; X, y) + α ||w||₁</code></td>
+            <td dir="ltr"><code>J̃(w; X, y) = J(w; X, y) + (1/2) α ||w||₂²</code></td>
+          </tr>
+          <tr>
+            <td><b>معادلة التدرج / تحديث الوزن</b></td>
+            <td dir="ltr"><code>∇_w J̃ = α sign(w) + ∇_w J(w)</code></td>
+            <td dir="ltr"><code>w ← (1 - εα)w - ε ∇_w J(w)</code><br><small>(يضرب المحددة بعامل تخفيض $1-\epsilon\alpha$)</small></td>
+          </tr>
+          <tr>
+            <td><b>التناثر (Sparsity)</b></td>
+            <td>ينشئ نموذجاً <b>أكثر تناثراً (<span dir="ltr">more sparse</span>)</b> من $L_2$.</td>
+            <td>أقل تناثراً (يجعل الأوزان صغيرة لكن لا يصفرها تماماً).</td>
+          </tr>
+          <tr>
+            <td><b>اختيار الميزة (Feature Selection)</b></td>
+            <td>يقلل المحددات الصغيرة <b>مباشرة إلى 0</b>، لذا <b>يُستخدم لاختيار الميزة</b>.</td>
+            <td>لا يصفر الأوزان مباشرة فلا يُستخدم بمفرده لحذف الميزات.</td>
+          </tr>
+          <tr>
+            <td><b>التوزيع الاحتمالي السابق المقابل</b></td>
+            <td>يتوافق مع قاعدة <b>توزيع لابلاس (<span dir="ltr">Laplace distribution</span>)</b>.</td>
+            <td>يتوافق مع قاعدة <b>التوزيع الغاوسي (<span dir="ltr">Gaussian distribution</span>)</b>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>2. مقارنة شاملة بين المُحسِّنات الأربعة الرئيسية (Optimizers) (ص 146 - 149)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>المُحسِّن</th>
+            <th>الفكرة الرياضية الأساسية</th>
+            <th>المزايا والاستخدامات</th>
+            <th>العيوب / الملاحظات</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1. الزخم<br>(Momentum)</b></td>
+            <td>يضيف مصطلح الزخم $\alpha \Delta w(n-1)$ لمنح الكرة <b>قصوراً ذاتياً (جموداً)</b> على سطح الخطأ.</td>
+            <td>يثبت اتجاه التدرج، يقلل الطفرات، يسرع تجاوز المناطق المسطحة، ويتخطى الحدود المحلية الضيقة.</td>
+            <td>معدل التعلم واحد لجميع المعلمات، ويجب ضبط $\eta$ و $\alpha$ <b>يدوياً</b> بالتجربة.</td>
+          </tr>
+          <tr>
+            <td><b>2. محسن<br>AdaGrad</b></td>
+            <td>يحدد <b>معدلات تعلم مختلفة لمعلمات مختلفة</b> عبر مراكمة مربعات التدرج $r_t = r_{t-1} + g_t^2$.</td>
+            <td>يحدث معدل التعلم تلقائياً، وينخفض معدل التعلم تدريجياً مع زيادة التحديثات.</td>
+            <td>يتراكم المقام $\sqrt{r_t}$ باستمرار فيصبح معدل التعلم <b>صغيراً جداً في النهاية وتتوقف الخوارزمية مبكراً</b>.</td>
+          </tr>
+          <tr>
+            <td><b>3. محسن<br>RMSProp</b></td>
+            <td>نسخة مطورة من AdaGrad تضيف <b>معامل توهين ($\rho$)</b> لحساب المتوسط المتناقص لمربع التدرج.</td>
+            <td>يحل مشكلة التوقف المبكر لـ AdaGrad، وممتاز <b>للأهداف غير المستقرة ولشبكات RNN</b>.</td>
+            <td>يحتاج لضبط معدل التعلم الشامل $\epsilon$ ومعامل التوهين $\rho$.</td>
+          </tr>
+          <tr>
+            <td><b>4. محسن<br>Adam</b></td>
+            <td>يجمع ميزات AdaGrad و AdaDelta بحساب <b>اللحظة الأولى $m_t$ (المتوسط)</b> و<b>اللحظة الثانية $v_t$ (التباين غير المتمركز)</b> مع <b>تصحيح التحيز</b>.</td>
+            <td>إعداداته أبسط بكثير، <b>يتقارب بسرعة فائقة</b>، ويعالج تحيز التهيئة الصفرية عبر $\hat{m}_t$ و $\hat{v}_t$.</td>
+            <td>قد نحتاج فقط لتقليل $\eta$ عند الوصول إلى تشبع التقارب.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>3. مقارنة طرق توسيع البيانات والتسرب والتوقف المبكر (ص 143 - 144)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>التقنية</th>
+            <th>آلية العمل والأمثلة التطبيقية في الشرائح</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>توسيع مجموعة البيانات<br>(Dataset Expansion)</b></td>
+            <td>الطريقة <b>الأكثر فعالية</b> لمنع Overfitting عبر تكبير مجموعة التدريب:<br>
+              • <b>في الصور (التعرف على الكائنات):</b> تدوير الصور أو تغيير حجمها (بشرط عدم تغيير فئة الصورة، مثل الحذر من انقلاب الرقمين <b>6 و 9</b> عند التدوير).<br>
+              • <b>في التعرف على الكلام:</b> إضافة <b>تشويش عشوائي</b> لبيانات الإدخال.<br>
+              • <b>في معالجة اللغة الطبيعية (NLP):</b> <b>استبدال الكلمات بمرادفاتها</b>.
+            </td>
+          </tr>
+          <tr>
+            <td><b>التسرب<br>(Dropout - 2014)</b></td>
+            <td>إسقاط وتجاهل بعض المدخلات عشوائياً أثناء التدريب وعدم تحديث أوزانها، ويعمل كطريقة تكامل (<span dir="ltr">Ensemble</span>) تجمع نتائج الشبكات الفرعية.</td>
+          </tr>
+          <tr>
+            <td><b>التوقف المبكر<br>(Early Stopping)</b></td>
+            <td>مراقبة أداء النموذج على <b>مجموعة التحقق (Validation set)</b> أثناء التدريب، وإيقاف التدريب فوراً عندما تبدأ <b>خسارة التحقق في الازدياد</b>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>4. مقارنة المشكلات الثلاث في الوحدة الثالثة وأسبابها وحلولها (ص 150 - 152)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>المشكلة</th>
+            <th>الوصف والسبب الرياضي / الجذري</th>
+            <th>الحلول المعتمدة في الشرائح</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1. خلل توازن البيانات<br>(Imbalanced Data)</b></td>
+            <td>تفاوت كبير في عدد العينات بين الفئات (مثل 4251 صورة فيها 2000 فئة بصورة واحدة)، فلا تفحص الخوارزمية فئات الأقلية ولا تتوفر عينات كافية للتحقق والاختبار.</td>
+            <td>1) تقليل عينات عشوائية (حذف الفائض)<br>2) زيادة عينات عشوائية (نسخ العينات)<br>3) تقنية <b>SMOTE</b> (عينات أقلية اصطناعية)<br>4) أخذ العينات ودمجها.</td>
+          </tr>
+          <tr>
+            <td><b>2. التدرج المتلاشي<br>(Vanishing Gradient)</b></td>
+            <td>تنخفض المشتقة في الانتشار العكسي مع زيادة الطبقات لأن الحد الأقصى لمشتقة سيجمويد $\sigma'(x) = \frac{1}{4}$ والوزن $w < 1$ فيكون $|w \cdot \sigma'(u)| \le \frac{1}{4}$.</td>
+            <td>استخدام <b>دالة التنشيط ReLU</b> وشبكات <b>LSTM</b>.</td>
+          </tr>
+          <tr>
+            <td><b>3. التدرج المتفجر<br>(Exploding Gradient)</b></td>
+            <td>تزداد المشتقة بشكل هائل مع زيادة الطبقات عندما يكون وزن الشبكة $w$ كبيراً بحيث يكون $|w \cdot \sigma'(u)| > 1$.</td>
+            <td>استخدام <b>قص التدرج (Gradient Clipping)</b>.</td>
+          </tr>
+          <tr>
+            <td><b>4. التجهيز الزائد<br>(Overfitting)</b></td>
+            <td>أداء ممتاز في التدريب وسيئ في الاختبار؛ بسبب كثرة أبعاد الميزات والمعلمات والضوضاء مع <b>قلة بيانات التدريب</b>.</td>
+            <td>1) زيادة البيانات، 2) التنظيم ($L_1, L_2$)، 3) التوقف المبكر، 4) التسرب (Dropout).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الثالث: المصطلحات ================= -->
+  <section id="terms" class="panel">
+    <div class="card">
+      <h2>قاموس المصطلحات والمفاهيم الشامل للفصل الحادي عشر (28 مصطلحاً)</h2>
+      <p class="muted">جميع المصطلحات والمعادلات والمحسنات الواردة في شرائح الفصل الحادي عشر (ص 140 - 152):</p>
+      <div id="termsGrid" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الرابع: البطاقات التعليمية ================= -->
+  <section id="cards" class="panel">
+    <div class="card">
+      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
+      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
+      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
+        <div class="term" id="flashTerm"></div>
+        <div class="answer" id="flashAnswer" hidden></div>
+        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="prevCard">السابق</button>
+        <span id="cardCount" class="muted"></span>
+        <button class="btn primary" id="nextCard">التالي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الخامس: الاختبار الشامل ================= -->
+  <section id="quiz" class="panel">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2>الاختبار الشامل للفصل الحادي عشر - موضوعات مختارة (25 سؤالاً)</h2>
+          <p class="muted">يغطي كافة تفاصيل التنظيم والمحسنات وتوازن البيانات ومشكلات التدرج (ص 140 - 152) مع تصحيح وتعليل فوري.</p>
+        </div>
+        <div class="score" id="score">النتيجة: 0 / 25</div>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="quizArea"></div>
+      <div class="row">
+        <button class="btn" id="resetQuiz">إعادة الاختبار</button>
+        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+      </div>
+      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
+    </div>
+  </section>
+</main>
+
+<footer>مبني بالكامل (100%) على شرائح الفصل الحادي عشر: المكونات الأساسية لبناء نماذج التعلم العميق - مقرر موضوعات مختارة في علوم البيانات (صفحات PDF من 140 إلى 152)</footer>
+
+<script>
+const terms = [
+  ["Regularization (التنظيم)", "تقنية فعالة لتقليل أخطاء التعميم ومنع الإفراط في التجهيز (Overfitting) في نماذج التعلم العميق ذات العدد الكبير من المعلمات (ص 141)."],
+  ["Penalty Norm Ω(θ)", "معيار الجزاء (مصطلح العقوبة) الذي يُضاف إلى دالة الهدف القياسية J لتقييد قدرة النموذج على التعلم المفرط (ص 141)."],
+  ["Hyperparameter α ∈ [0, ∞)", "المحددة الفائقة التي تزن المساهمة النسبية لمصطلح العقوبة Ω(θ)؛ إذا كانت 0 لا يتم أي تنظيم، وتزداد العقوبة بزيادتها (ص 141)."],
+  ["L1 Regularization", "إضافة القيد المعياري α||w||₁ لدالة الهدف؛ ينشئ نموذجاً أكثر تناثراً ويصفر الأوزان الصغيرة فيُستخدم لاختيار الميزة (ص 142-143)."],
+  ["L2 Regularization", "إضافة القيد المعياري (1/2)α||w||₂² لدالة الهدف؛ يضرب الوزن بعامل تخفيض (1 - εα) عند تحديث التدرج (ص 142)."],
+  ["Sparsity (التناثر)", "خاصية تميز تنظيم L1 عن L2 حيث يجعل العديد من معاملات الأوزان تساوي صفراً فينشئ نموذجاً أكثر تناثراً (more sparse) (ص 143)."],
+  ["Laplace vs Gaussian Prior", "من منظور الاحتمالية: يتوافق تنظيم L1 مع توزيع لابلاس (Laplace)، بينما يتوافق تنظيم L2 مع التوزيع الغاوسي (Gaussian) (ص 143)."],
+  ["Dataset Expansion", "توسيع مجموعة البيانات: الطريقة الأكثر فعالية لمنع Overfitting عبر تدوير الصور، أو إضافة تشويش للكلام، أو استبدال المرادفات في NLP (ص 143)."],
+  ["Dropout (التسرب - 2014)", "طريقة تنظيم شائعة منذ 2014 تتجاهل بعض المدخلات عشوائياً أثناء التدريب ولا تحدث أوزانها، وتعمل كطريقة تكامل للشبكات الفرعية (ص 144)."],
+  ["Early Stopping (التوقف المبكر)", "إيقاف التدريب مبكراً عندما تبدأ خسارة مجموعة التحقق (Validation loss) في الزيادة رغم انخفاض خسارة التدريب (ص 144)."],
+  ["Optimizer (المُحسِّن)", "كائن برمجي يغلف الإصدارات المحسنة لخوارزميات الانحدار التدريجي لتسريع التقارب والقفز من القيم المحلية وتبسيط ضبط معدل التعلم (ص 145)."],
+  ["Momentum Optimizer", "محسن الزخم: يضيف مصطلح الزخم αΔw(n-1) لمنح الكرة المتدحرجة قصوراً ذاتياً (جموداً) يقلل التذبذب ويتجاوز المناطق المسطحة (ص 146)."],
+  ["Momentum Coefficient (α)", "معامل الزخم: ثابت في الفترة [0, 1) يحدد وزن خطوة التحديث السابقة في محسن الزخم، ويجب ضبطه يدوياً مع معدل التعلم (ص 146)."],
+  ["AdaGrad Optimizer", "محسن يحدد معدلات تعلم مختلفة لمعلمات مختلفة عبر مراكمة مربع التدرج r_t = r_{t-1} + g_t²، فيحدث LR تلقائياً (ص 147)."],
+  ["Constant δ (10⁻⁷)", "ثابت صغير جداً يُضاف في مقام AdaGrad و RMSProp لتحقيق الاستقرار العددي ومنع القسمة على صفر (ص 147-148)."],
+  ["RMSProp Optimizer", "انتشار الجذر التربيعي المتوسط: نسخة مطورة من AdaGrad تقدم معامل توهين (ρ) لمنع التوقف المبكر، وهو فعال جداً مع شبكات RNN (ص 148)."],
+  ["Attenuation Coefficient (ρ)", "معامل التوهين في محسن RMSProp الذي يتحكم في نسبة تلاشي تراكم التدرجات المربعة r_t في كل جولة (ص 148)."],
+  ["Adam Optimizer", "Adaptive Moment Estimation: محسن يدمج AdaGrad و AdaDelta بحساب اللحظة الأولى m_t (المتوسط) واللحظة الثانية v_t (التباين غير المتمركز) (ص 148)."],
+  ["First & Second Moment (m_t, v_t)", "في محسن Adam: اللحظة الأولى m_t هي متوسط التدرج، واللحظة الثانية v_t هي التباين غير المتمركز لمربع التدرج (ص 148)."],
+  ["Bias Correction (m̂_t, v̂_t)", "تصحيح التحيز في محسن Adam لمعالجة اقتراب m_t و v_t من الصفر عند تهيئتهما بالمتجه الصفري في التكرارات الأولية (ص 149)."],
+  ["Imbalanced Data", "خلل توازن البيانات: اختلاف عدد العينات بشكل كبير بين الفئات في مهام التصنيف مما يمنع النموذج من فحص فئات الأقلية بفعالية (ص 150)."],
+  ["Random Undersampling", "تقليل عينات عشوائية: معالجة عدم التوازن عبر حذف العينات الزائدة عن الحاجة في فئة الأغلبية (ص 151)."],
+  ["Random Oversampling", "زيادة عينات عشوائية: معالجة عدم التوازن عبر نسخ وتكرار العينات الموجودة في فئة الأقلية (ص 151)."],
+  ["SMOTE", "تقنية الإفراط في أخذ عينات الأقلية الاصطناعية: توليد عينات اصطناعية جديدة لفئة الأقلية لمعالجة خلل توازن البيانات (ص 151)."],
+  ["Vanishing Gradient", "التدرج المتلاشي: تضاؤل وانخفاض القيمة المشتقة في الانتشار العكسي مع زيادة الطبقات عندما يكون |w·σ'(u)| ≤ 1/4 (ص 151-152)."],
+  ["Exploding Gradient", "التدرج المتفجر: تزايد القيمة المشتقة بشكل هائل مع زيادة الطبقات عندما يكون الوزن كبيراً بحيث |w·σ'(u)| > 1 (ص 151-152)."],
+  ["Gradient Clipping (قص التدرج)", "الحل التقني المعتمد للتخفيف من مشكلة التدرج المتفجر (Exploding Gradient) أثناء تدريب الشبكات العميقة (ص 152)."],
+  ["ReLU & LSTM for Gradients", "الأدوات المعتمدة للتخفيف من مشكلة التدرج المتلاشي (Vanishing Gradient) في الشبكات العميقة والمتكررة (ص 152)."]
+];
+
+const cards = [
+  ["ما أهمية التنظيم (Regularization) في التعلم العميق؟ وما التقنيات الأربع لتحقيقه؟", "يقلل أخطاء التعميم ويمنع الإفراط في التجهيز (Overfitting) الناتج عن كثرة المعلمات.\nتقنياته الأربع: 1) قيود المحددات (L1 و L2)، 2) توسيع مجموعة التدريب، 3) التسرب (Dropout)، 4) التوقف المبكر (Early stopping) (ص 141)."],
+  ["ما هي معادلة معايير الجزاء العامة؟ وما دور المعلمة الفائقة α؟", "المعادلة: J̃(θ; X, y) = J(θ; X, y) + α Ω(θ).\nحيث α ∈ [0, ∞) محددة فائقة تزن مساهمة مصطلح العقوبة Ω(θ)؛ إذا كانت α = 0 لا يتم أي تنظيم، وتزداد العقوبة بزيادة α (ص 141)."],
+  ["ما هي معادلة تنظيم L1 ومعادلة تدرجه؟", "• معادلة الهدف: J̃(w; X, y) = J(w; X, y) + α ||w||₁.\n• معادلة التدرج: ∇_w J̃(w; X, y) = α sign(w) + ∇_w J(w) (ص 142)."],
+  ["ما هي معادلة تنظيم L2 ومعادلة تحديث الوزن فيه؟", "• معادلة الهدف: J̃(w; X, y) = J(w; X, y) + (1/2) α ||w||₂².\n• تحديث الوزن: w ← (1 - εα)w - ε ∇_w J(w)، حيث تضرب المحددة بعامل تخفيض (1 - εα) (ص 142)."],
+  ["ما هي الاختلافات الثلاثة الرئيسية بين تنظيم L1 وتنظيم L2 (ص 143)؟", "1) ينشئ L1 نموذجاً أكثر تناثراً (more sparse) من L2.\n2) يقلل L1 المحددات الصغيرة مباشرة إلى 0 فيُستخدم لاختيار الميزة.\n3) احتمالياً: يتوافق L2 مع التوزيع الغاوسي (Gaussian)، بينما يتوافق L1 مع توزيع لابلاس (Laplace) (ص 143)."],
+  ["ما هي الطريقة الأكثر فعالية لمنع الإفراط في التجهيز (Overfitting)؟", "توسيع وزيادة مجموعة التدريب؛ لأن مجموعة التدريب الأكبر لديها احتمالية أقل للإفراط في التجهيز (ص 143)."],
+  ["كيف يتم توسيع مجموعة البيانات في: 1) الصور، 2) الكلام، 3) معالجة اللغة الطبيعية NLP؟", "• في الصور: تدوير الصور أو تغيير حجمها (بشرط عدم تغيير فئة الصورة كالرقمين 6 و 9).\n• في الكلام: إضافة تشويش عشوائي لبيانات الإدخال.\n• في NLP: استبدال الكلمات بمرادفاتها (ص 143)."],
+  ["ما هو الشرط الأساسي عند تدوير الصور لتوسيع مجموعة البيانات؟ مع ذكر مثال.", "الشرط الأساسي هو أن نوع/فئة الصورة لا يمكن تغييره من خلال التحويل؛ فمثلاً في التعرف على أرقام الكتابة اليدوية يمكن أن تتغير الفئتان 6 و 9 بسهولة بعد التدوير (ص 143)."],
+  ["متى انتشرت طريقة التسرب (Dropout)؟ وكيف تعمل أثناء التدريب؟", "استُخدمت على نطاق واسع منذ عام 2014؛ وتعمل بتجاهل وإسقاط بعض المدخلات عشوائياً أثناء التدريب فلا يتم تحديث المحددات المقابلة لها، وتجمع نتائج الشبكات الفرعية كطريقة تكامل (ص 144)."],
+  ["كيف يعمل التوقف المبكر (Early Stopping) لمنع Overfitting؟", "يتم إدخال اختبار على بيانات مجموعة التحقق (Validation set) أثناء التدريب؛ وعندما تبدأ خسارة البيانات في خطوة التحقق بالزيادة، يتم إيقاف التدريب مبكراً (ص 144)."],
+  ["ما هو المُحسِّن (Optimizer)؟ وما الأغراض الثلاثة لتحسين الخوارزمية (ص 145)؟", "هو كائن برمجي يغلف الإصدارات المحسنة لخوارزميات الانحدار التدريجي.\nأغراضه: 1) تسريع تقارب الخوارزميات، 2) منع أو القفز من القيم المتطرفة المحلية، 3) تبسيط إعداد المعلمات اليدوية وخاصة معدل التعلم (LR) (ص 145)."],
+  ["اذكري أدوات تحسين الأداء (Optimizers) التسع الشائعة المذكورة في الشرائح.", "1) GD الشائع، 2) الزخم (Momentum)، 3) Nesterov، 4) AdaGrad، 5) AdaDelta، 6) RMSProp، 7) Adam، 8) AdaMax، 9) Nadam (ص 145)."],
+  ["ما هي معادلة محسن الزخم (Momentum)؟ وبماذا يُشبّه فيزيائياً؟", "المعادلة: Δw_ij(n) = -η (∂E/∂w_ij(n)) + α Δw_ij(n-1)، حيث α ∈ [0,1) معامل الزخم.\nويُشبّه بإعطاء كرة صغيرة تتدحرج على سطح الخطأ خاصية الجمود / القصور الذاتي (Inertia) (ص 146)."],
+  ["ما هي مزايا وعيوب محسن الزخم (Momentum) (ص 146)؟", "• المزايا: يعزز ثبات اتجاه التدرج ويقلل الطفرات، يسرع تجاوز المناطق المسطحة، ويتدحرج عبر بعض الحدود المحلية الضيقة.\n• العيوب: يجب ضبط معدل التعلم والزخم يدوياً بالتجربة (ص 146)."],
+  ["بماذا يختلف منهج محسن AdaGrad عن SGD و MBGD ومحسن الزخم؟", "في SGD و MBGD والزخم يتم تحديث كل معلمة بنفس معدل التعلم (LR)، بينما في AdaGrad يتم تحديد معدلات تعلم مختلفة لمعايير (معلمات) مختلفة تلقائياً (ص 147)."],
+  ["ما هي إيجابيات وسلبيات محسن AdaGrad (ص 147)؟", "• الإيجابيات: يتم تحديث معدل التعلم تلقائياً وينخفض مع زيادة التحديثات.\n• السلبيات: يستمر المقام (تراكم مربع التدرج r_t) في الزيادة حتى يصبح معدل التعلم صغيراً جداً في النهاية وتصبح الخوارزمية غير فعالة (تتوقف مبكراً) (ص 147)."],
+  ["كيف طوّر محسن RMSProp خوارزمية AdaGrad؟ وأين يبرز أداؤه الجيد؟", "قدّم معامل توهين (Attenuation coefficient ρ) لضمان نسبة توهين معينة لـ r_t في كل جولة، مما حل مشكلة التوقف المبكر في AdaGrad. وهو مناسب للأهداف غير المستقرة وله تأثيرات جيدة على شبكات RNN (ص 148)."],
+  ["علامَ يعتمد محسن Adam؟ وما معنى المتغيرين m_t و v_t إحصائياً؟", "طُوّر استناداً إلى AdaGrad و AdaDelta، ويحتفظ بمتغيرين:\n• m_t: تقدير للحظة الأولى (متوسط القيمة Mean) للتدرج.\n• v_t: تقدير للحظة الثانية (التباين غير المتمركز Uncentered variance) للتدرج المربع (ص 148)."],
+  ["لماذا نحتاج إلى تصحيح التحيز (m̂_t و v̂_t) في محسن Adam؟", "لأنه إذا تمت تهيئة m_t و v_t بالمتجه الصفري، فإنهما يكونان قريبين من 0 أثناء التكرارات الأولية (خاصة عندما تكون β₁ و β₂ قريبة من 1)، فيُقسم كل منهما على (1 - β^t) لتصحيح التحيز (ص 149)."],
+  ["ما هي الميزة العملية لمحسن Adam عند تدريب الشبكات العميقة؟", "يتقارب بسرعة كبيرة وإعداداته أبسط بكثير؛ وعند الوصول لتشبع التقارب يمكن تقليل معدل التعلم η عدة مرات للوصول لحد أقصى محلي مرضٍ دون تعديل المعلمات الأخرى (ص 149)."],
+  ["ما المقصود بخلل توازن البيانات (Imbalanced Data)؟ وما المثال الرقمي عليه؟", "مشكلة في مهام التصنيف حيث يختلف عدد العينات بشكل كبير من فئة لأخرى (مثال: في 4251 صورة تدريب، توجد أكثر من 2000 فئة بصورة واحدة فقط، وبعض الفئات من 2 إلى 5 صور) (ص 150)."],
+  ["ما هي التأثيرات السلبية لخلل توازن البيانات على نموذج التعلم العميق؟", "1) لا يمكن الحصول على النتيجة المثلى لأن الخوارزمية لا تفحص الفئات ذات العينات القليلة جداً بشكل كافٍ.\n2) الفشل في الحصول على عينات كافية للتحقق والاختبار لبعض الفئات (ص 150)."],
+  ["ما هي الطرق الأربع لمعالجة خلل توازن البيانات (ص 151)؟", "1) تقليل عينات عشوائية (حذف العينات الزائدة).\n2) زيادة عينات عشوائية (نسخ العينات).\n3) تقنية الإفراط في أخذ عينات الأقلية الاصطناعية (SMOTE).\n4) أخذ العينات ودمج العينات (ص 151)."],
+  ["ما الفرق بين مشكلة التدرج المتلاشي (Vanishing) والتدرج المتفجر (Exploding)؟", "• التدرج المتلاشي: تنخفض القيمة المشتقة للانتشار العكسي مع تزايد طبقات الشبكة.\n• التدرج المتفجر: تزداد القيمة المشتقة للانتشار العكسي بشكل مفرط مع تزايد طبقات الشبكة (وتنبع المشكلتان من معادلات الانتشار الخلفي) (ص 151)."],
+  ["لماذا يحدث التدرج المتلاشي رياضياً عند استخدام دالة سيجمويد (ص 152)؟", "لأن الحد الأقصى لمشتقة سيجمويد σ'(x) هو 1/4 (0.25)، ووزن الشبكة w عادة أصغر من 1، فيكون |w · σ'(u)| ≤ 1/4؛ ووفقاً لقاعدة السلسلة تتناقص نتيجة الاشتقاق بزيادة الطبقات (ص 152)."],
+  ["متى يحدث التدرج المتفجر رياضياً؟ وما الحل التقني لتخفيفه؟", "يحدث عندما يكون وزن الشبكة w كبيراً بحيث يكون |w · σ'(u)| > 1؛ ويتم استخدام (قص التدرج Gradient Clipping) للتخفيف من مشكلة التدرج المتفجر (ص 152)."],
+  ["ما هو الحل التقني المعتمد للتخفيف من مشكلة التدرج المتلاشي؟", "استخدام دالة التنشيط (ReLU) وشبكات الذاكرة الطويلة والقصيرة (LSTM) (ص 152)."],
+  ["ما هو السبب الجذري لمشكلة التجهيز الزائد (Overfitting) وما حلولها الأربعة (ص 152)؟", "• السبب الجذري: كثرة أبعاد الميزات والمعلمات والضوضاء مع قلة بيانات التدريب (فيعمل جيداً في التدريب وسيئاً في الاختبار).\n• الحلول: زيادة البيانات، التنظيم، التوقف المبكر، والتسرب (Dropout) (ص 152)."]
+];
+
+const questions = [
+  {q:"لماذا تميل نماذج التعلم العميق بشكل خاص إلى الوقوع في مشكلة الإفراط في الملاءمة والتجهيز (Overfitting)، وما التقنية الفعالة لتقليل أخطاء التعميم فيها؟", o:["بسبب العدد الكبير من المحددات (المعلمات)؛ وتُستخدم تقنية التنظيم (Regularization) لتقليل أخطاء التعميم","بسبب عدم وجود أي معلمات أو أوزان فيها؛ ويُستخدم الحذف الكامل للبيانات","بسبب صغر حجم الشبكة؛ وتُستخدم زيادة الضوضاء في مجموعة الاختبار","لأنها تعمل بدون دوال تنشيط"], a:0, e:"تميل نماذج التعلم العميق إلى Overfitting بسبب العدد الكبير من المحددات، ويُعد التنظيم (Regularization) تقنية فعالة لتقليل أخطاء التعميم (ص 141)."},
+  {q:"في معادلة التنظيم العامة J̃(θ; X, y) = J(θ; X, y) + α Ω(θ)، ماذا تمثل المعلمة (α) وماذا يحدث إذا أُعطيت القيمة 0؟", o:["تمثل محددة فائقة تزن المساهمة النسبية لمصطلح العقوبة Ω(θ)؛ وإذا أُعطيت القيمة 0 فلن يتم تنفيذ أي تسوية (تنظيم)","تمثل معدل التعلم؛ وإذا كانت 0 تزداد العقوبة إلى ما لا نهاية","تمثل عدد الطبقات المخفية؛ وإذا كانت 0 يتوقف النموذج","تمثل بيانات الاختبار"], a:0, e:"α هي محددة فائقة تزن مساهمة مصطلح العقوبة، وإذا أُعطيت قيمة 0 فلن يتم تنفيذ أي تسوية، وتزداد العقوبة بزيادة α (ص 141)."},
+  {q:"عند استخدام تقنية التحسين (طريقة التدرج) مع تنظيم L2، تصبح صيغة تحديث الوزن: w ← (1 - εα)w - ε∇J(w)؛ فماذا تفعل هذه الصيغة بالمحددة w؟", o:["تقوم بضرب المحددة w بعامل تخفيض (1 - εα) في كل خطوة","تقوم بتصفير المحددة w فوراً باستخدام دالة الإشارة sign(w)","تقوم بمضاعفة قيمة الوزن عشر مرات","تحذف معدل التعلم ε من المعادلة"], a:0, e:"بالمقارنة مع صيغة التدرج الشائعة، تقوم صيغة تنظيم L2 بضرب المحددة بعامل تخفيض (1 - εα) (ص 142)."},
+  {q:"أي العبارات التالية توضح الفرق الصحيح بين تنظيم L1 وتنظيم L2 من حيث التناثر واختيار الميزة (ص 143)؟", o:["ينشئ L1 نموذجاً أكثر تناثراً (more sparse) من L2، ويقلل المحددات الصغيرة مباشرة إلى 0 مما يسمح باستخدامه لاختيار الميزة","ينشئ L2 نموذجاً أكثر تناثراً من L1 ويصفر جميع الأوزان","كلاهما متطابقان تماماً ولا يوجد أي فرق بينهما","لا يمكن استخدام L1 أو L2 لمنع الإفراط في التجهيز"], a:0, e:"يمكن لـ L1 إنشاء نموذج أكثر تناثراً من L2، وتقليل قيمة المحددة الصغيرة مباشرة إلى 0 لذا يُستخدم لاختيار الميزة (ص 143)."},
+  {q:"من منظور الاحتمالية، تعادل القيود المعيارية إضافة توزيع احتمالي سابق للمحددات؛ فما التوزيع الذي يتوافق معه كل من تنظيم L2 وتنظيم L1 (ص 143)؟", o:["في تنظيم L2 تتوافق المحددة مع التوزيع الغاوسي (Gaussian)، وفي تنظيم L1 تتوافق مع توزيع لابلاس (Laplace)","في تنظيم L2 تتوافق مع توزيع لابلاس، وفي L1 مع التوزيع الغاوسي","كلاهما يتوافقان مع توزيع برنولي فقط","لا علاقة للتنظيم بالتوزيعات الاحتمالية"], a:0, e:"في تنظيم L2 تتوافق قيمة المحددة مع قاعدة التوزيع الغاوسي (Gaussian)، وفي تنظيم L1 تتوافق مع قاعدة توزيع لابلاس (Laplace) (ص 143)."},
+  {q:"ما هي الطريقة الأكثر فعالية لمنع الإفراط في الملاءمة والتجهيز (Overfitting)، وكيف تُطبق في مجال معالجة اللغة الطبيعية (NLP) والتعرف على الكلام (ص 143)؟", o:["زيادة وتوسيع مجموعة التدريب؛ وتُطبق في NLP باستبدال الكلمات بمرادفاتها، وفي التعرف على الكلام بإضافة تشويش عشوائي لبيانات الإدخال","تقليص مجموعة التدريب؛ وتُطبق بحذف الكلمات والمرادفات","إلغاء مجموعة التحقق؛ وتُطبق بتدوير الملفات الصوتية","تثبيت الأوزان عشوائياً دون تدريب"], a:0, e:"الطريقة الأكثر فعالية لمنع Overfitting هي زيادة مجموعة التدريب؛ وفي الكلام نضيف تشويشاً عشوائياً، وفي NLP نستبدل الكلمات بمرادفاتها (ص 143)."},
+  {q:"عند توسيع مجموعة البيانات في مجال التعرف على الكائنات (الصور) عن طريق تدوير الصور، ما هو الشرط الأساسي الذي يجب مراعاته كما وُضح بمثال الرقمين 6 و 9؟", o:["أن نوع/فئة الصورة لا يمكن تغييره من خلال التحويل (لأن الرقمين 6 و 9 يمكن أن يتغير تصنيفهما بسهولة بعد التدوير)","أنه يجب تغيير فئة الصورة عند كل تدوير","أنه يمنع تغيير حجم الصورة نهائياً","أن التدوير يصلح فقط للملفات الصوتية"], a:0, e:"الشرط الأساسي لتحويل الصورة هو أن نوع الصورة لا يمكن تغييره من خلال التحويل، مثل انقلاب الفئتين 6 و 9 بعد التدوير (ص 143)."},
+  {q:"طريقة التنظيم الشائعة منذ عام 2014 التي تتجاهل بعض المدخلات بشكل عشوائي أثناء التدريب (فلا يتم تحديث محدداتها) وتجمع نتائج الشبكات الفرعية كطريقة تكامل هي:", o:["التسرب (Dropout)","التوقف المبكر (Early Stopping)","محسن الزخم (Momentum)","قص التدرج (Gradient Clipping)"], a:0, e:"التسرب (Dropout) يتجاهل بعض المدخلات عشوائياً أثناء التدريب ولا يحدث محدداتها، ويعمل كطريقة تكامل للشبكات الفرعية (ص 144)."},
+  {q:"متى نقوم بإجراء (التوقف المبكر - Early Stopping) أثناء تدريب نموذج التعلم العميق (ص 144)؟", o:["عندما تزداد خسارة البيانات في خطوة التحقق (Validation loss) أثناء اختبار مجموعة التحقق","عندما تنخفض خسارة التدريب في الجولة الأولى","قبل البدء بتدريب النموذج","بعد وصول خسارة الاختبار إلى الصفر"], a:0, e:"يتم إدخال اختبار على مجموعة التحقق أثناء التدريب، وعندما تزداد خسارة البيانات في خطوة التحقق نقوم بإجراء إيقاف مبكر (ص 144)."},
+  {q:"أي مما يلي يمثل الأغراض الثلاثة الرئيسية لاستخدام المُحسِّنات (Optimizers) في نماذج التعلم العميق (ص 145)؟", o:["تسريع تقارب الخوارزميات، منع أو القفز من القيم المتطرفة المحلية، وتبسيط إعداد المعلمات اليدوية وخاصة معدل التعلم (LR)","إبطاء التقارب، والبقاء داخل القيم المتطرفة المحلية، وتعقيد ضبط معدل التعلم","حذف الطبقات المخفية وتقليل حجم البيانات","تحويل الشبكة العصبية إلى شجرة قرار"], a:0, e:"الغرض من المحسنات هو تسريع التقارب، ومنع أو القفز من القيم المتطرفة المحلية، وتبسيط إعداد المعلمات اليدوية وخاصة LR (ص 145)."},
+  {q:"في محسن الزخم (Momentum)، ماذا يعادل إدخال مصطلح الزخم αΔw(n-1) فيزيائياً، وما هي أبرز مزاياه (ص 146)؟", o:["يعادل إعطاء الكرة الصغيرة المتدحرجة الجمود (القصور الذاتي)؛ مما يعزز ثبات اتجاه التدرج، ويسرع تجاوز المناطق المسطحة، ويتخطى الحدود المحلية الضيقة","يعادل إيقاف الكرة تماماً في المناطق المسطحة؛ مما يبطئ التقارب","يعادل تصفير جميع الأوزان في كل جولة","يعادل ضبط معدل التعلم تلقائياً دون تدخل يدوي"], a:0, e:"إدخال مصطلح الزخم يعادل إعطاء الكرة الجمود (القصور الذاتي)، فيقلل الطفرات ويتجاوز المناطق المسطحة والحدود المحلية الضيقة (ص 146)."},
+  {q:"ما هو العيب الرئيسي لمحسن الزخم (Momentum) المذكور في ص 146؟", o:["يجب ضبط معدل التعلم والزخم يدوياً، وهو ما يتطلب غالباً المزيد من التجارب لتحديد القيمة المناسبة","أنه لا يعمل مع الانحدار التدريجي","أنه يصفر معدل التعلم بعد جولة واحدة","أنه يسبب زيادة التذبذبات والطفرات"], a:0, e:"عيب محسن الزخم هو وجوب ضبط معدل التعلم والزخم يدوياً مما يتطلب تجارب إضافية (ص 146)."},
+  {q:"ما الفرق الأساسي بين منهج محسن (AdaGrad) ومنهج كل من (SGD و MBGD ومحسن الزخم) (ص 147)؟", o:["في SGD و MBGD والزخم تُحدّث كل معلمة بنفس معدل التعلم، بينما في AdaGrad يتم تحديد معدلات تعلم مختلفة لمعايير (معلمات) مختلفة","في AdaGrad يكون معدل التعلم ثابتاً ويدوياً لجميع المعلمات","AdaGrad لا يستخدم التدرج نهائياً","SGD يحدث معدل التعلم تلقائياً بينما AdaGrad لا يفعل ذلك"], a:0, e:"السمة المشتركة بين SGD و MBGD والزخم هي تحديث كل معلمة بنفس LR، أما وفق منهج AdaGrad فيجب تحديد معدلات تعلم مختلفة لمعلمات مختلفة (ص 147)."},
+  {q:"في معادلة محسن AdaGrad: Δw_t = -[ε / (δ + √r_t)] · g_t، لماذا يُضاف الثابت الصغير δ (حوالي 10⁻⁷) في المقام؟", o:["لتحقيق الاستقرار العددي (ومنع القسمة على صفر)","لزيادة حجم الخطأ إلى ما لا نهاية","لإلغاء تأثير التدرج g_t","لتثبيت معدل التعلم"], a:0, e:"δ هو ثابت صغير يتم ضبطه على حوالي 10⁻⁷ لتحقيق الاستقرار العددي (ص 147)."},
+  {q:"ما هي السلبية الرئيسية لمحسن (AdaGrad) التي دفعت الباحثين لتطوير محسن (RMSProp) (ص 147-148)؟", o:["أن المقام في AdaGrad يستمر في التراكم بحيث يصبح معدل التعلم في النهاية صغيراً جداً وتنهي الخوارزمية عملية التحسين في وقت مبكر جداً","أن معدل التعلم في AdaGrad يزداد باستمرار حتى ينفجر","أن AdaGrad لا يمكنه حساب التدرج","أن AdaGrad يعمل فقط على الصور"], a:0, e:"في AdaGrad يستمر المقام في التراكم فيصبح معدل التعلم صغيراً جداً وتصبح الخوارزمية غير فعالة وتنهي التحسين مبكراً جداً (ص 147-148)."},
+  {q:"كيف حلّ محسن (RMSProp) مشكلة التوقف المبكر في AdaGrad، وفي أي نوع من الشبكات والأهداف يبرز أداؤه الجيد (ص 148)؟", o:["قدّم معامل توهين (attenuation coefficient ρ) لضمان نسبة توهين معينة لـ r_t في كل جولة؛ وهو مناسب للأهداف غير المستقرة وله تأثيرات جيدة على شبكات RNN","حذف المقام بالكامل؛ وهو مناسب فقط للانحدار الخطي البسيط","ثبّت الأوزان عشوائياً؛ ولا يصلح لشبكات RNN","استبدل التدرج بدالة خطية"], a:0, e:"يقدم RMSProp معامل توهين لضمان نسبة توهين معينة لـ r_t في كل جولة، وهو مناسب للأهداف غير المستقرة وله تأثيرات جيدة على RNN (ص 148)."},
+  {q:"ما سبب تسمية محسن (Adam - Adaptive Moment Estimation) بهذا الاسم من المنظور الإحصائي (ص 148)؟", o:["لأنه يحتفظ بالمتغيرين m_t و v_t اللذين يمثلان تقديرات للحظة الأولى (متوسط القيمة) وللحظة الثانية (التباين غير المتمركز) للتدرجات على التوالي","نسبةً إلى اسم مخترع الحاسوب","لأنه يستخدم معلمة واحدة فقط","لأنه يلغي استخدام التدرجات المربعة"], a:0, e:"من المنظور الإحصائي، m_t و v_t هما تقديرات للحظة الأولى (متوسط القيمة) وللحظة الثانية (التباين غير المتمركز) للتدرجات، وهو ما يفسر تسميته بـ Adam (ص 148)."},
+  {q:"في محسن Adam، لماذا نستخدم المعادلتين m̂_t = m_t/(1-β₁^t) و v̂_t = v_t/(1-β₂^t) قبل تحديث الوزن (ص 149)؟", o:["لحل مشكلة اقتراب m_t و v_t من 0 أثناء التكرارات الأولية عند تهيئتهما باستخدام المتجه الصفري (تصحيح التحيز)","لجعل قيم m_t و v_t تساوي صفراً دائماً","لمضاعفة خطأ الاختبار","لتحويل التصنيف إلى تجميع"], a:0, e:"إذا تمت تهيئة m_t و v_t بالمتجه الصفري فإنهما يكونان قريبين من 0 في التكرارات الأولية، ولحل هذه المشكلة نستخدم m̂_t و v̂_t (ص 149)."},
+  {q:"ما هي التأثيرات السلبية لمشكلة (خلل توازن البيانات - Imbalanced Data) في مهام التصنيف كما ورد في ص 150؟", o:["لا تفحص الخوارزمية الفئات ذات العينات القليلة جداً بشكل كافٍ فلا نحصل على النتيجة المثلى، وقد نفشل في الحصول على عينات كافية للتحقق والاختبار","تزداد سرعة ودقة النموذج على الفئات النادرة تلقائياً","يصبح عدد العينات متساوياً تلقائياً دون تدخل","تختفي مشكلة التجهيز الزائد نهائياً"], a:0, e:"بسبب العدد غير المتوازن لا تفحص الخوارزمية الفئات قليلة العينات بشكل كافٍ، وقد نفشل في الحصول على عينات كافية للتحقق والاختبار (ص 150)."},
+  {q:"أي مما يلي يمثل الطرق الأربع لمعالجة خلل توازن البيانات المذكورة في مخطط ص 151؟", o:["تقليل عينات عشوائية، زيادة عينات عشوائية، تقنية الإفراط في أخذ عينات الأقلية الاصطناعية (SMOTE)، وأخذ العينات ودمج العينات","قص التدرج، دالة ReLU، التوقف المبكر، ومحسن الزخم","تنظيم L1، تنظيم L2، التسرب، وتدوير الصور","حذف مجموعة الاختبار وإيقاف التدريب"], a:0, e:"هذه هي الطرق الأربع المذكورة نصاً في شريحة 6 ص 151 لمعالجة خلل توازن البيانات."},
+  {q:"ما الفرق بين (التدرج المتلاشي) و(التدرج المتفجر)، ومن أين تنبع هاتان المشكلتان بصورة أساسية (ص 151)؟", o:["مع تزايد الطبقات تنخفض المشتقة في التدرج المتلاشي وتزداد في التدرج المتفجر؛ وتنبع المشكلتان أساساً من معادلات الانتشار الخلفي (Backpropagation)","كلاهما يحدثان في الشبكات ذات الطبقة الواحدة فقط ولا علاقة لهما بالانتشار الخلفي","التدرج المتلاشي يزيد المشتقة، والمتفجر ينقصها","تنبع المشكلتان من حجم شاشة الحاسوب"], a:0, e:"مع تزايد طبقات الشبكة تنخفض المشتقة في التدرج المتلاشي وتزداد في المتفجر، وتنبعان أساساً من معادلات الانتشار الخلفي (ص 151)."},
+  {q:"كم يبلغ الحد الأقصى لقيمة مشتقة دالة التنشيط سيجمويد σ'(x)، ومتى تحدث مشكلة التدرج المتلاشي وفق قاعدة السلسلة (ص 152)؟", o:["الحد الأقصى لمشتقة سيجمويد هو 1/4 (0.25)؛ وبما أن الوزن w عادة أصغر من 1 فإن |w·σ'(u)| ≤ 1/4 فتتناقص نتيجة الاشتقاق بزيادة الطبقات","الحد الأقصى هو 100؛ وتزداد المشتقة بزيادة الطبقات","الحد الأقصى هو 1؛ ولا تتأثر المشتقة بزيادة الطبقات","مشتقة سيجمويد سالبة دائماً"], a:0, e:"الحد الأقصى لقيمة σ'(x) هو 1/4، ووزن الشبكة عادة أصغر من 1 فيكون |w·σ'(u)| ≤ 1/4، وبزيادة الطبقات تتناقص نتيجة الاشتقاق وفق قاعدة السلسلة (ص 152)."},
+  {q:"متى تحدث مشكلة (التدرج المتفجر - Exploding Gradient) رياضياً في الشبكة العصبية العميقة (ص 152)؟", o:["عندما يكون وزن الشبكة w كبيراً، مما يؤدي إلى أن يكون |w · σ'(u)| > 1","عندما يكون وزن الشبكة w يساوي صفراً","عندما تكون الشبكة مكونة من طبقة إدخال فقط","عند استخدام التوقف المبكر"], a:0, e:"عندما يكون وزن الشبكة w كبيراً مما يؤدي إلى |w · σ'(u)| > 1، تحدث مشكلة التدرج المتفجر (ص 152)."},
+  {q:"ما هي الحلول التقنية المحددة في ص 152 للتخفيف من كل من (التدرج المتفجر) و(التدرج المتلاشي)؟", o:["يُستخدم (قص التدرج Gradient Clipping) للتخفيف من التدرج المتفجر، وتُستخدم (دالة التنشيط ReLU وشبكات LSTM) للتخفيف من التدرج المتلاشي","تُستخدم دالة سيجمويد لحل المشكلتين معاً","يُستخدم قص التدرج للتدرج المتلاشي، ودالة سيجمويد للمتفجر","يتم حذف جميع الطبقات المخفية"], a:0, e:"يتم استخدام قص التدرج للتخفيف من مشكلة التدرج المتفجر، ويتم استخدام دالة التنشيط ReLU و LSTM للتخفيف من مشكلة التدرج المتلاشي (ص 152)."},
+  {q:"ما هو الوصف الدقيق والسبب الجذري لمشكلة التجهيز الزائد (Overfitting) كما لُخصت في ختام الفصل الحادي عشر (ص 152)؟", o:["يعمل النموذج جيداً في التدريب وسيئاً في الاختبار؛ سببه كثرة أبعاد الميزات والمعلمات والضوضاء مع قلة بيانات التدريب جداً (وحله: زيادة البيانات، التنظيم، التوقف المبكر، والتسرب)","يعمل النموذج سيئاً في التدريب وجيداً في الاختبار؛ سببه قلة الميزات وكثرة البيانات","تساوي دقة التدريب ودقة الاختبار عند 100%","انقطاع التيار الكهربائي أثناء التدريب"], a:0, e:"في Overfitting يعمل النموذج جيداً في مجموعة التدريب ولكنه سيئ في الاختبار بسبب كثرة الميزات والمعلمات والضوضاء مع قلة بيانات التدريب، ويُحل بزيادة البيانات والتنظيم والتوقف المبكر والتسرب (ص 152)."}
+];
+
+// بناء شبكة المصطلحات
+const termsGrid = document.getElementById("termsGrid");
+terms.forEach(([en, ar]) => {
+  const d = document.createElement("div");
+  d.className = "card";
+  d.style.margin = "0";
+  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
+  termsGrid.appendChild(d);
+});
+
+// إدارة البطاقات التعليمية
+let ci = 0, showAnswer = false;
+function renderCard() {
+  document.getElementById("flashTerm").textContent = cards[ci][0];
+  const ansEl = document.getElementById("flashAnswer");
+  ansEl.innerHTML = cards[ci][1].replace(/\n/g, "<br>");
+  ansEl.hidden = !showAnswer;
+  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
+  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+}
+document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
+document.getElementById("flashcard").addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
+});
+document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
+document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
+renderCard();
+
+// التنقل بين التبويبات
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+// إدارة الاختبار
+let answers = {};
+function renderQuiz() {
+  const area = document.getElementById("quizArea");
+  area.innerHTML = "";
+  const letters = ["أ", "ب", "ج", "د"];
+  questions.forEach((item, i) => {
+    const box = document.createElement("div");
+    box.className = "qbox";
+    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
+    const opts = box.querySelector(".options");
+    item.o.forEach((opt, j) => {
+      const btn = document.createElement("button");
+      btn.className = "option";
+      btn.textContent = `${letters[j]}) ${opt}`;
+      btn.onclick = () => {
+        answers[i] = j;
+        [...opts.children].forEach((x, k) => {
+          x.classList.remove("correct", "wrong");
+          x.disabled = true;
+          if (k === item.a) x.classList.add("correct");
+          if (k === j && j !== item.a) x.classList.add("wrong");
+        });
+        const fb = document.getElementById("fb" + i);
+        fb.hidden = false;
+        fb.className = "feedback " + (j === item.a ? "good" : "bad");
+        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
+        updateScore();
+      };
+      opts.appendChild(btn);
+    });
+    area.appendChild(box);
+  });
+  updateScore();
+}
+
+function updateScore() {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
+  document.getElementById("score").textContent = `النتيجة: ${correct} / ${questions.length}`;
+  document.getElementById("progressBar").style.width = (Object.keys(answers).length / questions.length * 100) + "%";
+}
+
+document.getElementById("resetQuiz").onclick = () => {
+  answers = {};
+  document.getElementById("finalResult").textContent = "";
+  renderQuiz();
+};
+
+document.getElementById("finishQuiz").onclick = () => {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
+  const pct = Math.round(correct / questions.length * 100);
+  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${questions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! إتقان كامل للفصل الحادي عشر من موضوعات مختارة." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
+};
+
+renderQuiz();
+</script>
+</body>
+</html>

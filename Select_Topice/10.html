@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الفصل العاشر الشامل (100%) | موضوعات مختارة - المفاهيم الأساسية للتعلم العميق</title>
+<style>
+:root{
+  --bg:#f4f6fb;
+  --card:#ffffff;
+  --ink:#1b263b;
+  --muted:#637085;
+  --accent:#0f766e;
+  --accent-dark:#115e59;
+  --accent2:#ccfbf1;
+  --line:#e2e8f0;
+  --good:#059669;
+  --good-bg:#ecfdf5;
+  --bad:#dc2626;
+  --bad-bg:#fef2f2;
+  --warn:#d97706;
+  --warn-bg:#fffbeb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
+header{background:linear-gradient(135deg,#134e4a,#0f766e,#0284c7);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(19,78,74,0.18)}
+.wrap{max-width:1060px;margin:auto;padding:0 16px}
+.eyebrow{opacity:.92;font-size:.9rem;background:rgba(255,255,255,0.15);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
+h1{margin:5px 0;font-size:clamp(1.55rem,4vw,2.25rem)}
+header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
+nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:rgba(255,255,255,0.18);color:#ffffff;font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
+nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
+nav button.active{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+main .btn{background:var(--accent2);color:var(--accent-dark)}
+main .btn.primary{background:var(--accent);color:white}
+main{padding:22px 0 48px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(36,52,91,0.04)}
+h2{font-size:1.35rem;margin:0 0 12px;color:#134e4a}
+h3{font-size:1.06rem;margin:10px 0 6px;color:var(--accent-dark)}
+h4{font-size:.98rem;margin:8px 0 4px;color:#0f172a}
+small,.muted{color:var(--muted)}
+ul,ol{padding-right:22px;margin:8px 0}
+li{margin:6px 0}
+details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
+summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f0fdfa;color:#134e4a;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
+details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
+.details-body{padding:16px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#f1f5f9;color:#134e4a;font-weight:bold}
+tr:last-child td{border-bottom:0}
+.note{border-right:4px solid var(--accent);padding:10px 14px;background:#f0fdfa;border-radius:8px;margin:10px 0}
+.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
+.formula-box{background:#134e4a;color:#fff;padding:12px 16px;border-radius:12px;text-align:center;font-size:1.03rem;margin:10px 0;direction:ltr;font-family:monospace}
+.step-card{border:1px solid var(--line);border-radius:12px;padding:14px;background:#f8fafc}
+.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
+.options{display:grid;gap:8px;margin-top:12px}
+.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
+.option:hover:not(:disabled){border-color:var(--accent);background:#f0fdfa}
+.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
+.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
+.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
+.feedback.good{color:var(--good);background:var(--good-bg)}
+.feedback.bad{color:var(--bad);background:var(--bad-bg)}
+.progress{height:10px;background:#e2e8f0;border-radius:9px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
+.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#ccfbf1);border:2px solid #99f6e4;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
+.flashcard:hover{transform:scale(1.005)}
+.flashcard .term{font-size:1.35rem;font-weight:bold;color:#134e4a}
+.flashcard .answer{margin-top:16px;font-size:1.08rem;color:var(--accent-dark);background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
+@media(max-width:600px){
+  .card{padding:14px}
+  nav button{flex:1 1 calc(50% - 8px);text-align:center}
+  .flashcard{min-height:200px;padding:18px}
+  th,td{padding:8px 10px;font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">مقرر موضوعات مختارة في علوم البيانات • تغطية شاملة 100% (صفحات PDF من 126 إلى 140)</div>
+    <h1>الفصل العاشر: المفاهيم الأساسية للتعلم العميق</h1>
+    <p>يغطي المقارنة بين التعلم التقليدي والعميق، المدرك أحادي الطبقة ومسألة XOR، الشبكة المغذية للأمام، دوال الخسارة والانتشار العكسي، ودوال التنشيط الست</p>
+    <nav>
+      <button class="active" data-tab="summary">الشرح الشامل</button>
+      <button data-tab="tables">جداول المقارنات والمعادلات (4)</button>
+      <button data-tab="terms">المصطلحات والمفاهيم (28)</button>
+      <button data-tab="cards">البطاقات (28)</button>
+      <button data-tab="quiz">الاختبار الشامل (25)</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- ================= التبويب الأول: الشرح الشامل ================= -->
+  <section id="summary" class="panel active">
+    <div class="card">
+      <h2>خريطة الفصل العاشر (صفحات PDF من 126 إلى 140)</h2>
+      <div class="grid">
+        <div>
+          <span class="tag">الوحدة التعليمية 1 (ص 126 - 131)</span>
+          <h3>التعلم العميق والمدرك و XOR</h3>
+          <p>مقارنة التعلم الآلي التقليدي والتعلم العميق، مفهوم وتاريخ الشبكة العصبية (تعريف نيلسن)، المدرك أحادي الطبقة، مسألة XOR (مينسكي 1969)، وتأثير الطبقات المخفية.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة التعليمية 2 (ص 131 - 135)</span>
+          <h3>دوال الخسارة والانتشار العكسي</h3>
+          <p>متجه التدرج والانحدار التدريجي، دالة التكلفة التربيعية (MSE) ودالة الإنتروبيا المتقاطعة (Cross Entropy)، وخوارزمية الانتشار العكسي (Backpropagation).</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة التعليمية 3 (ص 136 - 140)</span>
+          <h3>دوال التنشيط الست (Activation)</h3>
+          <p>أهمية دالة التنشيط لإدخال اللاخطية، وتفصيل دوال: Sigmoid، و Tanh، و Softsign، و ReLU، و Softplus، و Softmax مع معادلاتها ومزاياها وعيوبها.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- الوحدة الأولى -->
+    <details open>
+      <summary>1) الوحدة التعليمية (1): مقارنة التعلم التقليدي والعميق، الشبكة العصبية، المدرك الأحادي، ومسألة XOR (ص 126 - 131)</summary>
+      <div class="details-body">
+        <div class="exam-alert">
+          <h3>أولاً: المقارنة الجوهرية بين التعلم الآلي التقليدي والتعلم العميق (ص 127) - موضع أسئلة مؤكدة:</h3>
+          <p>يتمتع التعلم العميق (كنموذج يعتمد على تعلم الميزات غير الخاضع للرقابة وتعلم التسلسل الهرمي للميزات) بمزايا كبيرة في مجالات مثل <b>رؤية الكمبيوتر، التعرف على الكلام، ومعالجة اللغة الطبيعية</b>:</p>
+          <ol>
+            <li><b>متطلبات الأجهزة:</b>
+              <ul>
+                <li><b>التعلم الآلي التقليدي:</b> متطلبات أجهزة <b>منخفضة</b> على الكمبيوتر؛ ونظراً لكمية الحوسبة المحدودة، <b>لا يحتاج إلى وحدة معالجة رسومية (<span dir="ltr">GPU</span>)</b> للحوسبة المتوازية بشكل عام.</li>
+                <li><b>التعلم العميق:</b> متطلبات أجهزة <b>أعلى</b> على الكمبيوتر؛ لتنفيذ عمليات المصفوفة على بيانات ضخمة، <b>يحتاج الكمبيوتر إلى وحدة معالجة رسومية (<span dir="ltr">GPU</span>)</b> لأداء الحوسبة المتوازية.</li>
+              </ul>
+            </li>
+            <li><b>حجم البيانات والأداء:</b>
+              <ul>
+                <li><b>التعلم الآلي التقليدي:</b> قابل للتطبيق بالتدريب باستخدام <b>كمية بيانات صغيرة</b>، و<b>لا يمكن تحسين أدائه باستمرار مع زيادة كمية البيانات</b>.</li>
+                <li><b>التعلم العميق:</b> يمكن أن يكون الأداء <b>مرتفعاً</b> عند توفير معلمات وزن عالية الأبعاد و<b>بيانات تدريب ضخمة</b>.</li>
+              </ul>
+            </li>
+            <li><b>منهجية حل المشكلة:</b> التقليدي يعتمد <b>تقسيم المشكلة مستوى بمستوى (<span dir="ltr">level-by-level</span>)</b>، بينما التعلم العميق يعتمد <b>التعلم من طرف إلى طرف (<span dir="ltr">End-to-End / E2E</span>)</b>.</li>
+            <li><b>استخراج الميزات:</b> التقليدي يعتمد <b>اختيار الميزة يدوياً</b>، بينما التعلم العميق يعتمد <b>استخراج الميزات التلقائي القائم على الخوارزمية</b>.</li>
+            <li><b>قابلية التفسير والشرح:</b> في التقليدي <b>ميزات سهلة الشرح</b>، بينما في التعلم العميق <b>ميزات يصعب شرحها</b>.</li>
+          </ol>
+        </div>
+
+        <h3>ثانياً: مفهوم الشبكة العصبية والتعلم العميق (ص 127 - 128)</h3>
+        <ul>
+          <li>بنية التعلم العميق بشكل عام عبارة عن <b>شبكة عصبية عميقة</b>، وكلمة <b>"عميق" (<span dir="ltr">Deep</span>)</b> في "التعلم العميق" تشير إلى <b>عدد طبقات الشبكة العصبية</b>.</li>
+          <li><b>تعريف نيلسن (<span dir="ltr">Hecht Nielson</span>) للشبكة العصبية (ص 128):</b> عرّف الباحث الأمريكي نيلسن الشبكة العصبية بأنها: <b>"نظام كمبيوتر يتكون من عناصر معالجة بسيطة ومترابطة للغاية، والتي تعالج المعلومات من خلال الاستجابة الديناميكية للمدخلات الخارجية"</b>.</li>
+          <li><b>الشبكة العصبية الاصطناعية:</b> نظام معالجة معلومات مصمم لتقليد وتبسيط البنية الدقيقة للدماغ البشري ووظائفه، ويعكس السمات الأساسية لوظائف الدماغ البشري مثل:
+            <br>1) <b>معالجة المعلومات المتزامنة</b> • 2) <b>التعلم</b> • 3) <b>الارتباط</b> • 4) <b>تصنيف النماذج</b> • 5) <b>الذاكرة</b>.</li>
+        </ul>
+
+        <h3>ثالثاً: مُدرِك أحادي الطبقة (<span dir="ltr">Single-layer Perceptron</span>) ومسألة <span dir="ltr">XOR</span> (ص 129 - 131)</h3>
+        <ul>
+          <li><b>مكونات ومعادلة المدرك أحادي الطبقة (ص 129):</b>
+            <ul>
+              <li>يعادل <b>المصنف (<span dir="ltr">Classifier</span>)</b>، حيث يأخذ متجه الإدخال $X = [x_0, x_1, \dots, x_n]^T$ ومتجه الوزن $W = [w_0, w_1, \dots, w_n]^T$ (حيث <b dir="ltr">w_0</b> هي <b>الإزاحة / الانحياز</b>).</li>
+              <li>دالة التنشيط (<span dir="ltr">Sign Activation Function</span>):
+                <div class="formula-box">o = sign(Wᵀ · X) = { +1 if Wᵀ · X &gt; 0  ;  -1 otherwise }</div>
+              </li>
+              <li>ينفذ التصنيف الثنائي في الفضاء عالي الأبعاد، وتكون حدود الفصل بين النوعين هي المعادلة <b dir="ltr">Wᵀ · X = 0</b>، وهي <b>مستوى فائق (<span dir="ltr">hyperplane</span>) عالي الأبعاد</b>.</li>
+            </ul>
+          </li>
+          <li class="exam-alert"><b>مسألة <span dir="ltr">XOR</span> وعام 1969 (ص 129 - 130) - مهمة جداً:</b>
+            <ul>
+              <li>في عام <b>1969</b>، أثبت عالم الرياضيات الأمريكي ورائد الذكاء الاصطناعي <b>مينسكي (<span dir="ltr">Minsky</span>)</b> أن الإدراك الحسي (المدرك الأحادي) هو في الأساس <b>نموذج خطي</b> يمكنه التعامل فقط مع مشاكل التصنيف الخطي (مثل بوابتي <span dir="ltr">AND</span> و <span dir="ltr">OR</span>)، لكنه <b>لا يستطيع معالجة البيانات غير الخطية مثل مسألة <span dir="ltr">XOR</span></b>.</li>
+              <li><b>كيف تم حل مسألة <span dir="ltr">XOR</span>؟ (ص 130 - 131):</b> باستخدام <b>الشبكة العصبية المغذية للأمام (<span dir="ltr">Feedforward Neural Network</span>)</b> عبر إضافة <b>طبقات مخفية (<span dir="ltr">Hidden layers</span>)</b> بين طبقة المدخلات وطبقة المخرجات.</li>
+              <li><b>تأثير زيادة الطبقات المخفية (ص 131):</b> (0 طبقة مخفية = فصل خطي بسيط)، (3 طبقات مخفية = حدود قرار منحنية)، (20 طبقة مخفية = حدود قرار معقدة جداً تفصل أصعب الأنماط).</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- الوحدة الثانية -->
+    <details open>
+      <summary>2) الوحدة التعليمية (2): الانحدار التدريجي، دوال الخسارة، وخوارزمية الانتشار العكسي (ص 131 - 135)</summary>
+      <div class="details-body">
+        <h3>أولاً: متجه التدرج والانحدار التدريجي ودالة الخسارة (ص 132 - 133)</h3>
+        <ul>
+          <li><b>قاعدة اتجاه التدرج (ص 132):</b>
+            <ul>
+              <li>تدرج الدالة متعددة المتغيرات هو $\nabla f = (\frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2}, \dots, \frac{\partial f}{\partial x_n})$.</li>
+              <li><b>اتجاه متجه التدرج ($\nabla f$)</b> هو <b>الاتجاه الأسرع نمواً (صعوداً) للدالة</b>.</li>
+              <li><b>اتجاه متجه التدرج السلبي ($-\nabla f$)</b> هو <b>أسرع اتجاه نزول للدالة</b> (ولذلك تستخدمه طريقة الانحدار التدريجي للبحث وتحديث المعلمات لتقليل قيمة دالة الخسارة).</li>
+            </ul>
+          </li>
+          <li><b>دالة التكلفة التربيعية (<span dir="ltr">Quadratic Cost Function</span>) (ص 132 - 133):</b>
+            <ul>
+              <li>تعكس دالة الخسارة (<span dir="ltr">loss function</span>) الخطأ بين المخرجات المستهدفة ($t_d$) والمخرجات الفعلية ($o_d$)، وأكثرها شيوعاً لعينة تدريب واحدة هي:
+                <div class="formula-box">E(w) = (1 / 2) Σ_{d∈D} (t_d - o_d)²</div>
+              </li>
+              <li>يتم تعريف دالة الخسارة $E(W)$ على مساحة الوزن، والهدف هو البحث عن متجه الوزن $W$ الذي يقلل $E(W)$؛ ونظراً لعدم وجود طريقة رياضية مباشرة لحل الحدود القصوى على السطح المعقد عالي الأبعاد، نلجأ للانحدار التدريجي.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <div class="exam-alert">
+          <h3>ثانياً: دوال الخسارة الشائعة في التعلم العميق ومتى نستخدم كلاً منها (ص 133) - موضع سؤال مؤكد:</h3>
+          <ol>
+            <li><b>دالة التكلفة التربيعية / الخطأ المربع المتوسط (<span dir="ltr">Quadratic cost function / MSE</span>):</b>
+              <br>تُستخدم بشكل عام لحل <b>مشكلة الانحدار (<span dir="ltr">Regression</span>)</b>.</li>
+            <li><b>دالة خطأ الإنتروبيا المتقاطعة (<span dir="ltr">Cross entropy error</span>):</b>
+              <div class="formula-box">E(w) = - Σ_{d∈D} [ t_d ln(o_d) + (1 - t_d) ln(1 - o_d) ]</div>
+              <ul>
+                <li>تمثل هذه الدالة <b>المسافة بين توزيعين احتماليين</b>.</li>
+                <li>تُستخدم على نطاق واسع لحل <b>مشكلة التصنيف (<span dir="ltr">Classification</span>)</b>.</li>
+              </ul>
+            </li>
+          </ol>
+        </div>
+
+        <h3>ثالثاً: خوارزمية الانتشار العكسي (<span dir="ltr">Backpropagation</span>) (ص 134 - 135)</h3>
+        <ul>
+          <li><b>المبدأ الأساسي (ص 134):</b> يتم نشر <b>الإشارات (<span dir="ltr">signals</span>) في الاتجاه الأمامي</b>، ويتم نشر <b>الأخطاء (<span dir="ltr">errors</span>) في الاتجاه الخلفي</b>.</li>
+          <li>يتم تجميع الأخطاء في طبقات الإدخال والطبقات المخفية والمخرجات، وإذا كانت هناك طبقات مخفية متعددة، فسيتم استخدام <b>قواعد السلسلة (<span dir="ltr">Chain Rule</span>)</b> للحصول على مشتق لكل طبقة وحساب الأوزان المثلى ($w_b$ بين المخفية والإخراج، و $w_c$ بين المدخلة والمخفية) عن طريق التكرار.</li>
+          <li><b>الخطوات الأربع لتدريب الشبكة بخوارزمية الانتشار العكسي (ص 135):</b>
+            <ol>
+              <li>أخذ عينة التدريب التالية $\langle X, T \rangle$، وإدخال $X$ إلى الشبكة، والحصول على المخرج الفعلي $o$.</li>
+              <li>حساب حد الخطأ ($\delta$) في طبقة المخرجات وفقاً لصيغة خطأ طبقة المخرجات.</li>
+              <li>حساب حد الخطأ ($\delta$) لكل طبقة مخفية <b>من الإخراج إلى الإدخال</b> عن طريق التكرار.</li>
+              <li>تحديث قيم الوزن ($\Delta w$) لكل طبقة وفقاً لقيمة $\delta$ الخاصة بها.</li>
+            </ol>
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- الوحدة الثالثة -->
+    <details open>
+      <summary>3) الوحدة التعليمية (3): دوال التنشيط الست (Activation Functions) وخصائصها (ص 136 - 140)</summary>
+      <div class="details-body">
+        <h3>أولاً: الدور الجوهري لدالة التنشيط (<span dir="ltr">Activation Function</span>) (ص 136)</h3>
+        <div class="note">
+          <ul>
+            <li>تلعب دالة التنشيط دوراً مهماً للغاية في تعلم نماذج الشبكات العصبية وتفسير الدوال غير الخطية المعقدة؛ فهي <b>تسمح بإدخال ميزات غير خطية إلى الشبكة العصبية</b>.</li>
+            <li><b>ماذا يحدث بدون دالة التنشيط؟</b> بدون دالة التنشيط، <b>لا يمكن للشبكة العصبية أن تمثل سوى دالة خطية واحدة، بغض النظر عن عدد الطبقات التي تحتوي عليها!</b> (لأن تركيب دوال خطية يعطي دالة خطية أيضاً).</li>
+          </ul>
+        </div>
+
+        <div class="exam-alert">
+          <h3>ثانياً: تفصيل دوال التنشيط الست الشائعة في التعلم العميق (ص 137 - 140) - مهمة جداً في الاختبار:</h3>
+
+          <h4>1. الدالة السينية (<span dir="ltr">Sigmoid</span>) (ص 137):</h4>
+          <ul>
+            <li><b>المعادلة والمدى:</b> $f(x) = \frac{1}{1 + e^{-x}}$ ، مداها <b>$(0, 1)$</b> ، ومدى مشتقتها <b>$(0, 0.25]$</b>.</li>
+            <li><b>المزايا والاستخدام:</b> الأكثر استخداماً في المرحلة المبكرة لدراسة الشبكات الأمامية، وتُستخدم في طبقة الإخراج <b>للتصنيف الثنائي</b>؛ وهي دالة رتيبة (<span dir="ltr">monotonic</span>) ومتواصلة (<span dir="ltr">continuous</span>) وسهلة الاشتقاق.</li>
+            <li><b>السلبيات:</b>
+              <br>أ) تتدهور مشتقتها إلى $0$ في غضون <b>5 طبقات</b> مما يعطل التدريب ويسبب <b>مشكلة التدرج المتلاشي (<span dir="ltr">vanishing gradient</span>)</b>.
+              <br>ب) <b>مخرجاتها ليست مركزية الصفر (<span dir="ltr">not zero-centered</span>)</b>.</li>
+          </ul>
+
+          <hr style="border:0;border-top:1px solid #fcd34d;margin:10px 0">
+
+          <h4>2. دالة الظل الزائدي (<span dir="ltr">Tanh</span>) (ص 137):</h4>
+          <ul>
+            <li><b>المعادلة والمدى:</b> $f(x) = \tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}$ ، مداها <b>$(-1, 1)$</b> ، ومدى مشتقتها $f'(x) = 1 - \tanh^2(x)$ هو <b>$(0, 1]$</b>.</li>
+            <li><b>المزايا:</b> بديل رئيسي لـ Sigmoid؛ <b>تصحح عيب عدم تركيز المخرجات على الصفر</b>، مما يقلل عدد التكرارات المطلوبة في الانحدار المتدرج.</li>
+            <li><b>السلبيات:</b> لا تزال <b>عرضة للتشبع (<span dir="ltr">saturation</span>)</b> تماماً مثل دالة Sigmoid وتسبب التدرج المتلاشي.</li>
+          </ul>
+
+          <hr style="border:0;border-top:1px solid #fcd34d;margin:10px 0">
+
+          <h4>3. دالة <span dir="ltr">Softsign</span> (ص 138):</h4>
+          <ul>
+            <li><b>المعادلة:</b> $f(x) = \frac{x}{1 + |x|}$ ، ومشتقتها $f'(x) = \frac{1}{(1 + |x|)^2}$.</li>
+            <li><b>خصائصها:</b> تقلل من قابلية تشبع دالتي <span dir="ltr">tanh</span> و <span dir="ltr">sigmoid</span>، ولكن في المواضع البعيدة عن النقطة المركزية (الأصل) يقترب مشتقها أيضاً من $0$ فيتوقف تحديث الأوزان وتسبب <b>مشكلة التدرج المتلاشي</b>.</li>
+          </ul>
+
+          <hr style="border:0;border-top:1px solid #fcd34d;margin:10px 0">
+
+          <h4>4. الوحدة الخطية المصححة (<span dir="ltr">ReLU</span>) (ص 138 - 139):</h4>
+          <ul>
+            <li><b>المعادلة والمدى:</b> $f(x) = \max(0, x)$ (تساوي $x$ إذا كانت $x \ge 0$، وتساوي $0$ إذا كانت $x < 0$). مداها <b>$[0, \infty)$</b> ومشتقتها <b>$\{0, 1\}$</b>.</li>
+            <li><b>المزايا الأربع:</b> 1) <b>أكثر وظائف التنشيط تطبيقاً على نطاق واسع حالياً</b> • 2) ليس لها حد أعلى فلن تصل للتشبع في الجانب الموجب، مما <b>يخفف بفعالية من التدرج المتلاشي ويتقارب أسرع بكثير</b> • 3) تولد أداءً جيداً حتى بدون تدريب مسبق غير خاضع للإشراف • 4) <b>توفر الكثير من الجهود الحسابية</b> مقارنة بالدوال الأسية.</li>
+            <li><b>السلبيات الثلاث (ص 139):</b>
+              <br>1) لعدم وجود حد أعلى فقد تتصاعد أثناء التدريب.
+              <br>2) <b>غير قابلة للاشتقاق (التوجيه) عند الصفر</b> فلا تكون سلسة كفاية في بعض مشكلات الانحدار.
+              <br>3) قيمتها تظل <b>صفراً باستمرار عندما تكون المدخلات سلبية</b>، مما قد يتسبب في <b>"موت" الخلايا العصبية (<span dir="ltr">Dead Neurons</span>)</b>.</li>
+          </ul>
+
+          <hr style="border:0;border-top:1px solid #fcd34d;margin:10px 0">
+
+          <h4>5. دالة <span dir="ltr">Softplus</span> (ص 139):</h4>
+          <ul>
+            <li><b>المعادلة والمدى:</b> $f(x) = \ln(e^x + 1)$ ، ومشتقتها هي دالة سيجمويد $f'(x) = \frac{1}{1 + e^{-x}}$، مداها <b>$(0, \infty)$</b>.</li>
+            <li><b>خصائصها:</b> تم تعديلها على أساس <span dir="ltr">ReLU</span>؛ ورغم أنها تتطلب حسابات أكثر من <span dir="ltr">ReLU</span>، إلا أنها تمتاز بـ <b>مشتقة مستمرة ومنحنى أكثر سلاسة نسبياً</b>.</li>
+          </ul>
+
+          <hr style="border:0;border-top:1px solid #fcd34d;margin:10px 0">
+
+          <h4>6. دالة <span dir="ltr">Softmax</span> (ص 140):</h4>
+          <ul>
+            <li><b>المعادلة:</b> $\sigma(z)_j = \frac{e^{z_j}}{\sum_{k=1}^K e^{z_k}}$.</li>
+            <li><b>خصائصها واستخدامها:</b> هي امتداد للدالة السينية (<span dir="ltr">Sigmoid</span>) في الحالات متعددة الأبعاد؛ تحول متجهاً عشوائياً لبُعد $K$ إلى <b>توزيع احتمالات</b> (مجموعه يساوي 1)، ولذلك تُستخدم غالباً <b>كطبقة مخرجات للتصنيف المتعدد (<span dir="ltr">Multi-class classification</span>)</b>.</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= التبويب الثاني: جداول المقارنات والمعادلات ================= -->
+  <section id="tables" class="panel">
+    <div class="card">
+      <h2>1. جدول المقارنة الرسمي بين التعلم الآلي التقليدي والتعلم العميق (ص 127)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>وجه المقارنة</th>
+            <th>التعلم الآلي التقليدي (Traditional ML)</th>
+            <th>التعلم العميق (Deep Learning)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>متطلبات الأجهزة والـ GPU</b></td>
+            <td>متطلبات أجهزة <b>منخفضة</b>؛ لا يحتاج إلى وحدة معالجة رسومية (<span dir="ltr">GPU</span>) للحوسبة المتوازية بشكل عام.</td>
+            <td>متطلبات أجهزة <b>أعلى</b>؛ يحتاج الكمبيوتر إلى <b>وحدة معالجة رسومية (<span dir="ltr">GPU</span>)</b> لأداء الحوسبة المتوازية على المصفوفات الضخمة.</td>
+          </tr>
+          <tr>
+            <td><b>حجم البيانات وتطور الأداء</b></td>
+            <td>يعمل بكمية بيانات <b>صغيرة</b>، ولا يمكن تحسين أدائه باستمرار مع زيادة كمية البيانات.</td>
+            <td>يحقق أداءً <b>مرتفعاً جداً</b> عند توفير معلمات وزن عالية الأبعاد و<b>بيانات تدريب ضخمة</b>.</td>
+          </tr>
+          <tr>
+            <td><b>أسلوب معالجة المشكلة</b></td>
+            <td>تقسيم المشكلة <b>مستوى بمستوى (<span dir="ltr">level-by-level</span>)</b>.</td>
+            <td>التعلم <b>من طرف إلى طرف (<span dir="ltr">End-to-End / E2E</span>)</b>.</td>
+          </tr>
+          <tr>
+            <td><b>استخراج الميزات (Features)</b></td>
+            <td>اختيار الميزة <b>يدوياً</b> بواسطة الخبراء.</td>
+            <td>استخراج الميزات <b>بشكل تلقائي</b> قائم على الخوارزمية.</td>
+          </tr>
+          <tr>
+            <td><b>قابلية التفسير</b></td>
+            <td>ميزات <b>سهلة الشرح</b> والتفسير.</td>
+            <td>ميزات <b>يصعب شرحها</b> (صندوق أسود).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>2. جدول مقارنة شامل لدوال التنشيط الست (Activation Functions) (ص 136 - 140)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>دالة التنشيط</th>
+            <th>المعادلة والمشتقة</th>
+            <th>المدى (Range)</th>
+            <th>أبرز المزايا والعيوب في الشرائح</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1. Sigmoid<br>(السينية)</b></td>
+            <td dir="ltr"><code>f(x) = 1 / (1 + e⁻ˣ)</code><br><code>f'(x) ∈ (0, 0.25]</code></td>
+            <td dir="ltr"><b>(0, 1)</b></td>
+            <td>• <b>المزايا:</b> رتيبة ومتواصلة، تُستخدم للتصنيف الثنائي.<br>• <b>العيوب:</b> تتدهور لـ $0$ خلال <b>5 طبقات (التدرج المتلاشي)</b>، ومخرجاتها <b>ليست مركزية الصفر</b>.</td>
+          </tr>
+          <tr>
+            <td><b>2. Tanh<br>(الظل الزائدي)</b></td>
+            <td dir="ltr"><code>(eˣ - e⁻ˣ)/(eˣ + e⁻ˣ)</code><br><code>f'(x) = 1 - tanh²(x)</code></td>
+            <td dir="ltr"><b>(-1, 1)</b></td>
+            <td>• <b>المزايا:</b> <b>تصحح عيب عدم التمركز حول الصفر</b> فتقلل التكرارات.<br>• <b>العيوب:</b> لا تزال <b>عرضة للتشبع (Saturation)</b> والتدرج المتلاشي.</td>
+          </tr>
+          <tr>
+            <td><b>3. Softsign</b></td>
+            <td dir="ltr"><code>f(x) = x / (1 + |x|)</code><br><code>f'(x) = 1 / (1 + |x|)²</code></td>
+            <td dir="ltr"><b>(-1, 1)</b></td>
+            <td>• <b>المزايا:</b> تقلل من قابلية تشبع <span dir="ltr">tanh</span> و <span dir="ltr">sigmoid</span>.<br>• <b>العيوب:</b> تظل معرضة <b>لمشكلة التدرج المتلاشي</b> بعيداً عن نقطة الأصل.</td>
+          </tr>
+          <tr>
+            <td><b>4. ReLU<br>(الخطية المصححة)</b></td>
+            <td dir="ltr"><code>f(x) = max(0, x)</code><br><code>f'(x) ∈ {0, 1}</code></td>
+            <td dir="ltr"><b>[0, ∞)</b></td>
+            <td>• <b>المزايا:</b> <b>الأكثر استخداماً</b>، لا تتشبع بالموجب، تخفف التدرج المتلاشي، سريعة حسابياً.<br>• <b>العيوب:</b> لا حد أعلى لها، غير قابلة للاشتقاق عند $0$، وتسبب <b>"موت الخلايا العصبية"</b> للقيم السالبة.</td>
+          </tr>
+          <tr>
+            <td><b>5. Softplus</b></td>
+            <td dir="ltr"><code>f(x) = ln(eˣ + 1)</code><br><code>f'(x) = 1 / (1 + e⁻ˣ)</code></td>
+            <td dir="ltr"><b>(0, ∞)</b></td>
+            <td>• <b>المزايا:</b> نسخة معدلة من <span dir="ltr">ReLU</span> لها <b>مشتقة مستمرة ومنحنى أكثر سلاسة</b>.<br>• <b>العيوب:</b> تتطلب حسابات أكثر من <span dir="ltr">ReLU</span>.</td>
+          </tr>
+          <tr>
+            <td><b>6. Softmax</b></td>
+            <td dir="ltr"><code>σ(z)_j = e^(z_j) / Σ e^(z_k)</code></td>
+            <td dir="ltr"><b>(0, 1)</b><br><small>مجموعها = 1</small></td>
+            <td>• <b>الوظيفة:</b> امتداد لـ Sigmoid في الأبعاد المتعددة؛ تحول متجه $K$ إلى توزيع احتمالي وتُستخدم كطبقة مخرجات <b>للتصنيف المتعدد</b>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>3. مقارنة دوال الخسارة، اتجاه التدرج، والانتشار العكسي (ص 132 - 135)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>المفهوم</th>
+            <th>الصيغة / القاعدة</th>
+            <th>الاستخدام والدلالة في الشرائح</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>اتجاه متجه التدرج (<span dir="ltr">∇f</span>)</b></td>
+            <td dir="ltr"><code>∇f = (∂f/∂x₁, ..., ∂f/∂xₙ)</code></td>
+            <td>يمثل <b>الاتجاه الأسرع نمواً (صعوداً)</b> للدالة.</td>
+          </tr>
+          <tr>
+            <td><b>اتجاه التدرج السلبي (<span dir="ltr">-∇f</span>)</b></td>
+            <td dir="ltr"><code>-∇f</code></td>
+            <td>يمثل <b>أسرع اتجاه نزول للدالة</b> (يُستخدم في الانحدار التدريجي لتقليل الخسارة).</td>
+          </tr>
+          <tr>
+            <td><b>دالة التكلفة التربيعية (MSE)</b></td>
+            <td dir="ltr"><code>E(w) = (1/2) Σ (t_d - o_d)²</code></td>
+            <td>تُستخدم بشكل عام لحل <b>مشكلة الانحدار (Regression)</b>.</td>
+          </tr>
+          <tr>
+            <td><b>دالة الإنتروبيا المتقاطعة<br>(Cross Entropy Error)</b></td>
+            <td dir="ltr"><code>-Σ [t_d ln(o_d) + (1-t_d)ln(1-o_d)]</code></td>
+            <td>تمثل <b>المسافة بين توزيعين احتماليين</b>، وتُستخدم لحل <b>مشكلة التصنيف (Classification)</b>.</td>
+          </tr>
+          <tr>
+            <td><b>الانتشار العكسي<br>(Backpropagation)</b></td>
+            <td>• الإشارات (<span dir="ltr">Signals</span>) &rarr; <b>للأمام</b><br>• الأخطاء (<span dir="ltr">Errors</span> $\delta$) &rarr; <b>للخلف</b></td>
+            <td>يستخدم <b>قواعد السلسلة (Chain Rule)</b> لحساب مشتق كل طبقة مخفية وتحديث الأوزان تكرارياً.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>4. مقارنة المدرك أحادي الطبقة والشبكة المغذية للأمام ومسألة XOR (ص 129 - 131)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>البند</th>
+            <th>المدرك أحادي الطبقة (Single-layer Perceptron)</th>
+            <th>الشبكة المغذية للأمام متعددة الطبقات (Feedforward / MLP)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>الهيكلية</b></td>
+            <td>طبقة مدخلات وطبقة مخرجات فقط (بدون طبقات مخفية)، والحد الفاصل هو $W^T \cdot X = 0$.</td>
+            <td>تضم طبقة مدخلات + <b>طبقة مخفية واحدة أو أكثر (Hidden layers)</b> + طبقة مخرجات.</td>
+          </tr>
+          <tr>
+            <td><b>القدرة على الفصل وحل XOR</b></td>
+            <td>نموذج <b>خطي فقط</b>؛ يحل <span dir="ltr">AND</span> و <span dir="ltr">OR</span> لكنه <b>يفشل في حل مسألة <span dir="ltr">XOR</span> غير الخطية</b> (كما أثبت مينسكي عام 1969).</td>
+            <td>قادر على <b>حل مسألة <span dir="ltr">XOR</span> والبيانات غير الخطية المعقدة</b> بفضل الطبقات المخفية ودوال التنشيط.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الثالث: المصطلحات ================= -->
+  <section id="terms" class="panel">
+    <div class="card">
+      <h2>قاموس المصطلحات والمفاهيم الشامل للفصل العاشر (28 مصطلحاً)</h2>
+      <p class="muted">جميع المصطلحات والمعادلات ودوال التنشيط الواردة في شرائح الفصل العاشر (ص 126 - 140):</p>
+      <div id="termsGrid" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الرابع: البطاقات التعليمية ================= -->
+  <section id="cards" class="panel">
+    <div class="card">
+      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
+      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
+      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
+        <div class="term" id="flashTerm"></div>
+        <div class="answer" id="flashAnswer" hidden></div>
+        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="prevCard">السابق</button>
+        <span id="cardCount" class="muted"></span>
+        <button class="btn primary" id="nextCard">التالي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الخامس: الاختبار الشامل ================= -->
+  <section id="quiz" class="panel">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2>الاختبار الشامل للفصل العاشر - موضوعات مختارة (25 سؤالاً)</h2>
+          <p class="muted">تم توزيع الإجابات الصحيحة بشكل متنوع وعشوائي بين الخيارات (أ، ب، ج، د) لتدريبكِ بدقة على الاختبار الفعلي!</p>
+        </div>
+        <div class="score" id="score">النتيجة: 0 / 25</div>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="quizArea"></div>
+      <div class="row">
+        <button class="btn" id="resetQuiz">إعادة الاختبار</button>
+        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+      </div>
+      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
+    </div>
+  </section>
+</main>
+
+<footer>مبني بالكامل (100%) على شرائح الفصل العاشر: المفاهيم الأساسية للتعلم العميق - مقرر موضوعات مختارة في علوم البيانات (صفحات PDF من 126 إلى 140)</footer>
+
+<script>
+const terms = [
+  ["End-to-End Learning (E2E)", "التعلم من طرف إلى طرف: منهجية التعلم العميق في حل المشكلات مباشرة من المدخلات للمخرجات، مقابل تقسيم المشكلة مستوى بمستوى في التعلم التقليدي (ص 127)."],
+  ["Automatic Feature Extraction", "استخراج الميزات التلقائي القائم على الخوارزمية: ميزة جوهرية للتعلم العميق مقابل اختيار الميزة يدوياً في التعلم الآلي التقليدي (ص 127)."],
+  ["Deep in Deep Learning", "كلمة 'عميق' في التعلم العميق تشير تحديداً إلى عدد طبقات الشبكة العصبية العميقة (ص 127)."],
+  ["Hecht Nielson Definition", "تعريف الباحث الأمريكي نيلسن للشبكة العصبية: نظام كمبيوتر يتكون من عناصر معالجة بسيطة ومترابطة للغاية تعالج المعلومات بالاستجابة الديناميكية للمدخلات الخارجية (ص 128)."],
+  ["Artificial Neural Network", "الشبكة العصبية الاصطناعية: نظام معالجة معلومات يقلد الدماغ البشري ويعكس سماته كالمعالجة المتزامنة والتعلم والارتباط وتصنيف النماذج والذاكرة (ص 128)."],
+  ["Single-layer Perceptron", "مُدرِك أحادي الطبقة: مصنف ثنائي خطي يستخدم متجه الإدخال X ومتجه الوزن W ودالة الإشارة sign(Wᵀ·X) للتصنيف (ص 129)."],
+  ["Offset / Bias (w₀)", "الإزاحة (w₀): المركبة الأولى في متجه الوزن W داخل المدرك أحادي الطبقة (ص 129)."],
+  ["Decision Boundary Wᵀ·X = 0", "حدود الفصل بين النوعين (+1 و -1) في المدرك أحادي الطبقة، وهي مستوى فائق (hyperplane) عالي الأبعاد (ص 129)."],
+  ["Minsky & XOR Problem (1969)", "في عام 1969 أثبت عالم الرياضيات الأمريكي مينسكي أن المدرك الأحادي نموذج خطي لا يستطيع حل المشكلات غير الخطية مثل مسألة XOR (ص 129-130)."],
+  ["Feedforward Neural Network", "الشبكة العصبية المغذية للأمام: شبكة تضم طبقة مدخلات وطبقات مخفية (Hidden layers) وطبقة مخرجات، واستطاعت حل مسألة XOR (ص 130)."],
+  ["Hidden Layers Effect", "تأثير الطبقات المخفية: زيادة عدد الطبقات المخفية (من 0 إلى 3 إلى 20) يمنح الشبكة قدرة أعلى على رسم حدود قرار غير خطية ومعقدة (ص 131)."],
+  ["Gradient Vector (∇f)", "متجه التدرج: اتجاهه يمثل الاتجاه الأسرع نمواً (صعوداً) للدالة متعددة المتغيرات (ص 132)."],
+  ["Negative Gradient (-∇f)", "متجه التدرج السلبي: يمثل أسرع اتجاه نزول للدالة، ولذلك يعتمد عليه الانحدار التدريجي للبحث وتقليل دالة الخسارة (ص 132)."],
+  ["Quadratic Cost Function", "دالة التكلفة التربيعية: E(w) = (1/2) Σ (t_d - o_d)²، وهي دالة الخسارة الأكثر شيوعاً وتُستخدم لحل مشكلة الانحدار (ص 132-133)."],
+  ["Cross Entropy Error", "دالة خطأ الإنتروبيا المتقاطعة: تمثل المسافة بين توزيعين احتماليين، وتُستخدم على نطاق واسع كدالة خسارة لمشكلات التصنيف (ص 133)."],
+  ["Backpropagation", "خوارزمية الانتشار العكسي: تُنشر فيها الإشارات (signals) في الاتجاه الأمامي، وتُنشر الأخطاء (errors) في الاتجاه الخلفي لتحديث الأوزان (ص 134)."],
+  ["Chain Rule (قاعدة السلسلة)", "القاعدة الرياضية المستخدمة في الانتشار العكسي لحساب مشتق كل طبقة عند وجود طبقات مخفية متعددة (ص 135)."],
+  ["Activation Function Role", "دور دالة التنشيط: إدخال ميزات غير خطية للشبكة العصبية؛ وبدونها لا تمثل الشبكة سوى دالة خطية واحدة مهما زاد عدد طبقاتها (ص 136)."],
+  ["Sigmoid Function", "الدالة السينية: f(x) = 1/(1+e⁻ˣ)، مداها (0,1) ومشتقتها (0, 0.25]؛ تتدهور للصفر خلال 5 طبقات مسببة التدرج المتلاشي ومخرجاتها غير متمركزة حول الصفر (ص 137)."],
+  ["Vanishing Gradient (5 Layers)", "مشكلة التدرج المتلاشي: تدهور قيمة المشتقة في الشبكة السينية (Sigmoid) إلى 0 في غضون 5 طبقات مما يعطل التدريب (ص 137)."],
+  ["Tanh Function", "دالة الظل الزائدي: مداها (-1,1) ومشتقتها (0,1]؛ بديل لـ Sigmoid يصحح عيب عدم التمركز حول الصفر ويقلل التكرارات، لكنها تظل عرضة للتشبع (ص 137)."],
+  ["Saturation (التشبع)", "وصول دالة التنشيط (مثل Sigmoid و Tanh) إلى مناطق مسطحة تقترب فيها المشتقة من الصفر فيتوقف تحديث الأوزان (ص 137-138)."],
+  ["Softsign Function", "دالة تنشيط f(x) = x/(1+|x|) تقلل قابلية تشبع tanh و sigmoid، لكنها تظل معرضة للتدرج المتلاشي بعيداً عن نقطة الأصل (ص 138)."],
+  ["ReLU (Rectified Linear Unit)", "الوحدة الخطية المصححة: f(x) = max(0,x)، أكثر دوال التنشيط استخداماً؛ لا تتشبع في الموجب وتخفف التدرج المتلاشي وتوفر الحسابات (ص 138)."],
+  ["Dead Neurons (موت الخلايا)", "عيب في دالة ReLU يحدث لأن قيمتها تظل صفراً باستمرار عندما تكون المدخلات سلبية، مما يوقف تحديث الخلية العصبية (ص 139)."],
+  ["Softplus Function", "دالة تنشيط f(x) = ln(eˣ + 1) معدلة على أساس ReLU؛ تتطلب حسابات أكثر لكن لها مشتقة مستمرة ومنحنى أكثر سلاسة (ص 139)."],
+  ["Softmax Function", "دالة تنشيط σ(z)_j = e^(z_j) / Σe^(z_k) تُعد امتداداً لـ Sigmoid في الأبعاد المتعددة وتُستخدم كطبقة مخرجات للتصنيف المتعدد (ص 140)."]
+];
+
+const cards = [
+  ["قارني بين التعلم الآلي التقليدي والتعلم العميق من حيث متطلبات الأجهزة والـ GPU.", "• التقليدي: متطلبات أجهزة منخفضة ولا يحتاج إلى GPU بشكل عام.\n• العميق: متطلبات أجهزة أعلى ويحتاج إلى وحدة معالجة رسومية (GPU) لأداء الحوسبة المتوازية على المصفوفات الضخمة (ص 127)."],
+  ["قارني بين التعلم التقليدي والعميق من حيث استخراج الميزات ومنهجية حل المشكلة.", "• التقليدي: اختيار الميزة يدوياً، وتقسيم المشكلة مستوى بمستوى (level-by-level).\n• العميق: استخراج الميزات تلقائياً بالخوارزمية، والتعلم من طرف إلى طرف (E2E) (ص 127)."],
+  ["إلى ماذا تشير كلمة (عميق Deep) في مصطلح التعلم العميق؟", "تشير إلى عدد طبقات الشبكة العصبية (ص 127)."],
+  ["ما هو تعريف الباحث الأمريكي نيلسن (Hecht Nielson) للشبكة العصبية؟", "نظام كمبيوتر يتكون من عناصر معالجة بسيطة ومترابطة للغاية، والتي تعالج المعلومات من خلال الاستجابة الديناميكية للمدخلات الخارجية (ص 128)."],
+  ["ما هي السمات الخمس لوظائف الدماغ البشري التي تعكسها الشبكة العصبية الاصطناعية؟", "1) معالجة المعلومات المتزامنة، 2) التعلم، 3) الارتباط، 4) تصنيف النماذج، 5) الذاكرة (ص 128)."],
+  ["ما هي معادلة المدرك أحادي الطبقة (Single-layer perceptron)؟ وماذا تمثل w₀ و Wᵀ·X = 0؟", "المعادلة: o = sign(Wᵀ·X) (تعطي +1 إذا كان أكبر من 0، وإلا -1).\n• w₀: تمثل الإزاحة (Offset/Bias).\n• Wᵀ·X = 0: تمثل حدود الفصل بين النوعين وهي مستوى فائق (hyperplane) عالي الأبعاد (ص 129)."],
+  ["ماذا أثبت عالم الرياضيات الأمريكي مينسكي (Minsky) عام 1969 حول المدرك الحسي؟", "أثبت أن المدرك الحسي الأحادي هو في الأساس نموذج خطي يمكنه التعامل فقط مع مشاكل التصنيف الخطي، لكنه لا يستطيع معالجة البيانات غير الخطية مثل مسألة XOR (ص 129-130)."],
+  ["كيف تم حل مسألة XOR؟ وما تأثير زيادة عدد الطبقات المخفية؟", "تم حلها باستخدام الشبكة العصبية المغذية للأمام عبر إضافة طبقات مخفية (Hidden layers)؛ وكلما زاد عدد الطبقات المخفية زادت قدرة الشبكة على تكوين حدود قرار غير خطية ومعقدة (ص 130-131)."],
+  ["ما الفرق بين اتجاه متجه التدرج (∇f) واتجاه متجه التدرج السلبي (-∇f)؟", "• اتجاه متجه التدرج (∇f): هو الاتجاه الأسرع نمواً (صعوداً) للدالة.\n• اتجاه متجه التدرج السلبي (-∇f): هو أسرع اتجاه نزول للدالة (يُستخدم لتقليل دالة الخسارة) (ص 132)."],
+  ["ما هي معادلة دالة التكلفة التربيعية (Quadratic cost function)؟ وإلى ماذا يرمز t_d و o_d؟", "المعادلة: E(w) = (1/2) Σ (t_d - o_d)².\nحيث t_d هو الناتج المستهدف، و o_d هو الناتج الفعلي للخلية العصبية d في طبقة المخرجات (ص 132)."],
+  ["متى نستخدم دالة الخطأ المربع المتوسط (MSE) ومتى نستخدم دالة Cross Entropy Error؟", "• تُستخدم دالة MSE لحل مشكلة الانحدار (Regression).\n• تُستخدم دالة الإنتروبيا المتقاطعة (Cross entropy error) لحل مشكلة التصنيف (Classification)، وهي تمثل المسافة بين توزيعين احتماليين (ص 133)."],
+  ["كيف تنتقل الإشارات والأخطاء في خوارزمية الانتشار العكسي (Backpropagation)؟", "يتم نشر الإشارات (signals) في الاتجاه الأمامي، ويتم نشر الأخطاء (errors) في الاتجاه الخلفي من المخرجات إلى المدخلات (ص 134)."],
+  ["بأي قاعدة رياضية نحسب مشتقات الطبقات المخفية المتعددة في الانتشار العكسي؟", "باستخدام قواعد السلسلة (Chain Rule) للحصول على مشتق لكل طبقة وتحديث المعلمات عن طريق التكرار (ص 135)."],
+  ["ما هي الخطوات الأربع لتدريب الشبكة العصبية بخوارزمية الانتشار العكسي (ص 135)؟", "1) إدخال العينة X والحصول على المخرج الفعلي o.\n2) حساب خطأ طبقة المخرجات (δ).\n3) حساب خطأ كل طبقة مخفية (δ) من الإخراج للإدخال بالتكرار.\n4) تحديث قيم الوزن لكل طبقة وفقاً لقيمة δ الخاصة بها (ص 135)."],
+  ["ما أهمية دالة التنشيط (Activation Function)؟ وماذا يحدث للشبكة بدونها؟", "تسمح بإدخال ميزات غير خطية إلى الشبكة العصبية لتفسير الدوال المعقدة.\nوبدون دالة التنشيط: لا يمكن للشبكة العصبية أن تمثل سوى دالة خطية واحدة بغض النظر عن عدد الطبقات التي تحتوي عليها! (ص 136)."],
+  ["اذكري دوال التنشيط الست الشائعة في التعلم العميق المذكورة في الفصل العاشر.", "1) Sigmoid، 2) Tanh، 3) Softsign، 4) ReLU، 5) Softplus، 6) Softmax (ص 136)."],
+  ["ما هي معادلة ومدى دالة Sigmoid؟ وما مدى مشتقتها؟", "• المعادلة: f(x) = 1 / (1 + e⁻ˣ).\n• مدى الدالة: (0, 1).\n• مدى المشتقة: (0, 0.25] (ص 137)."],
+  ["ما هي سلبيات الدالة السينية (Sigmoid) في الشبكات العصبية العميقة؟", "1) تتدهور إلى 0 في غضون 5 طبقات مما يعطل التدريب ويسبب مشكلة التدرج المتلاشي (vanishing gradient).\n2) مخرجاتها ليست مركزية الصفر (ص 137)."],
+  ["ما هي معادلة ومدى دالة Tanh؟ وبماذا تتفوق على دالة Sigmoid؟ وما عيبها؟", "• المعادلة: (eˣ - e⁻ˣ)/(eˣ + e⁻ˣ)، ومداها (-1, 1)، ومدى مشتقتها (0, 1].\n• ميزتها: تصحح عيب عدم تركيز المخرجات على الصفر فتقلل عدد التكرارات.\n• عيبها: لا تزال عرضة للتشبع (saturation) مثل Sigmoid (ص 137)."],
+  ["ما هي معادلة دالة Softsign؟ وما ميزتها وعيبها؟", "• المعادلة: f(x) = x / (1 + |x|).\n• ميزتها: تقلل من قابلية تشبع دالتي tanh و sigmoid.\n• عيبها: بعيداً عن نقطة الأصل يقترب مشتقها من 0 فتوقف تحديث الأوزان وتسبب التدرج المتلاشي (ص 138)."],
+  ["ما هي معادلة ومدى دالة ReLU (الوحدة الخطية المصححة)؟", "f(x) = x عندما x ≥ 0، وتساوي 0 عندما x < 0.\nمدى الدالة: [0, ∞)، ومدى المشتقة: {0, 1} (ص 138)."],
+  ["لماذا تُعد دالة ReLU أكثر دوال التنشيط تطبيقاً على نطاق واسع حالياً؟ (المزايا الأربع)", "1) لا يحدها حد أعلى فلن تصل للتشبع في الموجب وتخفف التدرج المتلاشي.\n2) تتقارب أسرع بكثير في انحدار التدرج.\n3) تولد أداءً جيداً حتى بدون تدريب مسبق غير خاضع للإشراف.\n4) توفر الكثير من العمليات الحسابية مقارنة بالدوال الأسية (ص 138)."],
+  ["ما هي السلبيات الثلاث لدالة التنشيط ReLU (ص 139)؟", "1) ليس لها حد أعلى فقد تتصاعد أثناء التدريب.\n2) لا يمكن توجيهها (اشتقاقها) عند الصفر فليست سلسة كفاية في بعض مشكلات الانحدار.\n3) قيمتها تظل صفراً باستمرار عندما تكون المدخلات سلبية مما قد يسبب 'موت' الخلايا العصبية (ص 139)."],
+  ["ما هي دالة Softplus؟ وما معادلتها ومشتقتها؟ وبماذا تمتاز عن ReLU؟", "هي دالة معدلة على أساس ReLU معادلتها f(x) = ln(eˣ + 1) ومشتقتها هي دالة Sigmoid: 1/(1+e⁻ˣ). ورغم أنها تتطلب حسابات أكثر من ReLU إلا أن لها مشتقة مستمرة ومنحنى أكثر سلاسة (ص 139)."],
+  ["ما هي دالة Softmax؟ وفي أي طبقة ومهمة تُستخدم غالباً؟", "هي امتداد للدالة السينية في الحالات متعددة الأبعاد؛ تعين متجهاً لبُعد K إلى توزيع احتمالات لبُعد K، وتُستخدم غالباً كطبقة مخرجات للتصنيف المتعدد (ص 140)."]
+];
+
+// تم تنويع الإجابة الصحيحة (a) بين 0 (أ)، 1 (ب)، 2 (ج)، 3 (د) في جميع الأسئلة!
+const questions = [
+  {
+    q: "عند المقارنة بين التعلم الآلي التقليدي والتعلم العميق (ص 127)، أي العبارات التالية صحيحة؟",
+    o: [
+      "التعلم العميق يختار الميزات يدوياً ولا يحتاج إلى GPU",
+      "التعلم العميق يعتمد التعلم من طرف إلى طرف (E2E) ويستخرج الميزات تلقائياً ويحتاج إلى GPU للحوسبة المتوازية",
+      "التعلم التقليدي يحتاج إلى بيانات ضخمة ومعالجات GPU دائماً",
+      "ميزات التعلم العميق سهلة الشرح والتفسير مقارنة بالتعلم التقليدي"
+    ],
+    a: 1,
+    e: "في جدول ص 127: التعلم العميق يحتاج إلى GPU للحوسبة المتوازية، ويتعلم من طرف إلى طرف (E2E)، ويستخرج الميزات تلقائياً، وميزاته يصعب شرحها."
+  },
+  {
+    q: "إلى ماذا تشير كلمة 'عميق' (Deep) في مصطلح 'التعلم العميق' كما ورد في ص 127؟",
+    o: [
+      "إلى حجم شاشة الكمبيوتر المستخدم",
+      "إلى سرعة اتصال الإنترنت",
+      "إلى عدد طبقات الشبكة العصبية",
+      "إلى اختيار الميزات يدوياً بواسطة الخبراء"
+    ],
+    a: 2,
+    e: "نصت الشريحة 6 في ص 127 على أن: 'عميق' في 'التعلم العميق' يشير إلى عدد طبقات الشبكة العصبية."
+  },
+  {
+    q: "من هو الباحث في الولايات المتحدة الذي عرّف الشبكة العصبية بأنها 'نظام كمبيوتر يتكون من عناصر معالجة بسيطة ومترابطة للغاية تعالج المعلومات من خلال الاستجابة الديناميكية للمدخلات الخارجية' (ص 128)؟",
+    o: [
+      "آلان تورينج (Alan Turing)",
+      "جون مكارثي (John McCarthy)",
+      "توماس بايز (Thomas Bayes)",
+      "نيلسن (Hecht Nielson)"
+    ],
+    a: 3,
+    e: "عرّف الباحث الأمريكي نيلسن (Hecht Nielson) الشبكة العصبية بهذا التعريف في ص 128."
+  },
+  {
+    q: "في المُدرِك أحادي الطبقة (Single-layer perceptron) (ص 129)، ماذا تمثل المعادلة Wᵀ · X = 0؟",
+    o: [
+      "تمثل حدود الفصل بين النوعين (+1 و -1) وهي مستوى فائق (hyperplane) عالي الأبعاد",
+      "تمثل دالة خطأ الإنتروبيا المتقاطعة",
+      "تمثل عدد الطبقات المخفية في الشبكة",
+      "تمثل معدل التعلم في الانحدار التدريجي"
+    ],
+    a: 0,
+    e: "عندما Wᵀ·X > 0 يكون المخرج +1 وإلا -1، وحدود هذين النوعين هي Wᵀ·X = 0 وهي مستوى فائق عالي الأبعاد (ص 129)."
+  },
+  {
+    q: "ماذا أثبت عالم الرياضيات الأمريكي ورائد الذكاء الاصطناعي مينسكي (Minsky) في عام 1969 (ص 129)؟",
+    o: [
+      "أن المدرك أحادي الطبقة يستطيع حل جميع المسائل غير الخطية بدون طبقات مخفية",
+      "أن الإدراك الحسي (Perceptron) هو نموذج خطي لا يستطيع معالجة البيانات غير الخطية مثل مسألة XOR",
+      "أن دالة ReLU تسبب التدرج المتلاشي في طبقة واحدة",
+      "أن الشبكات العصبية لا تحتاج إلى أوزان"
+    ],
+    a: 1,
+    e: "في عام 1969 أثبت مينسكي أن الإدراك الحسي هو في الأساس نموذج خطي يتعامل فقط مع التصنيف الخطي ولا يستطيع معالجة البيانات غير الخطية كمسألة XOR (ص 129)."
+  },
+  {
+    q: "كيف تم التغلب على مشكلة عدم قدرة المدرك الأحادي على حل مسألة XOR غير الخطية (ص 130-131)؟",
+    o: [
+      "عن طريق حذف دالة التنشيط نهائياً",
+      "عن طريق تقليل عدد المدخلات إلى مدخل واحد",
+      "عن طريق استخدام الشبكة العصبية المغذية للأمام وإضافة طبقات مخفية (Hidden layers)",
+      "عن طريق تصفير جميع الأوزان"
+    ],
+    a: 2,
+    e: "بإضافة طبقات مخفية في الشبكة العصبية المغذية للأمام (Feedforward Neural Network) أمكن رسم حدود قرار غير خطية وحل مسألة XOR (ص 130-131)."
+  },
+  {
+    q: "بالنسبة للدالة متعددة المتغيرات f(x₁, x₂, ..., xₙ)، ما الفرق بين اتجاه متجه التدرج (∇f) واتجاه متجه التدرج السلبي (-∇f) (ص 132)؟",
+    o: [
+      "كلاهما يمثلان نقاط ثبات لا تتغير فيها الدالة",
+      "اتجاه متجه التدرج هو أسرع نزول، والسلبي هو أسرع صعود",
+      "لا علاقة لمتجه التدرج بنمو أو نزول الدالة",
+      "اتجاه متجه التدرج (∇f) هو الاتجاه الأسرع نمواً للدالة، بينما اتجاه التدرج السلبي (-∇f) هو أسرع اتجاه نزول للدالة"
+    ],
+    a: 3,
+    e: "اتجاه متجه التدرج هو الاتجاه الأسرع نمواً للدالة، ونتيجة لذلك فإن اتجاه متجه التدرج السلبي (-∇f) هو أسرع اتجاه نزول للدالة (ص 132)."
+  },
+  {
+    q: "في معادلة دالة التكلفة التربيعية E(w) = (1/2) Σ (t_d - o_d)² (ص 132)، إلى ماذا يرمز كل من t_d و o_d؟",
+    o: [
+      "t_d هو الناتج المستهدف، و o_d هو الناتج الفعلي للخلية العصبية في طبقة المخرجات",
+      "t_d هو الزمن بالثواني، و o_d هو عدد الطبقات المخفية",
+      "t_d هو متجه الإدخال، و o_d هو معامل الإزاحة",
+      "كلاهما يرمزان إلى أوزان الطبقة الأولى"
+    ],
+    a: 0,
+    e: "في الدالة التربيعية: d خلية عصبية في طبقة المخرجات، و t_d هو الناتج المستهدف، و o_d هو الناتج الفعلي (ص 132)."
+  },
+  {
+    q: "ما القاعدة العامة لاستخدام كل من دالة الخطأ المربع المتوسط (MSE) ودالة الإنتروبيا المتقاطعة (Cross entropy error) في التعلم العميق (ص 133)؟",
+    o: [
+      "تُستخدم MSE للتصنيف فقط، وتُستخدم Cross entropy للانحدار فقط",
+      "تُستخدم MSE لحل مشكلة الانحدار، بينما تُستخدم دالة Cross entropy error لحل مشكلة التصنيف",
+      "كلتا الدالتين لا تُستخدمان كدوال خسارة في التعلم العميق",
+      "تُستخدم Cross entropy لتقليل عدد الطبقات المخفية فقط"
+    ],
+    a: 1,
+    e: "بشكل عام، يتم استخدام دالة الخطأ المربع المتوسط MSE لحل مشكلة الانحدار، بينما يتم استخدام دالة Cross entropy error لحل مشكلة التصنيف (ص 133)."
+  },
+  {
+    q: "ماذا تمثل دالة خطأ الإنتروبيا المتقاطعة (Cross entropy error) من الناحية الرياضية والاحتمالية (ص 133)؟",
+    o: [
+      "مجموع مربعات الأوزان في طبقة الإدخال",
+      "عدد الخلايا الميتة في دالة ReLU",
+      "المسافة بين توزيعين احتماليين",
+      "ميل الخط المستقيم في المدرك الأحادي"
+    ],
+    a: 2,
+    e: "نصت الشريحة 8 في ص 133 على أن دالة Cross entropy error تمثل المسافة بين توزيعين احتماليين وهي واسعة الاستخدام لمشكلات التصنيف."
+  },
+  {
+    q: "في خوارزمية الانتشار العكسي (Backpropagation) (ص 134)، كيف يتم نشر كل من الإشارات (signals) والأخطاء (errors)؟",
+    o: [
+      "يتم نشر الإشارات والأخطاء معاً في الاتجاه الخلفي فقط",
+      "يتم نشر الإشارات في الاتجاه الخلفي، والأخطاء في الاتجاه الأمامي",
+      "لا يتم نشر أي أخطاء في الشبكة العصبية",
+      "يتم نشر الإشارات (signals) في الاتجاه الأمامي، ويتم نشر الأخطاء (errors) في الاتجاه الخلفي"
+    ],
+    a: 3,
+    e: "في خوارزمية الانتشار العكسي، يتم نشر الإشارات في الاتجاه الأمامي، ويتم نشر الأخطاء في الاتجاه الخلفي (ص 134)."
+  },
+  {
+    q: "عند وجود طبقات مخفية متعددة في الشبكة العصبية، أي قاعدة رياضية تستخدمها خوارزمية الانتشار العكسي للحصول على مشتق لكل طبقة (ص 135)؟",
+    o: [
+      "قواعد السلسلة (Chain Rule)",
+      "قاعدة كرامر للمحددات",
+      "نظرية بايز الشرطية",
+      "المتوسط التوافقي البسيط"
+    ],
+    a: 0,
+    e: "إذا كانت هناك طبقات مخفية متعددة، فسيتم استخدام قواعد السلسلة (Chain Rule) للحصول على مشتق لكل طبقة (ص 135)."
+  },
+  {
+    q: "ماذا يحدث للشبكة العصبية إذا تم بناؤها (بدون دالة تنشيط - Activation function) (ص 136)؟",
+    o: [
+      "تصبح قادرة على حل أعقد المسائل غير الخطية بسرعة مضاعفة",
+      "لا يمكن للشبكة العصبية أن تمثل سوى دالة خطية واحدة، بغض النظر عن عدد الطبقات التي تحتوي عليها",
+      "تتحول تلقائياً إلى شبكة تلافيفية",
+      "يزداد مدى مخرجاتها بين -1 و +1 فقط"
+    ],
+    a: 1,
+    e: "بدون دالة التنشيط، لا يمكن للشبكة العصبية أن تمثل سوى دالة خطية واحدة بغض النظر عن عدد الطبقات التي تحتوي عليها (ص 136)."
+  },
+  {
+    q: "ما هو المدى (Range) للدالة السينية (Sigmoid) ومدى مشتقتها f'(x) كما ورد في ص 137؟",
+    o: [
+      "مدى الدالة [-1, 1] ومدى المشتقة [0, 10]",
+      "مدى الدالة [0, ∞) ومدى المشتقة {0, 1}",
+      "مدى الدالة (0, 1) ومدى مشتقتها (0, 0.25]",
+      "مدى الدالة (-∞, ∞) ومدى المشتقة سالب دائماً"
+    ],
+    a: 2,
+    e: "دالة Sigmoid مداها (0, 1) ومدى مشتقتها (0, 0.25] (ص 137)."
+  },
+  {
+    q: "ما هما السلبيتان الرئيسيتان للدالة السينية (Sigmoid) المذكورتان في ص 137؟",
+    o: [
+      "أنها غير متواصلة ولا يمكن اشتقاقها",
+      "أن مخرجاتها سالبة دائماً وليس لها حد أعلى",
+      "أنها لا تصلح للتصنيف الثنائي في طبقة الإخراج",
+      "أنها تتدهور إلى 0 في غضون 5 طبقات مسببة مشكلة التدرج المتلاشي (vanishing gradient)، وأن مخرجاتها ليست مركزية الصفر"
+    ],
+    a: 3,
+    e: "سلبيات Sigmoid في ص 137: تتدهور إلى 0 في غضون 5 طبقات (مشكلة التدرج المتلاشي)، ومخرجاتها ليست مركزية الصفر."
+  },
+  {
+    q: "بماذا تتميز دالة التنشيط (Tanh) عن دالة (Sigmoid)، وما هو مداها (ص 137)؟",
+    o: [
+      "مداها (-1, 1)، وتعمل على تصحيح عيب عدم التمركز حول الصفر في المخرجات مما يقلل عدد التكرارات المطلوبة",
+      "مداها (0, 100)، ولا تتعرض للتشبع أبداً",
+      "مداها {0, 1}، وهي دالة غير قابلة للاشتقاق",
+      "مداها (0, 0.25)، وتزيد من عدد التكرارات المطلوبة"
+    ],
+    a: 0,
+    e: "دالة Tanh مداها (-1, 1) وتصحح عيب عدم تركيز المخرجات على الصفر مما يقلل عدد التكرارات، لكنها لا تزال عرضة للتشبع (ص 137)."
+  },
+  {
+    q: "أي دالة تنشيط تعطى بالمعادلة f(x) = x / (1 + |x|) وتقلل من قابلية تشبع دالتي tanh و sigmoid (ص 138)؟",
+    o: [
+      "دالة ReLU",
+      "دالة Softsign",
+      "دالة Softmax",
+      "دالة المسافة الإقليدية"
+    ],
+    a: 1,
+    e: "دالة Softsign معادلتها f(x) = x / (1 + |x|) وتقلل من قابلية تشبع tanh و sigmoid (ص 138)."
+  },
+  {
+    q: "لماذا تتسبب دوال (Sigmoid و Tanh و Softsign) جميعها في مشكلة التدرج المتلاشي في الشبكات العميقة (ص 138)؟",
+    o: [
+      "لأن مشتقاتها تساوي 100 دائماً",
+      "لأنها لا تحتوي على أي عمليات قسمة",
+      "لأنه في موضع بعيد بما يكفي عن النقطة المركزية (الأصل)، يقترب مشتق دالة التنشيط دائماً من 0 مما يوقف تحديث الأوزان",
+      "لأنها تعمل فقط مع طبقة مخفية واحدة"
+    ],
+    a: 2,
+    e: "بعيداً عن نقطة الأصل، يقترب مشتق هذه الدوال الثلاث دائماً من 0 مما يوقف تحديث الأوزان ويسبب التدرج المتلاشي (ص 138)."
+  },
+  {
+    q: "ما هي وظيفة التنشيط الأكثر تطبيقاً على نطاق واسع حالياً، والتي لا يحدها حد أعلى في الجانب الموجب فتخفف بفعالية من التدرج المتلاشي وتوفر العمليات الحسابية (ص 138)؟",
+    o: [
+      "الدالة السينية Sigmoid",
+      "دالة جيب التمام Cosine",
+      "دالة الظل الزائدي Tanh",
+      "الوحدة الخطية المصححة (ReLU)"
+    ],
+    a: 3,
+    e: "الوحدة الخطية المصححة (ReLU) هي الأكثر تطبيقاً حالياً، وتخفف التدرج المتلاشي وتتقارب أسرع وتوفر الحسابات الأسية (ص 138)."
+  },
+  {
+    q: "ما هي المشكلة الأكثر إثارة للقلق في سلبيات دالة التنشيط (ReLU) عندما تكون المدخلات سلبية (ص 139)؟",
+    o: [
+      "أن قيمة دالة ReLU ومشتقتها تظل صفراً باستمرار عندما تكون المدخلات سلبية، مما قد يتسبب في 'موت' الخلايا العصبية",
+      "أنها تتحول إلى دالة أسية معقدة جداً عند القيم السالبة",
+      "أن قيمتها تصبح موجبة ما لا نهاية عندما تكون المدخلات سالبة",
+      "أنها تحتاج إلى تدريب مسبق غير خاضع للإشراف دائماً"
+    ],
+    a: 0,
+    e: "تظل قيمة ReLU صفراً باستمرار عندما تكون المدخلات سلبية، وهو ما قد يتسبب في 'موت' الخلايا العصبية، كما أنها غير قابلة للتوجيه عند الصفر (ص 139)."
+  },
+  {
+    q: "أي دالة تنشيط تم تعديلها على أساس ReLU بالمعادلة f(x) = ln(eˣ + 1) لتمتلك مشتقة مستمرة ومنحنى أكثر سلاسة نسبياً (ص 139)؟",
+    o: [
+      "دالة Sign",
+      "دالة Softplus",
+      "دالة Tanh",
+      "دالة خطأ الإنتروبيا"
+    ],
+    a: 1,
+    e: "دالة Softplus معادلتها ln(eˣ + 1) ومشتقتها 1/(1+e⁻ˣ)، وهي تعديل لـ ReLU بمشتقة مستمرة ومنحنى أكثر سلاسة (ص 139)."
+  },
+  {
+    q: "ما هي دالة التنشيط التي تُعد امتداداً للدالة السينية في الحالات متعددة الأبعاد، وتُستخدم غالباً كطبقة مخرجات للتصنيف المتعدد بتحويل متجه K إلى توزيع احتمالات (ص 140)؟",
+    o: [
+      "دالة ReLU",
+      "دالة Softsign",
+      "دالة Softmax",
+      "دالة التكلفة التربيعية"
+    ],
+    a: 2,
+    e: "دالة Softmax تحول متجهاً لبُعد K إلى توزيع احتمالات، وتُستخدم كطبقة مخرجات للتصنيف المتعدد (ص 140)."
+  },
+  {
+    q: "في المدرك أحادي الطبقة (ص 129)، إذا كان حاصل الضرب الداخلي Wᵀ · X أكبر من الصفر (Wᵀ · X > 0)، فما هي قيمة المخرج o؟",
+    o: [
+      "0",
+      "-1",
+      "0.25",
+      "+1"
+    ],
+    a: 3,
+    e: "وفق معادلة دالة التنشيط sign(Wᵀ·X) في ص 129: إذا كان Wᵀ·X > 0 فإن o = 1، وإلا فإن o = -1."
+  },
+  {
+    q: "أي مما يلي يُعد من السمات الأساسية لوظائف الدماغ البشري التي تعكسها الشبكة العصبية الاصطناعية كما ورد في ص 128؟",
+    o: [
+      "معالجة المعلومات المتزامنة، والتعلم، والارتباط، وتصنيف النماذج، والذاكرة",
+      "الاعتماد على معالج مركزي واحد فقط بدون اتصالات",
+      "عدم القدرة على التكيف مع المدخلات الخارجية",
+      "فصل الذاكرة تماماً عن عناصر المعالجة"
+    ],
+    a: 0,
+    e: "تعكس الشبكة العصبية الاصطناعية سمات الدماغ البشري مثل: معالجة المعلومات المتزامنة، والتعلم، والارتباط، وتصنيف النماذج، والذاكرة (ص 128)."
+  },
+  {
+    q: "في خطوات خوارزمية الانتشار العكسي لتدريب الشبكة العصبية (ص 135)، كيف يتم حساب حد الخطأ (δ) للطبقات المخفية؟",
+    o: [
+      "يتم تجاهل الطبقات المخفية وعدم حساب خطئها",
+      "يتم حساب δ لكل طبقة مخفية من الإخراج إلى الإدخال عن طريق التكرار وفقاً لصيغة انتشار خطأ الطبقة المخفية",
+      "يتم تثبيت قيمة δ عند الصفر لجميع الطبقات",
+      "يتم حسابها قبل إدخال العينة X إلى الشبكة"
+    ],
+    a: 1,
+    e: "بعد حساب خطأ طبقة المخرجات، يتم حساب δ لكل طبقة مخفية من الإخراج إلى الإدخال عن طريق التكرار ثم تحديث الأوزان (ص 135)."
+  }
+];
+
+// بناء شبكة المصطلحات
+const termsGrid = document.getElementById("termsGrid");
+terms.forEach(([en, ar]) => {
+  const d = document.createElement("div");
+  d.className = "card";
+  d.style.margin = "0";
+  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
+  termsGrid.appendChild(d);
+});
+
+// إدارة البطاقات التعليمية
+let ci = 0, showAnswer = false;
+function renderCard() {
+  document.getElementById("flashTerm").textContent = cards[ci][0];
+  const ansEl = document.getElementById("flashAnswer");
+  ansEl.innerHTML = cards[ci][1].replace(/\n/g, "<br>");
+  ansEl.hidden = !showAnswer;
+  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
+  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+}
+document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
+document.getElementById("flashcard").addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
+});
+document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
+document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
+renderCard();
+
+// التنقل بين التبويبات
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+// إدارة الاختبار
+let answers = {};
+function renderQuiz() {
+  const area = document.getElementById("quizArea");
+  area.innerHTML = "";
+  const letters = ["أ", "ب", "ج", "د"];
+  questions.forEach((item, i) => {
+    const box = document.createElement("div");
+    box.className = "qbox";
+    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
+    const opts = box.querySelector(".options");
+    item.o.forEach((opt, j) => {
+      const btn = document.createElement("button");
+      btn.className = "option";
+      btn.textContent = `${letters[j]}) ${opt}`;
+      btn.onclick = () => {
+        answers[i] = j;
+        [...opts.children].forEach((x, k) => {
+          x.classList.remove("correct", "wrong");
+          x.disabled = true;
+          if (k === item.a) x.classList.add("correct");
+          if (k === j && j !== item.a) x.classList.add("wrong");
+        });
+        const fb = document.getElementById("fb" + i);
+        fb.hidden = false;
+        fb.className = "feedback " + (j === item.a ? "good" : "bad");
+        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
+        updateScore();
+      };
+      opts.appendChild(btn);
+    });
+    area.appendChild(box);
+  });
+  updateScore();
+}
+
+function updateScore() {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
+  document.getElementById("score").textContent = `النتيجة: ${correct} / ${questions.length}`;
+  document.getElementById("progressBar").style.width = (Object.keys(answers).length / questions.length * 100) + "%";
+}
+
+document.getElementById("resetQuiz").onclick = () => {
+  answers = {};
+  document.getElementById("finalResult").textContent = "";
+  renderQuiz();
+};
+
+document.getElementById("finishQuiz").onclick = () => {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
+  const pct = Math.round(correct / questions.length * 100);
+  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${questions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! إتقان كامل للفصل العاشر من موضوعات مختارة." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
+};
+
+renderQuiz();
+</script>
+</body>
+</html>
