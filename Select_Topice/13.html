@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الفصل الثالث عشر الشامل (100%) | موضوعات مختارة - أطر التعلم العميق</title>
+<style>
+:root{
+  --bg:#f4f6fb;
+  --card:#ffffff;
+  --ink:#1b263b;
+  --muted:#637085;
+  --accent:#0f766e;
+  --accent-dark:#115e59;
+  --accent2:#ccfbf1;
+  --line:#e2e8f0;
+  --good:#059669;
+  --good-bg:#ecfdf5;
+  --bad:#dc2626;
+  --bad-bg:#fef2f2;
+  --warn:#d97706;
+  --warn-bg:#fffbeb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
+header{background:linear-gradient(135deg,#134e4a,#0f766e,#0284c7);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(19,78,74,0.18)}
+.wrap{max-width:1060px;margin:auto;padding:0 16px}
+.eyebrow{opacity:.92;font-size:.9rem;background:rgba(255,255,255,0.15);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
+h1{margin:5px 0;font-size:clamp(1.55rem,4vw,2.25rem)}
+header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
+nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:rgba(255,255,255,0.18);color:#ffffff;font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
+nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
+nav button.active{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+main .btn{background:var(--accent2);color:var(--accent-dark)}
+main .btn.primary{background:var(--accent);color:white}
+main{padding:22px 0 48px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(36,52,91,0.04)}
+h2{font-size:1.35rem;margin:0 0 12px;color:#134e4a}
+h3{font-size:1.06rem;margin:10px 0 6px;color:var(--accent-dark)}
+h4{font-size:.98rem;margin:8px 0 4px;color:#0f172a}
+small,.muted{color:var(--muted)}
+ul,ol{padding-right:22px;margin:8px 0}
+li{margin:6px 0}
+details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
+summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f0fdfa;color:#134e4a;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
+details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
+.details-body{padding:16px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
+.tag.self-eval{background:var(--warn-bg);color:var(--warn);border:1px solid #fcd34d}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#f1f5f9;color:#134e4a;font-weight:bold}
+tr:last-child td{border-bottom:0}
+.note{border-right:4px solid var(--accent);padding:10px 14px;background:#f0fdfa;border-radius:8px;margin:10px 0}
+.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
+.code-box{background:#0f172a;color:#f8fafc;padding:12px 16px;border-radius:12px;font-family:monospace;font-size:.9rem;margin:10px 0;direction:ltr;text-align:left;overflow-x:auto;line-height:1.6}
+.step-card{border:1px solid var(--line);border-radius:12px;padding:14px;background:#f8fafc}
+.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
+.options{display:grid;gap:8px;margin-top:12px}
+.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
+.option:hover:not(:disabled){border-color:var(--accent);background:#f0fdfa}
+.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
+.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
+.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
+.feedback.good{color:var(--good);background:var(--good-bg)}
+.feedback.bad{color:var(--bad);background:var(--bad-bg)}
+.progress{height:10px;background:#e2e8f0;border-radius:9px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
+.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#ccfbf1);border:2px solid #99f6e4;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
+.flashcard:hover{transform:scale(1.005)}
+.flashcard .term{font-size:1.35rem;font-weight:bold;color:#134e4a}
+.flashcard .answer{margin-top:16px;font-size:1.08rem;color:var(--accent-dark);background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
+@media(max-width:600px){
+  .card{padding:14px}
+  nav button{flex:1 1 calc(50% - 8px);text-align:center}
+  .flashcard{min-height:200px;padding:18px}
+  th,td{padding:8px 10px;font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">مقرر موضوعات مختارة في علوم البيانات • تغطية شاملة 100% (شرائح 438 إلى 475 / ص 1 إلى 38)</div>
+    <h1>الفصل الثالث عشر: أطر التعلم العميق (Deep Learning Frameworks)</h1>
+    <p>يغطي مفهوم أطر التعلم العميق، إطار PyTorch ومميزاته، مكتبة TensorFlow ومميزاتها والتدريب الموزع، هياكل ورتب الموتر (Tensor)، وضع التنفيذ الحريص (Eager Execution) و AutoGraph، الوحدات النمطية، واجهة Keras، وتطوير مشروع MNIST بالكود</p>
+    <nav>
+      <button class="active" data-tab="summary">الشرح الشامل</button>
+      <button data-tab="tables">جداول المقارنات والأكواد (4)</button>
+      <button data-tab="terms">المصطلحات والدوال (28)</button>
+      <button data-tab="cards">البطاقات (28)</button>
+      <button data-tab="quiz">الاختبار الشامل + التقييم الذاتي (25)</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- ================= التبويب الأول: الشرح الشامل ================= -->
+  <section id="summary" class="panel active">
+    <div class="card">
+      <h2>خريطة الفصل الثالث عشر: أطر التعلم العميق (شرائح 438 إلى 475)</h2>
+      <div class="grid">
+        <div>
+          <span class="tag">الوحدة التعليمية 1 (شريحة 438 - 448)</span>
+          <h3>إطار التعلم العميق، PyTorch، و TensorFlow</h3>
+          <p>مفهوم إطار التعلم العميق كلبنات أساسية، إطار PyTorch وأصله (Torch/Lua) ومميزاته الثلاث، ومكتبة TensorFlow ومميزاتها الست والتدريب الموزع.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة التعليمية 2 (شريحة 449 - 460)</span>
+          <h3>الموتر (Tensor)، التنفيذ الحريص، و Keras</h3>
+          <p>معنى ورتب وتصنيف الـ Tensor، وضع التنفيذ الحريص (Eager) مقابل الرسم الثابت، المزين @tf.function، الوحدات النمطية الـ 7، وواجهة Keras ومزاياها.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة التعليمية 3 (شريحة 461 - 475)</span>
+          <h3>إعداد البيئة وتطوير مشروع MNIST</h3>
+          <p>تثبيت TensorFlow على Windows و Linux، مراحل عملية التطوير، مشروع الأرقام المكتوبة بخط اليد (MNIST)، نموذج انحدار Softmax، وأكواد التدريب والتقييم.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- الوحدة الأولى -->
+    <details open>
+      <summary>1) الوحدة التعليمية (1): مفهوم إطار التعلم العميق، PyTorch، و TensorFlow والتدريب الموزع (شريحة 438 - 448 / ص 1 - 11)</summary>
+      <div class="details-body">
+        <h3>أولاً: مفهوم إطار التعلم العميق (<span dir="ltr">Deep Learning Framework</span>) (شريحة 441 / ص 4)</h3>
+        <ul>
+          <li><b>تعريفه:</b> هو واجهة أو مكتبة أو أداة تسمح لنا ببناء نماذج التعلم العميق <b>بسهولة وسرعة أكبر، دون الدخول في تفاصيل الخوارزميات الأساسية</b>.</li>
+          <li><b>تشبيه اللبنات الأساسية:</b> يمكن اعتبار إطار التعلم العميق بمثابة <b>مجموعة من اللبنات الأساسية (<span dir="ltr">Building Blocks</span>)</b>؛ حيث يمثل كل مكون فيها نموذجاً أو خوارزمية، فيستخدمها المطورون لتجميع النماذج التي تلبي المتطلبات دون الحاجة للبدء من الصفر.</li>
+          <li><b>كيف يقلل من متطلبات المطورين؟</b>
+            <ul>
+              <li>لم يعد المطورون بحاجة لتجميع التعليمات البرمجية بدءاً من الشبكات العصبية المعقدة وخوارزميات الانتشار الخلفي (<span dir="ltr">Backpropagation</span>).</li>
+              <li>بدلاً من ذلك، يمكنهم استخدام النماذج الموجودة لتكوين المحددات كما هو مطلوب (حيث <b>يتم تدريب محددات النموذج تلقائياً</b>)، وإضافة طبقات شبكة محددة ذاتياً، أو تحديد المصنفات وخوارزميات التحسين مباشرةً باستدعاء التعليمات البرمجية الموجودة.</li>
+            </ul>
+          </li>
+          <li><b>أبرز الأطر المعروضة في الشريحة:</b> <span dir="ltr">Theano, Caffe, dmlc mxnet, DL4J (Deep Learning for Java), PyTorch, Torch, TensorFlow, MindSpore</span>.</li>
+        </ul>
+
+        <div class="exam-alert">
+          <h3>ثانياً: إطار العمل <span dir="ltr">PyTorch</span> وأصله ومميزاته الثلاث (شريحة 442 - 443 / ص 5 - 6) - موضع أسئلة مؤكدة:</h3>
+          <ul>
+            <li><b>تعريفه والشركة المطورة:</b> <b dir="ltr">PyTorch</b> هو إطار عمل حاسوبي قائم على لغة <b>البايثون (<span dir="ltr">Python</span>)</b> يعتمد على التعلم الآلي وطورته شركة <b dir="ltr">Facebook</b> (وتستخدمه أيضاً معاهد وشركات مثل <b dir="ltr">Twitter</b> و <b dir="ltr">GM / CMU</b>).</li>
+            <li><b>أصله ولماذا تم تطويره؟</b> تم تطويره بناءً على <b dir="ltr">Torch</b> (وهو إطار عمل حاسوبي علمي ومكتبة عمليات موتر <span dir="ltr">tensor</span> مشابهة لـ <span dir="ltr">NumPy</span> وتتميز بمرونة عالية)، لكن <span dir="ltr">Torch</span> كانت <b>أقل شهرة لأنها تستخدم لغة البرمجة <span dir="ltr">Lua</span></b>، وهذا هو السبب الرئيسي لتطوير <span dir="ltr">PyTorch</span> بلغة بايثون.</li>
+            <li><b>مميزات <span dir="ltr">PyTorch</span> الثلاث (شريحة 443 / ص 6):</b>
+              <ol>
+                <li><b><span dir="ltr">Python</span> أولاً (<span dir="ltr">Python First</span>):</b> لا يقوم ببساطة بربط <span dir="ltr">Python</span> بإطار عمل <span dir="ltr">C++</span>، بل يدعم الوصول إلى <span dir="ltr">Python</span> بشكل مباشر وبدقة (مثل استخدام <span dir="ltr">SciPy</span> أو <span dir="ltr">NumPy</span>)، مما يخفض عتبة فهم بايثون ويضمن توافق الكود مع تنفيذ بايثون الأصلي.</li>
+                <li><b>الشبكة العصبية الديناميكية (<span dir="ltr">Dynamic Neural Network</span>):</b> على عكس <span dir="ltr">TensorFlow 1.x</span> الذي يتطلب إنشاء رسوم بيانية حسابية ثابتة مسبقاً وتشغيل أوامر التغذية والتشغيل، فإن <span dir="ltr">PyTorch</span> يمكنه <b>إنشاء وتعديل الرسوم البيانية الحسابية ديناميكياً أثناء التنفيذ</b> دون تعقيد.</li>
+                <li><b>سهولة التصحيح (<span dir="ltr">Easy Debugging</span>) وتسريع الحوسبة:</b> يمكن للمطورين إيقاف المترجم في مصحح الأخطاء (<span dir="ltr">Debugger</span>) وعرض مخرجات عقدة معينة، كما يوفر موتراً (<span dir="ltr">Tensor</span>) يدعم <span dir="ltr">CPU</span> و <span dir="ltr">GPU</span> لتسريع الحوسبة بشكل كبير.</li>
+              </ol>
+            </li>
+          </ul>
+        </div>
+
+        <div class="exam-alert">
+          <h3>ثالثاً: مكتبة <span dir="ltr">TensorFlow</span> ومميزاتها والتدريب الموزع (شريحة 444 - 448 / ص 7 - 11) - مهمة جداً:</h3>
+          <ul>
+            <li><b>تعريفها (سؤال تقييم ذاتي):</b> <b dir="ltr">TensorFlow</b> هي مكتبة برمجيات مفتوحة المصدر من <b>الجيل الثاني من شركة <span dir="ltr">Google</span></b> للحوسبة الرقمية، وتدعم العديد من خوارزميات التعلم العميق ومنصات الحوسبة المتعددة مما يضمن استقراراً عالياً للنظام.</li>
+            <li><b>مميزات <span dir="ltr">TensorFlow</span> الست (شريحة 445 / ص 8):</b>
+              <br>1) <b>قابلية التوسع (<span dir="ltr">Scalability</span>)</b> • 2) <b>وحدة معالجة الرسوميات (<span dir="ltr">GPU</span>)</b> • 3) <b>الحوسبة القوية (<span dir="ltr">Powerful computing</span>)</b> • 4) <b>متعدد اللغات (<span dir="ltr">Multi-lingual</span>)</b> • 5) <b>متعدد المنصات (<span dir="ltr">Multi-platform</span>)</b> • 6) <b>موزعة (<span dir="ltr">Distributed</span>)</b>.</li>
+            <li><b>ميزة <span dir="ltr">TensorFlow</span> موزعة (<span dir="ltr">Distributed</span>) (شريحة 446 / ص 9 - سؤال تقييم ذاتي!):</b>
+              <ul>
+                <li>يمكن تشغيل <span dir="ltr">TensorFlow</span> على أجهزة مختلفة من الهواتف الذكية إلى مجموعات أجهزة الكمبيوتر (<span dir="ltr">Clusters</span>).</li>
+                <li><b>ما هي أطر التعلم العميق الموزعة الأصلية المدعومة حالياً فقط؟</b> تتضمن 4 أطر فقط هي: <b dir="ltr">TensorFlow</b>، و<b dir="ltr">CNTK</b>، و<b dir="ltr">Deeplearning4J</b>، و<b dir="ltr">MXNet</b>. <i>(انتبهي: <b dir="ltr">PyTorch</b> ليس من ضمنها في سؤال التقييم الذاتي شريحة 448!)</i>.</li>
+                <li>عند استخدام وحدة معالجة رسومية واحدة (<span dir="ltr">Single GPU</span>)، تعتمد معظم أطر التعلم العميق على مكتبة <b dir="ltr">cuDNN</b>، وبالتالي تدعم نفس سرعة التدريب تقريباً؛ لكن مع البيانات الضخمة والتعلم العميق واسع النطاق تعجز وحدة <span dir="ltr">GPU</span> الفردية عن إكمال التدريب في وقت محدود، ولذلك يتيح <span dir="ltr">TensorFlow</span> <b>التدريب الموزع</b>.</li>
+              </ul>
+            </li>
+            <li><b>لماذا <span dir="ltr">TensorFlow</span>؟ (شريحة 447 / ص 10):</b>
+              <ul>
+                <li>مفتوح المصدر ويمكن صيانته وتحديثه بسهولة لتقليل صعوبة التطوير، وهو <b>الأعلى طلباً في سوق التوظيف (<span dir="ltr">Recruitment market</span>)</b> يليه <span dir="ltr">PyTorch</span> ثم <span dir="ltr">Keras</span> ثم <span dir="ltr">FastAI</span>.</li>
+                <li>تم تضمين <b dir="ltr">Keras</b> (الذي يحتل <b>المرتبة الثالثة من حيث عدد النجوم على <span dir="ltr">GitHub</span></b>) في واجهة برمجة تطبيقات متقدمة لـ <span dir="ltr">TensorFlow 2.0</span>، مما جعل <span dir="ltr">TensorFlow 2.x</span> أكثر مرونة وأسهل في الاختبار.</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </details>
+
+    <!-- الوحدة الثانية -->
+    <details open>
+      <summary>2) الوحدة التعليمية (2): الموتر (Tensor)، وضع التنفيذ الحريص، الوحدات النمطية، وواجهة Keras (شريحة 449 - 460 / ص 12 - 23)</summary>
+      <div class="details-body">
+        <div class="exam-alert">
+          <h3>أولاً: تعريف الموتر (<span dir="ltr">Tensor</span>) ورتبه وتصنيفه (شريحة 452 - 453 / ص 15 - 16) - موضع سؤال مؤكد:</h3>
+          <ul>
+            <li><b>تعريف <span dir="ltr">Tensor</span>:</b> هو <b>أبسط هياكل البيانات في <span dir="ltr">TensorFlow</span></b>؛ يتم تغليف جميع البيانات في <span dir="ltr">Tensor</span>، وهو عبارة عن <b>مصفوفة متعددة الأبعاد</b>.</li>
+            <li><b>رتب الـ <span dir="ltr">Tensor</span> حسب الأبعاد (سؤال تقييم ذاتي ص 23!):</b>
+              <ol>
+                <li><b>العددي (<span dir="ltr">Scalar</span>):</b> هو <span dir="ltr">Tensor</span> من <b>الرتبة 0 (<span dir="ltr">rank-0 tensor</span>)</b>.</li>
+                <li><b>المتجه (<span dir="ltr">Vector</span>):</b> هو <span dir="ltr">Tensor</span> من <b>الرتبة 1 (<span dir="ltr">rank-1 tensor</span>)</b>.</li>
+                <li><b>المصفوفة (<span dir="ltr">Matrix</span>):</b> هي <span dir="ltr">Tensor</span> من <b>الرتبة 2 (<span dir="ltr">rank-2 tensor</span>)</b>.</li>
+              </ol>
+            </li>
+            <li><b>يتم تصنيف <span dir="ltr">Tensor</span> في <span dir="ltr">TensorFlow</span> إلى نوعين هما:</b>
+              <br>1) <b>ثابت (<span dir="ltr">Constant</span>)</b> • 2) <b>متغير (<span dir="ltr">Variable</span>)</b>.</li>
+            <li><b>العمليات الخمس الأساسية في <span dir="ltr">TensorFlow 2.x</span> (شريحة 453):</b> 1) طرق إنشاء الثوابت والمتغيرات، 2) تقسيم <span dir="ltr">Tensor</span> وفهرسته، 3) تغييرات أبعاد <span dir="ltr">Tensor</span>، 4) العمليات الحسابية على <span dir="ltr">Tensor</span>، 5) تسلسل <span dir="ltr">Tensor</span> وتقسيمه.</li>
+          </ul>
+        </div>
+
+        <h3>ثانياً: وضع التنفيذ الحريص (<span dir="ltr">Eager Execution</span>) و <span dir="ltr">AutoGraph</span> في <span dir="ltr">TensorFlow 2.x</span> (شريحة 454 - 455 / ص 17 - 18)</h3>
+        <div class="grid">
+          <div class="step-card">
+            <span class="tag">1. الرسم البياني الثابت (TF 1.x)</span>
+            <ul>
+              <li>يفصل تعريف الحساب عن التنفيذ؛ وهو <b>نموذج برمجة تصريحي (<span dir="ltr">Declarative</span>)</b> يحتاج لإنشاء رسم بياني، وبدء جلسة (<span dir="ltr">Session</span>)، ثم إدخال البيانات.</li>
+              <li><b>مفيد في:</b> التدريب الموزع وتحسين الأداء والنشر.</li>
+              <li><b>عيبه:</b> <b>غير ملائم لتصحيح الأخطاء</b> (يشبه استدعاء برنامج لغة <span dir="ltr">C</span> المترجم).</li>
+            </ul>
+          </div>
+          <div class="step-card">
+            <span class="tag">2. التنفيذ الحريص Eager (TF 2.x)</span>
+            <ul>
+              <li>قائم على الرسوم البيانية الحسابية <b>الديناميكية</b>، وهو ممكّن <b>افتراضياً</b> في <span dir="ltr">TensorFlow 2.x</span>.</li>
+              <li>طريقة برمجة <b>تعتمد على الأوامر (<span dir="ltr">Imperative</span>)</b> مثل <span dir="ltr">Python</span> الأصلية، حيث <b>يتم إرجاع النتيجة فوراً بعد تنفيذ العملية</b>.</li>
+              <li><b>عيبه:</b> بديهي ومرن، لكنه قد يؤثر على الأداء وإمكانية النشر.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note">
+          <b>أداة <span dir="ltr">AutoGraph</span> والمزين <code dir="ltr">@tf.function</code> (شريحة 455 / ص 18):</b>
+          <br>لتحقيق الأداء الأمثل وجعل النموذج قابلاً للنشر في أي مكان مع الحفاظ على سهولة <span dir="ltr">Eager</span>، يمكنك تشغيل <b dir="ltr">@tf.function</b> لإضافة <b>مزين (<span dir="ltr">Decorator</span>)</b> يقوم بتغليف الدالة وبناء عملية <span dir="ltr">TensorFlow</span> في <b>رسم بياني</b> لتنفيذها في وضع الرسم البياني بكفاءة عالية.
+        </div>
+
+        <div class="exam-alert">
+          <h3>ثالثاً: الوحدات النمطية السبع الشائعة في <span dir="ltr">TensorFlow 2.x</span> (شريحة 456 - 457 / ص 19 - 20) - مهمة جداً:</h3>
+          <ol>
+            <li><b dir="ltr">tf:</b> لإجراء عمليات حسابية شائعة، مثل <code dir="ltr">tf.abs</code> (حساب قيمة مطلقة)، و <code dir="ltr">tf.add</code> (إضافة عناصر واحدة تلو الأخرى)، و <code dir="ltr">tf.concat</code> (ربط المتجهات)، ويمكن إجراء معظمها بواسطة <span dir="ltr">NumPy</span>.</li>
+            <li><b dir="ltr">tf.errors:</b> وحدة نمطية لنوع الخطأ في <span dir="ltr">TensorFlow</span>.</li>
+            <li><b dir="ltr">tf.data:</b> تنفذ العمليات على <b>مجموعات البيانات</b> (تُستخدم أنابيب الإدخال التي تنشئها لقراءة بيانات التدريب وإدخال البيانات بسهولة من الذاكرات مثل <span dir="ltr">NumPy</span>).</li>
+            <li><b dir="ltr">tf.distributions:</b> تنفذ <b>توزيعات إحصائية متنوعة</b>، مثل توزيع برنولي، والتوزيع الموحد، والتوزيع الغاوسي <i>(سؤال تقييم ذاتي ص 23!)</i>.</li>
+            <li><b dir="ltr">tf.io.gfile:</b> تنفذ العمليات على <b>الملفات</b> (إدخال/إخراج الملفات، نسخ الملفات، وإعادة تسمية الملفات).</li>
+            <li><b dir="ltr">tf.image:</b> تنفذ العمليات على <b>الصور</b>؛ وهي تعادل حزمة معالجة الصور الصغيرة من <b dir="ltr">OpenCV</b> (توفر إضاءة الصورة، التشبع، عكس الطور، القص، تغيير الحجم، تحويل تنسيق الصورة من <span dir="ltr">RGB</span> إلى <span dir="ltr">HSV</span> أو <span dir="ltr">YUV</span> أو <span dir="ltr">YIQ</span> أو الرمادي، التدوير، واكتشاف حافة سوبل <span dir="ltr">Sobel</span>).</li>
+            <li><b dir="ltr">tf.keras:</b> واجهة برمجة تطبيقات <span dir="ltr">Python</span> لاستدعاء أدوات <span dir="ltr">Keras</span> وتمكين عمليات الشبكة المختلفة.</li>
+          </ol>
+        </div>
+
+        <h3>رابعاً: واجهة <span dir="ltr">Keras</span> ومزاياها الثلاث وطرقها الشائعة (شريحة 458 - 459 / ص 21 - 22)</h3>
+        <ul>
+          <li>يوصي <span dir="ltr">TensorFlow 2.x</span> باستخدام <b dir="ltr">Keras</b> لبناء الشبكات، ويتم تضمين الشبكات العصبية الشائعة في <code dir="ltr">Keras.layers</code>.</li>
+          <li><b>تعريفها:</b> واجهة برمجة تطبيقات عالية المستوى لبناء وتدريب نماذج التعلم العميق، تُستخدم لتصميم النماذج الأولية السريعة والبحث المتقدم والإنتاج.</li>
+          <li><b>المزايا الثلاث لواجهة <span dir="ltr">Keras</span> (سؤال تقييم ذاتي ص 23 - حيث <span dir="ltr">RBM</span> ليست من مميزاتها!):</b>
+            <ol>
+              <li><b>سهلة الاستخدام:</b> توفر واجهات بسيطة ومتسقة ومحسنة للحالات الشائعة، وملاحظات عملية وواضحة حول أخطاء المستخدم.</li>
+              <li><b>قابلة للتكوين والتركيب:</b> بناء نماذج <span dir="ltr">Keras</span> من خلال ربط كتل البناء القابلة للتكوين معاً مع قيود قليلة.</li>
+              <li><b>سهلة التوسيع:</b> تخصيص كتل البناء للتعبير عن أفكار بحثية جديدة وإنشاء طبقات ووظائف خسارة جديدة وتطوير نماذج متقدمة.</li>
+            </ol>
+          </li>
+          <li><b>الطرق والواجهات الأربع الشائعة لـ <span dir="ltr">tf.keras</span> (شريحة 459):</b>
+            <br>1) <b>معالجة مجموعة البيانات</b> (مجموعات البيانات والمعالجة المسبقة) • 2) <b>إنشاء نموذج الشبكة العصبية</b> (التسلسل، النموذج، الطبقات) • 3) <b>تجميع الشبكة</b> (التجميع، الخسائر، المقاييس، والمحسنات) • 4) <b>تدريب الشبكة وتقييمها</b> (الملاءمة، مولد الملاءمة، والتقييم).</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- الوحدة الثالثة -->
+    <details open>
+      <summary>3) الوحدة التعليمية (3): إعداد بيئة TensorFlow، عملية التطوير، ومشروع MNIST بالكود (شريحة 461 - 475 / ص 24 - 38)</summary>
+      <div class="details-body">
+        <h3>أولاً: إعداد بيئة <span dir="ltr">TensorFlow</span> في Windows 10 و Linux (شريحة 464 - 465 / ص 27 - 28)</h3>
+        <ul>
+          <li><b>في <span dir="ltr">Windows 10</span>:</b> نستخدم برنامج <code dir="ltr">pip</code> المدمج في <b dir="ltr">Anaconda3</b> المتكيف مع <b dir="ltr">Python 3</b>، وذلك بفتح موجه الأوامر <span dir="ltr">Anaconda</span> وتشغيل الأمر: <code dir="ltr">pip install tensorflow</code>.</li>
+          <li><b>في <span dir="ltr">Ubuntu / Linux</span>:</b> الطريقة الأبسط هي تشغيل الأمر <code dir="ltr">pip</code> مثل: <code dir="ltr">pip install tensorflow==2.1.0</code> أو <code dir="ltr">pip install tensorflow==2.0.0-alpha0</code>.</li>
+        </ul>
+
+        <div class="exam-alert">
+          <h3>ثانياً: عملية تطوير <span dir="ltr">TensorFlow</span> (شريحة 466 / ص 29 - موضع سؤال في التقييم الذاتي!):</h3>
+          <p>تمر عملية التطوير بـ 5 مراحل متسلسلة على المخطط: <span class="tag">1. تحضير البيانات Data preparation</span> &rarr; <span class="tag">2. تعريف النموذج Model definition</span> &rarr; <span class="tag">3. تدريب النموذج Model training</span> &rarr; <span class="tag">4. التحقق Model verification</span> &rarr; <span class="tag">5. النشر والتطبيق Model deployment</span>.</p>
+          <div class="grid">
+            <div class="step-card">
+              <h4>1. تحضير البيانات (Data Preparation)</h4>
+              <ul>
+                <li>إعداد البيانات.</li>
+                <li>استكشاف البيانات.</li>
+              </ul>
+            </div>
+            <div class="step-card">
+              <h4>2. بناء الشبكة (Network Construction) - مهم جداً!</h4>
+              <ul>
+                <li>تحديد بنية الشبكة.</li>
+                <li><b>تحديد وظائف الخسارة، واختيار المحسنات، وتحديد مؤشرات تقييم النموذج</b> <i>(سؤال تقييم ذاتي ص 38!)</i>.</li>
+                <li>تدريب النموذج والتحقق منه.</li>
+                <li>حفظ النموذج، واستعادة النموذج واستدعائه.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <h3>ثالثاً: مشروع التعرف على الأرقام المكتوبة بخط اليد (<span dir="ltr">MNIST</span>) ونموذج <span dir="ltr">Softmax</span> (شريحة 467 - 474 / ص 30 - 37)</h3>
+        <ul>
+          <li><b>وصف المشروع ومجموعة بيانات <span dir="ltr">MNIST</span> (شريحة 467 - 468):</b>
+            <ul>
+              <li>مهمة شائعة للتعرف على الصور المكتوبة بخط اليد (التي تختلف في أحجامها وأنماطها من شخص لآخر) باستخدام <span dir="ltr">TensorFlow</span>.</li>
+              <li><b>مكونات مجموعة بيانات <span dir="ltr">MNIST</span>:</b>
+                <br>1) <b>مجموعة التدريب:</b> <b>60,000 صورة</b> خط يد وعلامات مطابقة (<span dir="ltr">Corresponding labels</span>).
+                <br>2) <b>مجموعة الاختبار:</b> <b>10,000 صورة</b> خط يد وعلامات مطابقة.</li>
+            </ul>
+          </li>
+          <li><b>تعريف بنية الشبكة - نموذج انحدار سوفت ماكس (<span dir="ltr">Softmax Regression</span>) (شريحة 469 - 470 / ص 32 - 33):</b>
+            <ul>
+              <li>المعادلة: $\text{evidence}_i = \sum_j W_{i,j} x_j + b_i$ ، ثم $y = \text{softmax}(\text{evidence})$.</li>
+              <li class="exam-alert"><b>معلومة هامة (سؤال تقييم ذاتي ص 38!):</b> تسمى دالة سوفت ماكس (<span dir="ltr">Softmax</span>) أيضاً بـ <b>الدالة الأسية الطبيعية (<span dir="ltr">Natural Exponential Function</span>)</b>، وهي تعميم لدالة التصنيف الثنائية <span dir="ltr">sigmoid</span> للتصنيف متعدد الفئات، حيث $0 < y_i < 1$ و $\sum_i y_i = 1$.</li>
+              <li>يتم استخدام <b>ضرب المصفوفات وإضافة المتجهات</b> للتعبير عن عملية حساب <span dir="ltr">softmax</span>.</li>
+            </ul>
+          </li>
+          <li><b>الكود البرمجي الكامل للمشروع في الشرائح (شريحة 471 - 474 / ص 34 - 37):</b>
+            <div class="code-box"># 1. تعريف بنية الشبكة (شريحة 471)
+import tensorflow as tf
+# كل صورة يتم تسطيحها إلى متجه من 784 بعداً، و None تعني أي طول (عدد عينات)
+x = tf.placeholder(tf.float32, [None, 784])
+# تعريف الوزن w والانحياز b كمتغيرات قابلة للتعديل مهيأة بـ 0 (لـ 10 فئات أرقام)
+w = tf.Variable(tf.zeros([784, 10]))
+b = tf.Variable(tf.zeros([10]))
+# معادلة انحدار سوفت ماكس حيث tf.matmul(x, w) تضرب x في w
+y = tf.nn.softmax(tf.matmul(x, w) + b)
+
+# 2. تجميع الشبكة: اختيار دالة الخسارة (cross entropy) والمحسن (Adam) (شريحة 472)
+model.compile(optimizer=tf.train.AdamOptimizer(),
+              loss=tf.keras.losses.categorical_crossentropy,
+              metrics=[tf.keras.metrics.categorical_accuracy])
+
+# 3. عملية التدريب: استخدام model.fit حيث يشير epoch إلى عدد تكرارات التدريب (5 مرات) (شريحة 473)
+model.fit(mnist.train.images, mnist.train.labels, epochs=5)
+
+# 4. تقييم النموذج باستخدام مجموعة الاختبار لحساب قيمة الخسارة والدقة (شريحة 474)
+model.evaluate(mnist.test.images, mnist.test.labels)</div>
+          </li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= التبويب الثاني: جداول المقارنات والأكواد ================= -->
+  <section id="tables" class="panel">
+    <div class="card">
+      <h2>1. جدول المقارنة الشامل بين إطار PyTorch ومكتبة TensorFlow (شريحة 442 - 447)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>وجه المقارنة</th>
+            <th>إطار العمل PyTorch</th>
+            <th>مكتبة TensorFlow</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>الشركة المطورة والجيل</b></td>
+            <td>طورته شركة <b>Facebook</b> (وتستخدمه Twitter و GM/CMU).</td>
+            <td>مكتبة مفتوحة المصدر من <b>الجيل الثاني من شركة Google</b> للحوسبة الرقمية.</td>
+          </tr>
+          <tr>
+            <td><b>الأصل ولغة البرمجة</b></td>
+            <td>قائم على <b>Python</b>، وطُوّر بناءً على إطار <b>Torch</b> (الذي كان أقل شهرة لاستخدامه لغة <b>Lua</b>).</td>
+            <td>يدعم لغات متعددة (<span dir="ltr">Multi-lingual</span>) وعلى رأسها <b>Python</b>، ودمج واجهة <b>Keras</b> في الإصدار 2.0.</td>
+          </tr>
+          <tr>
+            <td><b>نوع الرسم البياني الحسابي</b></td>
+            <td>يمتاز بـ <b>الشبكة العصبية الديناميكية</b> (إنشاء وتعديل الرسوم البيانية ديناميكياً أثناء التنفيذ).</td>
+            <td>في <b>TF 1.x</b>: رسم بياني ثابت (تصريحي يتطلب جلسة).<br>في <b>TF 2.x</b>: يمكّن <b>التنفيذ الحريص (Eager)</b> الديناميكي افتراضياً مع <code>@tf.function</code>.</td>
+          </tr>
+          <tr>
+            <td><b>المميزات البارزة</b></td>
+            <td>1) <b>Python أولاً</b> (وصول مباشر لبايثون دون تعقيد ربط C++)<br>2) <b>الشبكة الديناميكية</b><br>3) <b>سهولة التصحيح (Debugging)</b> ودعم CPU/GPU.</td>
+            <td>1) قابلية التوسع (<span dir="ltr">Scalability</span>) • 2) دعم <span dir="ltr">GPU</span> • 3) الحوسبة القوية • 4) متعدد اللغات • 5) متعدد المنصات • 6) <b>موزعة (<span dir="ltr">Distributed</span>)</b>.</td>
+          </tr>
+          <tr>
+            <td><b>دعم التدريب الموزع الأصلي</b></td>
+            <td><b>ليس</b> من ضمن الأطر الأربعة الموزعة الأصلية المذكورة في الشريحة 446.</td>
+            <td><b>مدعوم أصلياً</b> (إلى جانب <b dir="ltr">CNTK</b> و <b dir="ltr">Deeplearning4J</b> و <b dir="ltr">MXNet</b>).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>2. جدول رتب وتصنيف الموتر (Tensor) ومقارنة الرسم الثابت بالتنفيذ الحريص (شريحة 452 - 455)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>البند / المفهوم</th>
+            <th>التفاصيل والخصائص الدقيقة في الشرائح</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>العددي (Scalar)</b></td>
+            <td>هو <span dir="ltr">Tensor</span> من <b>الرتبة 0 (<span dir="ltr">rank-0 tensor</span>)</b> (قيمة واحدة بدون أبعاد).</td>
+          </tr>
+          <tr>
+            <td><b>المتجه (Vector)</b></td>
+            <td>هو <span dir="ltr">Tensor</span> من <b>الرتبة 1 (<span dir="ltr">rank-1 tensor</span>)</b> (أحادي البعد).</td>
+          </tr>
+          <tr>
+            <td><b>المصفوفة (Matrix)</b></td>
+            <td>هي <span dir="ltr">Tensor</span> من <b>الرتبة 2 (<span dir="ltr">rank-2 tensor</span>)</b> (ثنائية الأبعاد: صفوف وأعمدة).</td>
+          </tr>
+          <tr>
+            <td><b>تصنيف Tensor في TensorFlow</b></td>
+            <td>ينقسم إلى نوعين: 1) <b>ثابت (<span dir="ltr">Constant</span>)</b>، و 2) <b>متغير (<span dir="ltr">Variable</span>)</b> (يُستخدم للأوزان $w$ والانحياز $b$).</td>
+          </tr>
+          <tr>
+            <td><b>الرسم البياني الثابت (Static Graph - TF 1.x)</b></td>
+            <td>نموذج برمجة <b>تصريحي</b> يفصل تعريف الحساب عن التنفيذ (يشبه برنامج لغة C المترجم)؛ مفيد في التدريب الموزع وتحسين الأداء والنشر، ولكنه <b>غير ملائم لتصحيح الأخطاء</b>.</td>
+          </tr>
+          <tr>
+            <td><b>التنفيذ الحريص (Eager Execution - TF 2.x)</b></td>
+            <td>ممكّن <b>افتراضياً</b> في TF 2.x؛ برمجة <b>تعتمد على الأوامر</b> مثل بايثون الأصلية وترجع النتيجة فوراً، وتستخدم المزين <b dir="ltr">@tf.function</b> (<span dir="ltr">AutoGraph</span>) لتحويل الدالة لرسم بياني عند النشر.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>3. جدول الوحدات النمطية السبع الشائعة في TensorFlow 2.x (شريحة 456 - 457)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>الوحدة النمطية (Module)</th>
+            <th>الوظيفة والأمثلة البرمجية في الشرائح</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td dir="ltr"><b>1. tf</b></td>
+            <td>إجراء عمليات حسابية شائعة (معظمها يمكن إجراؤه بـ NumPy)، مثل: <code>tf.abs</code> (قيمة مطلقة)، <code>tf.add</code> (جمع عناصر)، و <code>tf.concat</code> (ربط المتجهات).</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>2. tf.errors</b></td>
+            <td>وحدة نمطية مخصصة لنوع الخطأ في <span dir="ltr">TensorFlow</span>.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>3. tf.data</b></td>
+            <td>تنفذ العمليات على <b>مجموعات البيانات</b>؛ تنشئ أنابيب الإدخال لقراءة بيانات التدريب وإدخال البيانات من الذاكرات مثل <span dir="ltr">NumPy</span>.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>4. tf.distributions</b></td>
+            <td>تنفذ <b>توزيعات إحصائية متنوعة</b>، مثل: توزيع برنولي، والتوزيع الموحد، والتوزيع الغاوسي.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>5. tf.io.gfile</b></td>
+            <td>تنفذ العمليات على <b>الملفات</b>: إدخال/إخراج الملفات، نسخ الملفات، وإعادة تسمية الملفات.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>6. tf.image</b></td>
+            <td>تنفذ العمليات على <b>الصور</b> (تعادل حزمة معالجة الصور الصغيرة من <b dir="ltr">OpenCV</b>): الإضاءة، التشبع، عكس الطور، القص، تغيير الحجم، تحويل الألوان (<span dir="ltr">RGB</span> إلى <span dir="ltr">HSV, YUV, YIQ, Grayscale</span>)، التدوير، واكتشاف حافة سوبل (<span dir="ltr">Sobel</span>).</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>7. tf.keras</b></td>
+            <td>واجهة برمجة تطبيقات <span dir="ltr">Python</span> لاستدعاء أدوات <span dir="ltr">Keras</span> وتمكين عمليات الشبكة العصبية المختلفة.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>4. ملخص الدوال والأكواد البرمجية في مشروع MNIST (شريحة 467 - 474)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>الكود / الدالة</th>
+            <th>الوظيفة والدلالة في تطوير نموذج TensorFlow</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td dir="ltr"><b>MNIST Dataset (60,000 / 10,000)</b></td>
+            <td>مجموعة بيانات صور الأرقام المكتوبة بخط اليد: تضم <b>60,000 صورة تدريب</b> و <b>10,000 صورة اختبار</b>.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>tf.placeholder(tf.float32, [None, 784])</b></td>
+            <td>تعريف متغير لتغذية البيانات في الرسم البياني؛ كل صورة مسطحة في متجه من <b>784 بُعداً</b>، و <code>None</code> تعني أنه يمكن أن يكون بأي طول.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>tf.Variable(tf.zeros([784, 10]))</b></td>
+            <td>تعريف الأوزان $w$ والانحياز $b$ كمتغيرات قابلة للتعديل وتهيئتها بقيم أولية تساوي <b>0</b>.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>tf.nn.softmax(tf.matmul(x, w) + b)</b></td>
+            <td>معادلة انحدار سوفت ماكس (الدالة الأسية الطبيعية)؛ حيث تقوم <code>tf.matmul(x, w)</code> بضرب المصفوفة $x$ في $w$.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>model.compile(optimizer, loss, metrics)</b></td>
+            <td>تجميع الشبكة عبر تحديد المحسن (<code>AdamOptimizer</code>)، ودالة الخسارة (<code>categorical_crossentropy</code>)، ومقياس الدقة.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>model.fit(..., epochs=5)</b></td>
+            <td>تدريب النموذج على بيانات التدريب؛ حيث يشير المعامل <b dir="ltr">epoch</b> إلى <b>عدد تكرارات التدريب الكاملة</b> (5 مرات).</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>model.evaluate(test.images, test.labels)</b></td>
+            <td>تقييم واختبار النموذج باستخدام مجموعة الاختبار لإرجاع قيمة الخسارة (<span dir="ltr">Loss value</span>) والدقة (<span dir="ltr">Accuracy</span>).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الثالث: المصطلحات ================= -->
+  <section id="terms" class="panel">
+    <div class="card">
+      <h2>قاموس المصطلحات والدوال الشامل للفصل الثالث عشر (28 مصطلحاً)</h2>
+      <p class="muted">جميع الأطر والوحدات النمطية والدوال البرمجية الواردة في شرائح الفصل الثالث عشر (شريحة 438 - 475):</p>
+      <div id="termsGrid" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الرابع: البطاقات التعليمية ================= -->
+  <section id="cards" class="panel">
+    <div class="card">
+      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
+      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
+      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
+        <div class="term" id="flashTerm"></div>
+        <div class="answer" id="flashAnswer" hidden></div>
+        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="prevCard">السابق</button>
+        <span id="cardCount" class="muted"></span>
+        <button class="btn primary" id="nextCard">التالي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الخامس: الاختبار الشامل ================= -->
+  <section id="quiz" class="panel">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2>الاختبار الشامل للفصل الثالث عشر + أسئلة التقييم الذاتي (25 سؤالاً)</h2>
+          <p class="muted">يشمل جميع أسئلة التقييم الذاتي الواردة في الشرائح (مميزة بعلامة خاصة) مع تنويع الإجابات الصحيحة بين (أ، ب، ج، د)!</p>
+        </div>
+        <div class="score" id="score">النتيجة: 0 / 25</div>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="quizArea"></div>
+      <div class="row">
+        <button class="btn" id="resetQuiz">إعادة الاختبار</button>
+        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+      </div>
+      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
+    </div>
+  </section>
+</main>
+
+<footer>مبني بالكامل (100%) على شرائح الفصل الثالث عشر: أطر التعلم العميق - مقرر موضوعات مختارة في علوم البيانات (شرائح 438 إلى 475)</footer>
+
+<script>
+const terms = [
+  ["إطار التعلم العميق (DL Framework)", "واجهة أو مكتبة أو أداة (مجموعة من اللبنات الأساسية) تسمح ببناء نماذج التعلم العميق بسهولة وسرعة دون الدخول في تفاصيل الخوارزميات الأساسية (شريحة 441)."],
+  ["PyTorch", "إطار عمل حاسوبي قائم على لغة Python يعتمد على التعلم الآلي وطورته شركة Facebook بناءً على مكتبة Torch (شريحة 442)."],
+  ["Torch & Lua", "مكتبة عمليات موتر (tensor) مشابهة لـ NumPy وتتميز بمرونة عالية، لكنها أقل شهرة لأنها تستخدم لغة البرمجة Lua مما دفع لتطوير PyTorch (شريحة 442)."],
+  ["الشبكة العصبية الديناميكية", "ميزة في PyTorch تتيح إنشاء وتعديل الرسوم البيانية الحسابية ديناميكياً أثناء التنفيذ دون الحاجة لرسم بياني ثابت مسبق كما في TF 1.x (شريحة 443)."],
+  ["TensorFlow", "مكتبة برمجيات مفتوحة المصدر من الجيل الثاني من شركة Google للحوسبة الرقمية وتدعم خوارزميات التعلم العميق ومنصات متعددة باستقرار عالٍ (شريحة 444)."],
+  ["مميزات TensorFlow الست", "1) قابلية التوسع (Scalability)، 2) دعم GPU، 3) الحوسبة القوية، 4) متعدد اللغات، 5) متعدد المنصات، 6) موزعة (Distributed) (شريحة 445)."],
+  ["الأطر الموزعة الأصلية الأربعة", "تتضمن أطر التعلم العميق الموزعة الأصلية المدعومة حالياً 4 أطر فقط: TensorFlow، و CNTK، و Deeplearning4J، و MXNet (شريحة 446)."],
+  ["مكتبة cuDNN", "المكتبة التي تعتمد عليها معظم أطر التعلم العميق عند استخدام وحدة معالجة رسومية واحدة (Single GPU) لدعم نفس سرعة التدريب تقريباً (شريحة 446)."],
+  ["الموتر (Tensor)", "أبسط هياكل البيانات في TensorFlow؛ يتم تغليف جميع البيانات فيه وهو عبارة عن مصفوفة متعددة الأبعاد، ويُصنف إلى ثابت (Constant) ومتغير (Variable) (شريحة 452)."],
+  ["رتب الـ Tensor (0 و 1 و 2)", "العددي (Scalar) هو Tensor من الرتبة 0، والمتجه (Vector) من الرتبة 1، والمصفوفة (Matrix) من الرتبة 2 (شريحة 452)."],
+  ["الرسم البياني الثابت (Static Graph)", "نموذج برمجة تصريحي في TensorFlow 1.x يفصل تعريف الحساب عن التنفيذ؛ مفيد في التدريب الموزع والنشر لكنه غير ملائم لتصحيح الأخطاء (شريحة 454)."],
+  ["التنفيذ الحريص (Eager Execution)", "طريقة برمجة تعتمد على الأوامر (مثل Python الأصلية) ممكّنة افتراضياً في TensorFlow 2.x، ترجع النتيجة فوراً بعد تنفيذ العملية (شريحة 454-455)."],
+  ["AutoGraph & @tf.function", "مزين (Decorator) يُضاف لبناء وتغليف دالة بايثون كعملية TensorFlow في رسم بياني لتحقيق الأداء الأمثل وجعل النموذج قابلاً للنشر في أي مكان (شريحة 455)."],
+  ["الوحدة النمطية tf", "تُستخدم لإجراء عمليات حسابية شائعة مثل tf.abs (قيمة مطلقة)، و tf.add (جمع عناصر)، و tf.concat (ربط المتجهات) (شريحة 456)."],
+  ["الوحدة النمطية tf.errors", "وحدة نمطية مخصصة لنوع الخطأ في TensorFlow 2.x (شريحة 456)."],
+  ["الوحدة النمطية tf.data", "تنفذ العمليات على مجموعات البيانات وتنشئ أنابيب الإدخال لقراءة بيانات التدريب وإدخالها من الذاكرات مثل NumPy (شريحة 456)."],
+  ["الوحدة النمطية tf.distributions", "تنفذ توزيعات إحصائية متنوعة في TensorFlow مثل توزيع برنولي، والتوزيع الموحد، والتوزيع الغاوسي (شريحة 456)."],
+  ["الوحدة النمطية tf.io.gfile", "تنفذ العمليات على الملفات مثل إدخال/إخراج الملفات، ونسخ الملفات، وإعادة تسمية الملفات (شريحة 457)."],
+  ["الوحدة النمطية tf.image", "تنفذ العمليات على الصور وتعادل حزمة معالجة الصور الصغيرة من OpenCV (كالإضاءة، القص، تحويل RGB إلى HSV/YUV/YIQ، واكتشاف حافة سوبل) (شريحة 457)."],
+  ["واجهة Keras (tf.keras)", "واجهة برمجة تطبيقات عالية المستوى لبناء وتدريب نماذج التعلم العميق، تحتل المرتبة الثالثة في نجوم GitHub، وتتمتع بـ 3 مزايا: سهلة الاستخدام، قابلة للتكوين والتركيب، وسهلة التوسيع (شريحة 447 و 458)."],
+  ["أمر pip install tensorflow", "الأمر المستخدم في موجه أوامر Anaconda على Windows 10 أو في طرفية Ubuntu/Linux لتثبيت مكتبة TensorFlow (شريحة 464-465)."],
+  ["بناء الشبكة (في عملية تطوير TF)", "مرحلة تشمل: تحديد بنية الشبكة، تحديد وظائف الخسارة واختيار المحسنات ومؤشرات التقييم، تدريب النموذج والتحقق منه، وحفظ واستعادة النموذج (شريحة 466)."],
+  ["مجموعة بيانات MNIST", "مجموعة بيانات الأرقام المكتوبة بخط اليد؛ تتكون من 60,000 صورة في مجموعة التدريب و 10,000 صورة في مجموعة الاختبار (شريحة 467-468)."],
+  ["الدالة الأسية الطبيعية (Softmax)", "الاسم الآخر لدالة سوفت ماكس؛ وهي تعميم لدالة التصنيف الثنائية sigmoid للتصنيف متعدد الفئات بحيث يكون مجموع الاحتمالات يساوي 1 (شريحة 469)."],
+  ["tf.placeholder & [None, 784]", "متغير لتغذية البيانات في الرسم البياني؛ حيث 784 هو حجم متجه الصورة المسطحة، و None تشير إلى إمكانية أن يكون بأي طول (شريحة 471)."],
+  ["tf.matmul(x, w)", "دالة في TensorFlow تُستخدم للإشارة إلى ضرب المصفوفة x في مصفوفة الوزن w داخل معادلة انحدار سوفت ماكس (شريحة 471)."],
+  ["model.compile & model.fit", "تُستخدم model.compile لتجميع النموذج (تحديد المحسن ودالة الخسارة)، وتُستخدم model.fit لتدريب النموذج لعدد من التكرارات (epochs) (شريحة 472-473)."],
+  ["epoch & model.evaluate", "يشير epoch إلى عدد تكرارات التدريب الكاملة، بينما تُستخدم model.evaluate لاختبار النموذج على مجموعة الاختبار وحساب الخسارة والدقة (شريحة 473-474)."]
+];
+
+const cards = [
+  ["ما هو تعريف إطار التعلم العميق (Deep Learning Framework) وكيف يفيد المطورين (شريحة 441)؟", "هو واجهة أو مكتبة أو أداة (مجموعة من اللبنات الأساسية) تسمح ببناء نماذج التعلم العميق بسهولة وسرعة دون الدخول في تفاصيل الخوارزميات الأساسية، وتغني المطورين عن كتابة الشبكات والانتشار الخلفي من الصفر."],
+  ["ما هو إطار العمل PyTorch؟ ومن طوره؟ وعلامَ بُني (شريحة 442)؟", "هو إطار عمل حاسوبي قائم على لغة Python يعتمد على التعلم الآلي وطورته شركة Facebook (وتستخدمه Twitter و GM). تم تطويره بناءً على إطار Torch."],
+  ["ما هي مكتبة Torch؟ ولماذا كانت أقل شهرة مما دفع لتطوير PyTorch (شريحة 442)؟", "Torch هي مكتبة عمليات موتر (tensor) مشابهة لـ NumPy وتتميز بمرونة عالية، لكنها كانت أقل شهرة لأنها تستخدم لغة البرمجة (Lua)، وهذا هو سبب تطوير PyTorch بلغة Python."],
+  ["ما هي مميزات PyTorch الثلاث الرئيسية (شريحة 443)؟", "1) Python أولاً (يدعم الوصول المباشر والدقيق لبايثون كـ NumPy).\n2) الشبكة العصبية الديناميكية (إنشاء وتعديل الرسوم البيانية الحسابية ديناميكياً أثناء التنفيذ).\n3) سهولة التصحيح (إيقاف المترجم في مصحح الأخطاء وعرض مخرجات عقدة معينة) ودعم CPU و GPU."],
+  ["ما الفرق بين PyTorch و TensorFlow 1.x في التعامل مع الرسوم البيانية الحسابية (شريحة 443)؟", "• في TensorFlow 1.x: يجب إنشاء رسوم بيانية حسابية ثابتة مسبقاً وتشغيل أوامر التغذية والتشغيل.\n• في PyTorch: يمكن إنشاء وتعديل الرسوم البيانية الحسابية ديناميكياً أثناء التنفيذ دون تعقيد."],
+  ["ما هو تعريف مكتبة TensorFlow (شريحة 444)؟", "هي مكتبة برمجيات مفتوحة المصدر من الجيل الثاني من شركة Google للحوسبة الرقمية، وتدعم العديد من خوارزميات التعلم العميق ومنصات الحوسبة المتعددة باستقرار عالٍ."],
+  ["ما هي مميزات TensorFlow الست (شريحة 445)؟", "1) قابلية التوسع (Scalability)، 2) وحدة معالجة الرسوميات (GPU)، 3) الحوسبة القوية (Powerful computing)، 4) متعدد اللغات (Multi-lingual)، 5) متعدد المنصات (Multi-platform)، 6) موزعة (Distributed)."],
+  ["ما هي أطر التعلم العميق الأربعة الموزعة الأصلية المدعومة حالياً فقط؟ وعلى ماذا تعتمد عند استخدام GPU واحدة (شريحة 446)؟", "• الأطر الأربعة الموزعة الأصلية هي فقط: TensorFlow، و CNTK، و Deeplearning4J، و MXNet (وليس منها PyTorch).\n• عند استخدام GPU واحدة تعتمد معظم الأطر على مكتبة cuDNN."],
+  ["لماذا يتيح TensorFlow ميزة (التدريب الموزع) وما ترتيبه في سوق التوظيف ودمجه لـ Keras (شريحة 446-447)؟", "لأنه في التعلم العميق واسع النطاق والبيانات الضخمة يصعب على GPU فردية إكمال التدريب في وقت محدود. ويتصدر TensorFlow الطلب في سوق التوظيف، كما دمج Keras (صاحب المرتبة 3 في نجوم GitHub) في TensorFlow 2.0."],
+  ["ما هو الـ Tensor في TensorFlow؟ وإلى ماذا يُصنف (شريحة 452)؟", "هو أبسط هياكل البيانات في TensorFlow، ويتم تغليف جميع البيانات فيه كـ (مصفوفة متعددة الأبعاد).\nويُصنف في TensorFlow إلى نوعين: 1) ثابت (Constant)، 2) متغير (Variable)."],
+  ["ما هي رتبة الـ Tensor لكل من: العددي (Scalar)، والمتجه (Vector)، والمصفوفة (Matrix) (شريحة 452)؟", "• العددي (Scalar): هو Tensor من الرتبة 0 (rank-0).\n• المتجه (Vector): هو Tensor من الرتبة 1 (rank-1).\n• المصفوفة (Matrix): هي Tensor من الرتبة 2 (rank-2)."],
+  ["ما هي العمليات الخمس الأساسية على الـ Tensor في TensorFlow 2.x (شريحة 453)؟", "1) طرق إنشاء الثوابت والمتغيرات، 2) تقسيم Tensor وفهرسته، 3) تغييرات أبعاد Tensor، 4) العمليات الحسابية على Tensor، 5) تسلسل Tensor وتقسيمه."],
+  ["قارني بين (الرسم البياني الثابت) و(التنفيذ الحريص Eager Execution) في TensorFlow (شريحة 454).", "• الرسم الثابت (TF 1.x): نموذج برمجة تصريحي يفصل تعريف الحساب عن التنفيذ؛ مفيد للتدريب الموزع والنشر لكنه غير ملائم لتصحيح الأخطاء.\n• التنفيذ الحريص (TF 2.x افتراضياً): برمجة تعتمد على الأوامر مثل بايثون الأصلية وترجع النتيجة فوراً بعد تنفيذ العملية."],
+  ["ما وظيفة أداة AutoGraph والمزين @tf.function في TensorFlow 2.x (شريحة 455)؟", "لأن تنفيذ Eager قد يؤثر على الأداء والنشر، نستخدم المزين @tf.function لتغليف دالة بايثون وبناء عملية TensorFlow في رسم بياني لتنفيذها في وضع الرسم البياني بكفاءة عالية وقابلية للنشر في أي مكان."],
+  ["ما هي وظيفة الوحدات النمطية: tf، و tf.errors، و tf.data، و tf.distributions (شريحة 456)؟", "• tf: عمليات حسابية شائعة (tf.abs, tf.add, tf.concat).\n• tf.errors: لنوع الخطأ.\n• tf.data: تنفذ العمليات على مجموعات البيانات وأنابيب الإدخال.\n• tf.distributions: تنفذ توزيعات إحصائية متنوعة (كبرنولي والموحد والغاوسي)."],
+  ["ما هي وظيفة الوحدات النمطية: tf.io.gfile، و tf.image، و tf.keras (شريحة 457)؟", "• tf.io.gfile: تنفذ العمليات على الملفات (إدخال/إخراج، نسخ، إعادة تسمية).\n• tf.image: تنفذ العمليات على الصور وتعادل حزمة معالجة الصور الصغيرة من OpenCV (كالتحويل اللوني واكتشاف حافة سوبل).\n• tf.keras: واجهة بايثون لاستدعاء أدوات Keras."],
+  ["ما هي واجهة Keras؟ وما هي مزاياها الثلاث الرئيسية (شريحة 458)؟", "واجهة برمجة تطبيقات عالية المستوى لبناء وتدريب نماذج التعلم العميق (توجد طبقاتها في Keras.layers).\nمزاياها الثلاث: 1) سهلة الاستخدام، 2) قابلة للتكوين والتركيب، 3) سهلة التوسيع."],
+  ["ما هي الطرق والواجهات الأربع الشائعة في tf.keras (شريحة 459)؟", "1) معالجة مجموعة البيانات، 2) إنشاء نموذج الشبكة العصبية (التسلسل، النموذج، الطبقات)، 3) تجميع الشبكة (الخسائر، المقاييس، المحسنات)، 4) تدريب الشبكة وتقييمها (الملاءمة والتقييم)."],
+  ["كيف يتم تثبيت وإعداد بيئة TensorFlow في Windows 10 وفي Ubuntu/Linux (شريحة 464-465)؟", "في كلا النظامين يتم استخدام الأداة pip (في ويندوز عبر موجه أوامر Anaconda3 المتكيف مع Python 3) بتشغيل الأمر: pip install tensorflow."],
+  ["ما هي المهام الفرعية التي تندرج تحت مرحلة (تحضير البيانات) ومرحلة (بناء الشبكة) في عملية تطوير TensorFlow (شريحة 466)؟", "• تحضير البيانات: 1) إعداد البيانات، 2) استكشاف البيانات.\n• بناء الشبكة: 1) تحديد بنية الشبكة، 2) تحديد وظائف الخسارة واختيار المحسنات ومؤشرات التقييم، 3) تدريب النموذج والتحقق منه، 4) حفظ النموذج، 5) استعادة النموذج واستدعائه."],
+  ["ممَ تتكون مجموعة بيانات الكتابة اليدوية MNIST من حيث عدد صور التدريب والاختبار (شريحة 468)؟", "تتكون من:\n1) مجموعة التدريب: 60,000 صورة خط يد وعلامات مطابقة.\n2) مجموعة الاختبار: 10,000 صورة خط يد وعلامات مطابقة."],
+  ["بماذا تسمى دالة سوفت ماكس (Softmax) أيضاً؟ وما علاقتها بدالة Sigmoid وما شرط احتمالاتها (شريحة 469)؟", "تسمى أيضاً بـ (الدالة الأسية الطبيعية)، وهي تعميم لدالة التصنيف الثنائية sigmoid للتصنيف متعدد الفئات، بحيث تكون كل احتمالية بين 0 و 1 ويكون مجموع كل الاحتمالات يساوي 1."],
+  ["كيف يتم التعبير رياضياً وبرمجياً عن عملية حساب Softmax في تعريف بنية الشبكة (شريحة 470-471)؟", "يتم استخدام (ضرب المصفوفات وإضافة المتجهات): y = tf.nn.softmax(tf.matmul(x, w) + b)، حيث يتم تسطيح كل صورة إلى متجه من 784 بُعداً [None, 784]."],
+  ["إلى ماذا تشير كلمة None والرقم 784 والرقم 10 في كود نموذج Softmax لمشروع MNIST (شريحة 471)؟", "• 784: أبعاد متجه الصورة بعد تسطيحها.\n• None: تشير إلى أن البُعد الأول يمكن أن يكون بأي طول (أي عدد من الصور).\n• 10: عدد فئات الأرقام من 0 إلى 9 في الوزن w [784, 10] والانحياز b [10]."],
+  ["ما هما الجزآن اللذان يتضمنهما (تجميع النموذج model.compile) في مشروع MNIST (شريحة 472)؟", "1) اختيار دالة الخسارة (حيث تم استخدام دالة الخسارة عبر الإنتروبيا categorical_crossentropy).\n2) طريقة الانحدار المتدرج / خوارزمية التحسين (حيث تم استخدام محسن AdamOptimizer)."],
+  ["ما الدالة المستخدمة لتدريب النموذج في TensorFlow؟ وإلى ماذا يشير المعامل epoch (شريحة 473)؟", "تُستخدم الدالة model.fit للتدريب، ويشير المعامل (epoch) إلى عدد تكرارات التدريب الكاملة لجميع بيانات التدريب (في التجربة epochs=5)."],
+  ["ما الدالة المستخدمة لتقييم واختبار النموذج على مجموعة الاختبار في TensorFlow وما مخرجاتها (شريحة 474)؟", "الدالة model.evaluate(mnist.test.images, mnist.test.labels)، وتخرج قيمتين هما: قيمة الخسارة (Loss value) ودقة مجموعة الاختبار (Accuracy)."],
+  ["راجعي إجابات أسئلة التقييم الذاتي التسعة في شرائح الفصل الثالث عشر (شريحة 448 و 460 و 475).", "• الوحدة 1: 1) البايثون، 2) Google، 3) PyTorch.\n• الوحدة 2: 1) الرتبة 2، 2) tf.distributions، 3) توفر RBM.\n• الوحدة 3: 1) بناء الشبكة، 2) الأسية الطبيعية، 3) epoch."]
+];
+
+// تم تضمين جميع أسئلة التقييم الذاتي الـ 9 من الشرائح + 16 سؤالاً شاملاً مع تنويع الإجابات الصحيحة (a) بين 0، 1، 2، 3!
+const questions = [
+  {
+    q: "[سؤال تقييم ذاتي - شريحة 448]: PyTorch هو إطار عمل حاسوبي قائم على لغة ............ طورته شركة Facebook:",
+    o: [
+      "البايثون (Python)",
+      "الجافا (Java)",
+      "C++",
+      "Lua"
+    ],
+    a: 0,
+    e: "إطار العمل PyTorch قائم على لغة البايثون (Python)، بينما كان إطار Torch القديم قائماً على لغة Lua (شريحة 442 و 448)."
+  },
+  {
+    q: "[سؤال تقييم ذاتي - شريحة 448]: TensorFlow هي مكتبة برمجيات مفتوحة المصدر من الجيل الثاني من شركة ............ للحوسبة الرقمية:",
+    o: [
+      "Facebook",
+      "Google",
+      "GitHub",
+      "CMU"
+    ],
+    a: 1,
+    e: "TensorFlow هي مكتبة برمجيات مفتوحة المصدر من الجيل الثاني من شركة Google للحوسبة الرقمية (شريحة 444 و 448)."
+  },
+  {
+    q: "[سؤال تقييم ذاتي - شريحة 448]: أي من التالي (ليس) من ضمن أطر التعلم العميق الموزعة الأصلية المدعومة حالياً؟",
+    o: [
+      "TensorFlow",
+      "CNTK",
+      "MXNet (وكذلك Deeplearning4J)",
+      "PyTorch"
+    ],
+    a: 3,
+    e: "نصت الشريحة 446 على أن أطر التعلم العميق الموزعة الأصلية المدعومة حالياً تتضمن فقط: TensorFlow و CNTK و Deeplearning4J و MXNet؛ لذا فإن PyTorch ليس من ضمنها (شريحة 448)."
+  },
+  {
+    q: "[سؤال تقييم ذاتي - شريحة 460]: في هياكل بيانات TensorFlow، المصفوفة (Matrix) هي Tensor من الرتبة:",
+    o: [
+      "0 (الرتبة صفر)",
+      "1 (الرتبة الأولى)",
+      "2 (الرتبة الثانية)",
+      "3 (الرتبة الثالثة)"
+    ],
+    a: 2,
+    e: "في الشريحة 452: العددي (Scalar) هو Tensor من الرتبة 0، والمتجه (Vector) هو Tensor من الرتبة 1، والمصفوفة (Matrix) هي Tensor من الرتبة 2 (شريحة 460)."
+  },
+  {
+    q: "[سؤال تقييم ذاتي - شريحة 460]: أي من الوحدات النمطية التالية تنفذ توزيعات إحصائية متنوعة (مثل توزيع برنولي والتوزيع الموحد والغاوسي) في TensorFlow؟",
+    o: [
+      "tf.data",
+      "tf.distributions",
+      "tf.io.gfile",
+      "tf.errors"
+    ],
+    a: 1,
+    e: "الوحدة النمطية tf.distributions هي المسؤولة عن تنفيذ توزيعات إحصائية متنوعة مثل توزيع برنولي والموحد والغاوسي (شريحة 456 و 460)."
+  },
+  {
+    q: "[سؤال تقييم ذاتي - شريحة 460]: أي من التالي (ليس) من مميزات واجهة Keras المذكورة في الشرائح؟",
+    o: [
+      "سهلة الاستخدام",
+      "سهلة التوسيع",
+      "قابلة للتكوين والتركيب",
+      "توفر RBM"
+    ],
+    a: 3,
+    e: "المزايا الثلاث لواجهة Keras في الشريحة 458 هي: سهلة الاستخدام، قابلة للتكوين والتركيب، وسهلة التوسيع؛ بينما (توفر RBM) ليست من مميزاتها (شريحة 460)."
+  },
+  {
+    q: "[سؤال تقييم ذاتي - شريحة 475]: في عملية تطوير TensorFlow، تندرج خطوة (تحديد وظائف الخسارة، واختيار المحسنات، وتحديد مؤشرات تقييم النموذج) تحت عملية:",
+    o: [
+      "تدريب النموذج والتحقق منه",
+      "حفظ النموذج",
+      "بناء الشبكة",
+      "تجهيز البيانات"
+    ],
+    a: 2,
+    e: "في الشريحة 466، تندرج خطوة (تحديد وظائف الخسارة، واختيار المحسنات، وتحديد مؤشرات تقييم النموذج) نصاً تحت عملية (بناء الشبكة) (شريحة 475)."
+  },
+  {
+    q: "[سؤال تقييم ذاتي - شريحة 475]: تسمى دالة سوفت ماكس (Softmax) المستخدمة في التصنيف متعدد الفئات أيضاً بالدالة:",
+    o: [
+      "الأسية الطبيعية",
+      "اللوغاريتمية",
+      "الهندسية",
+      "النهائية"
+    ],
+    a: 0,
+    e: "نصت الشريحة 469 على أنه: تسمى دالة سوفت ماكس أيضاً بالدالة الأسية الطبيعية، وهي تعميم لدالة التصنيف الثنائية sigmoid (شريحة 475)."
+  },
+  {
+    q: "[سؤال تقييم ذاتي - شريحة 475]: في تدريب نماذج TensorFlow باستخدام model.fit، يشير ............ إلى عدد تكرارات التدريب:",
+    o: [
+      "دالة التنشيط",
+      "epoch",
+      "pooling",
+      "layers"
+    ],
+    a: 1,
+    e: "في TensorFlow يتم استخدام model.fit للتدريب، حيث يشير epoch إلى عدد تكرارات التدريب (شريحة 473 و 475)."
+  },
+  {
+    q: "لماذا كانت مكتبة (Torch) أقل شهرة على الرغم من مرونتها العالية كإطار عمل حاسوبي علمي مما أدى إلى تطوير (PyTorch) (شريحة 442)؟",
+    o: [
+      "لأنها لم تكن تدعم الموترات (Tensors)",
+      "لأنها كانت تعمل على الهواتف القديمة فقط",
+      "لأنها كانت تستخدم لغة البرمجة Lua",
+      "لأنها لم تكن تحتوي على خوارزميات تعلم آلي"
+    ],
+    a: 2,
+    e: "مكتبة Torch مشابهة لـ NumPy وتتميز بمرونة عالية، لكنها أقل شهرة لأنها تستخدم لغة البرمجة Lua، وهذا هو سبب تطوير PyTorch القائم على Python (شريحة 442)."
+  },
+  {
+    q: "أي ميزة من مميزات PyTorch تسمح للمطورين بإنشاء وتعديل الرسوم البيانية الحسابية أثناء التنفيذ دون الحاجة لإنشاء رسوم بيانية ثابتة مسبقاً كما في TensorFlow 1.x (شريحة 443)؟",
+    o: [
+      "الرسم البياني الثابت التصريحي",
+      "التدريب الموزع الحصري",
+      "استخدام لغة Lua",
+      "الشبكة العصبية الديناميكية"
+    ],
+    a: 3,
+    e: "بفضل ميزة (الشبكة العصبية الديناميكية)، يمكن لبرامج PyTorch إنشاء وتعديل الرسوم البيانية الحسابية ديناميكياً أثناء التنفيذ (شريحة 443)."
+  },
+  {
+    q: "عند استخدام وحدة معالجة رسومية واحدة (Single GPU)، على أي مكتبة تعتمد معظم أطر التعلم العميق لدعم نفس سرعة التدريب تقريباً (شريحة 446)؟",
+    o: [
+      "مكتبة cuDNN",
+      "مكتبة OpenCV",
+      "مكتبة WordCloud",
+      "مكتبة Tweepy"
+    ],
+    a: 0,
+    e: "عند استخدام وحدة معالجة رسومية واحدة، تعتمد معظم أطر التعلم العميق على cuDNN وبالتالي تدعم نفس سرعة التدريب تقريباً (شريحة 446)."
+  },
+  {
+    q: "ما الترتيب الذي تحتله واجهة (Keras) من حيث عدد النجوم على منصة GitHub، وما أثر تضمينها في TensorFlow 2.0 (شريحة 447)؟",
+    o: [
+      "تحتل المرتبة العاشرة، وجعلت الاختبار أكثر صعوبة",
+      "تحتل المرتبة الثالثة من حيث عدد النجوم على GitHub، وجعلت TensorFlow 2.x أكثر مرونة وأسهل في الاختبار",
+      "تحتل المرتبة الأولى، وألغت دعم لغة بايثون",
+      "لا توجد واجهة Keras على منصة GitHub"
+    ],
+    a: 1,
+    e: "تم تضمين Keras، الذي يحتل المرتبة الثالثة من حيث عدد النجوم على GitHub، في واجهة برمجة تطبيقات متقدمة لـ TensorFlow 2.0 مما جعله أكثر مرونة وأسهل في الاختبار (شريحة 447)."
+  },
+  {
+    q: "وفق مخطط نمو طلب الوظائف عبر الإنترنت (Demand on the recruitment market) في الشريحة 447، ما هو الترتيب التنازلي الصحيح للأطر الأربعة من الأكثر طلباً إلى الأقل؟",
+    o: [
+      "FastAI ثم Keras ثم PyTorch ثم TensorFlow",
+      "Keras ثم FastAI ثم TensorFlow ثم PyTorch",
+      "TensorFlow (الأول)، يليه PyTorch، ثم Keras، ثم FastAI",
+      "جميع الأطر الأربعة متساوية في الطلب"
+    ],
+    a: 2,
+    e: "يُظهر الرسم البياني في الشريحة 447 تصدر TensorFlow للمرتبة الأولى في سوق التوظيف، يليه PyTorch ثانياً، ثم Keras ثالثاً، ثم FastAI رابعاً."
+  },
+  {
+    q: "ما هو أبسط هياكل البيانات في TensorFlow، وما هي رتب كل من العددي (Scalar) والمتجه (Vector) فيه (شريحة 452)؟",
+    o: [
+      "القائمة النصية؛ والعددي من الرتبة 5",
+      "الجدول العلائقي؛ والمتجه من الرتبة 2",
+      "الشجرة الثنائية؛ والعددي من الرتبة 1",
+      "الموتر (Tensor)؛ حيث العددي (Scalar) من الرتبة 0، والمتجه (Vector) من الرتبة 1"
+    ],
+    a: 3,
+    e: "الـ Tensor هو أبسط هياكل البيانات في TensorFlow، والعددي هو Tensor من الرتبة 0، والمتجه من الرتبة 1، والمصفوفة من الرتبة 2 (شريحة 452)."
+  },
+  {
+    q: "إلى أي نوعين يتم تصنيف الموتر (Tensor) في مكتبة TensorFlow (شريحة 452)؟",
+    o: [
+      "ثابت (Constant) ومتغير (Variable)",
+      "موجب وسالب فقط",
+      "نصي وصوتي فقط",
+      "موزع ومركزي"
+    ],
+    a: 0,
+    e: "في TensorFlow، يتم تصنيف Tensor إلى: ثابت (Constant) ومتغير (Variable) (شريحة 452)."
+  },
+  {
+    q: "ما الفرق بين (الرسم البياني الثابت في TF 1.x) و(التنفيذ الحريص Eager Execution في TF 2.x) (شريحة 454)؟",
+    o: [
+      "الرسم الثابت يعتمد على الأوامر ويرجع النتيجة فوراً، بينما التنفيذ الحريص يتطلب جلسة",
+      "الرسم الثابت نموذج تصريحي يفصل تعريف الحساب عن التنفيذ (مفيد للنشر لكنه غير ملائم لتصحيح الأخطاء)، بينما التنفيذ الحريص يعتمد على الأوامر ويرجع النتيجة فوراً بعد تنفيذ العملية",
+      "كلاهما لا يعملان مع لغة بايثون",
+      "التنفيذ الحريص غير ممكّن افتراضياً في TensorFlow 2.x"
+    ],
+    a: 1,
+    e: "الرسم البياني الثابت في TF 1.x نموذج برمجة تصريحي يفصل التعريف عن التنفيذ ويصعب تصحيح أخطائه، أما التنفيذ الحريص في TF 2.x فيعتمد على الأوامر ويرجع النتيجة فوراً (شريحة 454)."
+  },
+  {
+    q: "في TensorFlow 2.x، ماذا نستخدم لإضافة مزين (Decorator) يقوم بتغليف دالة بايثون وبناء رسم بياني منها لتحقيق الأداء الأمثل وجعل النموذج قابلاً للنشر في أي مكان (شريحة 455)؟",
+    o: [
+      "نستخدم الدالة tf.errors",
+      "نستخدم الدالة tf.io.gfile",
+      "نستخدم المزين @tf.function (ضمن ميزة AutoGraph)",
+      "نستخدم الأمر pip install"
+    ],
+    a: 2,
+    e: "لتحقيق الأداء الأمثل وجعل النموذج قابلاً للنشر في أي مكان، يمكنك تشغيل @tf.function لإضافة مزين لبناء رسم بياني من برنامج بايثون (شريحة 455)."
+  },
+  {
+    q: "في الوحدات النمطية الشائعة لـ TensorFlow 2.x (شريحة 456-457)، ما هي الوحدة المسؤولة عن تنفيذ العمليات على (الملفات) مثل النسخ وإعادة التسمية، والوحدة المسؤولة عن إنشاء أنابيب الإدخال لقراءة (مجموعات البيانات)؟",
+    o: [
+      "tf.image للملفات، و tf.errors للبيانات",
+      "tf.keras للملفات، و tf.abs للبيانات",
+      "tf.distributions للملفات والبيانات معاً",
+      "tf.io.gfile للعمليات على الملفات، و tf.data للعمليات على مجموعات البيانات"
+    ],
+    a: 3,
+    e: "الوحدة tf.io.gfile تنفذ العمليات على الملفات (إدخال/إخراج، نسخ، إعادة تسمية)، بينما تنفذ tf.data العمليات على مجموعات البيانات وأنابيب الإدخال (شريحة 456-457)."
+  },
+  {
+    q: "أي وحدة نمطية في TensorFlow 2.x تعادل حزمة معالجة الصور الصغيرة من (OpenCV) وتوفر وظائف مثل تحويل تنسيق الصورة (RGB إلى HSV أو YUV) واكتشاف حافة سوبل (شريحة 457)؟",
+    o: [
+      "tf.image",
+      "tf.data",
+      "tf.io.gfile",
+      "tf.distributions"
+    ],
+    a: 0,
+    e: "الوحدة النمطية tf.image تنفذ العمليات على الصور وتعادل حزمة معالجة الصور الصغيرة من OpenCV (شريحة 457)."
+  },
+  {
+    q: "ما الأمر البرمجي الصحيح لتثبيت مكتبة TensorFlow في موجه أوامر Anaconda على نظام Windows 10 أو في طرفية Linux (شريحة 464-465)؟",
+    o: [
+      "git clone pytorch",
+      "pip install tensorflow",
+      "model.evaluate(tensorflow)",
+      "tf.matmul(install)"
+    ],
+    a: 1,
+    e: "يتم تثبيت TensorFlow عبر فتح موجه الأوامر وتشغيل أمر pip: pip install tensorflow (شريحة 464-465)."
+  },
+  {
+    q: "في مشروع التعرف على الأرقام المكتوبة بخط اليد باستخدام مجموعة بيانات (MNIST) (شريحة 468)، كم يبلغ عدد صور خط اليد في كل من مجموعة التدريب ومجموعة الاختبار؟",
+    o: [
+      "1,000 صورة تدريب و 500 صورة اختبار",
+      "10,000 صورة تدريب و 60,000 صورة اختبار",
+      "60,000 صورة في مجموعة التدريب، و 10,000 صورة في مجموعة الاختبار",
+      "100 صورة تدريب و 100 صورة اختبار"
+    ],
+    a: 2,
+    e: "تتكون مجموعات بيانات MNIST من مجموعة تدريب تضم 60,000 صورة خط يد وعلامات مطابقة، ومجموعة اختبار تضم 10,000 صورة (شريحة 468)."
+  },
+  {
+    q: "في كود تعريف بنية شبكة انحدار Softmax لمشروع MNIST: x = tf.placeholder(tf.float32, [None, 784])، ماذا يعني كل من الرقم (784) والكلمة (None) (شريحة 471)؟",
+    o: [
+      "784 هو عدد الفئات، و None تعني صفر صورة",
+      "784 هو عدد الطبقات المخفية، و None تعني خطأ برمجي",
+      "784 هو معدل التعلم، و None تعني بدون انحياز",
+      "784 هو حجم المتجه بعد تسطيح كل صورة إدخال، و None تشير إلى أنه يمكن أن يكون بأي طول (أي عدد من العينات)"
+    ],
+    a: 3,
+    e: "يتم تسطيح كل صورة إدخال في متجه مكون من 784 بُعداً، ويكون شكل الموتر [None, 784] حيث تشير None إلى أنه يمكن أن يكون بأي طول (شريحة 471)."
+  },
+  {
+    q: "في كود TensorFlow: y = tf.nn.softmax(tf.matmul(x, w) + b)، ما العملية التي تنفذها الدالة tf.matmul(x, w) وكيف تمت تهيئة المتغيرين w و b (شريحة 471)؟",
+    o: [
+      "تشير tf.matmul(x, w) إلى ضرب المصفوفة x في الوزن w، وتمت تهيئة القيم الأولية لـ w و b بـ 0 باستخدام tf.Variable(tf.zeros(...))",
+      "تقوم بقسمة x على w، وتمت تهيئتهما بالرقم 100",
+      "تقوم بحذف الوزن w، ولا تستخدم أي متغيرات",
+      "تقوم برسم الصور على الشاشة"
+    ],
+    a: 0,
+    e: "يُستخدم tf.Variable(tf.zeros(...)) للإشارة للوزن w والانحياز b بقيم أولية 0، وتُستخدم tf.matmul(x, w) للإشارة إلى ضرب x في w (شريحة 471)."
+  },
+  {
+    q: "ما الفرق بين وظيفة الدالة (model.compile) والدالة (model.evaluate) في كود مشروع MNIST بـ TensorFlow (شريحة 472 و 474)؟",
+    o: [
+      "كلتاهما تستخدمان لحذف مجموعة البيانات",
+      "تُستخدم model.compile لتجميع النموذج (تحديد المحسن Adam ودالة الخسارة categorical_crossentropy)، بينما تُستخدم model.evaluate لاختبار النموذج بمجموعة الاختبار وحساب الخسارة والدقة",
+      "تُستخدم model.compile لاختبار النموذج، و model.evaluate لتحميل الصور من الإنترنت",
+      "لا توجد دالة باسم model.evaluate في TensorFlow"
+    ],
+    a: 1,
+    e: "تقوم model.compile بتجميع الشبكة بتحديد المحسن ودالة الخسارة والمقاييس (شريحة 472)، بينما تختبر model.evaluate النموذج على مجموعة الاختبار لحساب قيمة الخسارة والدقة (شريحة 474)."
+  }
+];
+
+// بناء شبكة المصطلحات
+const termsGrid = document.getElementById("termsGrid");
+terms.forEach(([en, ar]) => {
+  const d = document.createElement("div");
+  d.className = "card";
+  d.style.margin = "0";
+  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
+  termsGrid.appendChild(d);
+});
+
+// إدارة البطاقات التعليمية
+let ci = 0, showAnswer = false;
+function renderCard() {
+  document.getElementById("flashTerm").textContent = cards[ci][0];
+  const ansEl = document.getElementById("flashAnswer");
+  ansEl.innerHTML = cards[ci][1].replace(/\n/g, "<br>");
+  ansEl.hidden = !showAnswer;
+  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
+  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+}
+document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
+document.getElementById("flashcard").addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
+});
+document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
+document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
+renderCard();
+
+// التنقل بين التبويبات
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+// إدارة الاختبار
+let answers = {};
+function renderQuiz() {
+  const area = document.getElementById("quizArea");
+  area.innerHTML = "";
+  const letters = ["أ", "ب", "ج", "د"];
+  questions.forEach((item, i) => {
+    const box = document.createElement("div");
+    box.className = "qbox";
+    const isSelfEval = item.q.includes("[سؤال تقييم ذاتي");
+    const badgeHtml = isSelfEval ? `<div style="margin-bottom:6px"><span class="tag self-eval">★ سؤال تقييم ذاتي رسمي في الشرائح</span></div>` : "";
+    box.innerHTML = `${badgeHtml}<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
+    const opts = box.querySelector(".options");
+    item.o.forEach((opt, j) => {
+      const btn = document.createElement("button");
+      btn.className = "option";
+      btn.textContent = `${letters[j]}) ${opt}`;
+      btn.onclick = () => {
+        answers[i] = j;
+        [...opts.children].forEach((x, k) => {
+          x.classList.remove("correct", "wrong");
+          x.disabled = true;
+          if (k === item.a) x.classList.add("correct");
+          if (k === j && j !== item.a) x.classList.add("wrong");
+        });
+        const fb = document.getElementById("fb" + i);
+        fb.hidden = false;
+        fb.className = "feedback " + (j === item.a ? "good" : "bad");
+        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
+        updateScore();
+      };
+      opts.appendChild(btn);
+    });
+    area.appendChild(box);
+  });
+  updateScore();
+}
+
+function updateScore() {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
+  document.getElementById("score").textContent = `النتيجة: ${correct} / ${questions.length}`;
+  document.getElementById("progressBar").style.width = (Object.keys(answers).length / questions.length * 100) + "%";
+}
+
+document.getElementById("resetQuiz").onclick = () => {
+  answers = {};
+  document.getElementById("finalResult").textContent = "";
+  renderQuiz();
+};
+
+document.getElementById("finishQuiz").onclick = () => {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
+  const pct = Math.round(correct / questions.length * 100);
+  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${questions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! إتقان كامل للفصل الثالث عشر من موضوعات مختارة." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
+};
+
+renderQuiz();
+</script>
+</body>
+</html>
