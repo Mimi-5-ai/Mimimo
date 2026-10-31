@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الفصل الثاني الشامل | مستحدثات تقنية في الذكاء الاصطناعي</title>
+<style>
+:root{
+  --bg:#f4f6fb;
+  --card:#ffffff;
+  --ink:#0f172a;
+  --muted:#64748b;
+  --accent:#4f46e5;
+  --accent-dark:#3730a3;
+  --accent2:#eef2ff;
+  --teal:#0d9488;
+  --teal-light:#ccfbf1;
+  --line:#e2e8f0;
+  --good:#059669;
+  --good-bg:#ecfdf5;
+  --bad:#dc2626;
+  --bad-bg:#fef2f2;
+  --warn:#d97706;
+  --warn-bg:#fffbeb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
+header{background:linear-gradient(135deg,#1e1b4b,#3730a3,#0d9488);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(30,27,75,0.2)}
+.wrap{max-width:1060px;margin:auto;padding:0 16px}
+.eyebrow{opacity:.95;font-size:.9rem;background:rgba(255,255,255,0.16);display:inline-block;padding:4px 14px;border-radius:99px;margin-bottom:6px;font-weight:bold}
+h1{margin:5px 0;font-size:clamp(1.55rem,4vw,2.25rem)}
+header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
+nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:rgba(255,255,255,0.18);color:#ffffff;font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
+nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
+nav button.active{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+main .btn{background:var(--accent2);color:var(--accent-dark)}
+main .btn.primary{background:var(--accent);color:white}
+main{padding:22px 0 48px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(15,23,42,0.04)}
+h2{font-size:1.35rem;margin:0 0 12px;color:#1e1b4b}
+h3{font-size:1.06rem;margin:10px 0 6px;color:var(--accent-dark)}
+h4{font-size:.98rem;margin:8px 0 4px;color:#0f172a}
+small,.muted{color:var(--muted)}
+ul,ol{padding-right:22px;margin:8px 0}
+li{margin:6px 0}
+details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
+summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f8faff;color:#1e1b4b;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
+details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
+.details-body{padding:16px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
+.tag.teal{background:var(--teal-light);color:var(--teal)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#f1f5f9;color:#1e1b4b;font-weight:bold}
+tr:last-child td{border-bottom:0}
+.note{border-right:4px solid var(--accent);padding:10px 14px;background:#f5f7ff;border-radius:8px;margin:10px 0}
+.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
+.step-card{border:1px solid var(--line);border-radius:12px;padding:14px;background:#f8fafc}
+.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
+.options{display:grid;gap:8px;margin-top:12px}
+.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
+.option:hover:not(:disabled){border-color:var(--accent);background:#f8faff}
+.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
+.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
+.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
+.feedback.good{color:var(--good);background:var(--good-bg)}
+.feedback.bad{color:var(--bad);background:var(--bad-bg)}
+.progress{height:10px;background:#e2e8f0;border-radius:9px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
+.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#eef2ff);border:2px solid #c7d2fe;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
+.flashcard:hover{transform:scale(1.005)}
+.flashcard .term{font-size:1.35rem;font-weight:bold;color:#1e1b4b}
+.flashcard .answer{margin-top:16px;font-size:1.08rem;color:var(--accent-dark);background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
+@media(max-width:600px){
+  .card{padding:14px}
+  nav button{flex:1 1 calc(50% - 8px);text-align:center}
+  .flashcard{min-height:200px;padding:18px}
+  th,td{padding:8px 10px;font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">مقرر الذكاء الاصطناعي • تغطية شاملة 100%</div>
+    <h1>الفصل الثاني: مستحدثات تقنية في الذكاء الاصطناعي</h1>
+    <p>يغطي الذكاء الاصطناعي التوليدي (Generative AI)، النماذج اللغوية الكبيرة (LLMs) وهندسة الأوامر (Prompt Engineering) وتقنية RAG، ووكلاء الذكاء الاصطناعي (AI Agents) وأنواعهم الخمسة</p>
+    <nav>
+      <button class="active" data-tab="summary">الشرح الشامل</button>
+      <button data-tab="tables">جداول المقارنات والملخصات (4)</button>
+      <button data-tab="terms">المصطلحات والمفاهيم (28)</button>
+      <button data-tab="cards">البطاقات التعليمية (28)</button>
+      <button data-tab="quiz">الاختبار الشامل (25)</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- ================= التبويب الأول: الشرح الشامل ================= -->
+  <section id="summary" class="panel active">
+    <div class="card">
+      <h2>خريطة الفصل الثاني: مستحدثات تقنية في الذكاء الاصطناعي</h2>
+      <div class="grid">
+        <div>
+          <span class="tag">الوحدة الأولى</span>
+          <h3>الذكاء الاصطناعي التوليدي (Generative AI)</h3>
+          <p>المفهوم، الفرق الجوهري بين الذكاء التقليدي (التمييزي) والتوليدي، النماذج العميقة الأربعة المشغلة له، تطبيقاته المتعددة، وتحدياته (كالهلوسة والتزييف العميق).</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثانية</span>
+          <h3>نماذج LLM وهندسة الأوامر و RAG</h3>
+          <p>مفهوم النماذج اللغوية الكبيرة (LLMs) وبنية المحولات، مراحل التدريب الثلاث (Pre-training, SFT, RLHF)، هندسة الأوامر (Zero/Few-shot, CoT)، وتقنية RAG.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثالثة</span>
+          <h3>وكلاء الذكاء الاصطناعي (AI Agents)</h3>
+          <p>مفهوم الوكيل الذكي (المستشعرات والمؤثرات)، توصيف بيئة العمل (PEAS)، الفرق بين LLM والوكيل المستقل، والأنواع الخمسة للوكلاء الأذكياء.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- الوحدة الأولى -->
+    <details open>
+      <summary>1) الوحدة الأولى: الذكاء الاصطناعي التوليدي (Generative AI) وآلية عمله وتطبيقاته وتحدياته</summary>
+      <div class="details-body">
+        <h3>أولاً: مفهوم الذكاء الاصطناعي التوليدي والفرق بينه وبين الذكاء التقليدي</h3>
+        <ul>
+          <li><b>تعريف الذكاء الاصطناعي التوليدي (<span dir="ltr">Generative AI</span>):</b> هو فرع متقدم من الذكاء الاصطناعي يركز على <b>إنشاء وإنتاج محتوى جديد وأصلي</b> (مثل النصوص، الصور، المقاطع الصوتية، الفيديوهات، والأكواد البرمجية) لم يكن موجوداً من قبل، وذلك من خلال تعلم الأنماط والهياكل المعقدة من كميات هائلة من بيانات التدريب.</li>
+          <li><b>الفرق الجوهري بين الذكاء الاصطناعي التقليدي (التمييزي) والتوليدي:</b>
+            <ul>
+              <li><b>الذكاء الاصطناعي التقليدي / التمييزي (<span dir="ltr">Discriminative / Traditional AI</span>):</b> يركز على تحليل البيانات الموجودة مسبقاً، وتصنيفها، واكتشاف الأنماط، أو التنبؤ بقيم وقرارات محددة (مثل: تحديد ما إذا كانت الصورة لقطة أم كلب، أو كشف البريد المزعج).</li>
+              <li><b>الذكاء الاصطناعي التوليدي (<span dir="ltr">Generative AI</span>):</b> يتجاوز التصنيف إلى <b>الابتكار والإنشاء</b>؛ فبدلاً من تمييز صورة القطة، يقوم برسم وتوليد صورة جديدة تماماً لقطة بناءً على وصف نصي.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <div class="exam-alert">
+          <h3>ثانياً: البنى والنماذج العميقة الأربعة التي يقوم عليها الذكاء الاصطناعي التوليدي - مهم جداً:</h3>
+          <ol>
+            <li><b>بنية المحولات (<span dir="ltr">Transformers</span>):</b> حجر الأساس في ثورة الذكاء الاصطناعي التوليدي للنصوص واللغات؛ تعتمد على آلية <b>الانتباه الذاتي (<span dir="ltr">Self-Attention</span>)</b> لمعالجة البيانات المتسلسلة بالتوازي وفهم العلاقات البعيدة بين الكلمات في السياق.</li>
+            <li><b>شبكات الخصومة التوليدية (<span dir="ltr">GANs - Generative Adversarial Networks</span>):</b> تتكون من شبكتين عصبيتين تتنافسان مع بعضهما: <b>المولد (<span dir="ltr">Generator</span>)</b> الذي ينشئ بيانات مزيفة تحاكي الواقع، و<b>المميز (<span dir="ltr">Discriminator</span>)</b> الذي يحاول كشف ما إذا كانت البيانات حقيقية أم مزيفة، مما يؤدي لإنتاج صور وفيديوهات عالية الواقعية.</li>
+            <li><b>أجهزة الترميز التلقائي المتغيرة (<span dir="ltr">VAEs - Variational Autoencoders</span>):</b> تتكون من مشفر (<span dir="ltr">Encoder</span>) يضغط البيانات في فضاء كامن احتمالي، ومفكك ترميز (<span dir="ltr">Decoder</span>) يولد عينات جديدة من هذا الفضاء.</li>
+            <li><b>نماذج الانتشار (<span dir="ltr">Diffusion Models</span>):</b> تعمل عن طريق إضافة تشويش (ضوضاء) تدريجي للبيانات (كالصور) ثم تدريب النموذج على <b>عكس العملية وإزالة الضوضاء تدريجياً</b> لتوليد صور فائقة الدقة من الصفر (مثل نماذج <b dir="ltr">Midjourney</b> و <b dir="ltr">DALL-E</b> و <b dir="ltr">Stable Diffusion</b>).</li>
+          </ol>
+        </div>
+
+        <h3>ثالثاً: أبرز مجالات وتطبيقات الذكاء الاصطناعي التوليدي</h3>
+        <div class="grid">
+          <div class="step-card">
+            <span class="tag">1. توليد النصوص والمحادثة</span>
+            <p>كتابة المقالات، تلخيص التقارير، الترجمة، والإجابة التفاعلية عن الأسئلة (مثل: <b dir="ltr">ChatGPT</b>، و <b dir="ltr">Gemini</b>، و <b dir="ltr">Claude</b>، ونموذج <b dir="ltr">علّام ALLaM</b> العربي).</p>
+          </div>
+          <div class="step-card">
+            <span class="tag">2. توليد الصور والتصميم</span>
+            <p>تحويل الأوصاف النصية إلى صور فنية ورسوميات واقعية (<span dir="ltr">Text-to-Image</span>) وتحرير الصور (مثل: <b dir="ltr">Midjourney</b> و <b dir="ltr">DALL-E</b>).</p>
+          </div>
+          <div class="step-card">
+            <span class="tag">3. توليد الأكواد البرمجية</span>
+            <p>كتابة الشيفرات البرمجية بلغات متعددة، إكمال الكود تلقائياً، واكتشاف الأخطاء وإصلاحها (مثل: <b dir="ltr">GitHub Copilot</b>).</p>
+          </div>
+          <div class="step-card">
+            <span class="tag">4. توليد الصوت والفيديو</span>
+            <p>تحويل النص إلى كلام بشري طبيعي، تأليف الموسيقى، وتوليد مقاطع فيديو من النصوص (<span dir="ltr">Text-to-Video</span> مثل <b dir="ltr">Sora</b> و <b dir="ltr">Runway</b>).</p>
+          </div>
+        </div>
+
+        <h3>رابعاً: تحديات ومخاطر الذكاء الاصطناعي التوليدي</h3>
+        <ul>
+          <li><b>1. الهلوسة (<span dir="ltr">Hallucination</span>):</b> قيام النموذج بتوليد معلومات غير صحيحة أو مختلقة تماماً وصياغتها بأسلوب واثق يبدو منطقياً ومقنعاً للمستخدم.</li>
+          <li><b>2. التزييف العميق (<span dir="ltr">Deepfakes</span>) والتضليل:</b> استغلال تقنيات توليد الصور والصوت والفيديو في انتحال الشخصيات ونشر الأخبار الكاذبة والاحتيال.</li>
+          <li><b>3. حقوق الملكية الفكرية وحقوق النشر:</b> الإشكاليات القانونية حول تدريب النماذج على أعمال فنية وأدبية محمية بحقوق الطبع والنشر دون إذن أصحابها.</li>
+          <li><b>4. التحيز والخصوصية واستهلاك الطاقة:</b> عكس التحيزات الموجودة في بيانات الإنترنت، وخطر تسريب البيانات الحساسة، والاستهلاك الهائل للطاقة والموارد الحاسوبية أثناء التدريب.</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- الوحدة الثانية -->
+    <details open>
+      <summary>2) الوحدة الثانية: النماذج اللغوية الكبيرة (LLMs)، هندسة الأوامر (Prompt Engineering)، وتقنية RAG</summary>
+      <div class="details-body">
+        <h3>أولاً: مفهوم النماذج اللغوية الكبيرة (<span dir="ltr">Large Language Models - LLMs</span>) وآلية عملها</h3>
+        <ul>
+          <li><b>تعريف <span dir="ltr">LLMs</span>:</b> هي نماذج ذكاء اصطناعي وتعلم عميق ضخمة جداً (تضم مليارات أو تريليونات المعلمات <span dir="ltr">Parameters</span>)، مبنية على معمارية <b>المحولات (<span dir="ltr">Transformers</span>)</b>، وتم تدريبها على كميات هائلة من النصوص لتمكينها من فهم وتوليد ومعالجة اللغة البشرية بكفاءة عالية.</li>
+          <li><b>كيف تعمل النماذج اللغوية الكبيرة؟</b>
+            <ol>
+              <li><b>الترميز (<span dir="ltr">Tokenization</span>):</b> تقسيم النص المدخل إلى وحدات أساسية صغيرة تُسمى <b>رموزاً أو توكنز (<span dir="ltr">Tokens</span>)</b> قد تكون كلمات كاملة أو أجزاء من كلمات أو أحرفاً.</li>
+              <li><b>آلية الانتباه الذاتي (<span dir="ltr">Self-Attention</span>):</b> حساب قوة العلاقة والارتباط بين كل كلمة وباقي الكلمات في الجملة لفهم السياق الدقيق والمعنى المقصود.</li>
+              <li><b>التنبؤ بالرمز التالي (<span dir="ltr">Next-Token Prediction</span>):</b> المبدأ الإحصائي الأساسي لعمل النموذج؛ حيث يحسب التوزيع الاحتمالي للكلمات الممكنة ويختار الكلمة/الرمز التالي الأكثر احتمالاً وملاءمة للسياق خطوة بخطوة لتكوين الإجابة الكاملة.</li>
+            </ol>
+          </li>
+        </ul>
+
+        <div class="exam-alert">
+          <h3>ثانياً: المراحل الثلاث لبناء وتدريب النماذج اللغوية الكبيرة (LLMs) بالترتيب - موضع أسئلة مؤكدة:</h3>
+          <ol>
+            <li><b>المرحلة الأولى: التدريب المسبق (<span dir="ltr">Pre-training</span>):</b>
+              <br>يتم فيها تدريب النموذج بطريقة <b>التعلم ذاتي الإشراف (<span dir="ltr">Self-supervised learning</span>)</b> على بيانات نصية ضخمة جداً وغير مصنفة من الإنترنت والكتب والمقالات، ليتعلم قواعد اللغة والحقائق العامة والقدرة على إكمال النصوص، وينتج عن هذه المرحلة <b>النموذج الأساسي (<span dir="ltr">Base / Foundation Model</span>)</b>.</li>
+            <li><b>المرحلة الثانية: الضبط الدقيق الخاضع للإشراف (<span dir="ltr">Supervised Fine-Tuning - SFT</span>):</b>
+              <br>يتم تدريب النموذج الأساسي على مجموعات بيانات عالية الجودة ومصنفة تحتوي على <b>أزواج من (التعليمات/الأسئلة والإجابات النموذجية)</b> ليتعلم كيف يتبع أوامر المستخدم ويجيب كمساعد ذكي.</li>
+            <li><b>المرحلة الثالثة: التعلم المعزز من التغذية الراجعة البشرية (<span dir="ltr">RLHF - Reinforcement Learning from Human Feedback</span>):</b>
+              <br>يقيّم المراجعون البشريون عدة إجابات ينتجها النموذج ويرتبونها حسب الجودة والأمان، ليتم بناء <b>نموذج مكافأة (<span dir="ltr">Reward Model</span>)</b> يقوم بمحاذاة النموذج اللغوي (<span dir="ltr">Alignment</span>) مع القيم البشرية وتقليل الإجابات الضارة أو المتحيزة أو الهلوسة.</li>
+          </ol>
+        </div>
+
+        <h3>ثالثاً: هندسة الأوامر / التلقين (<span dir="ltr">Prompt Engineering</span>) وتقنياتها</h3>
+        <ul>
+          <li><b>تعريف هندسة الأوامر:</b> هي عملية تصميم وصياغة وتحسين المدخلات النصية أو التعليمات (<span dir="ltr">Prompts</span>) المقدمة لنماذج الذكاء الاصطناعي التوليدي بهدف توجيهها لإنتاج مخرجات دقيقة، موثوقة، وملائمة للغرض المطلوب.</li>
+          <li><b>العناصر الخمسة لبناء أمر فعال (<span dir="ltr">Prompt Elements</span>):</b>
+            <br>1) <b>تحديد الدور (<span dir="ltr">Role / Persona</span>):</b> مثل <i>"تصرف كخبير في الأمن السيبراني"</i> • 2) <b>المهمة أو التعليمات (<span dir="ltr">Task / Instruction</span>):</b> الفعل المطلوب كالتلخيص أو المقارنة • 3) <b>السياق (<span dir="ltr">Context</span>):</b> الخلفية والقيود • 4) <b>بيانات الإدخال (<span dir="ltr">Input Data</span>):</b> النص أو البيانات المراد معالجتها • 5) <b>تنسيق المخرجات (<span dir="ltr">Output Format</span>):</b> مثل طلب الإجابة في جدول أو نقاط محددة.</li>
+          <li class="exam-alert"><b>تقنيات وأساليب هندسة الأوامر الثلاثة الرئيسية:</b>
+            <ol>
+              <li><b>التلقين الصفري / بدون أمثلة (<span dir="ltr">Zero-Shot Prompting</span>):</b> توجيه الأمر أو السؤال للنموذج مباشرة دون تزويده بأي أمثلة سابقة في النص، اعتماداً على معرفته المكتسبة أثناء التدريب المسبق.</li>
+              <li><b>التلقين بأمثلة قليلة (<span dir="ltr">One-Shot / Few-Shot Prompting</span>):</b> تزويد النموذج بمثال واحد (<span dir="ltr">One-Shot</span>) أو عدة أمثلة (<span dir="ltr">Few-Shot</span>) من المدخلات والمخرجات المطلوبة داخل الأمر، ليتعلم النمط والأسلوب المطلوب قبل الإجابة عن السؤال الجديد.</li>
+              <li><b>سلسلة الأفكار (<span dir="ltr">Chain-of-Thought - CoT Prompting</span>):</b> مطالبة النموذج بـ <b>التفكير خطوة بخطوة (<span dir="ltr">Think step-by-step</span>)</b> وتوضيح خطوات الاستنتاج المنطقي الوسيطة قبل إعطاء النتيجة النهائية، وهو أسلوب فعال جداً في المسائل الحسابية والمنطقية المعقدة.</li>
+            </ol>
+          </li>
+        </ul>
+
+        <h3>رابعاً: التوليد المعزز بالاسترجاع (<span dir="ltr">RAG - Retrieval-Augmented Generation</span>)</h3>
+        <ul>
+          <li><b>المشكلة في نماذج <span dir="ltr">LLMs</span> التقليدية:</b> معرفتها مقيدة بتاريخ انتهاء بيانات تدريبها (<span dir="ltr">Knowledge Cutoff</span>)، ولا تطلع على البيانات الخاصة بالمؤسسات، وقد تقع في <b>الهلوسة</b> عند سؤالها عن معلومات حديثة أو دقيقة.</li>
+          <li><b>الحل عبر تقنية <span dir="ltr">RAG</span>:</b> تقنية تربط النموذج اللغوي الكبير بقاعدة معرفة خارجية موثوقة ومحدثة (مثل مستندات الشركة أو قواعد البيانات المتجهة)؛ فعندما يطرح المستخدم سؤالاً، يقوم النظام أولاً بـ <b>استرجاع (<span dir="ltr">Retrieval</span>)</b> الوثائق والمقاطع ذات الصلة، ثم يدمجها مع سؤال المستخدم في السياق ليقوم النموذج بـ <b>توليد (<span dir="ltr">Generation</span>)</b> إجابة دقيقة وموثقة بالمصادر دون الحاجة لإعادة تدريب النموذج المكلفة.</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- الوحدة الثالثة -->
+    <details open>
+      <summary>3) الوحدة الثالثة: وكلاء الذكاء الاصطناعي (AI Agents)، توصيف PEAS، وأنواع الوكلاء الخمسة</summary>
+      <div class="details-body">
+        <h3>أولاً: مفهوم وكيل الذكاء الاصطناعي (<span dir="ltr">AI Agent</span>) ودورة عمله</h3>
+        <ul>
+          <li><b>تعريف الوكيل (<span dir="ltr">Agent</span>):</b> هو أي كيان برمجي أو مادي مستقل يدرك بيئته المحيطة من خلال <b>المستشعرات (<span dir="ltr">Sensors</span>)</b>، ويتخذ قرارات بناءً على ما يدركه، ثم يتصرف ويؤثر في تلك البيئة من خلال <b>المؤثرات أو المشغلات (<span dir="ltr">Actuators / Effectors</span>)</b>.</li>
+          <li><b>الوكيل العقلاني / الرشيد (<span dir="ltr">Rational Agent</span>):</b> هو الوكيل الذي يختار دائماً الفعل الذي يُتوقع أن <b>يعظم مقياس أدائه (<span dir="ltr">Performance Measure</span>)</b> استناداً إلى سلسلة الإدراكات التي لاحظها وأي معرفة مسبقة يمتلكها.</li>
+          <li><b>دورة عمل الوكيل الذكي:</b>
+            <br><span class="tag">1. الإدراك (Perception) بالمستشعرات</span> &rarr; <span class="tag">2. التفكير والتخطيط والذاكرة (Reasoning & Planning)</span> &rarr; <span class="tag">3. الفعل والتنفيذ (Action) بالمشغلات والأدوات</span> &rarr; <span class="tag">4. التعلم من التغذية الراجعة (Learning)</span>.</li>
+        </ul>
+
+        <div class="exam-alert">
+          <h3>ثانياً: توصيف بيئة المهمة للوكيل الذكي (<span dir="ltr">PEAS Framework</span>) - موضع أسئلة مؤكدة:</h3>
+          <p>لتصميم أي وكيل ذكي، يجب تحديد عناصر بيئة المهمة الأربعة والتي تُختصر في كلمة <b dir="ltr">PEAS</b>:</p>
+          <ol>
+            <li><b dir="ltr">P - Performance Measure (مقياس الأداء):</b> المعيار الذي نقيم به مدى نجاح الوكيل في تحقيق هدفه (في السيارة ذاتية القيادة: الأمان، الوصول السريع، الالتزام بقوانين المرور، وراحة الركاب).</li>
+            <li><b dir="ltr">E - Environment (البيئة):</b> المحيط الخارجي الذي يعمل ويتفاعل فيه الوكيل (في السيارة ذاتية القيادة: الطرق، السيارات الأخرى، المشاة، إشارات المرور، والطقس).</li>
+            <li><b dir="ltr">A - Actuators (المشغلات / المؤثرات):</b> الوسائل أو الأدوات التي ينفذ بها الوكيل أفعاله لتغيير البيئة (في السيارة ذاتية القيادة: عجلة القيادة/المقود، دواسة الوقود، الفرامل، وإشارات التنبيه).</li>
+            <li><b dir="ltr">S - Sensors (المستشعرات / الحساسات):</b> الوسائل التي يستقبل بها الوكيل المدخلات والبيانات من البيئة (في السيارة ذاتية القيادة: الكاميرات، الرادار، الليدار <span dir="ltr">LiDAR</span>، نظام <span dir="ltr">GPS</span>، وعدّاد السرعة).</li>
+          </ol>
+        </div>
+
+        <div class="exam-alert">
+          <h3>ثالثاً: الأنواع الخمسة لوكلاء الذكاء الاصطناعي (من الأبسط إلى الأكثر تطوراً) - مهمة جداً:</h3>
+          <ol>
+            <li><b>وكيل رد الفعل البسيط (<span dir="ltr">Simple Reflex Agent</span>):</b>
+              <ul>
+                <li>أبسط أنواع الوكلاء؛ يختار أفعاله بناءً على <b>الإدراك الحالي فقط (<span dir="ltr">Current Percept</span>)</b> متجاهلاً كل تاريخ الإدراكات السابقة.</li>
+                <li>يعمل وفق قاعدة <b>الشرط والفعل (<span dir="ltr">Condition-Action Rule</span>: إذا حدث كذا &larr; افعل كذا)</b>، مثل: <i>"إذا كانت السيارة الأمامية تضغط الفرامل (شرط) &larr; اضغط الفرامل فوراً (فعل)"</i>، ولا ينجح إلا إذا كانت البيئة <b>مرئية بالكامل (<span dir="ltr">Fully Observable</span>)</b>.</li>
+              </ul>
+            </li>
+            <li><b>وكيل رد الفعل المبني على نموذج (<span dir="ltr">Model-Based Reflex Agent</span>):</b>
+              <ul>
+                <li>يتغلب على محدودية الرؤية الجزئية للبيئة من خلال الاحتفاظ بـ <b>حالة داخلية (<span dir="ltr">Internal State</span>)</b> ونموذج داخلي لكيفية عمل العالم وتطوره، فيدمج الإدراك الحالي مع تاريخ الإدراكات السابقة لاتخاذ القرار.</li>
+              </ul>
+            </li>
+            <li><b>الوكيل المبني على الهدف (<span dir="ltr">Goal-Based Agent</span>):</b>
+              <ul>
+                <li>لا يكفيه معرفة الحالة الحالية للبيئة، بل يحتاج إلى معلومات واضحة عن <b>الهدف (<span dir="ltr">Goal</span>)</b> المراد الوصول إليه، فيقوم بعمليات <b>البحث والتخطيط (<span dir="ltr">Search and Planning</span>)</b> لاختيار سلسلة الأفعال التي تحقق هذا الهدف.</li>
+              </ul>
+            </li>
+            <li><b>الوكيل المبني على المنفعة (<span dir="ltr">Utility-Based Agent</span>):</b>
+              <ul>
+                <li>عندما توجد عدة طرق للوصول إلى الهدف نفسه، يستخدم هذا الوكيل <b>دالة المنفعة (<span dir="ltr">Utility Function</span>)</b> لقياس درجة الرضا أو الكفاءة لكل حالة، فيختار الطريق <b>الأفضل والأكثر منفعة</b> (الأسرع، الأقل تكلفة، والأكثر أماناً).</li>
+              </ul>
+            </li>
+            <li><b>الوكيل المتعلم (<span dir="ltr">Learning Agent</span>):</b>
+              <ul>
+                <li>وكيل يمتلك القدرة على العمل في بيئات غير معروفة مسبقاً وتحسين كفاءته بمرور الوقت من خلال التعلم من الخبرة؛ ويتكون من <b>4 مكونات أساسية</b>:
+                  <br>أ) <b>عنصر التعلم (<span dir="ltr">Learning Element</span>):</b> مسؤول عن إجراء التحسينات والتعديلات.
+                  <br>ب) <b>عنصر الأداء (<span dir="ltr">Performance Element</span>):</b> مسؤول عن اختيار الأفعال الخارجية.
+                  <br>ج) <b>الناقد (<span dir="ltr">Critic</span>):</b> يقيم أداء الوكيل مقارنة بمعيار ثابت ويزود عنصر التعلم بالتغذية الراجعة.
+                  <br>د) <b>مولد المشكلات (<span dir="ltr">Problem Generator</span>):</b> يقترح أفعالاً استكشافية جديدة تقود إلى تجارب وخبرات جديدة.</li>
+              </ul>
+            </li>
+          </ol>
+        </div>
+
+        <h3>رابعاً: الوكلاء المستقلون المعتمدون على <span dir="ltr">LLMs</span> والفرق بين النموذج اللغوي والوكيل الذكي</h3>
+        <ul>
+          <li>في الجيل الحديث من الذكاء الاصطناعي، أصبحت النماذج اللغوية الكبيرة (<span dir="ltr">LLMs</span>) تُستخدم كـ <b>"العقل المدبر" (<span dir="ltr">Brain / Core Controller</span>)</b> لوكلاء الذكاء الاصطناعي المستقلين.</li>
+          <li><b>ما الفرق بين نموذج <span dir="ltr">LLM</span> التقليدي ووكيل الذكاء الاصطناعي (<span dir="ltr">AI Agent</span>)؟</b>
+            <ul>
+              <li><b>النموذج اللغوي (<span dir="ltr">LLM</span>):</b> نظام تفاعلي ينتظر أمر المستخدم ليولد نصاً كرد مباشر (سؤال وجواب)، ولا يقوم بتقسيم الأهداف الكبرى أو استخدام أدوات خارجية من تلقاء نفسه.</li>
+              <li><b>وكيل الذكاء الاصطناعي (<span dir="ltr">AI Agent</span>):</b> يتمتع بـ <b>الاستقلالية (<span dir="ltr">Autonomy</span>)</b>؛ فهو يأخذ هدفاً عاماً من المستخدم، ثم يقوم تلقائياً بـ: 1) <b>التخطيط وتقسيم المهمة (<span dir="ltr">Task Decomposition</span>)</b> إلى مهام فرعية، 2) <b>استخدام الأدوات الخارجية (<span dir="ltr">Tool Use</span>)</b> مثل البحث في الويب، تشغيل أكواد برمجية، أو استدعاء واجهات <span dir="ltr">APIs</span>، 3) <b>حفظ الذاكرة (<span dir="ltr">Memory</span>)</b> قصيرة وطويلة المدى، و4) المراجعة الذاتية والتعاون مع وكلاء آخرين (<span dir="ltr">Multi-Agent Systems</span>) حتى إنجاز الهدف بالكامل.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= التبويب الثاني: جداول المقارنات والملخصات ================= -->
+  <section id="tables" class="panel">
+    <div class="card">
+      <h2>1. جدول مقارنة الذكاء الاصطناعي التقليدي (التمييزي) والذكاء الاصطناعي التوليدي ونماذجه</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>وجه المقارنة / النموذج</th>
+            <th>الذكاء التقليدي / التمييزي (Discriminative AI)</th>
+            <th>الذكاء الاصطناعي التوليدي (Generative AI)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>الهدف والوظيفة الأساسية</b></td>
+            <td>تحليل البيانات الموجودة، تصنيفها إلى فئات، أو التنبؤ بأرقام وقرارات محددة.</td>
+            <td><b>إنشاء وإنتاج محتوى جديد وأصلي</b> (نصوص، صور، صوت، فيديو، أكواد) يحاكي الإبداع البشري.</td>
+          </tr>
+          <tr>
+            <td><b>أمثلة تطبيقية</b></td>
+            <td>تصفية البريد المزعج (<span dir="ltr">Spam</span>)، تشخيص صورة أشعة، توقع أسعار العقارات.</td>
+            <td>كتابة مقال أو كود برمجي (<span dir="ltr">ChatGPT</span>)، توليد صورة من نص (<span dir="ltr">Midjourney</span>)، توليد فيديو (<span dir="ltr">Sora</span>).</td>
+          </tr>
+          <tr>
+            <td><b>النماذج العميقة المشغلة للتوليدي</b></td>
+            <td colspan="2">
+              1) <b>المحولات (<span dir="ltr">Transformers</span>):</b> تعتمد على الانتباه الذاتي (<span dir="ltr">Self-Attention</span>) لتوليد النصوص واللغات.<br>
+              2) <b>شبكات الخصومة التوليدية (<span dir="ltr">GANs</span>):</b> تنافس بين شبكتي المولد (<span dir="ltr">Generator</span>) والمميز (<span dir="ltr">Discriminator</span>).<br>
+              3) <b>المشفر التلقائي المتغير (<span dir="ltr">VAEs</span>):</b> مشفر ومفكك ترميز عبر فضاء كامن احتمالي.<br>
+              4) <b>نماذج الانتشار (<span dir="ltr">Diffusion Models</span>):</b> إضافة تشويش للصورة ثم إزالته تدريجياً لتوليد صور فائقة الجودة.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>2. جدول مراحل تدريب نماذج LLMs وتقنيات هندسة الأوامر (Prompt Engineering)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>المرحلة / التقنية</th>
+            <th>المصطلح الإنجليزي</th>
+            <th>الشرح والوظيفة الدقيقة</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1. التدريب المسبق</b></td>
+            <td dir="ltr"><b>Pre-training</b></td>
+            <td>تدريب ذاتي الإشراف على نصوص ضخمة غير مصنفة من الإنترنت لتعلم اللغة والتنبؤ بالكلمة التالية، وينتج عنه <b>النموذج الأساسي (<span dir="ltr">Base Model</span>)</b>.</td>
+          </tr>
+          <tr>
+            <td><b>2. الضبط الدقيق الخاضع للإشراف</b></td>
+            <td dir="ltr"><b>Supervised Fine-Tuning (SFT)</b></td>
+            <td>تدريب النموذج على أمثلة مصنفة من (التعليمات والإجابات النموذجية) ليتعلم اتباع الأوامر والمحادثة.</td>
+          </tr>
+          <tr>
+            <td><b>3. التعلم المعزز من التغذية البشرية</b></td>
+            <td dir="ltr"><b>RLHF</b></td>
+            <td>استخدام تقييمات البشر لبناء نموذج مكافأة يحاذي النموذج (<span dir="ltr">Alignment</span>) ليكون آمناً ودقيقاً وغير متحيز.</td>
+          </tr>
+          <tr>
+            <td><b>التلقين الصفري (بدون أمثلة)</b></td>
+            <td dir="ltr"><b>Zero-Shot Prompting</b></td>
+            <td>طلب المهمة من النموذج مباشرة دون إعطائه أي أمثلة سابقة داخل الأمر.</td>
+          </tr>
+          <tr>
+            <td><b>التلقين بأمثلة قليلة</b></td>
+            <td dir="ltr"><b>One-Shot / Few-Shot Prompting</b></td>
+            <td>تزويد النموذج بمثال واحد أو عدة أمثلة داخل الأمر لتوضيح النمط والتنسيق المطلوب قبل الإجابة.</td>
+          </tr>
+          <tr>
+            <td><b>سلسلة الأفكار</b></td>
+            <td dir="ltr"><b>Chain-of-Thought (CoT)</b></td>
+            <td>توجيه النموذج للتفكير <b>خطوة بخطوة (<span dir="ltr">Step-by-step</span>)</b> لحل المسائل المنطقية والرياضية المعقدة بدقة.</td>
+          </tr>
+          <tr>
+            <td><b>التوليد المعزز بالاسترجاع</b></td>
+            <td dir="ltr"><b>RAG</b></td>
+            <td>ربط النموذج بقاعدة معرفة خارجية موثوقة لاسترجاع المعلومات الحديثة وتقليل <b>الهلوسة (<span dir="ltr">Hallucination</span>)</b> دون إعادة تدريب النموذج.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>3. جدول توصيف بيئة الوكيل الذكي (PEAS) مع أمثلة تطبيقية</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>العنصر في إطار PEAS</th>
+            <th>المعنى</th>
+            <th>مثال (1): سيارة الأجرة ذاتية القيادة</th>
+            <th>مثال (2): نظام التشخيص الطبي الذكي</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>P - Performance Measure<br>(مقياس الأداء)</b></td>
+            <td>معيار تقييم نجاح الوكيل</td>
+            <td>الأمان، السرعة، الالتزام بالقوانين، راحة الراكب، تقليل الوقود.</td>
+            <td>صحة ودقة التشخيص، تقليل التكاليف، شفاء المريض.</td>
+          </tr>
+          <tr>
+            <td><b>E - Environment<br>(البيئة)</b></td>
+            <td>المحيط الذي يعمل فيه الوكيل</td>
+            <td>الطرق، حركة المرور، المشاة، السيارات الأخرى، الطقس.</td>
+            <td>المريض، المستشفى، الطاقم الطبي.</td>
+          </tr>
+          <tr>
+            <td><b>A - Actuators<br>(المشغلات / المؤثرات)</b></td>
+            <td>أدوات تنفيذ الفعل والتأثير بالبيئة</td>
+            <td>المقود، دواسة الوقود، الفرامل، إشارات التنبيه، الشاشة.</td>
+            <td>شاشة العرض لإظهار التشخيص، التوصيات العلاجية، والأسئلة.</td>
+          </tr>
+          <tr>
+            <td><b>S - Sensors<br>(المستشعرات / الحساسات)</b></td>
+            <td>أدوات إدراك وجمع بيانات البيئة</td>
+            <td>الكاميرات، الرادار، الليدار (<span dir="ltr">LiDAR</span>)، <span dir="ltr">GPS</span>، عداد السرعة.</td>
+            <td>لوحة المفاتيح (لإدخال الأعراض ونتائج الفحوصات وإجابات المريض).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>4. جدول مقارنة الأنواع الخمسة لوكلاء الذكاء الاصطناعي (AI Agents)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>نوع الوكيل الذكي</th>
+            <th>المصطلح الإنجليزي</th>
+            <th>آلية اتخاذ القرار والمكونات المميزة له</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1. وكيل رد الفعل البسيط</b></td>
+            <td dir="ltr"><b>Simple Reflex Agent</b></td>
+            <td>يعتمد على <b>الإدراك الحالي فقط</b> ويتجاهل التاريخ السابق، ويعمل بقاعدة <b>(شرط - فعل <span dir="ltr">Condition-Action</span>)</b> في البيئات المرئية بالكامل.</td>
+          </tr>
+          <tr>
+            <td><b>2. وكيل رد الفعل المبني على نموذج</b></td>
+            <td dir="ltr"><b>Model-Based Reflex Agent</b></td>
+            <td>يحتفظ بـ <b>حالة داخلية (<span dir="ltr">Internal State</span>)</b> ونموذج للعالم لتتبع الأجزاء غير المرئية من البيئة بالاعتماد على تاريخ الإدراكات.</td>
+          </tr>
+          <tr>
+            <td><b>3. الوكيل المبني على الهدف</b></td>
+            <td dir="ltr"><b>Goal-Based Agent</b></td>
+            <td>يعتمد على معلومات <b>الهدف (<span dir="ltr">Goal</span>)</b> المراد تحقيقه، ويستخدم البحث والتخطيط لاختيار الأفعال التي توصل للهدف.</td>
+          </tr>
+          <tr>
+            <td><b>4. الوكيل المبني على المنفعة</b></td>
+            <td dir="ltr"><b>Utility-Based Agent</b></td>
+            <td>يستخدم <b>دالة المنفعة (<span dir="ltr">Utility Function</span>)</b> للمفاضلة بين الطرق المختلفة واختيار الفعل الذي يحقق أعلى درجة رضا وكفاءة وأمان.</td>
+          </tr>
+          <tr>
+            <td><b>5. الوكيل المتعلم</b></td>
+            <td dir="ltr"><b>Learning Agent</b></td>
+            <td>يتعلم من التجارب لتحسين أدائه في البيئات المجهولة، ويتكون من 4 عناصر: <b>(عنصر التعلم، عنصر الأداء، الناقد <span dir="ltr">Critic</span>، ومولد المشكلات)</b>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الثالث: المصطلحات ================= -->
+  <section id="terms" class="panel">
+    <div class="card">
+      <h2>قاموس المصطلحات والمفاهيم الشامل للفصل الثاني (28 مصطلحاً)</h2>
+      <p class="muted">جميع المصطلحات التقنية الحديثة للذكاء الاصطناعي التوليدي ونماذج LLM وهندسة الأوامر ووكلاء الذكاء الاصطناعي:</p>
+      <div id="termsGrid" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الرابع: البطاقات التعليمية ================= -->
+  <section id="cards" class="panel">
+    <div class="card">
+      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
+      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
+      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
+        <div class="term" id="flashTerm"></div>
+        <div class="answer" id="flashAnswer" hidden></div>
+        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="prevCard">السابق</button>
+        <span id="cardCount" class="muted"></span>
+        <button class="btn primary" id="nextCard">التالي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الخامس: الاختبار الشامل ================= -->
+  <section id="quiz" class="panel">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2>الاختبار الشامل للفصل الثاني (25 سؤالاً)</h2>
+          <p class="muted">أسئلة شاملة تغطي جميع تفاصيل الوحدات الثلاث مع تنويع الإجابات الصحيحة بين (أ، ب، ج، د) وتصحيح فوري.</p>
+        </div>
+        <div class="score" id="score">النتيجة: 0 / 25</div>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="quizArea"></div>
+      <div class="row">
+        <button class="btn" id="resetQuiz">إعادة الاختبار</button>
+        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+      </div>
+      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
+    </div>
+  </section>
+</main>
+
+<footer>الفصل الثاني: مستحدثات تقنية في الذكاء الاصطناعي • مراجعة تفاعلية شاملة</footer>
+
+<script>
+const terms = [
+  ["Generative AI (الذكاء الاصطناعي التوليدي)", "فرع متقدم من الذكاء الاصطناعي يركز على إنشاء وإنتاج محتوى جديد وأصلي (نصوص، صور، صوت، فيديو، أكواد) بناءً على الأنماط المتعلمة من بيانات التدريب."],
+  ["Discriminative AI (الذكاء التمييزي / التقليدي)", "يركز على تحليل البيانات الموجودة وتصنيفها إلى فئات أو التنبؤ بقيم محددة دون إنشاء محتوى جديد."],
+  ["Transformers (بنية المحولات)", "المعمارية العصبية التي تقوم عليها النماذج اللغوية الكبيرة (LLMs)، وتعتمد على آلية الانتباه الذاتي (Self-Attention) لمعالجة البيانات بالتوازي."],
+  ["Self-Attention (الانتباه الذاتي)", "آلية داخل المحولات تمكّن النموذج من حساب قوة الارتباط بين الكلمات في الجملة وفهم السياق مهما تباعدت الكلمات."],
+  ["Diffusion Models (نماذج الانتشار)", "نماذج توليدية تعمل بإضافة ضوضاء للصورة ثم تدريب النموذج على إزالتها تدريجياً لتوليد صور فائقة الجودة (مثل Midjourney و DALL-E)."],
+  ["GANs (شبكات الخصومة التوليدية)", "تتكون من شبكتين متنافستين: المولد (Generator) الذي ينشئ بيانات مزيفة، والمميز (Discriminator) الذي يحاول كشفها."],
+  ["Hallucination (الهلوسة)", "ظاهرة قيام النموذج التوليدي بإنتاج معلومات غير صحيحة أو مختلقة تماماً وصياغتها بطريقة تبدو منطقية وواثقة."],
+  ["Deepfakes (التزييف العميق)", "استخدام تقنيات الذكاء الاصطناعي التوليدي لإنشاء مقاطع فيديو أو صوت أو صور مزيفة تنتحل شخصيات حقيقية."],
+  ["LLMs (النماذج اللغوية الكبيرة)", "Large Language Models: نماذج تعلم عميق ضخمة تضم مليارات المعلمات، مدربة على نصوص هائلة لفهم وتوليد اللغة البشرية."],
+  ["Next-Token Prediction (التنبؤ بالرمز التالي)", "المبدأ الأساسي لعمل نماذج LLMs؛ حيث تتنبأ بالكلمة أو الرمز التالي الأكثر احتمالاً بناءً على السياق السابق."],
+  ["Tokenization (الترميز / التقطيع)", "تقسيم النص المدخل إلى وحدات أساسية صغيرة تُسمى توكنز (Tokens) ليتمكن النموذج اللغوي من معالجتها رقمياً."],
+  ["Pre-training (التدريب المسبق)", "المرحلة الأولى لتدريب LLMs بطريقة ذاتية الإشراف على نصوص ضخمة غير مصنفة لإنتاج النموذج الأساسي (Base Model)."],
+  ["Supervised Fine-Tuning (SFT)", "الضبط الدقيق الخاضع للإشراف: تدريب النموذج الأساسي على أزواج من التعليمات والإجابات النموذجية ليتعلم اتباع الأوامر."],
+  ["RLHF (التعلم المعزز من التغذية البشرية)", "Reinforcement Learning from Human Feedback: استخدام تقييمات البشر لمحاذاة النموذج اللغوي ليكون أكثر أماناً ودقة وموثوقية."],
+  ["نموذج علّام (ALLaM)", "نموذج لغوي كبير للغة العربية طورته الهيئة السعودية للبيانات والذكاء الاصطناعي (سدايا - SDAIA)."],
+  ["Prompt Engineering (هندسة الأوامر)", "فن وعلم تصميم وصياغة التعليمات النصية (Prompts) الموجهة لنماذج الذكاء الاصطناعي للحصول على أدق وأفضل المخرجات."],
+  ["Zero-Shot Prompting (التلقين الصفري)", "توجيه الأمر أو السؤال للنموذج اللغوي مباشرة دون إعطائه أي أمثلة توضيحية سابقة داخل الأمر."],
+  ["Few-Shot Prompting (التلقين بأمثلة قليلة)", "تزويد النموذج بعدة أمثلة من المدخلات والمخرجات المطلوبة داخل الأمر ليتعلم النمط قبل الإجابة."],
+  ["Chain-of-Thought - CoT (سلسلة الأفكار)", "تقنية في هندسة الأوامر تطلب من النموذج التفكير خطوة بخطوة وتوضيح خطوات الاستنتاج لحل المسائل المنطقية والحسابية."],
+  ["RAG (التوليد المعزز بالاسترجاع)", "Retrieval-Augmented Generation: ربط النموذج اللغوي بقاعدة معرفة خارجية موثوقة لاسترجاع معلومات دقيقة وتقليل الهلوسة."],
+  ["AI Agent (وكيل الذكاء الاصطناعي)", "كيان برمجي أو مادي مستقل يدرك بيئته بالمستشعرات (Sensors)، ويتخذ قرارات، ويتصرف في البيئة بالمشغلات (Actuators) لتحقيق هدف."],
+  ["Sensors & Actuators (المستشعرات والمشغلات)", "المستشعرات هي أدوات إدراك البيئة وجمع المدخلات، والمشغلات (المؤثرات) هي أدوات تنفيذ الأفعال والتأثير في البيئة."],
+  ["PEAS Framework (توصيف بيئة الوكيل)", "اختصار للعناصر الأربعة لتوصيف مهمة الوكيل الذكي: مقياس الأداء (Performance)، البيئة (Environment)، المشغلات (Actuators)، والمستشعرات (Sensors)."],
+  ["Simple Reflex Agent (وكيل رد الفعل البسيط)", "وكيل يعمل بقاعدة (شرط - فعل Condition-Action) بناءً على الإدراك الحالي فقط متجاهلاً تاريخ الإدراكات السابقة."],
+  ["Model-Based Reflex Agent", "وكيل رد الفعل المبني على نموذج: يحتفظ بحالة داخلية (Internal State) لتتبع الأجزاء غير المرئية من البيئة."],
+  ["Goal-Based Agent (الوكيل المبني على الهدف)", "وكيل يمتلك معلومات عن الهدف المرغوب ويستخدم البحث والتخطيط لاختيار الأفعال التي تحقق هذا الهدف."],
+  ["Utility-Based Agent (الوكيل المبني على المنفعة)", "وكيل يستخدم دالة المنفعة (Utility Function) للمفاضلة بين الطرق واختيار الفعل الأكثر كفاءة ورضا وأماناً."],
+  ["Learning Agent (الوكيل المتعلم)", "وكيل يحسن أداءه بالتعلم من الخبرة، ويتكون من 4 عناصر: عنصر التعلم، عنصر الأداء، الناقد (Critic)، ومولد المشكلات."]
+];
+
+const cards = [
+  ["ما هو تعريف الذكاء الاصطناعي التوليدي (Generative AI)؟", "هو فرع متقدم من الذكاء الاصطناعي يركز على إنشاء وإنتاج محتوى جديد وأصلي (نصوص، صور، صوتيات، فيديو، وأكواد برمجية) بناءً على الأنماط التي تعلمها من بيانات التدريب الضخمة."],
+  ["ما الفرق الجوهري بين الذكاء الاصطناعي التقليدي (التمييزي) والذكاء الاصطناعي التوليدي؟", "• التقليدي (التمييزي): يحلل البيانات الموجودة ويصنفها أو يتنبأ بقيم محددة.\n• التوليدي: يبتكر وينشئ محتوى جديداً وأصلياً لم يكن موجوداً من قبل."],
+  ["ما هي النماذج العميقة الأربعة الرئيسية التي يقوم عليها الذكاء الاصطناعي التوليدي؟", "1) بنية المحولات (Transformers).\n2) شبكات الخصومة التوليدية (GANs).\n3) أجهزة الترميز التلقائي المتغيرة (VAEs).\n4) نماذج الانتشار (Diffusion Models)."],
+  ["كيف تعمل نماذج الانتشار (Diffusion Models)؟ وما أشهر أمثلتها؟", "تعمل بإضافة تشويش (ضوضاء) تدريجي للصور ثم تدريب النموذج على عكس العملية وإزالة الضوضاء تدريجياً لتوليد صور فائقة الجودة من الصفر. من أمثلتها: Midjourney و DALL-E و Stable Diffusion."],
+  ["اذكري أمثلة لتطبيقات الذكاء الاصطناعي التوليدي في: النصوص، الصور، الفيديو، والبرمجة.", "• النصوص: ChatGPT, Gemini, Claude, ونموذج علّام (ALLaM).\n• الصور: Midjourney, DALL-E.\n• الفيديو: Sora, Runway.\n• البرمجة: GitHub Copilot."],
+  ["ما المقصود بظاهرة (الهلوسة - Hallucination) في الذكاء الاصطناعي التوليدي؟", "هي قيام النموذج التوليدي بإنتاج معلومات غير صحيحة أو مختلقة تماماً لا تستند إلى الواقع، وصياغتها بأسلوب واثق يبدو منطقياً ومقنعاً للمستخدم."],
+  ["ما هي أبرز التحديات والمخاطر المرتبطة بالذكاء الاصطناعي التوليدي؟", "1) الهلوسة (معلومات مختلقة)، 2) التزييف العميق (Deepfakes) والتضليل، 3) انتهاك حقوق الملكية الفكرية والنشر، 4) التحيز وانتهاك الخصوصية والاستهلاك العالي للطاقة."],
+  ["ما هي النماذج اللغوية الكبيرة (LLMs)؟ وعلى أي معمارية تعتمد؟", "هي نماذج تعلم عميق ضخمة تضم مليارات المعلمات (Parameters) وتُدرب على نصوص هائلة لفهم وتوليد اللغة البشرية، وتعتمد على معمارية المحولات (Transformers)."],
+  ["ما هو المبدأ الإحصائي الأساسي لعمل النماذج اللغوية الكبيرة (LLMs) عند توليد النص؟", "تعتمد على مبدأ (التنبؤ بالرمز أو الكلمة التالية - Next-Token Prediction) الأكثر احتمالاً بناءً على السياق السابق، بمساعدة آلية الانتباه الذاتي (Self-Attention)."],
+  ["ما هي المراحل الثلاث لتدريب وبناء النماذج اللغوية الكبيرة (LLMs) بالترتيب؟", "1) التدريب المسبق (Pre-training) لإنتاج النموذج الأساسي.\n2) الضبط الدقيق الخاضع للإشراف (Supervised Fine-Tuning - SFT).\n3) التعلم المعزز من التغذية الراجعة البشرية (RLHF)."],
+  ["ما الهدف من مرحلة (التعلم المعزز من التغذية الراجعة البشرية - RLHF) في تدريب LLMs؟", "محاذاة النموذج اللغوي (Alignment) مع القيم والتفضيلات البشرية باستخدام نموذج مكافأة مبني على تقييمات البشر، لجعله أكثر دقة وأماناً وأقل عرضة للإجابات الضارة أو المتحيزة."],
+  ["ما هو تعريف هندسة الأوامر (Prompt Engineering)؟", "هي فن وعلم صياغة وتصميم وتحسين التعليمات أو المدخلات النصية (Prompts) الموجهة لنماذج الذكاء الاصطناعي التوليدي للحصول على أفضل وأدق المخرجات المطلوبة."],
+  ["ما هي العناصر الخمسة لبناء أمر فعال (Prompt Elements)؟", "1) تحديد الدور أو الشخصية (Role/Persona)، 2) المهمة أو التعليمات (Task)، 3) السياق والقيود (Context)، 4) بيانات الإدخال (Input Data)، 5) تنسيق المخرجات المطلوب (Output Format)."],
+  ["ما الفرق بين التلقين الصفري (Zero-Shot) والتلقين بأمثلة قليلة (Few-Shot Prompting)؟", "• التلقين الصفري (Zero-Shot): طلب المهمة من النموذج مباشرة دون إعطائه أي أمثلة في الأمر.\n• التلقين بأمثلة قليلة (Few-Shot): تزويد النموذج بعدة أمثلة داخل الأمر لتوضيح النمط المطلوب قبل طرح السؤال الجديد."],
+  ["ما هي تقنية سلسلة الأفكار (Chain-of-Thought - CoT) في هندسة الأوامر ومتى نستخدمها؟", "توجيه النموذج للتفكير خطوة بخطوة (Step-by-step) وتوضيح خطوات الاستنتاج المنطقي قبل كتابة الجواب النهائي؛ وتُستخدم في المسائل الرياضية والمنطقية المعقدة."],
+  ["ما هي تقنية التوليد المعزز بالاسترجاع (RAG) وما المشكلة التي تحلها؟", "تقنية تربط النموذج اللغوي بقاعدة معرفة خارجية موثوقة ومحدثة لاسترجاع الوثائق ذات الصلة قبل توليد الإجابة؛ وتحل مشكلة تقادم المعلومات وتقلل من ظاهرة (الهلوسة) دون الحاجة لإعادة تدريب النموذج."],
+  ["ما هو تعريف وكيل الذكاء الاصطناعي (AI Agent)؟", "هو كيان برمجي أو مادي مستقل يدرك بيئته المحيطة من خلال المستشعرات (Sensors)، ويعالج المعلومات ليتخذ قرارات، ثم يتصرف ويؤثر في البيئة من خلال المشغلات أو المؤثرات (Actuators) لتحقيق هدف محدد."],
+  ["من هو الوكيل العقلاني / الرشيد (Rational Agent)؟", "هو الوكيل الذي يختار دائماً الفعل الذي يُتوقع أن يعظم مقياس أدائه (Performance Measure) بناءً على سلسلة الإدراكات التي لاحظها والمعرفة المسبقة لديه."],
+  ["إلى ماذا يرمز اختصار (PEAS) المستخدم لتوصيف بيئة المهمة للوكيل الذكي؟", "• P: مقياس الأداء (Performance Measure).\n• E: البيئة (Environment).\n• A: المشغلات / المؤثرات (Actuators).\n• S: المستشعرات / الحساسات (Sensors)."],
+  ["حددي عناصر PEAS الأربعة لوكيل (السيارة ذاتية القيادة).", "• مقياس الأداء (P): الأمان، السرعة، الالتزام بالقوانين، راحة الراكب.\n• البيئة (E): الطرق، المشاة، السيارات الأخرى.\n• المشغلات (A): المقود، الفرامل، دواسة الوقود.\n• المستشعرات (S): الكاميرات، الرادار، الليدار (LiDAR)، GPS."],
+  ["ما هي الأنواع الخمسة لوكلاء الذكاء الاصطناعي؟", "1) وكيل رد الفعل البسيط (Simple Reflex).\n2) وكيل رد الفعل المبني على نموذج (Model-Based).\n3) الوكيل المبني على الهدف (Goal-Based).\n4) الوكيل المبني على المنفعة (Utility-Based).\n5) الوكيل المتعلم (Learning Agent)."],
+  ["كيف يعمل (وكيل رد الفعل البسيط - Simple Reflex Agent) وما شرط نجاحه؟", "يعمل وفق قاعدة (شرط - فعل Condition-Action) بناءً على الإدراك الحالي فقط متجاهلاً تاريخ الإدراكات السابقة؛ ويشترط لنجاحه أن تكون البيئة مرئية بالكامل (Fully Observable)."],
+  ["بماذا يتميز (وكيل رد الفعل المبني على نموذج - Model-Based Reflex Agent) عن البسيط؟", "يحتفظ بحالة داخلية (Internal State) ونموذج لكيفية عمل العالم، مما يمكنه من العمل في البيئات المرئية جزئياً عبر دمج الإدراك الحالي مع تاريخ الإدراكات السابقة."],
+  ["ما الفرق بين (الوكيل المبني على الهدف Goal-Based) و(الوكيل المبني على المنفعة Utility-Based)؟", "• المبني على الهدف: يبحث ويخطط للوصول إلى حالة الهدف المطلوبة.\n• المبني على المنفعة: عندما تتعدد الطرق للهدف، يستخدم دالة المنفعة (Utility Function) لاختيار الطريق الأفضل والأعلى كفاءة وأماناً ورضا."],
+  ["ما هي المكونات الأربعة لـ (الوكيل المتعلم - Learning Agent)؟", "1) عنصر التعلم (Learning Element): يجري التحسينات.\n2) عنصر الأداء (Performance Element): يختار الأفعال.\n3) الناقد (Critic): يقيم الأداء ويزود عنصر التعلم بالتغذية الراجعة.\n4) مولد المشكلات (Problem Generator): يقترح أفعالاً استكشافية جديدة."],
+  ["ما الفرق بين نموذج LLM التقليدي ووكيل الذكاء الاصطناعي المستقل (AI Agent)؟", "نموذج LLM التقليدي يستجيب بشكل سلبي للأوامر (سؤال وجواب)، بينما الوكيل الذكي (AI Agent) يتمتع بالاستقلالية (Autonomy)، ويقسم الهدف لمهام فرعية، ويستخدم أدوات خارجية (كالبحث وتشغيل الكود)، ويحتفظ بذاكرة لإنجاز مهام معقدة."],
+  ["ما وظيفة كل من (الناقد Critic) و(مولد المشكلات Problem Generator) في الوكيل المتعلم؟", "• الناقد: يقيم سلوك وأداء الوكيل في البيئة مقارنة بمعيار الأداء ويرسل تغذية راجعة لعنصر التعلم.\n• مولد المشكلات: يقترح تجارب وأفعالاً جديدة غير مألوفة لاكتساب خبرات أفضل على المدى الطويل."],
+  ["ما هو النموذج اللغوي العربي الكبير الذي طورته سدايا (SDAIA)؟", "نموذج (علّام - ALLaM) لخدمة اللغة العربية وتطبيقات الذكاء الاصطناعي التوليدي."]
+];
+
+const questions = [
+  {
+    q: "ما هو الفرع المتقدم من الذكاء الاصطناعي الذي يركز على إنشاء وإنتاج محتوى جديد وأصلي (كالنصوص والصور والصوتيات والفيديو والأكواد) بدلاً من مجرد تصنيف البيانات الموجودة؟",
+    o: [
+      "الذكاء الاصطناعي التمييزي التقليدي",
+      "الذكاء الاصطناعي التوليدي (Generative AI)",
+      "قواعد البيانات العلائقية",
+      "وكيل رد الفعل البسيط"
+    ],
+    a: 1,
+    e: "الذكاء الاصطناعي التوليدي (Generative AI) هو المختص بإنشاء وإنتاج محتوى جديد وأصلي بناءً على الأنماط التي تعلمها من بيانات التدريب."
+  },
+  {
+    q: "أي من النماذج العميقة التالية يعمل عن طريق إضافة تشويش (ضوضاء) تدريجي للصور ثم تدريب النموذج على عكس العملية وإزالة الضوضاء تدريجياً لتوليد صور فائقة الجودة (مثل Midjourney و DALL-E)؟",
+    o: [
+      "الانحدار الخطي البسيط",
+      "شجرة القرار الكلاسيكية",
+      "نماذج الانتشار (Diffusion Models)",
+      "خوارزمية الجار الأقرب KNN"
+    ],
+    a: 2,
+    e: "نماذج الانتشار (Diffusion Models) تولد الصور عن طريق إضافة الضوضاء ثم تعلم إزالتها تدريجياً، وهي المشغلة لنماذج مثل DALL-E و Midjourney."
+  },
+  {
+    q: "ماذا نُطلق على الظاهرة التي يقوم فيها نموذج الذكاء الاصطناعي التوليدي بإنتاج معلومات غير صحيحة أو مختلقة تماماً وصياغتها بأسلوب يبدو منطقياً ومقنعاً؟",
+    o: [
+      "الضبط الدقيق (Fine-Tuning)",
+      "التوليد المعزز بالاسترجاع (RAG)",
+      "التلقين الصفري (Zero-Shot)",
+      "الهلوسة (Hallucination)"
+    ],
+    a: 3,
+    e: "الهلوسة (Hallucination) هي توليد النموذج لمعلومات خاطئة أو مختلقة لا أساس لها في الواقع مع عرضها بثقة."
+  },
+  {
+    q: "ما هي المعمارية العصبية التي تُعد حجر الأساس لبناء النماذج اللغوية الكبيرة (LLMs) وتعتمد على آلية الانتباه الذاتي (Self-Attention)؟",
+    o: [
+      "بنية المحولات (Transformers)",
+      "المدرك أحادي الطبقة (Single Perceptron)",
+      "خوارزمية K-Means للتجميع",
+      "مخطط ندفة الثلج"
+    ],
+    a: 0,
+    e: "تعتمد النماذج اللغوية الكبيرة (LLMs) على بنية المحولات (Transformers) وآلية الانتباه الذاتي (Self-Attention) لفهم العلاقات السياقية بين الكلمات."
+  },
+  {
+    q: "على أي مبدأ أساسي تعتمد النماذج اللغوية الكبيرة (LLMs) في توليدها للنصوص والإجابات؟",
+    o: [
+      "نسخ صفحات كاملة من الإنترنت دون تحليل",
+      "التنبؤ بالرمز أو الكلمة التالية (Next-Token Prediction) الأكثر احتمالاً بناءً على السياق السابق",
+      "الاعتماد على قواعد نحوية مكتوبة يدوياً فقط",
+      "حذف جميع الكلمات وتحويلها إلى صور"
+    ],
+    a: 1,
+    e: "المبدأ الإحصائي الأساسي لنماذج LLMs هو التنبؤ بالرمز/الكلمة التالية (Next-Token Prediction) الأكثر احتمالاً في السياق."
+  },
+  {
+    q: "عملية تقسيم النص المدخل إلى وحدات أساسية صغيرة (قد تكون كلمات أو أجزاء من كلمات) ليتمكن النموذج اللغوي الكبير من معالجتها تُسمى:",
+    o: [
+      "الهلوسة (Hallucination)",
+      "التزييف العميق (Deepfake)",
+      "الترميز أو التقطيع النصي (Tokenization)",
+      "التعلم المعزز (RLHF)"
+    ],
+    a: 2,
+    e: "الترميز (Tokenization) هو تقسيم النص إلى وحدات صغيرة تُسمى توكنز (Tokens) لمعالجتها في نماذج LLMs."
+  },
+  {
+    q: "ما هو الترتيب الصحيح للمراحل الثلاث لتدريب وبناء النماذج اللغوية الكبيرة (LLMs)؟",
+    o: [
+      "1) RLHF ← 2) التدريب المسبق ← 3) الضبط الدقيق",
+      "1) الضبط الدقيق ← 2) الحذف ← 3) التدريب المسبق",
+      "1) التقييم النهائي ← 2) التلقين الصفري ← 3) التدريب المسبق",
+      "1) التدريب المسبق (Pre-training) ← 2) الضبط الدقيق الخاضع للإشراف (SFT) ← 3) التعلم المعزز من التغذية الراجعة البشرية (RLHF)"
+    ],
+    a: 3,
+    e: "تبدأ مراحل بناء LLM بالتدريب المسبق لإنتاج النموذج الأساسي، ثم الضبط الدقيق الخاضع للإشراف (SFT)، وأخيراً التعلم المعزز من التغذية الراجعة البشرية (RLHF)."
+  },
+  {
+    q: "في مراحل تدريب النماذج اللغوية الكبيرة، ما الهدف الرئيسي من المرحلة الثالثة (التعلم المعزز من التغذية الراجعة البشرية - RLHF)؟",
+    o: [
+      "محاذاة النموذج (Alignment) مع القيم والتفضيلات البشرية ليكون أكثر دقة وأماناً وأقل عرضة لإنتاج إجابات ضارة أو متحيزة",
+      "تقسيم الكلمات إلى حروف منفصلة فقط",
+      "تدريب النموذج لأول مرة على نصوص خام غير مصنفة",
+      "إلغاء قدرة النموذج على فهم أوامر المستخدم"
+    ],
+    a: 0,
+    e: "تُستخدم مرحلة RLHF لمحاذاة النموذج اللغوي مع القيم البشرية عبر نموذج مكافأة مبني على تقييمات المراجعين البشريين."
+  },
+  {
+    q: "ما هو العلم والفن الذي يُعنى بتصميم وصياغة وتحسين المدخلات النصية أو التعليمات الموجهة لنماذج الذكاء الاصطناعي التوليدي للحصول على أفضل وأدق المخرجات؟",
+    o: [
+      "هندسة الشبكات السلكية",
+      "هندسة الأوامر / التلقين (Prompt Engineering)",
+      "تصميم الدوائر المتكاملة",
+      "التجميع غير الخاضع للإشراف"
+    ],
+    a: 1,
+    e: "هندسة الأوامر (Prompt Engineering) هي عملية صياغة وتصميم التعليمات النصية (Prompts) لتوجيه النموذج التوليدي نحو أفضل مخرجات."
+  },
+  {
+    q: "في تقنيات هندسة الأوامر، عندما نطلب من النموذج اللغوي تنفيذ مهمة مباشرة دون تزويده بأي أمثلة سابقة داخل الأمر، فإننا نستخدم:",
+    o: [
+      "التلقين بأمثلة متعددة (Few-Shot Prompting)",
+      "التوليد المعزز بالاسترجاع (RAG)",
+      "التلقين الصفري / بدون أمثلة (Zero-Shot Prompting)",
+      "الضبط الدقيق الخاضع للإشراف (SFT)"
+    ],
+    a: 2,
+    e: "التلقين الصفري (Zero-Shot Prompting) هو توجيه السؤال أو المهمة مباشرة للنموذج دون إعطائه أي أمثلة في النص."
+  },
+  {
+    q: "أي تقنية من تقنيات هندسة الأوامر توجه النموذج اللغوي إلى (التفكير خطوة بخطوة - Step-by-step) وتوضيح خطوات الاستنتاج الوسيطة لحل المسائل الحسابية والمنطقية المعقدة؟",
+    o: [
+      "التلقين الصفري (Zero-Shot)",
+      "إزالة الضوضاء (Diffusion)",
+      "الترميز النصي (Tokenization)",
+      "سلسلة الأفكار (Chain-of-Thought - CoT)"
+    ],
+    a: 3,
+    e: "تقنية سلسلة الأفكار (Chain-of-Thought - CoT) تحفز النموذج على تفكيك المشكلة والتفكير خطوة بخطوة قبل إعطاء الجواب النهائي."
+  },
+  {
+    q: "ما هي التقنية التي تربط النموذج اللغوي الكبير بقاعدة معرفة خارجية موثوقة ومحدثة (كمستندات المؤسسة) لاسترجاع المعلومات الدقيقة وتقليل الهلوسة دون الحاجة لإعادة تدريب النموذج؟",
+    o: [
+      "التوليد المعزز بالاسترجاع (RAG - Retrieval-Augmented Generation)",
+      "شبكات الخصومة التوليدية (GANs)",
+      "وكيل رد الفعل البسيط (Simple Reflex Agent)",
+      "التدريب المسبق الأولي (Pre-training)"
+    ],
+    a: 0,
+    e: "تقنية RAG تسترجع الوثائق الموثوقة ذات الصلة بسؤال المستخدم وتدمجها في السياق لتوليد إجابة دقيقة ومحدثة وتقليل الهلوسة."
+  },
+  {
+    q: "في علم الذكاء الاصطناعي، ماذا نُسمي الكيان البرمجي أو المادي المستقل الذي يدرك بيئته من خلال (المستشعرات Sensors) ويتصرف ويؤثر في تلك البيئة من خلال (المشغلات/المؤثرات Actuators)؟",
+    o: [
+      "الجدول الإحصائي الثابت",
+      "وكيل الذكاء الاصطناعي (AI Agent)",
+      "قاعدة البيانات العلائقية",
+      "ملف السجل النصي"
+    ],
+    a: 1,
+    e: "وكيل الذكاء الاصطناعي (AI Agent) هو أي كيان يدرك بيئته عبر المستشعرات ويتصرف فيها عبر المشغلات (المؤثرات)."
+  },
+  {
+    q: "لتوصيف بيئة المهمة لأي وكيل ذكي نستخدم إطار العمل (PEAS)؛ فإلى ماذا يرمز كل حرف من الحروف الأربعة (P, E, A, S)؟",
+    o: [
+      "البرمجة، التقييم، التحليل، والتخزين",
+      "المعالج، الطاقة، الخوارزمية، والشاشة",
+      "مقياس الأداء (Performance)، البيئة (Environment)، المشغلات/المؤثرات (Actuators)، والمستشعرات (Sensors)",
+      "التخطيط، التنفيذ، الأتمتة، والأمان"
+    ],
+    a: 2,
+    e: "يتكون إطار PEAS من: Performance measure (مقياس الأداء)، Environment (البيئة)، Actuators (المشغلات)، و Sensors (المستشعرات)."
+  },
+  {
+    q: "في توصيف (PEAS) لوكيل السيارة ذاتية القيادة، تحت أي عنصر تندرج كل من (الكاميرات، الرادار، الليدار LiDAR، ونظام GPS)، وتحت أي عنصر تندرج (عجلة القيادة، الفرامل، ودواسة الوقود)؟",
+    o: [
+      "جميعها تندرج تحت عنصر مقياس الأداء (Performance)",
+      "الكاميرات تحت المشغلات، والفرامل تحت المستشعرات",
+      "جميعها تندرج تحت عنصر البيئة الخارجية (Environment)",
+      "الكاميرات والرادار والليدار تندرج تحت المستشعرات (Sensors)، بينما عجلة القيادة والفرامل والوقود تندرج تحت المشغلات (Actuators)"
+    ],
+    a: 3,
+    e: "الكاميرات والرادار والليدار تدرك البيئة فهي مستشعرات (Sensors)، بينما المقود والفرامل والوقود تنفذ الفعل فهي مشغلات (Actuators)."
+  },
+  {
+    q: "ما هو تعريف (الوكيل العقلاني / الرشيد - Rational Agent) في الذكاء الاصطناعي؟",
+    o: [
+      "الوكيل الذي يختار دائماً الفعل الذي يُتوقع أن يعظم مقياس أدائه (Performance Measure) استناداً إلى سلسلة الإدراكات التي لاحظها ومعرفته المسبقة",
+      "الوكيل الذي يتصرف بشكل عشوائي دون هدف أو مقياس أداء",
+      "الوكيل الذي يتجاهل بيئته المحيطة ولا يمتلك مستشعرات",
+      "الوكيل الذي يكرر نفس الخطأ دون النظر للنتائج"
+    ],
+    a: 0,
+    e: "الوكيل العقلاني (Rational Agent) هو الذي يتخذ الإجراء المتوقع أن يحقق أقصى قيمة لمقياس الأداء بناءً على إدراكاته ومعرفته."
+  },
+  {
+    q: "أي نوع من أنواع الوكلاء الأذكياء يُعد الأبسط، ويختار أفعاله بناءً على (الإدراك الحالي فقط) متجاهلاً تاريخ الإدراكات السابقة، ويعمل بقاعدة (شرط - فعل Condition-Action)؟",
+    o: [
+      "الوكيل المبني على المنفعة (Utility-Based Agent)",
+      "وكيل رد الفعل البسيط (Simple Reflex Agent)",
+      "الوكيل المتعلم (Learning Agent)",
+      "الوكيل المبني على الهدف (Goal-Based Agent)"
+    ],
+    a: 1,
+    e: "وكيل رد الفعل البسيط (Simple Reflex Agent) يعتمد على الإدراك اللحظي الحالي فقط وفق قواعد (إذا حدث الشرط ← نفذ الفعل)."
+  },
+  {
+    q: "كيف يتغلب (وكيل رد الفعل المبني على نموذج - Model-Based Reflex Agent) على مشكلة البيئات المرئية جزئياً التي يفشل فيها وكيل رد الفعل البسيط؟",
+    o: [
+      "عن طريق إيقاف جميع المستشعرات عن العمل",
+      "عن طريق تجاهل الإدراك الحالي والتاريخ السابق معاً",
+      "من خلال الاحتفاظ بحالة داخلية (Internal State) ونموذج داخلي لكيفية تطور العالم لتتبع الأجزاء غير المرئية من البيئة",
+      "عن طريق العمل بدون أي قواعد أو مشغلات"
+    ],
+    a: 2,
+    e: "يحتفظ وكيل رد الفعل المبني على نموذج بحالة داخلية (Internal State) تحدث باستمرار لتمثيل الأجزاء غير المرئية من البيئة."
+  },
+  {
+    q: "عندما توجد عدة طرق ومسارات مختلفة تؤدي جميعها إلى تحقيق الهدف نفسه، أي نوع من الوكلاء يستخدم دالة خاصة لقياس درجة الكفاءة والرضا والأمان لاختيار المسار الأفضل؟",
+    o: [
+      "وكيل رد الفعل البسيط",
+      "وكيل رد الفعل المبني على نموذج",
+      "المستشعر الضوئي",
+      "الوكيل المبني على المنفعة (Utility-Based Agent)"
+    ],
+    a: 3,
+    e: "الوكيل المبني على المنفعة (Utility-Based Agent) يستخدم دالة المنفعة (Utility Function) للمفاضلة بين الحالات واختيار المسار الأفضل والأكثر كفاءة."
+  },
+  {
+    q: "يتكون (الوكيل المتعلم - Learning Agent) من أربعة مكونات رئيسية؛ فما هي هذه المكونات الأربعة؟",
+    o: [
+      "عنصر التعلم (Learning Element)، وعنصر الأداء (Performance Element)، والناقد (Critic)، ومولد المشكلات (Problem Generator)",
+      "الشاشة، ولوحة المفاتيح، والفأرة، والطابعة",
+      "المولد، والمميز، والمشفر، ومفكك الترميز",
+      "التلقين الصفري، والتلقين بالأمثلة، وسلسلة الأفكار، والاسترجاع"
+    ],
+    a: 0,
+    e: "المكونات الأربعة للوكيل المتعلم هي: عنصر التعلم، عنصر الأداء، الناقد (Critic)، ومولد المشكلات (Problem Generator)."
+  },
+  {
+    q: "في بنية الوكيل المتعلم (Learning Agent)، ما هي وظيفة كل من المكون (الناقد - Critic) والمكون (مولد المشكلات - Problem Generator)؟",
+    o: [
+      "كلاهما يقومان بإيقاف الوكيل عن التعلم",
+      "يقيم (الناقد) أداء الوكيل مقارنة بمعيار ثابت ويزود عنصر التعلم بالتغذية الراجعة، بينما يقترح (مولد المشكلات) أفعالاً استكشافية جديدة تقود لتجارب وخبرات جديدة",
+      "يقوم الناقد بتنفيذ الأفعال الخارجية، ويقوم مولد المشكلات بحذف الذاكرة",
+      "لا يوجد مكون باسم الناقد في الوكيل المتعلم"
+    ],
+    a: 1,
+    e: "الناقد (Critic) يقيم الأداء ويرسل التغذية الراجعة لعنصر التعلم، ومولد المشكلات يقترح أفعالاً استكشافية لاكتساب خبرات جديدة."
+  },
+  {
+    q: "ما هو الفرق الجوهري بين استخدام نموذج لغوي كبير (LLM) بمفرده وبين استخدام (وكيل ذكاء اصطناعي مستقل - AI Agent) مبني على LLM؟",
+    o: [
+      "نموذج LLM يستطيع استخدام الأدوات الخارجية والتخطيط المستقل بينما الوكيل لا يستطيع ذلك",
+      "الوكيل الذكي يقتصر على الإجابة بنعم أو لا فقط",
+      "نموذج LLM يستجيب للأوامر بشكل سلبي (سؤال وجواب)، بينما يتمتع الوكيل الذكي (AI Agent) بالاستقلالية والقدرة على التخطيط وتقسيم المهام واستخدام الأدوات الخارجية وحفظ الذاكرة لإنجاز أهداف معقدة",
+      "لا يوجد أي فرق بينهما على الإطلاق"
+    ],
+    a: 2,
+    e: "يتميز الوكيل الذكي (AI Agent) بالاستقلالية (Autonomy) وتقسيم المهام واستخدام الأدوات الخارجية (كالبحث والبرمجة و APIs) والذاكرة."
+  },
+  {
+    q: "أي من النماذج التالية يُعد مثالاً على نماذج توليد الفيديو من النصوص (Text-to-Video)، وأيها يُعد مثالاً على توليد وإكمال الأكواد البرمجية؟",
+    o: [
+      "Midjourney للبرمجة، و GitHub Copilot للفيديو",
+      "BERT للفيديو، و Dall-E للبرمجة",
+      "SQL للفيديو، و Excel للبرمجة",
+      "Sora (و Runway) لتوليد الفيديو من النصوص، و GitHub Copilot لتوليد وإكمال الأكواد البرمجية"
+    ],
+    a: 3,
+    e: "Sora و Runway من أشهر نماذج توليد الفيديو، بينما GitHub Copilot مخصص لتوليد وإكمال الأكواد البرمجية."
+  },
+  {
+    q: "ما اسم النموذج اللغوي العربي الكبير (LLM) الذي طورته الهيئة السعودية للبيانات والذكاء الاصطناعي (سدايا - SDAIA) لخدمة اللغة العربية؟",
+    o: [
+      "نموذج علّام (ALLaM)",
+      "نموذج LLaMA",
+      "نموذج Claude",
+      "نموذج Sora"
+    ],
+    a: 0,
+    e: "طورت الهيئة السعودية للبيانات والذكاء الاصطناعي (سدايا) النموذج اللغوي العربي الكبير (علّام - ALLaM)."
+  },
+  {
+    q: "في شبكات الخصومة التوليدية (GANs)، ما اسم الشبكتين المتنافستين اللتين تعملان معاً لإنتاج بيانات وصور عالية الواقعية؟",
+    o: [
+      "المستشعر والمشغل (Sensor & Actuator)",
+      "المولد (Generator) والمميز (Discriminator)",
+      "الناقد ومولد المشكلات",
+      "المرسل والمستقبل"
+    ],
+    a: 1,
+    e: "تتكون شبكات GANs من المولد (Generator) الذي ينشئ العينات المزيفة، والمميز (Discriminator) الذي يحاول التمييز بين الحقيقي والمزيف."
+  }
+];
+
+// بناء شبكة المصطلحات
+const termsGrid = document.getElementById("termsGrid");
+terms.forEach(([en, ar]) => {
+  const d = document.createElement("div");
+  d.className = "card";
+  d.style.margin = "0";
+  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
+  termsGrid.appendChild(d);
+});
+
+// إدارة البطاقات التعليمية
+let ci = 0, showAnswer = false;
+function renderCard() {
+  document.getElementById("flashTerm").textContent = cards[ci][0];
+  const ansEl = document.getElementById("flashAnswer");
+  ansEl.innerHTML = cards[ci][1].replace(/\n/g, "<br>");
+  ansEl.hidden = !showAnswer;
+  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
+  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+}
+document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
+document.getElementById("flashcard").addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
+});
+document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
+document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
+renderCard();
+
+// التنقل بين التبويبات
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+// إدارة الاختبار
+let answers = {};
+function renderQuiz() {
+  const area = document.getElementById("quizArea");
+  area.innerHTML = "";
+  const letters = ["أ", "ب", "ج", "د"];
+  questions.forEach((item, i) => {
+    const box = document.createElement("div");
+    box.className = "qbox";
+    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
+    const opts = box.querySelector(".options");
+    item.o.forEach((opt, j) => {
+      const btn = document.createElement("button");
+      btn.className = "option";
+      btn.textContent = `${letters[j]}) ${opt}`;
+      btn.onclick = () => {
+        answers[i] = j;
+        [...opts.children].forEach((x, k) => {
+          x.classList.remove("correct", "wrong");
+          x.disabled = true;
+          if (k === item.a) x.classList.add("correct");
+          if (k === j && j !== item.a) x.classList.add("wrong");
+        });
+        const fb = document.getElementById("fb" + i);
+        fb.hidden = false;
+        fb.className = "feedback " + (j === item.a ? "good" : "bad");
+        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
+        updateScore();
+      };
+      opts.appendChild(btn);
+    });
+    area.appendChild(box);
+  });
+  updateScore();
+}
+
+function updateScore() {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
+  document.getElementById("score").textContent = `النتيجة: ${correct} / ${questions.length}`;
+  document.getElementById("progressBar").style.width = (Object.keys(answers).length / questions.length * 100) + "%";
+}
+
+document.getElementById("resetQuiz").onclick = () => {
+  answers = {};
+  document.getElementById("finalResult").textContent = "";
+  renderQuiz();
+};
+
+document.getElementById("finishQuiz").onclick = () => {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
+  const pct = Math.round(correct / questions.length * 100);
+  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${questions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! إتقان كامل للفصل الثاني." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
+};
+
+renderQuiz();
+</script>
+</body>
+</html>

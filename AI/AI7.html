@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الفصل السابع الشامل (ص 75-82) | خوارزمية A* وتطبيق 8-Puzzle</title>
+<style>
+:root{
+  --bg:#f4f6fb;
+  --card:#ffffff;
+  --ink:#0f172a;
+  --muted:#64748b;
+  --accent:#4f46e5;
+  --accent-dark:#3730a3;
+  --accent2:#eef2ff;
+  --teal:#0d9488;
+  --teal-light:#ccfbf1;
+  --line:#e2e8f0;
+  --good:#059669;
+  --good-bg:#ecfdf5;
+  --bad:#dc2626;
+  --bad-bg:#fef2f2;
+  --warn:#d97706;
+  --warn-bg:#fffbeb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
+header{background:linear-gradient(135deg,#1e1b4b,#3730a3,#0d9488);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(30,27,75,0.2)}
+.wrap{max-width:1060px;margin:auto;padding:0 16px}
+.eyebrow{opacity:.95;font-size:.9rem;background:rgba(255,255,255,0.16);display:inline-block;padding:4px 14px;border-radius:99px;margin-bottom:6px;font-weight:bold}
+h1{margin:5px 0;font-size:clamp(1.5rem,3.8vw,2.2rem)}
+header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
+nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:rgba(255,255,255,0.18);color:#ffffff;font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
+nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
+nav button.active{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+main .btn{background:var(--accent2);color:var(--accent-dark)}
+main .btn.primary{background:var(--accent);color:white}
+main{padding:22px 0 48px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(15,23,42,0.04)}
+h2{font-size:1.35rem;margin:0 0 12px;color:#1e1b4b}
+h3{font-size:1.06rem;margin:10px 0 6px;color:var(--accent-dark)}
+h4{font-size:.98rem;margin:8px 0 4px;color:#0f172a}
+small,.muted{color:var(--muted)}
+ul,ol{padding-right:22px;margin:8px 0}
+li{margin:6px 0}
+details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
+summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f8faff;color:#1e1b4b;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
+details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
+.details-body{padding:16px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
+.tag.teal{background:var(--teal-light);color:var(--teal)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#f1f5f9;color:#1e1b4b;font-weight:bold}
+tr:last-child td{border-bottom:0}
+.note{border-right:4px solid var(--accent);padding:10px 14px;background:#f5f7ff;border-radius:8px;margin:10px 0}
+.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
+.formula-box{background:#1e1b4b;color:#fff;padding:12px 16px;border-radius:12px;text-align:center;font-size:1.06rem;margin:10px 0;direction:ltr;font-family:monospace}
+.step-card{border:1px solid var(--line);border-radius:12px;padding:14px;background:#f8fafc}
+
+/* تصميم لوحة 8-Puzzle التوضيحية */
+.puzzle-wrap{display:flex;gap:18px;flex-wrap:wrap;justify-content:center;align-items:center;margin:14px 0}
+.puzzle-box{text-align:center;background:#f8fafc;border:1px solid var(--line);padding:12px;border-radius:14px}
+.puzzle-grid{display:grid;grid-template-columns:repeat(3,46px);grid-template-rows:repeat(3,46px);gap:4px;margin:8px auto;direction:ltr}
+.p-cell{display:flex;align-items:center;justify-content:center;background:#1e1b4b;color:#fff;font-weight:bold;font-size:1.1rem;border-radius:8px}
+.p-cell.misplaced{background:#dc2626}
+.p-cell.blank{background:#e2e8f0;color:#64748b;border:2px dashed #94a3b8}
+
+.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
+.options{display:grid;gap:8px;margin-top:12px}
+.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
+.option:hover:not(:disabled){border-color:var(--accent);background:#f8faff}
+.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
+.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
+.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
+.feedback.good{color:var(--good);background:var(--good-bg)}
+.feedback.bad{color:var(--bad);background:var(--bad-bg)}
+.progress{height:10px;background:#e2e8f0;border-radius:9px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
+.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#eef2ff);border:2px solid #c7d2fe;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
+.flashcard:hover{transform:scale(1.005)}
+.flashcard .term{font-size:1.35rem;font-weight:bold;color:#1e1b4b}
+.flashcard .answer{margin-top:16px;font-size:1.08rem;color:var(--accent-dark);background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
+@media(max-width:600px){
+  .card{padding:14px}
+  nav button{flex:1 1 calc(50% - 8px);text-align:center}
+  .flashcard{min-height:200px;padding:18px}
+  th,td{padding:8px 10px;font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">مقرر الذكاء الاصطناعي • الفصل السابع (صفحات 75 إلى 82)</div>
+    <h1>الفصل السابع: خوارزمية البحث $A^*$ وتطبيق أحجية الأرقام (8-Puzzle)</h1>
+    <p>يغطي مفهوم ومعادلة خوارزمية $A^*$، خطوات عملها بقائمتي OPEN و CLOSED، شروط القبول والاتساق، تتبع الخوارزمية على الرسوم البيانية، وتطبيقها الكامل لحل أحجية 8-Puzzle بدالتي الإرشاد ($h_1$ و $h_2$)</p>
+    <nav>
+      <button class="active" data-tab="summary">الشرح الشامل</button>
+      <button data-tab="tables">جداول المقارنات والتتبع (4)</button>
+      <button data-tab="terms">المصطلحات والمفاهيم (28)</button>
+      <button data-tab="cards">البطاقات التعليمية (28)</button>
+      <button data-tab="quiz">الاختبار الشامل (25)</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- ================= التبويب الأول: الشرح الشامل ================= -->
+  <section id="summary" class="panel active">
+    <div class="card">
+      <h2>خريطة الفصل السابع (ص 75 - 82)</h2>
+      <div class="grid">
+        <div>
+          <span class="tag">الوحدة الأولى (ص 75 - 77)</span>
+          <h3>مفهوم وآلية عمل خوارزمية $A^*$</h3>
+          <p>دمج التكلفة الفعلية $g(n)$ والتقديرية $h(n)$ في معادلة $f(n)=g(n)+h(n)$، دور قائمتي OPEN و CLOSED، وخطوات الخوارزمية التفصيلية.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثانية (ص 78 - 79)</span>
+          <h3>شروط الأمثلية وتتبع الرسوم البيانية</h3>
+          <p>شرط القبول (Admissibility) وشرط الاتساق (Consistency)، التقييم بالمعايير الأربعة، ومثال تتبع رقمي كامل على رسم بياني موزون.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثالثة (ص 80 - 82)</span>
+          <h3>تطبيق 8-Puzzle ودوال الإرشاد</h3>
+          <p>حل أحجية الأرقام الثمانية بـ $A^*$، حساب المربعات الخاطئة ($h_1$) ومسافة مانهاتن ($h_2$)، مفهوم الهيمنة (Dominance)، وتتبع شجرة الحل.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- الوحدة الأولى -->
+    <details open>
+      <summary>1) الوحدة الأولى: مفهوم خوارزمية البحث A* (A-Star Search)، معادلتها، وخطوات عملها (ص 75 - 77)</summary>
+      <div class="details-body">
+        <div class="exam-alert">
+          <h3>أولاً: مفهوم خوارزمية البحث $A^*$ (<span dir="ltr">A-Star Search</span>) ومعادلة التقييم (ص 75):</h3>
+          <ul>
+            <li>تُعد خوارزمية البحث <b dir="ltr">A*</b> أكثر أشكال البحث بأولوية الأفضل (<span dir="ltr">Best-First Search</span>) شهرةً واستخداماً في الذكاء الاصطناعي؛ لأنها تتغلب على عيوب البحث الجشع (<span dir="ltr">Greedy</span>) الذي ينظر للمستقبل فقط ويتجاهل تكلفة الطريق المقطوع.</li>
+            <li><b>الفكرة الجوهرية لخوارزمية $A^*$:</b> تقيّم العقد عن طريق <b>دمج وجمع</b> تكلفة الوصول الفعلي إلى العقدة <b dir="ltr">g(n)</b> مع التكلفة المقدرة للوصول من هذه العقدة إلى الهدف <b dir="ltr">h(n)</b>:
+              <div class="formula-box">f(n) = g(n) + h(n)</div>
+            </li>
+            <li><b>معنى كل رمز في المعادلة (موضع أسئلة مؤكدة):</b>
+              <ol>
+                <li><b dir="ltr">g(n):</b> <b>التكلفة الفعلية الحقيقية (<span dir="ltr">Actual Path Cost</span>)</b> للمسار من عقدة البداية (الجذر) حتى الوصول إلى العقدة الحالية $n$.</li>
+                <li><b dir="ltr">h(n):</b> <b>التكلفة التقديرية / الاستدلالية (<span dir="ltr">Estimated Heuristic Cost</span>)</b> لأرخص مسار من العقدة الحالية $n$ إلى عقدة الهدف (حيث <b dir="ltr">h(Goal) = 0</b> دائماً).</li>
+                <li><b dir="ltr">f(n):</b> <b>التكلفة الكلية المقدرة (<span dir="ltr">Estimated Total Cost</span>)</b> لأرخص حل يمر عبر العقدة $n$.</li>
+              </ol>
+            </li>
+            <li>بذلك تجمع خوارزمية $A^*$ بين ميزة <b>البحث بالتكلفة الموحدة (<span dir="ltr">UCS</span>)</b> الذي يعتمد على $g(n)$ (ضمان الأمثلية)، وميزة <b>البحث الجشع (<span dir="ltr">Greedy</span>)</b> الذي يعتمد على $h(n)$ (السرعة والتوجيه نحو الهدف).</li>
+          </ul>
+        </div>
+
+        <h3>ثانياً: القوائم المستخدمة وخطوات خوارزمية $A^*$ التفصيلية (ص 76 - 77)</h3>
+        <ul>
+          <li>تستخدم خوارزمية $A^*$ قائمتين أساسيتين لإدارة عملية البحث:
+            <ul>
+              <li><b>1. القائمة المفتوحة (<span dir="ltr">OPEN List / Frontier</span>):</b> طابور أولوية (<span dir="ltr">Priority Queue</span>) يضم العقد التي تم توليدها وحساب قيم $f(n)$ لها ولكن لم يتم توسيعها بعد، وتُرتب دائماً <b>تصاعدياً حسب أقل قيمة لـ $f(n)$</b>.</li>
+              <li><b>2. القائمة المغلقة (<span dir="ltr">CLOSED List / Explored Set</span>):</b> قائمة تضم العقد التي تم سحبها من <code dir="ltr">OPEN</code> وفحصها وتوسيعها بالفعل.</li>
+            </ul>
+          </li>
+          <li class="note"><b>خطوات خوارزمية البحث $A^*$ بالترتيب (ص 76 - 77):</b>
+            <ol>
+              <li>ضع عقدة البداية $S$ في القائمة المفتوحة <code dir="ltr">OPEN</code>، واحسب لها: $g(S) = 0$ ، و $f(S) = 0 + h(S) = h(S)$.</li>
+              <li>إذا كانت القائمة <code dir="ltr">OPEN</code> فارغة، توقف وأعلن الفشل (لا يوجد حل).</li>
+              <li>اختر من القائمة <code dir="ltr">OPEN</code> العقدة <b dir="ltr">n</b> صاحبة <b>أصغر قيمة لدالة التقييم $f(n)$</b>، وأزلها من <code dir="ltr">OPEN</code> وضعها في القائمة المغلقة <code dir="ltr">CLOSED</code>.</li>
+              <li>إذا كانت العقدة <b dir="ltr">n</b> هي <b>عقدة الهدف (<span dir="ltr">Goal Node</span>)</b>، توقف بنجاح وأرجع المسار (عن طريق تتبع مؤشرات الأب <code dir="ltr">PARENT</code> عكسياً حتى عقدة البداية).</li>
+              <li>وإلا، قم بتوسيع العقدة <b dir="ltr">n</b> بتوليد جميع خلفائها (جيرانها المباشرين)، ولكل خليفة (ابن) <b dir="ltr">m</b> احسب:
+                <br>• $g(m) = g(n) + \text{cost}(n, m)$
+                <br>• $f(m) = g(m) + h(m)$</li>
+              <li><b>فحص حالة الخليفة <span dir="ltr">m</span> (ثلاث حالات مهمة جداً):</b>
+                <ul>
+                  <li><b>أ) إذا لم تكن <span dir="ltr">m</span> موجودة في <code dir="ltr">OPEN</code> ولا في <code dir="ltr">CLOSED</code>:</b> اجعل أباها هو $n$، وأضفها إلى القائمة المفتوحة <code dir="ltr">OPEN</code>.</li>
+                  <li><b>ب) إذا كانت <span dir="ltr">m</span> موجودة مسبقاً في <code dir="ltr">OPEN</code>:</b> قارن القيمة الجديدة $f(m)$ بالقيمة القديمة المسجلة لها؛ فإذا كان المسار الجديد <b>أرخص (أقل في $g(m)$ و $f(m)$)</b>، قم بتحديث قيمة $f(m)$ وتحديث مؤشر الأب ليصبح $n$.</li>
+                  <li><b>ج) إذا كانت <span dir="ltr">m</span> موجودة مسبقاً في <code dir="ltr">CLOSED</code>:</b> وكان المسار الجديد أرخص (أقل في $f(m)$)، فحدث قيمتها وأباها وأعد نقلها من <code dir="ltr">CLOSED</code> إلى <code dir="ltr">OPEN</code> (أو حدث أحفادها).</li>
+                </ul>
+              </li>
+              <li>أعد ترتيب القائمة <code dir="ltr">OPEN</code> تصاعدياً حسب $f(n)$، وكرر الخطوات من (2) إلى (6).</li>
+            </ol>
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- الوحدة الثانية -->
+    <details open>
+      <summary>2) الوحدة الثانية: شروط أمثلية خوارزمية A* (القبول والاتساق)، خصائصها، ومثال تتبع كامل على رسم بياني (ص 78 - 79)</summary>
+      <div class="details-body">
+        <div class="exam-alert">
+          <h3>أولاً: متى تكون خوارزمية $A^*$ أمثلية (<span dir="ltr">Optimal</span>)؟ شرط القبول وشرط الاتساق (ص 78) - موضع أسئلة مؤكدة:</h3>
+          <div class="grid">
+            <div class="step-card">
+              <span class="tag">1. دالة استدلال مقبولة (Admissible Heuristic)</span>
+              <h4>شرط الأمثلية في البحث الشجري (Tree Search)</h4>
+              <ul>
+                <li>تكون دالة الإرشاد $h(n)$ <b>مقبولة (<span dir="ltr">Admissible</span>)</b> إذا كانت <b>لا تبالغ أبداً في تقدير التكلفة الحقيقية للوصول إلى الهدف</b>:
+                  <div class="formula-box">0 ≤ h(n) ≤ h*(n)</div>
+                  (حيث $h^*(n)$ هي التكلفة الحقيقية الفعلية لأرخص مسار من $n$ للهدف).
+                </li>
+                <li>بمعنى آخر، الدالة المقبولة هي دالة <b>متفائلة (<span dir="ltr">Optimistic</span>)</b> تعتقد أن تكلفة حل المشكلة أقل أو تساوي التكلفة الفعلية (مثل مسافة الخط المستقيم في الخرائط).</li>
+              </ul>
+            </div>
+            <div class="step-card">
+              <span class="tag teal">2. دالة استدلال متسقة / رتيبة (Consistent / Monotonic)</span>
+              <h4>شرط الأمثلية في البحث البياني (Graph Search)</h4>
+              <ul>
+                <li>تكون دالة الإرشاد $h(n)$ <b>متسقة (<span dir="ltr">Consistent</span>)</b> إذا كانت لكل عقدة $n$ وأي خليفة لها $n'$ ناتج عن فعل بتكلفة خطوة $c(n, a, n')$ تحقق <b>متباينة المثلث (<span dir="ltr">Triangle Inequality</span>)</b>:
+                  <div class="formula-box">h(n) ≤ c(n, a, n') + h(n')</div>
+                </li>
+                <li><b>نتيجة هامة:</b> إذا كانت $h(n)$ متسقة، فإن قيم $f(n)$ على طول أي مسار تكون <b>غير متناقصة</b>، وعندما تختار $A^*$ عقدة لتوسيعها تكون قد وجدت المسار الأمثل إليها بالفعل فلا نحتاج لإعادة فتح العقد من <code dir="ltr">CLOSED</code>! (وكل دالة متسقة هي مقبولة تلقائياً).</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <h3>ثالثاً: تقييم خوارزمية $A^*$ وفق المعايير الأربعة (ص 78)</h3>
+        <ul>
+          <li><b>1. الاكتمال (<span dir="ltr">Completeness</span>):</b> <b>نعم، مكتملة دائماً</b> (طالما أن عامل التفرع $b$ منتهٍ وتكلفة كل خطوة موجبة أكبر من ثابت صغير $\epsilon > 0$).</li>
+          <li><b>2. الأمثلية (<span dir="ltr">Optimality</span>):</b> <b>نعم، أمثلية</b> (تجد دائماً الحل الأقل تكلفة) بشرط أن تكون $h(n)$ مقبولة في البحث الشجري أو متسقة في البحث البياني. كما أن $A^*$ تتميز بكونها <b>فعالة بشكل أمثل (<span dir="ltr">Optimally Efficient</span>)</b>؛ فلا توجد خوارزمية أخرى تستخدم نفس دالة الإرشاد وتضمن إيجاد الحل الأمثل بتوسيع عدد أقل من العقد!</li>
+          <li><b>3. التعقيد الزمني (<span dir="ltr">Time Complexity</span>):</b> يعتمد على دقة دالة الإرشاد $h(n)$، ولكنه في أسوأ الحالات لا يزال أسياً $O(b^d)$.</li>
+          <li><b>4. التعقيد المكاني (<span dir="ltr">Space Complexity</span>):</b> تحتفظ خوارزمية $A^*$ بجميع العقد المولدة في الذاكرة داخل قائمتي <code dir="ltr">OPEN</code> و <code dir="ltr">CLOSED</code>، لذا فإن تعقيدها المكاني هو <b dir="ltr">O(bᵈ)</b>؛ ويمثل <b>نفاد الذاكرة العيب الرئيسي والأكبر لخوارزمية $A^*$</b> في المسائل الضخمة.</li>
+        </ul>
+
+        <h3>رابعاً: مثال عملي محلول لتتبع خوارزمية $A^*$ على رسم بياني موزون (ص 79)</h3>
+        <div class="note">
+          <p><b>المعطيات في الرسم البياني الموزون:</b><br>
+          نريد إيجاد المسار الأمثل من عقدة البداية <b dir="ltr">S</b> إلى عقدة الهدف <b dir="ltr">G</b>.<br>
+          • <b>قيم دالة الإرشاد $h(n)$ لكل عقدة:</b> $h(S)=10$ ، $h(A)=8$ ، $h(B)=6$ ، $h(C)=4$ ، $h(D)=3$ ، $h(G)=0$.<br>
+          • <b>أوزان الحواف (تكلفة الخطوة الفعلية بين العقد):</b><br>
+          من <span dir="ltr">S</span> إلى <span dir="ltr">A</span> $= 2$ | من <span dir="ltr">S</span> إلى <span dir="ltr">B</span> $= 5$<br>
+          من <span dir="ltr">A</span> إلى <span dir="ltr">C</span> $= 4$ | من <span dir="ltr">A</span> إلى <span dir="ltr">D</span> $= 7$<br>
+          من <span dir="ltr">B</span> إلى <span dir="ltr">G</span> $= 6$<br>
+          من <span dir="ltr">C</span> إلى <span dir="ltr">G</span> $= 3$ | من <span dir="ltr">D</span> إلى <span dir="ltr">G</span> $= 2$.<br>
+          <b>التتبع خطوة بخطوة بحساب $f(n) = g(n) + h(n)$:</b></p>
+          <ol>
+            <li><b>الخطوة 1 (البداية عند S):</b><br>
+              $f(S) = g(S) + h(S) = 0 + 10 = 10$.<br>
+              <code dir="ltr">OPEN = [S(10)]</code> | <code dir="ltr">CLOSED = []</code></li>
+            <li><b>الخطوة 2 (سحب S وتوسيعه إلى A و B):</b><br>
+              • للعقدة <span dir="ltr">A</span> (المسار S&rarr;A): $g(A) = 2$ ، $h(A) = 8 \implies f(A) = 2 + 8 = \mathbf{10}$.<br>
+              • للعقدة <span dir="ltr">B</span> (المسار S&rarr;B): $g(B) = 5$ ، $h(B) = 6 \implies f(B) = 5 + 6 = \mathbf{11}$.<br>
+              <code dir="ltr">OPEN = [A(10), B(11)]</code> | <code dir="ltr">CLOSED = [S]</code><br>
+              <i>(لاحظي: لو كنا نستخدم البحث الجشع لاختار B لأن $h(B)=6 < h(A)=8$، لكن $A^*$ اختارت A لأن مجموع $f(A)=10 < f(B)=11$!)</i></li>
+            <li><b>الخطوة 3 (سحب الأصغر وهو A(10) وتوسيعه إلى C و D):</b><br>
+              • للعقدة <span dir="ltr">C</span> (المسار S&rarr;A&rarr;C): $g(C) = 2 + 4 = 6$ ، $h(C) = 4 \implies f(C) = 6 + 4 = \mathbf{10}$.<br>
+              • للعقدة <span dir="ltr">D</span> (المسار S&rarr;A&rarr;D): $g(D) = 2 + 7 = 9$ ، $h(D) = 3 \implies f(D) = 9 + 3 = \mathbf{12}$.<br>
+              <code dir="ltr">OPEN = [C(10), B(11), D(12)]</code> | <code dir="ltr">CLOSED = [S, A]</code></li>
+            <li><b>الخطوة 4 (سحب الأصغر وهو C(10) وتوسيعه إلى G):</b><br>
+              • للعقدة <span dir="ltr">G</span> (المسار S&rarr;A&rarr;C&rarr;G): $g(G) = 6 + 3 = 9$ ، $h(G) = 0 \implies f(G) = 9 + 0 = \mathbf{9}$.<br>
+              <code dir="ltr">OPEN = [G(9), B(11), D(12)]</code> | <code dir="ltr">CLOSED = [S, A, C]</code></li>
+            <li><b>الخطوة 5 (سحب الأصغر وهو G(9)):</b><br>
+              العقدة المسحوبة هي عقدة الهدف <b dir="ltr">G</b>! نتوقف بنجاح.<br>
+              <b>المسار الأمثل الذي وجدته خوارزمية $A^*$ هو: <span dir="ltr">S &rarr; A &rarr; C &rarr; G</span> بتكلفة كلية فعلية $= 9$</b> (بينما المسار عبر B كانت تكلفته $5+6=11$، وعبر D كانت تكلفته $9+2=11$).</li>
+          </ol>
+        </div>
+      </div>
+    </details>
+
+    <!-- الوحدة الثالثة -->
+    <details open>
+      <summary>3) الوحدة الثالثة: تطبيق خوارزمية A* على أحجية الأرقام الثمانية (8-Puzzle) ودوال الإرشاد (h1 و h2) (ص 80 - 82)</summary>
+      <div class="details-body">
+        <div class="exam-alert">
+          <h3>أولاً: صياغة دالتي الإرشاد القياسيتين ($h_1$ و $h_2$) في أحجية 8-Puzzle (ص 80 - 81) - موضع أسئلة حسابية مؤكدة:</h3>
+          <p>عند حل أحجية الأرقام الثمانية (<span dir="ltr">8-Puzzle</span>) باستخدام خوارزمية $A^*$ ($f(n) = g(n) + h(n)$):</p>
+          <ul>
+            <li>تمثل <b dir="ltr">g(n)</b>: <b>عدد الحركات (الخطوات) الفعلية</b> التي تم تنفيذها للوصول من اللوحة الابتدائية إلى اللوحة الحالية $n$ (مستوى العمق).</li>
+            <li>ولحساب التكلفة التقديرية المتبقية <b dir="ltr">h(n)</b>، نستخدم إحدى دالتي الاستدلال المقبولتين التاليتين:
+              <ol>
+                <li><b>الدالة الأولى <span dir="ltr">h₁(n)</span> — عدد المربعات في غير مكانها الصحيح (<span dir="ltr">Number of Misplaced Tiles</span>):</b>
+                  <br>تحسب عدد الأرقام (من $1$ إلى $8$) التي <b>لا تتواجد في مواقعها النهائية الصحيحة</b> مقارنة بلوحة الهدف.
+                  <br><b style="color:var(--bad)">تنبيه اختباري هام جداً:</b> <b>لا يتم احتساب المربع الفارغ (<span dir="ltr">Blank Space</span>) ضمن $h_1$ أو $h_2$ أبداً!</b> (لأن الفراغ ليس رقماً، ولو حسبناه لبالغت الدالة في التقدير وفقدت شرط القبول).</li>
+                <li><b>الدالة الثانية <span dir="ltr">h₂(n)</span> — مجموع مسافات مانهاتن (<span dir="ltr">Sum of Manhattan Distances</span>):</b>
+                  <br>تُسمى أيضاً مسافة الكتل المدينة (<span dir="ltr">City Block Distance</span>)؛ وتحسب مجموع المسافات (الأفقية + العمودية) التي يبعدها كل رقم (من $1$ إلى $8$) عن موقعه الصحيح في لوحة الهدف:
+                  <div class="formula-box">h₂(n) = Σ ( |x_current - x_goal| + |y_current - y_goal| )</div>
+                </li>
+              </ol>
+            </li>
+          </ul>
+        </div>
+
+        <h3>ثانياً: مثال بصري وحسابي لحساب $h_1(n)$ و $h_2(n)$ على لوحة 8-Puzzle (ص 81)</h3>
+        <div class="puzzle-wrap">
+          <div class="puzzle-box">
+            <b>الحالة الحالية (Current State $n$)</b>
+            <div class="puzzle-grid">
+              <div class="p-cell misplaced">2</div>
+              <div class="p-cell misplaced">8</div>
+              <div class="p-cell">3</div>
+              <div class="p-cell misplaced">1</div>
+              <div class="p-cell misplaced">6</div>
+              <div class="p-cell">4</div>
+              <div class="p-cell">7</div>
+              <div class="p-cell blank"> </div>
+              <div class="p-cell">5</div>
+            </div>
+            <small class="muted">الأحمر = رقم في غير مكانه الصحيح</small>
+          </div>
+
+          <div class="puzzle-box">
+            <b>حالة الهدف (Goal State)</b>
+            <div class="puzzle-grid">
+              <div class="p-cell" style="background:var(--good)">1</div>
+              <div class="p-cell" style="background:var(--good)">2</div>
+              <div class="p-cell" style="background:var(--good)">3</div>
+              <div class="p-cell" style="background:var(--good)">8</div>
+              <div class="p-cell blank"> </div>
+              <div class="p-cell" style="background:var(--good)">4</div>
+              <div class="p-cell" style="background:var(--good)">7</div>
+              <div class="p-cell" style="background:var(--good)">6</div>
+              <div class="p-cell" style="background:var(--good)">5</div>
+            </div>
+            <small class="muted">الترتيب النهائي المطلوب</small>
+          </div>
+        </div>
+
+        <div class="note">
+          <h4>طريقة حساب $h_1(n)$ و $h_2(n)$ للوحة أعلاه خطوة بخطوة:</h4>
+          <ul>
+            <li><b>1. حساب <span dir="ltr">h₁(n)</span> (عدد الأرقام في غير مكانها الصحيح مع تجاهل الفراغ):</b>
+              <br>• الأرقام (<b>3، 4، 5، 7</b>) موجودة في أماكنها الصحيحة تماماً مقارنة بالهدف.
+              <br>• الأرقام (<b>1، 2، 6، 8</b>) موجودة في غير أماكنها الصحيحة (4 أرقام باللون الأحمر).
+              <br>• إذن: <b dir="ltr">h₁(n) = 4</b>.</li>
+            <li><b>2. حساب <span dir="ltr">h₂(n)</span> (مجموع مسافات مانهاتن للأرقام من 1 إلى 8):</b>
+              <br>• الرقم <b>1</b>: يحتاج خطوة واحدة للأعلى ليصل لمكانه &larr; $1$
+              <br>• الرقم <b>2</b>: يحتاج خطوة واحدة لليمين ليصل لمكانه &larr; $1$
+              <br>• الرقم <b>3</b>: في مكانه الصحيح &larr; $0$
+              <br>• الرقم <b>4</b>: في مكانه الصحيح &larr; $0$
+              <br>• الرقم <b>5</b>: في مكانه الصحيح &larr; $0$
+              <br>• الرقم <b>6</b>: يحتاج خطوة واحدة للأسفل ليصل لمكانه &larr; $1$
+              <br>• الرقم <b>7</b>: في مكانه الصحيح &larr; $0$
+              <br>• الرقم <b>8</b>: يحتاج خطوتين (خطوة لليسار + خطوة للأسفل) ليصل لمكانه &larr; $2$
+              <br>• إذن المجموع: <b dir="ltr">h₂(n) = 1 + 1 + 0 + 0 + 0 + 1 + 0 + 2 = 5</b>.</li>
+          </ul>
+        </div>
+
+        <div class="exam-alert">
+          <h3>ثالثاً: المقارنة بين دالتي الإرشاد ومفهوم الهيمنة (<span dir="ltr">Dominance</span>) وتتبع حل 8-Puzzle (ص 81 - 82):</h3>
+          <ul>
+            <li><b>لماذا كلتا الدالتين $h_1$ و $h_2$ مقبولتان (<span dir="ltr">Admissible</span>)؟</b>
+              <br>• لأن أي مربع في غير مكانه يحتاج على الأقل إلى حركة واحدة ليصل لمكانه، وبالتالي $h_1(n) \le h^*(n)$.
+              <br>• ولأن كل حركة تحرك مربعاً واحداً خطوة واحدة فقط أفقياً أو عمودياً، فلا يمكن لأي مربع أن يصل لمكانه بعدد خطوات أقل من مسافة مانهاتن، وبالتالي $h_2(n) \le h^*(n)$.</li>
+            <li><b>مفهوم الهيمنة / التفوق (<span dir="ltr">Dominance</span>):</b>
+              <br>بما أنه لكل عقدة $n$ يكون دائماً <b dir="ltr">h₂(n) ≥ h₁(n)</b> (وكلتاهما مقبولتان لا تتجاوزان التكلفة الحقيقية $h^*(n)$)، فإننا نقول إن <b>الدالة $h_2$ تهيمن على (تتفوق على <span dir="ltr">Dominates</span>) الدالة $h_1$</b>؛ ويعني ذلك أن استخدام $h_2$ في خوارزمية $A^*$ <b>أكثر كفاءة دائماً</b> ويولد عدداً أقل من العقد مقارنة بـ $h_1$.</li>
+            <li><b>كيف تتتبع خوارزمية $A^*$ شجرة حل 8-Puzzle (ص 82)؟</b>
+              <ol>
+                <li>في المستوى الابتدائى ($g=0$): نحسب $f = 0 + 4 = 4$.</li>
+                <li>في المستوى الأول ($g=1$): نحرك الفراغ في الاتجاهات المتاحة (أعلى، يسار، يمين) فتتولد 3 لوحات جديدة:<br>
+                  • تحريك الفراغ للأعلى (تحريك الرقم 6 للأسفل): يصبح عدد الأرقام الخاطئة $h_1 = 3$، فتكون $f = g + h = 1 + 3 = \mathbf{4}$.<br>
+                  • تحريك الفراغ لليسار (تحريك 7 لليمين): تصبح $h_1 = 5 \implies f = 1 + 5 = \mathbf{6}$.<br>
+                  • تحريك الفراغ لليمين (تحريك 5 لليسار): تصبح $h_1 = 5 \implies f = 1 + 5 = \mathbf{6}$.</li>
+                <li>تختار خوارزمية $A^*$ اللوحة ذات القيمة الأصغر وهي $f = 4$ وتكمل توسيعها في المستوى الثاني ($g=2$) ثم المستوى الثالث ($g=3$) والرابع ($g=4$) والخامس ($g=5$) حتى تصل للوحة الهدف التي تكون فيها <b dir="ltr">h = 0</b> و <b dir="ltr">f = 5 + 0 = 5</b>!</li>
+              </ol>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= التبويب الثاني: جداول المقارنات والتتبع ================= -->
+  <section id="tables" class="panel">
+    <div class="card">
+      <h2>1. جدول تتبع خوارزمية البحث A* على الرسم البياني خطوة بخطوة (ص 79)</h2>
+      <p class="muted">حساب $f(n) = g(n) + h(n)$ في كل خطوة لإيجاد المسار الأمثل من <b dir="ltr">S</b> إلى <b dir="ltr">G</b>:</p>
+      <table>
+        <thead>
+          <tr>
+            <th>الخطوة</th>
+            <th>العقدة المسحوبة للتوسيع (الأقل في $f$)</th>
+            <th>الأبناء المولدون وحساب $f(n) = g(n) + h(n)$</th>
+            <th>القائمة المفتوحة <code dir="ltr">OPEN List</code> (مرتبة تصاعدياً حسب $f$)</th>
+            <th>القائمة المغلقة <code dir="ltr">CLOSED List</code></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>الابتدائية</b></td>
+            <td>— (إدراج البداية <b dir="ltr">S</b>)</td>
+            <td dir="ltr"><code>f(S) = 0 + 10 = 10</code></td>
+            <td dir="ltr"><code>[S(10)]</code></td>
+            <td dir="ltr"><code>[]</code></td>
+          </tr>
+          <tr>
+            <td><b>الخطوة 1</b></td>
+            <td><b dir="ltr">S(10)</b></td>
+            <td dir="ltr"><code>f(A) = 2 + 8 = 10</code><br><code>f(B) = 5 + 6 = 11</code></td>
+            <td dir="ltr"><code>[A(10), B(11)]</code></td>
+            <td dir="ltr"><code>[S]</code></td>
+          </tr>
+          <tr>
+            <td><b>الخطوة 2</b></td>
+            <td><b dir="ltr">A(10)</b></td>
+            <td dir="ltr"><code>f(C) = (2+4) + 4 = 10</code><br><code>f(D) = (2+7) + 3 = 12</code></td>
+            <td dir="ltr"><code>[C(10), B(11), D(12)]</code></td>
+            <td dir="ltr"><code>[S, A]</code></td>
+          </tr>
+          <tr>
+            <td><b>الخطوة 3</b></td>
+            <td><b dir="ltr">C(10)</b></td>
+            <td dir="ltr"><code>f(G) = (6+3) + 0 = 9</code></td>
+            <td dir="ltr"><code>[G(9), B(11), D(12)]</code></td>
+            <td dir="ltr"><code>[S, A, C]</code></td>
+          </tr>
+          <tr>
+            <td><b>الخطوة 4</b></td>
+            <td><b dir="ltr">G(9)</b> (عقدة الهدف!)</td>
+            <td>توقف بنجاح</td>
+            <td dir="ltr"><code>[B(11), D(12)]</code></td>
+            <td dir="ltr"><b><code>[S, A, C, G]</code> (التكلفة الكلية = 9)</b></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>2. جدول المقارنة الشامل بين خوارزميات البحث الخمس (BFS, DFS, UCS, Greedy, A*)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>الخوارزمية</th>
+            <th>نوع البحث</th>
+            <th>دالة التقييم / الاختيار</th>
+            <th>الاكتمال (Completeness)</th>
+            <th>الأمثلية (Optimality)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1. العرض أولاً (BFS)</b></td>
+            <td>غير موجه (أعمى)</td>
+            <td>الأقل عمقاً $d$ (طابور FIFO)</td>
+            <td><b>نعم</b> (إذا كان $b$ محدوداً)</td>
+            <td><b>نعم بشرط</b> تساوي تكاليف الخطوات</td>
+          </tr>
+          <tr>
+            <td><b>2. العمق أولاً (DFS)</b></td>
+            <td>غير موجه (أعمى)</td>
+            <td>الأعمق في الفرع (مكدس LIFO)</td>
+            <td><b>لا</b> (يفشل في اللانهائي والحلقات)</td>
+            <td><b>لا</b> (غير أمثلي)</td>
+          </tr>
+          <tr>
+            <td><b>3. التكلفة الموحدة (UCS)</b></td>
+            <td>غير موجه (أعمى)</td>
+            <td dir="ltr"><b>f(n) = g(n)</b></td>
+            <td><b>نعم</b></td>
+            <td><b>نعم دائماً</b> (للتكاليف الموجبة)</td>
+          </tr>
+          <tr>
+            <td><b>4. الأفضل أولاً الجشع (Greedy)</b></td>
+            <td>موجه (استدلالي)</td>
+            <td dir="ltr"><b>f(n) = h(n)</b></td>
+            <td><b>لا</b> (إلا في الفضاء المحدود مع CLOSED)</td>
+            <td><b>لا</b> (غير أمثلي لأنه يتجاهل $g(n)$)</td>
+          </tr>
+          <tr>
+            <td><b>5. خوارزمية A* (A-Star)</b></td>
+            <td>موجه (استدلالي)</td>
+            <td dir="ltr"><b>f(n) = g(n) + h(n)</b></td>
+            <td><b>نعم دائماً</b></td>
+            <td><b>نعم دائماً</b> (بشرط قبول/اتساق $h(n)$)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>3. جدول مقارنة دالتي الاستدلال (h1 و h2) في أحجية الأرقام الثمانية (8-Puzzle) (ص 80 - 82)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>وجه المقارنة</th>
+            <th>الدالة الأولى: <span dir="ltr">h₁(n)</span> (Misplaced Tiles)</th>
+            <th>الدالة الثانية: <span dir="ltr">h₂(n)</span> (Manhattan Distance)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>طريقة الحساب</b></td>
+            <td>عدد الأرقام (من 1 إلى 8) الموجودة في <b>غير مكانها الصحيح</b> مقارنة بلوحة الهدف.</td>
+            <td>مجموع المسافات <b>(الأفقية + العمودية)</b> التي يبعدها كل رقم (من 1 إلى 8) عن مكانه الصحيح في الهدف.</td>
+          </tr>
+          <tr>
+            <td><b>هل يُحسب المربع الفارغ (Blank)؟</b></td>
+            <td><b style="color:var(--bad)">لا يُحسب أبداً!</b></td>
+            <td><b style="color:var(--bad)">لا يُحسب أبداً!</b></td>
+          </tr>
+          <tr>
+            <td><b>هل هي دالة مقبولة (Admissible)؟</b></td>
+            <td><b>نعم مقبولة</b> ($h_1(n) \le h^*(n)$ لأن كل مربع خاطئ يحتاج لحركة واحدة على الأقل).</td>
+            <td><b>نعم مقبولة</b> ($h_2(n) \le h^*(n)$ لأن كل حركة تنقل الرقم خطوة واحدة فقط).</td>
+          </tr>
+          <tr>
+            <td><b>العلاقة والهيمنة (Dominance)</b></td>
+            <td>أقل دقة (تولد عقداً أكثر أثناء البحث).</td>
+            <td><b>تهيمن وتتفوق على $h_1$</b> لأن $h_2(n) \ge h_1(n)$ دائماً، فتستكشف عدداً أقل من العقد وتصل للحل أسرع.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>4. جدول شروط وخصائص خوارزمية البحث A* (ص 78)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>المفهوم / الشرط</th>
+            <th>الصيغة الرياضية</th>
+            <th>الدلالة والأثر على خوارزمية A*</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>شرط القبول (Admissibility)</b></td>
+            <td dir="ltr"><code>0 ≤ h(n) ≤ h*(n)</code></td>
+            <td>دالة الإرشاد لا تبالغ أبداً في تقدير التكلفة الحقيقية للهدف؛ يضمن أمثلية $A^*$ في <b>البحث الشجري</b>.</td>
+          </tr>
+          <tr>
+            <td><b>شرط الاتساق (Consistency)</b></td>
+            <td dir="ltr"><code>h(n) ≤ c(n, a, n') + h(n')</code></td>
+            <td>يحقق متباينة المثلث ويجعل $f(n)$ غير متناقصة؛ يضمن أمثلية $A^*$ في <b>البحث البياني (Graph Search)</b>.</td>
+          </tr>
+          <tr>
+            <td><b>الحالة الخاصة عند $h(n) = 0$</b></td>
+            <td dir="ltr"><code>f(n) = g(n) + 0 = g(n)</code></td>
+            <td>عندما تكون $h(n) = 0$ دائماً، تتحول خوارزمية $A^*$ إلى <b>خوارزمية البحث بالتكلفة الموحدة (UCS)</b>.</td>
+          </tr>
+          <tr>
+            <td><b>العيب الرئيسي لخوارزمية A*</b></td>
+            <td dir="ltr"><code>Space Complexity = O(bᵈ)</code></td>
+            <td>الاحتفاظ بجميع العقد المولدة في الذاكرة (<code dir="ltr">OPEN</code> و <code dir="ltr">CLOSED</code>)، مما يؤدي لنفاد الذاكرة في المسائل الكبيرة.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الثالث: المصطلحات ================= -->
+  <section id="terms" class="panel">
+    <div class="card">
+      <h2>قاموس المصطلحات والمفاهيم الشامل للفصل السابع (28 مصطلحاً)</h2>
+      <p class="muted">جميع مصطلحات خوارزمية $A^*$ وشروط القبول والاتساق وتطبيق 8-Puzzle (ص 75 - 82):</p>
+      <div id="termsGrid" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الرابع: البطاقات التعليمية ================= -->
+  <section id="cards" class="panel">
+    <div class="card">
+      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
+      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
+      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
+        <div class="term" id="flashTerm"></div>
+        <div class="answer" id="flashAnswer" hidden></div>
+        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="prevCard">السابق</button>
+        <span id="cardCount" class="muted"></span>
+        <button class="btn primary" id="nextCard">التالي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الخامس: الاختبار الشامل ================= -->
+  <section id="quiz" class="panel">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2>الاختبار الشامل للفصل السابع (25 سؤالاً)</h2>
+          <p class="muted">يغطي معادلة وخطوات خوارزمية $A^*$، شروط القبول والاتساق، مسائل تتبع الرسوم البيانية، ومسائل حساب $h_1$ و $h_2$ في أحجية 8-Puzzle.</p>
+        </div>
+        <div class="score" id="score">النتيجة: 0 / 25</div>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="quizArea"></div>
+      <div class="row">
+        <button class="btn" id="resetQuiz">إعادة الاختبار</button>
+        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+      </div>
+      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
+    </div>
+  </section>
+</main>
+
+<footer>الفصل السابع: خوارزمية البحث A* وتطبيق 8-Puzzle • مراجعة تفاعلية شاملة (صفحات 75 - 82)</footer>
+
+<script>
+const terms = [
+  ["A* Search (خوارزمية البحث A ستار)", "أشهر خوارزميات البحث الموجه (الاستدلالي)؛ تقيّم العقد بجمع التكلفة الفعلية من البداية g(n) والتكلفة التقديرية للهدف h(n)."],
+  ["f(n) = g(n) + h(n)", "معادلة دالة التقييم في خوارزمية A*؛ حيث تمثل f(n) التكلفة الكلية المقدرة لأرخص حل يمر عبر العقدة n."],
+  ["g(n) (التكلفة الفعلية)", "التكلفة الحقيقية الفعلية للمسار المقطوع من عقدة البداية (الجذر) حتى العقدة الحالية n."],
+  ["h(n) (التكلفة التقديرية / الاستدلالية)", "التكلفة المقدرة لأرخص مسار متبقٍ من العقدة الحالية n إلى عقدة الهدف، وتساوي صفراً عند الهدف h(Goal) = 0."],
+  ["h*(n) (التكلفة الحقيقية للهدف)", "التكلفة الحقيقية الفعلية لأرخص مسار من العقدة n إلى الهدف، وتُستخدم كمرجع لاختبار قبول دالة الاستدلال h(n)."],
+  ["OPEN List in A*", "القائمة المفتوحة في A*: طابور أولوية يحفظ العقد المولدة التي لم تُوسع بعد، مرتبة تصاعدياً حسب أقل قيمة لـ f(n)."],
+  ["CLOSED List in A*", "القائمة المغلقة في A*: قائمة تحفظ العقد التي تم سحبها وتوسيعها بالفعل لمنع تكرار فحصها."],
+  ["Admissible Heuristic (دالة استدلال مقبولة)", "دالة إرشاد متفائلة لا تبالغ أبداً في تقدير التكلفة الحقيقية للوصول للهدف: 0 ≤ h(n) ≤ h*(n)."],
+  ["Consistent / Monotonic Heuristic", "دالة استدلال متسقة (رتيبة): تحقق متباينة المثلث h(n) ≤ c(n, a, n') + h(n') وتضمن أمثلية A* في البحث البياني."],
+  ["Triangle Inequality (متباينة المثلث)", "الشرط الرياضي للاتساق: التكلفة المقدرة من n للهدف لا تزيد عن تكلفة الخطوة للجار n' مضافاً إليها التكلفة المقدرة من n' للهدف."],
+  ["Optimally Efficient (فعالة بشكل أمثل)", "خاصية تميز خوارزمية A* وتعني أنه لا توجد خوارزمية أخرى تستخدم نفس دالة الإرشاد وتضمن الحل الأمثل بتوسيع عقد أقل."],
+  ["A* Completeness (اكتمال A*)", "خوارزمية A* مكتملة دائماً بشرط أن يكون عامل التفرع منتهياً وتكلفة كل خطوة موجبة أكبر من ثابت صغير (c ≥ ε > 0)."],
+  ["A* Space Complexity O(b^d)", "التعقيد المكاني لخوارزمية A* أسي لأنها تحتفظ بجميع العقد المولدة في الذاكرة، وهو العيب الرئيسي لـ A*."],
+  ["8-Puzzle Problem (أحجية الأرقام الثمانية)", "لوحة 3×3 تضم 8 مربعات مرقمة ومربعاً فارغاً، والمطلوب ترتيب الأرقام بأقل عدد من الحركات باستخدام A*."],
+  ["g(n) in 8-Puzzle", "في أحجية 8-Puzzle تمثل g(n) عدد الحركات (الخطوات) الفعلية التي نُفذت من الحالة الابتدائية حتى اللوحة الحالية."],
+  ["h₁(n): Misplaced Tiles", "دالة الاستدلال الأولى في 8-Puzzle: تحسب عدد الأرقام (من 1 إلى 8) الموجودة في غير مكانها الصحيح مقارنة بالهدف."],
+  ["h₂(n): Manhattan Distance", "دالة الاستدلال الثانية في 8-Puzzle: تحسب مجموع المسافات الأفقية والعمودية التي يبعدها كل رقم عن مكانه الصحيح."],
+  ["City Block Distance (مسافة الكتل المدينة)", "الاسم الآخر لمسافة مانهاتن |x₁ - x₂| + |y₁ - y₂| لأن الحركة تقتصر على الاتجاهين الأفقي والعمودي فقط دون الأقطار."],
+  ["Blank Space Exclusion (استبعاد المربع الفارغ)", "قاعدة أساسية في 8-Puzzle: لا يتم احتساب المربع الفارغ (Blank) عند حساب h₁ أو h₂ حتى تظل الدالة مقبولة."],
+  ["Heuristic Dominance (هيمنة دالة الإرشاد)", "إذا كانت h₂(n) ≥ h₁(n) لكل عقدة n وكلتاهما مقبولتان، فإن h₂ تهيمن على h₁ وتكون أكثر كفاءة وتوسع عقداً أقل."],
+  ["Path Updating in OPEN", "إذا وُلدت عقدة m موجودة مسبقاً في OPEN ولكن بمسار جديد له تكلفة g(m) و f(m) أقل، يتم تحديث قيمتها وأبيها للمسار الأرخص."],
+  ["Parent Pointer (مؤشر الأب)", "يُحفظ في كل عقدة لتتبع مسار الحل الأمثل عكسياً من عقدة الهدف حتى عقدة البداية بعد انتهاء بحث A*."],
+  ["Non-decreasing f(n)", "عندما تكون دالة الإرشاد متسقة (Consistent)، فإن قيم f(n) على طول أي مسار في البحث لا تتناقص أبداً."],
+  ["A* when h(n) = 0", "إذا كانت دالة الاستدلال تساوي صفراً دائماً h(n) = 0، فإن f(n) = g(n) وتتحول خوارزمية A* إلى البحث بالتكلفة الموحدة (UCS)."],
+  ["A* when g(n) = 0", "إذا تم تجاهل التكلفة الفعلية g(n) = 0 والاعتماد فقط على h(n)، تتحول الخوارزمية إلى البحث الجشع بأولوية الأفضل (Greedy)."],
+  ["Overestimating Heuristic", "دالة إرشاد تبالغ في تقدير التكلفة (h(n) > h*(n))؛ وهي دالة غير مقبولة قد تفقد معها خوارزمية A* خاصية الأمثلية."],
+  ["Straight-Line Distance (SLD)", "مسافة الخط المستقيم: دالة استدلال مقبولة ومتسقة شائعة الاستخدام مع خوارزمية A* في خرائط الطرق والمدن."],
+  ["Effective Branching Factor (b*)", "عامل التفرع الفعال: مقياس لجودة وكفاءة دالة الإرشاد في A*، وكلما اقترب من 1 زادت قوة دالة الإرشاد."]
+];
+
+const cards = [
+  ["ما هي الفكرة الأساسية لخوارزمية البحث A* (A-Star Search)؟ وما معادلتها؟", "تجمع بين ميزة البحث بالتكلفة الموحدة (UCS) وميزة البحث الجشع (Greedy) عن طريق تقييم العقد بالمعادلة:\nf(n) = g(n) + h(n)."],
+  ["إلى ماذا يرمز كل من g(n) و h(n) و f(n) في معادلة خوارزمية A*؟", "• g(n): التكلفة الفعلية الحقيقية للمسار من عقدة البداية إلى العقدة n.\n• h(n): التكلفة التقديرية/الاستدلالية لأرخص مسار من العقدة n إلى الهدف.\n• f(n): التكلفة الكلية المقدرة لأرخص حل يمر عبر العقدة n."],
+  ["كيف يتم ترتيب العقد داخل القائمة المفتوحة (OPEN List) في خوارزمية A*؟", "تُرتب العقد في القائمة المفتوحة (طابور أولوية) تصاعدياً حسب أقل قيمة لدالة التقييم الكلية f(n) = g(n) + h(n)."],
+  ["متى تتوقف خوارزمية البحث A* وتُعلن العثور على الحل الأمثل؟", "تتوقف عندما تكون العقدة المسحوبة من مقدمة القائمة المفتوحة (OPEN) للتوسيع (صاحبة أقل قيمة لـ f(n)) هي عقدة الهدف (Goal Node)."],
+  ["ماذا تفعل خوارزمية A* إذا ولّدت عقدة ابن (m) موجودة مسبقاً في القائمة المفتوحة (OPEN)؟", "تقارن تكلفة المسار الجديد g(m) و f(m) بالتكلفة القديمة المسجلة لها؛ فإذا كان المسار الجديد أرخص (أقل تكلفة)، تقوم بتحديث قيمة f(m) وتغيير مؤشر الأب ليصبح العقدة الحالية."],
+  ["ما هو شرط القبول (Admissibility) لدالة الاستدلال h(n)؟ وما أهميته لخوارزمية A*؟", "تكون الدالة h(n) مقبولة (Admissible) إذا كانت لا تبالغ أبداً في تقدير التكلفة الحقيقية للوصول للهدف: 0 ≤ h(n) ≤ h*(n).\nوأهميته أنه الشرط الأساسي لضمان أمثلية (Optimality) خوارزمية A*."],
+  ["لماذا توصف دالة الاستدلال المقبولة (Admissible Heuristic) بأنها 'متفائلة' (Optimistic)؟", "لأنها تفترض دائماً أن تكلفة الوصول إلى الهدف أقل من أو تساوي التكلفة الحقيقية الفعلية h*(n) ولا تبالغ فيها أبداً."],
+  ["ما هو شرط الاتساق أو الرتابة (Consistency / Monotonicity) لدالة الاستدلال h(n)؟", "هو تحقيق متباينة المثلث لكل عقدة n وخليفتها n' بفعل تكلفته c(n,a,n'):\nh(n) ≤ c(n, a, n') + h(n')\nوهو يضمن أمثلية خوارزمية A* في البحث البياني (Graph Search)."],
+  ["ما العلاقة بين دالة الاستدلال المتسقة (Consistent) ودالة الاستدلال المقبولة (Admissible)؟", "كل دالة استدلال متسقة (Consistent) هي بالضرورة دالة مقبولة (Admissible)، ولكن ليس كل دالة مقبولة متسقة."],
+  ["ماذا يحدث لسلوك خوارزمية A* إذا كانت دالة الاستدلال تبالغ في تقدير التكلفة (أي h(n) > h*(n))؟", "تصبح دالة الاستدلال غير مقبولة (Not Admissible)، وقد تفقد خوارزمية A* خاصية الأمثلية فتُرجع حلاً ذا تكلفة أعلى من الحل الأمثل."],
+  ["ماذا تصبح خوارزمية A* في الحالتين الخاصتين: 1) عندما h(n) = 0 دائماً، و 2) عندما g(n) = 0 دائماً؟", "• عندما h(n) = 0: تصبح f(n) = g(n)، فتتحول A* إلى البحث بالتكلفة الموحدة (UCS).\n• عندما g(n) = 0: تصبح f(n) = h(n)، فتتحول A* إلى البحث الجشع بأولوية الأفضل (Greedy)."],
+  ["ما هو تقييم خوارزمية A* من حيث الاكتمال والأمثلية والوقت والذاكرة؟", "• الاكتمال: نعم مكتملة.\n• الأمثلية: نعم أمثلية (بشرط قبول/اتساق h).\n• الوقت: أسي في أسوأ حالة.\n• الذاكرة: أسية O(b^d)؛ ونفاد الذاكرة هو العيب الرئيسي لـ A*."],
+  ["ما معنى أن خوارزمية A* (فعالة بشكل أمثل - Optimally Efficient)؟", "يعني أنه من بين جميع الخوارزميات التي تستخدم نفس دالة الاستدلال h(n)، لا توجد أي خوارزمية أخرى تضمن إيجاد الحل الأمثل وتوسع عدداً أقل من العقد مقارنة بـ A*."],
+  ["عند تطبيق خوارزمية A* على أحجية الأرقام الثمانية (8-Puzzle)، ماذا تمثل قيمة g(n)؟", "تمثل g(n) عدد الحركات (الخطوات) الفعلية التي تم تنفيذها لتحريك المربع الفارغ من الحالة الابتدائية حتى الوصول إلى اللوحة الحالية n (عمق العقدة)."],
+  ["ما هي دالة الاستدلال الأولى h₁(n) المستخدمة في حل أحجية 8-Puzzle؟", "هي عدد المربعات/الأرقام (من 1 إلى 8) الموجودة في غير مكانها الصحيح (Misplaced Tiles) مقارنة بلوحة الهدف (مع عدم احتساب المربع الفارغ!)."],
+  ["ما هي دالة الاستدلال الثانية h₂(n) المستخدمة في حل أحجية 8-Puzzle؟", "هي مجموع مسافات مانهاتن (Manhattan Distance / مسافة الكتل المدينة): مجموع الخطوات الأفقية والعمودية التي يبعدها كل رقم (من 1 إلى 8) عن موقعه الصحيح في لوحة الهدف."],
+  ["لماذا لا نحتسب المربع الفارغ (Blank Space) عند حساب h₁(n) أو h₂(n) في أحجية 8-Puzzle؟", "لأن تحريك أي رقم إلى المربع الفارغ يحرك الرقم والفراغ معاً في خطوة واحدة؛ فلو حسبنا الفراغ كقطعة تاسعة لبالغت الدالة في تقدير التكلفة وفقدت شرط القبول (Admissibility)."],
+  ["في لوحة 8-Puzzle، إذا كان الرقم 8 يقع في الصف الأول والعمود الثاني (1,2)، وموقعه في الهدف هو الصف الثاني والعمود الأول (2,1)، فكم مسافة مانهاتن الخاصة بالرقم 8؟", "مسافة مانهاتن = |1 - 2| + |2 - 1| = 1 + 1 = 2 خطوة (خطوة لليسار + خطوة للأسفل)."],
+  ["أيهما أفضل وأكثر كفاءة في حل أحجية 8-Puzzle باستخدام A*: دالة المربعات الخاطئة (h₁) أم دالة مسافة مانهاتن (h₂)؟ ولماذا؟", "دالة مسافة مانهاتن (h₂) أفضل وأكثر كفاءة لأنها تهيمن (Dominates) على h₁؛ حيث إن h₂(n) ≥ h₁(n) لكل عقدة n، مما يجعلها أقرب للتكلفة الحقيقية فتوسع عقداً أقل."],
+  ["متى نقول إن دالة الاستدلال h₂ تهيمن على (Dominates) دالة الاستدلال h₁؟", "عندما تكون كلتا الدالتين مقبولتين (Admissible)، وتكون قيمة h₂(n) ≥ h₁(n) لجميع العقد n في فضاء البحث."],
+  ["إذا كانت عقدة N في شجرة بحث 8-Puzzle على المستوى الثالث (تم الوصول إليها بـ 3 حركات من البداية)، وكان بها 4 أرقام في غير مكانها الصحيح (h₁ = 4)، فكم تبلغ قيمة f(N)؟", "بما أنها في المستوى الثالث فإن g(N) = 3، ولدينا h₁(N) = 4؛ إذن:\nf(N) = g(N) + h₁(N) = 3 + 4 = 7."],
+  ["في مثال تتبع الرسم البياني، إذا كانت العقدة A لها g(A)=2 و h(A)=8، والعقدة B لها g(B)=5 و h(B)=6؛ فأي عقدة تختارها Greedy وأي عقدة تختارها A*؟", "• البحث الجشع (Greedy) ينظر لـ h فقط فيختار B لأن h(B)=6 < h(A)=8.\n• خوارزمية A* تحسب f=g+h: f(A)=2+8=10 و f(B)=5+6=11، فتختار A لأن 10 < 11."],
+  ["هل تتوقف خوارزمية A* بمجرد توليد عقدة الهدف وإضافتها للقائمة المفتوحة OPEN، أم تنتظر حتى يتم سحبها من OPEN لتوسيعها؟", "لا تتوقف بمجرد توليدها، بل تنتظر حتى يتم سحب عقدة الهدف من مقدمة القائمة المفتوحة OPEN (لتضمن أنه لا يوجد مسار آخر في OPEN له تكلفة f أقل)."],
+  ["في أحجية 8-Puzzle، كم تبلغ قيمة h₁(Goal) و h₂(Goal) عند الوصول إلى لوحة الهدف النهائية؟", "عند الوصول إلى لوحة الهدف تكون جميع الأرقام في أماكنها الصحيحة والمسافة المتبقية صفراً، لذا فإن:\nh₁(Goal) = 0 ، و h₂(Goal) = 0."],
+  ["ما هي أقصى عدد حركات ممكنة للمربع الفارغ في لوحة 8-Puzzle عندما يكون في: 1) المنتصف، 2) الزاوية، 3) منتصف الضلع؟", "1) في المنتصف: 4 حركات (أعلى، أسفل، يمين، يسار).\n2) في الزاوية (الركن): حركتان فقط.\n3) في منتصف الضلع الجانبي: 3 حركات."],
+  ["كيف تستخرج خوارزمية A* سلسلة خطوات الحل النهائي بعد أن تسحب عقدة الهدف من القائمة المفتوحة؟", "عن طريق تتبع مؤشرات الأب (PARENT Pointers) عكسياً من عقدة الهدف رجوعاً إلى عقدة البداية (الجذر)."],
+  ["ما الشرط الرياضي الذي يجعل قيم f(n) لا تتناقص أبداً على طول أي مسار في شجرة بحث A*؟", "شرط الاتساق أو الرتابة (Consistency / Monotonicity): h(n) ≤ c(n, a, n') + h(n')."],
+  ["لماذا قد تترك خوارزمية A* مساراً وصلت فيه للمستوى الثالث وتعود لتوسيع عقدة قديمة في المستوى الأول؟", "يحدث ذلك عندما تكتشف أن قيمة f(n) للعقدة في المستوى الثالث أصبحت أكبر (أعلى تكلفة) من قيمة f(n) للعقدة المنتظرة في المستوى الأول داخل قائمة OPEN."]
+];
+
+const questions = [
+  {
+    q: "ما هي معادلة دالة التقييم الشهيرة التي تعتمد عليها خوارزمية البحث (A* - A-Star Search) لتحديد أولوية العقد؟",
+    o: [
+      "f(n) = g(n) - h(n)",
+      "f(n) = g(n) + h(n)",
+      "f(n) = h(n) فقط",
+      "f(n) = g(n) × h(n)"
+    ],
+    a: 1,
+    e: "تقيّم خوارزمية A* العقد بجمع التكلفة الفعلية من البداية g(n) والتكلفة التقديرية للهدف h(n) بالمعادلة: f(n) = g(n) + h(n) (ص 75)."
+  },
+  {
+    q: "في معادلة خوارزمية البحث A*: f(n) = g(n) + h(n)، ماذا يمثل كل من الرمزين g(n) و h(n) بدقة؟",
+    o: [
+      "g(n) هي التكلفة التقديرية للهدف، و h(n) هي التكلفة الفعلية من البداية",
+      "كلاهما يمثلان عدد الأبناء للعقدة الحالية",
+      "g(n) هي التكلفة الفعلية للمسار من عقدة البداية إلى العقدة n، و h(n) هي التكلفة التقديرية (الاستدلالية) لأرخص مسار من العقدة n إلى الهدف",
+      "g(n) هي عامل التفرع، و h(n) هي عمق الشجرة الكلي"
+    ],
+    a: 2,
+    e: "تمثل g(n) تكلفة المسار الفعلي المقطوع من الجذر إلى n، وتمثل h(n) التكلفة الاستدلالية المقدرة من n إلى الهدف (ص 75)."
+  },
+  {
+    q: "تجمع خوارزمية البحث (A*) بين مزايا خوارزميتين أساسيتين من خلال دمج g(n) و h(n)؛ فما هما هاتان الخوارزميتان؟",
+    o: [
+      "البحث بالعمق أولاً (DFS) وتقليم ألفا-بيتا",
+      "تسلق التل والخوارزميات الجينية",
+      "البحث العشوائي والبحث بالعمق المحدود",
+      "البحث بالتكلفة الموحدة (UCS الذي يعتمد على g(n)) والبحث الجشع بأولوية الأفضل (Greedy الذي يعتمد على h(n))"
+    ],
+    a: 3,
+    e: "تأخذ A* ضمان الأمثلية من UCS (المعتمد على g(n)) والسرعة والتوجيه نحو الهدف من البحث الجشع (المعتمد على h(n)) (ص 75)."
+  },
+  {
+    q: "كيف يتم ترتيب وسحب العقد من القائمة المفتوحة (OPEN List) أثناء عمل خوارزمية البحث A*؟",
+    o: [
+      "تُرتب تصاعدياً كطابور أولوية بحيث يتم دائماً سحب العقدة صاحبة أصغر (أقل) قيمة لدالة التقييم الكلية f(n)",
+      "تُرتب تنازلياً بحيث تُسحب العقدة صاحبة أكبر قيمة لـ f(n)",
+      "تُسحب العقد حسب مبدأ آخراً يدخل أولاً يخرج (LIFO)",
+      "تُسحب العقد حسب قيمة h(n) فقط مع تجاهل g(n)"
+    ],
+    a: 0,
+    e: "في خوارزمية A* تُدار القائمة المفتوحة OPEN كطابور أولوية يختار دائماً العقدة ذات أقل تكلفة إجمالية مقدرة f(n) (ص 76)."
+  },
+  {
+    q: "ماذا تفعل خوارزمية A* عند توليد عقدة خليفة (m) كانت موجودة مسبقاً في القائمة المفتوحة (OPEN)، وتبين أن المسار الجديد إليها يعطي قيمة f(m) أصغر من قيمتها السابقة؟",
+    o: [
+      "تتجاهل المسار الجديد الأرخص وتبقي على المسار القديم الأغلى",
+      "تقوم بتحديث قيمة g(m) و f(m) إلى القيمة الجديدة الأقل، وتحدث مؤشر الأب (PARENT) ليشير إلى العقدة الحالية",
+      "تحذف العقدة m من القائمتين OPEN و CLOSED نهائياً",
+      "تتوقف عن البحث وتعلن الفشل"
+    ],
+    a: 1,
+    e: "عند العثور على مسار أرخص لعقدة موجودة في OPEN، تحدث خوارزمية A* تكلفتها ومؤشر أبيهالاعتماد المسار الأفضل (ص 77)."
+  },
+  {
+    q: "ما هو الشرط الأساسي الواجب توافره في دالة الاستدلال h(n) لكي تضمن خوارزمية A* إيجاد الحل الأمثل (Optimal Solution) في البحث الشجري؟",
+    o: [
+      "أن تكون قيمة h(n) أكبر دائماً من التكلفة الحقيقية h*(n)",
+      "أن تكون قيمة h(n) سالبة لجميع العقد",
+      "أن تكون دالة الاستدلال مقبولة (Admissible Heuristic)، أي لا تبالغ أبداً في تقدير التكلفة الحقيقية للوصول إلى الهدف: 0 ≤ h(n) ≤ h*(n)",
+      "أن تساوي قيمة h(n) مئة ضعف التكلفة الفعلية"
+    ],
+    a: 2,
+    e: "شرط القبول (Admissibility: h(n) ≤ h*(n)) هو الشرط اللازم والكافي لضمان أمثلية خوارزمية A* (ص 78)."
+  },
+  {
+    q: "متى توصف دالة الاستدلال h(n) بأنها متسقة أو رتيبة (Consistent / Monotonic) لضمان أمثلية A* في البحث البياني (Graph Search)؟",
+    o: [
+      "إذا كانت قيمتها تزداد كلما اقتربنا من عقدة الهدف",
+      "إذا كانت تساوي ما لا نهاية عند عقدة الهدف",
+      "إذا كانت تلغي تكلفة الخطوة الفعلية",
+      "إذا كانت تحقق متباينة المثلث لكل عقدة n وخليفتها n': h(n) ≤ c(n, a, n') + h(n')"
+    ],
+    a: 3,
+    e: "شرط الاتساق (Consistency) ينص على أن التكلفة المقدرة من n للهدف لا تتجاوز تكلفة الخطوة لـ n' مضافاً إليها التكلفة المقدرة من n' للهدف (ص 78)."
+  },
+  {
+    q: "ما هو العيب الرئيسي والأكبر لخوارزمية البحث A* عند تطبيقها على مسائل ذات فضاء حالات ضخم جداً؟",
+    o: [
+      "التعقيد المكاني الأسي O(b^d)؛ لأنها تحتفظ بجميع العقد المولدة في الذاكرة داخل القائمتين OPEN و CLOSED مما يؤدي لنفاد الذاكرة",
+      "أنها غير مكتملة ولا تجد الحل حتى لو كان موجوداً",
+      "أنها لا تستخدم دالة الاستدلال h(n)",
+      "أنها تختار دائماً أطول وأغلى مسار نحو الهدف"
+    ],
+    a: 0,
+    e: "رغم أن A* مكتملة وأمثلية وفعالة، إلا أن احتفاظها بجميع العقد المولدة في الذاكرة يجعل نفاد الذاكرة (Space Complexity) هو عيبها الأساسي (ص 78)."
+  },
+  {
+    q: "[مسألة تتبع خوارزمية A*]: إذا كانت عقدة البداية S متصلة بالعقدتين A و B، حيث: تكلفة الطريق من S إلى A هي 3 وقيمة h(A)=6، وتكلفة الطريق من S إلى B هي 2 وقيمة h(B)=8؛ فكم تبلغ قيمة f(A) و f(B)، وأي عقدة ستختارها خوارزمية A* لتوسيعها أولاً؟",
+    o: [
+      "f(A) = 6 و f(B) = 8؛ وتختار A",
+      "f(A) = 3 + 6 = 9 ، و f(B) = 2 + 8 = 10؛ وتختار العقدة A لأن f(A)=9 أصغر من f(B)=10",
+      "f(A) = 9 و f(B) = 10؛ وتختار العقدة B لأن g(B)=2 أصغر",
+      "f(A) = 18 و f(B) = 16؛ وتختار B"
+    ],
+    a: 1,
+    e: "نحسب f(n) = g(n) + h(n): للعقدة A تكون f(A) = 3 + 6 = 9، وللعقدة B تكون f(B) = 2 + 8 = 10. تختار A* القيمة الأقل وهي A(9) (ص 79)."
+  },
+  {
+    q: "[مسألة تتبع خوارزمية A*]: في القائمة المفتوحة OPEN توجد ثلاث عقد: العقدة X (لها g=4, h=5)، والعقدة Y (لها g=6, h=2)، والعقدة Z (لها g=3, h=7). أي عقدة ستسحبها خوارزمية A* لتوسيعها؟",
+    o: [
+      "العقدة Z لأن g(Z) = 3 هي الأقل",
+      "العقدة X لأن f(X) = 9",
+      "العقدة Y لأن مجموع f(Y) = 6 + 2 = 8 هو الأصغر مقارنة بـ f(X)=9 و f(Z)=10",
+      "جميع العقد متساوية في الأولوية"
+    ],
+    a: 2,
+    e: "نحسب f = g + h لكل عقدة: f(X) = 4+5 = 9، و f(Y) = 6+2 = 8، و f(Z) = 3+7 = 10. الأصغر هي Y بـ f=8 (ص 79)."
+  },
+  {
+    q: "عند تطبيق خوارزمية A* على أحجية الأرقام الثمانية (8-Puzzle)، ماذا تمثل قيمة g(n) وما هما دالتا الإرشاد القياسيتان h₁(n) و h₂(n)؟",
+    o: [
+      "تمثل g(n) عدد الأرقام الزوجية، و h₁ هي مساحة اللوحة",
+      "تمثل g(n) مسافة مانهاتن، و h₁ هي عمق العقدة",
+      "جميعها تساوي الصفر في جميع خطوات الحل",
+      "تمثل g(n) عدد الحركات الفعلية المنفذة من البداية (عمق العقدة)، وتمثل h₁ عدد الأرقام في غير مكانها الصحيح، وتمثل h₂ مجموع مسافات مانهاتن للأرقام عن مواقعها في الهدف"
+    ],
+    a: 3,
+    e: "في 8-Puzzle: g(n) هي عدد الحركات المقطوعة، و h₁ هي عدد المربعات الخاطئة (Misplaced tiles)، و h₂ هي مجموع مسافات مانهاتن (ص 80-81)."
+  },
+  {
+    q: "عند حساب دالة الاستدلال h₁(n) (عدد المربعات في غير مكانها الصحيح) أو h₂(n) (مسافة مانهاتن) في أحجية 8-Puzzle، كيف يتم التعامل مع (المربع الفارغ - Blank Space)؟",
+    o: [
+      "لا يتم احتساب المربع الفارغ أبداً ضمن h₁ أو h₂ (نحسب فقط الأرقام من 1 إلى 8) لكي تظل دالة الاستدلال مقبولة ولا تبالغ في التقدير",
+      "يُحسب المربع الفارغ دائماً كقطعة تاسعة ويُضرب في 2",
+      "يُحسب المربع الفارغ في h₁ ولا يُحسب في h₂",
+      "نحسب المربع الفارغ فقط ونتجاهل الأرقام من 1 إلى 8"
+    ],
+    a: 0,
+    e: "قاعدة أساسية في 8-Puzzle: المربع الفارغ لا يُعدّ قطعة مرقمة، لذا لا يُحسب في h₁ ولا في h₂ (ص 80-81)."
+  },
+  {
+    q: "[مسألة حساب h₁ في 8-Puzzle]: إذا كان الصف الأول في لوحة الهدف هو [1, 2, 3]، والثاني [8, فراغ, 4]، والثالث [7, 6, 5]؛ وكانت اللوحة الحالية صفها الأول [2, 8, 3]، والثاني [1, 6, 4]، والثالث [7, فراغ, 5]؛ فكم تبلغ قيمة h₁(n) (عدد المربعات في غير مكانها الصحيح)؟",
+    o: [
+      "5 (باحتساب المربع الفارغ)",
+      "4 (لأن الأرقام 1 و 2 و 6 و 8 فقط في غير أماكنها الصحيحة، بينما 3 و 4 و 5 و 7 في أماكنها الصحيحة، والفراغ لا يُحسب)",
+      "8 (لأن جميع الأرقام خاطئة)",
+      "2 فقط"
+    ],
+    a: 1,
+    e: "بمقارنة اللوحتين (مع تجاهل الفراغ): الأرقام 3, 4, 5, 7 في نفس مواقع الهدف، بينما الأرقام (2, 8, 1, 6) في غير مواقعها، إذن h₁ = 4 (ص 81)."
+  },
+  {
+    q: "[مسألة حساب مسافة مانهاتن h₂ في 8-Puzzle]: في نفس اللوحة السابقة، يبعد الرقم (1) خطوة واحدة عن مكانه، والرقم (2) خطوة واحدة، والرقم (6) خطوة واحدة، والرقم (8) خطوتين (خطوة لليسار وخطوة للأسفل)، وبقية الأرقام في أماكنها (0). فكم تبلغ قيمة مسافة مانهاتن الكلية h₂(n)؟",
+    o: [
+      "4",
+      "8",
+      "5 (لأن 1 + 1 + 1 + 2 = 5)",
+      "3"
+    ],
+    a: 2,
+    e: "نجمع مسافات مانهاتن للأرقام الخاطئة: مسافة(1)=1 + مسافة(2)=1 + مسافة(6)=1 + مسافة(8)=2 = 5 خطوات (ص 81)."
+  },
+  {
+    q: "في نفس مسألة 8-Puzzle السابقة، إذا كانت اللوحة المذكورة تقع في المستوى الثاني من شجرة البحث (أي تم الوصول إليها بعد حركتين من البداية g(n) = 2)، فكم تبلغ قيمة f(n) باستخدام دالة المربعات الخاطئة (h₁ = 4)، وباستخدام مسافة مانهاتن (h₂ = 5)؟",
+    o: [
+      "باستخدام h₁ تكون f = 4، وباستخدام h₂ تكون f = 5",
+      "باستخدام h₁ تكون f = 2، وباستخدام h₂ تكون f = 2",
+      "باستخدام h₁ تكون f = 8، وباستخدام h₂ تكون f = 10",
+      "باستخدام h₁ تكون f(n) = 2 + 4 = 6، وباستخدام h₂ تكون f(n) = 2 + 5 = 7"
+    ],
+    a: 3,
+    e: "نطبق المعادلة f(n) = g(n) + h(n) حيث g(n) = 2: مع h₁ تكون f = 2 + 4 = 6، ومع h₂ تكون f = 2 + 5 = 7 (ص 81-82)."
+  },
+  {
+    q: "عند المقارنة بين دالتي الإرشاد h₁ (المربعات الخاطئة) و h₂ (مسافة مانهاتن) في أحجية 8-Puzzle، ماذا نعني بقولنا إن (الدالة h₂ تهيمن على / تتفوق على الدالة h₁ - Dominance)؟",
+    o: [
+      "أن كلتيهما مقبولتان وأن h₂(n) ≥ h₁(n) لجميع العقد n، وبالتالي فإن استخدام h₂ في خوارزمية A* أكثر كفاءة دائماً ويوسع عدداً أقل من العقد للوصول للحل",
+      "أن الدالة h₁ أفضل وأسرع من الدالة h₂ دائماً",
+      "أن الدالة h₂ غير مقبولة وتبالغ في تقدير التكلفة",
+      "أن h₁(n) أكبر من h₂(n) لجميع العقد"
+    ],
+    a: 0,
+    e: "بما أن مسافة مانهاتن h₂ أكبر أو تساوي عدد المربعات الخاطئة h₁ ولا تتجاوز التكلفة الحقيقية، فإن h₂ أدق وتهيمن على h₁ وتقلل العقد المستكشفة (ص 81)."
+  },
+  {
+    q: "[مسألة إحداثيات مانهاتن]: في لوحة 8-Puzzle مقسمة إلى صفوف وأعمدة (من 1 إلى 3)، إذا كان الرقم (7) يقع حالياً في الخانة (الصف 1، العمود 3)، وموقعه المطلوب في لوحة الهدف هو الخانة (الصف 3، العمود 1)؛ فكم تبلغ مسافة مانهاتن للرقم (7) وحده؟",
+    o: [
+      "خطوة واحدة فقط",
+      "4 خطوات (لأن |1 - 3| + |3 - 1| = 2 + 2 = 4 خطوات: خطوتان للأسفل وخطوتان لليسار)",
+      "خطوتان فقط",
+      "6 خطوات"
+    ],
+    a: 1,
+    e: "مسافة مانهاتن = فرق الصفوف |1 - 3| + فرق الأعمدة |3 - 1| = 2 + 2 = 4 خطوات (ص 81)."
+  },
+  {
+    q: "إذا وضعنا قيمة دالة الاستدلال تساوي صفراً لجميع العقد في خوارزمية A* (أي h(n) = 0 دائماً)، فإلى أي خوارزمية تتحول خوارزمية A*؟",
+    o: [
+      "تتحول إلى خوارزمية البحث بالعمق أولاً (DFS)",
+      "تتحول إلى خوارزمية تسلق التل (Hill Climbing)",
+      "تتحول إلى خوارزمية البحث بالتكلفة الموحدة (Uniform-Cost Search - UCS) لأن f(n) = g(n) + 0 = g(n)",
+      "تتحول إلى البحث الجشع (Greedy)"
+    ],
+    a: 2,
+    e: "عندما h(n) = 0 تصبح دالة التقييم f(n) = g(n) فقط، وهو تعريف خوارزمية البحث بالتكلفة الموحدة UCS (ص 78)."
+  },
+  {
+    q: "أي من الدوال التالية تُعد دالة استدلال مقبولة (Admissible Heuristic) لإيجاد أقصر طريق بين مدينتين على خريطة جغرافية باستخدام خوارزمية A*؟",
+    o: [
+      "مجموع أطوال جميع الطرق في الدولة",
+      "ضعف مسافة الطريق البري الفعلي",
+      "رقم عشوائي أكبر من 10,000 كيلومتر",
+      "مسافة الخط المستقيم (Straight-Line Distance - SLD) بين المدينة الحالية ومدينة الهدف؛ لأنها أقصر مسافة هندسية فلا تبالغ أبداً في التقدير"
+    ],
+    a: 3,
+    e: "مسافة الخط المستقيم (SLD) لا يمكن أن تزيد أبداً عن مسافة الطريق الفعلي، لذا فهي دالة مقبولة ومتسقة دائماً (ص 78)."
+  },
+  {
+    q: "في شجرة حل 8-Puzzle بخوارزمية A* (ص 82)، إذا ولدت اللوحة الحالية ثلاث لوحات أبناء في المستوى الأول (g = 1) وكانت قيم عدد المربعات الخاطئة لها هي: اللوحة الأولى (h₁ = 3)، واللوحة الثانية (h₁ = 5)، واللوحة الثالثة (h₁ = 5)؛ فما هي قيمة f(n) لكل منها وأي لوحة ستختارها A*؟",
+    o: [
+      "قيم f هي: الأولى (1+3 = 4)، والثانية (1+5 = 6)، والثالثة (1+5 = 6)؛ وتختار A* اللوحة الأولى لأنها صاحبة أقل قيمة f = 4",
+      "قيم f هي: 3 و 5 و 5؛ وتختار اللوحة الثالثة",
+      "تختار اللوحة الثانية صاحبة أكبر قيمة f = 6",
+      "تتوقف عن البحث لأن g = 1"
+    ],
+    a: 0,
+    e: "في المستوى الأول تكون g=1 لجميع الأبناء، فنضيف 1 لقيمة h₁ لكل لوحة: الأولى f=1+3=4، والثانية f=6، والثالثة f=6، فتختار A* الأقل وهي 4 (ص 82)."
+  },
+  {
+    q: "متى تتوقف خوارزمية البحث A* وتُعلن الوصول إلى الحل الأمثل عند البحث في رسم بياني؟",
+    o: [
+      "بمجرد رؤية عقدة الهدف لأول مرة أثناء توليد الأبناء حتى لو كانت قيمتها f(G) كبيرة جداً",
+      "عندما يتم سحب عقدة الهدف (Goal Node) من مقدمة القائمة المفتوحة OPEN لتوسيعها (أي عندما تكون f(G) هي الأصغر في كامل قائمة OPEN)",
+      "بعد فحص عقدة البداية مباشرة",
+      "عندما تمتلئ القائمة المغلقة بجميع عقد الرسم البياني"
+    ],
+    a: 1,
+    e: "لا تتوقف A* بمجرد توليد الهدف وإدراجه في OPEN، بل تنتظر حتى يصبح الهدف هو صاحب أقل قيمة f(n) ويُسحب من مقدمة OPEN لضمان عدم وجود مسار آخر أرخص (ص 76-79)."
+  },
+  {
+    q: "ماذا نعني بقولنا إن خوارزمية البحث A* (فعالة بشكل أمثل - Optimally Efficient)؟",
+    o: [
+      "أنها لا تستهلك أي ذاكرة في الحاسوب",
+      "أنها تعمل بدون قائمة مفتوحة أو مغلقة",
+      "أنه لا توجد أي خوارزمية بحث أخرى تستخدم نفس دالة الاستدلال h(n) وتضمن إيجاد الحل الأمثل مع توسيع عدد أقل من العقد مقارنة بـ A*",
+      "أنها تجد الحل دائماً في خطوة واحدة فقط"
+    ],
+    a: 2,
+    e: "فعالة بشكل أمثل (Optimally Efficient) تعني أن A* توسع أقل عدد ممكن من العقد اللازمة لضمان أمثلية الحل مقارنة بأي خوارزمية أخرى بنفس المعرفة الإرشادية (ص 78)."
+  },
+  {
+    q: "إذا كانت دالة الاستدلال h(n) المستخدمة في خوارزمية A* تبالغ أحياناً في تقدير التكلفة الحقيقية للهدف (أي توجد عقدة فيها h(n) > h*(n))، فما الأثر المترتب على ذلك؟",
+    o: [
+      "تصبح الخوارزمية أسرع وتضمن الحل الأمثل بنسبة 100%",
+      "تتحول الخوارزمية إلى البحث بالعرض أولاً BFS",
+      "لا تتأثر الخوارزمية على الإطلاق",
+      "تفقد دالة الاستدلال شرط القبول (Not Admissible)، وبالتالي قد تفقد خوارزمية A* خاصية الأمثلية وتُرجع حلاً غير أمثلي (أغلى تكلفة)"
+    ],
+    a: 3,
+    e: "المبالغة في تقدير التكلفة (h(n) > h*(n)) قد تجعل المسار الأمثل يبدو مكلفاً فتتجاهله الخوارزمية وتختار مساراً آخر غير أمثلي (ص 78)."
+  },
+  {
+    q: "في أحجية 8-Puzzle، إذا وصلنا إلى لوحة الهدف النهائية في المستوى الخامس (بعد 5 حركات من البداية)، فكم تبلغ قيمة كل من g(Goal) و h(Goal) و f(Goal) عند هذه العقدة؟",
+    o: [
+      "g(Goal) = 5 ، و h(Goal) = 0 ، و f(Goal) = 5 + 0 = 5",
+      "g(Goal) = 0 ، و h(Goal) = 5 ، و f(Goal) = 5",
+      "جميع القيم الثلاث تساوي صفراً",
+      "g(Goal) = 5 ، و h(Goal) = 8 ، و f(Goal) = 13"
+    ],
+    a: 0,
+    e: "عند الوصول للهدف بعد 5 حركات تكون التكلفة الفعلية g=5، والتكلفة المتبقية للهدف h=0، فيكون المجموع f = 5 + 0 = 5 (ص 82)."
+  },
+  {
+    q: "ما هو الفرق الجوهري بين دالة التقييم في (البحث بأولوية الأفضل الجشع Greedy) ودالة التقييم في (خوارزمية A*)؟",
+    o: [
+      "كلاهما يستخدمان f(n) = g(n) فقط",
+      "البحث الجشع يعتمد على التكلفة التقديرية فقط f(n) = h(n) (غير أمثلي)، بينما تدمج خوارزمية A* التكلفة الفعلية والتقديرية معاً f(n) = g(n) + h(n) (أمثلية)",
+      "البحث الجشع يجمع g(n) + h(n)، بينما تعتمد A* على h(n) فقط",
+      "خوارزمية A* لا تستخدم القائمة المفتوحة OPEN"
+    ],
+    a: 1,
+    e: "إضافة الحد g(n) إلى h(n) في خوارزمية A* هو ما يمنعها من الانخداع بالمسارات الطويلة المكلفة ويجعلها أمثلية على عكس البحث الجشع (ص 75)."
+  }
+];
+
+// بناء شبكة المصطلحات
+const termsGrid = document.getElementById("termsGrid");
+terms.forEach(([en, ar]) => {
+  const d = document.createElement("div");
+  d.className = "card";
+  d.style.margin = "0";
+  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
+  termsGrid.appendChild(d);
+});
+
+// إدارة البطاقات التعليمية
+let ci = 0, showAnswer = false;
+function renderCard() {
+  document.getElementById("flashTerm").textContent = cards[ci][0];
+  const ansEl = document.getElementById("flashAnswer");
+  ansEl.innerHTML = cards[ci][1].replace(/\n/g, "<br>");
+  ansEl.hidden = !showAnswer;
+  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
+  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+}
+document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
+document.getElementById("flashcard").addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
+});
+document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
+document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
+renderCard();
+
+// التنقل بين التبويبات
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+// إدارة الاختبار
+let answers = {};
+function renderQuiz() {
+  const area = document.getElementById("quizArea");
+  area.innerHTML = "";
+  const letters = ["أ", "ب", "ج", "د"];
+  questions.forEach((item, i) => {
+    const box = document.createElement("div");
+    box.className = "qbox";
+    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
+    const opts = box.querySelector(".options");
+    item.o.forEach((opt, j) => {
+      const btn = document.createElement("button");
+      btn.className = "option";
+      btn.textContent = `${letters[j]}) ${opt}`;
+      btn.onclick = () => {
+        answers[i] = j;
+        [...opts.children].forEach((x, k) => {
+          x.classList.remove("correct", "wrong");
+          x.disabled = true;
+          if (k === item.a) x.classList.add("correct");
+          if (k === j && j !== item.a) x.classList.add("wrong");
+        });
+        const fb = document.getElementById("fb" + i);
+        fb.hidden = false;
+        fb.className = "feedback " + (j === item.a ? "good" : "bad");
+        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
+        updateScore();
+      };
+      opts.appendChild(btn);
+    });
+    area.appendChild(box);
+  });
+  updateScore();
+}
+
+function updateScore() {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
+  document.getElementById("score").textContent = `النتيجة: ${correct} / ${questions.length}`;
+  document.getElementById("progressBar").style.width = (Object.keys(answers).length / questions.length * 100) + "%";
+}
+
+document.getElementById("resetQuiz").onclick = () => {
+  answers = {};
+  document.getElementById("finalResult").textContent = "";
+  renderQuiz();
+};
+
+document.getElementById("finishQuiz").onclick = () => {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
+  const pct = Math.round(correct / questions.length * 100);
+  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${questions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! إتقان كامل للفصل السابع (خوارزمية A* وتطبيق 8-Puzzle)." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
+};
+
+renderQuiz();
+</script>
+</body>
+</html>

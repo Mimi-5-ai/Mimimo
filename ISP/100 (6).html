@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الفصل السابع الشامل (100%) | أمن البيانات والخصوصية</title>
+<style>
+:root{
+  --bg:#f2f7f6;
+  --card:#ffffff;
+  --ink:#132a28;
+  --muted:#5c7471;
+  --accent:#0d9488;
+  --accent-dark:#115e59;
+  --accent2:#ccfbf1;
+  --line:#d5e6e4;
+  --good:#059669;
+  --good-bg:#ecfdf5;
+  --bad:#dc2626;
+  --bad-bg:#fef2f2;
+  --warn:#d97706;
+  --warn-bg:#fffbeb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
+header{background:linear-gradient(135deg,#042f2e,#0d9488);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(4,47,46,0.18)}
+.wrap{max-width:1040px;margin:auto;padding:0 16px}
+.eyebrow{opacity:.92;font-size:.9rem;background:rgba(255,255,255,0.16);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
+h1{margin:5px 0;font-size:clamp(1.55rem,4vw,2.3rem)}
+header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
+nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:var(--accent2);color:var(--accent-dark);font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
+nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
+nav button.active,.btn.primary{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+main .btn.primary{background:var(--accent);color:white}
+main{padding:22px 0 48px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(19,42,40,0.04)}
+h2{font-size:1.35rem;margin:0 0 12px;color:#042f2e}
+h3{font-size:1.06rem;margin:0 0 8px;color:var(--accent-dark)}
+small,.muted{color:var(--muted)}
+ul,ol{padding-right:22px;margin:8px 0}
+li{margin:6px 0}
+details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
+summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f4fbf9;color:#042f2e;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
+details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
+.details-body{padding:16px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
+.badge-new{display:inline-block;background:var(--warn-bg);color:var(--warn);border:1px solid #fcd34d;font-size:.78rem;padding:1px 8px;border-radius:6px;margin-right:6px;font-weight:bold}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#e6f4f1;color:#042f2e;font-weight:bold}
+tr:last-child td{border-bottom:0}
+.note{border-right:4px solid var(--accent);padding:10px 14px;background:#f0fdfa;border-radius:8px;margin:10px 0}
+.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
+.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
+.options{display:grid;gap:8px;margin-top:12px}
+.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
+.option:hover:not(:disabled){border-color:var(--accent);background:#f0fdfa}
+.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
+.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
+.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
+.feedback.good{color:var(--good);background:var(--good-bg)}
+.feedback.bad{color:var(--bad);background:var(--bad-bg)}
+.progress{height:10px;background:#d5e6e4;border-radius:9px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
+.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#ccfbf1);border:2px solid #99f6e4;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
+.flashcard:hover{transform:scale(1.005)}
+.flashcard .term{font-size:1.35rem;font-weight:bold;color:#042f2e}
+.flashcard .answer{margin-top:16px;font-size:1.08rem;color:var(--accent-dark);background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
+@media(max-width:600px){
+  .card{padding:14px}
+  nav button{flex:1 1 calc(50% - 8px);text-align:center}
+  .flashcard{min-height:200px;padding:18px}
+  th,td{padding:8px 10px;font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">نسخة شاملة ومحدثة 100% • مقرر أمن البيانات والخصوصية</div>
+    <h1>الفصل السابع: التشفير (Encryption)</h1>
+    <p>يغطي مفهوم التشفير وأهميته وخوارزمياته، مفاتيح التشفير، التشفير المتماثل وغير المتماثل (RSA و AES) ومزاياهما وسلبياتهما، تشفير الشبكات اللاسلكية (WEP, WPA, WPA2)، وخدمات التشفير السحابية في (AWS و Azure)</p>
+    <nav>
+      <button class="active" data-tab="summary">الشرح الشامل</button>
+      <button data-tab="tables">جداول المقارنات</button>
+      <button data-tab="terms">المصطلحات والأدوات</button>
+      <button data-tab="cards">البطاقات (28)</button>
+      <button data-tab="quiz">الاختبار الشامل (25)</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- التبويب الأول: الشرح الشامل -->
+  <section id="summary" class="panel active">
+    <div class="card">
+      <h2>خريطة الفصل السابع (الوحدات الثلاث الكاملة)</h2>
+      <div class="grid">
+        <div>
+          <span class="tag">الوحدة الأولى</span>
+          <h3>مقدمة التشفير وأهميته وخوارزمياته</h3>
+          <p>مفهوم التشفير وتاريخه، حالات البيانات الثلاث، أهمية التشفير الأربعة، خوارزمية التشفير وطرق التحويل (الاستبدال والتحويل والعمليات الرياضية)، وخطوتا عمل التشفير وفك التشفير.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثانية</span>
+          <h3>مفتاح التشفير، المتماثل وغير المتماثل، و AES</h3>
+          <p>تعريف مفتاح التشفير وخصائصه، التشفير المتماثل، التشفير غير المتماثل (<span dir="ltr">RSA</span> والمفتاح العام والخاص)، خوارزمية (<span dir="ltr">AES</span>) وأطوال مفاتيحها، وسلبيات وإيجابيات النوعين.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثالثة</span>
+          <h3>تشفير الشبكات اللاسلكية وخدمات AWS و Azure</h3>
+          <p>مفهوم وأهمية تشفير الشبكات اللاسلكية، أنظمة (<span dir="ltr">WEP, WPA, WPA2</span>)، خدمات التشفير الخمس في (<span dir="ltr">AWS</span>)، وخدمات التشفير الأربع في (<span dir="ltr">Azure</span>).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- الوحدة الأولى كاملة في قائمة واحدة -->
+    <details open>
+      <summary>الوحدة الأولى: مقدمة عن التشفير، أهميته، خوارزمية التشفير، وكيف يعمل التشفير</summary>
+      <div class="details-body">
+        <h3>1) مقدمة عن التشفير (<span dir="ltr">Encryption</span>)</h3>
+        <ul>
+          <li><b>نبذة تاريخية وتعريف عام:</b> يعود استخدام التشفير إلى العديد من القرون، حيث استخدمت الحضارات القديمة وسائل تشفير بسيطة لتبادل الرسائل السرية. والتشفير هو <b>عملية لتحويل المعلومات من شكلها الأصلي إلى شكل غير قابل للقراءة أو الفهم</b>؛ وذلك بهدف حماية البيانات والمعلومات من الوصول غير المصرح به.</li>
+          <li><b>التعريف التقني الشامل:</b> التشفير هو عبارة عن ممارسة حماية المعلومات باستخدام <b>الخوارزميات المشفرة وعلامات التجزئة والتوقيعات</b>.</li>
+          <li><b>حالات المعلومات الثلاث التي يحميها التشفير:</b> يمكن أن تكون المعلومات في إحدى الحالات التالية:
+            <ol>
+              <li><b>غير نشطة:</b> (مثل ملف مخزن على القرص الصلب).</li>
+              <li><b>متنقلة:</b> (مثل الاتصالات الإلكترونية المتبادلة بين طرفين أو أكثر).</li>
+              <li><b>قيد الاستخدام:</b> (أثناء الحوسبة على البيانات).</li>
+            </ol>
+          </li>
+          <li><b>أدوات التشفير:</b> يستخدم التشفير عدداً من خوارزميات التشفير لتحقيق واحد أو أكثر من أهداف أمان المعلومات، وتتضمن هذه الأدوات: <b>خوارزميات التشفير، خوارزميات التوقيع الرقمي، خوارزميات التجزئة، ووظائف أخرى</b>.</li>
+          <li><b>نوعا التشفير الأساسيان:</b>
+            <ul>
+              <li><b>1. التشفير المتماثل (<span dir="ltr">Symmetric Encryption</span>):</b> تقنية تُستخدم لتشفير البيانات وفك تشفيرها باستخدام <b>مفتاح تشفير سري واحد</b>.</li>
+              <li><b>2. التشفير غير المتماثل (<span dir="ltr">Asymmetric Encryption</span>):</b> المعروف أيضاً باسم <b>"تشفير المفتاح العام"</b>، هو تقنية تستخدم <b>مفتاحين منفصلين</b> للتشفير وفك التشفير (مفتاح عام ومفتاح خاص)، وهو يختلف عن التشفير المتماثل الذي يستخدم نفس المفتاح السري للتشفير وفك التشفير.</li>
+            </ul>
+          </li>
+          <li><b>مثال على آلية عمل التشفير (من الشكل التوضيحي):</b>
+            <ul>
+              <li><b>النص الأصلي:</b> "المملكة العربية السعودية" &larr; (تطبيق <b>تشفير</b> باستخدام مفتاح التشفير) &larr; <b>النص المشفر:</b> رموز وحروف مبعثرة غير مفهومة &larr; (تطبيق <b>فك التشفير</b>) &larr; يعود إلى <b>النص الأصلي:</b> "المملكة العربية السعودية".</li>
+            </ul>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) أهمية تشفير البيانات (4 نقاط رئيسية)</h3>
+        <ol>
+          <li><b>عدم تعرض البيانات للخطر:</b> يمكن للقراصنة مهاجمة قنوات الاتصال بسهولة والتقاط البيانات المنقولة عبر الشبكة؛ ويضمن تشفير البيانات عدم إمكانية سرقة البيانات السرية أثناء نقلها من خلال تقنيات استخراج البيانات مثل <b>هجوم القوة الغاشمة (<span dir="ltr">Brute-force attack</span>)</b>.</li>
+          <li><b>حماية الخصوصية والسرية:</b> يسمح التشفير بحماية البيانات الحساسة والمعلومات الشخصية من الوصول غير المصرح به؛ فعندما يتم تشفير البيانات، يتعذر على المتطفلين والقراصنة فهم المحتوى أو سرقته.</li>
+          <li><b>التجارة الإلكترونية الآمنة:</b> يُعد التشفير أساسياً للحفاظ على أمان المعاملات التجارية عبر الإنترنت؛ حيث يُستخدم في تأمين المعلومات المالية وتفاصيل الدفع عند القيام بالمشتريات عبر الإنترنت، مما يحمي المستهلكين من عمليات الاحتيال وسرقة المعلومات المالية.</li>
+          <li><b>حماية البيانات الحساسة من الانتهاكات الأمنية:</b> قد يتسبب تثبيت واستخدام بعض الموارد والتطبيقات غير المعتمدة عبر الإنترنت في حدوث تدخلات وانتهاكات أمنية تعرض بياناتك الحساسة لعوامل ضارة. يمنع تشفير البيانات حدوث ذلك بالتأكد من أن بياناتك الخاصة مشفرة ويصعب قراءتها من قِبل المستخدمين غير المصرح لهم.</li>
+        </ol>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) خوارزمية التشفير (<span dir="ltr">Encryption Algorithm</span>)</h3>
+        <ul>
+          <li><b>تعريفها:</b> عبارة عن إجراء يحوّل رسالة مكونة من نص عادي إلى معلومات مشفرة. وتستخدم الخوارزميات الحديثة رياضيات متقدمة ومفتاح تشفير أو أكثر. وهي <b>تسهل نسبياً تشفير رسالة، ولكنها تجعل من المستحيل تقريباً فك تشفيرها بدون معرفة المفاتيح</b>.</li>
+          <li>تُعتبر خوارزميات التشفير مجموعة من <b>الإجراءات الرياضية والمنطقية</b> التي تُستخدم لتحويل البيانات من شكلها الأصلي (<b>النص الواضح</b>) إلى شكل غير قابل للقراءة (<b>النص المشفر</b>)، وتعتمد على مفتاح سري لتحقيق الأمان والحماية.</li>
+          <li><b>آلية عمل الخوارزمية:</b> عند استخدامها، يتم تطبيق سلسلة من الخطوات والعمليات الرياضية المعقدة على البيانات الأصلية والمفتاح السري؛ فتقوم بتشويه وتحويل البيانات بطرق محددة وقواعد معينة تجعلها غير قابلة للقراءة أو الفهم.</li>
+          <li><b>طرق تحويل البيانات في خوارزميات التشفير (طريقتان):</b>
+            <ol>
+              <li>خوارزميات تعتمد على <b>الاستبدال والتحويل (<span dir="ltr">Substitution and Permutation</span>)</b> لتغيير ترتيب الحروف والبتات في البيانات.</li>
+              <li>خوارزميات تستخدم <b>العمليات الرياضية</b> مثل (الجمع والطرح والضرب والقسمة) لتعديل البيانات.</li>
+            </ol>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>4) كيف يعمل التشفير؟ (خطوتان رئيسيتان)</h3>
+        <div class="note">
+          تتلخص الطريقة التي تحدث فيها عملية تشفير البيانات في خطوتين رئيسيتين هما: <b>1) التشفير</b>، و <b>2) فك التشفير</b>.
+        </div>
+        <ul>
+          <li><b>أولاً (عملية التشفير):</b> يتم أخذ النص الذي نرغب بتشفيره (رسالة نصية أو بريد إلكتروني)، ويتم تطبيق خوارزميات تشفير معقدة عليه وتحويله إلى تنسيق غير قابل للقراءة، ويُسمى النص بعد التحويل <b>"نص مشفر"</b>. يساعد هذا في حماية سرية البيانات الرقمية سواء المخزنة على أنظمة الكمبيوتر أو المنقولة عبر شبكة مثل الإنترنت.</li>
+          <li><b>ثانياً (عملية فك التشفير):</b> عندما يصل النص المشفر إلى المستلم المقصود، تتم ترجمة المعلومات مرة أخرى إلى شكلها الأصلي (إرجاع النص لما كان عليه قبل تطبيق خوارزميات التشفير عليه)، وهذا ما يُسمى <b>"فك التشفير"</b>.</li>
+          <li><b>شرط إلغاء قفل الرسالة:</b> حتى يتمكن المستلم من إلغاء قفل الرسالة، يجب على كل من المرسل والمتلقي استخدام <b>مفتاح تشفير "سري"</b>، وهو مجموعة من الخوارزميات التي تدافع عن البيانات وتفك تشفيرها إلى تنسيق قابل للقراءة (مثل تحويل كلمة <span dir="ltr">Hello!</span> إلى رموز مشفرة ثم إعادتها إلى <span dir="ltr">Hello!</span> لدى المستلم).</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- الوحدة الثانية كاملة في قائمة واحدة -->
+    <details>
+      <summary>الوحدة الثانية: مفتاح التشفير، التشفير المتماثل وغير المتماثل (RSA)، خوارزمية (AES)، والمزايا والسلبيات</summary>
+      <div class="details-body">
+        <h3>1) ما هو مفتاح التشفير (<span dir="ltr">Encryption Key</span>)؟</h3>
+        <ul>
+          <li><b>التعريف الأول:</b> هو سلسلة من الأرقام المستخدمة لتشفير البيانات وفك تشفيرها، حيث يتم إنشاء مفاتيح التشفير باستخدام الخوارزميات، ويتصف كل مفتاح تشفير بأنه <b>عشوائي وفريد</b>.</li>
+          <li><b>التعريف الثاني:</b> هو قيمة أو سلسلة من <b>البتات أو الحروف أو الأرقام</b> تُستخدم في عملية التشفير لتعديل وتحويل البيانات من شكلها الأصلي إلى شكل غير قابل للقراءة (مشفر)، لتحقيق الأمان والحماية عند نقل أو تخزين البيانات الحساسة.</li>
+          <li><b>دوره في التشفير وفك التشفير:</b> عند استخدام خوارزمية التشفير، يُستخدم مفتاح التشفير مع البيانات الأصلية لتوليد النص المشفر، وعند فك التشفير يُستخدم لاستعادة البيانات الأصلية من النص المشفر.</li>
+          <li><b>أهميته القصوى:</b> يُعتبر مفتاح التشفير <b>عنصراً حاسماً</b> في عملية التشفير حيث يحدد قوة وأمان نظام التشفير؛ فإذا تم الحصول على المفتاح السري بطرق غير مشروعة، يمكن للمهاجم فك تشفير البيانات والوصول إليها. لذلك يجب حفظ مفاتيح التشفير بشكل آمن وتأمينها بشكل جيد.</li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) أنواع التشفير: التشفير المتماثل والتشفير غير المتماثل</h3>
+        
+        <p><b>أولاً: التشفير المتماثل (<span dir="ltr">Symmetric Cryptography / Encryption</span>)</b></p>
+        <ul>
+          <li><b>التعريف:</b> هو الذي يستخدم <b>خوارزميات مفاتيح التشفير نفسها</b> لتشفير النص العادي وفك تشفير المعلومات المشفرة على حد سواء.</li>
+          <li><b>شرطه الأساسي:</b> يستلزم التشفير المتماثل حصول جميع مستلمي الرسائل المقصودين على حق الوصول إلى <b>مفتاح مشترك (<span dir="ltr">Same Key</span>)</b>.</li>
+          <li><b>وظيفته:</b> تحويل البيانات الواضحة المفتوحة إلى شكل غير قابل للقراءة والفهم إلا بواسطة الأشخاص الذين يمتلكون المفتاح السري المناسب؛ لحماية البيانات من الاطلاع غير المصرح به أثناء نقلها عبر الشبكات أو تخزينها في وسائط تخزين غير آمنة.</li>
+        </ul>
+
+        <p><b>ثانياً: التشفير غير المتماثل (<span dir="ltr">Asymmetric Encryption</span>)</b></p>
+        <div class="exam-alert">
+          <b>تنبيه هام للاختبار:</b> يفرّق الاختبار بدقة بين وظيفة <b>المفتاح العام (<span dir="ltr">Public Key</span>)</b> ووظيفة <b>المفتاح الخاص (<span dir="ltr">Private Key</span>)</b> في التشفير غير المتماثل!
+        </div>
+        <ul>
+          <li><b>التعريف والخوارزمية الشهيرة:</b> يستخدم نظاماً معقداً من المفاتيح العامة والخاصة لتشفير وفك تشفير البيانات، ويعتمد على خوارزميات رياضية معقدة مثل خوارزمية <b><span dir="ltr">Rivest Shamir Adleman (RSA)</span></b>.</li>
+          <li><b>زوج المفاتيح (مختلفان ومترابطان رياضياً):</b> يتم إنشاء زوج من المفاتيح هما:
+            <ol>
+              <li><b>المفتاح العام (<span dir="ltr">Public Key</span>):</b> مفتاح يتم توزيعه على نطاق واسع ومشاركته مع الأطراف الأخرى، ويُستخدم <b>لعملية التشفير</b> (حيث يمكن لأي شخص استخدامه لتشفير البيانات قبل إرسالها).</li>
+              <li><b>المفتاح الخاص (<span dir="ltr">Private Key</span>):</b> مفتاح يتم الاحتفاظ به في <b>سرية تامة</b> ولا يتم مشاركته مع الآخرين، ويُستخدم <b>لعملية فك التشفير</b> (حيث يمكن فقط لصاحب المفتاح الخاص فك تشفير البيانات واستعادة البيانات الأصلية من النص المشفر).</li>
+            </ol>
+          </li>
+          <li><b>متى يُسمى النظام غير متماثل؟</b> يُسمى نظام التشفير غير متماثل إذا كان يستخدم مفتاحاً واحداً (هو المفتاح العام) لتشفير البيانات، ومفتاحاً مختلفاً ولكنه مرتبط رياضياً (هو المفتاح الخاص) لفك تشفير البيانات.</li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) خوارزمية التشفير المتقدمة (<span dir="ltr">Advanced Encryption Standard - AES</span>)</h3>
+        <ul>
+          <li><b>التعريف ومجالات الاستخدام:</b> تُعرف خوارزمية <b dir="ltr">AES</b> بأنها معيار تشفير متقدم يُستخدم لحماية البيانات وتأمينها في العديد من التطبيقات والأنظمة، بما في ذلك:
+            <ul>
+              <li>تأمين الاتصالات عبر الإنترنت.</li>
+              <li>تشفير البيانات الحساسة في قواعد البيانات.</li>
+              <li>تشفير حواسيب الأجهزة المحمولة وغيرها الكثير.</li>
+            </ul>
+          </li>
+          <li><b>الخصائص التقنية لخوارزمية <span dir="ltr">AES</span> (هامة جداً للاختبار):</b>
+            <ol>
+              <li>تستخدم تقنية <span dir="ltr">AES</span> <b>خوارزمية التشفير المتماثلة</b>.</li>
+              <li>تدعم أطوال مفاتيح التشفير المختلفة بما في ذلك: <b>128 بت، 192 بت، و 256 بت</b>.</li>
+              <li>تقوم <b>بتقسيم البيانات إلى كتل صغيرة</b> وتطبق سلسلة من عمليات التشفير على كل كتلة لتحويلها إلى شكل غير قابل للقراءة والفهم لأي شخص غير المستلم المخول له الوصول.</li>
+            </ol>
+          </li>
+          <li><b>مثال عملي على استخدام <span dir="ltr">AES</span>:</b> تشفير البيانات في التواصل الآمن عبر الإنترنت، مثل <b>تأمين اتصالك بمواقع البنوك أو التسوق عبر الإنترنت</b>؛ فعند إرسال معلوماتك الشخصية أو المالية يتم استخدام <span dir="ltr">AES</span> لتشفير البيانات من جانب الخادم وفك تشفيرها من جانب العميل، مما يضمن سرية واستقامة البيانات ويحميها من أي اختراقات أو تجسس.</li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>4) سلبيات وإيجابيات التشفير المتماثل وغير المتماثل</h3>
+        <ul>
+          <li><b>إيجابيات (مزايا) التشفير المتماثل:</b>
+            <ul>
+              <li>سهولة إعداده ويمكن تنفيذه في لمح البصر (سريع جداً).</li>
+              <li>بسيط جداً، ويمكن لجميع الأشخاص بمختلف أعمارهم واختصاصاتهم استخدامه.</li>
+            </ul>
+          </li>
+          <li><b>سلبيات التشفير المتماثل:</b>
+            <ul>
+              <li>المفتاح السري يحتاج إلى <b>مشاركته مع المستلم</b> (مشكلة توزيع المفاتيح).</li>
+            </ul>
+          </li>
+          <li><b>إيجابيات (مزايا) التشفير غير المتماثل:</b>
+            <ul>
+              <li><b>لا يجبر المستخدم على مشاركة المفاتيح (السرية)</b>؛ فقد أزال هذا النوع من التشفير ضرورة توزيع المفاتيح السرية.</li>
+            </ul>
+          </li>
+          <li><b>سلبيات التشفير غير المتماثل (4 سلبيات هامة):</b>
+            <ol>
+              <li>أكثر صعوبة في الفهم والاستخدام.</li>
+              <li>يستغرق وقتاً طويلاً ويتطلب جهداً أكبر بكثير من التشفير المتماثل.</li>
+              <li>لا يمكنك إرسال رسائل بريد إلكتروني مشفرة إلا إذا قام الشخص الآخر بإنشاء أزواج من المفاتيح.</li>
+              <li>في حال فقدت مفتاحك الخاص <b>فستفقده إلى الأبد، حيث أن المفتاح الخاص غير قابل للاسترداد</b>.</li>
+            </ol>
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- الوحدة الثالثة كاملة في قائمة واحدة -->
+    <details>
+      <summary>الوحدة الثالثة: تشفير الشبكات اللاسلكية (WEP, WPA, WPA2) وخدمات التشفير السحابية (AWS و Azure)</summary>
+      <div class="details-body">
+        <h3>1) مفهوم وأهمية تشفير الشبكات اللاسلكية (<span dir="ltr">Wireless Network Encryption</span>)</h3>
+        <ul>
+          <li><b>التعريف:</b> عملية تحويل البيانات المرسلة عبر شبكة لاسلكية إلى شكل مشفر، بهدف حماية البيانات ومنع الوصول غير المصرح به إليها، وضمان سرية البيانات وتأمين الاتصالات.</li>
+          <li><b>أنظمة تشفير الشبكات اللاسلكية:</b> مجموعة من البروتوكولات والتقنيات التي تُستخدم لتأمين الاتصالات وحماية البيانات في شبكات الاتصالات اللاسلكية مثل شبكات الواي فاي (<b dir="ltr">Wi-Fi</b>)؛ لمنع المتطفلين والمهاجمين من الاستيلاء على البيانات أو التلاعب بها أثناء النقل. وتعتمد على خوارزميات تشفير قوية وتوليد مفاتيح تشفير يتم تبادلها بشكل آمن بين الأجهزة المرتبطة بالشبكة.</li>
+          <li><b>لماذا يُعد تشفير الشبكات اللاسلكية ضرورياً؟</b> لأن البيانات المرسلة عبر <b>الأمواج اللاسلكية يمكن اعتراضها بسهولة</b> من قِبل المهاجمين المحتملين، وبالتالي الاطلاع على المعلومات الحساسة مثل (كلمات المرور، البيانات الشخصية، أو المعاملات المالية).</li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) أنواع أنظمة تشفير الشبكات اللاسلكية (<span dir="ltr">WEP, WPA/WAP, WPA2</span>)</h3>
+        <p>توضح الوحدة ثلاثة أنظمة لتشفير الشبكات اللاسلكية هي: نظام التشفير (<b dir="ltr">WEP</b>)، نظام التشفير (<b dir="ltr">WPA / WAP</b>)، ونظام التشفير (<b dir="ltr">WPA2</b>):</p>
+
+        <p><b>أولاً: نظام التشفير <span dir="ltr">WEP (Wired Equivalent Privacy)</span></b></p>
+        <ul>
+          <li><b>التعريف والتاريخ:</b> نظام تشفير يُستخدم في شبكات الواي فاي (<span dir="ltr">Wi-Fi</span>) <b>القديمة</b>، تم تطويره كبديل أمان للشبكات السلكية التقليدية، ولكنه أصبح معرضاً للعديد من الثغرات والهجمات المعروفة.</li>
+          <li><b>الخوارزمية المستخدمة فيه:</b> يستخدم تقنية تشفير <b><span dir="ltr">RC4 (Rivest Cipher)</span></b> لحماية بيانات الاتصال في الشبكات اللاسلكية، ولكنه يعاني من ضعف في تصميمه الأمني يجعله عرضة للاختراق بسهولة.</li>
+          <li><b>الثغرات الأمنية في نظام <span dir="ltr">WEP</span>:</b>
+            <ol>
+              <li>ضعف في عملية توليد المفاتيح العشوائية.</li>
+              <li>استخدام نفس المفتاح لفترات طويلة من الزمن.</li>
+              <li>تسمح هذه الثغرات للمهاجمين بالتقاط حركة المرور واسترداد مفتاح التشفير بسهولة.</li>
+            </ol>
+          </li>
+          <li><b>حكم الخبراء عليه:</b> أصبح نظام <span dir="ltr">WEP</span> <b>غير موصى به تماماً</b> من قِبل الخبراء في أمان الشبكات، وتم تطوير تقنيات أقوى مثل <b dir="ltr">WPA (Wi-Fi Protected Access)</b> و <b dir="ltr">WPA2</b> لتعويض نقاط الضعف في <span dir="ltr">WEP</span>.</li>
+        </ul>
+
+        <p><b>ثانياً: نظام التشفير <span dir="ltr">WPA2 (Wi-Fi Protected Access 2)</span></b></p>
+        <ul>
+          <li><b>التعريف:</b> نظام تشفير للشبكات اللاسلكية يُستخدم لحماية الاتصالات اللاسلكية من الاختراق والاستيلاء عليها، ويُعتبر تطويراً لنظام التشفير السابق <b dir="ltr">WPA (Wi-Fi Protected Access)</b>.</li>
+          <li><b>الخوارزمية والبروتوكول المستخدمان في <span dir="ltr">WPA2</span> (هام جداً):</b>
+            <ol>
+              <li>يستخدم خوارزمية التشفير المتقدمة <b><span dir="ltr">AES (Advanced Encryption Standard)</span></b> لتأمين بيانات الاتصال.</li>
+              <li>يستخدم بروتوكول <b><span dir="ltr">802.1X</span></b> للمصادقة على المستخدمين وتوزيع المفاتيح المشتركة.</li>
+            </ol>
+          </li>
+          <li><b>مستوى الأمان وإرشادات الاستخدام:</b> يُعتبر <span dir="ltr">WPA2</span> <b>أكثر أماناً من <span dir="ltr">WPA</span> و <span dir="ltr">WEP</span></b> نظراً لاستخدامه لتشفير <span dir="ltr">AES</span> القوي. ومع ذلك، لتجنب أي ثغرات محتملة يجب:
+            <ul>
+              <li>تحديث أنظمة التشغيل والأجهزة المستخدمة لاستخدام أحدث إصدارات <span dir="ltr">WPA2</span> وتصحيحات الأمان.</li>
+              <li>تعيين كلمات مرور قوية لشبكة <span dir="ltr">Wi-Fi</span> وتغييرها بشكل منتظم، وتعيين إعدادات الأمان الأخرى المتاحة في الموجه (الراوتر).</li>
+            </ul>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) خدمات التشفير السحابية التي تقدمها (<span dir="ltr">AWS</span>) و (<span dir="ltr">AZURE</span>)</h3>
+        <div class="exam-alert">
+          <b>تنبيه هام للاختبار:</b> احرصي على معرفة اسم كل خدمة سحابية في <span dir="ltr">AWS</span> و <span dir="ltr">Azure</span> والوظيفة الدقيقة التي تقوم بها!
+        </div>
+
+        <p><b>أولاً: خدمات التشفير الخمس التي تقدمها <span dir="ltr">AWS</span> (لضمان سلامة البيانات غير النشطة أو المتنقلة):</b></p>
+        <ul>
+          <li><b>1. <span dir="ltr">AWS CloudHSM</span>:</b> تقدم <b>وحدات أمان أجهزة (<span dir="ltr">HSMs</span>)</b> يمكنها تخزين مجموعة مختلفة من مفاتيح التشفير بأمان، بما فيها <b>مفاتيح الجذر ومفاتيح البيانات</b>.</li>
+          <li><b>2. خدمة إدارة مفاتيح التشفير من <span dir="ltr">AWS (KMS)</span>:</b> تقدم أدوات <b>لإنشاء مفاتيح جذر وغيرها من مفاتيح البيانات</b>، وتتفاعل خدمة <span dir="ltr">AWS KMS</span> مع العديد من خدمات <span dir="ltr">AWS</span> الأخرى لتشفير بيانات خاصة بالخدمة.</li>
+          <li><b>3. خدمة <span dir="ltr">AWS Encryption SDK</span>:</b> تقدم <b>مكتبة تشفير من جانب العميل</b> لتنفيذ عمليات التشفير وفك التشفير لجميع أنواع البيانات.</li>
+          <li><b>4. عميل تشفير <span dir="ltr">Amazon DynamoDB</span>:</b> يقدم مكتبة تشفير من جانب العميل <b>لتشفير جداول البيانات قبل إرسالها</b> إلى إحدى خدمات قواعد البيانات مثل <span dir="ltr">Amazon DynamoDB</span>.</li>
+          <li><b>5. <span dir="ltr">AWS Secrets Manager</span>:</b> يقدم <b>تشفيراً وتناوباً للبيانات السرية</b> المستخدمة في قواعد البيانات المدعومة من <span dir="ltr">AWS</span>.</li>
+        </ul>
+
+        <p><b>ثانياً: خدمات التشفير الأربع التي تقدمها <span dir="ltr">AZURE</span> (منصة الحوسبة السحابية التابعة لشركة <span dir="ltr">Microsoft</span>):</b></p>
+        <ul>
+          <li><b>1. <span dir="ltr">Azure Key Vault</span>:</b> يوفر خدمة آمنة لإدارة وتخزين <b>الأسرار والمفاتيح والشهادات</b>، ويمكن استخدامه لتشفير وفك تشفير البيانات والتحكم في الوصول إلى المفاتيح التشفيرية.</li>
+          <li><b>2. <span dir="ltr">Azure Disk Encryption</span>:</b> توفر هذه الخدمة تشفيراً <b>للأقراص الافتراضية (<span dir="ltr">HD / VHD</span>)</b> المستخدمة في آلات افتراضية؛ حيث تقوم بتشفير البيانات عند حفظها على القرص وفك تشفيرها عند الوصول إليها.</li>
+          <li><b>3. <span dir="ltr">Azure Storage Service Encryption</span>:</b> تقدم خدمة تشفير لبيانات التخزين في: (<b dir="ltr">Azure Blob Storage</b>، <b dir="ltr">Azure File Storage</b>، <b dir="ltr">Azure Queue Storage</b>، و <b dir="ltr">Azure Table Storage</b>).</li>
+          <li><b>4. <span dir="ltr">Azure SQL Database Transparent Data Encryption (TDE)</span>:</b> توفر خدمة <b dir="ltr">TDE</b> <b>تشفيراً تلقائياً لبيانات قواعد البيانات</b> في خدمة <span dir="ltr">Azure SQL Database</span>؛ حيث يتم تشفير البيانات بالكامل مع استخدام مفتاح تشفير قاعدة البيانات الرئيسي الذي يتم إدارته بواسطة <span dir="ltr">Azure</span>.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- التبويب الثاني: جداول المقارنات السريعة -->
+  <section id="tables" class="panel">
+    <div class="card">
+      <h2>1. مقارنة شاملة بين التشفير المتماثل والتشفير غير المتماثل</h2>
+      <p class="muted">يلخص هذا الجدول الفروق الجوهرية والخوارزميات والمزايا والسلبيات لكلا النوعين كما ورد في الفصل السابع:</p>
+      <table>
+        <thead>
+          <tr>
+            <th>وجه المقارنة</th>
+            <th>التشفير المتماثل (Symmetric Encryption)</th>
+            <th>التشفير غير المتماثل (Asymmetric Encryption)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>المسمى الآخر</b></td>
+            <td>تشفير المفتاح المشترك / المفتاح السري الواحد.</td>
+            <td>تشفير المفتاح العام (<span dir="ltr">Public Key Encryption</span>).</td>
+          </tr>
+          <tr>
+            <td><b>عدد المفاتيح المستخدمة</b></td>
+            <td><b>مفتاح سري واحد مشترك (<span dir="ltr">Same Key</span>)</b> يُستخدم للتشفير وفك التشفير معاً.</td>
+            <td><b>مفتاحان منفصلان ومترابطان رياضياً:</b><br>• <b>المفتاح العام (<span dir="ltr">Public Key</span>):</b> للتشفير (يُشارك مع الجميع).<br>• <b>المفتاح الخاص (<span dir="ltr">Private Key</span>):</b> لفك التشفير (سري لصاحبه فقط).</td>
+          </tr>
+          <tr>
+            <td><b>أبرز الخوارزميات</b></td>
+            <td>خوارزمية التشفير المتقدمة <b dir="ltr">AES</b> (بأطوال مفاتيح 128، 192، 256 بت).</td>
+            <td>خوارزمية <b dir="ltr">RSA (Rivest Shamir Adleman)</b>.</td>
+          </tr>
+          <tr>
+            <td><b>الإيجابيات (المزايا)</b></td>
+            <td>• سهولة إعداده وبسيط جداً لجميع الأعمار والتخصصات.<br>• سريع جداً (يمكن تنفيذه في لمح البصر).</td>
+            <td>• لا يجبر المستخدم على مشاركة المفاتيح السرية (أزال ضرورة توزيع المفاتيح السرية).</td>
+          </tr>
+          <tr>
+            <td><b>السلبيات (العيوب)</b></td>
+            <td>• يحتاج إلى مشاركة المفتاح السري مع المستلم (مخاطرة أمنية أثناء التوزيع).</td>
+            <td>1) أكثر صعوبة في الفهم والاستخدام.<br>2) يستغرق وقتاً طويلاً ويتطلب جهداً أكبر بكثير.<br>3) يتطلب من الطرف الآخر إنشاء أزواج مفاتيح لتبادل البريد المشفر.<br>4) إذا فُقد المفتاح الخاص فسيُفقد إلى الأبد (غير قابل للاسترداد).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>2. مقارنة بين أنظمة تشفير الشبكات اللاسلكية (WEP مقابل WPA2)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>وجه المقارنة</th>
+            <th>نظام التشفير القديم (WEP)</th>
+            <th>نظام التشفير المتطور (WPA2)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>الاختصار الإنجليزي</b></td>
+            <td><b dir="ltr">Wired Equivalent Privacy</b></td>
+            <td><b dir="ltr">Wi-Fi Protected Access 2</b> (تطوير لنظام <span dir="ltr">WPA</span>).</td>
+          </tr>
+          <tr>
+            <td><b>خوارزمية التشفير والبروتوكول</b></td>
+            <td>يستخدم تقنية تشفير <b dir="ltr">RC4 (Rivest Cipher)</b>.</td>
+            <td>• يستخدم خوارزمية التشفير المتقدمة <b dir="ltr">AES</b>.<br>• يستخدم بروتوكول <b dir="ltr">802.1X</b> للمصادقة وتوزيع المفاتيح.</td>
+          </tr>
+          <tr>
+            <td><b>مستوى الأمان والثغرات</b></td>
+            <td><b>ضعيف جداً وعرضة للاختراق بسهولة</b>؛ بسبب ضعف توليد المفاتيح العشوائية واستخدام نفس المفتاح لفترات طويلة.</td>
+            <td><b>أكثر أماناً بكثير من <span dir="ltr">WPA</span> و <span dir="ltr">WEP</span></b> نظراً لاستخدامه لتشفير <span dir="ltr">AES</span> القوي (مع أهمية تحديث الأنظمة والراوتر).</td>
+          </tr>
+          <tr>
+            <td><b>توصية خبراء أمان الشبكات</b></td>
+            <td><b>غير موصى به تماماً.</b></td>
+            <td>موصى به مع تعيين كلمات مرور قوية وتغييرها بانتظام وتحديث الأجهزة.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>3. مقارنة خدمات وأدوات التشفير السحابية في (AWS) و (Microsoft Azure)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>المنصة السحابية</th>
+            <th>اسم الخدمة / الأداة</th>
+            <th>الوظيفة الدقيقة في المنهج</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td rowspan="5"><b>خدمات <span dir="ltr">AWS</span> (5 خدمات)</b></td>
+            <td><b dir="ltr">1. AWS CloudHSM</b></td>
+            <td>تقدم وحدات أمان أجهزة (<span dir="ltr">HSMs</span>) لتخزين مفاتيح التشفير بأمان (بما فيها مفاتيح الجذر ومفاتيح البيانات).</td>
+          </tr>
+          <tr>
+            <td><b dir="ltr">2. AWS KMS</b></td>
+            <td>خدمة إدارة مفاتيح التشفير؛ تقدم أدوات لإنشاء مفاتيح جذر ومفاتيح بيانات وتتفاعل مع خدمات <span dir="ltr">AWS</span> الأخرى.</td>
+          </tr>
+          <tr>
+            <td><b dir="ltr">3. AWS Encryption SDK</b></td>
+            <td>تقدم <b>مكتبة تشفير من جانب العميل</b> لتنفيذ التشفير وفك التشفير لجميع أنواع البيانات.</td>
+          </tr>
+          <tr>
+            <td><b dir="ltr">4. عميل تشفير Amazon DynamoDB</b></td>
+            <td>مكتبة تشفير من جانب العميل <b>لتشفير جداول البيانات قبل إرسالها</b> إلى قواعد البيانات مثل <span dir="ltr">DynamoDB</span>.</td>
+          </tr>
+          <tr>
+            <td><b dir="ltr">5. AWS Secrets Manager</b></td>
+            <td>يقدم <b>تشفيراً وتناوباً للبيانات السرية</b> المستخدمة في قواعد البيانات المدعومة من <span dir="ltr">AWS</span>.</td>
+          </tr>
+          <tr>
+            <td rowspan="4"><b>خدمات <span dir="ltr">Azure</span> (4 خدمات)</b></td>
+            <td><b dir="ltr">1. Azure Key Vault</b></td>
+            <td>إدارة وتخزين <b>الأسرار والمفاتيح والشهادات</b> بأمان، والتحكم في الوصول للمفاتيح التشفيرية.</td>
+          </tr>
+          <tr>
+            <td><b dir="ltr">2. Azure Disk Encryption</b></td>
+            <td>تشفير <b>الأقراص الافتراضية (<span dir="ltr">HD</span>)</b> المستخدمة في الآلات الافتراضية عند الحفظ وفك تشفيرها عند الوصول.</td>
+          </tr>
+          <tr>
+            <td><b dir="ltr">3. Azure Storage Service Encryption</b></td>
+            <td>تشفير بيانات التخزين في: <span dir="ltr">Blob Storage, File Storage, Queue Storage, Table Storage</span>.</td>
+          </tr>
+          <tr>
+            <td><b dir="ltr">4. Azure SQL Database (TDE)</b></td>
+            <td>تشفير البيانات الشفاف (<span dir="ltr">TDE</span>)؛ يوفر <b>تشفيراً تلقائياً لبيانات قواعد البيانات</b> باستخدام مفتاح رئيسي تديره <span dir="ltr">Azure</span>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- التبويب الثالث: المصطلحات والأدوات -->
+  <section id="terms" class="panel">
+    <div class="card">
+      <h2>قاموس المصطلحات والأدوات الشامل للفصل السابع</h2>
+      <p class="muted">جميع المصطلحات الإنجليزية والخوارزميات والبروتوكولات والخدمات السحابية الواردة في الوحدات الثلاث:</p>
+      <div id="termsGrid" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- التبويب الرابع: البطاقات التعليمية -->
+  <section id="cards" class="panel">
+    <div class="card">
+      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
+      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
+      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
+        <div class="term" id="flashTerm"></div>
+        <div class="answer" id="flashAnswer" hidden></div>
+        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="prevCard">السابق</button>
+        <span id="cardCount" class="muted"></span>
+        <button class="btn primary" id="nextCard">التالي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- التبويب الخامس: الاختبار الذاتي -->
+  <section id="quiz" class="panel">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2>الاختبار الشامل للفصل السابع (25 سؤالاً)</h2>
+          <p class="muted">يغطي جميع الأفكار والخوارزميات والخدمات السحابية الدقيقة في الوحدات الثلاث مع تصحيح فوري وتعليل.</p>
+        </div>
+        <div class="score" id="score">النتيجة: 0 / 25</div>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="quizArea"></div>
+      <div class="row">
+        <button class="btn" id="resetQuiz">إعادة الاختبار</button>
+        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+      </div>
+      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
+    </div>
+  </section>
+</main>
+
+<footer>مبني بالكامل (100%) على محتوى الفصل السابع من مقرر أمن البيانات والخصوصية</footer>
+
+<script>
+const terms = [
+  ["Encryption", "التشفير: عملية تحويل المعلومات من شكلها الأصلي (النص الواضح) إلى شكل غير قابل للقراءة أو الفهم (النص المشفر) لحمايتها من الوصول غير المصرح به."],
+  ["Symmetric Encryption", "التشفير المتماثل: تقنية تُستخدم لتشفير البيانات وفك تشفيرها باستخدام مفتاح تشفير سري واحد مشترك (Same Key)."],
+  ["Asymmetric Encryption", "التشفير غير المتماثل (تشفير المفتاح العام): تقنية تستخدم مفتاحين منفصلين ومترابطين رياضياً؛ مفتاح عام للتشفير ومفتاح خاص لفك التشفير."],
+  ["Brute-force attack", "هجوم القوة الغاشمة: من تقنيات استخراج وسرقة البيانات التي يحمي منها التشفير أثناء نقل البيانات عبر الشبكة."],
+  ["Substitution and Permutation", "الاستبدال والتحويل: طريقة تعتمد عليها بعض خوارزميات التشفير لتغيير ترتيب الحروف والبتات في البيانات."],
+  ["Encryption Key", "مفتاح التشفير: سلسلة عشوائية وفريدة من البتات أو الحروف أو الأرقام تُستخدم مع الخوارزمية لتشفير البيانات وفك تشفيرها."],
+  ["Public Key & Private Key", "المفتاح العام (يُوزع للجميع ويُستخدم للتشفير) والمفتاح الخاص (يُحفظ بسرية تامة ويُستخدم لفك التشفير ولا يمكن استرداده إذا فُقد)."],
+  ["RSA (Rivest Shamir Adleman)", "خوارزمية رياضية معقدة شهيرة تُستخدم في التشفير غير المتماثل."],
+  ["AES (Advanced Encryption Standard)", "معيار التشفير المتقدم: خوارزمية تشفير متماثلة تقسم البيانات إلى كتل صغيرة وتدعم أطوال مفاتيح 128 و 192 و 256 بت."],
+  ["Wireless Network Encryption", "تشفير الشبكات اللاسلكية: تحويل البيانات المرسلة عبر الأمواج اللاسلكية (Wi-Fi) إلى شكل مشفر لمنع اعتراضها."],
+  ["WEP (Wired Equivalent Privacy)", "نظام تشفير قديم لشبكات الواي فاي يستخدم خوارزمية RC4، وهو ضعيف جداً وغير موصى به لسهولة اختراقه."],
+  ["RC4 (Rivest Cipher)", "تقنية التشفير المستخدمة في نظام WEP القديم والتي تعاني من ثغرات في توليد المفاتيح العشوائية."],
+  ["WPA & WPA2 (Wi-Fi Protected Access)", "أنظمة تشفير حديثة لشبكات الواي فاي؛ ويعد WPA2 الأكثر أماناً لاستخدامه خوارزمية AES وبروتوكول 802.1X."],
+  ["802.1X Protocol", "بروتوكول يُستخدم في نظام WPA2 للمصادقة على المستخدمين وتوزيع المفاتيح المشتركة."],
+  ["AWS CloudHSM & AWS KMS", "من خدمات AWS: CloudHSM يوفر وحدات أمان أجهزة (HSMs) لتخزين المفاتيح، و KMS لإدارة وإنشاء مفاتيح الجذر والبيانات."],
+  ["AWS Encryption SDK & DynamoDB Client", "مكتبات تشفير من جانب العميل في AWS؛ الأولى لجميع أنواع البيانات، والثانية لتشفير جداول البيانات قبل إرسالها لـ DynamoDB."],
+  ["AWS Secrets Manager", "خدمة في AWS تقدم تشفيراً وتناوباً للبيانات السرية المستخدمة في قواعد البيانات."],
+  ["Azure Key Vault & Disk Encryption", "من خدمات Azure: Key Vault لإدارة الأسرار والمفاتيح والشهادات، و Disk Encryption لتشفير الأقراص الافتراضية (HD)."],
+  ["Azure Storage Service Encryption", "خدمة تشفير بيانات التخزين في Azure (Blob, File, Queue, Table Storage)."],
+  ["Azure SQL Database TDE", "تشفير البيانات الشفاف (Transparent Data Encryption): يوفر تشفيراً تلقائياً بالكامل لبيانات قواعد البيانات في Azure SQL Database."]
+];
+
+const cards = [
+  ["ما هو تعريف التشفير (Encryption)؟ وما الهدف منه؟", "هو عملية تحويل المعلومات من شكلها الأصلي (النص الواضح) إلى شكل غير قابل للقراءة أو الفهم (النص المشفر) باستخدام الخوارزميات المشفرة وعلامات التجزئة والتوقيعات؛ بهدف حماية البيانات من الوصول غير المصرح به."],
+  ["ما هي الحالات الثلاث للمعلومات التي يحميها التشفير؟ مع ذكر مثال لكل حالة.", "1) غير نشطة: مثل ملف مخزن على القرص الصلب.\n2) متنقلة: مثل الاتصالات الإلكترونية المتبادلة بين طرفين أو أكثر.\n3) قيد الاستخدام: أثناء الحوسبة على البيانات."],
+  ["ما هي الأدوات التي يستخدمها التشفير لتحقيق أهداف أمان المعلومات؟", "خوارزميات التشفير، خوارزميات التوقيع الرقمي، خوارزميات التجزئة، ووظائف أخرى."],
+  ["ما الفرق الأساسي بين التشفير المتماثل والتشفير غير المتماثل؟", "• التشفير المتماثل (Symmetric): يستخدم مفتاح تشفير سرياً واحداً مشتركاً للتشفير وفك التشفير.\n• التشفير غير المتماثل (Asymmetric / تشفير المفتاح العام): يستخدم مفتاحين منفصلين ومترابطين رياضياً (مفتاح عام للتشفير، ومفتاح خاص لفك التشفير)."],
+  ["ما هي النقاط الأربع التي تبرز (أهمية تشفير البيانات)؟", "1) عدم تعرض البيانات للخطر أثناء النقل (حمايتها من هجوم القوة الغاشمة Brute-force attack).\n2) حماية الخصوصية والسرية.\n3) التجارة الإلكترونية الآمنة (حماية المعاملات المالية وتفاصيل الدفع).\n4) حماية البيانات الحساسة من الانتهاكات الأمنية الناتجة عن التطبيقات غير المعتمدة."],
+  ["ما هي خوارزمية التشفير؟ وماذا تفعل بالبيانات؟", "هي مجموعة من الإجراءات الرياضية والمنطقية التي تحول الرسالة من شكلها الأصلي (النص الواضح) إلى شكل غير قابل للقراءة (النص المشفر) بالاعتماد على مفتاح سري. وهي تسهل التشفير نسبياً لكنها تجعل فك التشفير مستحيلاً تقريباً بدون معرفة المفاتيح."],
+  ["ما هما الطريقتان اللتان تستخدمهما خوارزميات التشفير لتحويل وتعديل البيانات؟", "1) الاستبدال والتحويل (Substitution and Permutation): لتغيير ترتيب الحروف والبتات في البيانات.\n2) العمليات الرياضية: مثل الجمع والطرح والضرب والقسمة لتعديل البيانات."],
+  ["كيف يعمل التشفير؟ (اذكري الخطوتين الرئيسيتين).", "1) التشفير: تطبيق خوارزميات معقدة على النص الأصلي لتحويله إلى (نص مشفر) غير قابل للقراءة.\n2) فك التشفير: ترجمة النص المشفر عند وصوله للمستلم المقصود وإرجاعه لشكل النص الأصلي باستخدام مفتاح التشفير السري."],
+  ["ما هو مفتاح التشفير (Encryption Key)؟ وبماذا يتصف؟", "هو قيمة أو سلسلة من البتات أو الحروف أو الأرقام تُستخدم في عملية التشفير وفك التشفير لتعديل وتحويل البيانات. ويتصف كل مفتاح تشفير بأنه (عشوائي وفريد)."],
+  ["لماذا يُعتبر مفتاح التشفير عنصراً حاسماً؟ وما خطورة كشفه؟", "لأنه يحدد قوة وأمان نظام التشفير؛ وإذا تم الحصول على المفتاح السري بطرق غير مشروعة، يمكن للمهاجم فك تشفير البيانات والوصول إليها."],
+  ["ما الذي يستلزمه (التشفير المتماثل) بين المرسل والمستلم؟", "يستلزم حصول جميع مستلمي الرسائل المقصودين على حق الوصول إلى (مفتاح مشترك - Same Key) لأنه يستخدم نفس المفتاح للتشفير وفك التشفير."],
+  ["اذكري مثالاً لخوارزمية رياضية معقدة تُستخدم في (التشفير غير المتماثل).", "خوارزمية Rivest Shamir Adleman التي يُرمز لها بـ (RSA)."],
+  ["ما الفرق بين وظيفة (المفتاح العام) ووظيفة (المفتاح الخاص) في التشفير غير المتماثل؟", "• المفتاح العام (Public Key): يتم توزيعه ومشاركته مع الآخرين، ويُستخدم لعملية (التشفير).\n• المفتاح الخاص (Private Key): يتم الاحتفاظ به في سرية تامة ولا يُشارك مع أحد، ويُستخدم لعملية (فك التشفير) من قِبل صاحبه فقط."],
+  ["ما هي خوارزمية (AES)؟ وهل هي متماثلة أم غير متماثلة؟", "هي معيار التشفير المتقدم (Advanced Encryption Standard)، وتستخدم خوارزمية (التشفير المتماثلة) لتأمين الاتصالات عبر الإنترنت وقواعد البيانات والأجهزة المحمولة."],
+  ["ما هي أطوال المفاتيح التي تدعمها خوارزمية (AES)؟ وكيف تعالج البيانات؟", "تدعم أطوال مفاتيح: 128 بت، 192 بت، و 256 بت. وتقوم بتقسيم البيانات إلى (كتل صغيرة) وتطبق سلسلة من عمليات التشفير على كل كتلة."],
+  ["اشرحي مثال استخدام تقنية (AES) في مواقع البنوك والتسوق عبر الإنترنت.", "عند إرسال معلوماتك الشخصية أو المالية عبر الإنترنت، يتم استخدام تقنية AES لتشفير هذه البيانات من جانب الخادم وفك تشفيرها من جانب العميل، مما يضمن سرية واستقامة البيانات."],
+  ["ما هي إيجابيات وسلبيات (التشفير المتماثل)؟", "• الإيجابيات: سهولة إعداده، يُنفذ في لمح البصر (سريع)، وبسيط جداً لجميع الأعمار والتخصصات.\n• السلبيات: يحتاج إلى مشاركة المفتاح السري مع المستلم."],
+  ["ما هي الميزة الرئيسية لـ (التشفير غير المتماثل)؟ وما هي سلبياته الأربع؟", "• الميزة: لا يجبر المستخدم على مشاركة المفاتيح السرية (أزال ضرورة توزيع المفاتيح).\n• السلبيات: 1) أصعب في الفهم والاستخدام، 2) يستغرق وقتاً طويلاً وجهداً أكبر، 3) يتطلب إنشاء أزواج مفاتيح لدى الطرف الآخر، 4) إذا فُقد المفتاح الخاص فسيُفقد إلى الأبد (غير قابل للاسترداد)."],
+  ["لماذا يُعد تشفير الشبكات اللاسلكية (Wi-Fi) أمراً ضرورياً؟", "لأن البيانات المرسلة عبر الأمواج اللاسلكية يمكن اعتراضها بسهولة من قِبل المهاجمين المحتملين، والاطلاع على كلمات المرور والبيانات الشخصية والمعاملات المالية."],
+  ["ما هي الأنواع الثلاثة لأنظمة تشفير الشبكات اللاسلكية المذكورة في الفصل؟", "1) نظام التشفير (WEP).\n2) نظام التشفير (WPA / WAP).\n3) نظام التشفير (WPA2)."],
+  ["ما هو نظام (WEP)؟ وما الخوارزمية التي يستخدمها؟ ولماذا لم يعد موصى به؟", "نظام تشفير لشبكات الواي فاي القديمة يستخدم تقنية (RC4). وهو غير موصى به تماماً لسهولة اختراقه بسبب ضعف عملية توليد المفاتيح العشوائية واستخدام نفس المفتاح لفترات طويلة."],
+  ["ما هو نظام (WPA2)؟ وما الخوارزمية والبروتوكول اللذان يستخدمهما؟", "هو تطوير لنظام WPA لحماية الشبكات اللاسلكية، ويُعد أكثر أماناً من WPA و WEP لأنه يستخدم:\n1) خوارزمية التشفير المتقدمة (AES) لتأمين البيانات.\n2) بروتوكول (802.1X) للمصادقة على المستخدمين وتوزيع المفاتيح المشتركة."],
+  ["ما الفرق بين خدمتي (AWS CloudHSM) و (AWS KMS) في أمازون؟", "• AWS CloudHSM: تقدم وحدات أمان أجهزة (HSMs) لتخزين مفاتيح التشفير بأمان (بما فيها مفاتيح الجذر والبيانات).\n• AWS KMS: خدمة إدارة مفاتيح التشفير؛ تقدم أدوات لإنشاء مفاتيح جذر ومفاتيح بيانات وتتفاعل مع خدمات AWS الأخرى."],
+  ["ما وظيفة كل من: (AWS Encryption SDK)، (عميل تشفير DynamoDB)، و(AWS Secrets Manager)؟", "• AWS Encryption SDK: مكتبة تشفير من جانب العميل لتشفير وفك تشفير جميع أنواع البيانات.\n• عميل تشفير DynamoDB: مكتبة من جانب العميل لتشفير جداول البيانات قبل إرسالها لقواعد البيانات.\n• AWS Secrets Manager: يقدم تشفيراً وتناوباً للبيانات السرية في قواعد البيانات المدعومة من AWS."],
+  ["ما هي منصة (Azure)؟ وما وظيفة خدمة (Azure Key Vault) فيها؟", "Azure هي منصة الحوسبة السحابية التابعة لشركة Microsoft. وخدمة (Azure Key Vault) توفر إدارة وتخزيناً آمناً للأسرار والمفاتيح والشهادات والتحكم في الوصول للمفاتيح."],
+  ["ما وظيفة خدمة (Azure Disk Encryption)؟", "توفر تشفيراً للأقراص الافتراضية (HD) المستخدمة في آلات افتراضية؛ حيث تشفر البيانات عند حفظها على القرص وتفك تشفيرها عند الوصول إليها."],
+  ["ما هي خدمات التخزين الأربع التي تشفرها خدمة (Azure Storage Service Encryption)؟", "1) Azure Blob Storage.\n2) Azure File Storage.\n3) Azure Queue Storage.\n4) Azure Table Storage."],
+  ["ما هي خدمة (Azure SQL Database TDE)؟ وكيف تعمل؟", "هي خدمة تشفير البيانات الشفاف (Transparent Data Encryption - TDE)، وتوفر تشفيراً تلقائياً بالكامل لبيانات قواعد البيانات في Azure SQL Database باستخدام مفتاح تشفير رئيسي تديره Azure."]
+];
+
+const questions = [
+  {q:"عملية تحويل المعلومات من شكلها الأصلي (النص الواضح) إلى شكل غير قابل للقراءة أو الفهم (النص المشفر) لحماية البيانات من الوصول غير المصرح به تُعرف بـ:",o:["التشفير (Encryption)","فك التشفير (Decryption)","هجوم القوة الغاشمة (Brute-force)","الاصطياد الإلكتروني"],a:0,e:"التشفير هو عملية تحويل المعلومات من شكلها الأصلي (النص الواضح) إلى شكل غير قابل للقراءة (النص المشفر)."},
+  {q:"يحمي التشفير المعلومات في ثلاث حالات؛ فأي مما يلي يُعد مثالاً على المعلومات (غير النشطة) والمعلومات (المتنقلة) على التوالي؟",o:["ملف على القرص الصلب (غير نشطة)، والاتصالات الإلكترونية المتبادلة بين طرفين (متنقلة)","الحوسبة على البيانات (غير نشطة)، وملف على القرص (متنقلة)","كلاهما يمثلان البيانات أثناء المعالجة فقط","التشفير لا يحمي الملفات المخزنة على القرص الصلب"],a:0,e:"المعلومات غير النشطة مثل ملف على القرص الصلب، والمتنقلة مثل الاتصالات الإلكترونية المتبادلة، وقيد الاستخدام أثناء الحوسبة."},
+  {q:"يضمن تشفير البيانات عدم إمكانية سرقة البيانات السرية أثناء نقلها عبر الشبكة من خلال تقنيات استخراج البيانات مثل:",o:["هجوم القوة الغاشمة (Brute-force attack)","الجدار الناري (Firewall)","التحقق الثنائي","توازن الحمل"],a:0,e:"يمنع التشفير سرقة البيانات أثناء نقلها عبر قنوات الاتصال بواسطة تقنيات استخراج البيانات مثل هجوم القوة الغاشمة (Brute-force attack)."},
+  {q:"بماذا تتصف خوارزميات التشفير الحديثة من حيث سهولة التشفير وصعوبة فك التشفير؟",o:["تسهل نسبياً تشفير رسالة، ولكنها تجعل من المستحيل تقريباً فك تشفيرها بدون معرفة المفاتيح","تجعل التشفير مستحيلاً وتجعل فك التشفير سهلاً بدون مفتاح","لا تستخدم أي عمليات رياضية أو منطقية","لا تحتاج إلى أي مفتاح تشفير"],a:0,e:"تستخدم الخوارزميات الحديثة رياضيات متقدمة، وهي تسهل نسبياً تشفير رسالة ولكنها تجعل من المستحيل تقريباً فك تشفيرها بدون معرفة المفاتيح."},
+  {q:"لتغيير ترتيب الحروف والبتات في البيانات أثناء عملية التشفير، تعتمد بعض خوارزميات التشفير على طريقة:",o:["الاستبدال والتحويل (Substitution and Permutation)","حذف البيانات نهائياً","إرسال البيانات كنص واضح","إيقاف عمل المتصفح"],a:0,e:"هناك خوارزميات تعتمد على الاستبدال والتحويل (Substitution and Permutation) لتغيير ترتيب الحروف والبتات، وأخرى تستخدم العمليات الرياضية."},
+  {q:"سلسلة من الأرقام أو البتات أو الحروف تُنشأ باستخدام الخوارزميات وتتصف بأنها (عشوائية وفريدة)، وتحدد قوة وأمان نظام التشفير:",o:["مفتاح التشفير (Encryption Key)","اسم الشبكة (SSID)","عنوان الرابط (URL)","ملف تعريف الارتباط (Cookie)"],a:0,e:"مفتاح التشفير (Encryption Key) هو سلسلة من الأرقام أو البتات أو الحروف لتشفير البيانات وفك تشفيرها، ويتصف بأنه عشوائي وفريد."},
+  {q:"التقنية التي تستخدم نفس مفتاح التشفير السري المشترك (Same Key) لتشفير النص العادي وفك تشفير المعلومات المشفرة على حد سواء هي:",o:["التشفير المتماثل (Symmetric Encryption)","التشفير غير المتماثل (Asymmetric Encryption)","تشفير المفتاح العام","خوارزمية RSA"],a:0,e:"التشفير المتماثل (Symmetric Encryption) يستخدم مفتاحاً سرياً واحداً مشتركاً للتشفير وفك التشفير."},
+  {q:"يُعرف (التشفير غير المتماثل - Asymmetric Encryption) أيضاً باسم آخر هو:",o:["تشفير المفتاح العام (Public Key Encryption)","تشفير المفتاح الواحد المشترك","نظام WEP القديم","التشفير بدون مفاتيح"],a:0,e:"التشفير غير المتماثل يُعرف أيضاً باسم تشفير المفتاح العام، ويستخدم مفتاحين منفصلين (مفتاح عام ومفتاح خاص)."},
+  {q:"في التشفير غير المتماثل، ما هي الوظيفة الدقيقة لكل من (المفتاح العام - Public Key) و (المفتاح الخاص - Private Key)؟",o:["المفتاح العام يُشارك مع الآخرين ويُستخدم لعملية (التشفير)، بينما المفتاح الخاص يُحفظ بسرية تامة ويُستخدم لعملية (فك التشفير)","المفتاح الخاص يُشارك مع الجميع للتشفير، والمفتاح العام يُحفظ بسرية لفك التشفير","كلا المفتاحين يُنشروان للعلن على الإنترنت","المفتاح العام يحذف البيانات والمفتاح الخاص ينسخها"],a:0,e:"في التشفير غير المتماثل: يمكن لأي شخص استخدام المفتاح العام لتشفير البيانات، ولكن يمكن فقط لصاحب المفتاح الخاص السري فك تشفيرها."},
+  {q:"أي من الخوارزميات التالية تُعد مثالاً شهيراً على الخوارزميات الرياضية المعقدة المستخدمة في (التشفير غير المتماثل)؟",o:["RSA (Rivest Shamir Adleman)","AES (Advanced Encryption Standard)","RC4","WEP"],a:0,e:"يستخدم التشفير غير المتماثل خوارزميات رياضية معقدة مثل Rivest Shamir Adleman (RSA)."},
+  {q:"تنتمي خوارزمية التشفير المتقدمة (AES) إلى أي نوع من التشفير؟ وما أطوال مفاتيح التشفير التي تدعمها؟",o:["تستخدم خوارزمية التشفير المتماثلة، وتدعم أطوال مفاتيح 128 بت و 192 بت و 256 بت","تستخدم التشفير غير المتماثل، وتدعم مفتاح 10 بت فقط","لا تستخدم أي مفاتيح تشفير","تُستخدم فقط في شبكات WEP القديمة"],a:0,e:"تستخدم تقنية AES خوارزمية التشفير المتماثلة، وتدعم أطوال مفاتيح 128 بت و 192 بت و 256 بت، وتقسم البيانات إلى كتل صغيرة."},
+  {q:"كيف تعمل خوارزمية التشفير المتقدمة (AES) على معالجة البيانات لتحويلها إلى شكل غير قابل للقراءة؟",o:["تقوم بتقسيم البيانات إلى كتل صغيرة وتطبق سلسلة من عمليات التشفير على كل كتلة","تترك البيانات ككتلة واحدة بدون أي عمليات رياضية","تنشر المفتاح الخاص للجمهور","تستخدم تقنية RC4 الضعيفة"],a:0,e:"تقوم تقنية AES بتقسيم البيانات إلى كتل صغيرة وتطبيق سلسلة من عمليات التشفير على كل كتلة."},
+  {q:"ما هي السلبية الرئيسية لـ (التشفير المتماثل) مقارنة بميزة (التشفير غير المتماثل)؟",o:["في التشفير المتماثل يحتاج المفتاح السري إلى مشاركته مع المستلم، بينما التشفير غير المتماثل أزال ضرورة توزيع ومشاركة المفاتيح السرية","التشفير المتماثل بطيء جداً ومعقد، بينما غير المتماثل يُنفذ في لمح البصر","التشفير المتماثل يتطلب مفتاحين لكل مستخدم","لا توجد أي سلبيات للتشفير المتماثل"],a:0,e:"سلبية التشفير المتماثل هي الحاجة لمشاركة المفتاح السري مع المستلم، بينما ميزة غير المتماثل أنه لا يجبر المستخدم على مشاركة المفاتيح السرية."},
+  {q:"جميع ما يلي يُعد من سلبيات (التشفير غير المتماثل) المذكورة في الفصل السابع ما عدا:",o:["يمكن تنفيذه في لمح البصر وبسيط جداً لجميع الأعمار","أكثر صعوبة في الفهم والاستخدام، ويستغرق وقتاً طويلاً ويتطلب جهداً أكبر بكثير","لا يمكنك إرسال بريد مشفر إلا إذا قام الشخص الآخر بإنشاء أزواج من المفاتيح","في حال فقدت مفتاحك الخاص فستفقده إلى الأبد لأنه غير قابل للاسترداد"],a:0,e:"التنفيذ في لمح البصر والبساطة الشديدة هي من مزايا التشفير المتماثل، أما الباقي فهي سلبيات التشفير غير المتماثل."},
+  {q:"ماذا يحدث إذا فقد المستخدم (مفتاحه الخاص - Private Key) في نظام التشفير غير المتماثل؟",o:["سيفقده إلى الأبد، حيث أن المفتاح الخاص غير قابل للاسترداد","يمكنه استرداده بسهولة من المفتاح العام","يرسل له المستلم نسخة جديدة منه","يتحول النظام تلقائياً إلى تشفير متماثل"],a:0,e:"ينص المنهج صراحةً على أنه: (بحال فقدت مفتاحك الخاص فستفقده إلى الأبد، حيث أن المفتاح الخاص غير قابل للاسترداد)."},
+  {q:"لماذا يُعتبر تشفير الشبكات اللاسلكية (Wi-Fi) أمراً ضرورياً لضمان الأمان والخصوصية؟",o:["لأن البيانات المرسلة عبر الأمواج اللاسلكية يمكن اعتراضها بسهولة من قبل المهاجمين والاطلاع على كلمات المرور والبيانات الحساسة","لأن الأمواج اللاسلكية تمنع عمل أجهزة الكمبيوتر المحمولة","لأن التشفير اللاسلكي يلغي الحاجة إلى الراوتر","لأن الشبكات اللاسلكية لا تنقل أي بيانات"],a:0,e:"البيانات المرسلة عبر الأمواج اللاسلكية يمكن اعتراضها بسهولة من قبل المهاجمين المحتملين للاطلاع على المعلومات الحساسة."},
+  {q:"نظام تشفير استُخدم في شبكات الواي فاي (القديمة)، ويعتمد على تقنية تشفير (RC4)، وأصبح غير موصى به تماماً من قبل الخبراء لسهولة اختراقه:",o:["نظام التشفير WEP (Wired Equivalent Privacy)","نظام التشفير WPA2","خوارزمية AES-256","خدمة Azure Key Vault"],a:0,e:"نظام WEP يستخدم تقنية RC4 في الشبكات القديمة، ويعاني من ثغرات تجعله عرضة للاختراق بسهولة فلم يعد موصى به تماماً."},
+  {q:"ما هي الثغرات الأمنية التي تم اكتشافها في نظام تشفير الشبكات اللاسلكية القديم (WEP)؟",o:["ضعف في عملية توليد المفاتيح العشوائية واستخدام نفس المفتاح لفترات طويلة من الزمن، مما يسمح بالتقاط حركة المرور واسترداد المفتاح بسهولة","استخدامه لخوارزمية AES القوية جداً","تغييره للمفتاح كل ثانية بشكل معقد","اعتماده على بروتوكول 802.1X"],a:0,e:"ثغرات WEP تشمل ضعف عملية توليد المفاتيح العشوائية واستخدام نفس المفتاح لفترات طويلة مما يسهل للمهاجم استرداد المفتاح."},
+  {q:"يُعتبر نظام (WPA2) أكثر أماناً من WPA و WEP؛ فما هي خوارزمية التشفير وبروتوكول المصادقة اللذان يستخدمهما نظام (WPA2)؟",o:["يستخدم خوارزمية التشفير المتقدمة (AES) لتأمين البيانات، وبروتوكول (802.1X) للمصادقة وتوزيع المفاتيح المشتركة","يستخدم تقنية (RC4) وبروتوكول (HTTP)","يستخدم التشفير غير المتماثل فقط بدون مصادقة","لا يستخدم أي خوارزميات تشفير"],a:0,e:"يستخدم WPA2 خوارزمية التشفير المتقدمة (AES) لتأمين بيانات الاتصال، وبروتوكول 802.1X للمصادقة وتوزيع المفاتيح المشتركة."},
+  {q:"أي خدمة من خدمات التشفير في (AWS) تقدم (وحدات أمان أجهزة - HSMs) لتخزين مجموعة مختلفة من مفاتيح التشفير بأمان بما فيها مفاتيح الجذر ومفاتيح البيانات؟",o:["AWS CloudHSM","AWS Secrets Manager","عميل تشفير Amazon DynamoDB","Azure Disk Encryption"],a:0,e:"AWS CloudHSM تقدم وحدات أمان أجهزة (HSMs) لتخزين مفاتيح التشفير بأمان بما فيها مفاتيح الجذر ومفاتيح البيانات."},
+  {q:"ما الفرق بين وظيفة (AWS KMS) ووظيفة (AWS Secrets Manager) ضمن خدمات التشفير التي تقدمها AWS؟",o:["AWS KMS تقدم أدوات لإنشاء مفاتيح جذر ومفاتيح بيانات وتتفاعل مع خدمات AWS، بينما Secrets Manager يقدم تشفيراً وتناوباً للبيانات السرية في قواعد البيانات","كلاهما يستخدمان لتشفير شبكات الواي فاي المنزلية WEP","AWS KMS لتشفير الأقراص الصلبة في مايكروسوفت فقط","لا علاقة لهما بالتشفير"],a:0,e:"خدمة AWS KMS تنشئ وتدير مفاتيح الجذر والبيانات، بينما AWS Secrets Manager يقدم تشفيراً وتناوباً للبيانات السرية في قواعد البيانات."},
+  {q:"لتشفير (جداول البيانات) من جانب العميل قبل إرسالها إلى إحدى خدمات قواعد البيانات في AWS، نستخدم:",o:["عميل تشفير Amazon DynamoDB","Azure Key Vault","نظام WEP","خوارزمية RC4"],a:0,e:"عميل تشفير Amazon DynamoDB يقدم مكتبة تشفير من جانب العميل لتشفير جداول البيانات قبل إرسالها إلى قواعد البيانات مثل DynamoDB."},
+  {q:"في منصة الحوسبة السحابية (Azure) التابعة لشركة Microsoft، ما اسم الخدمة التي توفر إدارة وتخزيناً آمناً لـ (الأسرار والمفاتيح والشهادات)؟",o:["Azure Key Vault","Azure Disk Encryption","AWS CloudHSM","AWS Encryption SDK"],a:0,e:"Azure Key Vault يوفر خدمة آمنة لإدارة وتخزين الأسرار والمفاتيح والشهادات والتحكم في الوصول للمفاتيح التشفيرية."},
+  {q:"أي خدمة في منصة (Azure) تقوم بتشفير البيانات المخزنة في (Azure Blob Storage و File Storage و Queue Storage و Table Storage)؟",o:["Azure Storage Service Encryption","Azure Disk Encryption","Azure SQL Database TDE","AWS KMS"],a:0,e:"خدمة Azure Storage Service Encryption تشفر بيانات التخزين في Blob و File و Queue و Table Storage."},
+  {q:"توفر خدمة (TDE) في منصة Azure تشفيراً تلقائياً بالكامل لبيانات قواعد البيانات باستخدام مفتاح رئيسي تديره Azure؛ وإلى ماذا يرمز الاختصار الكامل لهذه الخدمة؟",o:["Azure SQL Database Transparent Data Encryption (TDE)","Total Disk Erase (TDE)","Temporary Data Export (TDE)","Trojan Detection Engine (TDE)"],a:0,e:"TDE هي اختصار لـ Transparent Data Encryption في خدمة Azure SQL Database وتوفر تشفيراً تلقائياً لبيانات قواعد البيانات."}
+];
+
+// بناء شبكة المصطلحات
+const termsGrid = document.getElementById("termsGrid");
+terms.forEach(([en, ar]) => {
+  const d = document.createElement("div");
+  d.className = "card";
+  d.style.margin = "0";
+  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
+  termsGrid.appendChild(d);
+});
+
+// إدارة البطاقات التعليمية
+let ci = 0, showAnswer = false;
+function renderCard() {
+  document.getElementById("flashTerm").textContent = cards[ci][0];
+  document.getElementById("flashAnswer").textContent = cards[ci][1];
+  document.getElementById("flashAnswer").hidden = !showAnswer;
+  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
+  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+}
+document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
+document.getElementById("flashcard").addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
+});
+document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
+document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
+renderCard();
+
+// التنقل بين التبويبات
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+// إدارة الاختبار
+let answers = {};
+function renderQuiz() {
+  const area = document.getElementById("quizArea");
+  area.innerHTML = "";
+  const letters = ["أ", "ب", "ج", "د"];
+  questions.forEach((item, i) => {
+    const box = document.createElement("div");
+    box.className = "qbox";
+    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
+    const opts = box.querySelector(".options");
+    item.o.forEach((opt, j) => {
+      const btn = document.createElement("button");
+      btn.className = "option";
+      btn.textContent = `${letters[j]}) ${opt}`;
+      btn.onclick = () => {
+        answers[i] = j;
+        [...opts.children].forEach((x, k) => {
+          x.classList.remove("correct", "wrong");
+          x.disabled = true;
+          if (k === item.a) x.classList.add("correct");
+          if (k === j && j !== item.a) x.classList.add("wrong");
+        });
+        const fb = document.getElementById("fb" + i);
+        fb.hidden = false;
+        fb.className = "feedback " + (j === item.a ? "good" : "bad");
+        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
+        updateScore();
+      };
+      opts.appendChild(btn);
+    });
+    area.appendChild(box);
+  });
+  updateScore();
+}
+
+function updateScore() {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
+  document.getElementById("score").textContent = `النتيجة: ${correct} / ${questions.length}`;
+  document.getElementById("progressBar").style.width = (Object.keys(answers).length / questions.length * 100) + "%";
+}
+
+document.getElementById("resetQuiz").onclick = () => {
+  answers = {};
+  document.getElementById("finalResult").textContent = "";
+  renderQuiz();
+};
+
+document.getElementById("finishQuiz").onclick = () => {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
+  const pct = Math.round(correct / questions.length * 100);
+  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${questions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! أنتِ مستعدة تماماً للاختبار." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
+};
+
+renderQuiz();
+</script>
+</body>
+</html>

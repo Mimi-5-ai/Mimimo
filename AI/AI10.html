@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الفصل العاشر الشامل (ص 102-109) | الاستدلال المنطقي والذكاء الاصطناعي في وجود الخصوم</title>
+<style>
+:root{
+  --bg:#f4f6fb;
+  --card:#ffffff;
+  --ink:#0f172a;
+  --muted:#64748b;
+  --accent:#4f46e5;
+  --accent-dark:#3730a3;
+  --accent2:#eef2ff;
+  --teal:#0d9488;
+  --teal-light:#ccfbf1;
+  --line:#e2e8f0;
+  --good:#059669;
+  --good-bg:#ecfdf5;
+  --bad:#dc2626;
+  --bad-bg:#fef2f2;
+  --warn:#d97706;
+  --warn-bg:#fffbeb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
+header{background:linear-gradient(135deg,#1e1b4b,#3730a3,#0d9488);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(30,27,75,0.2)}
+.wrap{max-width:1060px;margin:auto;padding:0 16px}
+.eyebrow{opacity:.95;font-size:.9rem;background:rgba(255,255,255,0.16);display:inline-block;padding:4px 14px;border-radius:99px;margin-bottom:6px;font-weight:bold}
+h1{margin:5px 0;font-size:clamp(1.5rem,3.8vw,2.2rem)}
+header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
+nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:rgba(255,255,255,0.18);color:#ffffff;font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
+nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
+nav button.active{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+main .btn{background:var(--accent2);color:var(--accent-dark)}
+main .btn.primary{background:var(--accent);color:white}
+main{padding:22px 0 48px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(15,23,42,0.04)}
+h2{font-size:1.35rem;margin:0 0 12px;color:#1e1b4b}
+h3{font-size:1.06rem;margin:10px 0 6px;color:var(--accent-dark)}
+h4{font-size:.98rem;margin:8px 0 4px;color:#0f172a}
+small,.muted{color:var(--muted)}
+ul,ol{padding-right:22px;margin:8px 0}
+li{margin:6px 0}
+details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
+summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f8faff;color:#1e1b4b;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
+details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
+.details-body{padding:16px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
+.tag.teal{background:var(--teal-light);color:var(--teal)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#f1f5f9;color:#1e1b4b;font-weight:bold}
+tr:last-child td{border-bottom:0}
+.note{border-right:4px solid var(--accent);padding:10px 14px;background:#f5f7ff;border-radius:8px;margin:10px 0}
+.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
+.formula-box{background:#1e1b4b;color:#fff;padding:12px 16px;border-radius:12px;text-align:center;font-size:1.05rem;margin:10px 0;direction:ltr;font-family:monospace;line-height:1.75}
+.step-card{border:1px solid var(--line);border-radius:12px;padding:14px;background:#f8fafc}
+
+/* مخطط شجرة Minimax التوضيحي */
+.tree-box{background:#f8fafc;border:1px solid var(--line);border-radius:14px;padding:16px;margin:12px 0;text-align:center;direction:ltr}
+.tree-level{display:flex;justify-content:space-around;align-items:center;margin:10px 0;flex-wrap:wrap;gap:8px}
+.t-node{padding:8px 14px;border-radius:10px;font-weight:bold;font-family:monospace;font-size:.95rem;border:2px solid transparent}
+.t-max{background:#eef2ff;color:#3730a3;border-color:#818cf8}
+.t-min{background:#ccfbf1;color:#115e59;border-color:#2dd4bf}
+.t-leaf{background:#1e1b4b;color:#fff}
+.t-pruned{background:#fef2f2;color:#dc2626;border-color:#fca5a5;text-decoration:line-through;opacity:.8}
+
+.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
+.options{display:grid;gap:8px;margin-top:12px}
+.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
+.option:hover:not(:disabled){border-color:var(--accent);background:#f8faff}
+.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
+.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
+.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
+.feedback.good{color:var(--good);background:var(--good-bg)}
+.feedback.bad{color:var(--bad);background:var(--bad-bg)}
+.progress{height:10px;background:#e2e8f0;border-radius:9px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
+.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#eef2ff);border:2px solid #c7d2fe;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
+.flashcard:hover{transform:scale(1.005)}
+.flashcard .term{font-size:1.35rem;font-weight:bold;color:#1e1b4b}
+.flashcard .answer{margin-top:16px;font-size:1.08rem;color:var(--accent-dark);background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
+@media(max-width:600px){
+  .card{padding:14px}
+  nav button{flex:1 1 calc(50% - 8px);text-align:center}
+  .flashcard{min-height:200px;padding:18px}
+  th,td{padding:8px 10px;font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">مقرر الذكاء الاصطناعي • الفصل العاشر (صفحات 102 إلى 109)</div>
+    <h1>الفصل العاشر: الاستدلال المنطقي والذكاء الاصطناعي في وجود الخصوم</h1>
+    <p>يغطي أنواع وقواعد الاستدلال المنطقي (Modus Ponens, Modus Tollens)، التسلسل الأمامي والخلفي، البحث في وجود الخصوم وصياغة الألعاب، خوارزمية Minimax، وتقليم ألفا-بيتا (Alpha-Beta Pruning)</p>
+    <nav>
+      <button class="active" data-tab="summary">الشرح الشامل</button>
+      <button data-tab="tables">جداول المقارنات والمسائل (4)</button>
+      <button data-tab="terms">المصطلحات والمفاهيم (28)</button>
+      <button data-tab="cards">البطاقات التعليمية (28)</button>
+      <button data-tab="quiz">الاختبار الشامل (25)</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- ================= التبويب الأول: الشرح الشامل ================= -->
+  <section id="summary" class="panel active">
+    <div class="card">
+      <h2>خريطة الفصل العاشر (ص 102 - 109)</h2>
+      <div class="grid">
+        <div>
+          <span class="tag">الوحدة الأولى (ص 102 - 104)</span>
+          <h3>الاستدلال المنطقي وقواعده واتجاهاته</h3>
+          <p>مفهوم الاستدلال وأنواعه الثلاثة (الاستنباط، الاستقراء، الافتراضي)، قواعد الاستدلال السليمة (Modus Ponens & Tollens)، والتسلسل الأمامي والخلفي.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثانية (ص 105 - 107)</span>
+          <h3>البحث في وجود الخصوم و Minimax</h3>
+          <p>طبيعة الألعاب التنافسية ذات المجموع الصفري، العناصر الستة لصياغة اللعبة رسمياً، وآلية عمل خوارزمية الحد الأدنى الأقصى (Minimax) وتتبعها.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثالثة (ص 107 - 109)</span>
+          <h3>تقليم ألفا-بيتا (Alpha-Beta Pruning)</h3>
+          <p>مفهوم ومعاملي ($\alpha$ و $\beta$)، شرط القص ($\alpha \ge \beta$)، مسألة تتبع شجرة ألفا-بيتا خطوة بخطوة، وأثر ترتيب الحركات على مضاعفة عمق البحث.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- الوحدة الأولى -->
+    <details open>
+      <summary>1) الوحدة الأولى: الاستدلال المنطقي (Logical Inference)، أنواعه، قواعده القياسية، والتسلسل الأمامي والخلفي (ص 102 - 104)</summary>
+      <div class="details-body">
+        <h3>أولاً: مفهوم الاستدلال المنطقي (<span dir="ltr">Logical Inference</span>) وأنواعه الثلاثة (ص 102)</h3>
+        <ul>
+          <li><b>تعريف الاستدلال المنطقي:</b> هو العملية العقلية أو الحسابية التي يقوم بها محرك الاستدلال (<span dir="ltr">Inference Engine</span>) للانتقال من جمل وحقائق معلومة مسبقاً تسمى <b>المقدمات (<span dir="ltr">Premises</span>)</b> مخزنة في قاعدة المعرفة ($KB$) للوصول إلى جملة جديدة تسمى <b>النتيجة أو الاستنتاج (<span dir="ltr">Conclusion</span>)</b>.</li>
+          <li><b>أنواع الاستدلال المنطقي الثلاثة في الذكاء الاصطناعي:</b>
+            <ol>
+              <li><b>الاستدلال الاستنباطي / الاستنتاجي (<span dir="ltr">Deductive Reasoning / Deduction</span>):</b>
+                <br>الانتقال من <b>القاعدة العامة إلى الحالة الخاصة</b>؛ وفيه تكون النتيجة <b>حتمية ومضمونة الصحة بنسبة 100%</b> طالما كانت المقدمات صائبة (مثال: <i>"كل البشر فانون"</i> [قاعدة عامة] + <i>"سقراط بشر"</i> [حالة خاصة] $\implies$ <i>"سقراط فانٍ"</i> [نتيجة حتمية]).</li>
+              <li><b>الاستدلال الاستقرائي (<span dir="ltr">Inductive Reasoning / Induction</span>):</b>
+                <br>الانتقال من <b>الملاحظات والحالات الجزئية الخاصة إلى قاعدة عامة</b>؛ وتكون النتيجة فيه <b>احتمالية (تعميمية) وليست قطعية</b>، وهو الأساس الذي يقوم عليه <b>تعلم الآلة (<span dir="ltr">Machine Learning</span>)</b> لاكتشاف الأنماط من الأمثلة التدريبية.</li>
+              <li><b>الاستدلال التفسيري / الافتراضي (<span dir="ltr">Abductive Reasoning / Abduction</span>):</b>
+                <br>الانتقال من <b>النتيجة (أو العرض الملاحظ) إلى استنتاج السبب الأكثر احتمالاً</b>؛ ويُستخدم بكثرة في <b>أنظمة التشخيص الطبي وتشخيص الأعطال</b> (مثال: نعلم أن <i>"الإنفلونزا تسبب الحمى"</i>، ونلاحظ أن <i>"المريض لديه حمى"</i> $\implies$ نفترض كأفضل تفسير أن <i>"المريض قد يكون مصاباً بالإنفلونزا"</i>).</li>
+            </ol>
+          </li>
+        </ul>
+
+        <div class="exam-alert">
+          <h3>ثانياً: قواعد الاستدلال المنطقي القياسية السليمة (<span dir="ltr">Sound Inference Rules</span>) (ص 103) - موضع أسئلة مؤكدة:</h3>
+          <p>قواعد الاستدلال هي قوالب منطقية سليمة (<span dir="ltr">Sound</span>) تضمن أن النتيجة المشتقة صائبة دائماً متى كانت المقدمات صائبة:</p>
+          <div class="formula-box">
+1) قاعدة إثبات المقدم / وضع المقدم (Modus Ponens):       [ (P → Q)  ,  P ]       ⊢  Q
+2) قاعدة نفي التالي / رفع التالي (Modus Tollens):         [ (P → Q)  ,  ¬Q ]      ⊢  ¬P
+3) القياس الشرطي المتسلسل (Hypothetical Syllogism):      [ (P → Q)  ,  (Q → R) ] ⊢  (P → R)
+4) القياس الفصلي (Disjunctive Syllogism):                [ (P ∨ Q)  ,  ¬P ]      ⊢  Q
+5) إزالة العطف / التبسيط (And-Elimination):              [ P ∧ Q ]               ⊢  P   (أو Q)
+6) إدخال العطف (And-Introduction):                       [ P  ,  Q ]             ⊢  (P ∧ Q)
+7) إدخال الفصل / الإضافة (Or-Introduction):              [ P ]                   ⊢  (P ∨ Q)
+8) التخصيص الكلي (Universal Instantiation - UI):        [ ∀x P(x) ]             ⊢  P(c)  (لأي ثابت c)
+          </div>
+          <p class="note" style="margin-bottom:0"><b>مثال تطبيقي على Modus Ponens مع التخصيص الكلي (UI):</b><br>
+          المقدمة 1: $\forall x (\text{Human}(x) \rightarrow \text{Mortal}(x))$ ("كل إنسان فانٍ").<br>
+          المقدمة 2: $\text{Human}(\text{Socrates})$ ("سقراط إنسان").<br>
+          • <b>الخطوة 1 (تخصيص كلي UI بالتعويض $x / \text{Socrates}$):</b> نحصل على $\text{Human}(\text{Socrates}) \rightarrow \text{Mortal}(\text{Socrates})$.<br>
+          • <b>الخطوة 2 (تطبيق Modus Ponens مع المقدمة 2):</b> نستنتج $\text{Mortal}(\text{Socrates})$ ("سقراط فانٍ").</p>
+        </div>
+
+        <div class="exam-alert">
+          <h3>ثالثاً: اتجاها الاستدلال في الأنظمة الخبيرة: التسلسل الأمامي مقابل التسلسل الخلفي (ص 104):</h3>
+          <div class="grid">
+            <div class="step-card">
+              <span class="tag">1. التسلسل الأمامي (Forward Chaining)</span>
+              <h4>استدلال مدفوع بالبيانات (<span dir="ltr">Data-Driven Reasoning</span>)</h4>
+              <ul>
+                <li><b>نقطة الانطلاق:</b> يبدأ من <b>الحقائق والبيانات المعروفة</b> في قاعدة المعرفة (الجانب الأيسر للقواعد <code dir="ltr">IF</code>).</li>
+                <li><b>آلية العمل:</b> يفحص القواعد التي تتحقق شروطها، فيطلقها (<span dir="ltr">Fires</span>) ليضيف نتائجها (<code dir="ltr">THEN</code>) كحقائق جديدة إلى الذاكرة العاملة، ويكرر ذلك للأمام حتى يصل إلى الهدف أو لا تتبقى قواعد قابلة للإطلاق.</li>
+                <li><b>الاستخدام:</b> التخطيط، المراقبة، والتنبؤ بالنتائج من المعطيات المتاحة.</li>
+              </ul>
+            </div>
+            <div class="step-card">
+              <span class="tag teal">2. التسلسل الخلفي (Backward Chaining)</span>
+              <h4>استدلال مدفوع بالهدف (<span dir="ltr">Goal-Driven Reasoning</span>)</h4>
+              <ul>
+                <li><b>نقطة الانطلاق:</b> يبدأ من <b>الهدف أو الفرضية المراد إثباتها</b> (الجانب الأيمن للقواعد <code dir="ltr">THEN</code>).</li>
+                <li><b>آلية العمل:</b> يبحث عن القواعد التي تؤدي نتيجتها إلى هذا الهدف، ثم يحول شروط تلك القواعد (<code dir="ltr">IF</code>) إلى <b>أهداف فرعية (<span dir="ltr">Sub-goals</span>)</b> يحاول إثباتها رجوعاً للخلف حتى يصل إلى الحقائق الأولية المعطاة.</li>
+                <li><b>الاستخدام:</b> أنظمة التشخيص الطبي، كشف الأعطال، ومحرك لغة البرمجة المنطقية <b dir="ltr">Prolog</b>.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- الوحدة الثانية -->
+    <details open>
+      <summary>2) الوحدة الثانية: الذكاء الاصطناعي في وجود الخصوم (Adversarial Search) وخوارزمية Minimax (ص 105 - 107)</summary>
+      <div class="details-body">
+        <h3>أولاً: مفهوم البحث في وجود الخصوم / الألعاب التنافسية (<span dir="ltr">Adversarial Search / Games</span>) (ص 105)</h3>
+        <ul>
+          <li>في فصول البحث السابقة، كان الوكيل يعمل بمفرده في البيئة؛ أما في <b>البحث في وجود الخصوم (<span dir="ltr">Adversarial Search</span>)</b> فإننا نتعامل مع بيئات <b>متعددة الوكلاء وتنافسية (<span dir="ltr">Competitive Multi-Agent Environments</span>)</b> حيث تتعارض أهداف الوكلاء مع بعضهم البعض، مما ينشئ <b>الألعاب (<span dir="ltr">Games</span>)</b>.</li>
+          <li><b>خصائص الألعاب الكلاسيكية التي يدرسها الذكاء الاصطناعي (مثل الشطرنج، الداما، ولعبة Tic-Tac-Toe):</b>
+            <ol>
+              <li><b>ثنائية اللاعبين وتبادلية الأدوار (<span dir="ltr">Two-Player, Turn-Taking</span>):</b> يتناوب اللاعبان الحركة خطوة بخطوة، ونسمي اللاعب الأول <b dir="ltr">MAX</b> واللاعب الخصم <b dir="ltr">MIN</b>.</li>
+              <li><b>حتمية (<span dir="ltr">Deterministic</span>):</b> لا يوجد فيها عنصر حظ أو نرد، فالحركة تحدد حالة اللوحة التالية بيقين تام.</li>
+              <li><b>كاملة المعلومات / قابلة للملاحظة كلياً (<span dir="ltr">Perfect Information / Fully Observable</span>):</b> كلا اللاعبين يريان لوحة اللعب كاملة ولا توجد أوراق مخفية.</li>
+              <li><b>ألعاب ذات مجموع صفري (<span dir="ltr">Zero-Sum Games</span>):</b> ألعاب تنافسية خالصة يكون فيها مجموع مكاسب وخسائر اللاعبين مساوياً للصفر دائماً؛ فإذا فاز أحدهما بـ $(+1)$ يخسر الآخر $(-1)$، وإذا تعادلا يحصل كل منهما على $(0)$.</li>
+            </ol>
+          </li>
+        </ul>
+
+        <div class="exam-alert">
+          <h3>ثانياً: الصياغة الرسمية للعبة كمسألة بحث (العناصر الستة - ص 105 - 106) - موضع أسئلة مؤكدة:</h3>
+          <p>تُصاغ اللعبة رسمياً كنوع من مسائل البحث عبر <b>ستة عناصر أساسية</b>:</p>
+          <ol>
+            <li><b>الحالة الابتدائية (<span dir="ltr">Initial State</span> $S_0$):</b> تحدد وضعية لوحة اللعب عند بداية اللعبة، وتحدد أي لاعب له الدور للبدء.</li>
+            <li><b>دالة اللاعب (<span dir="ltr">PLAYER(s)</span>):</b> تحدد أي لاعب له الدور للتحرك في الحالة الحالية $s$ (هل هو <span dir="ltr">MAX</span> أم <span dir="ltr">MIN</span>؟).</li>
+            <li><b>الأفعال / الحركات الممكنة (<span dir="ltr">ACTIONS(s)</span>):</b> تُرجع مجموعة الحركات القانونية المتاحة في الحالة $s$.</li>
+            <li><b>نموذج الانتقال (<span dir="ltr">RESULT(s, a)</span>):</b> يحدد حالة اللوحة الجديدة الناتجة عن تنفيذ الحركة $a$ في الحالة $s$.</li>
+            <li><b>اختبار النهاية (<span dir="ltr">TERMINAL-TEST(s)</span>):</b> يفحص ما إذا كانت اللعبة قد انتهت أم لا؛ والحالات التي تنتهي عندها اللعبة تُسمى <b>الحالات الطرفية / النهائية (<span dir="ltr">Terminal States</span>)</b>.</li>
+            <li><b>دالة المنفعة / العائد (<span dir="ltr">UTILITY(s, p)</span>):</b> وتُسمى أيضاً دالة الهدف أو دالة الدفع (<span dir="ltr">Payoff Function</span>)؛ وهي دالة تعطي <b>القيمة الرقمية النهائية للعبة</b> للاعب $p$ عند انتهاء اللعبة في الحالة الطرفية $s$ (مثلاً في لعبة إكس-أو أو الشطرنج بالنسبة للاعب <span dir="ltr">MAX</span>: الفوز $= +1$، الخسارة $= -1$، والتعادل $= 0$).</li>
+          </ol>
+        </div>
+
+        <div class="exam-alert">
+          <h3>ثالثاً: خوارزمية الحد الأدنى الأقصى (<span dir="ltr">Minimax Algorithm</span>) ومعادلتها الرياضية (ص 106 - 107) - مهمة جداً:</h3>
+          <ul>
+            <li><b>الفكرة الأساسية:</b> تفترض خوارزمية <span dir="ltr">Minimax</span> أن كلا اللاعبين يلعبان <b>بطريقة مثالية (<span dir="ltr">Optimally</span>)</b> حتى نهاية اللعبة:
+              <br>• اللاعب الأول (<b dir="ltr">MAX</b>) يريد <b>تعظيم (<span dir="ltr">Maximize</span>)</b> قيمة المنفعة، فيختار دائماً الحركة التي تقوده إلى الابن ذي <b>القيمة الأكبر (الأعلى)</b>.
+              <br>• اللاعب الخصم (<b dir="ltr">MIN</b>) يريد <b>تقليل (<span dir="ltr">Minimize</span>)</b> منفعة <span dir="ltr">MAX</span>، فيختار دائماً الحركة التي تقوده إلى الابن ذي <b>القيمة الأصغر (الأدنى)</b>.</li>
+            <li><b>المعادلة العودية لقيمة <span dir="ltr">MINIMAX(s)</span> لأي عقدة $s$:</b>
+              <div class="formula-box">
+MINIMAX(s) = 
+  • UTILITY(s)                        if TERMINAL-TEST(s) is true (عقدة ورقية طرفية)
+  • max_{a ∈ Actions(s)} MINIMAX(Result(s, a))   if PLAYER(s) = MAX (دور اللاعب MAX)
+  • min_{a ∈ Actions(s)} MINIMAX(Result(s, a))   if PLAYER(s) = MIN (دور الخصم MIN)
+              </div>
+            </li>
+            <li><b>كيف تعمل الخوارزمية على شجرة اللعبة؟</b>
+              <br>تستكشف شجرة اللعبة باستخدام <b>البحث بالعمق أولاً (<span dir="ltr">DFS</span>)</b> نزولاً حتى تصل إلى العقد الورقية الطرفية، فتقرأ قيم المنفعة منها، ثم <b>تُصعّد القيم عكسياً من الأسفل إلى الأعلى (<span dir="ltr">Backing-up values</span>)</b> عبر مستويات <span dir="ltr">MIN</span> و <span dir="ltr">MAX</span> بالتناوب حتى تصل إلى الجذر.</li>
+          </ul>
+        </div>
+
+        <h3>رابعاً: مثال بصري ورقمي لتتبع شجرة <span dir="ltr">Minimax</span> ذات المستويات (ص 107)</h3>
+        <div class="tree-box">
+          <div><b>المستوى 0 (الجذر - دور MAX): يختار الأكبر بين (3 و 2 و 2) &rarr; القرار النهائي = <span style="color:var(--good)">3 (الفرع الأيسر A1)</span></b></div>
+          <div class="tree-level">
+            <span class="t-node t-max">MAX (Root A) = <b>3</b></span>
+          </div>
+          <div><small class="muted">▲ يصعد MAX القيمة الأكبر: max(3, 2, 2) = 3 ▲</small></div>
+          <div class="tree-level">
+            <span class="t-node t-min">MIN (B) = min(3,12,8) = <b>3</b></span>
+            <span class="t-node t-min">MIN (C) = min(2,4,6) = <b>2</b></span>
+            <span class="t-node t-min">MIN (D) = min(14,5,2) = <b>2</b></span>
+          </div>
+          <div><small class="muted">▲ يختار كل عقدة MIN القيمة الأصغر من أوراقها الطرفية ▲</small></div>
+          <div class="tree-level">
+            <span class="t-node t-leaf">3</span><span class="t-node t-leaf">12</span><span class="t-node t-leaf">8</span>
+            <span style="color:#cbd5e1">|</span>
+            <span class="t-node t-leaf">2</span><span class="t-node t-leaf">4</span><span class="t-node t-leaf">6</span>
+            <span style="color:#cbd5e1">|</span>
+            <span class="t-node t-leaf">14</span><span class="t-node t-leaf">5</span><span class="t-node t-leaf">2</span>
+          </div>
+        </div>
+        <ul>
+          <li><b>تقييم خوارزمية <span dir="ltr">Minimax</span> بالمعايير الأربعة:</b>
+            <br>1) <b>الاكتمال:</b> <b>نعم مكتملة</b> إذا كانت شجرة اللعبة منتهية (محدودة).
+            <br>2) <b>الأمثلية:</b> <b>نعم أمثلية</b> ضد خصم يلعب بمثالية.
+            <br>3) <b>التعقيد الزمني:</b> <b dir="ltr">O(bᵐ)</b> (حيث $b$ عدد الحركات القانونية المتاحة في كل دور، و $m$ أقصى عمق للعبة) — وهو عيبها القاتل لضخامته الأسية!
+            <br>4) <b>التعقيد المكاني:</b> <b dir="ltr">O(b · m)</b> (أو $O(m)$) لأنها تستكشف الشجرة بطريقة البحث بالعمق أولاً (<span dir="ltr">DFS</span>).</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- الوحدة الثالثة -->
+    <details open>
+      <summary>3) الوحدة الثالثة: تقليم ألفا-بيتا (Alpha-Beta Pruning) وكفاءته وتتبع المسائل (ص 107 - 109)</summary>
+      <div class="details-body">
+        <div class="exam-alert">
+          <h3>أولاً: مفهوم تقليم ألفا-بيتا (<span dir="ltr">Alpha-Beta Pruning</span>) ومعنى المعاملين ($\alpha$ و $\beta$) (ص 107 - 108) - موضع أسئلة مؤكدة:</h3>
+          <ul>
+            <li><b>المشكلة في <span dir="ltr">Minimax</span>:</b> تفحص جميع عقد شجرة اللعبة وعددها أسي $O(b^m)$، مما يجعلها بطيئة جداً في الألعاب الكبيرة.</li>
+            <li><b>الحل عبر تقليم ألفا-بيتا (<span dir="ltr">Alpha-Beta Pruning</span>):</b> هي تقنية تحسين رياضية تُطبق على شجرة <span dir="ltr">Minimax</span> لـ <b>قص وحذف وتجاهل (<span dir="ltr">Prune</span>) الفروع التي يستحيل أن تؤثر على القرار النهائي في الجذر</b> دون الحاجة لفحصها؛ وبذلك <b>تُرجع نفس الحركة والنتيجة المثالية تماماً التي ترجعها <span dir="ltr">Minimax</span></b> ولكن بفحص عدد أقل بكثير من العقد!</li>
+            <li><b>التعريف الدقيق للمعاملين ألفا ($\alpha$) وبيتا ($\beta$):</b>
+              <ol>
+                <li><b>المعامل ألفا (<span dir="ltr">α - Alpha</span>):</b> يمثل <b>أفضل قيمة (أي القيمة الأعلى / الأكبر)</b> وجدها اللاعب <b dir="ltr">MAX</b> حتى الآن في أي نقطة على طول المسار الحالي:
+                  <br>• قيمته الابتدائية هي سالب ما لا نهاية: <b dir="ltr">α = -∞</b>.
+                  <br>• يتم تحديث قيمة $\alpha$ في <b>عقد <span dir="ltr">MAX</span> فقط</b>: <code dir="ltr">α = max(α, value)</code>.</li>
+                <li><b>المعامل بيتا (<span dir="ltr">β - Beta</span>):</b> يمثل <b>أفضل قيمة (أي القيمة الأدنى / الأصغر)</b> وجدها اللاعب الخصم <b dir="ltr">MIN</b> حتى الآن في أي نقطة على طول المسار الحالي:
+                  <br>• قيمته الابتدائية هي موجب ما لا نهاية: <b dir="ltr">β = +∞</b>.
+                  <br>• يتم تحديث قيمة $\beta$ في <b>عقد <span dir="ltr">MIN</span> فقط</b>: <code dir="ltr">β = min(β, value)</code>.</li>
+              </ol>
+            </li>
+            <li><b>شرط القص / التقليم الحاسم (<span dir="ltr">Pruning / Cutoff Condition</span>):</b>
+              <div class="formula-box">يتم قص وتجاهل باقي أبناء العقدة الحالية فور أن يصبح:   α ≥ β</div>
+              <ul>
+                <li>في عقدة <b dir="ltr">MIN</b>: إذا وجدت ابناً قيمته $v \le \alpha$ (أي أصبحت $\beta \le \alpha$)، تتوقف فوراً عن فحص باقي أبنائها (لأن <span dir="ltr">MAX</span> الأب يملك خياراً أفضل قيمته $\alpha$ ولن يختار هذه العقدة أبداً!).</li>
+                <li>في عقدة <b dir="ltr">MAX</b>: إذا وجدت ابناً قيمته $v \ge \beta$ (أي أصبحت $\alpha \ge \beta$)، تتوقف فوراً عن فحص باقي أبنائها (لأن <span dir="ltr">MIN</span> الأب يملك خياراً أصغر قيمته $\beta$ ولن يسمح بالوصول لهذه العقدة أبداً!).</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        <h3>ثانياً: مسألة محلولة بالكامل لتتبع تقليم ألفا-بيتا (<span dir="ltr">Alpha-Beta Trace</span>) وتحديد العقد المقصوصة (ص 108 - 109)</h3>
+        <div class="note">
+          <p><b>المطلوب:</b> تتبعي شجرة اللعبة السابقة باستخدام <b>تقليم ألفا-بيتا</b> من اليسار إلى اليمين، وحددي ما هي العقد الورقية التي <b>سيتم قصها وعدم فحصها</b>:</p>
+          <ol>
+            <li><b>الفرع الأيسر (العقدة B - نوعها MIN):</b><br>
+              • تفحص B أوراقها الثلاث: $3$ ثم $12$ ثم $8$ &larr; فتصبح قيمة $B = \min(3, 12, 8) = \mathbf{3}$.<br>
+              • تصعد القيمة $3$ إلى الجذر <b dir="ltr">A (MAX)</b>، فيحدث الجذر قيمة ألفا لتصبح: <b dir="ltr">α = 3</b> (أي أن <span dir="ltr">MAX</span> ضمن لنفسه الحصول على $3$ على الأقل!).</li>
+            <li><b>الفرع الأوسط (العقدة C - نوعها MIN، وترث من الجذر $\alpha = 3, \beta = +\infty$):</b><br>
+              • تفحص العقدة <span dir="ltr">C</span> <b>أول ورقة لها فقط</b> فتجد قيمتها $= \mathbf{2}$!<br>
+              • بما أن <span dir="ltr">C</span> هي عقدة <span dir="ltr">MIN</span>، فإنها تحدث بيتا لتصبح $\beta = \min(+\infty, 2) = \mathbf{2}$ (أي أن قيمة العقدة C ستكون $\le 2$ حتماً مهما كانت قيم بقية أوراقها).<br>
+              • <b>اختبار شرط القص:</b> لدينا الآن <b dir="ltr">α = 3</b> و <b dir="ltr">β = 2</b> &larr; تحقق الشرط <b dir="ltr">α ≥ β (3 ≥ 2)</b>!<br>
+              • <b>القرار:</b> <b>يتم قص وتجاهل الورقتين المتبقيتين (4 و 6) تحت العقدة C وعدم فحصهما إطلاقاً!</b> (لأن الجذر MAX يملك $3$ من الفرع الأول، ولن يختار C التي ستعطيه $2$ أو أقل!).</li>
+            <li><b>الفرع الأيمن (العقدة D - نوعها MIN، وترث من الجذر $\alpha = 3, \beta = +\infty$):</b><br>
+              • تفحص <span dir="ltr">D</span> ورقتها الأولى $= 14$ ($\beta = 14$؛ لا يزال $\alpha < \beta$ لأن $3 < 14$ فنكمل).<br>
+              • تفحص <span dir="ltr">D</span> ورقتها الثانية $= 5$ ($\beta = 5$؛ لا يزال $3 < 5$ فنكمل).<br>
+              • تفحص <span dir="ltr">D</span> ورقتها الثالثة $= 2$ ($\beta = 2$).<br>
+              • في النهاية يختار الجذر <span dir="ltr">MAX</span> القيمة $\max(3, \le 2, 2) = \mathbf{3}$.</li>
+          </ol>
+        </div>
+
+        <div class="tree-box">
+          <div><b>نتيجة تطبيق تقليم ألفا-بيتا على الشجرة (تم قص الورقتين 4 و 6 تحت العقدة C!)</b></div>
+          <div class="tree-level">
+            <span class="t-node t-max">MAX (Root A): α = 3, Value = <b>3</b></span>
+          </div>
+          <div class="tree-level">
+            <span class="t-node t-min">MIN (B) = <b>3</b><br><small>β=3</small></span>
+            <span class="t-node t-min">MIN (C) ≤ <b>2</b><br><small style="color:var(--bad)">α=3 ≥ β=2 (قص!)</small></span>
+            <span class="t-node t-min">MIN (D) = <b>2</b><br><small>β=2</small></span>
+          </div>
+          <div class="tree-level">
+            <span class="t-node t-leaf">3</span><span class="t-node t-leaf">12</span><span class="t-node t-leaf">8</span>
+            <span style="color:#cbd5e1">|</span>
+            <span class="t-node t-leaf">2</span><span class="t-node t-pruned" title="تم قصها!">4 (مقصوصة)</span><span class="t-node t-pruned" title="تم قصها!">6 (مقصوصة)</span>
+            <span style="color:#cbd5e1">|</span>
+            <span class="t-node t-leaf">14</span><span class="t-node t-leaf">5</span><span class="t-node t-leaf">2</span>
+          </div>
+        </div>
+
+        <div class="exam-alert">
+          <h3>ثالثاً: كفاءة تقليم ألفا-بيتا، تأثير ترتيب الحركات، ودالة التقييم <span dir="ltr">EVAL(s)</span> (ص 109):</h3>
+          <ul>
+            <li><b>هل يغير تقليم ألفا-بيتا قرار الجذر؟</b> <b>لا يغيره إطلاقاً!</b> فالتقليم يؤثر فقط على سرعة الحساب وعدد العقد المفحوصة، بينما القرار النهائي مطابق بنسبة 100% لقرار <span dir="ltr">Minimax</span>.</li>
+            <li><b>تأثير ترتيب فحص الحركات (<span dir="ltr">Move Ordering</span>) على التعقيد الزمني:</b>
+              <ol>
+                <li><b>في أسوأ ترتيب للحركات:</b> لا يحدث أي تقليم، ويظل التعقيد الزمني <b dir="ltr">O(bᵐ)</b> كما في <span dir="ltr">Minimax</span>.</li>
+                <li><b>في الترتيب العشوائي للحركات:</b> ينخفض التعقيد الزمني إلى نحو <b dir="ltr">O(b^(3m/4))</b>.</li>
+                <li><b>في أفضل ترتيب مثالي للحركات (فحص أفضل الحركات أولاً):</b> ينخفض التعقيد الزمني بشكل مذهل من $O(b^m)$ إلى <b dir="ltr">O(b^(m/2))</b>!</li>
+              </ol>
+            </li>
+            <li><b>ماذا يعني انخفاض التعقيد الزمني إلى $O(b^{m/2})$؟ (مهم جداً):</b>
+              <br>يعني أن عامل التفرع الفعال ينخفض من $b$ إلى <b dir="ltr">√b</b>، وبذلك يستطيع برنامج الألعاب باستخدام تقليم ألفا-بيتا أن <b>يبحث في شجرة اللعبة إلى ضعف العمق (<span dir="ltr">Twice as deep</span> $2m$) في نفس مقدار الوقت المتاح</b> لخوارزمية <span dir="ltr">Minimax</span> العادية!</li>
+            <li><b>القطع المحدود للعمق ودالة التقييم الاستدلالية (<span dir="ltr">Evaluation Function - EVAL(s)</span>):</b>
+              <br>في الألعاب المعقدة كالشطرنج حيث لا يمكن الوصول لنهاية اللعبة بسبب ضيق الوقت، نستبدل اختبار النهاية <code dir="ltr">TERMINAL-TEST</code> بـ <b>اختبار حد القطع (<span dir="ltr">CUTOFF-TEST</span>)</b> عند عمق معين، ونستبدل دالة المنفعة <code dir="ltr">UTILITY</code> بـ <b>دالة تقييم استدلالية (<span dir="ltr">Heuristic Evaluation Function - EVAL(s)</span>)</b> تقدر مدى أفضلية وضعية اللوحة الحالية وفرصة الفوز منها (مثل حساب مجموع قيم قطع الشطرنج المتبقية لكل لاعب).</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= التبويب الثاني: جداول المقارنات والمسائل ================= -->
+  <section id="tables" class="panel">
+    <div class="card">
+      <h2>1. جدول مقارنة أنواع الاستدلال المنطقي الثلاثة وقواعد الاستدلال القياسية (ص 102 - 103)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>النوع / القاعدة</th>
+            <th>المصطلح الإنجليزي</th>
+            <th>الاتجاه / الصيغة الصورية</th>
+            <th>الخصائص والمثال التطبيقي</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1. الاستنباط</b></td>
+            <td dir="ltr"><b>Deduction</b></td>
+            <td>من <b>القاعدة العامة &rarr; الحالة الخاصة</b></td>
+            <td>نتيجته <b>حتمية وقطعية الصواب</b> متى صدقت المقدمات (كل إنسان فانٍ + سقراط إنسان &rarr; سقراط فانٍ).</td>
+          </tr>
+          <tr>
+            <td><b>2. الاستقراء</b></td>
+            <td dir="ltr"><b>Induction</b></td>
+            <td>من <b>الملاحظات الخاصة &rarr; القاعدة العامة</b></td>
+            <td>نتيجته <b>تعميمية احتمالية</b>، وهو أساس خوارزميات <b>تعلم الآلة</b> لبناء النماذج من العينات.</td>
+          </tr>
+          <tr>
+            <td><b>3. الاستدلال التفسيري (الافتراضي)</b></td>
+            <td dir="ltr"><b>Abduction</b></td>
+            <td>من <b>النتيجة (العرض) &rarr; السبب المحتمل</b></td>
+            <td>يستنتج أفضل تفسير ممكن للملاحظة، ويُستخدم في <b>التشخيص الطبي وكشف الأعطال</b>.</td>
+          </tr>
+          <tr>
+            <td><b>قاعدة وضع المقدم</b></td>
+            <td dir="ltr"><b>Modus Ponens</b></td>
+            <td dir="ltr"><code>[ P → Q , P ] ⊢ Q</code></td>
+            <td>إذا ثبتت القاعدة الشرطية وثبت تحقق الشرط (المقدم $P$)، تثبت النتيجة ($Q$) حتماً.</td>
+          </tr>
+          <tr>
+            <td><b>قاعدة نفي التالي</b></td>
+            <td dir="ltr"><b>Modus Tollens</b></td>
+            <td dir="ltr"><code>[ P → Q , ¬Q ] ⊢ ¬P</code></td>
+            <td>إذا ثبتت القاعدة الشرطية وثبت بطلان النتيجة ($\neg Q$)، ينتفي الشرط المقدم ($\neg P$) حتماً.</td>
+          </tr>
+          <tr>
+            <td><b>القياس الشرطي</b></td>
+            <td dir="ltr"><b>Hypothetical Syllogism</b></td>
+            <td dir="ltr"><code>[ P → Q , Q → R ] ⊢ P → R</code></td>
+            <td>قاعدة التعدي في الاستلزام المنطقي (ربط سلسلتين شرطيتين).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>2. جدول مقارنة التسلسل الأمامي (Forward Chaining) والتسلسل الخلفي (Backward Chaining) (ص 104)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>وجه المقارنة</th>
+            <th>التسلسل الأمامي (Forward Chaining)</th>
+            <th>التسلسل الخلفي (Backward Chaining)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>الدافع والمحرك الأساسي</b></td>
+            <td>استدلال <b>مدفوع بالبيانات (<span dir="ltr">Data-Driven</span>)</b>.</td>
+            <td>استدلال <b>مدفوع بالهدف (<span dir="ltr">Goal-Driven</span>)</b>.</td>
+          </tr>
+          <tr>
+            <td><b>نقطة البداية والاتجاه</b></td>
+            <td>يبدأ من <b>الحقائق المتوفرة</b> (الجزء الأيسر <code dir="ltr">IF</code>) ويتحرك للأمام لاستنتاج حقائق جديدة حتى يصل للهدف.</td>
+            <td>يبدأ من <b>الهدف أو الفرضية المطلوب إثباتها</b> (الجزء الأيمن <code dir="ltr">THEN</code>) ويعود للخلف للتحقق من شروطها كأهداف فرعية.</td>
+          </tr>
+          <tr>
+            <td><b>استكشاف القواعد</b></td>
+            <td>قد يطلق قواعد كثيرة ويستنتج حقائق غير مرتبطة بالهدف المطلوب.</td>
+            <td>يركز فقط على القواعد ذات الصلة المباشرة بالهدف المطلوب إثباته (أكفأ عند وجود هدف محدد).</td>
+          </tr>
+          <tr>
+            <td><b>أبرز مجالات التطبيق</b></td>
+            <td>أنظمة المراقبة، التخطيط، التنبؤ، والتصميم.</td>
+            <td>أنظمة التشخيص الطبي، كشف الأعطال، ولغة البرمجة المنطقية <b dir="ltr">Prolog</b>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>3. جدول مقابلة عناصر البحث الفردي مع العناصر الستة لصياغة الألعاب التنافسية (ص 105 - 106)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>العنصر في البحث الفردي القياسي</th>
+            <th>العنصر المقابل في صياغة الألعاب التنافسية</th>
+            <th>الوظيفة في شجرة اللعبة (كالشطرنج و Tic-Tac-Toe)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1. الحالة الابتدائية (Initial State)</b></td>
+            <td><b>الحالة الابتدائية ($S_0$) + <code dir="ltr">PLAYER(s)</code></b></td>
+            <td>وضعية لوحة اللعب عند البداية، وتحديد أي لاعب له الدور للتحرك (<span dir="ltr">MAX</span> أو <span dir="ltr">MIN</span>).</td>
+          </tr>
+          <tr>
+            <td><b>2. الأفعال الممكنة (Actions)</b></td>
+            <td><b>الحركات القانونية (<code dir="ltr">ACTIONS(s)</code>)</b></td>
+            <td>مجموعة الحركات المسموح بها قانونياً للاعب الحالي في وضعية اللوحة $s$.</td>
+          </tr>
+          <tr>
+            <td><b>3. نموذج الانتقال (Transition Model)</b></td>
+            <td><b>دالة النتيجة (<code dir="ltr">RESULT(s, a)</code>)</b></td>
+            <td>وضعية لوحة اللعب الجديدة الناتجة بعد تنفيذ الحركة $a$ في الحالة $s$.</td>
+          </tr>
+          <tr>
+            <td><b>4. اختبار الهدف (Goal Test)</b></td>
+            <td><b>اختبار نهاية اللعبة (<code dir="ltr">TERMINAL-TEST(s)</code>)</b></td>
+            <td>يفحص هل انتهت اللعبة (حالة طرفية <span dir="ltr">Terminal State</span> بفوز أو خسارة أو تعادل) أم ما زالت مستمرة.</td>
+          </tr>
+          <tr>
+            <td><b>5. تكلفة المسار (Path Cost)</b></td>
+            <td><b>دالة المنفعة / العائد (<code dir="ltr">UTILITY(s, p)</code>)</b></td>
+            <td>تُسند القيمة الرقمية النهائية للحالة الطرفية (مثل $+1$ لفوز <span dir="ltr">MAX</span>، و $-1$ لخسارته، و $0$ للتعادل).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>4. جدول مقارنة خوارزمية Minimax القياسية وخوارزمية تقليم ألفا-بيتا (Alpha-Beta Pruning) (ص 106 - 109)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>وجه المقارنة</th>
+            <th>خوارزمية Minimax القياسية</th>
+            <th>خوارزمية تقليم ألفا-بيتا (Alpha-Beta Pruning)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>آلية فحص الشجرة</b></td>
+            <td>تفحص <b>جميع العقد والفروع</b> في شجرة اللعبة حتى النهاية دون استثناء.</td>
+            <td>تقص وتتجاهل (<span dir="ltr">Prunes</span>) الفروع التي لا يمكن أن تؤثر على القرار النهائي فور تحقق الشرط <b dir="ltr">α ≥ β</b>.</td>
+          </tr>
+          <tr>
+            <td><b>القرار والحركة الناتجة</b></td>
+            <td>تُرجع الحركة المثالية للاعب <span dir="ltr">MAX</span>.</td>
+            <td>تُرجع <b>نفس الحركة والنتيجة المثالية لـ Minimax بنسبة 100%</b> دون أي تغيير في القرار!</td>
+          </tr>
+          <tr>
+            <td><b>التعقيد الزمني (Time)</b></td>
+            <td>أسي كبير دائماً: <b dir="ltr">O(bᵐ)</b>.</td>
+            <td>• في أسوأ ترتيب: <b dir="ltr">O(bᵐ)</b>.<br>• في أفضل ترتيب مثالي للحركات: ينخفض إلى <b style="color:var(--good)" dir="ltr">O(b^(m/2))</b>!</td>
+          </tr>
+          <tr>
+            <td><b>عامل التفرع الفعال وأقصى عمق</b></td>
+            <td>عامل التفرع هو $b$، وتبحث حتى العمق $m$.</td>
+            <td>في أفضل ترتيب يصبح عامل التفرع الفعال <b dir="ltr">√b</b>، مما يمكّنها من البحث إلى <b>ضعف العمق ($2m$)</b> في نفس الوقت!</td>
+          </tr>
+          <tr>
+            <td><b>التعقيد المكاني (Space)</b></td>
+            <td>خطي صغير <b dir="ltr">O(b · m)</b> (لأنها تستخدم DFS).</td>
+            <td>خطي صغير <b dir="ltr">O(b · m)</b> (تستكشف الشجرة أيضاً بطريقة DFS).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الثالث: المصطلحات ================= -->
+  <section id="terms" class="panel">
+    <div class="card">
+      <h2>قاموس المصطلحات والمفاهيم الشامل للفصل العاشر (28 مصطلحاً)</h2>
+      <p class="muted">جميع مصطلحات الاستدلال المنطقي والبحث التنافسي وخوارزمية Minimax وتقليم ألفا-بيتا (ص 102 - 109):</p>
+      <div id="termsGrid" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الرابع: البطاقات التعليمية ================= -->
+  <section id="cards" class="panel">
+    <div class="card">
+      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
+      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
+      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
+        <div class="term" id="flashTerm"></div>
+        <div class="answer" id="flashAnswer" hidden></div>
+        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="prevCard">السابق</button>
+        <span id="cardCount" class="muted"></span>
+        <button class="btn primary" id="nextCard">التالي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الخامس: الاختبار الشامل ================= -->
+  <section id="quiz" class="panel">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2>الاختبار الشامل للفصل العاشر (25 سؤالاً)</h2>
+          <p class="muted">يغطي أنواع وقواعد الاستدلال المنطقي، التسلسل الأمامي والخلفي، صياغة الألعاب، وتتبع شجر Minimax و Alpha-Beta مع تصحيح فوري.</p>
+        </div>
+        <div class="score" id="score">النتيجة: 0 / 25</div>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="quizArea"></div>
+      <div class="row">
+        <button class="btn" id="resetQuiz">إعادة الاختبار</button>
+        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+      </div>
+      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
+    </div>
+  </section>
+</main>
+
+<footer>الفصل العاشر: الاستدلال المنطقي والذكاء الاصطناعي في وجود الخصوم • مراجعة تفاعلية شاملة (صفحات 102 - 109)</footer>
+
+<script>
+const terms = [
+  ["Logical Inference (الاستدلال المنطقي)", "عملية اشتقاق جمل ونتائج جديدة من الجمل والمقدمات الموجودة مسبقاً في قاعدة المعرفة."],
+  ["Deductive Reasoning (الاستدلال الاستنباطي)", "الانتقال من القاعدة العامة إلى الحالة الخاصة؛ ونتيجته حتمية ومضمونة الصواب متى صدقت المقدمات."],
+  ["Inductive Reasoning (الاستدلال الاستقرائي)", "الانتقال من الملاحظات والأمثلة الخاصة المتكررة إلى قاعدة عامة؛ ونتيجته تعميمية احتمالية (أساس تعلم الآلة)."],
+  ["Abductive Reasoning (الاستدلال التفسيري / الافتراضي)", "استنتاج السبب الأكثر احتمالاً من النتيجة أو العرض الملاحظ؛ ويُستخدم في التشخيص الطبي وكشف الأعطال."],
+  ["Modus Ponens (قاعدة إثبات / وضع المقدم)", "قاعدة استدلال قياسية: من ثبوت (P → Q) وثبوت المقدم (P)، نستنتج حتماً ثبوت النتيجة (Q)."],
+  ["Modus Tollens (قاعدة نفي / رفع التالي)", "قاعدة استدلال قياسية: من ثبوت (P → Q) وبطلان النتيجة (¬Q)، نستنتج حتماً بطلان المقدم (¬P)."],
+  ["Hypothetical Syllogism (القياس الشرطي المتسلسل)", "قاعدة التعدي: من (P → Q) و (Q → R)، نستنتج (P → R)."],
+  ["Disjunctive Syllogism (القياس الفصلي)", "قاعدة استدلال: من ثبوت (P ∨ Q) وثبوت نفي أحدهما (¬P)، نستنتج حتماً ثبوت الآخر (Q)."],
+  ["Universal Instantiation - UI (التخصيص الكلي)", "قاعدة استدلال في منطق المحمولات: من الجملة الكلية ∀x P(x) نستنتج P(c) لأي كائن ثابت c في المجال."],
+  ["Forward Chaining (التسلسل الأمامي)", "استدلال مدفوع بالبيانات (Data-Driven) يبدأ من الحقائق المتوفرة ويطلق القواعد للوصول إلى الهدف."],
+  ["Backward Chaining (التسلسل الخلفي)", "استدلال مدفوع بالهدف (Goal-Driven) يبدأ من الهدف كفرضية ويعود للخلف لإثبات شروط القواعد كأهداف فرعية."],
+  ["Adversarial Search (البحث في وجود الخصوم)", "البحث في بيئات تنافسية متعددة الوكلاء (الألعاب) حيث تتعارض أهداف اللاعبين ويحاول كل لاعب هزيمة الآخر."],
+  ["Zero-Sum Game (لعبة ذات مجموع صفري)", "لعبة تنافسية خالصة يكون فيها مكسب أحد اللاعبين (+1) مساوياً تماماً لخسارة اللاعب الآخر (-1) ومجموعهما صفر."],
+  ["Perfect Information Game (لعبة كاملة المعلومات)", "لعبة قابلة للملاحظة كلياً يرى فيها كلا اللاعبين حالة اللوحة كاملة دون أوراق أو معلومات مخفية (مثل الشطرنج)."],
+  ["MAX & MIN Players (اللاعب MAX والخصم MIN)", "في شجرة الألعاب: MAX هو اللاعب الذي يريد تعظيم النتيجة (أكبر قيمة)، و MIN هو الخصم الذي يريد تقليلها (أصغر قيمة)."],
+  ["Terminal State (الحالة الطرفية / النهائية)", "حالة اللوحة التي تنتهي عندها اللعبة (فوز، خسارة، أو تعادل) وتقابل العقد الورقية في شجرة اللعبة."],
+  ["TERMINAL-TEST(s) (اختبار نهاية اللعبة)", "دالة في صياغة الألعاب تفحص ما إذا كانت اللعبة قد وصلت إلى حالة طرفية منتهية أم لا."],
+  ["Utility / Payoff Function (دالة المنفعة / العائد)", "دالة تعطي القيمة الرقمية النهائية للعبة في الحالات الطرفية (مثل +1 للفوز، -1 للخسارة، و 0 للتعادل)."],
+  ["Game Tree (شجرة اللعبة)", "شجرة بحث تمثل جميع الحركات المتناوبة الممكنة بين اللاعبين MAX و MIN من بداية اللعبة حتى الحالات الطرفية."],
+  ["Minimax Algorithm (خوارزمية الحد الأدنى الأقصى)", "خوارزمية تحسب القرار الأمثل في الألعاب التنافسية بافتراض أن الخصم يلعب بمثالية، وتصعد القيم من الأوراق للجذر."],
+  ["Backing-up Values (تصعيد القيم عكسياً)", "انتقال قيم المنفعة في خوارزمية Minimax من الأوراق الطرفية صعوداً إلى الجذر عبر مستويات MIN و MAX."],
+  ["Alpha-Beta Pruning (تقليم ألفا-بيتا)", "تقنية تحسين تقص الفروع غير المؤثرة في شجرة Minimax لتسريع البحث مع إرجاع نفس القرار الأمثل تماماً."],
+  ["Alpha (α) (المعامل ألفا)", "أفضل قيمة (الأعلى / الأكبر) وجدها اللاعب MAX حتى الآن على طول المسار (تبدأ بـ -∞ وتُحدث في عقد MAX)."],
+  ["Beta (β) (المعامل بيتا)", "أفضل قيمة (الأدنى / الأصغر) وجدها اللاعب MIN حتى الآن على طول المسار (تبدأ بـ +∞ وتُحدث في عقد MIN)."],
+  ["Pruning Condition (α ≥ β) (شرط القص / التقليم)", "الشرط الرياضي في تقليم ألفا-بيتا؛ فمتى أصبحت α أكبر من أو تساوي β يتم قص وتجاهل باقي أبناء العقدة الحالية."],
+  ["Move Ordering (ترتيب فحص الحركات)", "ترتيب الأبناء من الأفضل للأسوأ قبل الفحص؛ وفي أفضل ترتيب يخفض وقت ألفا-بيتا من O(b^m) إلى O(b^(m/2))."],
+  ["Effective Branching Factor √b", "في أفضل ترتيب للحركات، يخفض تقليم ألفا-بيتا عامل التفرع الفعال إلى الجذر التربيعي لـ b ويضاعف عمق البحث الممكن (2m)."],
+  ["Heuristic Evaluation Function EVAL(s)", "دالة تقييم استدلالية تُستخدم عند قطع البحث عند عمق محدد (Cutoff) لتقدير جودة وضعية اللوحة دون الوصول لنهاية اللعبة."]
+];
+
+const cards = [
+  ["ما هو تعريف الاستدلال المنطقي (Logical Inference)؟ وما هي أنواعه الثلاثة؟", "هو عملية استنباط جمل ونتائج جديدة من المقدمات والحقائق الموجودة في قاعدة المعرفة.\nأنواعه الثلاثة: 1) الاستنباط (Deduction)، 2) الاستقراء (Induction)، 3) الاستدلال التفسيري/الافتراضي (Abduction)."],
+  ["ما الفرق بين الاستنباط (Deduction)، والاستقراء (Induction)، والاستدلال التفسيري (Abduction)؟", "• الاستنباط: من العام للخاص (نتيجته حتمية قطعية).\n• الاستقراء: من الملاحظات الخاصة لقاعدة عامة (نتيجته احتمالية وهو أساس تعلم الآلة).\n• التفسيري (Abduction): من النتيجة/العرض إلى استنتاج السبب المحتمل (يُستخدم في التشخيص الطبي)."],
+  ["ما الفرق بين قاعدة وضع المقدم (Modus Ponens) وقاعدة نفي التالي (Modus Tollens)؟", "• وضع المقدم (Modus Ponens): من (P → Q) و (P) نستنتج (Q).\n• نفي التالي (Modus Tollens): من (P → Q) و (¬Q) نستنتج (¬P)."],
+  ["ما هي قاعدة القياس الشرطي المتسلسل (Hypothetical Syllogism) وقاعدة القياس الفصلي (Disjunctive Syllogism)؟", "• القياس الشرطي: من (P → Q) و (Q → R) نستنتج (P → R).\n• القياس الفصلي: من (P ∨ Q) و (¬P) نستنتج (Q)."],
+  ["ما هي قاعدة التخصيص الكلي (Universal Instantiation - UI) في منطق الرتبة الأولى؟", "هي قاعدة تسمح باستنتاج حقيقة خاصة لكائن معين من قاعدة كلية عامة: من ∀x P(x) نستنتج P(c) لأي ثابت c في المجال."],
+  ["قارني بين التسلسل الأمامي (Forward Chaining) والتسلسل الخلفي (Backward Chaining).", "• التسلسل الأمامي: مدفوع بالبيانات (Data-Driven)، يبدأ من الحقائق المتوفرة (IF) ويتحرك للأمام نحو النتائج.\n• التسلسل الخلفي: مدفوع بالهدف (Goal-Driven)، يبدأ من الهدف المطلوب إثباته (THEN) ويعود للخلف للتحقق من شروطه كأهداف فرعية."],
+  ["في أي التطبيقات يُفضل استخدام التسلسل الخلفي (Backward Chaining)؟", "يُفضل في أنظمة التشخيص الطبي، وتشخيص الأعطال، ولغة البرمجة المنطقية (Prolog) حيث يكون الهدف (المرض أو العطل) محدداً ونريد التحقق من أسبابه."],
+  ["ما هي خصائص الألعاب التنافسية الكلاسيكية (مثل الشطرنج ولعبة Tic-Tac-Toe)؟", "بيئات متعددة الوكلاء وتنافسية، ثنائية اللاعبين (MAX و MIN)، تبادلية الأدوار، حتمية (Deterministic)، كاملة المعلومات (قابلة للملاحظة كلياً)، وذات مجموع صفري (Zero-Sum)."],
+  ["ما المقصود باللعبة ذات المجموع الصفري (Zero-Sum Game)؟", "هي لعبة تنافسية خالصة تتعارض فيها مصالح اللاعبين تماماً، بحيث يكون مجموع مكاسب وخسائر اللاعبين مساوياً للصفر دائماً (فوز أحدهما +1 يعني خسارة الآخر -1)."],
+  ["ما هي العناصر الستة لصياغة اللعبة رسمياً كمسألة بحث في الذكاء الاصطناعي؟", "1) الحالة الابتدائية (S₀).\n2) دالة اللاعب PLAYER(s).\n3) الأفعال الممكنة ACTIONS(s).\n4) نموذج الانتقال RESULT(s, a).\n5) اختبار النهاية TERMINAL-TEST(s).\n6) دالة المنفعة/العائد UTILITY(s, p)."],
+  ["ما وظيفة كل من اختبار النهاية TERMINAL-TEST(s) ودالة المنفعة UTILITY(s, p) في الألعاب؟", "• اختبار النهاية: يفحص هل انتهت اللعبة أم لا (وتسمى حالات النهاية بالحالات الطرفية Terminal States).\n• دالة المنفعة: تعطي القيمة الرقمية النهائية للنتيجة في الحالات الطرفية (مثل +1 للفوز، -1 للخسارة، 0 للتعادل)."],
+  ["كيف يعمل اللاعبان MAX و MIN في خوارزمية الحد الأدنى الأقصى (Minimax Algorithm)؟", "• اللاعب الأول (MAX): يسعى لتعظيم النتيجة فيختار الحركة التي تعطي أكبر قيمة (max).\n• اللاعب الخصم (MIN): يسعى لتقليل منفعة MAX فيختار الحركة التي تعطي أصغر قيمة (min)."],
+  ["بأي طريقة بحث تستكشف خوارزمية Minimax شجرة اللعبة؟ وكيف تحسب قيمة الجذر؟", "تستكشف الشجرة بطريقة البحث بالعمق أولاً (DFS) نزولاً إلى الأوراق الطرفية، ثم تُصعّد القيم عكسياً من الأسفل للأعلى (Backing-up values) بالتناوب بين مستويات MIN و MAX حتى الجذر."],
+  ["ما هو التعقيد الزمني والتعقيد المكاني لخوارزمية Minimax القياسية؟", "• التعقيد الزمني: أسي ضخم O(b^m) حيث b عدد الحركات الممكنة و m أقصى عمق للعبة.\n• التعقيد المكاني: خطي صغير O(b · m) لأنها تستكشف الشجرة بطريقة البحث بالعمق أولاً (DFS)."],
+  ["في شجرة Minimax، إذا كانت عقدة MAX يتفرع منها عقدتا MIN: الأولى أوراقها (4, 9) والثانية أوراقها (7, 6)؛ فما قيمة كل عقدة؟", "• عقدة MIN الأولى تختار الأصغر: min(4, 9) = 4.\n• عقدة MIN الثانية تختار الأصغر: min(7, 6) = 6.\n• عقدة الجذر MAX تختار الأكبر بينهما: max(4, 6) = 6."],
+  ["ما هي الفكرة الأساسية لتقنية تقليم ألفا-بيتا (Alpha-Beta Pruning)؟", "قص وحذف (Prune) الفروع في شجرة Minimax التي يستحيل أن تؤثر على القرار النهائي في الجذر دون فحصها، مما يسرع البحث بشكل هائل مع إرجاع نفس الحركة المثالية لـ Minimax تماماً."],
+  ["ما هو المعامل ألفا (α) في تقليم ألفا-بيتا؟ وما قيمته الابتدائية؟ وأين يُحدّث؟", "• معناه: أفضل قيمة (الأعلى / الأكبر) وجدها اللاعب MAX حتى الآن على طول المسار.\n• قيمته الابتدائية: سالب ما لا نهاية (α = -∞).\n• يُحدّث في: عقد MAX فقط بالمعادلة α = max(α, v)."],
+  ["ما هو المعامل بيتا (β) في تقليم ألفا-بيتا؟ وما قيمته الابتدائية؟ وأين يُحدّث؟", "• معناه: أفضل قيمة (الأدنى / الأصغر) وجدها اللاعب الخصم MIN حتى الآن على طول المسار.\n• قيمته الابتدائية: موجب ما لا نهاية (β = +∞).\n• يُحدّث في: عقد MIN فقط بالمعادلة β = min(β, v)."],
+  ["ما هو الشرط الرياضي الحاسم الذي يحدث عنده القص (Pruning) في خوارزمية ألفا-بيتا؟", "يتم قص وتجاهل باقي أبناء العقدة الحالية فور تحقق الشرط:\nα ≥ β\n(أي عندما تصبح ألفا أكبر من أو تساوي بيتا)."],
+  ["متى يحدث القص داخل عقدة من نوع MIN في تقليم ألفا-بيتا؟ ولماذا؟", "يحدث عندما تجد عقدة MIN ابناً قيمته أقل من أو تساوي قيمة ألفا الحالية الموروثة من الأب MAX (أي β ≤ α)؛ لأن الأب MAX لديه خيار سابق مضمون بقيمة α ولن يختار هذه العقدة أبداً."],
+  ["متى يحدث القص داخل عقدة من نوع MAX في تقليم ألفا-بيتا؟ ولماذا؟", "يحدث عندما تجد عقدة MAX ابناً قيمته أكبر من أو تساوي قيمة بيتا الحالية الموروثة من الأب MIN (أي α ≥ β)؛ لأن الأب MIN لديه خيار سابق مضمون بقيمة β أصغر ولن يسمح بالوصول لهذه العقدة."],
+  ["هل يؤثر تقليم ألفا-بيتا على جودة القرار النهائي أو يغير الحركة المختارة مقارنة بـ Minimax؟", "لا يؤثر إطلاقاً! فالقرار النهائي وقيمة الجذر في تقليم ألفا-بيتا مطابقان بنسبة 100% لخوارزمية Minimax، والتوفير يكون في الوقت وعدد العقد المفحوصة فقط."],
+  ["ما أثر ترتيب فحص الحركات (Move Ordering) على التعقيد الزمني لتقليم ألفا-بيتا في أفضل حالة وفي أسوأ حالة؟", "• في أسوأ ترتيب للحركات: لا يحدث تقليم، ويظل الوقت O(b^m).\n• في أفضل ترتيب مثالي (فحص الحركات الأفضل أولاً): ينخفض الوقت من O(b^m) إلى O(b^(m/2))!"],
+  ["ماذا يعني انخفاض التعقيد الزمني لتقليم ألفا-بيتا إلى O(b^(m/2)) من حيث عامل التفرع وعمق البحث؟", "يعني أن عامل التفرع الفعال ينخفض من b إلى الجذر التربيعي (√b)، مما يسمح للبرنامج بالبحث إلى (ضعف العمق 2m) في شجرة اللعبة خلال نفس الوقت المتاح لـ Minimax!"],
+  ["لماذا نحتاج إلى اختبار حد القطع (CUTOFF-TEST) ودالة التقييم الاستدلالية EVAL(s) في الألعاب الكبيرة كالشطرنج؟", "لأن شجرة الشطرنج عميقة جداً ويستحيل الوصول لنهاية اللعبة (الحالات الطرفية) في وقت معقول؛ فنقطع البحث عند عمق محدد ونستخدم دالة تقييم استدلالية EVAL(s) لتقدير جودة اللوحة."],
+  ["في مسألة تتبع شجرة ألفا-بيتا، إذا كان الجذر MAX قد حصل من فرعه الأيسر على قيمة (α = 5)، وبدأ بفحص الفرع الأيمن (عقدة MIN) فوجدت أول ورقة لها تساوي (3)؛ فماذا يحدث؟", "تحدث عقدة MIN قيمتها إلى β = 3؛ وبما أن α = 5 و β = 3 فقد تحقق شرط القص (α ≥ β لأن 5 ≥ 3)، فيتم قص جميع الأوراق المتبقية في الفرع الأيمن فوراً!"],
+  ["في نفس المسألة السابقة، ماذا لو كانت الورقة الأولى في الفرع الأيمن (عقدة MIN) تساوي (8) بدلاً من (3) بينما α = 5؟", "تصبح β = 8؛ وبما أن α = 5 أصغر من β = 8 (لم يتحقق شرط α ≥ β)، فإن الخوارزمية لا تقص الفرع بل تستمر في فحص الورقة الثانية تحت عقدة MIN."],
+  ["ما هي الطريقة التي تنتقل بها قيم α و β، والطريقة التي تنتقل بها قيم المنفعة (Values) في شجرة ألفا-بيتا؟", "• قيم حدود البحث (α و β): تُمرر نزولاً من الأب إلى الأبناء (Top-down).\n• قيم المنفعة المحسوبة للعقد (Minimax Values): تُصعّد رجوعاً من الأبناء إلى الأب (Bottom-up)."]
+];
+
+const questions = [
+  {
+    q: "في أنواع الاستدلال المنطقي (ص 102)، ما هو الاستدلال الذي ينتقل من (القاعدة العامة إلى الحالة الخاصة) وتكون نتيجته حتمية ومضمونة الصواب متى صدقت المقدمات؟",
+    o: [
+      "الاستدلال الاستقرائي (Induction)",
+      "الاستدلال الاستنباطي / الاستنتاجي (Deduction)",
+      "الاستدلال التفسيري الافتراضي (Abduction)",
+      "التجميع العشوائي"
+    ],
+    a: 1,
+    e: "الاستنباط (Deduction) ينتقل من الكلي (العام) إلى الجزئي (الخاص) مثل: كل إنسان فانٍ + سقراط إنسان ← سقراط فانٍ، ونتيجته حتمية (ص 102)."
+  },
+  {
+    q: "أي نوع من أنواع الاستدلال ينتقل من (النتيجة أو العرض الملاحظ إلى استنتاج السبب الأكثر احتمالاً) ويُستخدم بكثرة في أنظمة التشخيص الطبي وكشف الأعطال؟",
+    o: [
+      "الاستنباط الرياضي (Deduction)",
+      "إزالة العطف (And-Elimination)",
+      "الاستدلال التفسيري / الافتراضي (Abduction)",
+      "التخصيص الكلي"
+    ],
+    a: 2,
+    e: "الاستدلال التفسيري أو الافتراضي (Abduction) يستنتج السبب المحتمل من النتيجة الملاحظة (كاستنتاج المرض من الأعراض)، بينما الاستقراء (Induction) يعمم من أمثلة خاصة لقاعدة عامة (ص 102)."
+  },
+  {
+    q: "في قواعد الاستدلال المنطقي القياسية (ص 103)، إذا كانت لدينا القاعدة الشرطية (P → Q) صائبة، وعلمنا أن النتيجة غير متحققة (¬Q)، فاستنتجنا بطلان المقدم (¬P)؛ فما اسم هذه القاعدة؟",
+    o: [
+      "قاعدة إثبات المقدم (Modus Ponens)",
+      "قاعدة القياس الشرطي المتسلسل",
+      "قاعدة إدخال الفصل",
+      "قاعدة نفي التالي / رفع التالي (Modus Tollens)"
+    ],
+    a: 3,
+    e: "قاعدة نفي التالي (Modus Tollens) تنص على أنه من (P → Q) و (¬Q) نشتق حتماً (¬P)، بينما Modus Ponens تشتق Q من (P → Q) و P (ص 103)."
+  },
+  {
+    q: "ما هي النتيجة المشتقة بتطبيق قاعدة (القياس المنطقي الفصلي - Disjunctive Syllogism) على المقدمتين: (P ∨ Q) و (¬P)؟",
+    o: [
+      "Q",
+      "¬Q",
+      "P ∧ Q",
+      "¬P ∧ ¬Q"
+    ],
+    a: 0,
+    e: "القياس الفصلي ينص على أنه إذا كانت إحدى القضيتين (P أو Q) صائبة، وثبت كذب P (أي ¬P)، فلا بد أن تكون Q صائبة (ص 103)."
+  },
+  {
+    q: "في محركات الاستدلال للأنظمة الخبيرة (ص 104)، ما الفرق الجوهري بين (التسلسل الأمامي Forward Chaining) و(التسلسل الخلفي Backward Chaining)؟",
+    o: [
+      "التسلسل الأمامي يبدأ من الهدف، والتسلسل الخلفي يبدأ من الحقائق",
+      "التسلسل الأمامي مدفوع بالبيانات (يبدأ من الحقائق المتوفرة للوصول للنتائج)، بينما التسلسل الخلفي مدفوع بالهدف (يبدأ من الهدف كفرضية ويعود للخلف للتحقق من شروطه كأهداف فرعية)",
+      "كلاهما لا يستخدمان القواعد الشرطية IF-THEN",
+      "التسلسل الأمامي هو الوحيد المستخدم في لغة Prolog والتشخيص الطبي"
+    ],
+    a: 1,
+    e: "التسلسل الأمامي (Data-Driven) ينطلق من المعطيات نحو الهدف، أما التسلسل الخلفي (Goal-Driven) فينطلق من الهدف للتحقق من أسبابه وشروطه (ص 104)."
+  },
+  {
+    q: "بماذا توصف الألعاب التنافسية الكلاسيكية في الذكاء الاصطناعي (مثل الشطرنج ولعبة إكس-أو Tic-Tac-Toe) من حيث المعلومات ومجموع المكاسب (ص 105)؟",
+    o: [
+      "ألعاب فردية غير حتمية تعتمد على الحظ والورق المخفي",
+      "ألعاب تعاونية يحصل فيها كلا اللاعبين على +1 معاً",
+      "ألعاب ثنائية اللاعبين، حتمية، كاملة المعلومات (قابلة للملاحظة كلياً)، وذات مجموع صفري (Zero-Sum Games: مكسب أحد اللاعبين يساوي خسارة الآخر)",
+      "ألعاب غير قابلة للملاحظة ولا تنتهي أبداً"
+    ],
+    a: 2,
+    e: "الشطرنج و Tic-Tac-Toe هي ألعاب حتمية كاملة المعلومات وذات مجموع صفري (Zero-Sum) حيث يتعارض هدف MAX مع هدف MIN تماماً (ص 105)."
+  },
+  {
+    q: "في الصياغة الرسمية للعبة كمسألة بحث (ص 105-106)، ما هي الدالة التي تعطي القيمة الرقمية النهائية للعبة (مثل +1 للفوز، -1 للخسارة، و 0 للتعادل) عند الوصول إلى حالة طرفية منتهية؟",
+    o: [
+      "دالة اللاعب PLAYER(s)",
+      "دالة الحركات ACTIONS(s)",
+      "نموذج الانتقال RESULT(s, a)",
+      "دالة المنفعة / العائد (UTILITY(s, p) أو Payoff Function)"
+    ],
+    a: 3,
+    e: "دالة المنفعة (Utility Function) هي التي تسند القيم الرقمية النهائية للحالات الطرفية (Terminal States) بعد انتهاء اللعبة (ص 106)."
+  },
+  {
+    q: "كيف يتخذ كل من اللاعب (MAX) واللاعب الخصم (MIN) قراراتهما في خوارزمية الحد الأدنى الأقصى (Minimax Algorithm)؟",
+    o: [
+      "يسعى اللاعب MAX لتعظيم النتيجة باختيار الحركة ذات القيمة الأكبر (max)، ويسعى الخصم MIN لتقليل نتيجة MAX باختيار الحركة ذات القيمة الأصغر (min)",
+      "يختار كلا اللاعبين القيمة الأكبر دائماً",
+      "يختار MAX القيمة الأصغر، ويختار MIN القيمة الأكبر",
+      "يختار كلا اللاعبين حركاتهما بالقرعة العشوائية"
+    ],
+    a: 0,
+    e: "في خوارزمية Minimax، عقد MAX تختار القيمة العظمى من أبنائها، وعقد MIN تختار القيمة الصغرى من أبنائها (ص 106)."
+  },
+  {
+    q: "بأي استراتيجية بحث تستكشف خوارزمية (Minimax) شجرة اللعبة، وما هو تعقيدها الزمني وتعقيدها المكاني بدلالة عامل التفرع b وأقصى عمق m (ص 106-107)؟",
+    o: [
+      "بطريقة البحث بالعرض أولاً BFS؛ ووقتها O(b) وذاكرتها O(b^m)",
+      "بطريقة البحث بالعمق أولاً (DFS)؛ وتعقيدها الزمني أسي O(b^m) وتعقيدها المكاني خطي O(b · m)",
+      "بطريقة تسلق التل؛ ووقتها O(1) وذاكرتها O(1)",
+      "لا تحتاج لاستكشاف شجرة اللعبة"
+    ],
+    a: 1,
+    e: "تنفذ خوارزمية Minimax بحثاً كاملاً بالعمق أولاً (DFS)، لذا فإن وقتها O(b^m) وذاكرتها خطية O(b · m) (ص 107)."
+  },
+  {
+    q: "[مسألة تتبع شجرة Minimax]: إذا كان الجذر A من نوع (MAX) ويتفرع إلى ثلاث عقد من نوع (MIN) هي B و C و D؛ وكانت أوراق B هي (5, 11)، وأوراق C هي (8, 3)، وأوراق D هي (7, 9). فما هي قيم العقد B و C و D، وما هي قيمة الجذر A النهائية؟",
+    o: [
+      "B = 11 ، C = 8 ، D = 9 ، والجذر A = 11",
+      "B = 5 ، C = 3 ، D = 7 ، والجذر A = 3",
+      "B = min(5,11) = 5 ، و C = min(8,3) = 3 ، و D = min(7,9) = 7 ؛ ويختار الجذر A (MAX) الأكبر بين (5, 3, 7) وهو 7 (يتحرك نحو D)",
+      "جميع العقد تساوي 5"
+    ],
+    a: 2,
+    e: "عقد MIN تختار الأصغر: B=5، C=3، D=7. ثم يختار الجذر MAX الأكبر من بينها: max(5, 3, 7) = 7 (ص 107)."
+  },
+  {
+    q: "ما هو الهدف الأساسي من تطبيق تقنية (تقليم ألفا-بيتا - Alpha-Beta Pruning) على شجرة Minimax (ص 107)؟",
+    o: [
+      "تغيير نتيجة اللعبة لصالح الخصم MIN",
+      "زيادة عدد العقد المفحوصة لضمان الدقة",
+      "تحويل اللعبة إلى لعبة حظ عشوائية",
+      "قص وحذف الفروع التي يستحيل أن تؤثر على القرار النهائي في الجذر لتقليل وقت البحث بشكل هائل، مع إرجاع نفس الحركة المثالية لـ Minimax تماماً"
+    ],
+    a: 3,
+    e: "تقليم ألفا-بيتا يتجاهل الفروع غير المؤثرة فيسرع البحث دون أن يغير قرار Minimax الأمثل إطلاقاً (ص 107-108)."
+  },
+  {
+    q: "في خوارزمية تقليم ألفا-بيتا، ماذا يمثل المعامل ألفا (α) وماذا يمثل المعامل بيتا (β)، وما هي قيمتاهما الابتدائية عند بداية البحث (ص 108)؟",
+    o: [
+      "ألفا (α) هي أفضل قيمة (الأعلى) وجدها MAX على المسار وتبدأ بـ (-∞)، وبيتا (β) هي أفضل قيمة (الأدنى) وجدها MIN على المسار وتبدأ بـ (+∞)",
+      "ألفا هي الأدنى لـ MIN وتبدأ بـ (+∞)، وبيتا هي الأعلى لـ MAX وتبدأ بـ (-∞)",
+      "كلاهما يبدآن بالقيمة صفر ولا يتغيران أثناء البحث",
+      "ألفا تمثل عمق الشجرة، وبيتا تمثل عامل التفرع"
+    ],
+    a: 0,
+    e: "α هي أعلى قيمة مضمونة لـ MAX (تبدأ بـ -∞ وتُحدث في عقد MAX)، و β هي أدنى قيمة مضمونة لـ MIN (تبدأ بـ +∞ وتُحدث في عقد MIN) (ص 108)."
+  },
+  {
+    q: "ما هو الشرط الرياضي الحاسم الذي يتم عنده قص (Pruning / Cutoff) وتجاهل باقي أبناء العقدة الحالية في خوارزمية ألفا-بيتا؟",
+    o: [
+      "عندما تكون α < β",
+      "عندما تصبح α ≥ β (ألفا أكبر من أو تساوي بيتا)",
+      "عندما تساوي α سالب ما لا نهاية",
+      "عندما تكون جميع الأوراق موجبة"
+    ],
+    a: 1,
+    e: "يتوقف فحص بقية أبناء العقدة ويحدث القص فور تحقق المتباينة: α ≥ β (ص 108)."
+  },
+  {
+    q: "[مسألة تتبع قص ألفا-بيتا]: إذا كان الجذر (MAX) قد فحص فرعه الأيسر بالكامل وحصل منه على قيمة (α = 6)، ثم انتقل لفحص فرعه الأيمن (عقدة MIN) ففحصت أول ورقة لها ووجدت قيمتها تساوي (4). ماذا سيحدث للورقتين الثانية والثالثة تحت عقدة MIN اليمنى؟",
+    o: [
+      "سيتم فحصهما بالكامل لأن 4 أصغر من 6",
+      "ستتغير قيمة الجذر MAX لتصبح 4",
+      "سيتم قصهما وتجاهلهما فوراً دون فحص! لأن عقدة MIN حدثت β = 4، وبما أن α = 6 ≥ β = 4 فإن قيمة عقدة MIN لن تتجاوز 4 أبداً بينما يملك الجذر MAX قيمة مضمونة هي 6",
+      "سيتم إعادة فحص الفرع الأيسر من جديد"
+    ],
+    a: 2,
+    e: "عقدة MIN ستعطي على الأكثر 4 (β=4)، والجذر MAX يملك خياراً يعطيه 6 (α=6)؛ وبما أن α ≥ β (6 ≥ 4) يقص باقي أبناء عقدة MIN فوراً (ص 108-109)."
+  },
+  {
+    q: "[مسألة تتبع ألفا-بيتا]: في نفس المسألة السابقة (حيث الجذر MAX لديه α = 6)، لو أن عقدة MIN اليمنى فحصت أول ورقة لها فوجدت قيمتها تساوي (9) بدلاً من (4)، فماذا ستفعل الخوارزمية؟",
+    o: [
+      "ستقص بقية الأوراق فوراً لأن 9 أكبر من 6",
+      "ستتوقف الخوارزمية وتعلن الفشل",
+      "ستحذف الفرع الأيسر",
+      "لن تقص الفرع بل ستستمر في فحص الورقة الثانية تحت عقدة MIN؛ لأن β أصبحت 9، وما زالت α = 6 < β = 9 (لم يتحقق شرط القص α ≥ β بعد)"
+    ],
+    a: 3,
+    e: "عندما تكون الورقة الأولى 9 تصبح β = 9، وبما أن α = 6 < β = 9 فربما توجد ورقة ثانية أصغر، أو ربما تظل القيمة النهائية أكبر من 6 فيستفيد منها MAX، لذا يستمر الفحص ولا يحدث قص (ص 108-109)."
+  },
+  {
+    q: "ما هو أثر (أفضل ترتيب مثالي لفحص الحركات - Best Move Ordering) على التعقيد الزمني لخوارزمية تقليم ألفا-بيتا مقارنة بـ Minimax القياسية (ص 109)؟",
+    o: [
+      "يخفض التعقيد الزمني من O(b^m) إلى O(b^(m/2))، مما يقلل عامل التفرع الفعال إلى √b ويسمح بالبحث إلى ضعف العمق (2m) في نفس الوقت المتاح!",
+      "يزيد التعقيد الزمني إلى O(b^(2m)) ويبطئ البحث",
+      "لا يؤثر ترتيب الحركات على عدد العقد المقصوصة أبداً",
+      "يجعل التعقيد الزمني ثابتاً O(1) في جميع الألعاب"
+    ],
+    a: 0,
+    e: "فحص الحركات الأفضل أولاً يعظم عملية القص، فيقلص الوقت من O(b^m) إلى O(b^(m/2)) ويضاعف العمق القابل للاستكشاف (ص 109)."
+  },
+  {
+    q: "عندما تكون شجرة اللعبة عميقة جداً (مثل لعبة الشطرنج) بحيث يستحيل الوصول إلى الحالات الطرفية في نهاية اللعبة خلال الوقت المسموح، ماذا نستخدم بدلاً من اختبار النهاية ودالة المنفعة (ص 109)؟",
+    o: [
+      "نستخدم البحث بالعرض أولاً BFS حتى نهاية اللعبة",
+      "نستخدم اختبار حد القطع (CUTOFF-TEST) لإيقاف البحث عند عمق معين، ونستخدم دالة تقييم استدلالية (EVAL(s)) لتقدير جودة وضعية اللوحة",
+      "نلغي شجرة البحث ونلعب عشوائياً",
+      "نحذف قواعد اللعبة"
+    ],
+    a: 1,
+    e: "نقطع البحث عند عمق محدد بـ CUTOFF-TEST ونطبق دالة تقييم استدلالية EVAL(s) تقدر احتمالية الفوز من وضعية اللوحة الحالية (ص 109)."
+  },
+  {
+    q: "في قواعد الاستدلال المنطقي، إذا كانت لدينا المقدمة الأولى: 'إذا كان اليوم جمعة فإن الجامعة عطلة' (F → H)، والمقدمة الثانية: 'إذا كانت الجامعة عطلة فسأزور جدي' (H → V)؛ فما القاعدة التي تمكننا من استنتاج: 'إذا كان اليوم جمعة فسأزور جدي' (F → V)؟",
+    o: [
+      "قاعدة نفي التالي (Modus Tollens)",
+      "القياس الفصلي (Disjunctive Syllogism)",
+      "القياس المنطقي الشرطي المتسلسل (Hypothetical Syllogism / Chaining)",
+      "إزالة العطف"
+    ],
+    a: 2,
+    e: "ربط قاعدتين شرطيتين بالتعدي من (F → H) و (H → V) لاستنتاج (F → V) هو القياس الشرطي المتسلسل (Hypothetical Syllogism) (ص 103)."
+  },
+  {
+    q: "على أي نوع من الاستدلال المنطقي تعتمد خوارزميات (تعلم الآلة - Machine Learning) عندما تتدرب على آلاف الأمثلة الخاصة لتستخلص منها نموذجاً أو قاعدة عامة؟",
+    o: [
+      "الاستنباط الرياضي الصارم (Deduction)",
+      "قاعدة نفي التالي فقط",
+      "تقليم ألفا-بيتا",
+      "الاستدلال الاستقرائي (Inductive Reasoning / Induction)"
+    ],
+    a: 3,
+    e: "الانتقال من الأمثلة والحالات الخاصة إلى استخلاص قاعدة عامة هو جوهر الاستقراء (Induction) الذي يقوم عليه تعلم الآلة (ص 102)."
+  },
+  {
+    q: "في شجرة تقليم ألفا-بيتا، أين يتم تحديث قيمة المعامل ألفا (α) وأين يتم تحديث قيمة المعامل بيتا (β)؟",
+    o: [
+      "تُحدّث قيمة ألفا (α) في عقد MAX فقط، وتُحدّث قيمة بيتا (β) في عقد MIN فقط",
+      "تُحدّث ألفا في عقد MIN، وتُحدّث بيتا في عقد MAX",
+      "تُحدّث القيمتان في الأوراق الطرفية فقط",
+      "لا تتغير قيمتا ألفا وبيتا عن -∞ و +∞ أبداً"
+    ],
+    a: 0,
+    e: "اللاعب MAX يبحث عن أعلى قيمة فيحدث α = max(α, v)، واللاعب MIN يبحث عن أدنى قيمة فيحدث β = min(β, v) (ص 108)."
+  },
+  {
+    q: "في شجرة اللعبة التنافسية، ماذا تمثل كل من (العقد Nodes) و(الفروع Branches) و(الأوراق Leaves)؟",
+    o: [
+      "العقد هي الحركات، والفروع هي اللاعبون، والأوراق هي بداية اللعبة",
+      "العقد تمثل حالات لوحة اللعب (States)، والفروع تمثل الحركات القانونية (Moves/Actions)، والأوراق تمثل الحالات الطرفية المنتهية (Terminal States)",
+      "جميعها تمثل دالة المنفعة فقط",
+      "الأوراق تمثل الحالة الابتدائية للعبة"
+    ],
+    a: 1,
+    e: "في شجرة اللعبة: الجذر هو الحالة الابتدائية، والعقد هي وضعيات اللوحة، والفروع هي حركات اللاعبين، والأوراق هي نهايات اللعبة (ص 105-106)."
+  },
+  {
+    q: "عند تطبيق قاعدة (التخصيص الكلي - Universal Instantiation) على الجملة: ∀x (King(x) → Person(x)) باستخدام الثابت (John)، فما هي الجملة الناتجة؟",
+    o: [
+      "∃x (King(x) ∧ Person(x))",
+      "King(x) → Person(John)",
+      "King(John) → Person(John)",
+      "¬King(John)"
+    ],
+    a: 2,
+    e: "التخصيص الكلي (UI) يحذف المكمم الكلي ∀x ويعوض عن كل ظهور للمتغير x بالثابت المختار John: King(John) → Person(John) (ص 103)."
+  },
+  {
+    q: "ماذا يحدث في تقليم ألفا-بيتا إذا تم ترتيب الحركات في شجرة اللعبة بأسوأ ترتيب ممكن (بحيث تُفحص الحركات الأسوأ أولاً وتأتي الحركات الأفضل في النهاية)؟",
+    o: [
+      "تعطي الخوارزمية قراراً خاطئاً غير أمثلي",
+      "يتضاعف عمق البحث إلى أربعة أضعاف",
+      "تتوقف الخوارزمية عند الجذر",
+      "لا يحدث أي تقليم (قص) للفروع، وتفحص الخوارزمية جميع العقد بتعقيد زمني O(b^m) مثل Minimax العادية تماماً مع إعطاء نفس القرار الصحيح"
+    ],
+    a: 3,
+    e: "في أسوأ ترتيب للحركات لا يتحقق شرط القص مبكراً فتفحص ألفا-بيتا كل العقد O(b^m) كأنها Minimax عادية (ص 109)."
+  },
+  {
+    q: "إذا كان لدى نظام خبير قاعدة بيانات ضخمة من الحقائق، ولكن المستخدم يريد التحقق من فرضية واحدة محددة فقط (مثل: هل المريض مصاب بالملاريا؟)، فأي استراتيجية استدلال تكون أكثر كفاءة هنا ولماذا؟",
+    o: [
+      "التسلسل الخلفي (Backward Chaining)؛ لأنه مدفوع بالهدف فيبحث فقط في القواعد المرتبطة بفرضية الملاريا بدلاً من إطلاق مئات القواعد غير المرتبطة بها",
+      "التسلسل الأمامي؛ لأنه يطلق جميع القواعد عشوائياً",
+      "خوارزمية Minimax للألعاب",
+      "إلغاء محرك الاستدلال"
+    ],
+    a: 0,
+    e: "عندما يكون الهدف محدداً وواضحاً، يتفوق التسلسل الخلفي (Goal-Driven) لأنه يفحص فقط المسار المؤدي لإثبات هذا الهدف (ص 104)."
+  },
+  {
+    q: "[مسألة شجرة Minimax من 3 مستويات]: الجذر A (MAX) له ابنان B و C من نوع (MIN). العقدة B لها ابنان من نوع (MAX) قيمتاهما بعد فحص أوراقهما هي (6 و 4). والعقدة C لها ابنان من نوع (MAX) قيمتاهما هي (2 و 9). فما هي القيمة النهائية للجذر A؟",
+    o: [
+      "9",
+      "4 (لأن عقدة B من نوع MIN فتختار الأصغر min(6, 4) = 4، وعقدة C من نوع MIN فتختار الأصغر min(2, 9) = 2؛ ثم يختار الجذر A من نوع MAX الأكبر max(4, 2) = 4)",
+      "6",
+      "2"
+    ],
+    a: 1,
+    e: "B (MIN) تختار min(6,4) = 4، و C (MIN) تختار min(2,9) = 2. ثم الجذر A (MAX) يختار max(4, 2) = 4 (ص 106-107)."
+  }
+];
+
+// بناء شبكة المصطلحات
+const termsGrid = document.getElementById("termsGrid");
+terms.forEach(([en, ar]) => {
+  const d = document.createElement("div");
+  d.className = "card";
+  d.style.margin = "0";
+  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
+  termsGrid.appendChild(d);
+});
+
+// إدارة البطاقات التعليمية
+let ci = 0, showAnswer = false;
+function renderCard() {
+  document.getElementById("flashTerm").textContent = cards[ci][0];
+  const ansEl = document.getElementById("flashAnswer");
+  ansEl.innerHTML = cards[ci][1].replace(/\n/g, "<br>");
+  ansEl.hidden = !showAnswer;
+  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
+  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+}
+document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
+document.getElementById("flashcard").addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
+});
+document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
+document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
+renderCard();
+
+// التنقل بين التبويبات
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+// إدارة الاختبار
+let answers = {};
+function renderQuiz() {
+  const area = document.getElementById("quizArea");
+  area.innerHTML = "";
+  const letters = ["أ", "ب", "ج", "د"];
+  questions.forEach((item, i) => {
+    const box = document.createElement("div");
+    box.className = "qbox";
+    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
+    const opts = box.querySelector(".options");
+    item.o.forEach((opt, j) => {
+      const btn = document.createElement("button");
+      btn.className = "option";
+      btn.textContent = `${letters[j]}) ${opt}`;
+      btn.onclick = () => {
+        answers[i] = j;
+        [...opts.children].forEach((x, k) => {
+          x.classList.remove("correct", "wrong");
+          x.disabled = true;
+          if (k === item.a) x.classList.add("correct");
+          if (k === j && j !== item.a) x.classList.add("wrong");
+        });
+        const fb = document.getElementById("fb" + i);
+        fb.hidden = false;
+        fb.className = "feedback " + (j === item.a ? "good" : "bad");
+        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
+        updateScore();
+      };
+      opts.appendChild(btn);
+    });
+    area.appendChild(box);
+  });
+  updateScore();
+}
+
+function updateScore() {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
+  document.getElementById("score").textContent = `النتيجة: ${correct} / ${questions.length}`;
+  document.getElementById("progressBar").style.width = (Object.keys(answers).length / questions.length * 100) + "%";
+}
+
+document.getElementById("resetQuiz").onclick = () => {
+  answers = {};
+  document.getElementById("finalResult").textContent = "";
+  renderQuiz();
+};
+
+document.getElementById("finishQuiz").onclick = () => {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
+  const pct = Math.round(correct / questions.length * 100);
+  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${questions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! إتقان كامل للفصل العاشر (الاستدلال المنطقي والبحث التنافسي)." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
+};
+
+renderQuiz();
+</script>
+</body>
+</html>

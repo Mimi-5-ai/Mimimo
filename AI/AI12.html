@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الفصل الثاني عشر الشامل (ص 120-136) | عدم اليقين في الذكاء الاصطناعي ومعالجته</title>
+<style>
+:root{
+  --bg:#f4f6fb;
+  --card:#ffffff;
+  --ink:#0f172a;
+  --muted:#64748b;
+  --accent:#4f46e5;
+  --accent-dark:#3730a3;
+  --accent2:#eef2ff;
+  --teal:#0d9488;
+  --teal-light:#ccfbf1;
+  --line:#e2e8f0;
+  --good:#059669;
+  --good-bg:#ecfdf5;
+  --bad:#dc2626;
+  --bad-bg:#fef2f2;
+  --warn:#d97706;
+  --warn-bg:#fffbeb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
+header{background:linear-gradient(135deg,#1e1b4b,#3730a3,#0d9488);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(30,27,75,0.2)}
+.wrap{max-width:1060px;margin:auto;padding:0 16px}
+.eyebrow{opacity:.95;font-size:.9rem;background:rgba(255,255,255,0.16);display:inline-block;padding:4px 14px;border-radius:99px;margin-bottom:6px;font-weight:bold}
+h1{margin:5px 0;font-size:clamp(1.5rem,3.8vw,2.2rem)}
+header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
+nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:rgba(255,255,255,0.18);color:#ffffff;font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
+nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
+nav button.active{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+main .btn{background:var(--accent2);color:var(--accent-dark)}
+main .btn.primary{background:var(--accent);color:white}
+main{padding:22px 0 48px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(15,23,42,0.04)}
+h2{font-size:1.35rem;margin:0 0 12px;color:#1e1b4b}
+h3{font-size:1.06rem;margin:10px 0 6px;color:var(--accent-dark)}
+h4{font-size:.98rem;margin:8px 0 4px;color:#0f172a}
+small,.muted{color:var(--muted)}
+ul,ol{padding-right:22px;margin:8px 0}
+li{margin:6px 0}
+details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
+summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f8faff;color:#1e1b4b;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
+details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
+.details-body{padding:16px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
+.tag.teal{background:var(--teal-light);color:var(--teal)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#f1f5f9;color:#1e1b4b;font-weight:bold}
+tr:last-child td{border-bottom:0}
+.note{border-right:4px solid var(--accent);padding:10px 14px;background:#f5f7ff;border-radius:8px;margin:10px 0}
+.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
+.formula-box{background:#1e1b4b;color:#fff;padding:12px 16px;border-radius:12px;text-align:center;font-size:1.05rem;margin:10px 0;direction:ltr;font-family:monospace;line-height:1.75}
+.step-card{border:1px solid var(--line);border-radius:12px;padding:14px;background:#f8fafc}
+.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
+.options{display:grid;gap:8px;margin-top:12px}
+.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
+.option:hover:not(:disabled){border-color:var(--accent);background:#f8faff}
+.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
+.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
+.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
+.feedback.good{color:var(--good);background:var(--good-bg)}
+.feedback.bad{color:var(--bad);background:var(--bad-bg)}
+.progress{height:10px;background:#e2e8f0;border-radius:9px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
+.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#eef2ff);border:2px solid #c7d2fe;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
+.flashcard:hover{transform:scale(1.005)}
+.flashcard .term{font-size:1.35rem;font-weight:bold;color:#1e1b4b}
+.flashcard .answer{margin-top:16px;font-size:1.08rem;color:var(--accent-dark);background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
+@media(max-width:600px){
+  .card{padding:14px}
+  nav button{flex:1 1 calc(50% - 8px);text-align:center}
+  .flashcard{min-height:200px;padding:18px}
+  th,td{padding:8px 10px;font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">مقرر الذكاء الاصطناعي • الفصل الثاني عشر والأخير (صفحات 120 إلى 136)</div>
+    <h1>الفصل الثاني عشر: عدم اليقين في الذكاء الاصطناعي ومعالجته</h1>
+    <p>يغطي مفهوم ومصادر عدم اليقين، قوانين الاحتمالات والاحتمال الشرطي، قاعدة بايز والشبكات البايزية وعوامل اليقين (MYCIN)، والمنطق الضبابي (Fuzzy Logic) وعملياته ومراحله الأربع ونظرية ديمبستر-شافير</p>
+    <nav>
+      <button class="active" data-tab="summary">الشرح الشامل</button>
+      <button data-tab="tables">جداول المقارنات والمسائل (4)</button>
+      <button data-tab="terms">المصطلحات والمفاهيم (28)</button>
+      <button data-tab="cards">البطاقات التعليمية (28)</button>
+      <button data-tab="quiz">الاختبار الشامل (25)</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- ================= التبويب الأول: الشرح الشامل ================= -->
+  <section id="summary" class="panel active">
+    <div class="card">
+      <h2>خريطة الفصل الثاني عشر والأخير (ص 120 - 136)</h2>
+      <div class="grid">
+        <div>
+          <span class="tag">الوحدة الأولى (ص 120 - 125)</span>
+          <h3>مفهوم ومصادر عدم اليقين والاحتمالات</h3>
+          <p>مفهوم عدم اليقين، الأسباب الثلاثة لفشل المنطق التقليدي، بديهيات الاحتمالات، الاحتمال غير المشروط والمشروط، وقاعدة الضرب والاستقلالية.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثانية (ص 126 - 131)</span>
+          <h3>قاعدة بايز، الشبكات البايزية، وعوامل اليقين</h3>
+          <p>نظرية بايز مع مسألة التشخيص الطبي المحلولة، الاستقلال الشرطي، الشبكات البايزية (Bayesian Networks)، وعوامل اليقين (CF) ونظرية ديمبستر-شافير.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثالثة (ص 132 - 136)</span>
+          <h3>المنطق الضبابي / الغامض (Fuzzy Logic)</h3>
+          <p>الفرق بين المجموعات الحادة والضبابية، دالة الانتماء، العمليات الثلاث على المجموعات الضبابية (NOT, AND, OR)، والمراحل الأربع لنظام الاستدلال الضبابي.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- الوحدة الأولى -->
+    <details open>
+      <summary>1) الوحدة الأولى: مفهوم ومصادر عدم اليقين في الذكاء الاصطناعي وأساسيات نظرية الاحتمالات (ص 120 - 125)</summary>
+      <div class="details-body">
+        <div class="exam-alert">
+          <h3>أولاً: لماذا يفشل المنطق التقليدي في العالم الحقيقي؟ ومفهوم عدم اليقين (ص 120 - 121):</h3>
+          <ul>
+            <li>في الفصول السابقة، افترض الوكيل المنطقي أن الجمل إما صائبة تماماً (<span dir="ltr">True</span>) وإما خاطئة تماماً (<span dir="ltr">False</span>)؛ ولكن في العالم الحقيقي (مثل التشخيص الطبي، التنبؤ بالطقس، أو قيادة السيارة)، يضطر الوكيل للتعامل مع <b>عدم اليقين (<span dir="ltr">Uncertainty</span>)</b> بسبب <b>الملاحظة الجزئية، أو عدم الحتمية، أو ضوضاء المستشعرات، أو نقص المعلومات</b>.</li>
+            <li><b>الأسباب الثلاثة الرئيسية لفشل القواعد المنطقية الصارمة في التعامل مع المجالات الواقعية (مثل الطب) - موضع سؤال مؤكد:</b>
+              <ol>
+                <li><b>الكسل (<span dir="ltr">Laziness</span>):</b> يتطلب سرد مجموعة كاملة من المقدمات والشروط والنتائج بدون استثناءات عملاً هائلاً وشاقاً جداً، وتكون القواعد الناتجة معقدة يصعب استخدامها.</li>
+                <li><b>الجهل النظري (<span dir="ltr">Theoretical Ignorance</span>):</b> في كثير من العلوم (مثل الطب)، لا توجد نظرية كاملة تربط الأسباب بالنتائج بنسبة 100% (لا نعرف كل القواعد الفسيولوجية الدقيقة لمرض معين).</li>
+                <li><b>الجهل العملي (<span dir="ltr">Practical Ignorance</span>):</b> حتى لو عرفنا جميع القواعد النظرية، فنحن غير متأكدين من حالة مريض معين لأننا لم نُجرِ (أو لا نستطيع إجراء) جميع الفحوصات والتحاليل اللازمة له.</li>
+              </ol>
+            </li>
+            <li><b>كيف يتخذ الوكيل قراراً عقلانياً تحت وطأة عدم اليقين؟</b>
+              <br>يعتمد القرار الصحيح على: 1) الأهمية النسبية للأهداف المختلفة، و2) مدى احتمالية تحقيقها. والوكيل العقلاني يختار الفعل الذي يعظم <b>المنفعة المتوقعة (<span dir="ltr">Maximizing Expected Utility - MEU</span>)</b>.</li>
+          </ul>
+        </div>
+
+        <div class="exam-alert">
+          <h3>ثانياً: أساسيات نظرية الاحتمالات (<span dir="ltr">Probability Theory</span>) وبديهيات كولموجروف (ص 122 - 123):</h3>
+          <ul>
+            <li>توفر نظرية الاحتمالات طريقة لتلخيص عدم اليقين من خلال إسناد <b>درجة اعتقاد رقمية (<span dir="ltr">Degree of Belief</span>)</b> لكل جملة بين $0$ و $1$.</li>
+            <li><b>المفاهيم الأساسية:</b>
+              <br>• <b>فضاء العينة (<span dir="ltr">Sample Space</span> $\Omega$):</b> مجموعة جميع العوالم الممكنة (أو النتائج الأولية للتجربة) والتي تكون متنافية مثنى وشاملة.
+              <br>• <b>الحدث (<span dir="ltr">Event</span> $A$):</b> أي مجموعة جزئية من فضاء العينة.
+              <br>• <b>الاحتمال غير المشروط / المسبق (<span dir="ltr">Unconditional / Prior Probability</span> $P(A)$):</b> درجة الاعتقاد في الحدث $A$ في غياب أي معلومات أو أدلة أخرى.</li>
+            <li><b>بديهيات الاحتمالات الثلاث (بديهيات كولموجروف <span dir="ltr">Kolmogorov's Axioms</span>):</b>
+              <div class="formula-box">
+1) لكل حدث A تكون قيمة الاحتمال محصورة بين 0 و 1:     0 ≤ P(A) ≤ 1
+2) الحدث المؤكد احتماله 1، والمستحيل احتماله 0:        P(True) = 1  ,  P(False) = 0   ,   P(¬A) = 1 - P(A)
+3) احتمال اتحاد حدثين (قاعدة الجمع العام):            P(A ∨ B) = P(A) + P(B) - P(A ∧ B)
+   (وإذا كان الحدثان متنافيين Mutually Exclusive أي P(A ∧ B) = 0 فإن: P(A ∨ B) = P(A) + P(B))
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="exam-alert">
+          <h3>ثالثاً: الاحتمال الشرطي (<span dir="ltr">Conditional Probability</span>)، قاعدة الضرب، والاستقلالية (ص 124 - 125) - مهمة جداً:</h3>
+          <ul>
+            <li><b>1. الاحتمال الشرطي / اللاحق (<span dir="ltr">Conditional / Posterior Probability</span> $P(A | B)$):</b>
+              <br>هو احتمال وقوع الحدث $A$ <b>بشرط (علماً بأن)</b> الحدث أو الدليل $B$ قد وقع بالفعل، ويُعطى بالمعادلة (بشرط $P(B) > 0$):
+              <div class="formula-box">P(A | B) = P(A ∧ B) / P(B)</div>
+            </li>
+            <li><b>2. قاعدة الضرب (<span dir="ltr">Product Rule</span>):</b>
+              <br>من معادلة الاحتمال الشرطي، نستنتج احتمال وقوع الحدثين معاً (الاحتمال المشترك <span dir="ltr">Joint Probability</span>):
+              <div class="formula-box">P(A ∧ B) = P(A | B) · P(B) = P(B | A) · P(A)</div>
+            </li>
+            <li><b>3. قاعدة السلسلة العامة (<span dir="ltr">Chain Rule</span>):</b>
+              <br>تعميم قاعدة الضرب لعدة متغيرات:
+              <div class="formula-box">P(X₁, X₂, ..., Xₙ) = P(X₁) · P(X₂ | X₁) · P(X₃ | X₁, X₂) ... P(Xₙ | X₁, ..., Xₙ₋₁)</div>
+            </li>
+            <li><b>4. الاستقلالية المطلقة (<span dir="ltr">Independence</span>):</b>
+              <br>إذا كان وقوع الحدث $B$ لا يؤثر إطلاقاً على احتمال وقوع الحدث $A$، نقول إن $A$ و $B$ <b>مستقلان (<span dir="ltr">Independent</span>)</b>، وعندها يتحقق:
+              <div class="formula-box">P(A | B) = P(A)   ,   P(B | A) = P(B)   ,   P(A ∧ B) = P(A) · P(B)</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </details>
+
+    <!-- الوحدة الثانية -->
+    <details open>
+      <summary>2) الوحدة الثانية: قاعدة بايز (Bayes' Rule)، الشبكات البايزية، وعوامل اليقين وديمبستر-شافير (ص 126 - 131)</summary>
+      <div class="details-body">
+        <div class="exam-alert">
+          <h3>أولاً: قاعدة / نظرية بايز (<span dir="ltr">Bayes' Rule / Theorem</span>) والتشخيص الطبي (ص 126 - 127) - موضع مسائل مؤكدة:</h3>
+          <ul>
+            <li>من التساوي في قاعدة الضرب: $P(A | B)P(B) = P(B | A)P(A)$، اشتق العالم توماس بايز قانونه الشهير:
+              <div class="formula-box">
+P(H | E) = [ P(E | H) · P(H) ] / P(E)
+              </div>
+              حيث <b dir="ltr">H</b> هي الفرضية أو السبب (مثل المرض <span dir="ltr">Cause / Disease</span>)، و <b dir="ltr">E</b> هو الدليل أو النتيجة الملاحظة (مثل العرض الطبي <span dir="ltr">Effect / Symptom</span>):
+              <br>• <b dir="ltr">P(H | E):</b> <b>الاحتمال اللاحق (<span dir="ltr">Posterior Probability</span>)</b> للفرضية $H$ بعد ملاحظة الدليل $E$.
+              <br>• <b dir="ltr">P(H):</b> <b>الاحتمال المسبق / القبلي (<span dir="ltr">Prior Probability</span>)</b> للفرضية $H$ قبل ملاحظة الدليل.
+              <br>• <b dir="ltr">P(E | H):</b> <b>احتمال المعقولية (<span dir="ltr">Likelihood</span>)</b> لظهور الدليل $E$ عند تحقق السبب $H$.
+              <br>• <b dir="ltr">P(E):</b> <b>الاحتمال الهامشي للدليل (<span dir="ltr">Marginal Probability / Evidence</span>)</b>، ويُحسب أحياناً بقانون الاحتمال الكلي: <code dir="ltr">P(E) = P(E|H)P(H) + P(E|¬H)P(¬H)</code>.
+            </li>
+            <li><b>لماذا تُعد قاعدة بايز حجر الأساس في أنظمة التشخيص الطبي؟</b>
+              <br>لأن الأطباء تتوفر لديهم دائماً المعرفة السببية <b dir="ltr">P(العرض | المرض)</b> (مثلاً: معلوم طبياً أن التهاب السحايا يسبب تيبس الرقبة بنسبة $50\%$)، بينما يريد الطبيب في الواقع حساب المعرفة التشخيصية العكسية <b dir="ltr">P(المرض | العرض)</b> عندما يأتيه مريض يشتكي من العرض!</li>
+          </ul>
+        </div>
+
+        <div class="note">
+          <h4>مسألة التشخيص الطبي الكلاسيكية المحلولة بقاعدة بايز (مثال التهاب السحايا وتيبس الرقبة - ص 127):</h4>
+          <p><b>المعطيات:</b><br>
+          • يسبب مرض التهاب السحايا ($M$) عرض تيبس الرقبة ($S$) للمريض باحتمال $50\%$ &larr; <code dir="ltr">P(S | M) = 0.5</code>.<br>
+          • الاحتمال المسبق لإصابة أي مريض بالتهاب السحايا هو $\frac{1}{50,000}$ &larr; <code dir="ltr">P(M) = 0.00002</code>.<br>
+          • الاحتمال العام لمعاناة أي مريض من تيبس الرقبة هو $\frac{1}{20}$ &larr; <code dir="ltr">P(S) = 0.05</code>.<br>
+          <b>المطلوب:</b> احسبي احتمال أن يكون المريض مصاباً بالتهاب السحايا علماً بأنه يعاني من تيبس الرقبة $P(M | S)$:</p>
+          <div class="formula-box">
+P(M | S) = [ P(S | M) · P(M) ] / P(S)
+         = (0.5 × 0.00002) / 0.05 = 0.00001 / 0.05 = 0.0002  (أي 0.02% أو 1 من كل 5000 مريض!)
+          </div>
+          <p style="margin-bottom:0"><b>الاستنتاج:</b> رغم أن المرض يسبب العرض بنسبة عالية ($50\%$)، إلا أن احتمال إصابة المريض بالمرض من هذا العرض وحده صغير جداً ($0.02\%$) لأن المرض نفسه نادر جداً في الأصل ($P(M)$ صغيرة جداً)!</p>
+        </div>
+
+        <div class="exam-alert">
+          <h3>ثانياً: الاستقلال الشرطي (<span dir="ltr">Conditional Independence</span>) والشبكات البايزية (<span dir="ltr">Bayesian Networks</span>) (ص 128 - 129):</h3>
+          <ul>
+            <li><b>الاستقلال الشرطي (<span dir="ltr">Conditional Independence</span>):</b> يكون المتغيران $A$ و $B$ مستقلين شرطياً بمعرفة المتغير السببي $C$ إذا كان:
+              <div class="formula-box">P(A ∧ B | C) = P(A | C) · P(B | C)   أو   P(A | B, C) = P(A | C)</div>
+              (مثال: ألم الأسنان وظهور الفجوة بالأسنان كلاهما ينتجان عن التسوس؛ فإذا علمنا يقيناً بوجود التسوس، يصبح ألم الأسنان والفجوة مستقلين شرطياً، وعلى هذا الافتراض يقوم مصنف بايز الساذج <span dir="ltr">Naive Bayes</span>!).</li>
+            <li><b>الشبكات البايزية / شبكات الاعتقاد (<span dir="ltr">Bayesian Belief Networks - BBNs</span>):</b>
+              <ul>
+                <li>هي تمثيل بياني مدمج للتوزيعات الاحتمالية المشتركة، وتتكون من <b>رسم بياني موجه وخالٍ من الدورات (<span dir="ltr">DAG - Directed Acyclic Graph</span>)</b>:
+                  <br>1) <b>العقد (<span dir="ltr">Nodes</span>):</b> تمثل المتغيرات العشوائية (أحداث أو أسباب أو أعراض).
+                  <br>2) <b>الأسهم الموجهة (<span dir="ltr">Arcs / Arrows</span>):</b> تمثل العلاقات السببية أو التأثير المباشر (إذا اتجه سهم من $X$ إلى $Y$ فإن $X$ يُسمى <b>أباً <span dir="ltr">Parent</span></b> لـ $Y$).
+                  <br>3) <b>جدول الاحتمال الشرطي (<span dir="ltr">CPT - Conditional Probability Table</span>):</b> يرتبط بكل عقدة $X_i$ ويحدد توزيع احتمالاتها بشرط قيم آبائها المباشرين <code dir="ltr">P(Xᵢ | Parents(Xᵢ))</code> (والعقد التي ليس لها آباء تحتوي على الاحتمال المسبق <code dir="ltr">P(Xᵢ)</code> فقط).</li>
+                <li><b>معادلة حساب الاحتمال المشترك الكامل في الشبكة البايزية (مهمة جداً):</b>
+                  <div class="formula-box">P(x₁, x₂, ..., xₙ) = Π_{i=1..n} P(xᵢ | Parents(Xᵢ))</div>
+                  (أي حاصل ضرب احتمال كل متغير بشرط آبائه المباشرين فقط؛ ففي شبكة الإنذار الشهيرة: السرقة $B$ والزلزال $E$ يؤديان للإنذار $A$، والإنذار يؤدي لاتصال جون $J$ وماري $M$: $P(J,M,A,B,E) = P(J|A)P(M|A)P(A|B,E)P(B)P(E)$).</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        <div class="exam-alert">
+          <h3>ثالثاً: الطرق البديلة لمعالجة عدم اليقين: عوامل اليقين (MYCIN) ونظرية ديمبستر-شافير (ص 130 - 131):</h3>
+          <div class="grid">
+            <div class="step-card">
+              <span class="tag">1. عوامل اليقين (Certainty Factors - CF)</span>
+              <ul>
+                <li>ابتُكرت في النظام الخبير الطبي الشهير <b dir="ltr">MYCIN</b> لتشخيص أمراض الدم البكتيرية دون الحاجة لاحتمالات إحصائية كاملة.</li>
+                <li>تُقاس درجة اليقين في الفرضية $H$ بوجود الدليل $E$ عبر الفرق بين <b>مقياس تزايد التصديق (<span dir="ltr">Measure of Belief - MB</span>)</b> و<b>مقياس تزايد عدم التصديق/الشك (<span dir="ltr">Measure of Disbelief - MD</span>)</b> (حيث $0 \le MB, MD \le 1$):
+                  <div class="formula-box">CF(H, E) = MB(H, E) - MD(H, E)</div>
+                </li>
+                <li><b>نطاق قيمة عامل اليقين <span dir="ltr">CF</span>:</b> يتراوح بين <b dir="ltr">[-1 و +1]</b>؛ حيث $(+1)$ تعني يقيناً تاماً بالصواب، و $(-1)$ يقيناً تاماً بالخطأ، و $(0)$ حياد أو غياب الدليل.</li>
+              </ul>
+            </div>
+            <div class="step-card">
+              <span class="tag teal">2. نظرية ديمبستر-شافير (Dempster-Shafer)</span>
+              <ul>
+                <li>صُممت للتمييز الرياضي بين <b>عدم اليقين (<span dir="ltr">Uncertainty</span>)</b> وبين <b>الجهل / نقص الأدلة (<span dir="ltr">Ignorance</span>)</b>.</li>
+                <li>بدلاً من إعطاء رقم احتمالي واحد للحدث، تُسند <b>فترة ثقة (<span dir="ltr">Belief Interval</span>)</b> محددة بقيمتين:
+                  <div class="formula-box">[ Bel(A) , Pl(A) ]</div>
+                  • <b dir="ltr">Bel(A) (دالة الاعتقاد Belief):</b> الحد الأدنى للثقة (مجموع الكتل الاحتمالية للأدلة التي تدعم $A$ مباشرة).
+                  <br>• <b dir="ltr">Pl(A) (دالة المعقولية Plausibility):</b> الحد الأقصى للثقة ($Pl(A) = 1 - Bel(\neg A)$)، والفرق بينهما $(Pl - Bel)$ يمثل مقدار الجهل.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- الوحدة الثالثة -->
+    <details open>
+      <summary>3) الوحدة الثالثة: المنطق الضبابي / الغامض (Fuzzy Logic) وعملياته ونظام الاستدلال الضبابي (ص 132 - 136)</summary>
+      <div class="details-body">
+        <div class="exam-alert">
+          <h3>أولاً: مفهوم المنطق الضبابي (<span dir="ltr">Fuzzy Logic</span>) والفرق بين المجموعات الحادة والضبابية (ص 132 - 133):</h3>
+          <ul>
+            <li>قدمه العالم <b>لطفي زاده (<span dir="ltr">Lotfi Zadeh</span>) في عام 1965</b> للتعامل مع المفاهيم اللغوية البشرية غير المحددة بدقة حادة (مثل: "الطقس حار"، "الرجل طويل"، "السرعة عالية")؛ فبينما تقيس الاحتمالات <b>فرصة وقوع حدث غير مؤكد</b>، يقيس المنطق الضبابي <b>درجة صحة أو تحقق وصف غامض (<span dir="ltr">Degree of Truth / Vagueness</span>)</b>.</li>
+            <li><b>المقارنة الجوهرية بين المجموعات الحادة/التقليدية (<span dir="ltr">Crisp Sets</span>) والمجموعات الضبابية (<span dir="ltr">Fuzzy Sets</span>):</b>
+              <ol>
+                <li><b>في المجموعات الحادة / الكلاسيكية (<span dir="ltr">Crisp / Classical Sets</span>):</b> العنصر إما ينتمي كلياً للمجموعة وإما لا ينتمي إليها إطلاقاً؛ فتأخذ دالة الانتماء قيمتين ثنائيتين فقط: <b dir="ltr">{0, 1}</b> (صواب أو خطأ قاطع).</li>
+                <li><b>في المجموعات الضبابية (<span dir="ltr">Fuzzy Sets</span>):</b> يُسمح بالانتماء الجزئي التدريجي؛ فتأخذ <b>دالة الانتماء / العضوية (<span dir="ltr">Membership Function</span> $\mu_A(x)$)</b> أي قيمة حقيقية مستمرة في الفترة المغلقة بين الصفر والواحد:
+                  <div class="formula-box">μ_A(x) ∈ [0, 1]</div>
+                  (حيث $\mu_A(x) = 1$ تعني انتماءً كاملاً، و $\mu_A(x) = 0$ تعني عدم انتماء، و $\mu_A(x) = 0.7$ تعني انتماءً جزئياً بدرجة $70\%$).</li>
+              </ol>
+            </li>
+            <li><b>المتغيرات اللغوية (<span dir="ltr">Linguistic Variables</span>):</b> متغيرات تأخذ قيماً عبارة عن كلمات أو أوصاف طبيعية تسمى القيم اللغوية (مثل المتغير اللغوي: <b>"درجة الحرارة"</b>، وقيمه اللغوية: <b>"بارد"، "دافئ"، "حار"</b>)، وتُمثل دوال الانتماء بأشكال هندسية كالمثلث (<span dir="ltr">Triangular</span>) أو شبه المنحرف (<span dir="ltr">Trapezoidal</span>) أو الغاوسي.</li>
+          </ul>
+        </div>
+
+        <div class="exam-alert">
+          <h3>ثالثاً: العمليات المنطقية الثلاث على المجموعات الضبابية مع مثال حسابي (ص 134) - موضع أسئلة حسابية مؤكدة:</h3>
+          <p>لتكن لدينا مجموعتان ضبابيتان $A$ و $B$ دالتا انتمائهما للعنصر $x$ هما $\mu_A(x)$ و $\mu_B(x)$؛ تُحسب العمليات الضبابية الأساسية كالتالي:</p>
+          <div class="formula-box">
+1) المتممة / النفي الضبابي (Complement / NOT):        μ_{¬A}(x)    = 1 - μ_A(x)
+2) التقاطع / الوصل الضبابي (Intersection / AND):     μ_{A ∩ B}(x) = min( μ_A(x) , μ_B(x) )
+3) الاتحاد / الفصل الضبابي (Union / OR):              μ_{A ∪ B}(x) = max( μ_A(x) , μ_B(x) )
+          </div>
+          <div class="note" style="margin-bottom:0">
+            <b>مثال حسابي مباشر للاختبار:</b> إذا كانت درجة انتماء شخص لمجموعة "طويل القامة" هي $\mu_{\text{Tall}}(x) = \mathbf{0.8}$، ودرجة انتمائه لمجموعة "سريع الجري" هي $\mu_{\text{Fast}}(x) = \mathbf{0.3}$، فإن:<br>
+            • درجة كونه <b>"غير طويل" (NOT Tall)</b> $= 1 - 0.8 = \mathbf{0.2}$.<br>
+            • درجة كونه <b>"طويلاً وسريعاً معاً" (Tall AND Fast)</b> $= \min(0.8, \, 0.3) = \mathbf{0.3}$.<br>
+            • درجة كونه <b>"طويلاً أو سريعاً" (Tall OR Fast)</b> $= \max(0.8, \, 0.3) = \mathbf{0.8}$.
+          </div>
+        </div>
+
+        <div class="exam-alert">
+          <h3>رابعاً: المكونات والمراحل الأربع لنظام الاستدلال الضبابي (<span dir="ltr">Fuzzy Inference System - FIS</span>) بالترتيب (ص 135 - 136):</h3>
+          <p>يعمل نظام التحكم والاستدلال الضبابي (المستخدم في المكيفات الذكية، الغسالات الأوتوماتيكية، مكابح السيارات ABS، والطائرات) عبر <b>4 مراحل أساسية متسلسلة</b>:</p>
+          <div class="grid">
+            <div class="step-card">
+              <span class="tag">المرحلة 1</span>
+              <h4>التضبيب (Fuzzification)</h4>
+              <p>تحويل المدخلات الرقمية الحادة (<span dir="ltr">Crisp Inputs</span> مثل حرارة الغرفة $= 32^\circ\text{C}$) إلى <b>مجموعات ضبابية ودرجات انتماء</b> ($\mu$) باستخدام دوال الانتماء.</p>
+            </div>
+            <div class="step-card">
+              <span class="tag">المرحلة 2</span>
+              <h4>تقييم القواعد / الاستدلال (Rule Evaluation)</h4>
+              <p>تطبيق القواعد الضبابية (<code dir="ltr">IF-THEN Fuzzy Rules</code> مثل: <i>إذا كانت الحرارة حارة فاجعل سرعة المروحة عالية</i>) وحساب قوة تفعيل كل قاعدة.</p>
+            </div>
+            <div class="step-card">
+              <span class="tag">المرحلة 3</span>
+              <h4>تجميع المخرجات (Aggregation)</h4>
+              <p>دمج وتجميع المجموعات الضبابية الناتجة من تقييم جميع القواعد الفرعية في <b>مجموعة ضبابية واحدة مجمعة</b> للمخرج.</p>
+            </div>
+            <div class="step-card">
+              <span class="tag teal">المرحلة 4</span>
+              <h4>إزالة التضبيب / فك الضبابية (Defuzzification)</h4>
+              <p>عكس عملية التضبيب؛ أي تحويل المخرج الضبابي المجمع إلى <b>قيمة رقمية حادة ودقيقة واحدة (<span dir="ltr">Crisp Output</span>)</b> قابلة للتنفيذ الفعلي (مثل سرعة المروحة $= 1200\text{ RPM}$)، وأشهر طرقها هي طريقة <b>مركز الثقل / المساحة (<span dir="ltr">Centroid / Center of Gravity - COG</span>)</b>.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= التبويب الثاني: جداول المقارنات والمسائل ================= -->
+  <section id="tables" class="panel">
+    <div class="card">
+      <h2>1. جدول قوانين الاحتمالات الأساسية وقاعدة بايز وعوامل اليقين (ص 122 - 130)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>القانون / المفهوم</th>
+            <th>الصيغة الرياضية</th>
+            <th>الاستخدام والملاحظات الاختبارية</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>الاحتمال المكمل (النفي)</b></td>
+            <td dir="ltr"><code>P(¬A) = 1 - P(A)</code></td>
+            <td>مجموع احتمال الحدث ومتممه يساوي $1$ دائماً.</td>
+          </tr>
+          <tr>
+            <td><b>قاعدة الجمع العام (الاتحاد)</b></td>
+            <td dir="ltr"><code>P(A ∨ B) = P(A) + P(B) - P(A ∧ B)</code></td>
+            <td>إذا كان الحدثان متنافيين ($P(A \land B)=0$) تصبح $P(A) + P(B)$.</td>
+          </tr>
+          <tr>
+            <td><b>الاحتمال الشرطي وقاعدة الضرب</b></td>
+            <td dir="ltr"><code>P(A | B) = P(A ∧ B) / P(B)</code><br><code>P(A ∧ B) = P(A | B) · P(B)</code></td>
+            <td>حساب احتمال $A$ بعد ثبوت وقوع الدليل $B$ (بشرط $P(B) > 0$).</td>
+          </tr>
+          <tr>
+            <td><b>شرط الاستقلالية المطلقة</b></td>
+            <td dir="ltr"><code>P(A | B) = P(A)</code><br><code>P(A ∧ B) = P(A) · P(B)</code></td>
+            <td>وقوع الحدث $B$ لا يغير من احتمال وقوع الحدث $A$ إطلاقاً.</td>
+          </tr>
+          <tr>
+            <td><b>قاعدة بايز (Bayes' Rule)</b></td>
+            <td dir="ltr"><code>P(H | E) = [ P(E | H) · P(H) ] / P(E)</code></td>
+            <td>حساب الاحتمال التشخيصي اللاحق للسبب $H$ بمعلومية النتيجة/العرض $E$.</td>
+          </tr>
+          <tr>
+            <td><b>الشبكة البايزية (BBN)</b></td>
+            <td dir="ltr"><code>P(x₁,..,xₙ) = Π P(xᵢ | Parents(Xᵢ))</code></td>
+            <td>رسم بياني موجه لا دوري (<span dir="ltr">DAG</span>) يحسب الاحتمال المشترك بدلالة الآباء المباشرين.</td>
+          </tr>
+          <tr>
+            <td><b>عامل اليقين (Certainty Factor)</b></td>
+            <td dir="ltr"><code>CF(H, E) = MB(H, E) - MD(H, E)</code></td>
+            <td>في نظام <span dir="ltr">MYCIN</span>؛ يتراوح بين $-1$ (رفض تام) و $+1$ (يقين تام) و $0$ (حياد).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>2. جدول المقارنة الشامل بين المنطق الكلاسيكي (الحاد)، نظرية الاحتمالات، والمنطق الضبابي (ص 120 - 133)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>وجه المقارنة</th>
+            <th>المنطق الكلاسيكي / الحاد (Crisp Logic)</th>
+            <th>نظرية الاحتمالات (Probability Theory)</th>
+            <th>المنطق الضبابي / الغامض (Fuzzy Logic)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>ماذا يقيس ويعالج؟</b></td>
+            <td>الحقائق المؤكدة الحادة (صواب مطلق أو خطأ مطلق).</td>
+            <td><b>عدم اليقين والفرصة العشوائية (<span dir="ltr">Randomness / Chance</span>)</b> حول وقوع حدث معين أم لا.</td>
+            <td><b>الغموض والالتباس اللغوي (<span dir="ltr">Vagueness / Imprecision</span>)</b> ودرجة تحقق الصفة الجزئية.</td>
+          </tr>
+          <tr>
+            <td><b>القيم المسموح بها</b></td>
+            <td>قيمتان منفصلتان فقط: <b dir="ltr">{0, 1}</b> (<span dir="ltr">False, True</span>).</td>
+            <td>فترة مستمرة <b dir="ltr">P(A) ∈ [0, 1]</b> تمثل درجة الاعتقاد بوقوع الحدث.</td>
+            <td>فترة مستمرة <b dir="ltr">μ_A(x) ∈ [0, 1]</b> تمثل درجة انتماء العنصر للمجموعة.</td>
+          </tr>
+          <tr>
+            <td><b>مثال توضيحي للفرق</b></td>
+            <td>كوب الماء إما مملوء ($1$) أو فارغ ($0$).</td>
+            <td>احتمال وجود ماء في الكوب المغلق هو $0.7$ ($70\%$ فرصة أنه مملوء).</td>
+            <td>الكوب أمامنا مملوء إلى نسبة $0.7$ من سعته (درجة امتلائه $70\%$).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>3. جدول العمليات على المجموعات الضبابية والمراحل الأربع لنظام الاستدلال الضبابي (ص 134 - 136)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>العملية / المرحلة في المنطق الضبابي</th>
+            <th>المصطلح الإنجليزي والمعادلة</th>
+            <th>الشرح والمثال التطبيقي</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1. المتممة الضبابية (النفي NOT)</b></td>
+            <td dir="ltr"><code>μ_{¬A}(x) = 1 - μ_A(x)</code></td>
+            <td>طرح درجة الانتماء من $1$ (إذا كان $\mu_A = 0.6$ فإن $\mu_{\neg A} = 0.4$).</td>
+          </tr>
+          <tr>
+            <td><b>2. التقاطع الضبابي (الوصل AND)</b></td>
+            <td dir="ltr"><code>μ_{A ∩ B}(x) = min(μ_A(x), μ_B(x))</code></td>
+            <td>اختيار <b>القيمة الأصغر (Minimum)</b> بين درجتي الانتماء.</td>
+          </tr>
+          <tr>
+            <td><b>3. الاتحاد الضبابي (الفصل OR)</b></td>
+            <td dir="ltr"><code>μ_{A ∪ B}(x) = max(μ_A(x), μ_B(x))</code></td>
+            <td>اختيار <b>القيمة الأكبر (Maximum)</b> بين درجتي الانتماء.</td>
+          </tr>
+          <tr>
+            <td><b>المرحلة 1: التضبيب</b></td>
+            <td dir="ltr"><b>1. Fuzzification</b></td>
+            <td>تحويل المدخلات الرقمية الحادة (<span dir="ltr">Crisp Inputs</span>) إلى درجات انتماء ضبابية.</td>
+          </tr>
+          <tr>
+            <td><b>المرحلة 2: تقييم القواعد</b></td>
+            <td dir="ltr"><b>2. Rule Evaluation (Inference)</b></td>
+            <td>تطبيق قواعد <code dir="ltr">IF-THEN</code> الضبابية على المدخلات المضببة لاستنتاج المخرجات الفرعية.</td>
+          </tr>
+          <tr>
+            <td><b>المرحلة 3: تجميع المخرجات</b></td>
+            <td dir="ltr"><b>3. Aggregation of Rule Outputs</b></td>
+            <td>توحيد ودمج المجموعات الضبابية الناتجة من جميع القواعد في منطقة ضبابية واحدة.</td>
+          </tr>
+          <tr>
+            <td><b>المرحلة 4: إزالة التضبيب</b></td>
+            <td dir="ltr"><b>4. Defuzzification (e.g., Centroid)</b></td>
+            <td>تحويل المخرج الضبابي المجمع إلى <b>رقم حاد واحد (<span dir="ltr">Crisp Output</span>)</b> لتشغيل الجهاز.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>4. جدول مقارنة الطرق الأربع لمعالجة عدم اليقين في الذكاء الاصطناعي</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>الطريقة / المنهجية</th>
+            <th>نطاق القيم</th>
+            <th>السمة المميزة وأبرز مجالات الاستخدام</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1. الاستدلال البايزي والشبكات البايزية</b></td>
+            <td dir="ltr"><code>[0, 1]</code></td>
+            <td>أساس رياضي احتمالي صارم يعتمد على الاحتمال الشرطي والاستقلال الشرطي (التشخيص الطبي، التنبؤ، وتصفية البريد).</td>
+          </tr>
+          <tr>
+            <td><b>2. عوامل اليقين (Certainty Factors)</b></td>
+            <td dir="ltr"><code>[-1, +1]</code></td>
+            <td>تجمع بين تزايد التصديق ($MB$) وتزايد الشك ($MD$) في الأنظمة الخبيرة المعتمدة على القواعد مثل نظام <b dir="ltr">MYCIN</b>.</td>
+          </tr>
+          <tr>
+            <td><b>3. نظرية ديمبستر-شافير (Dempster-Shafer)</b></td>
+            <td dir="ltr"><code>[Bel(A), Pl(A)]</code></td>
+            <td>تستخدم فترة ثقة بين الاعتقاد ($Bel$) والمعقولية ($Pl$) لتمييز عدم اليقين عن <b>الجهل (نقص الأدلة)</b> ودمج مصادر الأدلة.</td>
+          </tr>
+          <tr>
+            <td><b>4. المنطق الضبابي (Fuzzy Logic)</b></td>
+            <td dir="ltr"><code>μ(x) ∈ [0, 1]</code></td>
+            <td>يعالج الغموض اللغوي والانتماء الجزئي التدريجي، ويُستخدم بكثرة في أنظمة التحكم الآلي والأجهزة الذكية.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الثالث: المصطلحات ================= -->
+  <section id="terms" class="panel">
+    <div class="card">
+      <h2>قاموس المصطلحات والمفاهيم الشامل للفصل الثاني عشر (28 مصطلحاً)</h2>
+      <p class="muted">جميع مصطلحات عدم اليقين والاحتمالات والشبكات البايزية والمنطق الضبابي (ص 120 - 136):</p>
+      <div id="termsGrid" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الرابع: البطاقات التعليمية ================= -->
+  <section id="cards" class="panel">
+    <div class="card">
+      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
+      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
+      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
+        <div class="term" id="flashTerm"></div>
+        <div class="answer" id="flashAnswer" hidden></div>
+        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="prevCard">السابق</button>
+        <span id="cardCount" class="muted"></span>
+        <button class="btn primary" id="nextCard">التالي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= التبويب الخامس: الاختبار الشامل ================= -->
+  <section id="quiz" class="panel">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2>الاختبار الشامل للفصل الثاني عشر (25 سؤالاً)</h2>
+          <p class="muted">يغطي أسباب عدم اليقين، قوانين الاحتمالات وقاعدة بايز، الشبكات البايزية وعوامل اليقين، والمنطق الضبابي ومسائله الحسابية.</p>
+        </div>
+        <div class="score" id="score">النتيجة: 0 / 25</div>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="quizArea"></div>
+      <div class="row">
+        <button class="btn" id="resetQuiz">إعادة الاختبار</button>
+        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+      </div>
+      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
+    </div>
+  </section>
+</main>
+
+<footer>الفصل الثاني عشر والأخير: عدم اليقين في الذكاء الاصطناعي ومعالجته • مراجعة تفاعلية شاملة (صفحات 120 - 136)</footer>
+
+<script>
+const terms = [
+  ["Uncertainty (عدم اليقين)", "حالة نقص المعرفة الكاملة أو وجود شك في البيئة نتيجة الملاحظة الجزئية أو عدم الحتمية أو ضوضاء المستشعرات."],
+  ["Laziness, Theoretical & Practical Ignorance", "الأسباب الثلاثة لفشل المنطق الصارم في الواقع: الكسل (صعوبة سرد كل الشروط)، الجهل النظري، والجهل العملي."],
+  ["MEU (Maximizing Expected Utility)", "تعظيم المنفعة المتوقعة: المبدأ الذي يعتمد عليه الوكيل العقلاني لاتخاذ القرار الأفضل تحت وطأة عدم اليقين."],
+  ["Prior / Unconditional Probability P(A)", "الاحتمال المسبق (غير المشروط): درجة الاعتقاد في وقوع الحدث A في غياب أي معلومات أو أدلة إضافية."],
+  ["Posterior / Conditional Probability P(A|B)", "الاحتمال اللاحق (المشروط): احتمال وقوع الحدث A بعد ثبوت وقوع الدليل B، ويعطى بـ P(A ∧ B) / P(B)."],
+  ["Product Rule (قاعدة الضرب)", "قاعدة حساب الاحتمال المشترك لوقوع حدثين معاً: P(A ∧ B) = P(A | B) · P(B)."],
+  ["Statistical Independence (الاستقلالية)", "عدم تأثر احتمال أحد الحدثين بوقوع الآخر: P(A | B) = P(A)، وعندها يكون P(A ∧ B) = P(A) · P(B)."],
+  ["Bayes' Rule / Theorem (قاعدة / نظرية بايز)", "المعادلة P(H|E) = [P(E|H)·P(H)] / P(E) لعكس الاحتمال الشرطي وحساب احتمال السبب H بمعلومية النتيجة E."],
+  ["Conditional Independence (الاستقلال الشرطي)", "استقلال متغيرين (مثل عرضين طبيين) عن بعضهما بمجرد معرفة السبب المشترك بينهما: P(A,B|C) = P(A|C)P(B|C)."],
+  ["Bayesian Belief Network (BBN)", "الشبكة البايزية: رسم بياني موجه خالٍ من الدورات (DAG) يمثل المتغيرات العشوائية وعلاقات التأثير المباشر وجداول الاحتمال الشرطي."],
+  ["DAG (Directed Acyclic Graph)", "رسم بياني موجه خالٍ من الحلقات أو الدورات؛ وهو الهيكل الرياضي الذي تُبنى عليه الشبكات البايزية."],
+  ["CPT (Conditional Probability Table)", "جدول الاحتمال الشرطي: جدول يرتبط بكل عقدة في الشبكة البايزية يحدد احتمالها لكل تركيبة من قيم آبائها المباشرين."],
+  ["Certainty Factors - CF (عوامل اليقين)", "طريقة لمعالجة عدم اليقين في النظام الخبير MYCIN تحسب الفرق بين التصديق والشك: CF = MB - MD في النطاق [-1, +1]."],
+  ["MB & MD (تزايد التصديق وتزايد الشك)", "في عوامل اليقين: MB (Measure of Belief) مقياس تزايد التصديق، و MD (Measure of Disbelief) مقياس تزايد عدم التصديق."],
+  ["Dempster-Shafer Theory", "نظرية ديمبستر-شافير: تعالج عدم اليقين والجهل عبر فترة ثقة [Bel(A), Pl(A)] بين دالة الاعتقاد ودالة المعقولية."],
+  ["Belief (Bel) & Plausibility (Pl)", "في ديمبستر-شافير: Bel هي الحد الأدنى للثقة بالحدث، و Pl هي الحد الأقصى للثقة، والفرق بينهما يمثل مقدار الجهل."],
+  ["Fuzzy Logic (المنطق الضبابي / الغامض)", "ابتكره لطفي زاده (1965) لمعالجة الغموض اللغوي والانتماء الجزئي التدريجي بدرجات حقيقة بين 0 و 1."],
+  ["Crisp Set vs. Fuzzy Set", "المجموعة الحادة (Crisp) انتماؤها ثنائي قاطع {0, 1}، بينما المجموعة الضبابية (Fuzzy) تسمح بالانتماء الجزئي في الفترة [0, 1]."],
+  ["Membership Function μ_A(x) (دالة الانتماء)", "دالة تحدد درجة انتماء أو عضوية العنصر x للمجموعة الضبابية A بقيمة مستمرة بين 0 و 1."],
+  ["Linguistic Variable (المتغير اللغوي)", "متغير في المنطق الضبابي تكون قيمه كلمات طبيعية (مثل متغير 'السرعة' وقيمه: بطيئة، متوسطة، سريعة)."],
+  ["Fuzzy Complement (1 - μ_A)", "المتممة الضبابية (النفي NOT): تُحسب بطرح درجة الانتماء الحالية من الواحد الصحيح: 1 - μ_A(x)."],
+  ["Fuzzy Intersection (min)", "التقاطع الضبابي (الوصل AND): يُحسب بأخذ القيمة الصغرى بين درجتي الانتماء: min(μ_A(x), μ_B(x))."],
+  ["Fuzzy Union (max)", "الاتحاد الضبابي (الفصل OR): يُحسب بأخذ القيمة العظمى بين درجتي الانتماء: max(μ_A(x), μ_B(x))."],
+  ["Fuzzification (التضبيب)", "المرحلة الأولى في النظام الضبابي؛ تحويل القيم الرقمية الحادة المدخلة (Crisp Inputs) إلى درجات انتماء ضبابية."],
+  ["Fuzzy Rule Evaluation (تقييم القواعد الضبابية)", "المرحلة الثانية؛ تطبيق قواعد (IF-THEN) الضبابية لاستنتاج المخرجات الضبابية الفرعية."],
+  ["Aggregation (تجميع المخرجات الضبابية)", "المرحلة الثالثة؛ دمج المجموعات الضبابية الناتجة من تقييم كافة القواعد في مجموعة ضبابية واحدة للمخرج."],
+  ["Defuzzification (إزالة التضبيب / فك الضبابية)", "المرحلة الرابعة والأخيرة؛ تحويل المخرج الضبابي المجمع إلى رقم حاد واحد (Crisp Output) قابل للتنفيذ."],
+  ["Centroid / Center of Gravity (COG)", "طريقة مركز الثقل (مركز المساحة): أشهر طريقة رياضية لإجراء عملية إزالة التضبيب (Defuzzification)."]
+];
+
+const cards = [
+  ["ما هي الأسباب الثلاثة الرئيسية لفشل المنطق التقليدي الصارم في التعامل مع المجالات الواقعية كالطب؟", "1) الكسل (Laziness): صعوبة سرد كل الشروط والاستثناءات الممكنة.\n2) الجهل النظري (Theoretical Ignorance): عدم اكتمال النظريات العلمية بنسبة 100%.\n3) الجهل العملي (Practical Ignorance): عدم القدرة على إجراء كل الفحوصات لمعرفة كل الحقائق عن الحالة."],
+  ["كيف يتخذ الوكيل العقلاني القرار الصحيح تحت وطأة عدم اليقين؟", "يختار الفعل الذي يحقق أقصى قيمة للمنفعة المتوقعة (Maximizing Expected Utility - MEU) بناءً على احتمالات النتائج وأهمية الأهداف."],
+  ["ما الفرق بين الاحتمال غير المشروط (Prior P(A)) والاحتمال الشرطي (Posterior P(A|B))؟", "• غير المشروط (المسبق P(A)): درجة الاعتقاد في الحدث A قبل توفر أي أدلة.\n• الشرطي (اللاحق P(A|B)): احتمال وقوع A بعد ثبوت وقوع الدليل B، ويعطى بـ P(A ∧ B) / P(B)."],
+  ["اذكري بديهيات الاحتمالات الثلاث (بديهيات كولموجروف).", "1) كل احتمال محصور بين 0 و 1: 0 ≤ P(A) ≤ 1.\n2) P(True) = 1 ، و P(False) = 0 ، و P(¬A) = 1 - P(A).\n3) قاعدة الجمع العام: P(A ∨ B) = P(A) + P(B) - P(A ∧ B)."],
+  ["ما هي قاعدة الضرب (Product Rule) لحساب الاحتمال المشترك P(A ∧ B)؟", "P(A ∧ B) = P(A | B) · P(B) = P(B | A) · P(A)."],
+  ["متى يكون الحدثان A و B مستقلين (Independent)؟ وما معادلاتهما عند الاستقلال؟", "يكونان مستقلين إذا كان وقوع أحدهما لا يؤثر أبداً على احتمال وقوع الآخر؛ وعندها:\nP(A | B) = P(A)  ،  P(A ∧ B) = P(A) · P(B)."],
+  ["ما هي الصيغة الرياضية لقاعدة بايز (Bayes' Rule)؟ وما معنى رموزها؟", "P(H | E) = [ P(E | H) · P(H) ] / P(E)\nحيث P(H|E) الاحتمال اللاحق للفرضية H بعد الدليل E، و P(H) الاحتمال المسبق، و P(E|H) احتمال ظهور الدليل عند تحقق الفرضية، و P(E) احتمال الدليل."],
+  ["لماذا تُعد قاعدة بايز أساسية جداً في التشخيص الطبي؟", "لأنها تحول المعرفة السببية المتوفرة طبياً P(العرض | المرض) إلى معرفة تشخيصية مطلوبة P(المرض | العرض) لحساب احتمال إصابة المريض بالمرض عند ملاحظة العرض."],
+  ["إذا كان P(S|M) = 0.5، و P(M) = 0.00002، و P(S) = 0.05؛ فكم يبلغ P(M|S) بتطبيق قاعدة بايز؟", "P(M | S) = (0.5 × 0.00002) / 0.05 = 0.00001 / 0.05 = 0.0002 (أي 0.02%)."],
+  ["ما المقصود بالاستقلال الشرطي (Conditional Independence) بين متغيرين A و B بمعلومية C؟", "يعني أنه بمجرد معرفة قيمة المتغير السببي المشترك C، يصبح المتغيران A و B مستقلين عن بعضهما:\nP(A ∧ B | C) = P(A | C) · P(B | C)."],
+  ["مِمَّ تتكون الشبكة البايزية (Bayesian Belief Network - BBN)؟", "تتكون من رسم بياني موجه خالٍ من الدورات (DAG):\n1) العقد: تمثل المتغيرات العشوائية.\n2) الأسهم: تمثل التأثيرات السببية المباشرة.\n3) جدول الاحتمال الشرطي (CPT) لكل عقدة: يحدد احتمالها بشرط آبائها المباشرين."],
+  ["كيف يُحسب الاحتمال المشترك الكامل لجميع المتغيرات في الشبكة البايزية؟", "بحاصل ضرب احتمال كل متغير بشرط آبائه المباشرين فقط:\nP(x₁, x₂, ..., xₙ) = Π P(xᵢ | Parents(Xᵢ))."],
+  ["ما هي عوامل اليقين (Certainty Factors - CF)؟ وفي أي نظام خبير ابتُكرت؟ وما نطاق قيمها؟", "ابتُكرت في النظام الخبير الطبي (MYCIN)؛ وتحسب درجة اليقين بطرح مقياس تزايد الشك MD من مقياس تزايد التصديق MB:\nCF(H, E) = MB(H, E) - MD(H, E)\nويتراوح نطاقها بين [-1 و +1]."],
+  ["إذا كان مقياس تزايد التصديق MB(H, E) = 0.8، ومقياس تزايد الشك MD(H, E) = 0.2؛ فكم يبلغ عامل اليقين CF؟", "CF(H, E) = MB - MD = 0.8 - 0.2 = +0.6."],
+  ["كيف تعالج نظرية ديمبستر-شافير (Dempster-Shafer) عدم اليقين والجهل؟", "تستخدم فترة ثقة [Bel(A), Pl(A)] بدلاً من رقم واحد؛ حيث Bel(A) دالة الاعتقاد (الحد الأدنى للثقة)، و Pl(A) دالة المعقولية (الحد الأقصى للثقة)، والفرق بينهما (Pl - Bel) يمثل مقدار الجهل (Ignorance)."],
+  ["من هو مبتكر المنطق الضبابي (Fuzzy Logic) ومتى؟ وما الفكرة الأساسية له؟", "ابتكره العالم لطفي زاده (Lotfi Zadeh) عام 1965؛ وفكرته السماح بالانتماء الجزئي التدريجي ودرجات الحقيقة المستمرة بين [0, 1] لمعالجة الغموض اللغوي البشري."],
+  ["ما الفرق بين المجموعات الحادة (Crisp Sets) والمجموعات الضبابية (Fuzzy Sets)؟", "• المجموعات الحادة: الانتماء قاطع وثنائي إما 0 أو 1 فقط {0, 1}.\n• المجموعات الضبابية: الانتماء تدريجي يأخذ أي قيمة حقيقية في الفترة المغلقة [0, 1] عبر دالة الانتماء μ_A(x)."],
+  ["ما الفرق الفلسفي بين (الاحتمالية Probability) و(الضبابية Fuzziness)؟", "• الاحتمالية: تقيس فرصة أو عدم اليقين حول وقوع حدث حاد (هل ستمطر غداً أم لا؟).\n• الضبابية: تقيس درجة تحقق وصف غامض لحالة واقعة أمامنا (إلى أي درجة يُعد هذا المطر غزيراً؟)."],
+  ["ما المقصود بالمتغير اللغوي (Linguistic Variable) في المنطق الضبابي؟ مع مثال.", "هو متغير تكون قيمه عبارة عن كلمات أو أوصاف من اللغة الطبيعية البشرية بدلاً من الأرقام المجردة (مثال: المتغير اللغوي 'درجة الحرارة'، وقيمه اللغوية: بارد، معتدل، حار)."],
+  ["ما هي معادلات العمليات المنطقية الثلاث (NOT, AND, OR) في المجموعات الضبابية؟", "1) المتممة (NOT): μ_{¬A}(x) = 1 - μ_A(x).\n2) التقاطع (AND): μ_{A ∩ B}(x) = min(μ_A(x), μ_B(x)).\n3) الاتحاد (OR): μ_{A ∪ B}(x) = max(μ_A(x), μ_B(x))."],
+  ["إذا كانت μ_A(x) = 0.7 و μ_B(x) = 0.4، فاحسبي كلاً من: μ_{¬A}(x)، و μ_{A ∩ B}(x)، و μ_{A ∪ B}(x).", "• النفي μ_{¬A}(x) = 1 - 0.7 = 0.3.\n• التقاطع (AND) = min(0.7, 0.4) = 0.4.\n• الاتحاد (OR) = max(0.7, 0.4) = 0.7."],
+  ["ما هي المراحل الأربع لعمل نظام الاستدلال الضبابي (Fuzzy Inference System - FIS) بالترتيب؟", "1) التضبيب (Fuzzification).\n2) تقييم القواعد / الاستدلال (Rule Evaluation).\n3) تجميع المخرجات (Aggregation).\n4) إزالة التضبيب / فك الضبابية (Defuzzification)."],
+  ["ما الفرق بين مرحلة التضبيب (Fuzzification) ومرحلة إزالة التضبيب (Defuzzification)؟", "• التضبيب (المرحلة 1): تحويل المدخل الرقمي الحاد (Crisp Input) إلى درجات انتماء ضبابية.\n• إزالة التضبيب (المرحلة 4): تحويل المخرج الضبابي المجمع إلى رقم حاد واحد (Crisp Output) قابل للتنفيذ."],
+  ["ما هي أشهر طريقة رياضية لإجراء عملية إزالة التضبيب (Defuzzification)؟", "طريقة مركز الثقل أو مركز المساحة (Centroid / Center of Gravity - COG) التي تحسب نقطة توازن المساحة تحت منحنى المخرج الضبابي المجمع."],
+  ["اذكري 4 تطبيقات عملية يستخدم فيها المنطق الضبابي (Fuzzy Logic) في الحياة اليومية.", "1) أجهزة التكييف الذكية لضبط التبريد تدريجياً.\n2) الغسالات الأوتوماتيكية لتحديد وقت الغسيل وكمية الماء.\n3) أنظمة المكابح المانعة للانغلاق (ABS) في السيارات.\n4) أنظمة الطيران الآلي والقطارات الذكية."],
+  ["إذا كان حدثان A و B متنافيين (Mutually Exclusive) وكان P(A) = 0.3 و P(B) = 0.5، فكم يبلغ P(A ∧ B) و P(A ∨ B)؟", "بما أنهما متنافيان لا يمكن وقوعهما معاً، فإن:\n• P(A ∧ B) = 0.\n• P(A ∨ B) = P(A) + P(B) = 0.3 + 0.5 = 0.8."],
+  ["إذا كان حدثان A و B مستقلين (Independent) وكان P(A) = 0.4 و P(B) = 0.5، فكم يبلغ P(A ∧ B) و P(A | B)؟", "بما أنهما مستقلان:\n• P(A ∧ B) = P(A) × P(B) = 0.4 × 0.5 = 0.20.\n• P(A | B) = P(A) = 0.4."],
+  ["ما الذي تعنيه القيم (-1) و (+1) و (0) في عوامل اليقين (Certainty Factors - CF)؟", "• (+1): يقين تام بأن الفرضية صائبة.\n• (-1): يقين تام بأن الفرضية خاطئة.\n• (0): حياد تام أو عدم توفر أي دليل مع أو ضد الفرضية."]
+];
+
+const questions = [
+  {
+    q: "ما هي الأسباب الثلاثة الرئيسية التي تؤدي إلى فشل القواعد المنطقية التقليدية الصارمة عند التعامل مع المجالات الواقعية المعقدة كالتشخيص الطبي (ص 120-121)؟",
+    o: [
+      "سرعة المعالج، وحجم الشاشة، ونوع البرمجة",
+      "الكسل (Laziness: صعوبة سرد كل الشروط بدون استثناء)، والجهل النظري (Theoretical Ignorance: عدم اكتمال النظريات العلمية)، والجهل العملي (Practical Ignorance: عدم معرفة كل الفحوصات عن المريض)",
+      "استخدام الأرقام الثنائية والاعتماد على الجداول",
+      "عدم وجود مستشعرات أو مشغلات في الحاسوب"
+    ],
+    a: 1,
+    e: "يفشل المنطق الصارم في الواقع بسبب الكسل (استحالة حصر كل الشروط والاستثناءات)، والجهل النظري، والجهل العملي (ص 120-121)."
+  },
+  {
+    q: "وفق بديهيات الاحتمالات (بديهيات كولموجروف - ص 122)، ما هي المعادلة العامة لحساب احتمال اتحاد حدثين P(A ∨ B)؟",
+    o: [
+      "P(A ∨ B) = P(A) × P(B)",
+      "P(A ∨ B) = P(A) - P(B)",
+      "P(A ∨ B) = P(A) + P(B) - P(A ∧ B)",
+      "P(A ∨ B) = 1 - P(A)"
+    ],
+    a: 2,
+    e: "قاعدة الجمع العام للاحتمالات تنص على أن: P(A ∨ B) = P(A) + P(B) - P(A ∧ B) (ص 122)."
+  },
+  {
+    q: "[مسألة احتمال شرطي وقاعدة الضرب]: إذا كان احتمال وجود غيوم هو P(Cloudy) = 0.4، واحتمال وجود غيوم ومطر معاً هو P(Rain ∧ Cloudy) = 0.1؛ فكم يبلغ الاحتمال الشرطي لهطول المطر علماً بأن الجو غائم P(Rain | Cloudy)؟",
+    o: [
+      "0.50",
+      "0.04",
+      "0.30",
+      "0.25 (لأن P(Rain | Cloudy) = P(Rain ∧ Cloudy) / P(Cloudy) = 0.1 / 0.4 = 0.25 أي 25%)"
+    ],
+    a: 3,
+    e: "بتطبيق معادلة الاحتمال الشرطي P(A|B) = P(A ∧ B) / P(B) نقسم 0.1 على 0.4 فنحصل على 0.25 (ص 124)."
+  },
+  {
+    q: "متى نقول عن حدثين A و B في نظرية الاحتمالات إنهما (مستقلان إحصائياً - Independent)، وما المعادلة التي تتحقق عندئذٍ (ص 125)؟",
+    o: [
+      "عندما لا يؤثر وقوع أحدهما على احتمال وقوع الآخر، ويتحقق: P(A | B) = P(A) وكذلك P(A ∧ B) = P(A) · P(B)",
+      "عندما يستحيل وقوعهما معاً P(A ∧ B) = 0",
+      "عندما يكون مجموع احتمالهما يساوي صفراً",
+      "عندما يكون P(A | B) = 1 دائماً"
+    ],
+    a: 0,
+    e: "الاستقلالية تعني أن معرفة B لا تغير احتمال A أي P(A|B)=P(A)، فيصبح احتمال تقاطعهما هو حاصل ضرب احتماليهما P(A)·P(B) (ص 125)."
+  },
+  {
+    q: "ما هي الصيغة الرياضية الصحيحة لـ (قاعدة / نظرية بايز - Bayes' Rule) لحساب الاحتمال اللاحق للفرضية H بمعلومية الدليل E (ص 126)؟",
+    o: [
+      "P(H | E) = P(E | H) + P(H) - P(E)",
+      "P(H | E) = [ P(E | H) · P(H) ] / P(E)",
+      "P(H | E) = [ P(E) · P(H) ] / P(E | H)",
+      "P(H | E) = 1 - P(E | H)"
+    ],
+    a: 1,
+    e: "قانون بايز يحسب الاحتمال اللاحق بضرب احتمال المعقولية P(E|H) في الاحتمال المسبق P(H) وقسمتهما على احتمال الدليل P(E) (ص 126)."
+  },
+  {
+    q: "[مسألة تشخيص طبي بقاعدة بايز]: إذا كان مرض معين يصيب 1% من السكان P(D) = 0.01، وكان الفحص الطبي يعطي نتيجة إيجابية للمصابين باحتمال P(Pos | D) = 0.90، واحتمال ظهور نتيجة إيجابية بشكل عام هو P(Pos) = 0.05؛ فما احتمال أن يكون الشخص مصاباً بالمرض علماً بأن فحصه إيجابي P(D | Pos)؟",
+    o: [
+      "0.90 (90%)",
+      "0.01 (1%)",
+      "0.18 (18%؛ لأن P(D | Pos) = (0.90 × 0.01) / 0.05 = 0.009 / 0.05 = 0.18)",
+      "0.50 (50%)"
+    ],
+    a: 2,
+    e: "نطبق قاعدة بايز مباشرة: P(D|Pos) = [P(Pos|D) × P(D)] / P(Pos) = (0.90 × 0.01) / 0.05 = 0.009 / 0.05 = 0.18 أي 18% (ص 126-127)."
+  },
+  {
+    q: "لماذا تُعد قاعدة بايز أداة جوهرية في بناء أنظمة التشخيص الطبي الذكية (ص 126-127)؟",
+    o: [
+      "لأنها تلغي الحاجة لمعرفة الأعراض الطبية",
+      "لأنها تعطي دائماً احتمالاً يساوي 100%",
+      "لأنها تعمل بدون أي بيانات إحصائية",
+      "لأن المعرفة المتوفرة في المراجع الطبية تكون عادة سببية P(العرض | المرض)، فتمكننا قاعدة بايز من عكسها لحساب الاحتمال التشخيصي P(المرض | العرض) عند فحص المريض"
+    ],
+    a: 3,
+    e: "تربط قاعدة بايز بين الاحتمال السببي المعروف P(Symptom|Disease) والاحتمال التشخيصي المطلوب P(Disease|Symptom) (ص 126-127)."
+  },
+  {
+    q: "ما هو الهيكل البياني الذي تُبنى عليه (الشبكات البايزية - Bayesian Belief Networks)، وكيف تحسب الاحتمال المشترك الكامل للمتغيرات (ص 128-129)؟",
+    o: [
+      "رسم بياني موجه وخالٍ من الدورات (DAG) ترتبط بكل عقدة فيه جداول احتمال شرطي (CPT)، ويُحسب الاحتمال المشترك بضرب احتمال كل متغير بشرط آبائه المباشرين: Π P(xᵢ | Parents(Xᵢ))",
+      "رسم بياني غير موجه مليء بالحلقات الدائرية، ويُحسب بجمع جميع الاحتمالات",
+      "مصفوفة ثنائية تقتصر على القيم 0 و 1 فقط",
+      "شجرة ألعاب تنافسية بين MAX و MIN"
+    ],
+    a: 0,
+    e: "الشبكة البايزية هي رسم بياني موجه لا دوري (DAG) يستغل الاستقلال الشرطي لحساب الاحتمال المشترك بضرب P(xᵢ | Parents(Xᵢ)) (ص 128-129)."
+  },
+  {
+    q: "في النظام الخبير الطبي (MYCIN)، كيف يُحسب عامل اليقين (Certainty Factor - CF)، وما هو نطاق قيمته (ص 130)؟",
+    o: [
+      "يُحسب بجمع الاحتمالات؛ ونطاقه من 0 إلى 100",
+      "يُحسب بطرح مقياس تزايد الشك (MD) من مقياس تزايد التصديق (MB): CF(H, E) = MB(H, E) - MD(H, E)؛ ويتراوح نطاقه بين [-1 و +1]",
+      "يُحسب بقسمة MB على MD؛ ونطاقه موجب دائماً",
+      "يقتصر على القيمتين 0 و 1 فقط"
+    ],
+    a: 1,
+    e: "عامل اليقين CF = MB - MD، ويتراوح بين -1 (رفض قاطع) و +1 (يقين تام بالصواب) مروراً بـ 0 (حياد) (ص 130)."
+  },
+  {
+    q: "[مسألة عوامل اليقين CF]: إذا كان مقياس تزايد التصديق لفرضية طبية بوجود دليل معين هو MB(H, E) = 0.75، ومقياس تزايد عدم التصديق (الشك) هو MD(H, E) = 0.15؛ فكم تبلغ قيمة عامل اليقين CF(H, E)؟",
+    o: [
+      "0.90",
+      "-0.60",
+      "+0.60 (لأن CF = MB - MD = 0.75 - 0.15 = +0.60)",
+      "0.1125"
+    ],
+    a: 2,
+    e: "بتطبيق معادلة عوامل اليقين: CF(H, E) = MB(H, E) - MD(H, E) = 0.75 - 0.15 = +0.60 (ص 130)."
+  },
+  {
+    q: "بماذا تتميز (نظرية ديمبستر-شافير - Dempster-Shafer Theory) في معالجتها لعدم اليقين مقارنة بالاحتمالات التقليدية (ص 131)؟",
+    o: [
+      "أنها ترفض استخدام الأرقام وتعتمد على النصوص فقط",
+      "أنها تعطي لكل حدث قيمة تساوي 1 دائماً",
+      "أنها تلغي مفهوم الأدلة",
+      "أنها تميز رياضياً بين عدم اليقين والجهل (نقص الأدلة Ignorance) من خلال إسناد فترة ثقة [Bel(A), Pl(A)] بدلاً من رقم واحد، حيث Bel دالة الاعتقاد و Pl دالة المعقولية"
+    ],
+    a: 3,
+    e: "تستخدم نظرية ديمبستر-شافير فترة الثقة [Bel(A), Pl(A)]، حيث يمثل الفرق Pl(A) - Bel(A) مقدار الجهل الناتج عن نقص الأدلة (ص 131)."
+  },
+  {
+    q: "من هو العالم الذي قدم (المنطق الضبابي / الغامض - Fuzzy Logic) عام 1965، وما الفرق الجوهري بين المجموعات الحادة (Crisp Sets) والمجموعات الضبابية (Fuzzy Sets) (ص 132-133)؟",
+    o: [
+      "العالم لطفي زاده (Lotfi Zadeh)؛ وفي المجموعات الحادة يكون الانتماء ثنائياً قاطعاً {0, 1}، بينما في المجموعات الضبابية يكون الانتماء تدريجياً يأخذ أي قيمة مستمرة في الفترة المغلقة [0, 1] عبر دالة الانتماء μ(x)",
+      "العالم توماس بايز؛ والمجموعات الضبابية تقتصر على القيمتين 0 و 1 فقط",
+      "العالم مارفن مينسكي؛ والمجموعات الحادة تسمح بالانتماء الجزئي",
+      "العالم آلان تورينج؛ ولا يوجد فرق بين المجموعتين"
+    ],
+    a: 0,
+    e: "قدم لطفي زاده المنطق الضبابي عام 1965، ويسمح فيه لعنصر بالانتماء الجزئي للمجموعة بدرجة عضوية μ_A(x) ∈ [0, 1] (ص 132-133)."
+  },
+  {
+    q: "ما هو الفرق المفهومي الدقيق بين ما تقيسه (نظرية الاحتمالات) وما يقيسه (المنطق الضبابي)؟",
+    o: [
+      "كلاهما يقيسان نفس الشيء تماماً دون أي اختلاف",
+      "تقيس نظرية الاحتمالات فرصة وقوع حدث غير مؤكد (العشوائية Randomness)، بينما يقيس المنطق الضبابي درجة تحقق وصف غامض لحالة معينة (الغموض اللغوي Vagueness)",
+      "المنطق الضبابي يقيس رمي النرد والقرعة، والاحتمالات تقيس طول الإنسان فقط",
+      "المنطق الضبابي لا يستخدم أرقاماً بين 0 و 1"
+    ],
+    a: 1,
+    e: "الاحتمالات تتعامل مع عدم اليقين حول وقوع الحدث (هل سيقع أم لا؟)، أما المنطق الضبابي فيتعامل مع غموض الوصف ودرجة الانتماء الجزئي (إلى أي مدى هو حار أو طويل؟) (ص 132)."
+  },
+  {
+    q: "في العمليات المنطقية على المجموعات الضبابية (ص 134)، كيف يتم حساب كل من: المتممة (NOT ¬A)، والتقاطع (AND A ∩ B)، والاتحاد (OR A ∪ B)؟",
+    o: [
+      "المتممة بالضرب، والتقاطع بالجمع، والاتحاد بالطرح",
+      "التقاطع بأخذ القيمة العظمى max، والاتحاد بأخذ القيمة الصغرى min",
+      "المتممة (NOT) = 1 - μ_A(x) ، والتقاطع (AND) = min(μ_A(x), μ_B(x)) ، والاتحاد (OR) = max(μ_A(x), μ_B(x))",
+      "جميعها تساوي 0.5 دائماً"
+    ],
+    a: 2,
+    e: "قواعد العمليات الضبابية القياسية للـ Zadeh operators: النفي (1 - μ)، الوصل/التقاطع (min)، والفصل/الاتحاد (max) (ص 134)."
+  },
+  {
+    q: "[مسألة عمليات المنطق الضبابي]: إذا كانت درجة انتماء الجو لمجموعة 'حار' هي μ_Hot(x) = 0.85، ودرجة انتمائه لمجموعة 'رطب' هي μ_Humid(x) = 0.40؛ فكم تبلغ درجة انتمائه لكل من: 1) 'غير حار' (NOT Hot)، و 2) 'حار ورطب معاً' (Hot AND Humid)، و 3) 'حار أو رطب' (Hot OR Humid)؟",
+    o: [
+      "غير حار = 0.85 ، حار ورطب = 0.85 ، حار أو رطب = 0.40",
+      "غير حار = 0.60 ، حار ورطب = 0.34 ، حار أو رطب = 1.25",
+      "جميعها تساوي 0.50",
+      "1) غير حار = 1 - 0.85 = 0.15 ، 2) حار ورطب (AND) = min(0.85, 0.40) = 0.40 ، 3) حار أو رطب (OR) = max(0.85, 0.40) = 0.85"
+    ],
+    a: 3,
+    e: "حساب مباشر: النفي = 1 - 0.85 = 0.15. التقاطع (AND) = الأصغر min(0.85, 0.40) = 0.40. الاتحاد (OR) = الأكبر max(0.85, 0.40) = 0.85 (ص 134)."
+  },
+  {
+    q: "ما هو الترتيب الصحيح للمراحل الأربع التي يتكون منها نظام الاستدلال الضبابي (Fuzzy Inference System - FIS) (ص 135-136)؟",
+    o: [
+      "1) التضبيب (Fuzzification) ← 2) تقييم القواعد (Rule Evaluation) ← 3) تجميع المخرجات (Aggregation) ← 4) إزالة التضبيب / فك الضبابية (Defuzzification)",
+      "1) إزالة التضبيب ← 2) التضبيب ← 3) حذف القواعد",
+      "1) تقييم القواعد قبل التضبيب ← 2) التجميع بدون إزالة التضبيب",
+      "التضبيب فقط دون الحاجة لقواعد أو إزالة تضبيب"
+    ],
+    a: 0,
+    e: "يمر النظام الضبابي بأربع مراحل متتالية: التضبيب (تحويل الحاد لضبابي)، تقييم القواعد، تجميع المخرجات، ثم إزالة التضبيب (تحويل الضبابي لرقم حاد) (ص 135)."
+  },
+  {
+    q: "في نظام الاستدلال الضبابي، ماذا نُطلق على المرحلة الأولى التي تحول المدخلات الرقمية الحادة (Crisp Inputs مثل حرارة 30°C) إلى درجات انتماء ضبابية؟",
+    o: [
+      "إزالة التضبيب (Defuzzification)",
+      "التضبيب (Fuzzification)",
+      "مركز الثقل (Centroid)",
+      "التخصيص الكلي"
+    ],
+    a: 1,
+    e: "التضبيب (Fuzzification) هو عملية تحويل المدخلات العددية الدقيقة (Crisp) إلى قيم لغوية ودرجات انتماء ضبابية باستخدام دوال الانتماء (ص 135)."
+  },
+  {
+    q: "ما هي وظيفة المرحلة الرابعة والأخيرة في النظام الضبابي المعروفة بـ (إزالة التضبيب / فك الضبابية - Defuzzification)، وما هي أشهر طريقة رياضية لتنفيذها (ص 136)؟",
+    o: [
+      "تحويل الأرقام الحادة إلى كلمات غامضة؛ وأشهر طرقها قاعدة بايز",
+      "حذف جميع القواعد الضبابية من الذاكرة",
+      "تحويل المجموعة الضبابية المجمعة للمخرج إلى قيمة رقمية حادة ودقيقة واحدة (Crisp Output) قابلة للتنفيذ الفعلي؛ وأشهر طرقها هي طريقة مركز الثقل / مركز المساحة (Centroid / Center of Gravity - COG)",
+      "إضافة ضوضاء للمستشعرات"
+    ],
+    a: 2,
+    e: "إزالة التضبيب (Defuzzification) تستخرج رقماً حاداً واحداً من منطقة المخرج الضبابي (مثل سرعة المروحة)، وأشهر طرقها طريقة مركز الثقل (Centroid / COG) (ص 136)."
+  },
+  {
+    q: "في المنطق الضبابي، عندما نستخدم متغيراً مثل 'سرعة السيارة' وتكون قيمه عبارة عن كلمات مثل (بطيئة، متوسطة، سريعة، سريعة جداً)، فماذا نُسمي هذا المتغير؟",
+    o: [
+      "ثابت سكولم",
+      "متغيراً ثنائياً حاداً",
+      "مكمماً وجودياً",
+      "متغيراً لغوياً (Linguistic Variable)"
+    ],
+    a: 3,
+    e: "المتغير اللغوي (Linguistic Variable) هو متغير تأخذ قيمه كلمات أو أوصافاً من اللغة البشرية بدلاً من الأرقام فقط، وتُمثل كل قيمة بمجموعة ضبابية (ص 133)."
+  },
+  {
+    q: "على أي افتراض إحصائي يعتمد مصنف بايز الساذج (Naive Bayes Classifier) لتبسيط حساب الاحتمالات عند وجود عدة ميزات أو أعراض (E₁, E₂, ..., Eₙ) لسبب واحد (H) (ص 128)؟",
+    o: [
+      "يفترض الاستقلال الشرطي (Conditional Independence) بين جميع الميزات/الأعراض بمعلومية السبب H: P(E₁,..,Eₙ | H) = Π P(Eᵢ | H)",
+      "يفترض أن جميع الميزات متطابقة وتساوي الصفر",
+      "يفترض عدم وجود أي علاقة بين السبب H والأعراض",
+      "يعتمد على المنطق الضبابي بدون احتمالات"
+    ],
+    a: 0,
+    e: "يفترض مصنف بايز الساذج أن جميع الميزات مستقلة شرطياً عن بعضها بمجرد معرفة الفئة أو السبب H، مما يبسط الحساب بشكل هائل (ص 128)."
+  },
+  {
+    q: "في الشبكة البايزية، إذا كانت العقدة (المطر R) ليس لها أي آباء، وتتفرع منها أسهم مباشرة إلى العقدة (عشب مبلل W) والعقدة (ازدحام مروري T)؛ فكيف يُكتب الاحتمال المشترك P(R, W, T)؟",
+    o: [
+      "P(R) + P(W) + P(T)",
+      "P(R) · P(W | R) · P(T | R)",
+      "P(R | W, T)",
+      "P(W) · P(T)"
+    ],
+    a: 1,
+    e: "وفق معادلة الشبكة البايزية نضرب احتمال كل عقدة بشرط آبائها المباشرين: R ليس لها أب فنأخذ P(R)، وكل من W و T أبوهما هو R فنضرب في P(W|R) و P(T|R) (ص 129)."
+  },
+  {
+    q: "في نظرية ديمبستر-شافير، إذا كانت دالة الاعتقاد لفرضية معينة هي Bel(A) = 0.3، وكانت دالة الاعتقاد لنفيها هي Bel(¬A) = 0.2؛ فكم تبلغ دالة المعقولية Pl(A) = 1 - Bel(¬A)، وما هي فترة الثقة ومقدار الجهل؟",
+    o: [
+      "Pl(A) = 0.2 ، وفترة الثقة [0.2, 0.3]",
+      "Pl(A) = 1.0 ، ومقدار الجهل = 0",
+      "Pl(A) = 1 - 0.2 = 0.8 ؛ فتكون فترة الثقة هي [0.3, 0.8]، ومقدار الجهل (Ignorance) هو 0.8 - 0.3 = 0.5",
+      "Pl(A) = 0.5 ، وفترة الثقة [0, 1]"
+    ],
+    a: 2,
+    e: "تُحسب المعقولية بـ Pl(A) = 1 - Bel(¬A) = 1 - 0.2 = 0.8. فتكون فترة الثقة [Bel, Pl] = [0.3, 0.8]، والفرق بينهما (0.8 - 0.3 = 0.5) يمثل عدم المعرفة/الجهل (ص 131)."
+  },
+  {
+    q: "أي من الأشكال الهندسية التالية يُستخدم بشكل شائع لتمثيل (دوال الانتماء - Membership Functions) للمجموعات الضبابية؟",
+    o: [
+      "جداول الصواب الثنائية فقط",
+      "الأشجار العلائقية فقط",
+      "مصفوفات الأصفار فقط",
+      "الدالة المثلثية (Triangular)، ودالة شبه المنحرف (Trapezoidal)، والدالة الغاوسية (Gaussian)"
+    ],
+    a: 3,
+    e: "تُرسم دوال الانتماء الضبابية عادةً كمنحنيات متدرجة أشهرها المثلثية وشبه المنحرف والغاوسية والجرسية (ص 133)."
+  },
+  {
+    q: "[مسألة احتمالات أساسية]: إذا كان احتمال نجاح الطالب في المقرر الأول P(A) = 0.7، واحتمال نجاحه في المقرر الثاني P(B) = 0.6، واحتمال نجاحه فيهما معاً P(A ∧ B) = 0.5؛ فما هو احتمال نجاحه في أحد المقررين على الأقل P(A ∨ B)؟",
+    o: [
+      "0.8 (لأن P(A ∨ B) = P(A) + P(B) - P(A ∧ B) = 0.7 + 0.6 - 0.5 = 0.8)",
+      "1.3",
+      "0.42",
+      "0.1"
+    ],
+    a: 0,
+    e: "بتطبيق قاعدة الجمع العام: P(A ∨ B) = 0.7 + 0.6 - 0.5 = 0.8 (ص 122)."
+  },
+  {
+    q: "في عوامل اليقين (Certainty Factors - CF)، علامَ تدل القيمة (CF = 0) والقيمة (CF = -1)؟",
+    o: [
+      "CF = 0 تعني يقيناً تاماً بالصواب، و CF = -1 تعني حياداً",
+      "CF = 0 تدل على الحياد التام أو عدم توفر دليل، بينما CF = -1 تدل على يقين تام بأن الفرضية خاطئة (كاذبة)",
+      "كلتاهما تدلان على أن الفرضية صائبة بنسبة 100%",
+      "لا يمكن أن تكون قيمة CF سالبة أبداً"
+    ],
+    a: 1,
+    e: "في عوامل اليقين: +1 صواب مؤكد، -1 خطأ مؤكد، و 0 تعني عدم وجود دليل يرجح الصواب أو الخطأ (حياد) (ص 130)."
+  }
+];
+
+// بناء شبكة المصطلحات
+const termsGrid = document.getElementById("termsGrid");
+terms.forEach(([en, ar]) => {
+  const d = document.createElement("div");
+  d.className = "card";
+  d.style.margin = "0";
+  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
+  termsGrid.appendChild(d);
+});
+
+// إدارة البطاقات التعليمية
+let ci = 0, showAnswer = false;
+function renderCard() {
+  document.getElementById("flashTerm").textContent = cards[ci][0];
+  const ansEl = document.getElementById("flashAnswer");
+  ansEl.innerHTML = cards[ci][1].replace(/\n/g, "<br>");
+  ansEl.hidden = !showAnswer;
+  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
+  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+}
+document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
+document.getElementById("flashcard").addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
+});
+document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
+document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
+renderCard();
+
+// التنقل بين التبويبات
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+// إدارة الاختبار
+let answers = {};
+function renderQuiz() {
+  const area = document.getElementById("quizArea");
+  area.innerHTML = "";
+  const letters = ["أ", "ب", "ج", "د"];
+  questions.forEach((item, i) => {
+    const box = document.createElement("div");
+    box.className = "qbox";
+    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
+    const opts = box.querySelector(".options");
+    item.o.forEach((opt, j) => {
+      const btn = document.createElement("button");
+      btn.className = "option";
+      btn.textContent = `${letters[j]}) ${opt}`;
+      btn.onclick = () => {
+        answers[i] = j;
+        [...opts.children].forEach((x, k) => {
+          x.classList.remove("correct", "wrong");
+          x.disabled = true;
+          if (k === item.a) x.classList.add("correct");
+          if (k === j && j !== item.a) x.classList.add("wrong");
+        });
+        const fb = document.getElementById("fb" + i);
+        fb.hidden = false;
+        fb.className = "feedback " + (j === item.a ? "good" : "bad");
+        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
+        updateScore();
+      };
+      opts.appendChild(btn);
+    });
+    area.appendChild(box);
+  });
+  updateScore();
+}
+
+function updateScore() {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
+  document.getElementById("score").textContent = `النتيجة: ${correct} / ${questions.length}`;
+  document.getElementById("progressBar").style.width = (Object.keys(answers).length / questions.length * 100) + "%";
+}
+
+document.getElementById("resetQuiz").onclick = () => {
+  answers = {};
+  document.getElementById("finalResult").textContent = "";
+  renderQuiz();
+};
+
+document.getElementById("finishQuiz").onclick = () => {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
+  const pct = Math.round(correct / questions.length * 100);
+  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${questions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! إتقان كامل للفصل الثاني عشر، وألف مبروك ختم مقرر الذكاء الاصطناعي بالكامل!" : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
+};
+
+renderQuiz();
+</script>
+</body>
+</html>
