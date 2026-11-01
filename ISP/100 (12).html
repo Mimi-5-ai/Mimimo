@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الفصل الثالث عشر الشامل (100%) | أمن البيانات والخصوصية</title>
+<style>
+:root{
+  --bg:#f2f7f6;
+  --card:#ffffff;
+  --ink:#132a28;
+  --muted:#5c7471;
+  --accent:#0d9488;
+  --accent-dark:#115e59;
+  --accent2:#ccfbf1;
+  --line:#d5e6e4;
+  --good:#059669;
+  --good-bg:#ecfdf5;
+  --bad:#dc2626;
+  --bad-bg:#fef2f2;
+  --warn:#d97706;
+  --warn-bg:#fffbeb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
+header{background:linear-gradient(135deg,#042f2e,#0d9488);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(4,47,46,0.18)}
+.wrap{max-width:1040px;margin:auto;padding:0 16px}
+.eyebrow{opacity:.92;font-size:.9rem;background:rgba(255,255,255,0.16);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
+h1{margin:5px 0;font-size:clamp(1.55rem,4vw,2.3rem)}
+header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
+nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:var(--accent2);color:var(--accent-dark);font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
+nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
+nav button.active,.btn.primary{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+main .btn.primary{background:var(--accent);color:white}
+main{padding:22px 0 48px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(19,42,40,0.04)}
+h2{font-size:1.35rem;margin:0 0 12px;color:#042f2e}
+h3{font-size:1.06rem;margin:0 0 8px;color:var(--accent-dark)}
+small,.muted{color:var(--muted)}
+ul,ol{padding-right:22px;margin:8px 0}
+li{margin:6px 0}
+details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
+summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f4fbf9;color:#042f2e;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
+details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
+.details-body{padding:16px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
+.badge-new{display:inline-block;background:var(--warn-bg);color:var(--warn);border:1px solid #fcd34d;font-size:.78rem;padding:1px 8px;border-radius:6px;margin-right:6px;font-weight:bold}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#e6f4f1;color:#042f2e;font-weight:bold}
+tr:last-child td{border-bottom:0}
+.note{border-right:4px solid var(--accent);padding:10px 14px;background:#f0fdfa;border-radius:8px;margin:10px 0}
+.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
+.code-inline{background:#e6f4f1;color:#042f2e;padding:2px 8px;border-radius:6px;font-family:Consolas,Monaco,monospace;direction:ltr;display:inline-block;font-weight:bold}
+.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
+.options{display:grid;gap:8px;margin-top:12px}
+.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
+.option:hover:not(:disabled){border-color:var(--accent);background:#f0fdfa}
+.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
+.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
+.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
+.feedback.good{color:var(--good);background:var(--good-bg)}
+.feedback.bad{color:var(--bad);background:var(--bad-bg)}
+.progress{height:10px;background:#d5e6e4;border-radius:9px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
+.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#ccfbf1);border:2px solid #99f6e4;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
+.flashcard:hover{transform:scale(1.005)}
+.flashcard .term{font-size:1.35rem;font-weight:bold;color:#042f2e}
+.flashcard .answer{margin-top:16px;font-size:1.08rem;color:var(--accent-dark);background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
+@media(max-width:600px){
+  .card{padding:14px}
+  nav button{flex:1 1 calc(50% - 8px);text-align:center}
+  .flashcard{min-height:200px;padding:18px}
+  th,td{padding:8px 10px;font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">نسخة شاملة ومحدثة 100% • مقرر أمن البيانات والخصوصية</div>
+    <h1>الفصل الثالث عشر: الهجوم على خادم الويب</h1>
+    <p>يغطي مفهوم خادم الويب، أنواع الهجمات السبع عليه وطرق الوقاية، درع تهديدات الويب، سمعة الويب وعناصرها، اجتياز المسار، تسمم ذاكرة التخزين المؤقت، وهجمات حقن CRLF وحقن SQL</p>
+    <nav>
+      <button class="active" data-tab="summary">الشرح الشامل</button>
+      <button data-tab="tables">جداول المقارنات</button>
+      <button data-tab="terms">المصطلحات والأدوات</button>
+      <button data-tab="cards">البطاقات (28)</button>
+      <button data-tab="quiz">الاختبار العشوائي (25)</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- التبويب الأول: الشرح الشامل -->
+  <section id="summary" class="panel active">
+    <div class="card">
+      <h2>خريطة الفصل الثالث عشر (الوحدات الثلاث الكاملة)</h2>
+      <div class="grid">
+        <div>
+          <span class="tag">الوحدة الأولى</span>
+          <h3>خادم الويب، الهجمات السبع، والوقاية</h3>
+          <p>مفهوم خوادم الويب ومسؤوليتها الأساسية، الهجمات السبع على خادم الويب (<span dir="ltr">DoS, Defacement, SSH Brute Force, XSS, Directory Traversal, MITM, HTTP Response Splitting</span>)، وإجراءات الوقاية الستة.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثانية</span>
+          <h3>درع تهديدات الويب، سمعة الويب، واجتياز المسار</h3>
+          <p>مفهوم وميزات درع تهديدات الويب (<span dir="ltr">Web Threat Shield</span>) بنسختيه المجانية والمدفوعة، سمعة الويب (<span dir="ltr">Web Reputation</span>) وعناصرها الستة وطرق الحماية، وهجوم اجتياز المسار وطرق الوقاية الخمس.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثالثة</span>
+          <h3>تسمم التخزين المؤقت، وحقن CRLF و SQL</h3>
+          <p>تسمم ذاكرة التخزين المؤقت على الويب (<span dir="ltr">Web Cache Poisoning</span>) وطرق الحماية الأربع منه، هجوم حقن (<span dir="ltr">CRLF Injection</span>) وتطبيقاته الثلاثة، وهجوم حقن (<span dir="ltr">SQL Injection</span>) وتطبيقاته الثلاثة.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- الوحدة الأولى كاملة في قائمة واحدة -->
+    <details open>
+      <summary>الوحدة الأولى: مقدمة عن الهجوم على خادم الويب، أنواعه السبعة، وكيفية الوقاية منها</summary>
+      <div class="details-body">
+        <h3>1) مقدمة عن خادم الويب والهجوم عليه</h3>
+        <ul>
+          <li><b>تعريف خوادم الويب (<span dir="ltr">Web Servers</span>):</b> هي المكان الذي يتم فيه <b>تخزين المواقع الإلكترونية</b>؛ وهي عبارة عن أجهزة كمبيوتر تعمل بنظام تشغيل ومتصلة بقاعدة بيانات لتشغيل تطبيقات متعددة.</li>
+          <li><b>المسؤولية الأساسية لخادم الويب:</b> هي <b>عرض محتوى الموقع عن طريق تخزين ومعالجة وتوزيع صفحات الويب للمستخدمين</b>.</li>
+          <li><b>مفهوم الهجوم على تطبيق الويب أو خادم الويب:</b>
+            <ul>
+              <li>أي محاولة من قِبل أي مهاجم لتقويض أمان تطبيق مبني على الويب تُعتبر هجوماً على تطبيق الويب أو هجوماً على خادم الويب.</li>
+              <li>يمكن أن تستهدف هجمات تطبيقات الويب أحد أمرين:
+                <ol>
+                  <li>استهداف <b>التطبيق نفسه</b> للوصول إلى البيانات الحساسة.</li>
+                  <li>أو استخدام التطبيق <b>كمنطقة تجهيز للهجمات ضد مستخدمي البرنامج</b>.</li>
+                </ol>
+              </li>
+              <li><b>تعريف هجوم خادم الويب:</b> عملية تستهدف استغلال ثغرات في خادم الويب أو التطبيقات المستضافة عليه للتسبب في <b>تعطيل الخادم، أو الحصول على وصول غير مصرح به، أو سرقة البيانات</b>.</li>
+              <li>يهدف المهاجمون إلى الاستفادة من ضعف الأمان أو الأخطاء في تكوين الخادم أو التطبيقات أو البرمجيات المستخدمة فيها، كما تستهدف هذه الهجمات الثغرات في <b>قواعد البيانات المرتبطة بخادم الويب</b> بهدف الحصول على معلومات حساسة أو تعديل أو حذف البيانات.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) أنواع الهجوم على خادم الويب (7 أنواع رئيسية)</h3>
+        <div class="exam-alert">
+          <b>تنبيه هام للاختبار:</b> هذه الأنواع السبعة ومصطلحاتها الإنجليزية وتفاصيل كل نوع منها هي محور أساسي في أسئلة الاختبار:
+        </div>
+
+        <ul>
+          <li><b>1. هجوم رفض الخدمة (<span dir="ltr">Denial-of-Service - DoS</span>):</b>
+            <ul>
+              <li>هو عملية يقوم بها قراصنة الإنترنت تتسبب في <b>توجيه عدد كبير من الطلبات إلى الموقع الإلكتروني</b>، مما يؤدي إلى <b>إبطاء الخادم أو إسقاطه بالكامل</b>، وبالتالي يتعذر على المستخدمين المصرح لهم استخدام الخادم أو الوصول إليه.</li>
+              <li><b>أبرز ضحاياه:</b> <b>الخدمات الحكومية وشركات بطاقات الائتمان</b> تحت تأثير الشركات الكبيرة هي من ضحايا هذا النوع الشائع من الهجمات.</li>
+            </ul>
+          </li>
+          <li><b>2. هجوم تشويه الموقع الإلكتروني (<span dir="ltr">Web Defacement Attack</span>):</b>
+            <ul>
+              <li>في هذا الهجوم يحصل القراصنة على وصول إلى الموقع ويقومون <b>بتشويهه لأسباب متعددة، بما في ذلك إهانة وتشويه سمعة الضحية</b>.</li>
+              <li>يقوم الهاكرز بقرصنة خادم الويب و<b>استبدال الموقع الذي يتم استضافته بموقع خاص بهم</b>.</li>
+            </ul>
+          </li>
+          <li><b>3. هجوم قوة الاختراق عبر بروتوكول <span dir="ltr">SSH</span> (<span dir="ltr">SSH Brute Force Attacks</span>):</b>
+            <ul>
+              <li>يتم تنفيذه من خلال <b>تخمين اعتمادات تسجيل الدخول إلى <span dir="ltr">SSH</span></b> للحصول على وصول، ويمكن استخدام هذا الاستغلال لإرسال ملفات ضارة دون أن يتم اكتشافها.</li>
+              <li><b>ملاحظة جوهرية:</b> على عكس العديد من التكتيكات الأخرى المستخدمة من قِبل قراصنة الاختراق، فإن <b>هجمات قوة الاختراق لا تعتمد على ثغرات قائمة بالفعل</b> (بل تعتمد على تخمين بيانات الدخول).</li>
+            </ul>
+          </li>
+          <li><b>4. هجوم استغلال البرمجة النصية المشتركة (<span dir="ltr">Cross-Site Scripting - XSS</span>):</b>
+            <ul>
+              <li>يستهدف المواقع التي تحتوي على <b>عيوب في البرمجة النصية</b>؛ حيث يتم <b>حقن رمز خبيث في تطبيقات الويب</b>.</li>
+              <li>يمنح هذا السكريبت القراصنة وصولاً إلى بيانات تطبيق الويب مثل: <b>الجلسات (<span dir="ltr">Sessions</span>) والكوكيز (<span dir="ltr">Cookies</span>)</b> وما إلى ذلك.</li>
+            </ul>
+          </li>
+          <li><b>5. هجوم اختراق الدليل (<span dir="ltr">Directory Traversal</span>):</b>
+            <ul>
+              <li>يتم تنفيذه بشكل عام على <b>الخوادم القديمة ذات الثغرات والتهيئة الخاطئة</b>.</li>
+              <li>يُعد <b>الدليل الجذر (<span dir="ltr">Root Directory</span>)</b> هو المكان الذي يتم تخزين صفحات الويب فيه، ومع ذلك في هذا الهجوم <b>يهدف القراصنة إلى الوصول إلى الدلائل خارج الدليل الجذر</b>.</li>
+            </ul>
+          </li>
+          <li><b>6. هجوم رجل في الوسط (<span dir="ltr">MITM Attack</span>):</b>
+            <ul>
+              <li>يسمح للمهاجم بالوصول إلى معلومات حساسة عن طريق <b>حجب وتعديل الاتصال بين المستخدم النهائي وخوادم الويب</b> (التقاط أو تعديل الرسائل عن طريق الاستماع أو التدخل في الاتصال).</li>
+              <li>يتيح للمهاجم سرقة معلومات المستخدم الحساسة مثل: <b>تفاصيل الخدمات المصرفية عبر الإنترنت، وأسماء المستخدمين، وكلمات المرور</b> التي يتم نقلها عبر الإنترنت إلى خادم الويب.</li>
+              <li><b>كيف يغري الضحية؟</b> يغري المهاجم الضحية بالاتصال بخادم إنترنت من خلال <b>التظاهر بأنه وكيل (<span dir="ltr">Proxy</span>)</b>.</li>
+            </ul>
+          </li>
+          <li><b>7. هجوم تجزئة استجابة <span dir="ltr">HTTP</span> (<span dir="ltr">HTTP Response Splitting Attack</span>):</b>
+            <ul>
+              <li>يُعد هجوماً قائماً على <b>التلاعب بالبروتوكول</b>؛ حيث تكون البرامج التي تستخدم بروتوكول <b dir="ltr">HTTP</b> لتبادل البيانات هي الأكثر عرضة لهذا الهجوم.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) كيفية الوقاية من الهجمات المختلفة على أمان خادم الويب (6 إجراءات)</h3>
+        <ol>
+          <li><b>حافظ على تحديث نظامك:</b> عدم تحديث البرامج بانتظام يجعلها أضعف ويجعل النظام أكثر ضعفاً أمام الهجمات؛ حيث يستغل المتسللون هذه الثغرات للوصول إلى شبكتك.</li>
+          <li><b>تجنب الاتصال بشبكة الواي فاي العامة:</b> يمكن لاتصال واي فاي غير آمن أن يُستخدم لنشر برامج ضارة (خاصة إذا كنت تسمح بمشاركة الملفات عبر الشبكة). وإن <b>قدرة المتسلل على وضع نفسه بينك وبين نقطة الاتصال تشكل أكبر تهديد لأمان شبكة الواي فاي المجانية</b>.</li>
+          <li><b>قم بتثبيت برنامج مكافحة الفيروسات وتحديثه بانتظام:</b> يُصمم للكشف عن البرامج الضارة ومنعها والاستجابة لها؛ وتشمل التحديثات الملفات الأحدث لمكافحة التهديدات الجديدة، حيث <b>يتم توفير هذه الملفات التوقيعية يومياً</b>.</li>
+          <li><b>استخدم أنظمة اكتشاف التهديدات الأمنية وجدار الحماية مع تحديث التوقيعات:</b> تُعتبر أنظمة اكتشاف التهديدات الأمنية الشبكية (<b dir="ltr">NID / NIDS</b>) أنظمة للكشف عن تهديدات الأمان ومنعها من اختراق الشبكات الآمنة.</li>
+          <li><b>قم بعمل نسخ احتياطية لبياناتك:</b> الهدف الأساسي من النسخ الاحتياطي هو <b>الحفاظ على أرشيف آمن للمعلومات الحيوية الخاصة بك</b> (سواء وثائق مصنفة لعملك أو غيرها)، ويسمح باستعادة البيانات من نقطة زمنية سابقة لاستعادة العمل بعد حدوث حدث غير متوقع.</li>
+          <li><b>قم بتثبيت جدار حماية (<span dir="ltr">Firewall</span>):</b> يحمي جهاز الكمبيوتر أو الشبكة من الهجمات الإلكترونية الخارجية عن طريق <b>تصفية حركة المرور الشبكية الخطرة أو الزائدة</b>، ومنع وصول برامج ضارة من الإنترنت.</li>
+        </ol>
+      </div>
+    </details>
+
+    <!-- الوحدة الثانية كاملة في قائمة واحدة -->
+    <details>
+      <summary>الوحدة الثانية: درع تهديدات الويب (Web Threat Shield)، سمعة الويب (Web Reputation)، والحماية من اجتياز المسار</summary>
+      <div class="details-body">
+        <h3>1) درع تهديدات الويب (<span dir="ltr">WEB THREAT SHIELD</span>) وميزاته</h3>
+        <ul>
+          <li><b>تعريف درع تهديدات الويب ومسمياته الأخرى:</b> هو أداة برمجية تحمي حاجز النظام الحاسوبي الذي يعمل على تطبيق ويب عن طريق <b>تفحص حركة <span dir="ltr">HTTP</span> وتحديد الطلبات الخبيثة</b>. ويُشار إلى درع تهديدات الويب أيضاً باسمين آخرين هما:
+            <ol>
+              <li><b>حماية أمان المحتوى.</b></li>
+              <li><b>جدار حماية الويب.</b></li>
+            </ol>
+          </li>
+          <li><b>دور جدران الحماية وشهادات <span dir="ltr">SSL</span>:</b> تحمي أدوات البرمجيات مثل جدران الحماية أو شهادات <span dir="ltr">SSL</span> حاجز النظام الحاسوبي المتصل بالإنترنت عادةً من حركة المرور الواردة الخبيثة على شبكة قابلة للوصول عموماً.</li>
+          <li><b>تعريف جدار الحماية (<span dir="ltr">Firewall</span>) وموقعه:</b> هو جهاز يوضع بالقرب من جهاز كمبيوتر أو مضيف بعيد يواجه الإنترنت (يفصل بين الشبكة المحلية <span dir="ltr">LAN</span> والشبكة الواسعة <span dir="ltr">WAN</span>)، ويراقب <b>منفذ وحركة مرور <span dir="ltr">IP</span></b> للكمبيوتر أو المضيف البعيد؛ فإذا اكتشف مروراً يُرسل إلى خدمة يعمل كواجهة لها فقد يقوم <b>بإسقاطه أو تجاهله</b>، ويُستخدم للحماية ضد الهجمات من <b>مصادر داخلية وخارجية على حد سواء</b>.</li>
+        </ul>
+
+        <p><b>ميزات وخصائص درع تهديدات الويب (8 نقاط شاملة):</b></p>
+        <ol>
+          <li>حل شامل مصمم للمساعدة في حماية موقع الويب الخاص بك من القراصنة والتهديدات الخارجية.</li>
+          <li>لديه القدرة على <b>تفحص حركة المرور <span dir="ltr">HTTP</span> وتحديد الطلبات الخبيثة</b>.</li>
+          <li>يمكن استخدامه <b>لمنع بعض المستخدمين من الوصول إلى بعض مناطق موقع الويب</b> الخاص بك.</li>
+          <li>يمكن استخدامه <b>لإعادة توجيه المستخدمين إلى خوادم آمنة</b> بحيث لا يروا أي محتوى خبيث.</li>
+          <li>لديه القدرة على <b>مراقبة حركة المرور في قاعدة البيانات للكشف عن ثغرات مثل حقن <span dir="ltr">SQL</span> (<span dir="ltr">SQL Injection</span>)</b>، مما يمنح حماية إضافية لقاعدة البيانات.</li>
+          <li>يسمح بمنع قراصنة المواقع، ومراقبة اتصالات قاعدة البيانات، و<b>اختبار أمان موقعك</b>.</li>
+        </ol>
+        <div class="exam-alert">
+          <b>الفرق بين النسختين المجانية والمدفوعة من درع تهديدات الويب (هام جداً للاختبار):</b>
+          <ul style="margin-bottom:0">
+            <li><b>النسخة المجانية:</b> لديها <b>وظائف محدودة</b>، ولكنها ستقوم <b>بفحص جلسات <span dir="ltr">HTTP</span> والموارد الخارجية</b>.</li>
+            <li><b>النسخة المدفوعة:</b> تُستخدم في <b>مواقع الويب الكبيرة</b> التي تحتاج ميزات أكثر تعقيداً مثل: <b>مراقبة اتصالات قاعدة البيانات للكشف عن الثغرات قبل أن تؤثر على النظام الخلفي</b>، أو <b>إعادة توجيه المستخدمين إلى خادم آمن يقوم بفحص المحتوى الخبيث قبل حدوث إعادة التوجيه</b>.</li>
+          </ul>
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) سمعة الويب (<span dir="ltr">WEB REPUTATION</span>)، عناصرها الستة، وطرق الحماية</h3>
+        <ul>
+          <li><b>خلفية وأهمية سمعة الويب:</b> نظراً للنمو السريع في عدد المواقع المستضافة يومياً وزيادة الهجمات (كالصيد الاحتيالي، الهندسة الاجتماعية، وأجهزة تسجيل المفاتيح)، هناك مواقع تستضيف بدون الحماية المطلوبة أو ببنية تصميم متعمدة لسرقة معلومات الزائرين أو حقن رموز خبيثة على جانب العميل. وهنا تساعد <b>سمعة الويب</b> المستخدم النهائي على تحديد ما إذا كان موقع ما مشتركاً في أعمال غير قانونية وما إذا كان آمناً لتصفحه.</li>
+          <li><b>كيف تنبه المتصفحات المستخدم؟</b> تقوم متصفحات الويب بذلك عادةً باستخدام <b>مرشحات عناوين <span dir="ltr">URL</span></b> التي تنبه المستخدم بشأن المواقع غير الآمنة وتحظر الاتصالات منها أثناء الزيارة.</li>
+          <li><b>تعريف سمعة الويب وتأثيرها على النطاق (<span dir="ltr">Domain</span>):</b>
+            <ul>
+              <li>سمعة الويب <b>تحدد سلامة موقع الويب من حيث التهديدات والبرامج الضارة والأمان وعوامل أخرى</b>.</li>
+              <li>إذا كان الموقع مشتركاً في سرقة المعلومات أو بيع البيانات أو نشر البرامج الضارة أو حقن رموز خبيثة، فإن <b>سمعة الويب لنطاق المجال تتأثر سلباً</b>، وتواجه المواقع الأخرى المرتبطة بنفس النطاق أو التي تحيل إلى صفحة ويب في ذلك النطاق عواقب مماثلة.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <p><b>عناصر سمعة الويب الستة (<span dir="ltr">Elements of Web Reputation</span>):</b></p>
+        <div class="grid" style="margin:10px 0">
+          <div class="note" style="margin:0"><b>1. موقع الاستضافة (<span dir="ltr">Hosting Location</span>)</b></div>
+          <div class="note" style="margin:0"><b>2. نوع وعنوان (<span dir="ltr">URL</span>)</b></div>
+          <div class="note" style="margin:0"><b>3. جودة المحتوى</b></div>
+          <div class="note" style="margin:0"><b>4. مالك المجال (<span dir="ltr">Domain Owner</span>)</b></div>
+          <div class="note" style="margin:0"><b>5. الأداء</b></div>
+          <div class="note" style="margin:0"><b>6. مشاركة المستخدم (<span dir="ltr">User Engagement</span>)</b></div>
+        </div>
+
+        <p><b>إجراءات الحماية الستة من المواقع الضارة المؤثرة على سمعة الويب:</b></p>
+        <ol>
+          <li>استخدام أداة فحص سلامة المواقع مثل <b><span dir="ltr">Google Safe Browsing</span></b> التي تقدمها جوجل.</li>
+          <li>تفعيل خاصية التصفح الآمن ومرشحات عناوين <span dir="ltr">URL</span> في المتصفحات الحديثة مثل (<b dir="ltr">Safari, Google Chrome, Edge</b>).</li>
+          <li><b>عدم زيارة عناوين <span dir="ltr">URL</span> ذات بروتوكول <span dir="ltr">HTTP</span></b> (غير المشفر).</li>
+          <li>عدم إجراء المعاملات باستخدام بطاقات الائتمان / الخصم على المواقع غير الموثوقة.</li>
+          <li><b>عدم تجاهل تحذيرات المتصفح</b> بشأن المواقع الضارة.</li>
+          <li>تثبيت أدوات الأمان على الإنترنت وبرامج مكافحة الفيروسات.</li>
+        </ol>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) هجوم اجتياز المسار (<span dir="ltr">Path / Directory Traversal</span>) والحماية منه</h3>
+        <div class="exam-alert">
+          <b>تفاصيل تقنية هامة جداً للاختبار في هجوم اجتياز المسار:</b><br>
+          • مجلد جذر الويب المعتاد: <span class="code-inline">/var/www/</span><br>
+          • التسلسل المستخدم للتلاعب بالمسار: <b>"نقطة - نقطة - شرطة مائلة"</b> <span class="code-inline">../</span><br>
+          • مثال الملف الحساس المستهدف خارج المسار: <span class="code-inline">passwords.txt</span>
+        </div>
+        <ul>
+          <li><b>مفهوم هجوم اجتياز المسار (اختراق المسار / اختراق الدليل):</b> يسمح للمهاجمين بالوصول إلى الدلائل مثل <b>ملفات التكوين</b> أو أي ملفات/دلائل أخرى تحتوي على بيانات الخادم غير المقصودة للجمهور، والمخزنة <b>خارج مجلد جذر الويب عادةً <span class="code-inline">(/var/www/)</span></b>.</li>
+          <li><b>كيف يتم تنفيذه؟</b> من خلال تلاعب المتغيرات التي تشير إلى ملفات باستخدام تسلسلات <b>"نقطة - نقطة - شرطة مائلة" <span class="code-inline">(../)</span></b> واصطلاحاتها المختلفة، أو باستخدام <b>مسارات ملفات مطلقة</b>؛ مما يمكّن المهاجم من الوصول إلى مصدر التطبيق أو تكوينه وملفات النظام الحساسة مثل ملف كلمات المرور الحساسة <span class="code-inline">passwords.txt</span> الذي يقع خارج المسار المسموح به للوصول.</li>
+        </ul>
+
+        <p><b>الإجراءات الخمسة للحماية من هجوم اجتياز المسار:</b></p>
+        <ol>
+          <li><b>التحقق من صحة المسار:</b> تنفيذ التحقق من المسار الذي يتم توفيره في طلبات المستخدم، والتأكد من أنه لا يحتوي على أي أحرف خاصة غير مسموح بها وأنه يتوافق مع الصيغة المطلوبة.</li>
+          <li><b>استخدام إجراءات تنقية الإدخال:</b> تنقية الإدخالات المستخدمة في المسارات وإزالة أي أحرف أو تسلسلات غير مشروعة تشير إلى الانتقال إلى دلائل غير مصرح بها.</li>
+          <li><b>تقييد الوصول إلى المسارات المشروعة:</b> تحديد الدلائل والملفات التي يمكن للتطبيق الوصول إليها وتقييد الوصول إلى دلائل النظام أو ملفات حساسة غير ضرورية.</li>
+          <li><b>استخدام الأذونات الصحيحة:</b> تعيين الأذونات المناسبة للملفات والدلائل على النظام لضمان أن المستخدمين غير المصرح لهم لا يمكنهم الوصول للملفات غير المرغوب فيها.</li>
+          <li><b>تحديث وتطوير البرمجيات:</b> مراجعة وتحديث التطبيق بانتظام لتصحيح أي ثغرات أمنية معروفة أو تحسين طرق التحقق من المسارات.</li>
+        </ol>
+      </div>
+    </details>
+
+    <!-- الوحدة الثالثة كاملة في قائمة واحدة -->
+    <details>
+      <summary>الوحدة الثالثة: تسمم ذاكرة التخزين المؤقت (Web Cache Poisoning)، وهجمات حقن (CRLF Injection) وحقن (SQL Injection)</summary>
+      <div class="details-body">
+        <h3>1) تسمم ذاكرة التخزين المؤقت على الويب (<span dir="ltr">WEB CACHE POISONING</span>) والحماية منه</h3>
+        <ul>
+          <li><b>التعريف:</b> يُسمى تسمم ذاكرة التخزين المؤقت للويب <b>هجوماً على نظام التخزين المؤقت للمتصفح، حيث يتم تقديم محتوى قديم أو غير محدث للمستخدم</b>.</li>
+          <li><b>آلية الحدوث:</b>
+            <ul>
+              <li>إنها عملية <b>حقن رمز خبيث في البيانات التي يتم تسليمها عبر الإنترنت من قِبل شبكة إعلانات</b> وخداعها لعرض رسالة خطأ زائفة أو تهجئة خاطئة.</li>
+              <li>يمكن أن يحدث ذلك عندما يستخدم القراصنة <b>البوتات (<span dir="ltr">Bots</span>)</b> الخاصة بهم لطلب العديد من الصور الرسومية من موقع واحد مع <b>حقن رمز <span dir="ltr">HTML</span> مسموم</b> يسبب أخطاء في صفحة الويب الخاصة بك.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <p><b>الخطوات الأربع للحماية من هجوم تسمم ذاكرة التخزين المؤقت على الويب:</b></p>
+        <ol>
+          <li><b>تحسين الموقع والصور:</b> تأكد دائماً من أن موقعك محسن بشكل جيد بحيث يؤدي التخزين المؤقت إلى تحميل الصفحات بشكل أسرع وليس رسائل خطأ عند تحديث الصفحة، وتأكد من أن لديك صوراً على موقعك محسنة جيداً للأداء.</li>
+          <li><b>إزالة النسخ المؤقتة عند التحديث:</b> عند تغيير محتوى صفحاتك، تأكد من <b>إزالة أي نسخ مخزنة في الذاكرة المؤقتة</b>.</li>
+          <li><b>عدم تكرار نفس الصورة:</b> <b>لا تستخدم نفس الصورة مراراً وتكراراً في مقالات مدونتك</b>؛ حيث سيصبح من الأسهل لتسمم ذاكرة التخزين المؤقت أن يؤثر على موقعك.</li>
+          <li><b>استخدام ملحق تخزين (<span dir="ltr">Caching Plugin</span>):</b> بحيث إذا واجه شخص خطأ في الوصول إلى موقعك، فسيتمكن من رؤية نسخة سابقة من الصفحة قمت بتوفيرها من خلال النسخة المؤقتة (وهو مفيد أيضاً عند إصلاح مشكلات التخزين المؤقت دون القلق بشأن رؤية الزوار للصور المكسورة أو المحتوى القديم).</li>
+        </ol>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) هجوم حقن <span dir="ltr">CRLF INJECTION</span></h3>
+        <div class="exam-alert">
+          <b>تنبيه هام للاختبار:</b> كلا هجومي <b><span dir="ltr">CRLF Injection</span></b> و <b><span dir="ltr">SQL Injection</span></b> هما من الهجمات القائمة على <b>الجانب الخادم (<span dir="ltr">Server Side</span>)</b>!
+        </div>
+        <ul>
+          <li><b>التعريف ومعنى الاختصار:</b> هجوم حقن <b dir="ltr">CRLF (Carriage Return Line Feed)</b> هو نوع من الهجمات على <b>الجانب الخادم (<span dir="ltr">Server Side</span>)</b>، يتم فيها إدخال حروف <span dir="ltr">CRLF</span> (والتي تعني: <b>العودة إلى البداية والانتقال إلى السطر الجديد</b>) في إدخالات المستخدم بغرض استغلال ثغرة في تطبيق الويب.</li>
+          <li><b>أين يتم الحقن؟</b> عندما ينجح الهجوم، يتمكن المهاجم من حقن سلسلة الحروف <span dir="ltr">CRLF</span> في البيانات المرسلة إلى الخادم، والتي قد تكون في مجالات مثل: <b>رؤوس الـ <span dir="ltr">HTTP</span> (<span dir="ltr">HTTP Headers</span>) أو معلمات الطلبات</b>.</li>
+          <li><b>الهجمات الثلاث التي يتم إجراؤها باستغلال ثغرة <span dir="ltr">CRLF</span>:</b>
+            <ol>
+              <li><b>إدخال رؤوس <span dir="ltr">HTTP</span> إضافية:</b> يمكن للمهاجم إدخال رؤوس <span dir="ltr">HTTP</span> إضافية بعد حقن الـ <span dir="ltr">CRLF</span>، مما يسمح له بتنفيذ <b>هجمات تزوير الرؤوس (<span dir="ltr">Header Manipulation</span>)</b>؛ مثل تعيين ملفات تعريف الارتباط (<b dir="ltr">Cookies</b>) المزيفة، أو تغيير روابط المؤشر (<b dir="ltr">Redirects</b>) إلى مواقع ضارة.</li>
+              <li><b>إدخال محتوى غير مرئي:</b> يمكن للمهاجم استغلال الـ <span dir="ltr">CRLF</span> لإدخال محتوى غير مرئي في الصفحات، مثل إدخال <b>روابط غير مرئية أو تعليقات في صفحة ويب</b>.</li>
+              <li><b>هجمات انتقال الجلسة (<span dir="ltr">Session Riding</span>):</b> قد يستخدم المهاجم الـ <span dir="ltr">CRLF</span> لتنفيذ هجمات انتقال الجلسة، حيث يحاول اختراق جلسات المستخدمين المعتمدة على روابط مختلفة.</li>
+            </ol>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) هجوم حقن <span dir="ltr">SQL INJECTION</span></h3>
+        <ul>
+          <li><b>التعريف:</b> هجوم حقن <b dir="ltr">SQL Injection</b> هو نوع من الهجمات القائمة على <b>الجانب الخادم (<span dir="ltr">Server Side</span>)</b> يستغل ثغرات في تطبيقات قواعد البيانات التي تستخدم <b>لغة استعلام قواعد البيانات (<span dir="ltr">SQL</span>)</b> للتفاعل مع قاعدة البيانات.</li>
+          <li><b>أين يتم الحقن وما عواقبه؟</b> عند نجاحه، يتمكن المهاجم من حقن <b>تعليمات <span dir="ltr">SQL</span> خبيثة</b> في الإدخالات المرسلة إلى التطبيق، والتي قد تكون في مجالات مثل: <b>نماذج الويب (<span dir="ltr">Web Forms</span>) أو عناصر <span dir="ltr">URL</span></b>؛ وذلك لتنفيذ عمليات غير مصرح بها والتلاعب بقاعدة البيانات، مما قد يؤدي إلى <b>تسريب معلومات حساسة أو تعطيل التطبيق بأكمله</b>.</li>
+          <li><b>الأنواع الثلاثة لعمليات وهجمات <span dir="ltr">SQL Injection</span>:</b>
+            <ol>
+              <li><b>استرجاع بيانات حساسة من قاعدة البيانات:</b> مثل كلمات المرور المشفرة أو معلومات المستخدمين الحساسة.</li>
+              <li><b>تنفيذ تعليمات <span dir="ltr">SQL</span> لتعديل قاعدة البيانات:</b> مما يتيح للمهاجم تغيير البيانات أو حذفها أو إضافة بيانات غير مصرح بها.</li>
+              <li><b>تنفيذ أوامر خادم قاعدة البيانات:</b> مما يعني أنه يمكنه تنفيذ أوامر مثل <b>تشغيل نظام الملفات أو إنشاء اتصالات شبكية خارجية</b>.</li>
+            </ol>
+          </li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- التبويب الثاني: جداول المقارنات السريعة -->
+  <section id="tables" class="panel">
+    <div class="card">
+      <h2>1. مقارنة شاملة بين الأنواع السبعة للهجوم على خادم الويب (الوحدة الأولى)</h2>
+      <p class="muted">يلخص هذا الجدول كل هجوم ومصطلحه الإنجليزي وآلية عمله الدقيقة كما ورد في الفصل الثالث عشر:</p>
+      <table>
+        <thead>
+          <tr>
+            <th>اسم الهجوم بالعربية</th>
+            <th>المصطلح الإنجليزي</th>
+            <th>آلية العمل والسمة المميزة في المنهج</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1. هجوم رفض الخدمة</b></td>
+            <td><b dir="ltr">Denial-of-Service (DoS)</b></td>
+            <td>توجيه عدد كبير من الطلبات للموقع لإبطاء الخادم أو إسقاطه بالكامل ومنع المصرح لهم من الوصول. من أبرز ضحاياه: <b>الخدمات الحكومية وشركات بطاقات الائتمان</b>.</td>
+          </tr>
+          <tr>
+            <td><b>2. تشويه الموقع الإلكتروني</b></td>
+            <td><b dir="ltr">Web Defacement Attack</b></td>
+            <td>قرصنة خادم الويب و<b>استبدال الموقع المستضاف بموقع خاص بالهاكرز</b> بهدف إهانة وتشويه سمعة الضحية.</td>
+          </tr>
+          <tr>
+            <td><b>3. قوة الاختراق عبر SSH</b></td>
+            <td><b dir="ltr">SSH Brute Force Attacks</b></td>
+            <td><b>تخمين اعتمادات تسجيل الدخول إلى <span dir="ltr">SSH</span></b> للحصول على وصول وإرسال ملفات ضارة دون اكتشاف. (<b>لا يعتمد على ثغرات قائمة بالفعل</b>).</td>
+          </tr>
+          <tr>
+            <td><b>4. استغلال البرمجة النصية المشتركة</b></td>
+            <td><b dir="ltr">Cross-Site Scripting (XSS)</b></td>
+            <td>يستهدف المواقع ذات العيوب في البرمجة النصية عبر <b>حقن رمز خبيث (سكريبت)</b> يمنح القراصنة وصولاً لبيانات التطبيق مثل <b>الجلسات (<span dir="ltr">Sessions</span>) والكوكيز (<span dir="ltr">Cookies</span>)</b>.</td>
+          </tr>
+          <tr>
+            <td><b>5. هجوم اختراق الدليل (اجتياز المسار)</b></td>
+            <td><b dir="ltr">Directory Traversal</b></td>
+            <td>يُنفذ على الخوادم القديمة سيئة التهيئة للوصول إلى <b>الدلائل خارج الدليل الجذر (<code dir="ltr">/var/www/</code>)</b> باستخدام تسلسل <code dir="ltr">../</code> لسرقة ملفات مثل <code dir="ltr">passwords.txt</code>.</td>
+          </tr>
+          <tr>
+            <td><b>6. هجوم الرجل في الوسط</b></td>
+            <td><b dir="ltr">MITM Attack</b></td>
+            <td>حجب والتقاط وتعديل الاتصال بين المستخدم النهائي وخادم الويب لسرقة بيانات البنوك وكلمات المرور، حيث يغري المهاجم الضحية <b>بالتظاهر بأنه وكيل (<span dir="ltr">Proxy</span>)</b>.</td>
+          </tr>
+          <tr>
+            <td><b>7. تجزئة استجابة HTTP</b></td>
+            <td><b dir="ltr">HTTP Response Splitting</b></td>
+            <td>هجوم قائم على <b>التلاعب بالبروتوكول</b>، وتكون البرامج التي تستخدم بروتوكول <b dir="ltr">HTTP</b> لتبادل البيانات هي الأكثر عرضة له.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>2. مقارنة دقيقة بين هجمات الوحدة الثالثة (Cache Poisoning vs CRLF Injection vs SQL Injection)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>وجه المقارنة</th>
+            <th>تسمم ذاكرة التخزين المؤقت (Web Cache Poisoning)</th>
+            <th>هجوم حقن (CRLF Injection)</th>
+            <th>هجوم حقن (SQL Injection)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>الجانب المستهدف</b></td>
+            <td>نظام التخزين المؤقت للمتصفح وشبكات الإعلانات.</td>
+            <td>هجوم على <b>الجانب الخادم (<span dir="ltr">Server Side</span>)</b>.</td>
+            <td>هجوم على <b>الجانب الخادم (<span dir="ltr">Server Side</span>)</b> وتطبيقات قواعد البيانات.</td>
+          </tr>
+          <tr>
+            <td><b>آلية الحقن والتنفيذ</b></td>
+            <td>استخدام <b>البوتات (<span dir="ltr">Bots</span>)</b> لطلب العديد من الصور الرسومية مع <b>حقن رمز <span dir="ltr">HTML</span> مسموم</b> لعرض محتوى قديم أو رسالة خطأ زائفة.</td>
+            <td>إدخال حروف <span dir="ltr">CRLF</span> (<b>العودة للبداية والانتقال لسطر جديد</b>) في رؤوس <span dir="ltr">HTTP</span> أو معلمات الطلبات.</td>
+            <td>حقن <b>تعليمات <span dir="ltr">SQL</span> خبيثة</b> في نماذج الويب (<span dir="ltr">Forms</span>) أو عناصر <span dir="ltr">URL</span> للتلاعب بقاعدة البيانات.</td>
+          </tr>
+          <tr>
+            <td><b>النتائج والهجمات الفرعية الناتجة عنه</b></td>
+            <td>تقديم محتوى قديم أو غير محدث، أو عرض رسائل خطأ زائفة وتهجئة خاطئة للمستخدم.</td>
+            <td>1) <b>إدخال رؤوس <span dir="ltr">HTTP</span> إضافية</b> (تزوير الرؤوس <span dir="ltr">Header Manipulation</span>، كوكيز مزيفة، وتغيير روابط التوجيه <span dir="ltr">Redirects</span>).<br>2) <b>إدخال محتوى غير مرئي</b> (روابط أو تعليقات).<br>3) <b>هجمات انتقال الجلسة (<span dir="ltr">Session Riding</span>)</b>.</td>
+            <td>1) <b>استرجاع بيانات حساسة</b> (كلمات المرور المشفرة ومعلومات المستخدمين).<br>2) <b>تعديل قاعدة البيانات</b> (تغيير أو حذف أو إضافة بيانات).<br>3) <b>تنفيذ أوامر خادم قاعدة البيانات</b> (تشغيل نظام الملفات أو إنشاء اتصالات شبكية خارجية).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>3. مقارنة نسختي درع تهديدات الويب (Web Threat Shield) وعناصر سمعة الويب</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>البند</th>
+            <th>التفاصيل والخصائص في الوحدة الثانية</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>درع تهديدات الويب (النسخة المجانية)</b></td>
+            <td>لديها <b>وظائف محدودة</b>، وتقوم بـ <b>فحص جلسات <span dir="ltr">HTTP</span> والموارد الخارجية</b>.</td>
+          </tr>
+          <tr>
+            <td><b>درع تهديدات الويب (النسخة المدفوعة)</b></td>
+            <td>تُستخدم في <b>مواقع الويب الكبيرة</b>، وتتميز بـ:<br>1) مراقبة اتصالات قاعدة البيانات للكشف عن الثغرات (مثل حقن <span dir="ltr">SQL</span>) <b>قبل أن تؤثر على النظام الخلفي</b>.<br>2) إعادة توجيه المستخدمين إلى خادم آمن يقوم بفحص المحتوى الخبيث <b>قبل حدوث إعادة التوجيه</b>.</td>
+          </tr>
+          <tr>
+            <td><b>عناصر سمعة الويب الستة (<span dir="ltr">Web Reputation</span>)</b></td>
+            <td>1) موقع الاستضافة (<span dir="ltr">Hosting Location</span>) • 2) نوع وعنوان (<span dir="ltr">URL</span>) • 3) جودة المحتوى • 4) مالك المجال (<span dir="ltr">Domain Owner</span>) • 5) الأداء • 6) مشاركة المستخدم (<span dir="ltr">User Engagement</span>).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- التبويب الثالث: المصطلحات والأدوات -->
+  <section id="terms" class="panel">
+    <div class="card">
+      <h2>قاموس المصطلحات والأدوات الشامل للفصل الثالث عشر</h2>
+      <p class="muted">جميع المصطلحات الإنجليزية والتقنية وأسماء الهجمات وأدوات حماية الويب الواردة في الوحدات الثلاث:</p>
+      <div id="termsGrid" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- التبويب الرابع: البطاقات التعليمية -->
+  <section id="cards" class="panel">
+    <div class="card">
+      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
+      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
+      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
+        <div class="term" id="flashTerm"></div>
+        <div class="answer" id="flashAnswer" hidden></div>
+        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="prevCard">السابق</button>
+        <span id="cardCount" class="muted"></span>
+        <button class="btn primary" id="nextCard">التالي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- التبويب الخامس: الاختبار الذاتي العشوائي -->
+  <section id="quiz" class="panel">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2>الاختبار الشامل المتغير للفصل الثالث عشر (25 سؤالاً) <span class="badge-new">ترتيب عشوائي ذكي 🎲</span></h2>
+          <p class="muted">يتم خلط ترتيب الأسئلة وترتيب الخيارات تلقائياً في كل مرة لقياس فهمك الحقيقي بتركيز فائق!</p>
+        </div>
+        <div class="score" id="score">النتيجة: 0 / 25</div>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="quizArea"></div>
+      <div class="row">
+        <button class="btn" id="resetQuiz">إعادة الاختبار بترتيب عشوائي جديد 🔀</button>
+        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+      </div>
+      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
+    </div>
+  </section>
+</main>
+
+<footer>مبني بالكامل (100%) على محتوى الفصل الثالث عشر من مقرر أمن البيانات والخصوصية</footer>
+
+<script>
+const terms = [
+  ["Web Server (خادم الويب)", "جهاز كمبيوتر يعمل بنظام تشغيل ومتصل بقاعدة بيانات لتخزين المواقع الإلكترونية، ومسؤوليته الأساسية تخزين ومعالجة وتوزيع صفحات الويب للمستخدمين."],
+  ["Denial-of-Service (DoS)", "هجوم رفض الخدمة: توجيه عدد كبير من الطلبات إلى الموقع الإلكتروني لإبطاء الخادم أو إسقاطه بالكامل ومنع المستخدمين المصرح لهم من الوصول إليه."],
+  ["Web Defacement Attack", "هجوم تشويه الموقع الإلكتروني: قرصنة خادم الويب واستبدال الموقع المستضاف بموقع خاص بالهاكرز لإهانة وتشويه سمعة الضحية."],
+  ["SSH Brute Force Attacks", "هجوم قوة الاختراق عبر بروتوكول SSH: تخمين اعتمادات تسجيل الدخول إلى SSH للحصول على وصول وإرسال ملفات ضارة (لا يعتمد على ثغرات قائمة بالفعل)."],
+  ["Cross-Site Scripting (XSS)", "هجوم استغلال البرمجة النصية المشتركة: حقن رمز خبيث (سكريبت) في المواقع ذات العيوب البرمجية للوصول إلى الجلسات (Sessions) والكوكيز (Cookies)."],
+  ["Directory Traversal (Path Traversal)", "هجوم اختراق الدليل / اجتياز المسار: استخدام تسلسل (../) للوصول إلى الدلائل والملفات الحساسة (مثل passwords.txt) المخزنة خارج مجلد جذر الويب (/var/www/)."],
+  ["MITM Attack (Man-in-the-Middle)", "هجوم الرجل في الوسط: حجب وتعديل الاتصال بين المستخدم النهائي وخادم الويب عبر التظاهر بأنه وكيل (Proxy) لسرقة بيانات البنوك وكلمات المرور."],
+  ["HTTP Response Splitting Attack", "هجوم تجزئة استجابة HTTP: هجوم تلاعب بالبروتوكول يستهدف البرامج التي تستخدم بروتوكول HTTP لتبادل البيانات."],
+  ["Web Threat Shield", "درع تهديدات الويب (يُعرف أيضاً بحماية أمان المحتوى أو جدار حماية الويب): أداة برمجية تحمي تطبيق الويب بتفحص حركة HTTP ومراقبة اتصالات قاعدة البيانات."],
+  ["Web Reputation", "سمعة الويب: تحدد سلامة موقع الويب من حيث التهديدات والبرامج الضارة والأمان، وتساعد المستخدم في معرفة ما إذا كان الموقع آمناً لتصفحه."],
+  ["Google Safe Browsing", "أداة فحص سلامة المواقع التي تقدمها شركة جوجل للحماية من المواقع الضارة المؤثرة على سمعة الويب."],
+  ["/var/www/ & ../ & passwords.txt", "في هجوم اجتياز المسار: (/var/www/) هو مجلد جذر الويب، و (../) هو تسلسل نقطة-نقطة-شرطة مائلة للتلاعب بالمسار، و (passwords.txt) مثال لملف كلمات المرور المستهدف."],
+  ["Web Cache Poisoning", "تسمم ذاكرة التخزين المؤقت للويب: هجوم على نظام التخزين المؤقت للمتصفح عبر حقن رمز HTML مسموم لتقديم محتوى قديم أو عرض رسالة خطأ زائفة."],
+  ["CRLF Injection", "هجوم حقن CRLF (Carriage Return Line Feed): هجوم على الجانب الخادم (Server Side) يتم فيه إدخال حروف العودة للبداية والانتقال لسطر جديد في رؤوس HTTP."],
+  ["Header Manipulation & Session Riding", "هجمات تزوير الرؤوس (تعيين كوكيز مزيفة أو تغيير روابط التوجيه Redirects) وهجمات انتقال الجلسة، وتنتج عن استغلال ثغرة CRLF Injection."],
+  ["SQL Injection", "هجوم حقن SQL: هجوم على الجانب الخادم (Server Side) يحقن تعليمات SQL خبيثة في نماذج الويب أو URL لاسترجاع أو تعديل بيانات قاعدة البيانات أو تنفيذ أوامر الخادم."]
+];
+
+const cards = [
+  ["ما هي خوادم الويب؟ وما هي مسؤوليتها الأساسية؟", "هي أجهزة كمبيوتر تعمل بنظام تشغيل ومتصلة بقاعدة بيانات يتم فيها تخزين المواقع الإلكترونية. ومسؤوليتها الأساسية هي: عرض محتوى الموقع عن طريق تخزين ومعالجة وتوزيع صفحات الويب للمستخدمين."],
+  ["ماذا تستهدف هجمات تطبيقات وخوادم الويب؟", "تستهدف إما التطبيق نفسه للوصول إلى البيانات الحساسة، أو تستخدم التطبيق كمنطقة تجهيز للهجمات ضد مستخدمي البرنامج، كما تستهدف الثغرات في قواعد البيانات المرتبطة بالخادم لسرقة أو تعديل أو حذف البيانات."],
+  ["ما هي الأنواع السبعة للهجوم على خادم الويب؟", "1) رفض الخدمة (DoS)، 2) تشويه الموقع الإلكتروني (Web Defacement)، 3) قوة الاختراق عبر بروتوكول SSH، 4) استغلال البرمجة النصية المشتركة (XSS)، 5) اختراق الدليل (Directory Traversal)، 6) الرجل في الوسط (MITM)، 7) تجزئة استجابة HTTP."],
+  ["كيف يعمل هجوم رفض الخدمة (DoS) على خادم الويب؟ ومن هم أبرز ضحاياه؟", "يقوم القراصنة بتوجيه عدد كبير من الطلبات إلى الموقع الإلكتروني مما يؤدي لإبطاء الخادم أو إسقاطه بالكامل ومنع المصرح لهم من الوصول إليه. ومن أبرز ضحاياه: الخدمات الحكومية وشركات بطاقات الائتمان."],
+  ["ما هو هجوم تشويه الموقع الإلكتروني (Web Defacement Attack)؟", "يحصل القراصنة على وصول إلى الموقع ويقومون بتشويهه لإهانة وتشويه سمعة الضحية، عبر قرصنة خادم الويب واستبدال الموقع المستضاف بموقع خاص بهم."],
+  ["كيف يتم تنفيذ هجوم قوة الاختراق عبر بروتوكول SSH؟ وبماذا يختلف عن التكتيكات الأخرى؟", "يتم من خلال تخمين اعتمادات تسجيل الدخول إلى SSH للحصول على وصول وإرسال ملفات ضارة دون اكتشافها. ويختلف عن التكتيكات الأخرى في أنه (لا يعتمد على ثغرات قائمة بالفعل)."],
+  ["ما هو هجوم استغلال البرمجة النصية المشتركة (XSS)؟ وإلى ماذا يمنح الوصول؟", "يستهدف المواقع التي تحتوي على عيوب في البرمجة النصية عبر حقن رمز خبيث (سكريبت) في تطبيقات الويب، ويمنح القراصنة وصولاً إلى بيانات تطبيق الويب مثل الجلسات (Sessions) والكوكيز (Cookies)."],
+  ["ما هو هجوم اختراق الدليل (Directory Traversal)؟ وماذا يستهدف؟", "يُنفذ على الخوادم القديمة ذات الثغرات والتهيئة الخاطئة؛ حيث يهدف القراصنة فيه إلى الوصول إلى الدلائل والملفات الواقعة (خارج الدليل الجذر) المخصص لتخزين صفحات الويب."],
+  ["كيف يعمل هجوم الرجل في الوسط (MITM) على خادم الويب؟ وكيف يغري الضحية؟", "يقوم بحجب والتقاط وتعديل الاتصال بين المستخدم النهائي وخادم الويب لسرقة التفاصيل المصرفية وكلمات المرور. ويغري المهاجم الضحية بالاتصال بخادم إنترنت من خلال (التظاهر بأنه وكيل - Proxy)."],
+  ["ما هو هجوم تجزئة استجابة HTTP (HTTP Response Splitting Attack)؟", "هو هجوم قائم على التلاعب بالبروتوكول، وتكون البرامج التي تستخدم بروتوكول HTTP لتبادل البيانات هي الأكثر عرضة لهذا الهجوم."],
+  ["ما الذي يشكل أكبر تهديد لأمان شبكة الواي فاي المجانية؟ وكم مرة تُوفر الملفات التوقيعية لمكافح الفيروسات؟", "• أكبر تهديد للواي فاي المجانية: قدرة المتسلل على وضع نفسه بينك وبين نقطة الاتصال (وإصابة جهازك إذا سمحت بمشاركة الملفات).\n• الملفات التوقيعية لمكافحة الفيروسات: يتم توفيرها يومياً."],
+  ["ما هو درع تهديدات الويب (Web Threat Shield)؟ وبماذا يُشار إليه أيضاً؟", "هو أداة برمجية تحمي حاجز النظام الحاسوبي الذي يعمل على تطبيق ويب عن طريق تفحص حركة HTTP وتحديد الطلبات الخبيثة. ويُشار إليه أيضاً بـ (حماية أمان المحتوى) أو (جدار حماية الويب)."],
+  ["ما هي أبرز ميزات ووظائف درع تهديدات الويب؟", "1) تفحص حركة HTTP وتحديد الطلبات الخبيثة، 2) منع بعض المستخدمين من الوصول لبعض مناطق الموقع، 3) إعادة توجيه المستخدمين لخوادم آمنة، 4) مراقبة حركة قاعدة البيانات لكشف ثغرات حقن SQL، 5) اختبار أمان موقعك."],
+  ["ما الفرق بين النسخة المجانية والنسخة المدفوعة من (درع تهديدات الويب)؟", "• النسخة المجانية: وظائفها محدودة وتقوم بفحص جلسات HTTP والموارد الخارجية.\n• النسخة المدفوعة: للمواقع الكبيرة، تراقب اتصالات قاعدة البيانات لكشف الثغرات قبل أن تؤثر على النظام الخلفي، وتعيد توجيه المستخدمين لخادم آمن يفحص المحتوى الخبيث قبل إعادة التوجيه."],
+  ["ما هي سمعة الويب (Web Reputation)؟ وكيف تستخدمها المتصفحات؟", "تحدد سلامة موقع الويب من حيث التهديدات والبرامج الضارة والأمان، وتساعد المستخدم في تحديد ما إذا كان الموقع آمناً لتصفحه. وتستخدم المتصفحات (مرشحات عناوين URL) لتنبيه المستخدم وحظر الاتصال بالمواقع غير الآمنة."],
+  ["ماذا يحدث لسمعة الويب لنطاق المجال (Domain) إذا اشترك الموقع في سرقة المعلومات أو نشر برامج ضارة؟", "تتأثر سمعة الويب لنطاق المجال سلباً، وتواجه المواقع الأخرى المرتبطة بنفس النطاق أو التي تحيل إلى صفحة ويب في ذلك النطاق عواقب مماثلة."],
+  ["ما هي العناصر الستة لسمعة الويب (Web Reputation)؟", "1) موقع الاستضافة (Hosting Location).\n2) نوع وعنوان (URL).\n3) جودة المحتوى.\n4) مالك المجال (Domain Owner).\n5) الأداء.\n6) مشاركة المستخدم (User Engagement)."],
+  ["ما هي الإجراءات الستة للحماية من المواقع الضارة المؤثرة على سمعة الويب؟", "1) استخدام أداة فحص سلامة المواقع مثل Google Safe Browsing، 2) تفعيل التصفح الآمن ومرشحات URL في المتصفحات (Safari, Chrome, Edge)، 3) عدم زيارة عناوين HTTP، 4) عدم استخدام بطاقات الائتمان بالمواقع غير الموثوقة، 5) عدم تجاهل تحذيرات المتصفح، 6) تثبيت أدوات الأمان ومكافح الفيروسات."],
+  ["كيف يتم تنفيذ هجوم اجتياز المسار (Path Traversal) تقنياً؟ وما المثال المذكور للملف المستهدف؟", "يتم عبر تلاعب المتغيرات باستخدام تسلسلات 'نقطة - نقطة - شرطة مائلة' (../) أو مسارات مطلقة للخروج خارج مجلد جذر الويب المعتاد (/var/www/) والوصول لملفات النظام الحساسة مثل ملف كلمات المرور (passwords.txt)."],
+  ["ما هي الإجراءات الخمسة للحماية من هجوم اجتياز المسار؟", "1) التحقق من صحة المسار (عدم وجود أحرف خاصة غير مسموح بها)، 2) استخدام إجراءات تنقية الإدخال، 3) تقييد الوصول إلى المسارات المشروعة فقط، 4) استخدام الأذونات الصحيحة للملفات والدلائل، 5) تحديث وتطوير البرمجيات بانتظام."],
+  ["ما هو تسمم ذاكرة التخزين المؤقت على الويب (Web Cache Poisoning)؟ وكيف يحدث؟", "هو هجوم على نظام التخزين المؤقت للمتصفح حيث يُقدم محتوى قديم أو غير محدث للمستخدم، أو تُخدع شبكة إعلانات لعرض رسالة خطأ زائفة. ويحدث عندما يستخدم القراصنة البوتات لطلب العديد من الصور الرسومية مع حقن رمز HTML مسموم."],
+  ["ما هي الخطوات الأربع للحماية من تسمم ذاكرة التخزين المؤقت على الويب؟", "1) تحسين الموقع والصور لتحميل الصفحات بسرعة ودون أخطاء، 2) إزالة أي نسخ مخزنة في الذاكرة المؤقتة عند تغيير محتوى الصفحات، 3) عدم استخدام نفس الصورة مراراً وتكراراً في مقالات المدونة، 4) استخدام ملحق تخزين (Caching Plugin) لعرض نسخة سابقة سليمة عند حدوث خطأ."],
+  ["ما هو هجوم حقن (CRLF Injection)؟ وماذا تعني حروف CRLF؟", "هو نوع من الهجمات على الجانب الخادم (Server Side) يتم فيه إدخال حروف CRLF (Carriage Return Line Feed - وتعني العودة إلى البداية والانتقال إلى السطر الجديد) في إدخالات المستخدم (مثل رؤوس HTTP أو معلمات الطلبات)."],
+  ["ما هي الهجمات الثلاث التي يمكن للمهاجم إجراؤها عند استغلال ثغرة (CRLF Injection)؟", "1) إدخال رؤوس HTTP إضافية لتنفيذ هجمات تزوير الرؤوس (Header Manipulation) كتعيين كوكيز مزيفة أو تغيير روابط التوجيه (Redirects) لمواقع ضارة.\n2) إدخال محتوى غير مرئي (روابط أو تعليقات).\n3) هجمات انتقال الجلسة (Session Riding)."],
+  ["ما هو هجوم حقن (SQL Injection)؟ وأين يتم حقن التعليمات الخبيثة؟", "هو هجوم قائم على الجانب الخادم (Server Side) يستغل ثغرات في تطبيقات قواعد البيانات التي تستخدم لغة (SQL)؛ حيث يحقن المهاجم تعليمات SQL خبيثة في نماذج الويب أو عناصر URL للتلاعب بقاعدة البيانات."],
+  ["ما هي الأنواع (العمليات) الثلاث التي يمكن للمهاجم تنفيذها من خلال هجوم (SQL Injection)؟", "1) استرجاع بيانات حساسة من قاعدة البيانات (مثل كلمات المرور المشفرة ومعلومات المستخدمين).\n2) تنفيذ تعليمات SQL لتعديل قاعدة البيانات (تغيير أو حذف أو إضافة بيانات).\n3) تنفيذ أوامر خادم قاعدة البيانات (مثل تشغيل نظام الملفات أو إنشاء اتصالات شبكية خارجية)."],
+  ["ما القاسم المشترك بين هجوم (CRLF Injection) وهجوم (SQL Injection) من حيث مكان التنفيذ؟", "كلاهما يُصنفان كنوع من الهجمات القائمة على الجانب الخادم (Server Side) عبر حقن مدخلات خبيثة في طلبات المستخدم."],
+  ["لماذا يُحذر من استخدام نفس الصورة مراراً وتكراراً في مقالات مدونتك؟", "لأنه في حال تكرار نفس الصورة مراراً وتكراراً، سيصبح من الأسهل لهجوم (تسمم ذاكرة التخزين المؤقت - Web Cache Poisoning) أن يؤثر على موقعك."]
+];
+
+const masterQuestions = [
+  {q:"أجهزة كمبيوتر تعمل بنظام تشغيل ومتصلة بقاعدة بيانات لتخزين المواقع الإلكترونية، ومسؤوليتها الأساسية عرض محتوى الموقع عن طريق تخزين ومعالجة وتوزيع صفحات الويب للمستخدمين:",o:["خوادم الويب (Web Servers)","محطات النقل الأساسية (BTS)","بروتوكولات البلوتوث","موازنات الطاقة الكهربائية"],a:0,e:"خوادم الويب هي المكان الذي تُخزن فيه المواقع الإلكترونية ومسؤوليتها الأساسية تخزين ومعالجة وتوزيع صفحات الويب للمستخدمين."},
+  {q:"عملية يقوم بها قراصنة الإنترنت تتسبب في توجيه عدد كبير من الطلبات إلى الموقع الإلكتروني لإبطاء الخادم أو إسقاطه بالكامل، ومن أبرز ضحاياه الخدمات الحكومية وشركات بطاقات الائتمان:",o:["هجوم رفض الخدمة (Denial-of-Service - DoS)","هجوم تشويه الموقع الإلكتروني (Web Defacement)","هجوم اختراق الدليل (Directory Traversal)","تسمم ذاكرة التخزين المؤقت"],a:0,e:"هجوم رفض الخدمة (DoS) يوجه عدداً كبيراً من الطلبات لإبطاء أو إسقاط الخادم، ومن ضحاياه الخدمات الحكومية وشركات بطاقات الائتمان."},
+  {q:"في أي هجوم من هجمات خادم الويب يقوم الهاكرز بقرصنة الخادم واستبدال الموقع الذي يتم استضافته بموقع خاص بهم بهدف إهانة وتشويه سمعة الضحية؟",o:["هجوم تشويه الموقع الإلكتروني (Web Defacement Attack)","هجوم قوة الاختراق عبر SSH","هجوم تجزئة استجابة HTTP","هجوم الرجل في الوسط (MITM)"],a:0,e:"في هجوم تشويه الموقع الإلكتروني (Web Defacement) يستبدل القراصنة الموقع المستضاف بموقع خاص بهم لتشويه سمعة الضحية."},
+  {q:"هجوم يتم تنفيذه من خلال تخمين اعتمادات تسجيل الدخول لإرسال ملفات ضارة دون اكتشافها، ويتميز بأنه (لا يعتمد على ثغرات قائمة بالفعل):",o:["هجوم قوة الاختراق عبر بروتوكول SSH (SSH Brute Force Attacks)","هجوم استغلال البرمجة النصية المشتركة (XSS)","هجوم اختراق الدليل (Directory Traversal)","هجوم حقن SQL"],a:0,e:"هجوم قوة الاختراق عبر بروتوكول SSH يعتمد على تخمين اعتمادات تسجيل الدخول إلى SSH ولا يعتمد على ثغرات قائمة بالفعل."},
+  {q:"يستهدف المواقع التي تحتوي على عيوب في البرمجة النصية عبر حقن رمز خبيث (سكريبت) يمنح القراصنة وصولاً إلى بيانات تطبيق الويب مثل (الجلسات والكوكيز):",o:["هجوم استغلال البرمجة النصية المشتركة (Cross-Site Scripting - XSS)","هجوم رفض الخدمة (DoS)","هجوم تشويه الموقع الإلكتروني","درع تهديدات الويب"],a:0,e:"هجوم استغلال البرمجة النصية المشتركة (XSS) يحقن سكريبت خبيث للوصول إلى الجلسات (Sessions) والكوكيز (Cookies)."},
+  {q:"في هجوم الرجل في الوسط (MITM) على خادم الويب، كيف يغري المهاجم الضحية بالاتصال بخادم الإنترنت لالتقاط وتعديل الرسائل وسرقة التفاصيل المصرفية؟",o:["من خلال التظاهر بأنه وكيل (Proxy)","من خلال استبدال الصفحة الرئيسية بصورة فقط","من خلال حذف قاعدة البيانات بالكامل","من خلال إرسال حزم بلوتوث ضخمة"],a:0,e:"في هجمات MITM على خادم الويب، يغري المهاجم الضحية بالاتصال بخادم إنترنت من خلال التظاهر بأنه وكيل (Proxy)."},
+  {q:"يُعد هجوماً قائماً على (التلاعب بالبروتوكول)، وتكون البرامج التي تستخدم بروتوكول HTTP لتبادل البيانات هي الأكثر عرضة لهذا الهجوم:",o:["هجوم تجزئة استجابة HTTP (HTTP Response Splitting Attack)","هجوم قوة الاختراق عبر SSH","تثبيت جدار الحماية","نسخ البيانات الاحتياطي"],a:0,e:"هجوم تجزئة استجابة HTTP هو هجوم على التلاعب بالبروتوكول يستهدف البرامج التي تستخدم بروتوكول HTTP لتبادل البيانات."},
+  {q:"ما الذي يشكل أكبر تهديد لأمان شبكة الواي فاي المجانية (العامة) كما ورد في إجراءات الوقاية بالوحدة الأولى؟",o:["قدرة المتسلل على وضع نفسه بينك وبين نقطة الاتصال (ونشر برامج ضارة خاصة عند السماح بمشاركة الملفات)","سرعة تحميل الصفحات العالية","استخدامها لتحديث برامج مكافحة الفيروسات","وجود جدار ناري قوي فيها"],a:0,e:"ينص المنهج على أن قدرة المتسلل على وضع نفسه بينك وبين نقطة الاتصال تشكل أكبر تهديد لأمان شبكة الواي فاي المجانية."},
+  {q:"أداة برمجية تحمي حاجز النظام الحاسوبي الذي يعمل على تطبيق ويب عن طريق تفحص حركة HTTP وتحديد الطلبات الخبيثة، ويُشار إليها أيضاً بـ (حماية أمان المحتوى) أو (جدار حماية الويب):",o:["درع تهديدات الويب (Web Threat Shield)","تسمم ذاكرة التخزين المؤقت (Web Cache Poisoning)","هجوم اجتياز المسار (Path Traversal)","تجزئة استجابة HTTP"],a:0,e:"درع تهديدات الويب (Web Threat Shield) يفحص حركة HTTP ويحدد الطلبات الخبيثة، ويُسمى أيضاً حماية أمان المحتوى أو جدار حماية الويب."},
+  {q:"ما الفرق الدقيق بين (النسخة المجانية) و (النسخة المدفوعة) من أداة درع تهديدات الويب (Web Threat Shield)؟",o:["المجانية وظائفها محدودة وتفحص جلسات HTTP والموارد الخارجية، بينما المدفوعة للمواقع الكبيرة وتراقب اتصالات قاعدة البيانات لكشف الثغرات (مثل حقن SQL) قبل تأثيرها على النظام الخلفي","المجانية تراقب قواعد البيانات الضخمة والمدفوعة لا تفحص جلسات HTTP","النسخة المجانية مخصصة لاختراق المواقع والمدفوعة لتشويهها","لا يوجد أي فرق في الميزات بين النسختين"],a:0,e:"النسخة المجانية تفحص جلسات HTTP والموارد الخارجية فقط، أما المدفوعة فتوفر ميزات معقدة للمواقع الكبيرة كمراقبة اتصالات قاعدة البيانات لكشف الثغرات قبل تأثيرها على النظام الخلفي."},
+  {q:"تحدد سلامة موقع الويب من حيث التهديدات والبرامج الضارة والأمان، وتساعد المستخدم النهائي على تحديد ما إذا كان موقع ما مشتركاً في أعمال غير قانونية وهل هو آمن لتصفحه:",o:["سمعة الويب (Web Reputation)","هجوم حقن CRLF","تسمم ذاكرة التخزين المؤقت","بروتوكول SSH"],a:0,e:"سمعة الويب (Web Reputation) تحدد سلامة الموقع وتساعد المستخدم في معرفة مدى أمان الموقع لتصفحه."},
+  {q:"جميع ما يلي يُعد من العناصر الستة لـ (سمعة الويب - Web Reputation) المذكورة في الوحدة الثانية ما عدا:",o:["تسلسل نقطة-نقطة-شرطة مائلة (../)","موقع الاستضافة (Hosting Location) ونوع وعنوان (URL)","جودة المحتوى والأداء","مالك المجال (Domain Owner) ومشاركة المستخدم (User Engagement)"],a:0,e:"عناصر سمعة الويب الستة هي: موقع الاستضافة، نوع وعنوان URL، جودة المحتوى، مالك المجال، الأداء، ومشاركة المستخدم."},
+  {q:"أي أداة من الأدوات التالية تقدمها شركة جوجل وتُستخدم لفحص سلامة المواقع للحماية من المواقع الضارة المؤثرة على سمعة الويب؟",o:["Google Safe Browsing","Google Play Music","SSH Brute Force","Web Cache Poisoning"],a:0,e:"أداة Google Safe Browsing التي تقدمها جوجل تُستخدم لفحص سلامة المواقع للحماية من المواقع الضارة."},
+  {q:"في هجوم اجتياز المسار (اختراق الدليل - Directory Traversal)، ما هو مجلد جذر الويب المعتاد؟ وما التسلسل الذي يستخدمه المهاجم للخروج منه والوصول إلى ملف كلمات المرور (passwords.txt)؟",o:["مجلد جذر الويب هو (/var/www/)، والتسلسل هو 'نقطة - نقطة - شرطة مائلة' (../)","مجلد الجذر هو (http://)، والتسلسل هو (@@@)","مجلد الجذر هو (SQL)، والتسلسل هو (CRLF)","لا يستخدم المهاجم أي تسلسلات أو مسارات"],a:0,e:"يستهدف هجوم اختراق المسار الوصول لملفات خارج مجلد جذر الويب (/var/www/) مثل passwords.txt باستخدام تسلسل نقطة-نقطة-شرطة مائلة (../)."},
+  {q:"أي إجراء مما يلي يُعد من الإجراءات الخمسة للحماية من (هجوم اجتياز المسار - Path Traversal)؟",o:["جميع ما ذكر (التحقق من صحة المسار، تنقية الإدخال، تقييد الوصول للمسارات المشروعة، استخدام الأذونات الصحيحة، وتحديث البرمجيات)","السماح لجميع المستخدمين بالوصول لملف passwords.txt","وضع جميع ملفات النظام الحساسة للجمهور بدون أذونات","إلغاء التحقق من المدخلات في المسارات"],a:0,e:"هذه هي الإجراءات الخمسة الكاملة للحماية من هجوم اجتياز المسار كما وردت في نهاية الوحدة الثانية."},
+  {q:"هجوم على نظام التخزين المؤقت للمتصفح يتم فيه تقديم محتوى قديم أو غير محدث للمستخدم، أو حقن رمز خبيث عبر شبكة إعلانات لعرض رسالة خطأ زائفة:",o:["تسمم ذاكرة التخزين المؤقت على الويب (Web Cache Poisoning)","هجوم قوة الاختراق عبر SSH","درع تهديدات الويب (Web Threat Shield)","أداة Google Safe Browsing"],a:0,e:"تسمم ذاكرة التخزين المؤقت للويب (Web Cache Poisoning) يستهدف نظام التخزين المؤقت للمتصفح لتقديم محتوى قديم أو رسائل خطأ زائفة."},
+  {q:"كيف يحدث هجوم (تسمم ذاكرة التخزين المؤقت على الويب - Web Cache Poisoning) باستخدام البوتات؟",o:["يستخدم القراصنة البوتات لطلب العديد من الصور الرسومية من موقع واحد مع حقن رمز HTML مسموم يسبب أخطاء في صفحة الويب","يقوم البوت بتحديث نظام التشغيل تلقائياً","يقوم البوت بتشفير القرص الصلب بالبيتكوين","يستخدم البوت بروتوكول البلوتوث لإرسال رسائل نصية"],a:0,e:"يحدث ذلك عندما يستخدم القراصنة البوتات لطلب العديد من الصور الرسومية من موقع واحد مع حقن رمز HTML مسموم."},
+  {q:"للحماية من هجوم (تسمم ذاكرة التخزين المؤقت على الويب)، ينصح المنهج بجميع الخطوات التالية ما عدا:",o:["استخدام نفس الصورة مراراً وتكراراً في جميع مقالات مدونتك وعدم إزالة النسخ المؤقتة أبداً","التأكد من تحسين الموقع والصور لتحميل الصفحات بشكل أسرع ودون أخطاء","إزالة أي نسخ مخزنة في الذاكرة المؤقتة عند تغيير محتوى صفحاتك","استخدام ملحق تخزين (Caching Plugin) لرؤية نسخة سابقة سليمة عند حدوث خطأ"],a:0,e:"ينص المنهج صراحةً على: (لا تستخدم نفس الصورة مراراً وتكراراً في مقالات مدونتك، حيث سيصبح من الأسهل لتسمم ذاكرة التخزين المؤقت أن يؤثر على موقعك)."},
+  {q:"نوع من الهجمات على الجانب الخادم (Server Side) يتم فيها إدخال حروف تعني (العودة إلى البداية والانتقال إلى السطر الجديد) في رؤوس HTTP أو معلمات الطلبات:",o:["هجوم حقن CRLF (Carriage Return Line Feed)","هجوم حقن SQL (SQL Injection)","هجوم تشويه الموقع (Web Defacement)","هجوم قوة الاختراق عبر SSH"],a:0,e:"هجوم حقن CRLF (Carriage Return Line Feed) هو هجوم على الجانب الخادم يتم فيه إدخال حروف العودة للبداية والانتقال لسطر جديد."},
+  {q:"عند نجاح هجوم حقن (CRLF Injection)، يستطيع المهاجم إدخال رؤوس HTTP إضافية لتنفيذ هجمات تُعرف بـ:",o:["تزوير الرؤوس (Header Manipulation) مثل تعيين ملفات تعريف الارتباط (Cookies) المزيفة أو تغيير روابط المؤشر (Redirects) لمواقع ضارة","تشغيل نظام الملفات في قاعدة البيانات","إغراق الخادم بطلبات UDP","تخمين كلمة مرور SSH"],a:0,e:"إدخال رؤوس HTTP إضافية بعد حقن CRLF يسمح بتنفيذ هجمات تزوير الرؤوس (Header Manipulation) كتعيين كوكيز مزيفة أو تغيير الروابط Redirects."},
+  {q:"ما هي الهجمات الثلاث التي يتم إجراؤها عن طريق استغلال ثغرة (CRLF Injection)؟",o:["1) إدخال رؤوس HTTP إضافية (تزوير الرؤوس)، 2) إدخال محتوى غير مرئي، 3) هجمات انتقال الجلسة (Session Riding)","1) سرقة الجهاز، 2) كسر الشاشة، 3) فصل الكهرباء","1) تشفير الواي فاي، 2) تغيير SSID، 3) تحديث الراوتر","1) فحص الفيروسات، 2) النسخ الاحتياطي، 3) تفعيل الجدار الناري"],a:0,e:"يتم استغلال ثغرة CRLF لإجراء 3 هجمات: إدخال رؤوس HTTP إضافية، إدخال محتوى غير مرئي، وهجمات انتقال الجلسة (Session Riding)."},
+  {q:"نوع من الهجمات القائمة على الجانب الخادم (Server Side) يستغل ثغرات في تطبيقات قواعد البيانات عن طريق حقن تعليمات خبيثة في نماذج الويب أو عناصر URL:",o:["هجوم حقن SQL (SQL Injection)","هجوم حقن CRLF","تسمم ذاكرة التخزين المؤقت","سمعة الويب (Web Reputation)"],a:0,e:"هجوم حقن SQL (SQL Injection) هو هجوم على الجانب الخادم يستغل ثغرات تطبيقات قواعد البيانات بحقن تعليمات SQL خبيثة في نماذج الويب أو URL."},
+  {q:"من خلال إدخال تعليمات SQL مشبوهة في هجوم (SQL Injection)، ما هي العمليات الثلاث التي يمكن للمهاجم تنفيذها؟",o:["1) استرجاع بيانات حساسة (ككلمات المرور المشفرة)، 2) تعديل قاعدة البيانات (تغيير/حذف/إضافة)، 3) تنفيذ أوامر خادم قاعدة البيانات (كتشغيل نظام الملفات أو اتصالات شبكية خارجية)","1) تحسين جودة الصور، 2) تسريع المتصفح، 3) حماية الخادم","1) تغيير موقع الاستضافة، 2) شراء نطاق جديد، 3) تفعيل مرشحات URL","لا يمكن للمهاجم قراءة أو تعديل أي بيانات في قاعدة البيانات"],a:0,e:"هذه هي الأنواع والعمليات الثلاث التي ينفذها المهاجم عبر استغلال ثغرة SQL Injection كما وردت في نهاية الفصل الثالث عشر."},
+  {q:"أي ميزة في (درع تهديدات الويب) تمنحك حماية إضافية ضد القراصنة الذين يسعون للوصول إلى قاعدة البيانات الخاصة بك؟",o:["قدرته على مراقبة حركة المرور في قاعدة البيانات للكشف عن ثغرات مثل حقن SQL","تغيير لون خلفية الموقع الإلكتروني","إيقاف عمل المتصفحات الحديثة مثل Chrome و Safari","حذف ملفات النسخ الاحتياطي"],a:0,e:"يتميز درع تهديدات الويب بقدرته على مراقبة حركة المرور في قاعدة البيانات للكشف عن ثغرات مثل حقن SQL."},
+  {q:"للحماية من المواقع الضارة المؤثرة على سمعة الويب، أي نوع من عناوين URL يُحذر المنهج من زيارته؟",o:["عناوين URL ذات بروتوكول HTTP (غير المشفر)","عناوين URL المشفرة والموثوقة","المواقع المفحوصة بأداة Google Safe Browsing","المواقع المحمية بشهادات SSL"],a:0,e:"من إجراءات الحماية من المواقع الضارة المؤثرة على سمعة الويب: (عدم زيارة عناوين URL ذات بروتوكول HTTP)."}
+];
+
+// بناء شبكة المصطلحات
+const termsGrid = document.getElementById("termsGrid");
+terms.forEach(([en, ar]) => {
+  const d = document.createElement("div");
+  d.className = "card";
+  d.style.margin = "0";
+  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
+  termsGrid.appendChild(d);
+});
+
+// إدارة البطاقات التعليمية
+let ci = 0, showAnswer = false;
+function renderCard() {
+  document.getElementById("flashTerm").textContent = cards[ci][0];
+  document.getElementById("flashAnswer").textContent = cards[ci][1];
+  document.getElementById("flashAnswer").hidden = !showAnswer;
+  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
+  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+}
+document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
+document.getElementById("flashcard").addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
+});
+document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
+document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
+renderCard();
+
+// التنقل بين التبويبات
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+// خوارزمية خلط عشوائي (Fisher-Yates Shuffle) للأسئلة والخيارات
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+let currentQuestions = [];
+let answers = {};
+
+function prepareShuffledQuiz() {
+  currentQuestions = shuffleArray(masterQuestions).map(item => {
+    const optsWithFlag = item.o.map((text, idx) => ({ text, isCorrect: idx === item.a }));
+    const shuffledOpts = shuffleArray(optsWithFlag);
+    return {
+      q: item.q,
+      o: shuffledOpts.map(x => x.text),
+      a: shuffledOpts.findIndex(x => x.isCorrect),
+      e: item.e
+    };
+  });
+}
+
+function renderQuiz() {
+  prepareShuffledQuiz();
+  const area = document.getElementById("quizArea");
+  area.innerHTML = "";
+  const letters = ["أ", "ب", "ج", "د"];
+  currentQuestions.forEach((item, i) => {
+    const box = document.createElement("div");
+    box.className = "qbox";
+    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
+    const opts = box.querySelector(".options");
+    item.o.forEach((opt, j) => {
+      const btn = document.createElement("button");
+      btn.className = "option";
+      btn.textContent = `${letters[j]}) ${opt}`;
+      btn.onclick = () => {
+        answers[i] = j;
+        [...opts.children].forEach((x, k) => {
+          x.classList.remove("correct", "wrong");
+          x.disabled = true;
+          if (k === item.a) x.classList.add("correct");
+          if (k === j && j !== item.a) x.classList.add("wrong");
+        });
+        const fb = document.getElementById("fb" + i);
+        fb.hidden = false;
+        fb.className = "feedback " + (j === item.a ? "good" : "bad");
+        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
+        updateScore();
+      };
+      opts.appendChild(btn);
+    });
+    area.appendChild(box);
+  });
+  updateScore();
+}
+
+function updateScore() {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
+  document.getElementById("score").textContent = `النتيجة: ${correct} / ${currentQuestions.length}`;
+  document.getElementById("progressBar").style.width = (Object.keys(answers).length / currentQuestions.length * 100) + "%";
+}
+
+document.getElementById("resetQuiz").onclick = () => {
+  answers = {};
+  document.getElementById("finalResult").textContent = "";
+  renderQuiz();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+document.getElementById("finishQuiz").onclick = () => {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
+  const pct = Math.round(correct / currentQuestions.length * 100);
+  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${currentQuestions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! أنتِ مستعدة تماماً للاختبار." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
+};
+
+renderQuiz();
+</script>
+</body>
+</html>

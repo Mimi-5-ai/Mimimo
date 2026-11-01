@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الفصل الثاني عشر الشامل (100%) | أمن البيانات والخصوصية</title>
+<style>
+:root{
+  --bg:#f2f7f6;
+  --card:#ffffff;
+  --ink:#132a28;
+  --muted:#5c7471;
+  --accent:#0d9488;
+  --accent-dark:#115e59;
+  --accent2:#ccfbf1;
+  --line:#d5e6e4;
+  --good:#059669;
+  --good-bg:#ecfdf5;
+  --bad:#dc2626;
+  --bad-bg:#fef2f2;
+  --warn:#d97706;
+  --warn-bg:#fffbeb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
+header{background:linear-gradient(135deg,#042f2e,#0d9488);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(4,47,46,0.18)}
+.wrap{max-width:1040px;margin:auto;padding:0 16px}
+.eyebrow{opacity:.92;font-size:.9rem;background:rgba(255,255,255,0.16);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
+h1{margin:5px 0;font-size:clamp(1.55rem,4vw,2.3rem)}
+header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
+nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:var(--accent2);color:var(--accent-dark);font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
+nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
+nav button.active,.btn.primary{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+main .btn.primary{background:var(--accent);color:white}
+main{padding:22px 0 48px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(19,42,40,0.04)}
+h2{font-size:1.35rem;margin:0 0 12px;color:#042f2e}
+h3{font-size:1.06rem;margin:0 0 8px;color:var(--accent-dark)}
+small,.muted{color:var(--muted)}
+ul,ol{padding-right:22px;margin:8px 0}
+li{margin:6px 0}
+details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
+summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f4fbf9;color:#042f2e;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
+details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
+.details-body{padding:16px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
+.badge-new{display:inline-block;background:var(--warn-bg);color:var(--warn);border:1px solid #fcd34d;font-size:.78rem;padding:1px 8px;border-radius:6px;margin-right:6px;font-weight:bold}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#e6f4f1;color:#042f2e;font-weight:bold}
+tr:last-child td{border-bottom:0}
+.note{border-right:4px solid var(--accent);padding:10px 14px;background:#f0fdfa;border-radius:8px;margin:10px 0}
+.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
+.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
+.options{display:grid;gap:8px;margin-top:12px}
+.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
+.option:hover:not(:disabled){border-color:var(--accent);background:#f0fdfa}
+.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
+.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
+.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
+.feedback.good{color:var(--good);background:var(--good-bg)}
+.feedback.bad{color:var(--bad);background:var(--bad-bg)}
+.progress{height:10px;background:#d5e6e4;border-radius:9px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
+.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#ccfbf1);border:2px solid #99f6e4;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
+.flashcard:hover{transform:scale(1.005)}
+.flashcard .term{font-size:1.35rem;font-weight:bold;color:#042f2e}
+.flashcard .answer{margin-top:16px;font-size:1.08rem;color:var(--accent-dark);background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
+@media(max-width:600px){
+  .card{padding:14px}
+  nav button{flex:1 1 calc(50% - 8px);text-align:center}
+  .flashcard{min-height:200px;padding:18px}
+  th,td{padding:8px 10px;font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">نسخة شاملة ومحدثة 100% • مقرر أمن البيانات والخصوصية</div>
+    <h1>الفصل الثاني عشر: تأمين الشبكة اللاسلكية</h1>
+    <p>يغطي التقنيات اللاسلكية، مكونات الشبكة (AP, BTS, WLC, SSID)، أوضاع المصادقة في الواي فاي، هجمات البريد الإلكتروني (Phishing, Smishing, Whaling, Pharming)، وهجمات البلوتوث (Bluesnarfing, BlueSmack, Bluebugging)</p>
+    <nav>
+      <button class="active" data-tab="summary">الشرح الشامل</button>
+      <button data-tab="tables">جداول المقارنات</button>
+      <button data-tab="terms">المصطلحات والأدوات</button>
+      <button data-tab="cards">البطاقات (28)</button>
+      <button data-tab="quiz">الاختبار العشوائي (25)</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- التبويب الأول: الشرح الشامل -->
+  <section id="summary" class="panel active">
+    <div class="card">
+      <h2>خريطة الفصل الثاني عشر (الوحدات الثلاث الكاملة)</h2>
+      <div class="grid">
+        <div>
+          <span class="tag">الوحدة الأولى</span>
+          <h3>البنية التحتية اللاسلكية وأوضاع المصادقة</h3>
+          <p>التقنيات اللاسلكية الأربعة، نقطة الوصول (<span dir="ltr">AP</span>)، محطة النقل الأساسية (<span dir="ltr">BTS</span>)، وحدة التحكم اللاسلكية (<span dir="ltr">WLC</span>)، معرف الشبكة (<span dir="ltr">SSID</span>)، وأوضاع المصادقة الأربعة في الواي فاي.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثانية</span>
+          <h3>الهجمات عبر البريد الإلكتروني والوقاية منها</h3>
+          <p>مفهوم هجمات البريد الإلكتروني، التصيد (<span dir="ltr">Phishing</span>) والتصيد الهاتفي/النصي (<span dir="ltr">Smishing</span>)، صيد الحيتان (<span dir="ltr">Whaling</span>) والصيدلة (<span dir="ltr">Pharming</span>)، التجسس والترهيب، الإعلانات والبريد المزعج، وطرق الحماية.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثالثة</span>
+          <h3>أمن البلوتوث وهجماته وبروتوكول التشفير اللاسلكي</h3>
+          <p>مفهوم البلوتوث، هجوم <span dir="ltr">Bluesnarfing</span> (وبروتوكول <span dir="ltr">OBEX</span>)، هجوم <span dir="ltr">BlueSmack</span>، هجوم <span dir="ltr">Bluebugging</span> وطرق الحماية منها، ومفهوم ومميزات بروتوكول التشفير اللاسلكي (<span dir="ltr">WEP</span>).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- الوحدة الأولى كاملة في قائمة واحدة -->
+    <details open>
+      <summary>الوحدة الأولى: التقنيات اللاسلكية، مكونات الشبكة (AP, BTS, WLC, SSID)، وأوضاع المصادقة في الواي فاي</summary>
+      <div class="details-body">
+        <h3>1) مقدمة عن التقنيات اللاسلكية</h3>
+        <ul>
+          <li><b>أهمية أمان الأجهزة اللاسلكية والمحمولة:</b> يُعد أمراً حيوياً في العصر الحديث لاعتمادنا عليها في التواصل، المعاملات المصرفية، تصفح الإنترنت، والتطبيقات الأخرى.</li>
+          <li><b>تعريف الاتصال اللاسلكي:</b> يشير إلى <b>أي نوع من تبادل البيانات بين الأطراف الذي يتم بشكل لاسلكي (عبر الهواء)</b>. وهو تعريف واسع ينطبق على <b>4 أنواع من التقنيات اللاسلكية</b>:
+            <ol>
+              <li><b>اتصالات شبكة واي فاي (<span dir="ltr">Wi-Fi</span>).</b></li>
+              <li><b>الاتصالات بالبلوتوث (<span dir="ltr">Bluetooth</span>).</b></li>
+              <li><b>الاتصالات عبر الأقمار الصناعية.</b></li>
+              <li><b>الاتصالات المتنقلة.</b></li>
+            </ol>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) مكونات الشبكة اللاسلكية: (<span dir="ltr">AP</span>) و (<span dir="ltr">BTS</span>) و (<span dir="ltr">WLC</span>)</h3>
+        <div class="exam-alert">
+          <b>تنبيه هام للاختبار:</b> يفرّق المنهج بدقة بين وظيفة <b>نقطة الوصول (<span dir="ltr">AP</span>)</b>، و<b>محطة النقل الأساسية (<span dir="ltr">BTS</span>)</b>، و<b>وحدة التحكم اللاسلكية (<span dir="ltr">WLC</span>)</b>!
+        </div>
+        <ul>
+          <li><b>1. نقطة الوصول (<span dir="ltr">Access Point - AP</span>):</b>
+            <ul>
+              <li>هي <b>العقدة المركزية</b> في تنفيذات الشبكات اللاسلكية <b><span dir="ltr">802.11</span></b>.</li>
+              <li>تُمثل <b>الواجهة بين الشبكة المباشرة (السلكية) والشبكة اللاسلكية</b>، حيث يقوم جميع العملاء اللاسلكيين بالاتصال بها وتبادل البيانات معها.</li>
+              <li><b>في بيئة المنزل:</b> في معظم الأحيان يكون لديك <b>جهاز توجيه (راوتر) ومفتاح (سويتش) ونقطة وصول مضمنة في صندوق واحد</b>، مما يجعلها قابلة للاستخدام بشكل فعال لهذا الغرض.</li>
+            </ul>
+          </li>
+          <li><b>2. محطة النقل الأساسية (<span dir="ltr">Base Transceiver Station - BTS</span>):</b>
+            <ul>
+              <li>هي <b>ما يعادل نقطة الوصول (<span dir="ltr">AP</span>) في عالم <span dir="ltr">802.11</span></b>، ولكنها تُستخدم من قِبل <b>مشغلي الهواتف المحمولة</b> لتوفير تغطية إشارة، مثل شبكات <b><span dir="ltr">3G</span> و <span dir="ltr">GSM</span></b> وغيرها.</li>
+            </ul>
+          </li>
+          <li><b>3. وحدة التحكم اللاسلكية (<span dir="ltr">Wireless LAN Controller - WLC</span>):</b>
+            <ul>
+              <li><b>المشكلة في الشركات الكبيرة:</b> في تنفيذ الشبكات اللاسلكية في الشركات يكون عدد نقاط الوصول (<span dir="ltr">APs</span>) عادةً <b>بالمئات أو الآلاف من الوحدات</b>؛ وبالتالي لن يكون من الممكن إدارة كل نقطة وصول وتكوينها وضبط القدرة الناتجة بشكل أمثل، وتكوين التجوال، وإنشاء <span dir="ltr">SSID</span> على كل وحدة وصول على حدة بشكل إداري.</li>
+              <li><b>الحل ودور (<span dir="ltr">WLC</span>):</b> هنا يأتي مفهوم وحدة التحكم اللاسلكية (<span dir="ltr">WLC</span>)، وهي <b>خادم مركزي</b> مهم جداً في كل عمليات الشبكة اللاسلكية يتمتع <b>باتصال <span dir="ltr">IP</span> بجميع نقاط الوصول</b> الموجودة على الشبكة، مما يجعل من السهل:
+                <ol>
+                  <li>إدارتها جميعاً عالمياً من <b>منصة إدارة واحدة</b>.</li>
+                  <li>دفع <b>قوالب التكوين</b> لجميع النقاط.</li>
+                  <li>مراقبة المستخدمين من جميع نقاط الوصول <b>في الوقت الفعلي</b>.</li>
+                </ol>
+              </li>
+            </ul>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) معرف مجموعة الخدمة (<span dir="ltr">SSID - Service Set Identifier</span>)</h3>
+        <ul>
+          <li><b>تعريفه ووظيفته:</b> اسم الشبكة (<b dir="ltr">SSID</b>) يحدد الشبكة اللاسلكية نفسها؛ وهو اسم يتم تعيينه لشبكة الواي فاي اللاسلكية لتحديدها وتمييزها عن غيرها من الشبكات، ويعمل كعنصر تعريفي للشبكة تستخدمه الأجهزة اللاسلكية للعثور على الشبكة والاتصال بها.</li>
+          <li><b>شرط الاتصال بالشبكة اللاسلكية (<span dir="ltr">WLAN</span>):</b> عند إعداد نقطة الوصول (<span dir="ltr">AP</span>) يجب تعيين <span dir="ltr">SSID</span> للشبكة وتكوينه بشكل مسبق. ولكي يتصل العميل اللاسلكي بالشبكة، يحتاج إلى <b>إرسال نفس اسم <span dir="ltr">SSID</span> في إطار الاتصال كاسم <span dir="ltr">SSID</span> المعين مسبقاً على نقطة الوصول</b>؛ حيث يتعرف <span dir="ltr">AP</span> على الـ <span dir="ltr">SSID</span> المتطابق ويسمح للجهاز بالانضمام إلى الشبكة.</li>
+          <li><b>كيف تعرف الأجهزة اسم الشبكة اللاسلكية فقط من خلال الاستماع إلى الموجات المغناطيسية الراديوية؟</b>
+            <ul>
+              <li>وذلك لأن أحد الحقول الموجودة في <b>إطار الإشارة (<span dir="ltr">Beacon Frame</span>)</b> التي ترسلها نقاط الوصول طوال الوقت في فترات زمنية قصيرة جداً <b>يحتوي دائماً على اسم <span dir="ltr">SSID</span> بنص واضح</b>، وهي النظرية الكاملة حول هذا الأمر.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>4) المصادقة لأمان الواي فاي اللاسلكي (<span dir="ltr">Wi-Fi Authentication Modes</span>)</h3>
+        <p><b>مفهوم أوضاع المصادقة:</b> هي مجموعة من الإعدادات التي تحدد كيفية توثيق وتأمين الاتصالات اللاسلكية في شبكة الواي فاي، وتوفر حماية للشبكة وتحدد الطريقة التي يمكن للأجهزة المتصلة استخدامها للوصول إلى الشبكة.</p>
+        <div class="note">
+          <b>خطوات المصادقة والارتباط الأربع بين العميل (<span dir="ltr">Supplicant</span>) والموثق/نقطة الوصول (<span dir="ltr">Authenticator</span>):</b>
+          <ol style="margin-bottom:0">
+            <li><b dir="ltr">1. Authentication request</b> (طلب المصادقة من العميل إلى الموثق).</li>
+            <li><b dir="ltr">2. Authentication response</b> (رد المصادقة من الموثق إلى العميل).</li>
+            <li><b dir="ltr">3. Association request</b> (طلب الارتباط من العميل إلى الموثق).</li>
+            <li><b dir="ltr">4. Association response</b> (رد الارتباط من الموثق إلى العميل).</li>
+          </ol>
+        </div>
+
+        <p><b>أوضاع المصادقة الأربعة الشائعة في الواي فاي (من الأقل أماناً إلى الأكثر أماناً):</b></p>
+        <ul>
+          <li><b>1. وضع مفتوح (<span dir="ltr">Open Mode</span>):</b>
+            <ul>
+              <li>لا يتطلب الوصول إلى الشبكة أي توثيق؛ حيث يمكن لأي شخص في مدى الإشارة اللاسلكية الاتصال بالشبكة واستخدامها.</li>
+              <li><b>مستوى الأمان:</b> غير آمن ولا يُنصح باستخدامه إلا في الحالات التي لا تشتمل على معلومات حساسة ولا تحتاج إلى حماية.</li>
+            </ul>
+          </li>
+          <li><b>2. وضع المفتاح المشترك (<span dir="ltr">Shared Key Mode</span>):</b>
+            <ul>
+              <li>يتم استخدام مفتاح مشترك مسبقاً بين نقطة الوصول (<span dir="ltr">Access Point</span>) والأجهزة المتصلة؛ وعندما يحاول الجهاز الاتصال يُوجه لإدخال المفتاح المشترك للتأكيد على هويته.</li>
+              <li><b>مستوى الأمان:</b> أكثر أماناً من الوضع المفتوح، ولكنه ليس الأكثر أماناً.</li>
+            </ul>
+          </li>
+          <li><b>3. وضع <span dir="ltr">WPA/WPA2-PSK</span>:</b>
+            <ul>
+              <li>يستخدم بروتوكولات مصادقة محسنة مثل <span dir="ltr">Wi-Fi Protected Access (WPA)</span> أو <span dir="ltr">WPA2</span> بنظام مفتاح مشترك مسبق.</li>
+              <li>يتم استخدام <b>مفتاح مشترك مشفر (<span dir="ltr">Pre-Shared Key - PSK</span>)</b> يتم توزيعه مسبقاً على جميع الأجهزة المراد الاتصال بها، ويجب على المستخدمين إدخاله للاتصال بالشبكة.</li>
+              <li><b>مستوى الأمان:</b> يُعتبر هذا الوضع قوياً ويوفر حماية جيدة للشبكة.</li>
+            </ul>
+          </li>
+          <li><b>4. وضع <span dir="ltr">WPA-Enterprise / WPA2-Enterprise</span>:</b>
+            <ul>
+              <li>يستخدم بروتوكولات مصادقة معقدة مثل <b><span dir="ltr">Extensible Authentication Protocol (EAP)</span></b> لتوفير مصادقة قوية.</li>
+              <li>يتطلب استخدام <b>خادم مصادقة</b> مثل <b><span dir="ltr">RADIUS (Remote Authentication Dial-In User Service)</span></b> للتحقق من هوية المستخدمين والأجهزة المتصلة.</li>
+              <li><b>مستوى الأمان:</b> يُعتبر هذا الوضع <b>الأكثر أماناً</b>، ويُستخدم عادةً في <b>الشبكات الكبيرة والمؤسسات</b>.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- الوحدة الثانية كاملة في قائمة واحدة -->
+    <details>
+      <summary>الوحدة الثانية: الهجمات عبر البريد الإلكتروني (التصيد، Smishing، صيد الحيتان، الصيدلة، التجسس، الترهيب، والسبام)</summary>
+      <div class="details-body">
+        <h3>1) مقدمة وأنواع الهجمات عبر البريد الإلكتروني</h3>
+        <ul>
+          <li><b>أهمية البريد الإلكتروني وخطورته:</b> البريد الإلكتروني خدمة عالمية يستخدمها <b>أكثر من مليار شخص حول العالم</b> باعتبارها واحدة من الخدمات الأكثر شعبية، ومن ناحية أخرى أصبح نقطة ضعف كبيرة للمستخدمين والمؤسسات.</li>
+          <li><b>مفهوم الهجمات عبر البريد الإلكتروني:</b> هي هجمات شائعة عند استخدام الشبكة اللاسلكية تستهدف الأفراد أو المؤسسات من خلال التواصل عبر البريد الإلكتروني؛ بهدف استغلال ثغرات في نظم البريد الإلكتروني وإقناع المستخدمين بأداء إجراءات معينة أو الكشف عن معلومات حساسة.</li>
+          <li><b>المجموعات الأربع لأنواع الهجمات عبر البريد الإلكتروني:</b>
+            <div class="grid" style="margin:10px 0">
+              <div class="note" style="margin:0"><b>1. التصيد الاحتيالي (<span dir="ltr">Phishing &amp; Smishing</span>)</b></div>
+              <div class="note" style="margin:0"><b>2. صيد الحيتان والصيدلة (<span dir="ltr">Whaling &amp; Pharming</span>)</b></div>
+              <div class="note" style="margin:0"><b>3. برامج التجسس والترهيب (<span dir="ltr">Spyware &amp; Scareware</span>)</b></div>
+              <div class="note" style="margin:0"><b>4. الإعلانات والبريد المزعج (<span dir="ltr">Adware &amp; Email Spam</span>)</b></div>
+            </div>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) تفصيل أنواع الهجمات عبر البريد الإلكتروني</h3>
+        <div class="exam-alert">
+          <b>تنبيه هام جداً للاختبار:</b> ركّزي بشدة على الفروق الدقيقة بين المصطلحات الأربعة: <b><span dir="ltr">Phishing</span></b>، <b><span dir="ltr">Smishing</span></b>، <b><span dir="ltr">Whaling</span></b>، و <b><span dir="ltr">Pharming</span></b>!
+        </div>
+
+        <p><b>أولاً: التصيد الاحتيالي (<span dir="ltr">PHISHING</span>) والتصيد عبر الهاتف (<span dir="ltr">Smishing</span>)</b></p>
+        <ul>
+          <li><b>1. التصيد الاحتيالي (<span dir="ltr">Phishing</span>):</b>
+            <ul>
+              <li>شكل من أشكال الاحتيال يستخدم فيه المجرمون السيبرانيون البريد الإلكتروني أو الرسائل الفورية أو وسائل التواصل الاجتماعي لمحاولة جمع معلومات (مثل بيانات تسجيل الدخول، كلمات المرور، أو أرقام بطاقات الائتمان) عن طريق <b>التنكر كشخصية أو مصدر معتمد وموثوق</b> (مثل البنك أو بائع التجزئة عبر الإنترنت).</li>
+              <li>يهدف البريد المزيف إلى خداع المستلم لتثبيت برامج ضارة على جهازه أو مشاركة معلومات شخصية أو مالية.</li>
+            </ul>
+          </li>
+          <li><b>2. التصيد الاحتيالي عبر الهاتف والرسائل النصية (<span dir="ltr">Smishing</span>):</b>
+            <ul>
+              <li><b>عبر الاتصال الصوتي:</b> يستخدم المهاجمون تقنيات الاتصال الصوتي، حيث يقومون بالتمويه بالمكالمات من مصادر معتمدة باستخدام <b>تقنيات الصوت عبر بروتوكول الإنترنت (<span dir="ltr">VoIP</span>)</b>، أو قد يتلقى الضحايا رسالة صوتية مسجلة تبدو معتمدة للحصول على أرقام بطاقات الائتمان أو معلومات لسرقة هوية الضحية.</li>
+              <li><b>عبر رسائل النص (<span dir="ltr">SMS</span>) على الهواتف المحمولة:</b> يستخدم <span dir="ltr">Smishing</span> أيضاً رسائل النص على الهواتف المحمولة؛ حيث يتنكر المجرمون كمصدر شرعي لكسب ثقة الضحية (مثل إرسال رابط موقع ويب للضحية، وعند زيارته يتم تثبيت برامج ضارة على الهاتف المحمول).</li>
+            </ul>
+          </li>
+        </ul>
+
+        <p><b>ثانياً: هجمات صيد الحيتان (<span dir="ltr">Whaling</span>) والصيدلة (<span dir="ltr">Pharming</span>)</b></p>
+        <ul>
+          <li><b>1. صيد الحيتان (<span dir="ltr">Whaling</span>):</b>
+            <ul>
+              <li>هو هجوم صيد احتيالي يستهدف <b>الأهداف ذات التأثير الكبير داخل المؤسسة مثل القادة التنفيذيين الكبار</b>.</li>
+              <li>تُصمم هذه الرسائل الإلكترونية لتبدو وكأنها تأتي من قائد تنفيذي كبير (مثل <b>الرئيس التنفيذي <span dir="ltr">CEO</span> أو المدير المالي <span dir="ltr">CFO</span></b>)، وتشمل غالباً طلبات لتحويل الأموال أو معلومات حساسة أخرى.</li>
+            </ul>
+          </li>
+          <li><b>2. الصيدلة (<span dir="ltr">Pharming</span>):</b>
+            <ul>
+              <li>هو <b>تنكر موقع ويب معتمد</b> في محاولة لخداع المستخدمين وإدخال بيانات اعتمادهم.</li>
+              <li>يقوم هذا النوع من الهجوم <b>بتوجيه المستخدمين إلى موقع ويب مزيف يبدو رسمياً</b>، ثم يقوم الضحايا بإدخال معلوماتهم الشخصية معتقدين أنهم متصلون بموقع شرعي.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <p><b>ثالثاً: برامج التجسس (<span dir="ltr">Spyware</span>) وبرامج الترهيب (<span dir="ltr">Scareware</span>)</b></p>
+        <ul>
+          <li><b>1. برامج التجسس (<span dir="ltr">Spyware</span>):</b>
+            <ul>
+              <li>تمكّن المجرم من الحصول على معلومات حول أنشطة الكمبيوتر للمستخدم (تتبع الأنشطة، جمع ضغطات المفاتيح، واستيلاء البيانات).</li>
+              <li>للتغلب على تدابير الأمان، تقوم في كثير من الأحيان <b>بتعديل إعدادات الأمان</b>، وعادةً ما يتم تجميعها مع البرامج الشرعية أو مع حصان طروادة.</li>
+            </ul>
+          </li>
+          <li><b>2. برامج الترهيب (<span dir="ltr">Scareware</span>):</b>
+            <ul>
+              <li>تحاول إقناع المستخدم باتخاذ إجراء محدد <b>بناءً على الخوف</b>.</li>
+              <li>تقوم بإنشاء <b>نوافذ منبثقة تشبه نوافذ حوار نظام التشغيل</b> تنقل رسائل مزورة تفيد بأن النظام في خطر أو يحتاج إلى تنفيذ برنامج محدد للعودة إلى التشغيل الطبيعي. وفي الواقع لا توجد مشاكل، وإذا وافق المستخدم وسمح بتنفيذ البرنامج فإن البرمجيات الخبيثة تصيب جهازه.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <p><b>رابعاً: برامج الإعلانات (<span dir="ltr">Adware</span>) والبريد المزعج (<span dir="ltr">Email Spam</span>)</b></p>
+        <ul>
+          <li><b>1. برامج الإعلانات (<span dir="ltr">Adware</span>):</b> تعرض نوافذ منبثقة مزعجة لتوليد إيرادات لأصحابها، وتحلل اهتمامات المستخدم بتتبع المواقع التي يزورها لإرسال إعلانات منبثقة ذات صلة، وتقوم بعض النسخ من البرامج بتثبيتها تلقائياً.</li>
+          <li><b>2. البريد المزعج (<span dir="ltr">Email Spam</span>):</b>
+            <ul>
+              <li>معروف أيضاً بـ <b>البريد العشوائي</b>، وهو بريد إلكتروني غير مرغوب فيه. في معظم الحالات يُعد وسيلة للإعلان، ومع ذلك يمكن أن يرسل روابط ضارة أو برامج ضارة أو محتوى مضللاً.</li>
+              <li><b>الهدف النهائي منه:</b> الحصول على معلومات حساسة مثل <b>رقم الضمان الاجتماعي أو معلومات الحساب المصرفي</b>.</li>
+              <li><b>مصدره:</b> يأتي معظم البريد المزعج من <b>عدة أجهزة كمبيوتر على شبكات مصابة بفيروسات أو برامج ضارة أخرى (شبكات البوت نت)</b>.</li>
+              <li><b>أمثلة مصورة في المنهج على البريد المزعج:</b> رسالة ادعاء حظر بطاقة الصراف الآلي، رسالة باللغة الإنجليزية تزعم انتهاء كلمة مرور الشبكة الجامعية (<span dir="ltr">MyUniversity</span>) خلال 24 ساعة مع رابط تحديث، ورسالة تزعم الموافقة على مطالبة تعويض وتطلب دفع رسوم مطالبة بنسبة 15%.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) كيف تحمي نفسك من هجمات البريد الإلكتروني؟ (5 إجراءات)</h3>
+        <ol>
+          <li><b>كن حذراً</b> عند فتح الرسائل الإلكترونية من مصادر غير معروفة.</li>
+          <li><b>ابحث عن علامات التصيد الاحتيالي</b> مثل الروابط أو المرفقات المشبوهة وطلبات الحصول على معلومات شخصية.</li>
+          <li><b>استخدم كلمات مرور قوية والمصادقة الثنائية</b> لحماية حساب البريد الإلكتروني الخاص بك.</li>
+          <li><b>حافظ على تحديث جهاز الكمبيوتر الخاص بك والبرامج</b> بأحدث التصحيحات الأمنية.</li>
+          <li><b>استخدم برامج مكافحة الفيروسات ومكافحة البرامج الضارة</b> لاكتشاف ومنع هجمات البريد الإلكتروني.</li>
+        </ol>
+      </div>
+    </details>
+
+    <!-- الوحدة الثالثة كاملة في قائمة واحدة -->
+    <details>
+      <summary>الوحدة الثالثة: البلوتوث وهجماته (Bluesnarfing, BlueSmack, Bluebugging) وبروتوكول التشفير اللاسلكي (WEP)</summary>
+      <div class="details-body">
+        <h3>1) مقدمة عن البلوتوث (<span dir="ltr">Bluetooth</span>) ومخاطره</h3>
+        <ul>
+          <li><b>التعريف والخصائص:</b> البلوتوث هو بروتوكول قياسي يُستخدم لربط العديد من الأجهزة مع بعضها البعض (أجهزة كمبيوتر، محمولة، هواتف ذكية، أو أجهزة إدخال/إخراج). يستخدم البث اللاسلكي للتواصل بتردد يشبه ترددات الواي فاي، ويتميز بأنه <b>يستخدم قدرة منخفضة على الطاقة</b> بالمقارنة مع وسائط المعلومات الأخرى.</li>
+          <li><b>آلية الاتصال:</b> في بعض الأحيان يكفي أن يعثر على أجهزة أخرى في بيئته، وفي حالات أخرى يطلب من المستخدم إدخال <b>رمز التعريف الشخصي (<span dir="ltr">PIN</span>)</b> للاتصال بالجهاز الآخر.</li>
+          <li><b>كيف يستغله المتسللون؟</b> نظراً لتوفره على كل جهاز وقدرته على إرسال البيانات، يستغل المتسللون عدم قفل البلوتوث بشكل صحيح وعدم وعي الناس بالهجمات؛ فيرسلون بريداً مزعجاً إلى أجهزتك بجميع أنواع البرامج الضارة وبرامج التجسس، ويسرقون البيانات الحيوية ويسيطرون على جهاز الضحية.</li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) الهجمات الثلاثة على البلوتوث في الشبكات اللاسلكية وطرق الحماية منها</h3>
+        <div class="exam-alert">
+          <b>مقارنة جوهرية للاختبار بين هجمات البلوتوث الثلاثة:</b><br>
+          • <b><span dir="ltr">Bluesnarfing</span></b> = استرجاع وسرقة البيانات (عبر بروتوكول <b dir="ltr">OBEX</b>).<br>
+          • <b><span dir="ltr">BlueSmack</span></b> = هجوم حجب الخدمة (<b dir="ltr">DoS</b>) بإرسال حزم تتجاوز الحجم الأقصى لتعطيل الجهاز.<br>
+          • <b><span dir="ltr">Bluebugging</span></b> = التحكم الكامل عن بعد بالجهاز (إجراء مكالمات وإرسال رسائل وتنفيذ أوامر).
+        </div>
+
+        <p><b>أولاً: هجوم <span dir="ltr">BLUESNARFING</span> في الشبكات اللاسلكية</b></p>
+        <ul>
+          <li><b>التعريف ومتى يحدث:</b> هو تقنية قرصنة تُستخدم <b>لاسترجاع البيانات من جهاز الضحية</b>. وتحدث هجمات <span dir="ltr">Bluesnarfing</span> عندما يكون جهاز البلوتوث الخاص بك قيد التشغيل ومضبوطاً على <b>وضع قابل للاكتشاف (<span dir="ltr">Discoverable</span>)</b> من قِبل الآخرين.</li>
+          <li><b>البروتوكول المستغل (<span dir="ltr">OBEX</span>):</b> لتنفيذ هجوم <span dir="ltr">Bluesnarfing</span>، يحتاج المهاجم إلى استغلال <b>بروتوكول تبادل الكائنات (<span dir="ltr">OBEX - Object Exchange</span>)</b> لتبادل المعلومات بين الأجهزة اللاسلكية (وهو بروتوكول مستقل عن البائع منفذ على أنظمة تشغيل مختلفة)، حيث تُستخدم أدوات لاستغلال الثغرات الأمنية الأصلية في بروتوكول <span dir="ltr">OBEX</span>.</li>
+          <li><b>آلية السرقة:</b> يقوم المتسللون بإقران أنفسهم مع جهاز الضحية، ثم يسترجعون البيانات من جهاز الضحية إذا كانت حماية البرنامج الثابت (<span dir="ltr">Firmware</span>) الخاصة بهم ليست قوية بما فيه الكفاية.</li>
+          <li><b>إجراءات الحماية الأربعة من هجوم <span dir="ltr">Bluesnarfing</span>:</b>
+            <ol>
+              <li><b>إبقاء البلوتوث معطلاً أو في وضع عدم الكشف عند عدم استخدامه:</b> ويُوصى بإبقائه <b>معطلاً تماماً</b>؛ لأن الجهاز في وضع عدم الكشف لا تزال لديه فرصة ضئيلة للتعرض للهجوم حيث يمكن للمتسلل تنفيذ <span dir="ltr">Bluesnarfing</span> عن طريق <b>تخمين عنوان <span dir="ltr">MAC</span> الخاص بالضحية</b>.</li>
+              <li><b>عدم قبول أي طلبات اتصال</b> من غرباء أو أشخاص لا تعرفهم.</li>
+              <li><b>تنشيط ميزات الأمان المتقدمة:</b> مثل المصادقة الثنائية ورمز التعريف الشخصي (<span dir="ltr">PIN</span>)، وطلب موافقتك على جميع طلبات الاتصال قبل إجرائه.</li>
+              <li><b>تحديث برامج الجهاز بانتظام:</b> لتثبيت حزم جديدة تصلح الثغرات.</li>
+            </ol>
+          </li>
+        </ul>
+
+        <p><b>ثانياً: هجوم <span dir="ltr">BLUESMACK</span> في الشبكات اللاسلكية</b></p>
+        <ul>
+          <li><b>التعريف:</b> هو أحد أنواع الهجمات القديمة ضد البروتوكول، ويُعتبر نوعاً مغايراً لهجوم شائع يُسمى <b>حجب الخدمة (<span dir="ltr">Denial of Service - DoS</span>)</b> المستهدف للشبكات اللاسلكية التي تعتمد على تقنية البلوتوث.</li>
+          <li><b>آلية التنفيذ والنتيجة:</b> يتم تنفيذه عن طريق إرسال حزمة مصممة بشكل خاص <b>تتجاوز حجم الحزمة القصوى المتاحة على جهاز البلوتوث</b> (أو إرسال حزم البيانات بشكل متكرر ومتكامل بسرعة عالية). والنتيجة النهائية هي أن الجهاز يصبح غير قادر على معالجة الحزمة، فيؤدي ذلك إلى <b>إرباك وتعطيل أجهزة البلوتوث</b> وجعلها غير قابلة للاستخدام.</li>
+        </ul>
+
+        <p><b>ثالثاً: هجوم <span dir="ltr">BLUEBUGGING</span> في الشبكات اللاسلكية</b></p>
+        <ul>
+          <li><b>التعريف:</b> هو نوع من الهجمات التي تستهدف أجهزة البلوتوث <b>للتحكم غير المصرح به فيها</b> واستغلال ثغرات الأمان للوصول إلى المعلومات أو التحكم في الأجهزة بشكل غير قانوني، عن طريق استغلال ضعف في بروتوكول البلوتوث وتقنيات التواصل اللاسلكي.</li>
+          <li><b>قدرات المهاجم وخطورة الهجوم:</b> عند تنفيذه بنجاح، يمكن للمهاجم:
+            <ol>
+              <li>الوصول إلى الملفات والمعلومات المخزنة على الجهاز المستهدف.</li>
+              <li><b>إجراء المكالمات أو إرسال الرسائل بالنيابة عن الجهاز.</b></li>
+              <li><b>تنفيذ أوامر عن بعد والتحكم الكامل في الجهاز دون علم المستخدم.</b></li>
+            </ol>
+          </li>
+          <li><b>إجراءات الحماية من هجمات <span dir="ltr">BlueSmack</span> و <span dir="ltr">Bluebugging</span>:</b> تعطيل وضع الاكتشاف القابل للرؤية (<b dir="ltr">discoverable mode</b>)، تحديث برامج التشغيل والبرامج إلى أحدث الإصدارات، تقييد اتصال البلوتوث بأجهزة موثوقة فقط، وتعزيز إعدادات الأمان واستخدام مفاتيح التشفير القوية.</li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) بروتوكول التشفير اللاسلكي <span dir="ltr">WEP (Wireless Encryption Protocol)</span> ومميزاته</h3>
+        <ul>
+          <li><b>التعريف والهدف:</b> بروتوكول التشفير اللاسلكي، المعروف أيضاً في هذه الوحدة باسم <b dir="ltr">WEP (Wireless Encryption Protocol)</b>، هو واحد من أكثر البروتوكولات شيوعاً في الشبكات اللاسلكية لنقل البيانات وتأمين الاتصالات اللاسلكية؛ ويهدف إلى حماية البيانات المرسلة عبر الشبكة اللاسلكية من الوصول غير المصرح به أو التلاعب بها.</li>
+          <li><b>آلية عمله:</b> يعمل عن طريق تحويل البيانات إلى شكل غير مقروء وغير قابل للفهم للأطراف غير المرخص لها، باستخدام تقنيات التشفير المعروفة مثل تقنية تشفير المفتاح الخاص (<b dir="ltr">Private Key Encryption</b>) أو تقنية تشفير المفتاح العام (<b dir="ltr">Public Key Encryption</b>).</li>
+          <li><b>مميزات بروتوكول التشفير اللاسلكي (6 مميزات):</b>
+            <ol>
+              <li><b>حماية البيانات المرسلة:</b> عبر الشبكة اللاسلكية من الوصول غير المصرح به والتلاعب بها.</li>
+              <li><b>الحفاظ على سرية المعلومات:</b> بتحويل البيانات إلى شكل غير قابل للقراءة والفهم لمنع الآخرين من قراءتها.</li>
+              <li><b>مستوى متقدم من الأمان:</b> يقلل من فرص الاختراق والاستغلال الضار.</li>
+              <li><b>أداء متوازن بين الأمان والسرعة:</b> يتيح اختيار مستوى الأمان المناسب وضبط المعلمات بناءً على احتياجات المستخدم لتحقيق توازن بين الأمان وسرعة الاتصال.</li>
+              <li><b>التوافق الواسع:</b> يتوافق مع معظم أجهزة الشبكات اللاسلكية المتاحة في السوق، مما يسهل تطبيقه واستخدامه في البيئات المختلفة.</li>
+              <li><b>خيار اقتصادي:</b> يتطلب تكلفة أقل مقارنة بحلول الأمان الأخرى المتاحة.</li>
+            </ol>
+          </li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- التبويب الثاني: جداول المقارنات السريعة -->
+  <section id="tables" class="panel">
+    <div class="card">
+      <h2>1. مقارنة شاملة بين مكونات البنية التحتية اللاسلكية (AP, BTS, WLC, SSID)</h2>
+      <p class="muted">يلخص هذا الجدول الوظيفة الدقيقة لكل مكون في الشبكات اللاسلكية كما ورد في الوحدة الأولى:</p>
+      <table>
+        <thead>
+          <tr>
+            <th>المكون اللاسلكي</th>
+            <th>الاختصار والمصطلح الإنجليزي</th>
+            <th>الوظيفة الدقيقة وبيئة الاستخدام في المنهج</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1. نقطة الوصول</b></td>
+            <td><b dir="ltr">AP (Access Point)</b></td>
+            <td><b>العقدة المركزية</b> في شبكات <span dir="ltr">802.11</span>، والواجهة بين الشبكة السلكية واللاسلكية. وفي المنزل تُدمج غالباً مع الراوتر والسويتش في صندوق واحد.</td>
+          </tr>
+          <tr>
+            <td><b>2. محطة النقل الأساسية</b></td>
+            <td><b dir="ltr">BTS (Base Transceiver Station)</b></td>
+            <td>تعادل نقطة الوصول (<span dir="ltr">AP</span>) ولكنها تُستخدم من قِبل <b>مشغلي الهواتف المحمولة</b> لتوفير تغطية إشارة مثل <b><span dir="ltr">3G</span> و <span dir="ltr">GSM</span></b>.</td>
+          </tr>
+          <tr>
+            <td><b>3. وحدة التحكم اللاسلكية</b></td>
+            <td><b dir="ltr">WLC (Wireless LAN Controller)</b></td>
+            <td><b>خادم مركزي</b> يُستخدم في الشركات التي تضم مئات أو آلاف من نقاط الوصول (<span dir="ltr">APs</span>)؛ لإدارتها من منصة واحدة، ودفع قوالب التكوين، ومراقبة المستخدمين في الوقت الفعلي عبر اتصال <span dir="ltr">IP</span>.</td>
+          </tr>
+          <tr>
+            <td><b>4. معرف مجموعة الخدمة</b></td>
+            <td><b dir="ltr">SSID (Service Set Identifier)</b></td>
+            <td><b>اسم الشبكة اللاسلكية</b> الذي يميزها عن غيرها. يُرسل دائماً <b>بنص واضح</b> داخل حقل في إطار الإشارة الدوري من <span dir="ltr">AP</span>، ويجب تطابقه لدى العميل للانضمام للشبكة.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>2. مقارنة أوضاع المصادقة الأربعة الشائعة في الواي فاي (Wi-Fi Authentication Modes)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>وضع المصادقة</th>
+            <th>آلية التوثيق والعمل</th>
+            <th>مستوى الأمان والاستخدام</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1. الوضع المفتوح (<span dir="ltr">Open Mode</span>)</b></td>
+            <td>لا يتطلب أي توثيق؛ أي شخص في مدى الإشارة يمكنه الاتصال بالشبكة واستخدامها.</td>
+            <td><b>غير آمن إطلاقاً؛</b> لا يُنصح به إلا في الحالات التي لا تشتمل على معلومات حساسة.</td>
+          </tr>
+          <tr>
+            <td><b>2. وضع المفتاح المشترك (<span dir="ltr">Shared Key Mode</span>)</b></td>
+            <td>يُستخدم مفتاح مشترك مسبقاً بين نقطة الوصول (<span dir="ltr">AP</span>) والأجهزة المتصلة لتأكيد الهوية.</td>
+            <td>أكثر أماناً من الوضع المفتوح، ولكنه ليس الأكثر أماناً.</td>
+          </tr>
+          <tr>
+            <td><b>3. وضع <span dir="ltr">WPA/WPA2-PSK</span></b></td>
+            <td>يستخدم بروتوكولات <span dir="ltr">WPA/WPA2</span> مع <b>مفتاح مشترك مشفر مسبقاً (<span dir="ltr">Pre-Shared Key</span>)</b> يوزع على الأجهزة.</td>
+            <td><b>وضع قوي</b> ويوفر حماية جيدة للشبكة (شائع في المنازل والمكاتب الصغيرة).</td>
+          </tr>
+          <tr>
+            <td><b>4. وضع <span dir="ltr">WPA/WPA2-Enterprise</span></b></td>
+            <td>يستخدم بروتوكولات مصادقة معقدة مثل <b><span dir="ltr">EAP</span></b> ويتطلب <b>خادم مصادقة مثل <span dir="ltr">RADIUS</span></b> للتحقق من الهوية.</td>
+            <td><b>الوضع الأكثر أماناً على الإطلاق؛</b> ويُستخدم عادةً في <b>الشبكات الكبيرة والمؤسسات</b>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>3. مقارنة أنواع الهجمات الثمانية عبر البريد الإلكتروني (الوحدة الثانية)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>الهجوم / البرمجية</th>
+            <th>المصطلح الإنجليزي</th>
+            <th>السمة المميزة وآلية الخداع في المنهج</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1. التصيد الاحتيالي العام</b></td>
+            <td><b dir="ltr">Phishing</b></td>
+            <td>إرسال بريد إلكتروني مزيف يتنكر كمصدر موثوق (كالبنك أو متجر تجزئة) لسرقة كلمات المرور وبطاقات الائتمان.</td>
+          </tr>
+          <tr>
+            <td><b>2. التصيد الهاتفي والنصي</b></td>
+            <td><b dir="ltr">Smishing</b></td>
+            <td>تصيد يستخدم <b>تقنيات الاتصال الصوتي (<span dir="ltr">VoIP</span> والرسائل المسجلة)</b> وكذلك <b>رسائل النص (<span dir="ltr">SMS</span>)</b> بروابط خبيثة على الجوال.</td>
+          </tr>
+          <tr>
+            <td><b>3. صيد الحيتان</b></td>
+            <td><b dir="ltr">Whaling</b></td>
+            <td>تصيد يستهدف <b>الأهداف ذات التأثير الكبير مثل القادة التنفيذيين الكبار</b> (الرئيس التنفيذي أو المدير المالي) لطلب تحويل أموال.</td>
+          </tr>
+          <tr>
+            <td><b>4. الصيدلة</b></td>
+            <td><b dir="ltr">Pharming</b></td>
+            <td><b>تنكر موقع ويب معتمد</b> وتوجيه المستخدمين إلى موقع ويب مزيف يبدو رسمياً لسرقة بيانات اعتمادهم.</td>
+          </tr>
+          <tr>
+            <td><b>5. برامج التجسس</b></td>
+            <td><b dir="ltr">Spyware</b></td>
+            <td>تتبع أنشطة الكمبيوتر وجمع ضغطات المفاتيح، وتقوم <b>بتعديل إعدادات الأمان</b> وتُجمع مع البرامج الشرعية أو طروادة.</td>
+          </tr>
+          <tr>
+            <td><b>6. برامج الترهيب</b></td>
+            <td><b dir="ltr">Scareware</b></td>
+            <td>تعتمد على <b>الخوف</b>؛ تنشئ نوافذ منبثقة تشبه نوافذ حوار نظام التشغيل تزعم أن النظام في خطر لإقناع المستخدم بتشغيل برنامج خبيث.</td>
+          </tr>
+          <tr>
+            <td><b>7. برامج الإعلانات</b></td>
+            <td><b dir="ltr">Adware</b></td>
+            <td>تعرض نوافذ إعلانية منبثقة مزعجة لتحقيق إيرادات بعد تتبع المواقع التي يزورها المستخدم وتحليل اهتماماته.</td>
+          </tr>
+          <tr>
+            <td><b>8. البريد المزعج (العشوائي)</b></td>
+            <td><b dir="ltr">Email Spam</b></td>
+            <td>بريد غير مرغوب فيه للإعلان أو إرسال روابط ضارة لسرقة رقم الضمان الاجتماعي أو الحساب المصرفي، ويأتي من شبكات أجهزة مصابة.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>4. مقارنة دقيقة بين هجمات البلوتوث الثلاثة (Bluesnarfing vs BlueSmack vs Bluebugging)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>وجه المقارنة</th>
+            <th>هجوم Bluesnarfing</th>
+            <th>هجوم BlueSmack</th>
+            <th>هجوم Bluebugging</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>الهدف الرئيسي للهجوم</b></td>
+            <td><b>استرجاع وسرقة البيانات</b> من جهاز الضحية.</td>
+            <td><b>حجب الخدمة (<span dir="ltr">DoS</span>)</b> وإرباك وتعطيل جهاز البلوتوث.</td>
+            <td><b>التحكم الكامل غير المصرح به</b> في جهاز الضحية عن بعد.</td>
+          </tr>
+          <tr>
+            <td><b>الآلية التقنية والبروتوكول</b></td>
+            <td>يستغل الثغرات في <b>بروتوكول تبادل الكائنات (<span dir="ltr">OBEX</span>)</b> عندما يكون الجهاز في وضع قابل للاكتشاف (أو بتخمين عنوان <span dir="ltr">MAC</span>).</td>
+            <td>إرسال حزمة مصممة بشكل خاص <b>تتجاوز حجم الحزمة القصوى المتاحة</b> على جهاز البلوتوث بسرعة عالية.</td>
+            <td>استغلال ضعف في بروتوكول البلوتوث للوصول للملفات، <b>وإجراء المكالمات وإرسال الرسائل بالنيابة عن الجهاز وتنفيذ أوامر عن بعد</b>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- التبويب الثالث: المصطلحات والأدوات -->
+  <section id="terms" class="panel">
+    <div class="card">
+      <h2>قاموس المصطلحات والبروتوكولات الشامل للفصل الثاني عشر</h2>
+      <p class="muted">جميع المصطلحات الإنجليزية والتقنية وأسماء الهجمات والبروتوكولات الواردة في الوحدات الثلاث:</p>
+      <div id="termsGrid" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- التبويب الرابع: البطاقات التعليمية -->
+  <section id="cards" class="panel">
+    <div class="card">
+      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
+      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
+      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
+        <div class="term" id="flashTerm"></div>
+        <div class="answer" id="flashAnswer" hidden></div>
+        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="prevCard">السابق</button>
+        <span id="cardCount" class="muted"></span>
+        <button class="btn primary" id="nextCard">التالي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- التبويب الخامس: الاختبار الذاتي العشوائي -->
+  <section id="quiz" class="panel">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2>الاختبار الشامل المتغير للفصل الثاني عشر (25 سؤالاً) <span class="badge-new">ترتيب عشوائي ذكي 🎲</span></h2>
+          <p class="muted">يتم خلط ترتيب الأسئلة وترتيب الخيارات تلقائياً في كل مرة لقياس فهمك الحقيقي بتركيز فائق!</p>
+        </div>
+        <div class="score" id="score">النتيجة: 0 / 25</div>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="quizArea"></div>
+      <div class="row">
+        <button class="btn" id="resetQuiz">إعادة الاختبار بترتيب عشوائي جديد 🔀</button>
+        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+      </div>
+      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
+    </div>
+  </section>
+</main>
+
+<footer>مبني بالكامل (100%) على محتوى الفصل الثاني عشر من مقرر أمن البيانات والخصوصية</footer>
+
+<script>
+const terms = [
+  ["AP (Access Point)", "نقطة الوصول: العقدة المركزية في الشبكات اللاسلكية 802.11، والواجهة بين الشبكة السلكية واللاسلكية (تُدمج منزلياً مع الراوتر والسويتش)."],
+  ["BTS (Base Transceiver Station)", "محطة النقل الأساسية: تعادل نقطة الوصول (AP) ولكنها تُستخدم من قبل مشغلي الهواتف المحمولة لتوفير تغطية إشارة مثل 3G و GSM."],
+  ["WLC (Wireless LAN Controller)", "وحدة التحكم اللاسلكية: خادم مركزي يدير مئات أو آلاف نقاط الوصول (APs) في الشركات من منصة واحدة عبر اتصال IP."],
+  ["SSID (Service Set Identifier)", "معرف مجموعة الخدمة (اسم الشبكة): عنصر تعريفي يميز شبكة الواي فاي ويُرسل بنص واضح في إطار الإشارة الدوري من نقطة الوصول."],
+  ["Supplicant & Authenticator", "العميل اللاسلكي (Supplicant) والموثق/نقطة الوصول (Authenticator) اللذان يتبادلان طلبات وردود المصادقة والارتباط الأربعة."],
+  ["WPA/WPA2-PSK", "وضع مصادقة قوي يستخدم مفتاحاً مشتركاً مشفراً مسبقاً (Pre-Shared Key) يتم توزيعه على الأجهزة المراد اتصالها بالشبكة."],
+  ["WPA/WPA2-Enterprise", "وضع المصادقة الأكثر أماناً (للشبكات الكبيرة والمؤسسات)؛ يستخدم بروتوكول EAP وخادم مصادقة RADIUS."],
+  ["EAP & RADIUS", "بروتوكول المصادقة الموسع (EAP) وخادم خدمة مصادقة الاتصال عن بعد (RADIUS) المستخدمان في وضع WPA2-Enterprise."],
+  ["Phishing", "التصيد الاحتيالي: انتحال شخصية أو جهة موثوقة عبر البريد أو الرسائل لخداع الضحية وسرقة بيانات الدخول أو بطاقات الائتمان."],
+  ["Smishing", "التصيد عبر الهاتف والرسائل النصية: يستخدم تقنيات الاتصال الصوتي (VoIP والرسائل المسجلة) ورسائل النص (SMS) بروابط خبيثة على الجوال."],
+  ["Whaling (صيد الحيتان)", "هجوم تصيد احتيالي يستهدف الأهداف ذات التأثير الكبير في المؤسسة مثل القادة التنفيذيين الكبار (الرئيس التنفيذي أو المدير المالي)."],
+  ["Pharming (الصيدلة)", "تنكر موقع ويب معتمد وتوجيه المستخدمين إلى موقع ويب مزيف يبدو رسمياً لسرقة بيانات اعتمادهم."],
+  ["Scareware (برامج الترهيب)", "برامج تخدع المستخدم بناءً على الخوف عبر إنشاء نوافذ منبثقة تشبه نوافذ حوار نظام التشغيل تدعي أن النظام في خطر."],
+  ["Email Spam (البريد المزعج)", "بريد عشوائي غير مرغوب فيه للإعلان أو إرسال روابط ضارة لسرقة رقم الضمان الاجتماعي أو الحساب المصرفي، ويأتي من شبكات أجهزة مصابة."],
+  ["Bluetooth", "البلوتوث: بروتوكول قياسي لربط الأجهزة لاسلكياً بتردد يشبه الواي فاي، ويتميز باستهلاك قدرة منخفضة على الطاقة."],
+  ["Bluesnarfing & OBEX", "هجوم قرصنة عبر البلوتوث لاسترجاع وسرقة البيانات من جهاز الضحية عن طريق استغلال ثغرات بروتوكول تبادل الكائنات (OBEX)."],
+  ["BlueSmack", "هجوم حجب خدمة (DoS) ضد البلوتوث يتم بإرسال حزمة تتجاوز حجم الحزمة القصوى المتاحة لتعطيل وإرباك الجهاز."],
+  ["Bluebugging", "هجوم بلوتوث خطير يتيح التحكم الكامل في الجهاز عن بعد، والوصول للملفات، وإجراء المكالمات وإرسال الرسائل بالنيابة عن الجهاز."],
+  ["WEP (Wireless Encryption Protocol)", "بروتوكول التشفير اللاسلكي: نظام لتأمين الاتصالات اللاسلكية وتحويل البيانات لشكل غير مقروء، يتميز بالتوافق الواسع والتكلفة الاقتصادية."]
+];
+
+const cards = [
+  ["ما تعريف الاتصال اللاسلكي؟ وما هي الأنواع الأربعة للتقنيات اللاسلكية؟", "هو أي نوع من تبادل البيانات بين الأطراف يتم بشكل لاسلكي (عبر الهواء). وأنواعه الأربعة:\n1) اتصالات شبكة واي فاي.\n2) الاتصالات بالبلوتوث.\n3) الاتصالات عبر الأقمار الصناعية.\n4) الاتصالات المتنقلة."],
+  ["ما هي نقطة الوصول (AP)؟ وكيف تتواجد في بيئة المنزل؟", "هي العقدة المركزية في تنفيذات الشبكات اللاسلكية 802.11، والواجهة بين الشبكة المباشرة (السلكية) واللاسلكية. وفي المنزل يكون لديك غالباً جهاز توجيه (راوتر) ومفتاح (سويتش) ونقطة وصول مضمنة في صندوق واحد."],
+  ["ما هي محطة النقل الأساسية (BTS)؟ وما علاقتها بنقطة الوصول (AP)؟", "هي ما يعادل نقطة الوصول (AP) في عالم 802.11، ولكنها تُستخدم من قِبل مشغلي الهواتف المحمولة لتوفير تغطية إشارة مثل 3G و GSM وغيرها."],
+  ["لماذا نحتاج إلى وحدة التحكم اللاسلكية (WLC) في الشركات؟ وكيف تعمل؟", "لأن الشركات تضم مئات أو آلاف من نقاط الوصول (APs) يصعب إدارتها وتكوينها منفردة. وتعمل WLC كخادم مركزي متصل عبر IP بجميع نقاط الوصول لإدارتها من منصة واحدة، ودفع قوالب التكوين، ومراقبة المستخدمين في الوقت الفعلي."],
+  ["ما هو معرف مجموعة الخدمة (SSID)؟ وما شرط الاتصال بنقطة الوصول؟", "هو اسم الشبكة اللاسلكية الذي يحددها ويميزها عن غيرها. وللاتصال بها يجب أن يرسل العميل اللاسلكي نفس اسم SSID في إطار الاتصال كاسم SSID المعين مسبقاً على نقطة الوصول (AP)."],
+  ["كيف تعرف الأجهزة اللاسلكية اسم الشبكة (SSID) بمجرد الاستماع إلى الموجات الراديوية؟", "لأن أحد الحقول الموجودة في (إطار الإشارة) التي ترسلها نقاط الوصول طوال الوقت في فترات زمنية قصيرة جداً يحتوي دائماً على اسم SSID (بنص واضح)."],
+  ["ما هي الخطوات الأربع للمصادقة والارتباط بين العميل (Supplicant) والموثق (Authenticator)؟", "1) Authentication request (طلب المصادقة).\n2) Authentication response (رد المصادقة).\n3) Association request (طلب الارتباط).\n4) Association response (رد الارتباط)."],
+  ["ما هي أوضاع المصادقة الأربعة الشائعة في الواي فاي؟", "1) وضع مفتوح (Open Mode).\n2) وضع المفتاح المشترك (Shared Key Mode).\n3) وضع WPA/WPA2-PSK.\n4) وضع WPA-Enterprise / WPA2-Enterprise."],
+  ["ما الفرق بين وضع (WPA/WPA2-PSK) ووضع (WPA/WPA2-Enterprise)؟", "• WPA/WPA2-PSK: يستخدم مفتاحاً مشتركاً مشفراً مسبقاً (Pre-Shared Key) يوزع على الأجهزة.\n• WPA/WPA2-Enterprise: الوضع الأكثر أماناً (يُستخدم في الشبكات الكبيرة والمؤسسات)، ويستخدم بروتوكول (EAP) وخادم مصادقة مثل (RADIUS)."],
+  ["كم يبلغ عدد مستخدمي البريد الإلكتروني حول العالم؟ وما هي المجموعات الأربع لهجماته؟", "يستخدمه أكثر من مليار شخص حول العالم. ومجموعات هجماته الأربع هي:\n1) التصيد الاحتيالي، 2) صيد الحيتان والصيدلة، 3) برامج التجسس والترهيب، 4) الإعلانات والبريد المزعج."],
+  ["ما هو التصيد الاحتيالي عبر الهاتف والرسائل النصية (Smishing) كما ورد في الفصل؟", "هو أحد أنواع التصيد حيث يستخدم المهاجمون:\n1) تقنيات الاتصال الصوتي: التمويه بالمكالمات باستخدام تقنيات الصوت عبر الإنترنت (VoIP) أو الرسائل المسجلة لسرقة بيانات الائتمان.\n2) رسائل النص (SMS) على الجوال: إرسال رابط لموقع خبيث يثبت برامج ضارة على الهاتف."],
+  ["ما هو هجوم صيد الحيتان (Whaling)؟ ومن يستهدف؟", "هو هجوم صيد احتيالي يستهدف الأهداف ذات التأثير الكبير داخل المؤسسة مثل (القادة التنفيذيين الكبار كالرئيس التنفيذي أو المدير المالي)، وتصمم الرسائل لتبدو كأنها منهم وتطلب تحويل أموال أو معلومات حساسة."],
+  ["ما هو هجوم الصيدلة (Pharming)؟ وكيف يخدع الضحايا؟", "هو تنكر موقع ويب معتمد؛ حيث يقوم بتوجيه المستخدمين إلى موقع ويب مزيف يبدو رسمياً، فيدخل الضحايا معلوماتهم الشخصية وبيانات اعتمادهم معتقدين أنهم متصلون بموقع شرعي."],
+  ["كيف تتغلب برامج التجسس (Spyware) على تدابير الأمان؟ ومع ماذا تُجمع عادةً؟", "تقوم في كثير من الأحيان بتعديل إعدادات الأمان للتغلب عليها، وعادةً ما يتم تجميع برامج التجسس مع البرامج الشرعية أو مع حصان طروادة."],
+  ["كيف تعمل برامج الترهيب (Scareware)؟ وعلامَ تعتمد؟", "تحاول إقناع المستخدم باتخاذ إجراء محدد بناءً على (الخوف)؛ فتنشئ نوافذ منبثقة تشبه نوافذ حوار نظام التشغيل تزعم أن النظام في خطر ويحتاج لتنفيذ برنامج محدد، وإذا وافق المستخدم تصيب البرمجيات الخبيثة جهازه."],
+  ["ما هو البريد المزعج (Email Spam)؟ وما هدفه النهائي؟ ومن أين يأتي معظمه؟", "هو البريد العشوائي غير المرغوب فيه. هدفه النهائي الحصول على معلومات حساسة (مثل رقم الضمان الاجتماعي أو معلومات الحساب المصرفي)، ويأتي معظمه من عدة أجهزة كمبيوتر على شبكات مصابة بفيروسات أو برامج ضارة."],
+  ["ما هي الإجراءات الخمسة لحماية نفسك من هجمات البريد الإلكتروني؟", "1) الحذر عند فتح رسائل من مصادر غير معروفة، 2) البحث عن علامات التصيد كالروابط المشبوهة، 3) استخدام كلمات مرور قوية والمصادقة الثنائية، 4) تحديث الكمبيوتر والبرامج بأحدث التصحيحات، 5) استخدام برامج مكافحة الفيروسات والبرامج الضارة."],
+  ["ما هو البلوتوث (Bluetooth)؟ وبماذا يتميز في استهلاك الطاقة؟", "هو بروتوكول قياسي لربط الأجهزة لاسلكياً بتردد يشبه الواي فاي، ويتميز بأنه يستخدم (قدرة منخفضة على الطاقة) بالمقارنة مع وسائط المعلومات الأخرى."],
+  ["ما هي هجمات البلوتوث الثلاثة المذكورة في الشبكات اللاسلكية؟", "1) هجوم Bluesnarfing.\n2) هجوم BlueSmack.\n3) هجوم Bluebugging."],
+  ["ما هو هجوم (Bluesnarfing)؟ ومتى يحدث؟ وما البروتوكول الذي يستغله؟", "هو تقنية قرصنة تُستخدم لاسترجاع (سرقة) البيانات من جهاز الضحية عندما يكون البلوتوث قيد التشغيل وفي وضع قابل للاكتشاف. ويحتاج المهاجم فيه إلى استغلال بروتوكول تبادل الكائنات (OBEX)."],
+  ["لماذا يُوصى بإبقاء البلوتوث (معطلاً تماماً) بدلاً من وضعه في (وضع عدم الكشف) فقط للوقاية من Bluesnarfing؟", "لأن الجهاز في وضع عدم الكشف لا تزال لديه فرصة ضئيلة للتعرض للهجوم؛ حيث يمكن للمتسلل تنفيذ عملية Bluesnarfing عن طريق تخمين عنوان (MAC) الخاص بالضحية."],
+  ["ما هي الإجراءات الأربعة للحماية من هجوم (Bluesnarfing)؟", "1) إبقاء البلوتوث معطلاً عند عدم استخدامه.\n2) عدم قبول أي طلبات اتصال من غرباء.\n3) تنشيط ميزات الأمان المتقدمة كالمصادقة الثنائية ورمز PIN وطلب الموافقة قبل الاتصال.\n4) تحديث برامج الجهاز بانتظام."],
+  ["ما هو هجوم (BlueSmack)؟ وكيف يتم تنفيذه؟", "هو نوع من هجمات حجب الخدمة (Denial of Service - DoS) ضد أجهزة البلوتوث. يتم تنفيذه بإرسال حزمة مصممة بشكل خاص تتجاوز حجم الحزمة القصوى المتاحة على جهاز البلوتوث بسرعة عالية، مما يربك الجهاز ويعطله."],
+  ["ما هو هجوم (Bluebugging)؟ ولماذا يُعتبر خطيراً جداً؟", "هو هجوم يستهدف أجهزة البلوتوث للتحكم الكامل غير المصرح به فيها؛ حيث يمكّن المهاجم من الوصول للملفات، وإجراء المكالمات أو إرسال الرسائل بالنيابة عن الجهاز، وتنفيذ أوامر عن بعد دون علم المستخدم."],
+  ["كيف نحمي أجهزتنا من هجمات (BlueSmack) و (Bluebugging)؟", "بتعطيل وضع الاكتشاف القابل للرؤية (discoverable mode)، تحديث برامج التشغيل والبرامج لأحدث الإصدارات، تقييد الاتصال بأجهزة موثوقة فقط، وتعزيز إعدادات الأمان ومفاتيح التشفير القوية."],
+  ["ما هو بروتوكول التشفير اللاسلكي (Wireless Encryption Protocol - WEP) في الوحدة الثالثة؟ وكيف يعمل؟", "هو نظام لتأمين الاتصالات اللاسلكية وحماية البيانات المرسلة عبر الشبكة اللاسلكية بتحويلها لشكل غير مقروء باستخدام تقنيات تشفير مثل تشفير المفتاح الخاص (Private Key) أو المفتاح العام (Public Key)."],
+  ["ما هي المميزات الست لبروتوكول التشفير اللاسلكي المذكورة في نهاية الفصل؟", "1) حماية البيانات من الوصول غير المصرح به والتلاعب، 2) الحفاظ على سرية المعلومات، 3) توفير مستوى متقدم من الأمان، 4) تحقيق أداء متوازن بين الأمان وسرعة الاتصال، 5) التوافق مع معظم أجهزة الشبكات اللاسلكية، 6) خيار اقتصادي قليل التكلفة."],
+  ["ما البروتوكول المستقل عن البائع والمنفذ على أنظمة تشغيل مختلفة لتبادل المعلومات بين الأجهزة اللاسلكية والذي يستغله هجوم Bluesnarfing؟", "بروتوكول تبادل الكائنات (OBEX - Object Exchange)."]
+];
+
+const masterQuestions = [
+  {q:"أي نوع من تبادل البيانات بين الأطراف يتم بشكل لاسلكي (عبر الهواء)، ويشمل اتصالات الواي فاي والبلوتوث والأقمار الصناعية والاتصالات المتنقلة يُعرف بـ:",o:["الاتصال اللاسلكي","الاتصال السلكي المحوري فقط","قوائم التحكم المرقمة","بروتوكول التوجيه الداخلي"],a:0,e:"الاتصال اللاسلكي يشير إلى أي نوع من تبادل البيانات عبر الهواء ويشمل الواي فاي والبلوتوث والأقمار الصناعية والاتصالات المتنقلة."},
+  {q:"العقدة المركزية في تنفيذات الشبكات اللاسلكية (802.11)، والتي تمثل الواجهة بين الشبكة المباشرة (السلكية) والشبكة اللاسلكية هي:",o:["نقطة الوصول (Access Point - AP)","محطة النقل الأساسية (BTS)","وحدة التحكم اللاسلكية (WLC)","معرف مجموعة الخدمة (SSID)"],a:0,e:"نقطة الوصول (AP) هي العقدة المركزية في شبكات 802.11 والواجهة بين الشبكة المباشرة والشبكة اللاسلكية."},
+  {q:"ما الذي يعادل نقطة الوصول (AP) في عالم 802.11، ولكنه يُستخدم من قِبل مشغلي الهواتف المحمولة لتوفير تغطية إشارة مثل (3G و GSM)؟",o:["محطة النقل الأساسية (BTS)","وحدة التحكم اللاسلكية (WLC)","خادم المصادقة (RADIUS)","بروتوكول تبادل الكائنات (OBEX)"],a:0,e:"محطة النقل الأساسية (BTS) تعادل نقطة الوصول ولكنها تُستخدم من قبل مشغلي الهواتف المحمولة لتوفير تغطية 3G و GSM."},
+  {q:"في الشركات الكبيرة التي تضم مئات أو آلاف من نقاط الوصول (APs)، ما هو الخادم المركزي الذي يتمتع باتصال IP بجميع نقاط الوصول لإدارتها من منصة واحدة ودفع قوالب التكوين ومراقبة المستخدمين في الوقت الفعلي؟",o:["وحدة التحكم اللاسلكية (WLC)","محطة النقل الأساسية (BTS)","الراوتر المنزلي المدمج","وضع المفتاح المشترك"],a:0,e:"وحدة التحكم اللاسلكية (WLC) هي الخادم المركزي الذي يدير مئات أو آلاف نقاط الوصول في الشركات من منصة إدارة واحدة."},
+  {q:"العنصر التعريفي الذي يحدد الشبكة اللاسلكية (WLAN) ويميزها عن غيرها، ويجب على العميل اللاسلكي إرسال اسم مطابق له للاتصال بنقطة الوصول هو:",o:["معرف مجموعة الخدمة / اسم الشبكة (SSID)","عنوان الجهاز الفيزيائي (MAC)","وحدة التحكم اللاسلكية (WLC)","بروتوكول (EAP)"],a:0,e:"معرف مجموعة الخدمة (SSID) هو اسم الشبكة اللاسلكية الذي يحددها ويميزها عن غيرها من الشبكات."},
+  {q:"كيف تعرف الأجهزة اللاسلكية أن شبكة لاسلكية معينة تم تسميتها باسم (SSID) محدد فقط من خلال الاستماع إلى الموجات المغناطيسية الراديوية؟",o:["لأن أحد الحقول الموجودة في إطار الإشارة التي ترسلها نقاط الوصول طوال الوقت في فترات زمنية قصيرة جداً يحتوي دائماً على اسم SSID بنص واضح","لأن المستخدم يكتب الاسم ورقياً ويلصقه على الراوتر","لأن خادم RADIUS يرسل رسائل نصية SMS للهواتف","لأن موجات البلوتوث تترجم الترددات الصوتية"],a:0,e:"ترسل نقاط الوصول إطارات إشارة دورية في فترات قصيرة جداً يحتوي أحد حقولها دائماً على اسم SSID بنص واضح."},
+  {q:"ما هو الترتيب الصحيح للخطوات الأربع لعملية المصادقة والارتباط بين العميل (Supplicant) والموثق (Authenticator) في شبكة الواي فاي؟",o:["1) Authentication request -> 2) Authentication response -> 3) Association request -> 4) Association response","1) Association request -> 2) Authentication request -> 3) Association response -> 4) Authentication response","1) طلب فدية -> 2) تشفير -> 3) فك تشفير -> 4) ارتباط","1) إرسال SSID -> 2) حظر MAC -> 3) فصل الشبكة -> 4) إعادة التشغيل"],a:0,e:"تبدأ العملية بطلب المصادقة (Authentication request) ثم رد المصادقة (response)، يليهما طلب الارتباط (Association request) ثم رد الارتباط (response)."},
+  {q:"أي وضع من أوضاع المصادقة في الواي فاي لا يتطلب أي توثيق للوصول للشبكة، ويُعد غير آمن ولا يُنصح باستخدامه إلا في الحالات التي لا تشتمل على معلومات حساسة؟",o:["الوضع المفتوح (Open Mode)","وضع WPA/WPA2-PSK","وضع WPA2-Enterprise","وضع المفتاح المشترك (Shared Key Mode)"],a:0,e:"الوضع المفتوح (Open Mode) لا يتطلب أي توثيق ويسمح لأي شخص في مدى الإشارة بالاتصال، لذا فهو غير آمن."},
+  {q:"وضع مصادقة في الواي فاي يُعتبر (الأكثر أماناً) ويُستخدم عادةً في الشبكات الكبيرة والمؤسسات، حيث يعتمد على بروتوكول (EAP) ويتطلب خادم مصادقة مثل (RADIUS):",o:["وضع WPA-Enterprise / WPA2-Enterprise","وضع WPA/WPA2-PSK","الوضع المفتوح (Open Mode)","وضع المفتاح المشترك البسيط"],a:0,e:"وضع WPA-Enterprise / WPA2-Enterprise هو الأكثر أماناً ويستخدم في المؤسسات الكبيرة لاعتماده على بروتوكول EAP وخادم RADIUS."},
+  {q:"ما الفرق بين وضع (WPA/WPA2-PSK) ووضع (WPA/WPA2-Enterprise) في مصادقة الواي فاي؟",o:["وضع PSK يستخدم مفتاحاً مشتركاً مشفراً مسبقاً (Pre-Shared Key) يوزع على الأجهزة، بينما Enterprise يستخدم بروتوكول EAP وخادم مصادقة مثل RADIUS","كلاهما لا يستخدمان أي كلمات مرور أو مفاتيح","وضع PSK للشركات الضخمة فقط ووضع Enterprise للمنازل بدون كلمات سر","وضع PSK يستخدم البلوتوث فقط"],a:0,e:"يستخدم WPA/WPA2-PSK مفتاحاً مشتركاً مسبقاً (Pre-Shared Key)، بينما يتطلب Enterprise خادم مصادقة مثل RADIUS وبروتوكول EAP."},
+  {q:"أحد أنواع التصيد الاحتيالي يستخدم فيه المهاجمون تقنيات الاتصال الصوتي (VoIP والرسائل المسجلة) وكذلك رسائل النص (SMS) على الهواتف المحمولة لإرسال روابط خبيثة أو سرقة بيانات الائتمان:",o:["Smishing","Pharming","BlueSmack","WLC"],a:0,e:"عُرّف Smishing في الوحدة الثانية بأنه يستخدم تقنيات الاتصال الصوتي (VoIP والرسائل المسجلة) ورسائل النص على الهواتف المحمولة."},
+  {q:"هجوم صيد احتيالي عبر البريد الإلكتروني يستهدف (الأهداف ذات التأثير الكبير داخل المؤسسة مثل القادة التنفيذيين الكبار كالرئيس التنفيذي أو المدير المالي) لطلب تحويل أموال:",o:["صيد الحيتان (Whaling)","الصيدلة (Pharming)","برامج الإعلانات (Adware)","هجوم BlueSmack"],a:0,e:"صيد الحيتان (Whaling) يستهدف الأهداف ذات التأثير الكبير داخل المؤسسة مثل القادة التنفيذيين الكبار."},
+  {q:"تنكر موقع ويب معتمد في محاولة لخداع المستخدمين وتوجيههم إلى موقع ويب مزيف يبدو رسمياً لإدخال بيانات اعتمادهم ومعلوماتهم الشخصية يُعرف بـ:",o:["الصيدلة (Pharming)","صيد الحيتان (Whaling)","التصيد الهاتفي (Smishing)","هجوم Bluesnarfing"],a:0,e:"الصيدلة (Pharming) هو تنكر موقع ويب معتمد وتوجيه المستخدمين إلى موقع مزيف يبدو رسمياً لسرقة بياناتهم."},
+  {q:"برامج تحاول إقناع المستخدم باتخاذ إجراء محدد بناءً على (الخوف)، فتنشئ نوافذ منبثقة تشبه نوافذ حوار نظام التشغيل تفيد بأن النظام في خطر ويحتاج لتنفيذ برنامج محدد:",o:["برامج الترهيب (Scareware)","برامج الإعلانات (Adware)","صيد الحيتان (Whaling)","نقطة الوصول (AP)"],a:0,e:"برامج الترهيب (Scareware) تعتمد على الخوف وتنشئ نوافذ منبثقة تشبه نوافذ حوار نظام التشغيل لخداع المستخدم وتشغيل برمجية خبيثة."},
+  {q:"كيف تتغلب برامج التجسس (Spyware) في كثير من الأحيان على تدابير الأمان في جهاز الضحية كما ورد في الوحدة الثانية؟",o:["تقوم بتعديل إعدادات الأمان، وعادةً ما يتم تجميعها مع البرامج الشرعية أو مع حصان طروادة","تقوم بفصل سلك الكهرباء عن الكمبيوتر","تطلب من المستخدم الاتصال بخادم RADIUS","تغير اسم شبكة الواي فاي SSID"],a:0,e:"للتغلب على تدابير الأمان، تقوم برامج التجسس في كثير من الأحيان بتعديل إعدادات الأمان وتُجمع مع البرامج الشرعية أو حصان طروادة."},
+  {q:"ما الهدف النهائي من إرسال البريد المزعج (Email Spam) الذي يحتوي على روابط ضارة أو محتوى مضلل؟ ومن أين يأتي معظمه؟",o:["الهدف الحصول على معلومات حساسة (كرقم الضمان الاجتماعي أو الحساب المصرفي)، ويأتي معظمه من عدة أجهزة كمبيوتر على شبكات مصابة بفيروسات أو برامج ضارة","الهدف تسريع تصفح الإنترنت، ويأتي من خوادم الحماية الرسمية","الهدف تحديث نظام التشغيل، ويأتي من وحدة التحكم WLC","لا يهدف لجمع أي معلومات ويأتي من جهاز واحد سليم"],a:0,e:"الهدف النهائي للبريد المزعج الخبيث هو سرقة معلومات حساسة كرقم الضمان الاجتماعي أو الحساب المصرفي، ويأتي معظمه من شبكات أجهزة مصابة."},
+  {q:"بماذا يتميز بروتوكول البلوتوث (Bluetooth) من حيث التردد واستهلاك الطاقة؟",o:["يتواصل بتردد يشبه ترددات الواي فاي، ويستخدم قدرة منخفضة على الطاقة بالمقارنة مع وسائط المعلومات الأخرى","يستخدم طاقة كهربائية ضخمة جداً وتردداً فضائياً","لا يعمل إلا عبر الكابلات النحاسية","يُستخدم لربط الأقمار الصناعية فقط"],a:0,e:"يستخدم البلوتوث البث اللاسلكي بتردد يشبه الواي فاي، ويستخدم قدرة منخفضة على الطاقة مقارنة بوسائط المعلومات الأخرى."},
+  {q:"تقنية قرصنة تستهدف البلوتوث (عندما يكون قيد التشغيل وفي وضع قابل للاكتشاف) لاسترجاع وسرقة البيانات من جهاز الضحية عبر استغلال بروتوكول تبادل الكائنات (OBEX):",o:["هجوم Bluesnarfing","هجوم BlueSmack","هجوم Bluebugging","هجوم Pharming"],a:0,e:"هجوم Bluesnarfing يُستخدم لاسترجاع البيانات من جهاز الضحية عن طريق استغلال الثغرات في بروتوكول تبادل الكائنات (OBEX)."},
+  {q:"ما هو البروتوكول المستقل عن البائع والمنفذ على أنظمة تشغيل مختلفة لتبادل المعلومات بين الأجهزة اللاسلكية، والذي يحتاج المهاجم لاستغلاله لتنفيذ هجوم (Bluesnarfing)؟",o:["بروتوكول تبادل الكائنات (OBEX)","بروتوكول خدمة المصادقة (RADIUS)","بروتوكول نقل الملفات (FTP)","بروتوكول التحكم في النقل (TCP)"],a:0,e:"يحتاج المهاجم لتنفيذ Bluesnarfing إلى استغلال بروتوكول تبادل الكائنات (OBEX) لتبادل المعلومات بين الأجهزة اللاسلكية."},
+  {q:"لماذا يُوصى بإبقاء البلوتوث (معطلاً تماماً) عند عدم استخدامه بدلاً من الاكتفاء بوضعه في (وضع عدم الكشف) للوقاية من هجوم Bluesnarfing؟",o:["لأن الجهاز في وضع عدم الكشف لا تزال لديه فرصة ضئيلة للتعرض للهجوم عن طريق تخمين عنوان MAC الخاص بالضحية","لأن وضع عدم الكشف يحذف جميع ملفات الهاتف","لأن وضع عدم الكشف يقوم بإرسال رسائل نصية عشوائية","لا فرق بين إبقائه معطلاً أو مفتوحاً للجميع"],a:0,e:"ينص المنهج على أنه حتى في وضع عدم الكشف هناك فرصة ضئيلة للهجوم حيث يمكن للمتسلل تنفيذ Bluesnarfing عن طريق تخمين عنوان MAC للضحية."},
+  {q:"نوع من هجمات حجب الخدمة (Denial of Service - DoS) يستهدف أجهزة البلوتوث عن طريق إرسال حزمة مصممة بشكل خاص تتجاوز حجم الحزمة القصوى المتاحة لإرباك وتعطيل الجهاز:",o:["هجوم BlueSmack","هجوم Bluesnarfing","هجوم Bluebugging","هجوم Whaling"],a:0,e:"هجوم BlueSmack هو هجوم حجب خدمة (DoS) ضد البلوتوث يعمل بإرسال حزم تتجاوز حجم الحزمة القصوى المتاحة لتعطيل الجهاز."},
+  {q:"أي من هجمات البلوتوث التالية يُعد خطيراً جداً لقدرته على (التحكم الكامل بالجهاز، الوصول للملفات، وإجراء المكالمات أو إرسال الرسائل بالنيابة عن الجهاز وتنفيذ أوامر عن بعد)؟",o:["هجوم Bluebugging","هجوم BlueSmack","هجوم Bluesnarfing","برامج الإعلانات Adware"],a:0,e:"هجوم Bluebugging يمكّن المهاجم من التحكم الكامل بالجهاز وإجراء المكالمات وإرسال الرسائل بالنيابة عنه وتنفيذ أوامر عن بعد."},
+  {q:"ما الفرق الدقيق بين هجمات البلوتوث الثلاثة: (Bluesnarfing) و (BlueSmack) و (Bluebugging)؟",o:["Bluesnarfing لاسترجاع وسرقة البيانات عبر OBEX، و BlueSmack لحجب الخدمة وتعطيل الجهاز بحزم ضخمة، و Bluebugging للتحكم الكامل وإجراء المكالمات والأوامر عن بعد","جميعها تستخدم فقط لإرسال إعلانات البريد الإلكتروني Spam","BlueSmack لسرقة البيانات، و Bluesnarfing لإجراء المكالمات، و Bluebugging لتقوية الإشارة","جميعها بروتوكولات حماية لتشفير الواي فاي"],a:0,e:"هذا التلخيص يوضح الفروق الجوهرية الثلاثة بدقة تامة كما وردت في الوحدة الثالثة من الفصل الثاني عشر."},
+  {q:"جميع ما يلي يُعد من إجراءات الحماية من هجمات البلوتوث (Bluesnarfing و BlueSmack و Bluebugging) ما عدا:",o:["إبقاء البلوتوث في وضع الاكتشاف القابل للرؤية (discoverable mode) دائماً وقبول جميع طلبات الاتصال من الغرباء","تعطيل البلوتوث أو وضع الاكتشاف عند عدم استخدامه وتقييد الاتصال بأجهزة موثوقة فقط","تنشيط ميزات الأمان المتقدمة مثل المصادقة الثنائية ورمز التعريف الشخصي (PIN)","تحديث برامج الجهاز وبرامج التشغيل بانتظام لإصلاح الثغرات"],a:0,e:"للحماية من هجمات البلوتوث يجب تعطيل البلوتوث أو وضع الاكتشاف (discoverable mode) وعدم قبول أي طلبات اتصال من غرباء."},
+  {q:"من مميزات بروتوكول التشفير اللاسلكي (Wireless Encryption Protocol - WEP) كما وردت في نهاية الوحدة الثالثة:",o:["جميع ما ذكر (يحمي البيانات ويحافظ على سريتها، يحقق أداءً متوازناً بين الأمان والسرعة، يتوافق مع معظم الأجهزة، ويعد خياراً اقتصادياً قليل التكلفة)","يتطلب تكلفة مالية باهظة جداً ولا يتوافق مع أي جهاز في السوق","يرسل البيانات بنص واضح للجمهور بدون أي تشفير","يُستخدم لاختراق أجهزة البلوتوث عبر بروتوكول OBEX"],a:0,e:"هذه هي المميزات الست لبروتوكول التشفير اللاسلكي المذكورة في نهاية الفصل الثاني عشر."}
+];
+
+// بناء شبكة المصطلحات
+const termsGrid = document.getElementById("termsGrid");
+terms.forEach(([en, ar]) => {
+  const d = document.createElement("div");
+  d.className = "card";
+  d.style.margin = "0";
+  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
+  termsGrid.appendChild(d);
+});
+
+// إدارة البطاقات التعليمية
+let ci = 0, showAnswer = false;
+function renderCard() {
+  document.getElementById("flashTerm").textContent = cards[ci][0];
+  document.getElementById("flashAnswer").textContent = cards[ci][1];
+  document.getElementById("flashAnswer").hidden = !showAnswer;
+  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
+  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+}
+document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
+document.getElementById("flashcard").addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
+});
+document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
+document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
+renderCard();
+
+// التنقل بين التبويبات
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+// خوارزمية خلط عشوائي (Fisher-Yates Shuffle) للأسئلة والخيارات
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+let currentQuestions = [];
+let answers = {};
+
+function prepareShuffledQuiz() {
+  currentQuestions = shuffleArray(masterQuestions).map(item => {
+    const optsWithFlag = item.o.map((text, idx) => ({ text, isCorrect: idx === item.a }));
+    const shuffledOpts = shuffleArray(optsWithFlag);
+    return {
+      q: item.q,
+      o: shuffledOpts.map(x => x.text),
+      a: shuffledOpts.findIndex(x => x.isCorrect),
+      e: item.e
+    };
+  });
+}
+
+function renderQuiz() {
+  prepareShuffledQuiz();
+  const area = document.getElementById("quizArea");
+  area.innerHTML = "";
+  const letters = ["أ", "ب", "ج", "د"];
+  currentQuestions.forEach((item, i) => {
+    const box = document.createElement("div");
+    box.className = "qbox";
+    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
+    const opts = box.querySelector(".options");
+    item.o.forEach((opt, j) => {
+      const btn = document.createElement("button");
+      btn.className = "option";
+      btn.textContent = `${letters[j]}) ${opt}`;
+      btn.onclick = () => {
+        answers[i] = j;
+        [...opts.children].forEach((x, k) => {
+          x.classList.remove("correct", "wrong");
+          x.disabled = true;
+          if (k === item.a) x.classList.add("correct");
+          if (k === j && j !== item.a) x.classList.add("wrong");
+        });
+        const fb = document.getElementById("fb" + i);
+        fb.hidden = false;
+        fb.className = "feedback " + (j === item.a ? "good" : "bad");
+        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
+        updateScore();
+      };
+      opts.appendChild(btn);
+    });
+    area.appendChild(box);
+  });
+  updateScore();
+}
+
+function updateScore() {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
+  document.getElementById("score").textContent = `النتيجة: ${correct} / ${currentQuestions.length}`;
+  document.getElementById("progressBar").style.width = (Object.keys(answers).length / currentQuestions.length * 100) + "%";
+}
+
+document.getElementById("resetQuiz").onclick = () => {
+  answers = {};
+  document.getElementById("finalResult").textContent = "";
+  renderQuiz();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+document.getElementById("finishQuiz").onclick = () => {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
+  const pct = Math.round(correct / currentQuestions.length * 100);
+  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${currentQuestions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! أنتِ مستعدة تماماً للاختبار." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
+};
+
+renderQuiz();
+</script>
+</body>
+</html>

@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الفصل العاشر الشامل (100%) | أمن البيانات والخصوصية</title>
+<style>
+:root{
+  --bg:#f2f7f6;
+  --card:#ffffff;
+  --ink:#132a28;
+  --muted:#5c7471;
+  --accent:#0d9488;
+  --accent-dark:#115e59;
+  --accent2:#ccfbf1;
+  --line:#d5e6e4;
+  --good:#059669;
+  --good-bg:#ecfdf5;
+  --bad:#dc2626;
+  --bad-bg:#fef2f2;
+  --warn:#d97706;
+  --warn-bg:#fffbeb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
+header{background:linear-gradient(135deg,#042f2e,#0d9488);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(4,47,46,0.18)}
+.wrap{max-width:1040px;margin:auto;padding:0 16px}
+.eyebrow{opacity:.92;font-size:.9rem;background:rgba(255,255,255,0.16);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
+h1{margin:5px 0;font-size:clamp(1.55rem,4vw,2.3rem)}
+header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
+nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:var(--accent2);color:var(--accent-dark);font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
+nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
+nav button.active,.btn.primary{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+main .btn.primary{background:var(--accent);color:white}
+main{padding:22px 0 48px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(19,42,40,0.04)}
+h2{font-size:1.35rem;margin:0 0 12px;color:#042f2e}
+h3{font-size:1.06rem;margin:0 0 8px;color:var(--accent-dark)}
+small,.muted{color:var(--muted)}
+ul,ol{padding-right:22px;margin:8px 0}
+li{margin:6px 0}
+details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
+summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f4fbf9;color:#042f2e;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
+details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
+.details-body{padding:16px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
+.badge-new{display:inline-block;background:var(--warn-bg);color:var(--warn);border:1px solid #fcd34d;font-size:.78rem;padding:1px 8px;border-radius:6px;margin-right:6px;font-weight:bold}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#e6f4f1;color:#042f2e;font-weight:bold}
+tr:last-child td{border-bottom:0}
+.note{border-right:4px solid var(--accent);padding:10px 14px;background:#f0fdfa;border-radius:8px;margin:10px 0}
+.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
+.code-box{background:#0f172a;color:#e2e8f0;padding:14px 18px;border-radius:12px;font-family:Consolas,Monaco,monospace;direction:ltr;text-align:left;overflow-x:auto;margin:10px 0;border:1px solid #334155;line-height:1.6}
+.code-box .hl{color:#38bdf8;font-weight:bold}
+.code-box .kw{color:#4ade80;font-weight:bold}
+.code-box .deny{color:#f87171;font-weight:bold}
+.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
+.options{display:grid;gap:8px;margin-top:12px}
+.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
+.option:hover:not(:disabled){border-color:var(--accent);background:#f0fdfa}
+.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
+.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
+.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
+.feedback.good{color:var(--good);background:var(--good-bg)}
+.feedback.bad{color:var(--bad);background:var(--bad-bg)}
+.progress{height:10px;background:#d5e6e4;border-radius:9px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
+.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#ccfbf1);border:2px solid #99f6e4;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
+.flashcard:hover{transform:scale(1.005)}
+.flashcard .term{font-size:1.35rem;font-weight:bold;color:#042f2e}
+.flashcard .answer{margin-top:16px;font-size:1.08rem;color:var(--accent-dark);background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
+@media(max-width:600px){
+  .card{padding:14px}
+  nav button{flex:1 1 calc(50% - 8px);text-align:center}
+  .flashcard{min-height:200px;padding:18px}
+  th,td{padding:8px 10px;font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">نسخة شاملة ومحدثة 100% • مقرر أمن البيانات والخصوصية</div>
+    <h1>الفصل العاشر: التحكم في الوصول (Access Control)</h1>
+    <p>يغطي مفهوم ومزايا التحكم في الوصول، أنواع قوائم التحكم (ACL)، القواعد الذهبية للـ ACL، القوائم القياسية (Standard) والموسعة (Extended)، نطاقات الأرقام، وتكوين أوامر الراوتر بالتفصيل</p>
+    <nav>
+      <button class="active" data-tab="summary">الشرح الشامل</button>
+      <button data-tab="tables">جداول المقارنات</button>
+      <button data-tab="terms">المصطلحات والأوامر</button>
+      <button data-tab="cards">البطاقات (28)</button>
+      <button data-tab="quiz">الاختبار العشوائي (25)</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- التبويب الأول: الشرح الشامل -->
+  <section id="summary" class="panel active">
+    <div class="card">
+      <h2>خريطة الفصل العاشر (الوحدات الثلاث الكاملة)</h2>
+      <div class="grid">
+        <div>
+          <span class="tag">الوحدة الأولى</span>
+          <h3>مفهوم ومزايا وأنواع التحكم في الوصول</h3>
+          <p>تعريف التحكم في الوصول (<span dir="ltr">AC</span>) وقائمة التحكم في الوصول (<span dir="ltr">ACL</span>)، آلية المنع والسماح، مزايا التحكم الأربعة، وأنواع تقنية التحكم الأربعة (القياسية، المسماة، المرقمة، والموسعة).</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثانية</span>
+          <h3>قواعد (ACL) وقائمة التحكم القياسية</h3>
+          <p>القواعد السبعة الحاكمة لقوائم <span dir="ltr">ACL</span>، مفهوم ومزايا القائمة القياسية (<span dir="ltr">Standard ACL</span>)، نطاقات الأرقام (<span dir="ltr">1-99</span> و <span dir="ltr">1300-1999</span>)، أوامر (<span dir="ltr">Any, Host, Deny, Permit</span>)، وتطبيق عملي على الراوتر.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثالثة</span>
+          <h3>قائمة التحكم في الوصول الموسعة</h3>
+          <p>مفهوم القائمة الموسعة (<span dir="ltr">Extended ACL</span>)، التصفية بالمصدر والوجهة والمنافذ، نطاقات الأرقام (<span dir="ltr">100-199</span> و <span dir="ltr">2000-2699</span>)، تطبيق عملي لمنع <span dir="ltr">FTP</span> و <span dir="ltr">Telnet</span>، ومزاياها الست.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- الوحدة الأولى كاملة في قائمة واحدة -->
+    <details open>
+      <summary>الوحدة الأولى: ما هو التحكم في الوصول؟ مزاياه، وأنواع تقنية التحكم في الوصول (AC)</summary>
+      <div class="details-body">
+        <h3>1) ما هو التحكم في الوصول (<span dir="ltr">Access Control</span>) وقائمة (<span dir="ltr">ACL</span>)؟</h3>
+        <ul>
+          <li><b>الهدف العام لأنظمة التحكم في الوصول:</b> تهدف إلى حماية المعلومات والموارد الحساسة والخصوصية من الوصول غير المصرح به. وتتضمن هذه الأنظمة تحديد ثلاثة أمور رئيسية:
+            <ol>
+              <li><b>مَن</b> يمكنه الوصول إلى موارد محددة.</li>
+              <li><b>في أي وقت</b> يمكنهم الوصول.</li>
+              <li><b>وبأي طريقة</b> يمكنهم الوصول بها.</li>
+            </ol>
+          </li>
+          <li><b>تعريف قائمة التحكم في الوصول (<span dir="ltr">Access Control List - ACL</span>):</b>
+            <ul>
+              <li>هي <b>مجموعة من القواعد المعرفة</b> للتحكم في حركة المرور عبر الشبكة وتقليل هجمات الشبكة.</li>
+              <li>تُستخدم قوائم التحكم في الوصول <b>لتصفية حركة المرور (<span dir="ltr">Traffic Filtering</span>)</b> بناءً على مجموعة القواعد المحددة للمرور <b>الوارد (<span dir="ltr">Inbound</span>) أو الصادر (<span dir="ltr">Outbound</span>)</b> في الشبكة.</li>
+              <li>هي تقنية تقوم بالتحكم في عملية الاتصال ما بين الشبكات، وتقوم بتحديد الأجهزة أو الشبكات المصرح لها بالدخول والشبكات غير المصرح لها بالدخول؛ وذلك من خلال <b>تسجيل عناوين الشبكات أو عناوين الأجهزة في قائمة المنع أو قائمة الوصول</b>، بحيث تكون الشبكة أكثر أماناً وتنسيقاً عند القيام بعملية المنع وعملية السماح.</li>
+            </ul>
+          </li>
+          <li><b>تعريف التحكم في الوصول (<span dir="ltr">Access Control</span>) الشامل:</b> هو عملية تحديد وتنفيذ سياسات وإجراءات لضمان أن الأشخاص الذين يحاولون الوصول إلى موارد معينة — <b>سواء كانت مادية (مثل مبنى) أو إلكترونية (مثل نظام كمبيوتر)</b> — يكون لديهم الصلاحية اللازمة للوصول إليها.</li>
+          <li><b>توضيح الرسم التخطيطي لعملية التحكم بالوصول (<span dir="ltr">ACL Diagram</span>):</b>
+            <ul>
+              <li>يبين الشكل شبكة تضم الموقع أ (<span dir="ltr">Site A - R1</span>) والموقع ب (<span dir="ltr">Site B - R3</span>) يربط بينهما الموجه (<span dir="ltr">R2</span>)، والمطلوب حظر كافة حركة المرور من الشبكة <code dir="ltr">192.168.10.0/24</code> إلى الشبكة <code dir="ltr">192.168.30.0/24</code>.</li>
+              <li>يوضح الشكل أهمية اختيار المنفذ الصحيح لوضع الفلتر (<span dir="ltr">Filter</span>) على الموجه <span dir="ltr">R3</span>: فوضعه على المنفذ التسلسلي <code dir="ltr">S0/0/1</code> يصفّي المرور القادم من <code dir="ltr">192.168.10.0/24</code> إلى جميع الوجهات المتصلة بـ <span dir="ltr">R3</span>، بينما وضعه على منفذ الشبكة المحلية <code dir="ltr">G0/0</code> يصفّي المرور المتجه فقط إلى الشبكة المستهدفة <code dir="ltr">192.168.30.0/24</code>.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) مزايا التحكم في الوصول (4 مزايا رئيسية)</h3>
+        <ol>
+          <li><b>العمل في مختلف أحجام الشبكات:</b> تُستخدم في <b>الشبكات الكبيرة والصغيرة</b>، وتوفر لنا عملية التصفية للبيانات غير المصرح لها بالدخول لشبكة أخرى.</li>
+          <li><b>حماية الشبكة وتصفية البيانات (<span dir="ltr">Filtering</span>):</b> حماية الشبكة من الوصول، مثل: منع موظفين في شبكة معينة من الوصول لشبكة الإنترنت، أو الوصول لشبكة السنتر، أو الاتصال بأحد سيرفرات الويب. حيث تستطيع قوائم التحكم بالوصول (<span dir="ltr">ACL</span>) عمل الـ <b dir="ltr">Filtering</b> للبيانات لمعرفة إلى أين ستصل هذه البيانات وهل مصرح لها بالدخول أم لا.</li>
+          <li><b>العمل على منافذ جهاز الراوتر:</b> تعمل على <b>جهاز الراوتر وخاصة على المنفذ (<span dir="ltr">Port / Interface</span>)</b>؛ حيث تعتمد على المنفذ المرتبط في جهاز الراوتر والواصل في الشبكة.</li>
+          <li><b>الاعتماد على مهندس الشبكة:</b> يتم الاعتماد على <b>مهندس الشبكة</b> الذي سيقوم بعمل الـ <span dir="ltr">ACL</span> وتحديد قوائم التحكم بالوصول.</li>
+        </ol>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) أنواع تقنية التحكم في الوصول (<span dir="ltr">AC</span>) الأربعة</h3>
+        <div class="grid" style="margin:10px 0">
+          <div class="note" style="margin:0"><b>1. قائمة التحكم في الوصول القياسية (<span dir="ltr">Standard Access-list</span>)</b></div>
+          <div class="note" style="margin:0"><b>2. قائمة التحكم في الوصول المسماة (<span dir="ltr">Named Access-list</span>)</b></div>
+          <div class="note" style="margin:0"><b>3. قائمة التحكم في الوصول المرقمة (<span dir="ltr">Numbered Access-list</span>)</b></div>
+          <div class="note" style="margin:0"><b>4. قائمة التحكم في الوصول الموسعة (<span dir="ltr">Extended Access-list</span>)</b></div>
+        </div>
+      </div>
+    </details>
+
+    <!-- الوحدة الثانية كاملة في قائمة واحدة -->
+    <details>
+      <summary>الوحدة الثانية: القواعد الحاكمة لـ (ACL) وقائمة التحكم في الوصول القياسية (Standard ACL) وتطبيقها العملي</summary>
+      <div class="details-body">
+        <h3>1) القواعد والمبادئ السبعة الحاكمة لقوائم التحكم في الوصول (<span dir="ltr">ACL Rules</span>)</h3>
+        <div class="exam-alert">
+          <b>تنبيه فائق الأهمية للاختبار:</b> هذه القواعد السبع هي موضع أسئلة مباشرة ودقيقة جداً في الاختبارات:
+        </div>
+        <ol>
+          <li><b>موقع تطبيق القائمة القياسية:</b> تُطبق قائمة التحكم في الوصول <b>القياسية (<span dir="ltr">Standard</span>)</b> عادةً <b>بالقرب من الوجهة (<span dir="ltr">Destination</span>)</b> (ولكن ليس دائماً).</li>
+          <li><b>موقع تطبيق القائمة الموسعة:</b> تُطبق قائمة التحكم في الوصول <b>الموسعة (<span dir="ltr">Extended</span>)</b> عادةً <b>بالقرب من المصدر (<span dir="ltr">Source</span>)</b> (ولكن ليس دائماً).</li>
+          <li><b>قاعدة (واحدة لكل واجهة، لكل بروتوكول، لكل اتجاه):</b> يمكننا تعيين قائمة تحكم في الوصول <b>واحدة فقط لكل واجهة واحدة، لكل بروتوكول واحد، لكل اتجاه</b>؛ أي أنه يُسمح بوجود قائمة تحكم في الوصول واحدة فقط للمرور الوارد وأخرى للصادر عبر واجهة واحدة.</li>
+          <li><b>حذف القواعد (الفرق بين المرقمة والمسماة):</b>
+            <ul>
+              <li>إذا كنا نستخدم <b>قائمة تحكم في الوصول المرقمة (<span dir="ltr">Numbered ACL</span>)</b>: <b>لا يمكننا إزالة قاعدة واحدة</b> من القائمة؛ وإذا حاولنا إزالة قاعدة <b>فسيتم إزالة القائمة بأكملها</b>.</li>
+              <li>إذا كنا نستخدم <b>قوائم التحكم في الوصول المسماة (<span dir="ltr">Named ACL</span>)</b>: <b>يمكننا حذف قاعدة محددة</b> بمرونة دون حذف القائمة كلها.</li>
+            </ul>
+          </li>
+          <li><b>موقع إضافة القواعد الجديدة:</b> يتم وضع أي قاعدة جديدة يتم إضافتها إلى قائمة التحكم في الوصول <b>في الجزء السفلي (النهاية) من القائمة</b>؛ لذا قبل تنفيذ قوائم التحكم في الوصول، يجب تحليل السيناريو بعناية.</li>
+          <li><b>قاعدة الرفض الضمني (<span dir="ltr">Implicit Deny</span>):</b> نظراً لوجود <b>رفض ضمني في نهاية كل قائمة تحكم في الوصول</b>، يجب أن يكون لدينا <b>على الأقل عبارة إذن (<span dir="ltr">Permit</span>) واحدة</b> في قائمة التحكم في الوصول، وإلا <b>سيتم رفض كل حركة مرور</b>.</li>
+          <li><b>عدم تشابه الأسماء:</b> <b>لا يمكن</b> أن يكون لقوائم التحكم في الوصول القياسية وقوائم التحكم في الوصول الموسعة <b>نفس الاسم</b>.</li>
+        </ol>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) قائمة التحكم في الوصول القياسية (<span dir="ltr">Standard Access-list</span>) ومزاياها</h3>
+        <ul>
+          <li><b>التعريف وطريقة العمل:</b> هي قوائم التحكم في الوصول التي تُنشأ باستخدام <b>عنوان <span dir="ltr">IP</span> المصدر فقط (<span dir="ltr">Source IP Address Only</span>)</b>.</li>
+          <li><b>عدم التمييز بين البروتوكولات:</b> تسمح هذه القوائم بالسماح أو الرفض <b>للبروتوكولات الكاملة</b>، وهي <b>لا تميز</b> بين حركة المرور عبر الشبكة مثل (<span dir="ltr">TCP</span> و <span dir="ltr">UDP</span> و <span dir="ltr">HTTPS</span> وما إلى ذلك).</li>
+          <li><b>نطاقات الأرقام للقائمة القياسية:</b> عن طريق استخدام الأرقام من <b><span dir="ltr">1</span> إلى <span dir="ltr">99</span></b>، أو النطاق الموسع من <b><span dir="ltr">1300</span> إلى <span dir="ltr">1999</span></b>، سيفهم الموجه (الراوتر) أنها قائمة تحكم في الوصول قياسية وأن العنوان المحدد هو عنوان <span dir="ltr">IP</span> المصدر.</li>
+          <li><b>مزايا وخصائص قائمة التحكم في الوصول القياسية (6 نقاط):</b>
+            <ol>
+              <li>عادةً ما يتم تطبيقها <b>بالقرب من الوجهة</b> (ولكن ليس دائماً).</li>
+              <li>يتم فيها <b>رفض الشبكة أو الشبكة الفرعية بأكملها</b>.</li>
+              <li>تستخدم النطاق من <b><span dir="ltr">1</span> إلى <span dir="ltr">99</span></b> والنطاق الموسع من <b><span dir="ltr">1300</span> إلى <span dir="ltr">1999</span></b>.</li>
+              <li>يتم تنفيذها باستخدام <b>عنوان <span dir="ltr">IP</span> المصدر فقط</b>.</li>
+              <li>إذا تم استخدام القائمة <b>المرقمة</b> مع القائمة القياسية، فلا يمكن حذف القواعد منفردة (حذف إحدى القواعد يحذف القائمة بأكملها).</li>
+              <li>إذا تم استخدام القائمة <b>المسماة</b> مع القائمة القياسية، فلديك المرونة لحذف قاعدة محددة من القائمة.</li>
+            </ol>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) أوامر القائمة القياسية والتطبيق العملي على الراوتر</h3>
+        <p><b>أولاً: الأوامر الأساسية الأربعة في عملية التحكم بالوصول القياسية:</b></p>
+        <table>
+          <thead>
+            <tr>
+              <th>الأمر البرمجي</th>
+              <th>الوظيفة والمعنى الدقيق في المنهج</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b dir="ltr">Any</b></td>
+              <td>منع (أو تحديد) <b>جميع أجهزة الشبكة</b>.</td>
+            </tr>
+            <tr>
+              <td><b dir="ltr">Host</b></td>
+              <td>منع (أو تحديد) <b>جهاز معين</b>.</td>
+            </tr>
+            <tr>
+              <td><b dir="ltr">Deny</b></td>
+              <td>أمر <b>منع الوصول</b>.</td>
+            </tr>
+            <tr>
+              <td><b dir="ltr">Permit</b></td>
+              <td>أمر <b>سماح الوصول</b>.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p><b>ثانياً: المثال العملي والتوبولوجيا لقائمة التحكم القياسية:</b></p>
+        <ul>
+          <li><b>وصف التوبولوجيا (الشبكة):</b> توبولوجيا صغيرة متصلة بالموجه (<b dir="ltr">R1</b>) وتحتوي على <b>3 أقسام</b>:
+            <ul>
+              <li><b>قسم المبيعات (<span dir="ltr">SALES</span>):</b> متصل بالمنفذ <code dir="ltr">Fa0/0</code> ويحتوي على شبكة بعنوان <code dir="ltr">172.16.40.0/24</code>.</li>
+              <li><b>قسم المالية (<span dir="ltr">FINANCE</span>):</b> متصل بالمنفذ <code dir="ltr">Fa0/1</code> ويحتوي على شبكة بعنوان <code dir="ltr">172.16.50.0/24</code>.</li>
+              <li><b>قسم التسويق (<span dir="ltr">MARKETING</span>):</b> متصل بالمنفذ <code dir="ltr">Fa1/0</code> ويحتوي على شبكة بعنوان <code dir="ltr">172.16.60.0/24</code> (مع وجود اتصال بالإنترنت عبر المنفذ <code dir="ltr">s0/0/0</code>).</li>
+            </ul>
+          </li>
+          <li><b>المطلوب تنفيذه:</b> نرغب في <b>حظر الاتصال من قسم المبيعات (<code dir="ltr">172.16.40.0/24</code>) إلى قسم المالية (<code dir="ltr">172.16.50.0/24</code>)</b>، والسماح للآخرين بالوصول إلى تلك الشبكة (مع بقاء اتصال المبيعات بالإنترنت مسموحاً <span dir="ltr">PERMITTED</span>).</li>
+          <li><b>أوامر التكوين على الراوتر (<span dir="ltr">R1</span>):</b></li>
+        </ul>
+        <div class="code-box">
+          R1# <span class="hl">config terminal</span><br>
+          R1(config)# <span class="kw">access-list 10</span> <span class="deny">deny</span> 172.16.40.0 0.0.0.255
+        </div>
+        <ul>
+          <li><b>شرح التكوين:</b> تم إنشاء قائمة مرقمة بالرقم <b><span dir="ltr">10</span></b> (وهو ضمن النطاق القياسي <span dir="ltr">1-99</span>)، والسطر يمنع الوصول (<code dir="ltr">deny</code>) من قسم المبيعات (<code dir="ltr">172.16.40.0/24</code> باستخدام قناع البطاقة البرية <code dir="ltr">0.0.0.255</code>) إلى قسم المالية.</li>
+        </ul>
+        <div class="note">
+          <b>ملاحظة هامة جداً:</b> قوائم التحكم في الوصول القياسية (<span dir="ltr">Standard Access-list</span>) <b>تُستخدم بشكل أقل</b> مقارنة بقوائم التحكم في الوصول الموسعة (<span dir="ltr">Extended Access-list</span>)؛ لأنه يتم فيها السماح أو الرفض لمجموعة بروتوكولات <span dir="ltr">IP</span> بأكملها لحركة المرور، حيث لا يمكن التمييز بين مختلف حركة المرور لبروتوكولات <span dir="ltr">IP</span> المختلفة.
+        </div>
+      </div>
+    </details>
+
+    <!-- الوحدة الثالثة كاملة في قائمة واحدة -->
+    <details>
+      <summary>الوحدة الثالثة: قائمة التحكم في الوصول الموسعة (Extended ACL)، تطبيقها العملي، ومزاياها</summary>
+      <div class="details-body">
+        <h3>1) مفهوم قائمة التحكم في الوصول الموسعة (<span dir="ltr">Extended Access-list</span>)</h3>
+        <ul>
+          <li><b>التعريف وسبب كثرة استخدامها:</b> هي واحدة من أنواع قوائم التحكم في الوصول التي <b>تُستخدم بشكل كبير</b>؛ حيث يمكنها <b>التمييز بين حركة المرور لبروتوكول الإنترنت (<span dir="ltr">IP</span>)</b>، وبالتالي فإنها لا تسمح بالمرور الكامل أو ترفضه مثلما يحدث في قوائم التحكم القياسية.</li>
+          <li><b>عناصر التصفية التي تعتمد عليها:</b> تستخدم هذه القوائم كلاً من:
+            <ol>
+              <li><b>عناوين <span dir="ltr">IP</span> المصدر (<span dir="ltr">Source IP</span>).</b></li>
+              <li><b>عناوين <span dir="ltr">IP</span> الوجهة (<span dir="ltr">Destination IP</span>).</b></li>
+              <li><b>أرقام المنافذ (<span dir="ltr">Port Numbers</span>) ونوع البروتوكول:</b> للتمييز بين حركة المرور لبروتوكول الإنترنت، حيث يمكننا ذكر أي حركة مرور <span dir="ltr">IP</span> (خدمة محددة مثل <span dir="ltr">FTP</span> أو <span dir="ltr">Telnet</span>) يجب السماح بها أو رفضها.</li>
+            </ol>
+          </li>
+          <li><b>نطاقات الأرقام للقائمة الموسعة:</b> تستخدم هذه القوائم نطاقاً من <b><span dir="ltr">100</span> إلى <span dir="ltr">199</span></b>، والنطاق الموسع من <b><span dir="ltr">2000</span> إلى <span dir="ltr">2699</span></b>.</li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) التطبيق العملي والتوبولوجيا لقائمة التحكم في الوصول الموسعة</h3>
+        <ul>
+          <li><b>وصف التوبولوجيا والمطلوب:</b> لدينا التوبولوجيا التي تضم 3 أقسام متصلة بالموجه (<b dir="ltr">R1</b>):
+            <ul>
+              <li>قسم المبيعات (<span dir="ltr">SALES</span>): شبكة بعنوان <code dir="ltr">172.16.40.0/24</code> (وذُكرت في نص الشرح أيضاً كـ <code dir="ltr">172.16.10.0/24</code>).</li>
+              <li>قسم المالية / التمويل (<span dir="ltr">FINANCE</span>): شبكة بعنوان <code dir="ltr">172.16.50.0/24</code>.</li>
+              <li>قسم التسويق (<span dir="ltr">MARKETING</span>): شبكة بعنوان <code dir="ltr">172.16.60.0/24</code>.</li>
+              <li><b>الهدف المطلوب في السيناريو:</b> نرغب في <b>منع اتصال <span dir="ltr">FTP</span></b> من قسم المبيعات إلى قسم المالية (<span dir="ltr">DENIED FTP DATA</span>)، و<b>منع اتصال <span dir="ltr">Telnet</span></b> إلى قسم المالية من كلٍ من قسم المبيعات وقسم التسويق (<span dir="ltr">DENIED TELNET DATA</span>).</li>
+            </ul>
+          </li>
+          <li><b>أمر تكوين قائمة الوصول الموسعة لرفض اتصال <span dir="ltr">FTP</span> من المبيعات إلى المالية:</b></li>
+        </ul>
+        <div class="code-box">
+          R1# <span class="hl">config terminal</span><br>
+          R1(config)# <span class="kw">access-list 110</span> <span class="deny">deny</span> <span class="hl">tcp</span> 172.16.40.0 0.0.0.255 172.16.50.0 0.0.0.255 <span class="kw">eq 21</span>
+        </div>
+
+        <div class="exam-alert">
+          <b>توضيح وتفصيل رموز الأمر البرمجي (مهم جداً للاختبار):</b>
+          <ul style="margin-bottom:0">
+            <li><b dir="ltr">110</b>: يشير إلى <b>رقم القائمة المرقمة الموسعة</b> (ضمن النطاق <span dir="ltr">100-199</span>)، ويمكنك تحديده وفقاً للترتيب الذي تريده.</li>
+            <li><b dir="ltr">deny</b>: يشير إلى <b>رفض الاتصال</b>.</li>
+            <li><b dir="ltr">tcp</b>: يشير إلى <b>استخدام بروتوكول <span dir="ltr">TCP</span></b>.</li>
+            <li><b>عنوان <span dir="ltr">IP</span> المصدر (<code dir="ltr">172.16.40.0 0.0.0.255</code>):</b> يشير إلى عنوان <span dir="ltr">IP</span> لجهاز/شبكة المصدر (قسم المبيعات <code dir="ltr">172.16.40.0/24</code>).</li>
+            <li><b>عنوان <span dir="ltr">IP</span> الوجهة (<code dir="ltr">172.16.50.0 0.0.0.255</code>):</b> يشير إلى عنوان <span dir="ltr">IP</span> لجهاز/شبكة الوجهة (قسم المالية/التمويل <code dir="ltr">172.16.50.0/24</code>).</li>
+            <li><b dir="ltr">eq 21</b> (أو <b dir="ltr">eq ftp</b>): يشير إلى <b>تحديد منفذ <span dir="ltr">FTP</span> (رقم 21) كمنفذ وجهة للاتصال</b>.</li>
+          </ul>
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) مزايا قائمة التحكم في الوصول الموسعة (6 مزايا)</h3>
+        <ol>
+          <li>تُطبق عادةً قائمة التحكم في الوصول الموسعة <b>بالقرب من المصدر (<span dir="ltr">Source</span>)</b>، ولكن ليس دائماً.</li>
+          <li>يتم فيها تصفية الحزم بناءً على <b>عنوان <span dir="ltr">IP</span> المصدر، وعنوان <span dir="ltr">IP</span> الوجهة، وأرقام المنافذ (<span dir="ltr">Port Numbers</span>)</b>.</li>
+          <li>في القائمة الموسعة، <b>يُسمح بتمرير خدمات محددة أو يتم رفضها</b> (وليس حظر الشبكة بالكامل).</li>
+          <li>يتم إنشاء قائمة التحكم في الوصول الموسعة بين <b><span dir="ltr">100</span> و <span dir="ltr">199</span></b>، والنطاق الموسع بين <b><span dir="ltr">2000</span> و <span dir="ltr">2699</span></b>.</li>
+          <li>إذا تم استخدام <b>رقم (قائمة مرقمة)</b> في القائمة الموسعة، فتذكر أنه <b>لا يمكن حذف القواعد الفردية</b>؛ وإذا تم حذف إحدى القواعد سيتم حذف القائمة بأكملها.</li>
+          <li>إذا تم استخدام <b>اسم (قائمة مسماة)</b> في القائمة الموسعة، فلدينا <b>مرونة في حذف قاعدة محددة</b> من القائمة.</li>
+        </ol>
+      </div>
+    </details>
+  </section>
+
+  <!-- التبويب الثاني: جداول المقارنات السريعة -->
+  <section id="tables" class="panel">
+    <div class="card">
+      <h2>1. مقارنة شاملة ودقيقة بين القائمة القياسية (Standard ACL) والقائمة الموسعة (Extended ACL)</h2>
+      <p class="muted">هذا الجدول يجمع كافة الفروق الجوهرية التي يركز عليها الاختبار بين النوعين:</p>
+      <table>
+        <thead>
+          <tr>
+            <th>وجه المقارنة</th>
+            <th>قائمة التحكم القياسية (Standard Access-list)</th>
+            <th>قائمة التحكم الموسعة (Extended Access-list)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>معيار التصفية الأساسي</b></td>
+            <td>تعتمد على <b>عنوان <span dir="ltr">IP</span> المصدر فقط (<span dir="ltr">Source IP Only</span>)</b>.</td>
+            <td>تعتمد على <b>عنوان <span dir="ltr">IP</span> المصدر، وعنوان <span dir="ltr">IP</span> الوجهة، والبروتوكول، وأرقام المنافذ (<span dir="ltr">Ports</span>)</b>.</td>
+          </tr>
+          <tr>
+            <td><b>التعامل مع البروتوكولات والخدمات</b></td>
+            <td>تسمح أو ترفض <b>مجموعة البروتوكولات الكاملة</b> (ترفض الشبكة أو الشبكة الفرعية بأكملها) ولا تميز بين <span dir="ltr">TCP, UDP, HTTPS</span>.</td>
+            <td><b>تميز بين حركة مرور <span dir="ltr">IP</span></b>، وتسمح بتمرير أو رفض <b>خدمات محددة</b> (مثل منع <span dir="ltr">FTP</span> أو <span dir="ltr">Telnet</span> فقط).</td>
+          </tr>
+          <tr>
+            <td><b>الموقع المعتاد للتطبيق</b></td>
+            <td>تُطبق عادةً <b>بالقرب من الوجهة (<span dir="ltr">Destination</span>)</b> (ولكن ليس دائماً).</td>
+            <td>تُطبق عادةً <b>بالقرب من المصدر (<span dir="ltr">Source</span>)</b> (ولكن ليس دائماً).</td>
+          </tr>
+          <tr>
+            <td><b>نطاق الأرقام العادي</b></td>
+            <td>من <b><span dir="ltr">1</span> إلى <span dir="ltr">99</span></b></td>
+            <td>من <b><span dir="ltr">100</span> إلى <span dir="ltr">199</span></b></td>
+          </tr>
+          <tr>
+            <td><b>النطاق الموسع للأرقام</b></td>
+            <td>من <b><span dir="ltr">1300</span> إلى <span dir="ltr">1999</span></b></td>
+            <td>من <b><span dir="ltr">2000</span> إلى <span dir="ltr">2699</span></b></td>
+          </tr>
+          <tr>
+            <td><b>مدى الانتشار والاستخدام</b></td>
+            <td>تُستخدم <b>بشكل أقل</b>.</td>
+            <td>تُستخدم <b>بشكل كبير</b> لمرونتها ودقتها.</td>
+          </tr>
+          <tr>
+            <td><b>مثال الأمر البرمجي في المنهج</b></td>
+            <td><code dir="ltr">access-list 10 deny 172.16.40.0 0.0.0.255</code></td>
+            <td><code dir="ltr">access-list 110 deny tcp 172.16.40.0 0.0.0.255 172.16.50.0 0.0.0.255 eq 21</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>2. مقارنة بين القوائم المرقمة (Numbered) والقوائم المسماة (Named)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>وجه المقارنة</th>
+            <th>قائمة التحكم المرقمة (Numbered Access-list)</th>
+            <th>قائمة التحكم المسماة (Named Access-list)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>طريقة التعريف</b></td>
+            <td>تُعرف باستخدام رقم يحدد نوعها (قياسية: <span dir="ltr">1-99 / 1300-1999</span>، أو موسعة: <span dir="ltr">100-199 / 2000-2699</span>).</td>
+            <td>تُعرف باستخدام اسم نصي (مع مراعاة أنه لا يمكن أن يكون للقياسية والموسعة نفس الاسم).</td>
+          </tr>
+          <tr>
+            <td><b>حذف قاعدة واحدة من القائمة</b></td>
+            <td><b>لا يمكن إزالة قاعدة محددة منفردة؛</b> إذا حاولنا حذف قاعدة واحدة فسيتم <b>حذف القائمة بأكملها</b>.</td>
+            <td><b>تتميز بالمرونة؛</b> حيث <b>يمكننا حذف قاعدة محددة</b> من القائمة دون حذف القائمة بأكملها.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>3. جدول ملخص القواعد الذهبية لتكوين قوائم التحكم في الوصول (ACL)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>القاعدة / المبدأ</th>
+            <th>التفصيل الدقيق كما ورد في الفصل العاشر</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>عدد القوائم المسموح بها على المنفذ</b></td>
+            <td>قائمة تحكم في الوصول <b>واحدة فقط</b> لكل واجهة واحدة (<span dir="ltr">Interface</span>)، لكل بروتوكول واحد (<span dir="ltr">Protocol</span>)، لكل اتجاه (<span dir="ltr">Direction</span>: وارد أو صادر).</td>
+          </tr>
+          <tr>
+            <td><b>ترتيب إضافة القواعد الجديدة</b></td>
+            <td>تُوضع أي قاعدة جديدة يتم إضافتها في <b>الجزء السفلي (نهاية القائمة)</b>، لذا يجب تحليل السيناريو بعناية قبل التنفيذ.</td>
+          </tr>
+          <tr>
+            <td><b>الرفض الضمني (<span dir="ltr">Implicit Deny</span>)</b></td>
+            <td>يوجد رفض ضمني غير مرئي في نهاية كل قائمة <span dir="ltr">ACL</span>؛ لذا يجب وجود <b>عبارة إذن (<span dir="ltr">Permit</span>) واحدة على الأقل</b> وإلا سيتم رفض كل حركة المرور.</td>
+          </tr>
+          <tr>
+            <td><b>أوامر التحكم الأربعة</b></td>
+            <td>• <b dir="ltr">Permit</b>: أمر سماح الوصول.<br>• <b dir="ltr">Deny</b>: أمر منع الوصول.<br>• <b dir="ltr">Any</b>: منع/تحديد جميع أجهزة الشبكة.<br>• <b dir="ltr">Host</b>: منع/تحديد جهاز معين واحد.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- التبويب الثالث: المصطلحات والأوامر -->
+  <section id="terms" class="panel">
+    <div class="card">
+      <h2>قاموس المصطلحات والأوامر البرمجية الشامل للفصل العاشر</h2>
+      <p class="muted">جميع المصطلحات الإنجليزية والأوامر البرمجية ونطاقات الأرقام الواردة في الوحدات الثلاث:</p>
+      <div id="termsGrid" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- التبويب الرابع: البطاقات التعليمية -->
+  <section id="cards" class="panel">
+    <div class="card">
+      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
+      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
+      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
+        <div class="term" id="flashTerm"></div>
+        <div class="answer" id="flashAnswer" hidden></div>
+        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="prevCard">السابق</button>
+        <span id="cardCount" class="muted"></span>
+        <button class="btn primary" id="nextCard">التالي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- التبويب الخامس: الاختبار الذاتي العشوائي -->
+  <section id="quiz" class="panel">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2>الاختبار الشامل المتغير للفصل العاشر (25 سؤالاً) <span class="badge-new">ترتيب عشوائي ذكي 🎲</span></h2>
+          <p class="muted">يتم خلط ترتيب الأسئلة وترتيب الخيارات تلقائياً في كل مرة لقياس فهمك الحقيقي بتركيز فائق!</p>
+        </div>
+        <div class="score" id="score">النتيجة: 0 / 25</div>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="quizArea"></div>
+      <div class="row">
+        <button class="btn" id="resetQuiz">إعادة الاختبار بترتيب عشوائي جديد 🔀</button>
+        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+      </div>
+      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
+    </div>
+  </section>
+</main>
+
+<footer>مبني بالكامل (100%) على محتوى الفصل العاشر من مقرر أمن البيانات والخصوصية</footer>
+
+<script>
+const terms = [
+  ["Access Control (AC)", "التحكم في الوصول: عملية تحديد وتنفيذ سياسات وإجراءات لضمان أن الأشخاص الذين يحاولون الوصول لموارد مادية (كمبنى) أو إلكترونية (كنظام كمبيوتر) لديهم الصلاحية اللازمة."],
+  ["Access Control List (ACL)", "قائمة التحكم في الوصول: مجموعة من القواعد المعرفة للتحكم في حركة المرور عبر الشبكة وتصفيتها (الواردة أو الصادرة) وتقليل هجمات الشبكة."],
+  ["Traffic Filtering", "تصفية حركة المرور: وظيفة قوائم ACL لمعرفة إلى أين ستصل البيانات وهل مصرح لها بالدخول أم لا."],
+  ["Standard Access-list", "قائمة التحكم في الوصول القياسية: تُنشأ باستخدام عنوان IP المصدر فقط، وتسمح أو ترفض البروتوكولات الكاملة، وتطبق عادةً بالقرب من الوجهة."],
+  ["Extended Access-list", "قائمة التحكم في الوصول الموسعة: تُستخدم بكثرة وتصفّي الحزم بناءً على عنوان IP المصدر والوجهة وأرقام المنافذ، وتطبق عادةً بالقرب من المصدر."],
+  ["Numbered Access-list", "قائمة التحكم في الوصول المرقمة: قائمة تُعرف برقم؛ ولا يمكن فيها حذف قاعدة واحدة منفردة (محاولة حذف قاعدة تحذف القائمة بأكملها)."],
+  ["Named Access-list", "قائمة التحكم في الوصول المسماة: قائمة تُعرف باسم؛ وتمنح المرونة لحذف قاعدة محددة دون حذف القائمة بأكملها."],
+  ["1 - 99 & 1300 - 1999", "نطاقات أرقام قائمة التحكم القياسية (Standard ACL): من 1 إلى 99، والنطاق الموسع من 1300 إلى 1999."],
+  ["100 - 199 & 2000 - 2699", "نطاقات أرقام قائمة التحكم الموسعة (Extended ACL): من 100 إلى 199، والنطاق الموسع من 2000 إلى 2699."],
+  ["Implicit Deny (الرفض الضمني)", "قاعدة غير مرئية في نهاية كل قائمة ACL ترفض كل ما لم يُسمح به؛ لذا يجب وجود عبارة إذن (Permit) واحدة على الأقل وإلا سترفض كل حركة المرور."],
+  ["Permit", "أمر سماح الوصول في قوائم التحكم في الوصول (ACL)."],
+  ["Deny", "أمر منع أو رفض الوصول في قوائم التحكم في الوصول (ACL)."],
+  ["Any", "رمز/أمر في قائمة التحكم يعني: منع (أو مطابقة) جميع أجهزة الشبكة."],
+  ["Host", "رمز/أمر في قائمة التحكم يعني: منع (أو مطابقة) جهاز معين واحد فقط."],
+  ["eq 21 (eq ftp)", "جزء من أمر القائمة الموسعة يشير إلى تحديد منفذ خدمة نقل الملفات (FTP) رقم 21 كمنفذ وجهة للاتصال."],
+  ["Telnet & FTP", "خدمات شبكية يمكن التحكم في منعها أو السماح بها بشكل مستقل باستخدام قوائم التحكم الموسعة (Extended ACL)."]
+];
+
+const cards = [
+  ["ما هو الهدف العام لأنظمة التحكم في الوصول؟ وما الأمور الثلاثة التي تحددها؟", "تهدف لحماية المعلومات والموارد الحساسة والخصوصية من الوصول غير المصرح به. وتحدد:\n1) مَن يمكنه الوصول لموارد محددة.\n2) في أي وقت يمكنهم الوصول.\n3) بأي طريقة يمكنهم الوصول بها."],
+  ["ما هي قائمة التحكم في الوصول (Access Control List - ACL)؟", "هي مجموعة من القواعد المعرفة للتحكم في حركة المرور عبر الشبكة وتقليل الهجمات، وتُستخدم لتصفية حركة المرور (الواردة أو الصادرة) عبر تسجيل عناوين الشبكات أو الأجهزة في قائمة المنع أو قائمة الوصول."],
+  ["ما هو التعريف الشامل لـ (التحكم في الوصول - Access Control)؟", "هو عملية تحديد وتنفيذ سياسات وإجراءات لضمان أن الأشخاص الذين يحاولون الوصول إلى موارد معينة، سواء كانت مادية (مثل مبنى) أو إلكترونية (مثل نظام كمبيوتر)، يكون لديهم الصلاحية اللازمة للوصول إليها."],
+  ["ما هي المزايا الأربع للتحكم في الوصول؟", "1) تُستخدم في الشبكات الكبيرة والصغيرة لتصفية البيانات.\n2) حماية الشبكة عبر الـ Filtering (مثل منع موظفين من الوصول للإنترنت أو شبكة السنتر أو سيرفر ويب).\n3) تعمل على جهاز الراوتر وخاصة على المنفذ (Port/Interface).\n4) تعتمد على مهندس الشبكة الذي ينشئ ويحدد قوائم ACL."],
+  ["ما هي الأنواع الأربعة لتقنية التحكم في الوصول (AC)؟", "1) قائمة التحكم في الوصول القياسية (Standard Access-list).\n2) قائمة التحكم في الوصول المسماة (Named Access-list).\n3) قائمة التحكم في الوصول المرقمة (Numbered Access-list).\n4) قائمة التحكم في الوصول الموسعة (Extended Access-list)."],
+  ["أين تُطبق عادةً كل من القائمة القياسية (Standard) والقائمة الموسعة (Extended)؟", "• القائمة القياسية (Standard): تُطبق عادةً بالقرب من الوجهة (Destination) - ولكن ليس دائماً.\n• القائمة الموسعة (Extended): تُطبق عادةً بالقرب من المصدر (Source) - ولكن ليس دائماً."],
+  ["كم عدد قوائم التحكم في الوصول (ACL) التي يمكن تعيينها على واجهة الراوتر؟", "يمكننا تعيين قائمة تحكم في الوصول (واحدة فقط) لكل واجهة واحدة، لكل بروتوكول واحد، لكل اتجاه (أي قائمة واحدة للمرور الوارد وأخرى للصادر عبر واجهة واحدة)."],
+  ["ما الفرق الجوهري بين القائمة المرقمة (Numbered) والقائمة المسماة (Named) عند الرغبة في حذف قاعدة؟", "• في القائمة المرقمة: لا يمكننا إزالة قاعدة واحدة؛ وإذا حاولنا إزالة قاعدة فسيتم إزالة القائمة بأكملها.\n• في القائمة المسماة: لدينا المرونة لحذف قاعدة محددة دون حذف القائمة كلها."],
+  ["أين يتم وضع أي قاعدة جديدة تُضاف إلى قائمة التحكم في الوصول؟ ولماذا يهمنا ذلك؟", "يتم وضع أي قاعدة جديدة في (الجزء السفلي / نهاية القائمة)؛ لذا يجب تحليل السيناريو بعناية قبل تنفيذ قوائم التحكم في الوصول."],
+  ["ما هي قاعدة (الرفض الضمني - Implicit Deny) في قوائم ACL؟ وماذا تفرض علينا؟", "يوجد رفض ضمني في نهاية كل قائمة تحكم في الوصول؛ لذلك يجب أن يكون لدينا على الأقل (عبارة إذن Permit واحدة) في القائمة، وإلا سيتم رفض كل حركة مرور."],
+  ["هل يمكن أن تشترك قائمة تحكم قياسية وقائمة تحكم موسعة في نفس الاسم؟", "لا، لا يمكن أن يكون لقوائم التحكم في الوصول القياسية وقوائم التحكم في الوصول الموسعة نفس الاسم."],
+  ["ما هي قائمة التحكم في الوصول القياسية (Standard ACL)؟ وعلامَ تعتمد؟", "هي قوائم تُنشأ باستخدام (عنوان IP المصدر فقط). وتقوم بالسماح أو الرفض للبروتوكولات الكاملة (الشبكة أو الشبكة الفرعية بأكملها) ولا تميز بين حركة المرور مثل TCP و UDP و HTTPS."],
+  ["ما هي نطاقات الأرقام الخاصة بقائمة التحكم في الوصول القياسية (Standard ACL)؟", "تستخدم الأرقام من (1 إلى 99)، والنطاق الموسع من (1300 إلى 1999)."],
+  ["ماذا تعني الأوامر التالية في قوائم التحكم بالوصول: (Any, Host, Deny, Permit)؟", "• Any: منع/تحديد جميع أجهزة الشبكة.\n• Host: منع/تحديد جهاز معين.\n• Deny: أمر منع الوصول.\n• Permit: أمر سماح الوصول."],
+  ["اشرحي الأمر التالي: R1(config)# access-list 10 deny 172.16.40.0 0.0.0.255", "أمر لإنشاء قائمة تحكم مرقمة بالرقم (10) تمنع الوصول (deny) من شبكة قسم المبيعات ذات العنوان المصدر (172.16.40.0/24) وقناع البطاقة البرية (0.0.0.255)."],
+  ["لماذا تُستخدم قوائم التحكم القياسية (Standard) بشكل أقل مقارنة بالموسعة (Extended)؟", "لأنه في القياسية يتم السماح أو الرفض لمجموعة بروتوكولات IP بأكملها لحركة المرور، حيث لا يمكن التمييز بين مختلف حركة المرور لبروتوكولات IP المختلفة."],
+  ["ما هي قائمة التحكم في الوصول الموسعة (Extended ACL)؟ ولماذا تُستخدم بشكل كبير؟", "هي نوع من قوائم ACL يُستخدم بشكل كبير لأنها تستطيع التمييز بين حركة المرور لبروتوكول الإنترنت (IP)، فلا ترفض أو تسمح بالمرور الكامل بل تتحكم في خدمات محددة."],
+  ["ما هي العناصر الثلاثة التي تستخدمها القائمة الموسعة (Extended ACL) لتصفية الحزم؟", "1) عنوان IP المصدر (Source IP).\n2) عنوان IP الوجهة (Destination IP).\n3) أرقام المنافذ (Port Numbers) ونوع البروتوكول."],
+  ["ما هي نطاقات الأرقام الخاصة بقائمة التحكم في الوصول الموسعة (Extended ACL)؟", "تستخدم النطاق من (100 إلى 199)، والنطاق الموسع من (2000 إلى 2699)."],
+  ["ما معنى كل رمز في الأمر: access-list 110 deny tcp 172.16.40.0 0.0.0.255 172.16.50.0 0.0.0.255 eq 21 ؟", "• 110: رقم القائمة المرقمة الموسعة.\n• deny: رفض الاتصال.\n• tcp: استخدام بروتوكول TCP.\n• 172.16.40.0 0.0.0.255: عنوان IP المصدر (المبيعات).\n• 172.16.50.0 0.0.0.255: عنوان IP الوجهة (المالية).\n• eq 21: تحديد منفذ FTP (رقم 21) كمنفذ وجهة."],
+  ["إلى ماذا يشير الرمز (eq 21) أو (eq ftp) في نهاية أمر القائمة الموسعة؟", "يشير إلى تحديد منفذ خدمة نقل الملفات (FTP) كمنفذ وجهة للاتصال المراد منعه أو السماح به."],
+  ["ما هي المزايا الست لقائمة التحكم في الوصول الموسعة (Extended ACL)؟", "1) تُطبق عادةً بالقرب من المصدر (وليس دائماً).\n2) تصفي الحزم بناءً على IP المصدر وIP الوجهة وأرقام المنافذ.\n3) تسمح أو ترفض خدمات محددة.\n4) تُنشأ بين 100-199 و 2000-2699.\n5) إذا استُخدم رقم لا يمكن حذف قاعدة منفردة.\n6) إذا استُخدم اسم لدينا مرونة حذف قاعدة محددة."],
+  ["على أي جهاز في الشبكة تعمل قوائم التحكم في الوصول (ACL) بالتحديد؟", "تعمل على جهاز الموجه (الراوتر - Router) وخاصة على المنفذ (Interface/Port) المرتبط في جهاز الراوتر والواصل في الشبكة."],
+  ["مَن المسؤول عن إنشاء وتحديد قوائم التحكم في الوصول (ACL) في المؤسسة؟", "يتم الاعتماد على (مهندس الشبكة) الذي يقوم بعمل الـ ACL وتحديد قوائم التحكم بالوصول."],
+  ["في توبولوجيا الأقسام الثلاثة (المبيعات، المالية، التسويق)، ما هي عناوين الشبكات الخاصة بكل قسم؟", "• قسم المبيعات (SALES): 172.16.40.0/24.\n• قسم المالية (FINANCE): 172.16.50.0/24.\n• قسم التسويق (MARKETING): 172.16.60.0/24."],
+  ["لو أردنا منع خدمة (Telnet) أو (FTP) فقط بين قسمين مع السماح ببقية الخدمات، أي نوع من قوائم ACL يجب أن نستخدم؟", "يجب استخدام قائمة التحكم في الوصول الموسعة (Extended Access-list) لأنها الوحيدة القادرة على التصفية حسب أرقام المنافذ ونوع الخدمة."],
+  ["كيف يفهم الراوتر أن القائمة المنشأة بالأمر (access-list 50 ...) هي قائمة قياسية وليست موسعة؟", "من خلال رقم القائمة (50)؛ لأنه يقع ضمن نطاق أرقام القوائم القياسية (من 1 إلى 99 أو من 1300 إلى 1999)."],
+  ["ماذا يحدث لو أنشأ مهندس الشبكة قائمة ACL تحتوي على جمل منع (deny) فقط ونسي كتابة أي جملة سماح (permit)؟", "سيتم رفض جميع حركات المرور عبر ذلك المنفذ؛ بسبب وجود (الرفض الضمني - Implicit Deny) في نهاية كل قائمة ACL."]
+];
+
+const masterQuestions = [
+  {q:"عملية تحديد وتنفيذ سياسات وإجراءات لضمان أن الأشخاص الذين يحاولون الوصول إلى موارد معينة (سواء مادية مثل مبنى أو إلكترونية مثل نظام كمبيوتر) لديهم الصلاحية اللازمة للوصول إليها:",o:["التحكم في الوصول (Access Control)","تسمم ذاكرة التخزين المؤقت","التشفير غير المتماثل","هجمات الفيضان"],a:0,e:"هذا هو التعريف الدقيق والشامل للتحكم في الوصول (Access Control) الوارد في بداية الفصل العاشر."},
+  {q:"مجموعة من القواعد المعرفة للتحكم في حركة المرور عبر الشبكة وتقليل هجمات الشبكة، وتُستخدم لتصفية حركة المرور الواردة أو الصادرة:",o:["قائمة التحكم في الوصول (Access Control List - ACL)","نقطة الوصول اللاسلكية (AP)","بروتوكول تبادل الكائنات (OBEX)","وحدة التحكم اللاسلكية (WLC)"],a:0,e:"قائمة التحكم في الوصول (ACL) هي مجموعة القواعد المعرفة لتصفية حركة المرور الواردة أو الصادرة عبر الشبكة."},
+  {q:"تعمل قوائم التحكم في الوصول (ACL) لتصفية البيانات (Filtering) على جهاز:",o:["الراوتر (Router) وخاصة على المنفذ المرتبط بالراوتر والواصل في الشبكة","الطابعة الشبكية فقط","أقراص التخزين الخارجية فقط","متصفح الإنترنت لدى المستخدم"],a:0,e:"تعمل قوائم التحكم في الوصول (ACL) على جهاز الراوتر وخاصة على المنفذ المرتبط في جهاز الراوتر والواصل في الشبكة."},
+  {q:"جميع ما يلي يُعد من الأنواع الأربعة لتقنية التحكم في الوصول (AC) المذكورة في الفصل العاشر ما عدا:",o:["قائمة التحكم العشوائية (Random Access-list)","قائمة التحكم في الوصول القياسية (Standard Access-list)","قائمة التحكم في الوصول الموسعة (Extended Access-list)","قائمة التحكم المسماة (Named Access-list) والمرقمة (Numbered Access-list)"],a:0,e:"الأنواع الأربعة هي: القياسية (Standard)، المسماة (Named)، المرقمة (Numbered)، والموسعة (Extended)."},
+  {q:"أين تُطبق عادةً كل من (قائمة التحكم في الوصول القياسية) و (قائمة التحكم في الوصول الموسعة) على التوالي؟",o:["القياسية تُطبق عادةً بالقرب من الوجهة (Destination)، والموسعة تُطبق عادةً بالقرب من المصدر (Source)","القياسية تُطبق بالقرب من المصدر، والموسعة تُطبق بالقرب من الوجهة","كلاهما يُطبقان دائماً في منتصف الإنترنت فقط","لا تُطبقان على منافذ الموجهات أبداً"],a:0,e:"قاعدة هامة: القائمة القياسية تُطبق عادةً بالقرب من الوجهة، بينما القائمة الموسعة تُطبق عادةً بالقرب من المصدر (ولكن ليس دائماً)."},
+  {q:"ما هي القاعدة الصحيحة لتعيين قوائم التحكم في الوصول (ACL) على واجهات الموجه (الراوتر)؟",o:["يمكننا تعيين قائمة تحكم في الوصول واحدة فقط لكل واجهة واحدة، لكل بروتوكول واحد، لكل اتجاه (وارد أو صادر)","يمكن تعيين 10 قوائم في نفس الاتجاه لنفس البروتوكول على واجهة واحدة","يُسمح بقائمة واحدة فقط على الراوتر بالكامل لجميع المنافذ","لا يمكن تعيين قوائم ACL على الواجهات"],a:0,e:"تسمح القاعدة بوجود قائمة تحكم في الوصول واحدة فقط لكل واجهة واحدة لكل بروتوكول واحد لكل اتجاه."},
+  {q:"ماذا يحدث إذا حاولنا إزالة (حذف) قاعدة واحدة من قائمة تحكم في الوصول المرقمة (Numbered ACL)؟",o:["لا يمكننا إزالة قاعدة منفردة، وإذا حاولنا إزالة قاعدة فسيتم إزالة القائمة بأكملها","يتم حذف القاعدة المحددة فقط وتبقى باقي القواعد سليمة","يتحول الراوتر تلقائياً إلى قائمة مسماة","يتم تشفير القائمة بالكامل"],a:0,e:"في قوائم التحكم المرقمة لا يمكن حذف قاعدة منفردة؛ ومحاولة حذف قاعدة تؤدي إلى إزالة القائمة بأكملها."},
+  {q:"أي نوع من قوائم التحكم في الوصول يمنحنا المرونة لحذف قاعدة محددة من القائمة دون أن تُحذف القائمة بأكملها؟",o:["قوائم التحكم في الوصول المسماة (Named Access-list)","قوائم التحكم في الوصول المرقمة (Numbered Access-list)","الرفض الضمني (Implicit Deny)","أمر Host فقط"],a:0,e:"إذا كنا نستخدم قوائم التحكم في الوصول المسماة (Named ACL)، يمكننا حذف قاعدة محددة بمرونة."},
+  {q:"عند إضافة أي قاعدة جديدة إلى قائمة التحكم في الوصول (ACL)، أين يتم وضعها؟",o:["في الجزء السفلي (النهاية) من القائمة، لذا يجب تحليل السيناريو بعناية قبل التنفيذ","في أعلى القائمة دائماً قبل جميع القواعد السابقة","في منتصف القائمة عشوائياً","تحل محل القاعدة الأولى وتلغيها"],a:0,e:"يتم وضع أي قاعدة جديدة تُضاف إلى قائمة التحكم في الوصول في الجزء السفلي من القائمة."},
+  {q:"نظراً لوجود (رفض ضمني - Implicit Deny) في نهاية كل قائمة تحكم في الوصول، ما الشرط الواجب توفره في القائمة؟",o:["يجب أن يكون لدينا على الأقل عبارة إذن (Permit) واحدة في القائمة، وإلا سيتم رفض كل حركة مرور","يجب أن تحتوي القائمة على عبارات منع (Deny) فقط","يجب حذف جميع عبارات الإذن من القائمة","يجب تسمية القائمة القياسية والموسعة بنفس الاسم"],a:0,e:"بسبب الرفض الضمني في نهاية كل ACL، يجب وجود عبارة إذن (Permit) واحدة على الأقل وإلا سيتم رفض كل حركة المرور."},
+  {q:"هل يُسمح بأن يكون لقائمة التحكم في الوصول القياسية وقائمة التحكم في الوصول الموسعة نفس الاسم؟",o:["لا، لا يمكن أن يكون لقوائم التحكم القياسية والموسعة نفس الاسم","نعم، يُشترط أن يكون لهما نفس الاسم دائماً","نعم، إذا كانتا على نفس المنفذ","يُسمح بذلك في بروتوكول FTP فقط"],a:0,e:"تنص القاعدة صراحةً على أنه: لا يمكن أن يكون لقوائم التحكم في الوصول القياسية وقوائم التحكم في الوصول الموسعة نفس الاسم."},
+  {q:"قوائم التحكم في الوصول التي تُنشأ باستخدام (عنوان IP المصدر فقط)، وتسمح أو ترفض البروتوكولات الكاملة ولا تميز بين حركة المرور مثل TCP و UDP و HTTPS هي:",o:["قائمة التحكم في الوصول القياسية (Standard Access-list)","قائمة التحكم في الوصول الموسعة (Extended Access-list)","قائمة تصفية المنافذ الذكية","درع تهديدات الويب"],a:0,e:"القائمة القياسية (Standard ACL) تنشأ باستخدام عنوان IP المصدر فقط، وترفض أو تسمح بالبروتوكولات والشبكة الفرعية بأكملها."},
+  {q:"ما هي نطاقات الأرقام التي يفهم الموجه (الراوتر) عند استخدامها أنها (قائمة تحكم في الوصول قياسية - Standard ACL)؟",o:["من 1 إلى 99، والنطاق الموسع من 1300 إلى 1999","من 100 إلى 199، والنطاق الموسع من 2000 إلى 2699","من 500 إلى 900 فقط","من 3000 إلى 4000 فقط"],a:0,e:"تستخدم قوائم التحكم القياسية النطاق من 1 إلى 99 والنطاق الموسع من 1300 إلى 1999."},
+  {q:"في أوامر قائمة التحكم في الوصول، ما الفرق الدقيق بين الأمر (Any) والأمر (Host)؟",o:["Any يعني منع/تحديد جميع أجهزة الشبكة، بينما Host يعني منع/تحديد جهاز معين واحد","Host لجميع أجهزة الشبكة، و Any لجهاز معين واحد","كلاهما يعنيان السماح بمرور البيانات","Any لبروتوكول TCP و Host لبروتوكول UDP"],a:0,e:"وفق جدول الأوامر: Any لمنع جميع أجهزة الشبكة، و Host لمنع جهاز معين، و Deny لمنع الوصول، و Permit لسماح الوصول."},
+  {q:"في الأمر البرمجي: R1(config)# access-list 10 deny 172.16.40.0 0.0.0.255 ، ماذا يمثل الرقم (10) والعنوان (172.16.40.0)؟",o:["10 هو رقم القائمة المرقمة (ضمن النطاق القياسي)، و 172.16.40.0 هو عنوان شبكة المصدر (قسم المبيعات) المراد منعه","10 هو رقم منفذ FTP، و 172.16.40.0 هو عنوان الوجهة فقط","10 هو عدد الأجهزة المسموح لها بالدخول","هذا الأمر يقوم بالسماح لكافة حركة المرور"],a:0,e:"الرقم 10 هو رقم القائمة، و deny يمنع الوصول من شبكة قسم المبيعات ذات العنوان المصدر 172.16.40.0/24."},
+  {q:"لماذا تُستخدم قوائم التحكم القياسية (Standard Access-list) بشكل أقل مقارنة بقوائم التحكم الموسعة (Extended Access-list)؟",o:["لأنها تسمح أو ترفض مجموعة بروتوكولات IP بأكملها لحركة المرور، ولا يمكنها التمييز بين مختلف حركة المرور لبروتوكولات IP المختلفة","لأنها معقدة جداً وتحتاج لكتابة أرقام منافذ كثيرة","لأنها لا تعمل على أجهزة الراوتر","لأنها تميز بين TCP و UDP و FTP بدقة شديدة"],a:0,e:"تُستخدم القياسية بشكل أقل لأنها ترفض أو تسمح بمجموعة بروتوكولات IP بأكملها ولا تميز بين البروتوكولات والخدمات المختلفة."},
+  {q:"أي نوع من قوائم التحكم في الوصول يُستخدم بشكل كبير لقدرته على التمييز بين حركة مرور IP بالاعتماد على (عنوان IP المصدر، عنوان IP الوجهة، وأرقام المنافذ)؟",o:["قائمة التحكم في الوصول الموسعة (Extended Access-list)","قائمة التحكم في الوصول القياسية (Standard Access-list)","قائمة العناوين الفيزيائية MAC","قائمة التشفير المتماثل"],a:0,e:"قائمة التحكم الموسعة (Extended ACL) تصفي الحزم بناءً على IP المصدر، IP الوجهة، وأرقام المنافذ، وتسمح أو ترفض خدمات محددة."},
+  {q:"ما هي نطاقات الأرقام المخصصة لـ (قائمة التحكم في الوصول الموسعة - Extended Access-list)؟",o:["من 100 إلى 199، والنطاق الموسع من 2000 إلى 2699","من 1 إلى 99، والنطاق الموسع من 1300 إلى 1999","من 1 إلى 50 فقط","من 1000 إلى 1299 فقط"],a:0,e:"تُنشأ قائمة التحكم في الوصول الموسعة في النطاق بين 100 و 199 والنطاق الموسع بين 2000 و 2699."},
+  {q:"في الأمر: access-list 110 deny tcp 172.16.40.0 0.0.0.255 172.16.50.0 0.0.0.255 eq 21 ، ما وظيفة هذا الأمر بالتحديد؟",o:["إنشاء قائمة موسعة رقمها 110 لرفض اتصال FTP (منفذ 21 عبر بروتوكول TCP) من قسم المبيعات (172.16.40.0) إلى قسم المالية (172.16.50.0)","السماح لاتصال Telnet بين قسم التسويق والإنترنت","حذف القائمة رقم 110 من الراوتر","منع جميع البروتوكولات من قسم المالية إلى قسم المبيعات"],a:0,e:"هذا الأمر ينشئ قائمة موسعة (110) ترفض (deny) بروتوكول (tcp) من المصدر المبيعات (172.16.40.0) إلى الوجهة المالية (172.16.50.0) على منفذ FTP (eq 21)."},
+  {q:"في أمر القائمة الموسعة (access-list 110 deny tcp ... eq 21)، إلى ماذا يشير الجزء (eq 21) أو (eq ftp)؟",o:["يشير إلى تحديد منفذ FTP (رقم 21) كمنفذ وجهة للاتصال","يشير إلى رقم الراوتر في الشبكة","يشير إلى عدد المحاولات المسموحة لتسجيل الدخول","يشير إلى عنوان IP الخاص بقسم التسويق"],a:0,e:"الرمز eq 21 (أو eq ftp) يشير إلى تحديد منفذ خدمة FTP كمنفذ وجهة للاتصال."},
+  {q:"في نفس الأمر السابق (access-list 110 deny tcp 172.16.40.0 0.0.0.255 172.16.50.0 0.0.0.255 eq 21)، ماذا يمثل العنوان الأول (172.16.40.0) والعنوان الثاني (172.16.50.0) على التوالي؟",o:["الأول هو عنوان IP المصدر (قسم المبيعات)، والثاني هو عنوان IP الوجهة (قسم المالية/التمويل)","الأول هو عنوان IP الوجهة، والثاني هو عنوان IP المصدر","كلاهما عناوين IP وجهة","كلاهما عناوين IP مصدر"],a:0,e:"في أوامر ACL الموسعة يأتي عنوان IP المصدر أولاً (172.16.40.0 المبيعات) يليه عنوان IP الوجهة (172.16.50.0 المالية)."},
+  {q:"أي مما يلي يُعد من مزايا قائمة التحكم في الوصول الموسعة (Extended ACL)؟",o:["يُسمح فيها بتمرير خدمات محددة أو يتم رفضها (مثل منع FTP أو Telnet فقط دون حظر كامل الشبكة)","ترفض الشبكة أو الشبكة الفرعية بأكملها دائماً ولا تميز المنافذ","تستخدم عنوان IP المصدر فقط وتُطبق دائماً قرب الوجهة","تأخذ الأرقام من 1 إلى 99"],a:0,e:"من أهم مزايا القائمة الموسعة أنه يُسمح فيها بتمرير خدمات محددة أو رفضها بناءً على أرقام المنافذ والبروتوكولات."},
+  {q:"إذا أراد مهندس الشبكة إنشاء قائمة تحكم في الوصول برقم (150)، فما نوع هذه القائمة؟ وأين يُفضل تطبيقها عادةً؟",o:["قائمة تحكم موسعة (Extended ACL) لأنها بين 100-199، وتُطبق عادةً بالقرب من المصدر","قائمة تحكم قياسية (Standard ACL)، وتُطبق عادةً بالقرب من الوجهة","قائمة مسماة لا تقبل الأرقام","قائمة تحكم خاصة بالبلوتوث"],a:0,e:"الرقم 150 يقع في النطاق (100 إلى 199) الخاص بالقائمة الموسعة، والتي تُطبق عادةً بالقرب من المصدر."},
+  {q:"إذا أراد مهندس الشبكة إنشاء قائمة تحكم في الوصول برقم (1450)، فما نوع هذه القائمة؟",o:["قائمة تحكم قياسية (Standard ACL) ضمن النطاق الموسع (1300 إلى 1999)","قائمة تحكم موسعة (Extended ACL) ضمن النطاق (2000 إلى 2699)","قائمة غير صالحة لأن الأرقام تتوقف عند 199","قائمة مسماة"],a:0,e:"الرقم 1450 يقع ضمن النطاق الموسع (1300 إلى 1999) المخصص لقوائم التحكم القياسية (Standard ACL)."},
+  {q:"للدخول إلى وضع التكوين العام في الموجه (الراوتر) R1 قبل كتابة أوامر قوائم التحكم في الوصول، نستخدم الأمر:",o:["R1# config terminal","R1# delete access-list","R1# show ip route","R1# ping 172.16.40.0"],a:0,e:"كما ورد في أمثلة التكوين بالمنهج، نبدأ بالأمر R1# config terminal للدخول لوضع التكوين R1(config)# ثم نكتب أمر access-list."}
+];
+
+// بناء شبكة المصطلحات
+const termsGrid = document.getElementById("termsGrid");
+terms.forEach(([en, ar]) => {
+  const d = document.createElement("div");
+  d.className = "card";
+  d.style.margin = "0";
+  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
+  termsGrid.appendChild(d);
+});
+
+// إدارة البطاقات التعليمية
+let ci = 0, showAnswer = false;
+function renderCard() {
+  document.getElementById("flashTerm").textContent = cards[ci][0];
+  document.getElementById("flashAnswer").textContent = cards[ci][1];
+  document.getElementById("flashAnswer").hidden = !showAnswer;
+  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
+  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+}
+document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
+document.getElementById("flashcard").addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
+});
+document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
+document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
+renderCard();
+
+// التنقل بين التبويبات
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+// خوارزمية خلط عشوائي (Fisher-Yates Shuffle) للأسئلة والخيارات
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+let currentQuestions = [];
+let answers = {};
+
+function prepareShuffledQuiz() {
+  // خلط ترتيب الأسئلة، وخلط الخيارات داخل كل سؤال مع الاحتفاظ بمؤشر الإجابة الصحيحة
+  currentQuestions = shuffleArray(masterQuestions).map(item => {
+    const optsWithFlag = item.o.map((text, idx) => ({ text, isCorrect: idx === item.a }));
+    const shuffledOpts = shuffleArray(optsWithFlag);
+    return {
+      q: item.q,
+      o: shuffledOpts.map(x => x.text),
+      a: shuffledOpts.findIndex(x => x.isCorrect),
+      e: item.e
+    };
+  });
+}
+
+function renderQuiz() {
+  prepareShuffledQuiz();
+  const area = document.getElementById("quizArea");
+  area.innerHTML = "";
+  const letters = ["أ", "ب", "ج", "د"];
+  currentQuestions.forEach((item, i) => {
+    const box = document.createElement("div");
+    box.className = "qbox";
+    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
+    const opts = box.querySelector(".options");
+    item.o.forEach((opt, j) => {
+      const btn = document.createElement("button");
+      btn.className = "option";
+      btn.textContent = `${letters[j]}) ${opt}`;
+      btn.onclick = () => {
+        answers[i] = j;
+        [...opts.children].forEach((x, k) => {
+          x.classList.remove("correct", "wrong");
+          x.disabled = true;
+          if (k === item.a) x.classList.add("correct");
+          if (k === j && j !== item.a) x.classList.add("wrong");
+        });
+        const fb = document.getElementById("fb" + i);
+        fb.hidden = false;
+        fb.className = "feedback " + (j === item.a ? "good" : "bad");
+        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
+        updateScore();
+      };
+      opts.appendChild(btn);
+    });
+    area.appendChild(box);
+  });
+  updateScore();
+}
+
+function updateScore() {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
+  document.getElementById("score").textContent = `النتيجة: ${correct} / ${currentQuestions.length}`;
+  document.getElementById("progressBar").style.width = (Object.keys(answers).length / currentQuestions.length * 100) + "%";
+}
+
+document.getElementById("resetQuiz").onclick = () => {
+  answers = {};
+  document.getElementById("finalResult").textContent = "";
+  renderQuiz();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+document.getElementById("finishQuiz").onclick = () => {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
+  const pct = Math.round(correct / currentQuestions.length * 100);
+  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${currentQuestions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! أنتِ مستعدة تماماً للاختبار." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
+};
+
+renderQuiz();
+</script>
+</body>
+</html>
