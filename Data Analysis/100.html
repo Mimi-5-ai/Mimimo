@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الفصل الأول الشامل (100%) | تحليل وتمثيل البيانات</title>
+<style>
+:root{
+  --bg:#f0f5ff;
+  --card:#ffffff;
+  --ink:#0f172a;
+  --muted:#475569;
+  --accent:#1d4ed8;
+  --accent-dark:#1e3a8a;
+  --accent2:#dbeafe;
+  --line:#cbd5e1;
+  --good:#059669;
+  --good-bg:#ecfdf5;
+  --bad:#dc2626;
+  --bad-bg:#fef2f2;
+  --warn:#d97706;
+  --warn-bg:#fffbeb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
+header{background:linear-gradient(135deg,#0f172a,#1d4ed8);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(15,23,42,0.2)}
+.wrap{max-width:1040px;margin:auto;padding:0 16px}
+.eyebrow{opacity:.92;font-size:.9rem;background:rgba(255,255,255,0.16);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
+h1{margin:5px 0;font-size:clamp(1.5rem,4vw,2.25rem)}
+header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
+nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:var(--accent2);color:var(--accent-dark);font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
+nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
+nav button.active,.btn.primary{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+main .btn.primary{background:var(--accent);color:white}
+main{padding:22px 0 48px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(15,23,42,0.04)}
+h2{font-size:1.35rem;margin:0 0 12px;color:#0f172a}
+h3{font-size:1.08rem;margin:0 0 8px;color:var(--accent-dark)}
+small,.muted{color:var(--muted)}
+ul,ol{padding-right:22px;margin:8px 0}
+li{margin:6px 0}
+details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
+summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f8fafc;color:#0f172a;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
+details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
+.details-body{padding:16px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
+.badge-new{display:inline-block;background:var(--warn-bg);color:var(--warn);border:1px solid #fcd34d;font-size:.78rem;padding:1px 8px;border-radius:6px;margin-right:6px;font-weight:bold}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#eff6ff;color:#1e3a8a;font-weight:bold}
+tr:last-child td{border-bottom:0}
+.note{border-right:4px solid var(--accent);padding:10px 14px;background:#eff6ff;border-radius:8px;margin:10px 0}
+.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
+.code-box{background:#0f172a;color:#e2e8f0;padding:14px 18px;border-radius:12px;font-family:Consolas,Monaco,monospace;direction:ltr;text-align:left;overflow-x:auto;margin:10px 0;border:1px solid #334155;line-height:1.65;font-size:.92rem}
+.code-box .kw{color:#38bdf8;font-weight:bold}
+.code-box .str{color:#4ade80}
+.code-box .cmt{color:#94a3b8;font-style:italic}
+.pie-bars{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:12px 0}
+.pie-item{padding:10px 12px;border-radius:10px;color:#fff;font-weight:bold;text-align:center}
+.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
+.options{display:grid;gap:8px;margin-top:12px}
+.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
+.option:hover:not(:disabled){border-color:var(--accent);background:#eff6ff}
+.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
+.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
+.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
+.feedback.good{color:var(--good);background:var(--good-bg)}
+.feedback.bad{color:var(--bad);background:var(--bad-bg)}
+.progress{height:10px;background:#cbd5e1;border-radius:9px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
+.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#dbeafe);border:2px solid #93c5fd;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
+.flashcard:hover{transform:scale(1.005)}
+.flashcard .term{font-size:1.35rem;font-weight:bold;color:#1e3a8a}
+.flashcard .answer{margin-top:16px;font-size:1.06rem;color:#0f172a;background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
+@media(max-width:600px){
+  .card{padding:14px}
+  nav button{flex:1 1 calc(50% - 8px);text-align:center}
+  .flashcard{min-height:200px;padding:18px}
+  th,td{padding:8px 10px;font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">نسخة شاملة ومحدثة 100% • مقرر تحليل وتمثيل البيانات</div>
+    <h1>الفصل الأول: المقدمة وأساسيات تحليل وتمثيل البيانات</h1>
+    <p>يغطي مفهوم وفوائد وأنواع تحليل البيانات الأربعة، نموذج CRISP-DM ذي المراحل الست، مكتبات البايثون الست، البيانات الجدولية والعلائقية، مقاييس البيانات الأربعة، وإدارة بيئة JupyterLab و IPython</p>
+    <nav>
+      <button class="active" data-tab="summary">الشرح الشامل (100%)</button>
+      <button data-tab="tables">جداول المقارنات والأوامر</button>
+      <button data-tab="terms">المصطلحات والأوامر</button>
+      <button data-tab="cards">البطاقات (28)</button>
+      <button data-tab="quiz">الاختبار العشوائي (25)</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- التبويب الأول: الشرح الشامل -->
+  <section id="summary" class="panel active">
+    <div class="card">
+      <h2>خريطة الفصل الأول (الوحدات الثلاث الكاملة)</h2>
+      <div class="grid">
+        <div>
+          <span class="tag">الوحدة الأولى</span>
+          <h3>مفهوم وفوائد وأنواع تحليل البيانات</h3>
+          <p>مفهوم تحليل البيانات ومثال التجارة الإلكترونية، مفهوم تمثيل البيانات ومثال المخطط الدائري (<span dir="ltr">Pie Chart</span>)، فوائد التحليل الستة، وأنواع التحليل الأربعة (الوصفي، التشخيصي، التنبؤي، التوجيهي).</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثانية</span>
+          <h3>نموذج CRISP-DM، المكتبات، ومقاييس البيانات</h3>
+          <p>المراحل الست لنموذج (<span dir="ltr">CRISP-DM</span>)، مكتبات البايثون الست (<span dir="ltr">NumPy, SciPy, Pandas, Scikit-learn, Matplotlib, Seaborn</span>)، البيانات الجدولية والعلائقية، ومقاييس البيانات الأربعة.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثالثة</span>
+          <h3>استخدام JupyterLab و IPython و Notebook</h3>
+          <p>مفهوم وتثبيت وتشغيل (<span dir="ltr">JupyterLab</span>)، خطوات تغيير مجلد العمل الافتراضي الخمس، استخدام (<span dir="ltr">IPython</span>) واختصار (<span dir="ltr">Shift + Enter</span>)، وإنشاء وحفظ (<span dir="ltr">Jupyter Notebook</span>).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== الوحدة الأولى كاملة في قائمة واحدة ==================== -->
+    <details open>
+      <summary>الوحدة الأولى: نظرة عامة على تحليل وتمثيل البيانات، فوائده الستة، وأنواعه الأربعة</summary>
+      <div class="details-body">
+        <h3>1) نظرة عامة على تحليل وتمثيل البيانات</h3>
+        <ul>
+          <li><b>ما هو المفهوم الرئيسي لتحليل البيانات (<span dir="ltr">Data Analysis</span>)؟</b>
+            <ul>
+              <li>تحليل البيانات هو <b>طريقة شاملة لفحص البيانات وتنقيتها وتحويلها ونمذجتها</b>؛ لاكتشاف معلومات مفيدة واستخلاص النتائج ودعم اتخاذ القرار.</li>
+              <li>إنها عملية متعددة الأوجه تتضمن تقنيات ومنهجيات مختلفة لتفسير البيانات من مصادر مختلفة بتنسيقات مختلفة، <b>منظمة وغير منظمة</b>.</li>
+            </ul>
+          </li>
+          <li><b>مثال واقعي لعمليات تحليل البيانات وأهميتها في الواقع (شركة تجارة إلكترونية):</b>
+            <ul>
+              <li>تخيل <b>شركة رائدة في مجال التجارة الإلكترونية</b>؛ من خلال تحليل البيانات، يمكن لهذه الشركة فهم <b>سلوك الشراء لدى عملائهم وتفضيلاتهم وأنماطهم</b>.</li>
+              <li>ويمكنهم بعد ذلك استخدام هذه المعلومات لـ: <b>تخصيص تجارب العملاء، والتنبؤ بالمبيعات، وتحسين استراتيجيات التسويق</b>، مما يؤدي في النهاية إلى دفع نمو الأعمال ورضا العملاء.</li>
+            </ul>
+          </li>
+          <li><b>ما المقصود بتمثيل البيانات (<span dir="ltr">Data Visualization</span>)؟</b>
+            <ul>
+              <li>تمثيل البيانات هو <b>تحويل البيانات من شكلها الخام إلى تنسيق يمكن فهمه بسهولة من قِبل البشر</b>.</li>
+              <li>ويشمل ذلك استخدام <b>العناصر المرئية مثل المخططات والرسوم البيانية والخرائط</b> لعرض البيانات بطريقة تجعل من السهل رؤية <b>الاتجاهات والقيم المتطرفة والأنماط</b>.</li>
+            </ul>
+          </li>
+          <li><b>مثال المخطط الدائري (<span dir="ltr">Pie Chart</span>) لتمثيل مبيعات قطع الحاسب في متجر معين:</b>
+            <div class="pie-bars">
+              <div class="pie-item" style="background:#16a34a">HD (القرص الصلب)<br>45.0%</div>
+              <div class="pie-item" style="background:#ea580c">RAM (الذاكرة)<br>30.0%</div>
+              <div class="pie-item" style="background:#2563eb">CPU (المعالج)<br>15.0%</div>
+              <div class="pie-item" style="background:#dc2626">GPU (كرت الشاشة)<br>10.0%</div>
+            </div>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) أهم فوائد تحليل وتمثيل البيانات (6 فوائد رئيسية)</h3>
+        <ol>
+          <li><b>أولاً: اتخاذ القرارات المستنيرة:</b> يمكّن علم تحليل وتمثيل البيانات المؤسسات من <b>بناء خياراتها على أدلة ملموسة بدلاً من الحدس أو التخمين</b>.</li>
+          <li><b>ثانياً: تحسين الفهم:</b> يوفر فهماً أعمق للعمليات والسلوكيات والاتجاهات، ويسمح للمؤسسات باكتساب نظرة ثاقبة حول <b>تفضيلات العملاء وديناميكيات السوق والكفاءة التشغيلية</b>.</li>
+          <li><b>ثالثاً: إكساب المؤسسات ميزة تنافسية:</b> يمكن للمؤسسات تحديد الفرص والتهديدات من خلال تحليل <b>اتجاهات السوق وسلوك المستهلك وأداء المنافسين</b>، وتوجيه استراتيجياتهم للاستجابة بفعالية والبقاء في صدارة المنافسة.</li>
+          <li><b>رابعاً: تخفيف المخاطر:</b> يمكن للمؤسسات تقييم المشكلات المحتملة واتخاذ التدابير الوقائية من خلال <b>تحليل البيانات التاريخية</b>.</li>
+          <li><b>خامساً: كفاءة توزيع الموارد:</b> يساعد المؤسسات على تحسين تخصيص الموارد (سواء الميزانيات أو الموارد البشرية أو القدرات التصنيعية) لضمان استخدامها بكفاءة.<br>
+          • <b>مثال تطبيقي:</b> يمكن أن يساعد تحليل البيانات <b>المستشفيات</b> في تخصيص الموظفين والموارد للمناطق التي تشهد أعلى طلب من المرضى، مما يضمن رعاية المرضى بكفاءة وفاعلية.</li>
+          <li><b>سادساً: التحسين المستمر:</b> يسمح للمؤسسات بمراقبة مقاييس الأداء وتتبع التقدم وتحديد مجالات التحسين. وتؤدي هذه <b>العملية التكرارية (لتحليل البيانات &larr; وتنفيذ التغييرات &larr; والتحليل مرة أخرى)</b> إلى التحسين المستمر والتميز في العمليات والمنتجات.</li>
+        </ol>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) أنواع تحليل البيانات الأربعة</h3>
+        <div class="exam-alert">
+          <b>🔥 موضع سؤال أكيد في الاختبار:</b> احفظي كُل نوع من الأنواع الأربعة، والسؤال الذي يجيب عنه، والغرض منه، والمثال الخاص به:
+        </div>
+        <ul>
+          <li><b>أولاً: التحليل الوصفي (<span dir="ltr">Descriptive Analysis</span>) — يجيب عن سؤال: (ماذا حدث؟):</b>
+            <ul>
+              <li><b>مفهومه:</b> يصف أو يلخص البيانات الأولية ويجعلها قابلة للتفسير، ويشمل <b>تحليل البيانات التاريخية لفهم ما حدث في الماضي</b>، ويُستخدم لتحديد الأنماط والاتجاهات مع مرور الوقت.</li>
+              <li><b>مثال:</b> قد تستخدم إحدى الشركات التحليل الوصفي لفهم <b>متوسط المبيعات الشهرية للعام الماضي</b>.</li>
+            </ul>
+          </li>
+          <li><b>ثانياً: التحليل التشخيصي (<span dir="ltr">Diagnostic Analysis</span>) — يجيب عن سؤال: (لماذا حدث؟):</b>
+            <ul>
+              <li><b>مفهومه:</b> يهتم <b>بتحديد سبب حدوث شيء ما</b>؛ حيث يتضمن استكشاف بيانات أكثر تفصيلاً ومقارنة مجموعات البيانات المختلفة لفهم سبب نتيجة معينة.</li>
+              <li><b>مثال:</b> إذا <b>انخفضت مبيعات الشركة في شهر معين</b>، فيمكن استخدام التحليل التشخيصي لمعرفة السبب.</li>
+            </ul>
+          </li>
+          <li><b>ثالثاً: التحليل التنبؤي (<span dir="ltr">Predictive Analysis</span>) — يجيب عن سؤال: (ماذا سيحدث؟):</b>
+            <ul>
+              <li><b>مفهومه:</b> يستخدم <b>النماذج الإحصائية وتقنيات التنبؤ لفهم المستقبل</b>؛ ويتضمن استخدام بيانات من الماضي للتنبؤ بما يمكن أن يحدث في المستقبل. وغالباً ما يُستخدم في: <b>تقييم المخاطر، والتسويق، والتنبؤ بالمبيعات</b>.</li>
+              <li><b>مثال:</b> قد تستخدم الشركة التحليل التنبؤي <b>للتنبؤ بمبيعات الربع التالي بناءً على المبيعات خلال فترة سابقة</b>.</li>
+            </ul>
+          </li>
+          <li><b>رابعاً: التحليل التوجيهي (<span dir="ltr">Prescriptive Analysis</span>) — يجيب عن سؤال: (كيف يمكن تحقيق ذلك؟):</b>
+            <ul>
+              <li><b>مفهومه:</b> هو <b>النوع الأكثر تقدماً لتحليل البيانات</b>؛ فهو لا يتنبأ بالنتائج المستقبلية فحسب، بل <b>يقترح أيضاً إجراءات للاستفادة من هذه التنبؤات</b>، ويستخدم أدوات وتقنيات متطورة مثل <b>التعلم الآلي والذكاء الاصطناعي للتوصية بالقرارات</b>.</li>
+              <li><b>مثال:</b> قد يقترح التحليل التوجيهي <b>أفضل استراتيجيات التسويق لزيادة المبيعات المستقبلية</b>.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- ==================== الوحدة الثانية كاملة في قائمة واحدة ==================== -->
+    <details>
+      <summary>الوحدة الثانية: الخطوات القياسية (CRISP-DM)، مكتبات البايثون الست، أنواع البيانات، ومقاييس البيانات</summary>
+      <div class="details-body">
+        <h3>1) الخطوات القياسية لعملية تحليل البيانات: نموذج (<span dir="ltr">CRISP-DM</span>)</h3>
+        <div class="exam-alert">
+          <b>تنبيه هام للاختبار:</b> يرمز الاختصار <b><span dir="ltr">CRISP-DM</span></b> إلى: <b><span dir="ltr">Cross Industry Process for Data Mining</span></b>، ويتكون من <b>6 مراحل قياسية بالترتيب</b>: (1. فهم المشكلة &larr; 2. فهم البيانات &larr; 3. إعداد البيانات &larr; 4. النمذجة &larr; 5. التقييم &larr; 6. التطبيق).
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>المرحلة في CRISP-DM</th>
+              <th>الوصف والمهام التي تتم في المرحلة</th>
+              <th>المثال التطبيقي (مشروع تحليل فقدان العملاء في شركة بيع بالتجزئة)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>1. فهم المشكلة</b><br><small dir="ltr">Business Understanding</small></td>
+              <td>يتم تحديد <b>أهداف ومتطلبات العمل</b>، وفهم المشكلة أو الفرصة التي تحاول المؤسسة معالجتها، وتحديد كيف يمكن أن يساعد استخراج البيانات في تحقيق هذه الأهداف.</td>
+              <td>تريد إحدى شركات البيع بالتجزئة <b>تحسين الاحتفاظ بالعملاء</b> من خلال تحديد العوامل التي تساهم في فقدان العملاء.</td>
+            </tr>
+            <tr>
+              <td><b>2. فهم البيانات</b><br><small dir="ltr">Data Understanding</small></td>
+              <td>يتم تحديد <b>مصادر البيانات ذات الصلة وجمعها</b>، واستكشاف البيانات لفهم <b>جودتها واكتمالها وصلتها</b> بالمشكلة المطروحة.</td>
+              <td>تسترجع شركة البيع بالتجزئة البيانات المتعلقة بالعملاء، وتاريخ عمليات الشراء، ومقاييس التفاعل من <b>نظام إدارة علاقات العملاء</b> الخاص بها.</td>
+            </tr>
+            <tr>
+              <td><b>3. إعداد البيانات</b><br><small dir="ltr">Data Preparation</small></td>
+              <td>يتم <b>تنظيف البيانات وتحويلها وتنسيقها</b> لإعدادها للتحليل (معالجة القيم المفقودة، وإزالة القيم غير المنطقية، وتحويل البيانات لتنسيق مناسب).</td>
+              <td>تقوم الشركة بتنظيف البيانات عن طريق <b>إزالة السجلات المكررة ومعالجة القيم المفقودة</b> في معلومات العملاء أو سجلات الشراء.</td>
+            </tr>
+            <tr>
+              <td><b>4. النمذجة</b><br><small dir="ltr">Modeling</small></td>
+              <td>يتم تطبيق <b>تقنيات النمذجة المختلفة</b> على البيانات المعدة لبناء نماذج تنبؤية أو تحديد الأنماط والعلاقات.</td>
+              <td>قد تستخدم الشركة خوارزميات التعلم الآلي مثل <b><span dir="ltr">Logistic regression</span> أو <span dir="ltr">decision trees</span></b> للتنبؤ بفقدان العملاء بناءً على سمات العميل أو سلوكه.</td>
+            </tr>
+            <tr>
+              <td><b>5. التقييم</b><br><small dir="ltr">Evaluation</small></td>
+              <td>يتم <b>تقييم أداء النماذج</b> باستخدام مقاييس وتقنيات التقييم (قياس الدقة والمقاييس الأخرى لتحديد مدى جودة أداء النماذج).</td>
+              <td>تقوم الشركة بتقييم أداء نماذج التنبؤ بفقدان العملاء عن طريق حساب مقاييس مثل <b>الدقة و <span dir="ltr">F1-score</span></b>.</td>
+            </tr>
+            <tr>
+              <td><b>6. التطبيق</b><br><small dir="ltr">Deployment</small></td>
+              <td>في هذه <b>المرحلة النهائية</b> يتم تنفيذ الرؤى والنماذج المستمدة من المراحل السابقة في <b>العمليات التجارية الفعلية</b>.</td>
+              <td>دمج نماذج التنبؤ مع نظام إدارة علاقات العملاء لتحديد احتمالية فقدان العملاء تلقائياً، واتخاذ تدابير استباقية كـ <b>الحملات التسويقية المستهدفة أو العروض الشخصية</b>.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) مكتبات تحليل البيانات الأساسية في البايثون (6 مكتبات هامة جداً)</h3>
+        <ol>
+          <li><b dir="ltr">NumPy:</b> أقوى مكتبات البايثون في التعامل مع <b>المصفوفات متعددة الأبعاد وإجراء العمليات الرياضية</b>.</li>
+          <li><b dir="ltr">SciPy:</b> مكتبة مهمة جداً في <b>الحسابات العلمية</b> وتشمل مجموعة من المكتبات الفرعية التي تساعد في إجراء <b>العمليات الإحصائية</b>.</li>
+          <li><b dir="ltr">Pandas:</b> من أهم المكتبات في <b>التعامل مع البيانات</b>، ومن خلالها يمكن <b>تحميل البيانات واستكشافها وكذلك إجراء بعض عمليات التحليل</b>.</li>
+          <li><b dir="ltr">Scikit-learn:</b> مكتبة خاصة بتطبيق <b>خوارزميات تعلم الآلة</b>، وتقدم العديد من الوظائف مثل <b>تقسيم البيانات وتحويلها وبناء النماذج وتقييمها</b>.</li>
+          <li><b dir="ltr">Matplotlib:</b> المكتبة <b>الرئيسية لتمثيل البيانات (الرسوم البيانية)</b> في البايثون، وتُعد الأساس لباقي المكتبات.</li>
+          <li><b dir="ltr">Seaborn:</b> مكتبة <b>مبنية على <span dir="ltr">matplotlib</span></b> وتقدم مخططات تفاعلية منظمة بشكل مميز.</li>
+        </ol>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) نظرة عامة على البيانات (البيانات الجدولية والبيانات العلائقية)</h3>
+        <ul>
+          <li><b>1. البيانات الجدولية (<span dir="ltr">Tabular Data</span>):</b>
+            <ul>
+              <li>نتعامل في الغالب مع بيانات مرتبة على شكل <b>جدول به عدد من الصفوف والأعمدة</b> بحيث:
+                <ul>
+                  <li>تمثل <b>الصفوف (<span dir="ltr">Rows</span>):</b> <b>العينات المتوفرة</b> (مثلاً: كل البيانات الخاصة بموظف معين مثل <span dir="ltr">Andrew, Bernhard, Carolina...</span>).</li>
+                  <li>تمثل <b>الأعمدة (<span dir="ltr">Columns</span>):</b> <b>السمات أو الحقول (<span dir="ltr">Features / Fields</span>)</b> (مثل: الاسم <span dir="ltr">Name</span>، أو العمر <span dir="ltr">Age</span>، أو المستوى التعليمي <span dir="ltr">Educational Level</span>، أو الشركة <span dir="ltr">Company</span>، أو الطول أو الوزن).</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li><b>2. البيانات العلائقية (<span dir="ltr">Relational Data</span>):</b>
+            <ul>
+              <li>قواعد البيانات العلائقية هي عبارة عن <b>توسعة للبيانات الجدولية</b> بحيث تُمثل البيانات في <b>أكثر من جدول</b>، وتكون الجداول <b>مرتبطة ببعضها</b>.</li>
+              <li><b>مثال المنهج:</b> إذا كان الجدول الأول يحتوي على أعمدة (<span dir="ltr">Name, Age, Educational Level, Company</span>)، والجدول الثاني يحتوي على أعمدة (<span dir="ltr">Friend, Father, Mother</span>)، فيمكن اعتبارهما قاعدة بيانات علائقية، ويكون الربط بينهما من خلال <b>حقل الاسم (<span dir="ltr">Name</span>) بالجدول الأول وحقل (<span dir="ltr">Friend</span>) في الجدول الثاني</b>.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>4) مقاييس البيانات (<span dir="ltr">Data Scales</span>): الكمية والنوعية</h3>
+        <div class="exam-alert">
+          <b>🌟 مقارنة هامة جداً للاختبار:</b> تنقسم مقاييس البيانات إلى قسمين رئيسيين (<b>كمية</b> و<b>نوعية</b>)، ويندرج تحت كل قسم مقياسان فرعيان مع مثال محدد لكل مقياس:
+        </div>
+        <ul>
+          <li><b>أولاً: البيانات الكمية (<span dir="ltr">Quantitative</span>):</b>
+            <ol>
+              <li><b>كمي - مطلق (<span dir="ltr">Absolute</span>):</b> له <b>بداية طبيعية ويزداد في اتجاه واحد</b> مثل <b>الطول</b>؛ فالطول صفر يعني أنه لا يوجد طول.</li>
+              <li><b>كمي - نسبي (<span dir="ltr">Relative</span>):</b> يبدأ عند <b>نقطة اختيارية ويمتد في الجهتين (الموجبة والسالبة)</b> مثل <b>درجة الحرارة</b>؛ فالصفر لا يعني أنه لا توجد حرارة.</li>
+            </ol>
+          </li>
+          <li><b>ثانياً: البيانات النوعية (<span dir="ltr">Qualitative</span>):</b>
+            <ol>
+              <li><b>نوعي - اسمي (<span dir="ltr">Nominal</span>):</b> <b>لا يمكن ترتيبه</b> مثل <b>اسم الشخص أو نوعه (الجنس)</b>.</li>
+              <li><b>نوعي - ترتيبي (<span dir="ltr">Ordinal</span>):</b> <b>يمكن ترتيبه</b> مثل <b>الجودة (جيد أو غير جيد <span dir="ltr">Good / Bad</span>)</b>.</li>
+            </ol>
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- ==================== الوحدة الثالثة كاملة في قائمة واحدة ==================== -->
+    <details>
+      <summary>الوحدة الثالثة: استخدام وتثبيت JupyterLab، تغيير مجلد العمل، واستخدام IPython و Jupyter Notebook</summary>
+      <div class="details-body">
+        <h3>1) ما هو (<span dir="ltr">JupyterLab</span>)؟ وكيف يتم تثبيته وتشغيله؟</h3>
+        <ul>
+          <li><b>ما هو <span dir="ltr">JupyterLab</span>؟</b>
+            <ul>
+              <li>هو عبارة عن <b>واجهة مستخدم متقدمة تعتمد على الويب</b>، ويقدم مجموعة من أدوات تحليل البيانات وأدوات تطوير منتجات التعلم الآلي مثل: <b>محرر النصوص، و <span dir="ltr">Jupyter Notebooks</span>، وواجهة <span dir="ltr">terminal</span>، و <span dir="ltr">IPython</span></b>.</li>
+              <li>يُعتبر <span dir="ltr">JupyterLab</span> جزءاً من حزمة <b><span dir="ltr">Anaconda</span></b> ويتم تثبيته معها تلقائياً؛ وللتأكد من وجوده لديك قم بتشغيل <b><span dir="ltr">Anaconda Navigator</span></b> من قائمة البداية بالويندوز.</li>
+            </ul>
+          </li>
+          <li><b>تثبيت <span dir="ltr">JupyterLab</span> (في حال عدم وجوده):</b>
+            <ul>
+              <li>يُفضل بشدة استخدام الـ <span dir="ltr">Anaconda</span>.</li>
+              <li><b>الطريقة الأولى (من خلال الـ <span dir="ltr">Anaconda</span>):</b> فتح الـ <b><span dir="ltr">Anaconda Prompt</span></b> وكتابة الأمر:
+                <div class="code-box"><span class="kw">conda</span> install -c conda-forge jupyterlab</div>
+              </li>
+              <li><b>الطريقة الثانية (لأي نسخة بايثون أخرى):</b> فتح الـ <b><span dir="ltr">Terminal</span></b> وكتابة الأمر:
+                <div class="code-box"><span class="kw">pip</span> install jupyterlab</div>
+              </li>
+            </ul>
+          </li>
+          <li><b>تشغيل <span dir="ltr">JupyterLab</span> (ملاحظة هامة للاختبار!):</b>
+            <ul>
+              <li>عند الضغط على أيقونة <span dir="ltr">JupyterLab</span>، يتم تشغيله من خلال <b>متصفح الويب لديك</b>.</li>
+              <li><b>انتبهي:</b> على الرغم من أنه يفتح في متصفح الويب، إلا أنه <b>يعمل بشكل محلي (<span dir="ltr">Local</span>) في هذه الحالة ولا يجب أن تكون متصلاً بالإنترنت</b>!</li>
+            </ul>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) خطوات تغيير مجلد العمل الافتراضي في (<span dir="ltr">JupyterLab</span>) — (5 خطوات بالترتيب)</h3>
+        <p>يفتح <span dir="ltr">JupyterLab</span> على مجلد افتراضي مخصص مسبقاً، ولكن لحفظ عملنا في مجلد خاص بنا نتبع الخطوات الخمس التالية:</p>
+        <ol>
+          <li><b>الخطوة (1):</b> قم بإنشاء المجلد الذي تريد استخدامه وليكن بالـ <code dir="ltr">C:\</code> واسمه مثلاً: <code dir="ltr">"DataAnalysisWork"</code>.</li>
+          <li><b>الخطوة (2):</b> قم بفتح الـ <b><span dir="ltr">Anaconda Prompt</span></b> واكتب الأمر التالي لإنشاء ملف الإعدادات:
+            <div class="code-box"><span class="kw">jupyter</span> notebook --generate-config</div>
+            وبعد الضغط على زر الإدخال (<span dir="ltr">Enter</span>)، سيقوم بإنشاء الملف وطباعة المسار الخاص به مثل: <code dir="ltr">c:\users\afifi\.jupyter\jupyter_notebook_config.py</code> (وإذا كان الملف موجوداً مسبقاً سيسألك هل يقوم باستبداله، اختر <b>لا <span dir="ltr">N</span></b>).
+          </li>
+          <li><b>الخطوة (3):</b> نقوم بفتح ملف الإعدادات الذي تم إنشاؤه من خلال برنامج <b><span dir="ltr">PyCharm</span></b> أو أي محرر نصوص.</li>
+          <li><b>الخطوة (4):</b> نبحث داخل الملف عن السطر <code dir="ltr">"c.NotebookApp.notebook_dir"</code>، وعندما نجده <b>نزيل علامة التعليق <code dir="ltr">"#"</code></b> من بدايته ونجعله يساوي مسار المجلد الجديد كالتالي:
+            <div class="code-box">c.NotebookApp.notebook_dir = <span class="str">'C:\DataAnalysisWork'</span></div>
+          </li>
+          <li><b>الخطوة (5):</b> نخزن (نحفظ) الملف ونقوم بتشغيل <span dir="ltr">JupyterLab</span>، فنلاحظ أنه قد تغير مجلد العمل إلى المجلد الفارغ الذي أنشأناه.</li>
+        </ol>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) استخدام (<span dir="ltr">IPython</span>) واستخدام (<span dir="ltr">Jupyter Notebook</span>)</h3>
+        <div class="exam-alert">
+          <b>🌟 فرق مهم جداً في اختصارات لوحة المفاتيح داخل <span dir="ltr">IPython</span> و <span dir="ltr">Jupyter Notebook</span>:</b><br>
+          • الضغط على <b><span dir="ltr">Shift + Enter</span></b> &larr; يقوم بـ <b>تنفيذ الكود والأوامر</b> المكتوبة في الخلية.<br>
+          • الضغط على <b><span dir="ltr">Enter</span> فقط</b> &larr; ينزل لسطر جديد لـ <b>كتابة أمر إضافي جديد داخل نفس الخلية</b> دون تنفيذها فوراً!
+        </div>
+
+        <ul>
+          <li><b>أولاً: استخدام <span dir="ltr">IPython</span>:</b>
+            <ul>
+              <li>يُستخدم لتنفيذ الأوامر مباشرة بالضغط على أيقونة <b><span dir="ltr">Console &rarr; Python 3 (ipykernel)</span></b>.</li>
+              <li>تُكتب أوامر البايثون في مربع النص أسفل النافذة ونضغط <b><span dir="ltr">Shift + Enter</span></b> لتنفيذها.</li>
+              <li>يمكن كتابة أكثر من أمر وتنفيذهم معاً بالضغط على <b><span dir="ltr">Enter</span></b> لكتابة أمر جديد، وفي النهاية الضغط على <b><span dir="ltr">Shift + Enter</span></b> لتنفيذ كل الأوامر دفعة واحدة. وعند كتابة اسم المتغير فقط يتم عرض قيمته مباشرة.</li>
+            </ul>
+          </li>
+          <li><b>ثانياً: استخدام <span dir="ltr">Jupyter Notebook</span> من داخل <span dir="ltr">JupyterLab</span>:</b>
+            <ul>
+              <li><b>تعريف <span dir="ltr">Jupyter Notebook</span>:</b> هو تطبيق ويب يُستخدم لإنشاء <span dir="ltr">Notebook</span> لتحليل البيانات، والتي يمكن أن تحتوي على: <b>تعليمات برمجية، ونصوص، وأشكال، وروابط، ومعادلات رياضية، ومخططات</b>.</li>
+              <li>لإنشاء <span dir="ltr">Notebook</span> جديد نضغط على الأيقونة <b><span dir="ltr">Notebook &rarr; Python 3 (ipykernel)</span></b>، فينشأ ملف بامتداد <b><code dir="ltr">.ipynb</code></b> (مثل <code dir="ltr">Untitled.ipynb</code> أو <code dir="ltr">CH1_U3.ipynb</code>).</li>
+              <li><b>خطوات تخزين (حفظ) الـ <span dir="ltr">Notebook</span> وإعطائه اسماً مميزاً:</b>
+                <ol>
+                  <li>اختيار <b><span dir="ltr">Save Notebook</span></b> من قائمة <b><span dir="ltr">File</span></b> (أو الاختصار <code dir="ltr">Ctrl + S</code>).</li>
+                  <li>تغيير الاسم في النافذة التي تظهر والضغط على زر <b><span dir="ltr">Rename</span></b>.</li>
+                </ol>
+              </li>
+              <li>ويمكن فتح الـ <span dir="ltr">Notebook</span> المخزن مسبقاً من خلال الضغط على اسمه مباشرةً في متصفح الملفات الموجود بالـ <span dir="ltr">JupyterLab</span>.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- التبويب الثاني: جداول المقارنات والأوامر -->
+  <section id="tables" class="panel">
+    <div class="card">
+      <h2>1. جدول المقارنة الذهبي بين أنواع تحليل البيانات الأربعة (Unit 1)</h2>
+      <p class="muted">احفظي هذا الجدول جيداً؛ فكل سؤال في الاختبار عن أنواع التحليل يعتمد على هذه الفروق الأربعة:</p>
+      <table>
+        <thead>
+          <tr>
+            <th>نوع التحليل</th>
+            <th>السؤال الذي يجيب عنه</th>
+            <th>التركيز والآلية</th>
+            <th>المثال الوارد في المنهج</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1. التحليل الوصفي</b><br><small dir="ltr">Descriptive</small></td>
+            <td><b>ماذا حدث؟</b></td>
+            <td>يصف أو يلخص البيانات الأولية والتاريخية لفهم ما حدث في الماضي وتحديد الأنماط والاتجاهات عبر الوقت.</td>
+            <td>فهم <b>متوسط المبيعات الشهرية للعام الماضي</b>.</td>
+          </tr>
+          <tr>
+            <td><b>2. التحليل التشخيصي</b><br><small dir="ltr">Diagnostic</small></td>
+            <td><b>لماذا حدث؟</b></td>
+            <td>يهتم بتحديد <b>سبب حدوث شيء ما</b> عبر استكشاف بيانات أكثر تفصيلاً ومقارنة مجموعات البيانات المختلفة.</td>
+            <td>معرفة <b>سبب انخفاض مبيعات الشركة في شهر معين</b>.</td>
+          </tr>
+          <tr>
+            <td><b>3. التحليل التنبؤي</b><br><small dir="ltr">Predictive</small></td>
+            <td><b>ماذا سيحدث؟</b></td>
+            <td>يستخدم النماذج الإحصائية وتقنيات التنبؤ وبيانات الماضي للتنبؤ بالمستقبل (في المخاطر والتسويق والمبيعات).</td>
+            <td><b>التنبؤ بمبيعات الربع التالي</b> بناءً على المبيعات خلال فترة سابقة.</td>
+          </tr>
+          <tr>
+            <td><b>4. التحليل التوجيهي</b><br><small dir="ltr">Prescriptive</small></td>
+            <td><b>كيف يمكن تحقيق ذلك؟</b></td>
+            <td><b>الأكثر تقدماً؛</b> يتنبأ بالنتائج ويقترح إجراءات وقرارات باستخدام <b>التعلم الآلي والذكاء الاصطناعي</b>.</td>
+            <td>اقتراح <b>أفضل استراتيجيات التسويق لزيادة المبيعات المستقبلية</b>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>2. جدول مقارنة مكتبات البايثون الست ومقاييس البيانات الأربعة (Unit 2)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>المكتبة / مقياس البيانات</th>
+            <th>التصنيف</th>
+            <th>الوظيفة أو التعريف والمثال الدقيق في المنهج</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td dir="ltr"><b>1. NumPy</b></td>
+            <td>مكتبة بايثون</td>
+            <td>أقوى مكتبة للتعامل مع <b>المصفوفات متعددة الأبعاد وإجراء العمليات الرياضية</b>.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>2. SciPy</b></td>
+            <td>مكتبة بايثون</td>
+            <td>مكتبة للحسابات العلمية وتشمل مكتبات فرعية تساعد في <b>العمليات الإحصائية</b>.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>3. Pandas</b></td>
+            <td>مكتبة بايثون</td>
+            <td>من أهم المكتبات للتعامل مع البيانات: <b>تحميل البيانات واستكشافها وإجراء عمليات التحليل</b>.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>4. Scikit-learn</b></td>
+            <td>مكتبة بايثون</td>
+            <td>خاصة بتطبيق <b>خوارزميات تعلم الآلة</b> (تقسيم البيانات، تحويلها، بناء النماذج وتقييمها).</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>5. Matplotlib</b></td>
+            <td>مكتبة بايثون</td>
+            <td>المكتبة <b>الرئيسية لتمثيل البيانات</b> في البايثون وتعد الأساس لباقي المكتبات.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>6. Seaborn</b></td>
+            <td>مكتبة بايثون</td>
+            <td>مكتبة <b>مبنية على <span dir="ltr">matplotlib</span></b> وتقدم مخططات تفاعلية منظمة بشكل مميز.</td>
+          </tr>
+          <tr>
+            <td><b>• كمي - مطلق (<span dir="ltr">Absolute</span>)</b></td>
+            <td>مقياس بيانات كمي</td>
+            <td>له بداية طبيعية ويزداد في اتجاه واحد، مثل: <b>الطول</b> (الطول صفر يعني لا يوجد طول).</td>
+          </tr>
+          <tr>
+            <td><b>• كمي - نسبي (<span dir="ltr">Relative</span>)</b></td>
+            <td>مقياس بيانات كمي</td>
+            <td>يبدأ عند نقطة اختيارية ويمتد في الجهتين، مثل: <b>درجة الحرارة</b> (الصفر لا يعني انعدام الحرارة).</td>
+          </tr>
+          <tr>
+            <td><b>• نوعي - اسمي (<span dir="ltr">Nominal</span>)</b></td>
+            <td>مقياس بيانات نوعي</td>
+            <td><b>لا يمكن ترتيبه</b>، مثل: <b>اسم الشخص أو نوعه</b>.</td>
+          </tr>
+          <tr>
+            <td><b>• نوعي - ترتيبي (<span dir="ltr">Ordinal</span>)</b></td>
+            <td>مقياس بيانات نوعي</td>
+            <td><b>يمكن ترتيبه</b>، مثل: <b>الجودة (جيد أو غير جيد)</b>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>3. ملخص جميع الأوامر والاختصارات في الفصل الأول (Unit 3)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>الأمر أو الاختصار</th>
+            <th>الوظيفة الدقيقة كما وردت في المنهج</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td dir="ltr"><code>conda install -c conda-forge jupyterlab</code></td>
+            <td>تثبيت <span dir="ltr">JupyterLab</span> من خلال نافذة <span dir="ltr">Anaconda Prompt</span>.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><code>pip install jupyterlab</code></td>
+            <td>تثبيت <span dir="ltr">JupyterLab</span> لأي نسخة بايثون أخرى من خلال نافذة الـ <span dir="ltr">Terminal</span>.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><code>jupyter notebook --generate-config</code></td>
+            <td>إنشاء ملف الإعدادات الافتراضي (<code dir="ltr">jupyter_notebook_config.py</code>) لتغيير مجلد العمل.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><code>c.NotebookApp.notebook_dir = 'C:\DataAnalysisWork'</code></td>
+            <td>المتغير الذي نعدله (بعد إزالة علامة <code dir="ltr">#</code>) لتحديد مسار مجلد العمل الجديد.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>Shift + Enter</b></td>
+            <td>تنفيذ أمر أو مجموعة أوامر البايثون المكتوبة داخل الخلية في <span dir="ltr">IPython</span> أو <span dir="ltr">Notebook</span>.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>Enter</b></td>
+            <td>الانتقال لسطر جديد لكتابة أمر إضافي داخل نفس الخلية قبل تنفيذها جميعاً بـ <span dir="ltr">Shift + Enter</span>.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><b>File &rarr; Save Notebook &rarr; Rename</b></td>
+            <td>خطوات حفظ ملف الـ <span dir="ltr">Notebook</span> (<code dir="ltr">.ipynb</code>) وإعطائه اسماً مميزاً.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- التبويب الثالث: المصطلحات والأوامر -->
+  <section id="terms" class="panel">
+    <div class="card">
+      <h2>قاموس المصطلحات والمكتبات والأوامر الشامل للفصل الأول</h2>
+      <p class="muted">جميع المفاهيم والمصطلحات الإنجليزية والعربية والأوامر الواردة في الوحدات الثلاث:</p>
+      <div id="termsGrid" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- التبويب الرابع: البطاقات التعليمية -->
+  <section id="cards" class="panel">
+    <div class="card">
+      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
+      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
+      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
+        <div class="term" id="flashTerm"></div>
+        <div class="answer" id="flashAnswer" hidden></div>
+        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="prevCard">السابق</button>
+        <span id="cardCount" class="muted"></span>
+        <button class="btn primary" id="nextCard">التالي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- التبويب الخامس: الاختبار الذاتي العشوائي -->
+  <section id="quiz" class="panel">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2>الاختبار الشامل المتغير للفصل الأول (25 سؤالاً) <span class="badge-new">ترتيب عشوائي ذكي 🎲</span></h2>
+          <p class="muted">يتم خلط ترتيب الأسئلة وترتيب الخيارات تلقائياً في كل مرة لقياس فهمك الحقيقي بتركيز فائق!</p>
+        </div>
+        <div class="score" id="score">النتيجة: 0 / 25</div>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="quizArea"></div>
+      <div class="row">
+        <button class="btn" id="resetQuiz">إعادة الاختبار بترتيب عشوائي جديد 🔀</button>
+        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+      </div>
+      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
+    </div>
+  </section>
+</main>
+
+<footer>مبني بالكامل (100%) على محتوى الفصل الأول من مقرر تحليل وتمثيل البيانات</footer>
+
+<script>
+const terms = [
+  ["تحليل البيانات (Data Analysis)", "طريقة شاملة لفحص البيانات وتنقيتها وتحويلها ونمذجتها لاكتشاف معلومات مفيدة واستخلاص النتائج ودعم اتخاذ القرار من مصادر منظمة وغير منظمة."],
+  ["تمثيل البيانات (Data Visualization)", "تحويل البيانات من شكلها الخام إلى تنسيق يمكن فهمه بسهولة من قبل البشر باستخدام المخططات والرسوم البيانية والخرائط لرؤية الاتجاهات والقيم المتطرفة والأنماط."],
+  ["Pie Chart (المخطط الدائري)", "مخطط دائري لتمثيل النسب المئوية (مجموعها 100%)؛ وفي مثال مبيعات قطع الحاسب: HD (45%)، RAM (30%)، CPU (15%)، GPU (10%)."],
+  ["التحليل الوصفي (Descriptive)", "يجيب عن سؤال (ماذا حدث؟)؛ يصف ويلخص البيانات الأولية والتاريخية لفهم ما حدث في الماضي وتحديد الأنماط (مثل متوسط المبيعات الشهرية للعام الماضي)."],
+  ["التحليل التشخيصي (Diagnostic)", "يجيب عن سؤال (لماذا حدث؟)؛ يهتم بتحديد سبب حدوث شيء ما عبر استكشاف بيانات تفصيلية ومقارنة مجموعات البيانات (مثل معرفة سبب انخفاض المبيعات في شهر معين)."],
+  ["التحليل التنبؤي (Predictive)", "يجيب عن سؤال (ماذا سيحدث؟)؛ يستخدم النماذج الإحصائية وتقنيات التنبؤ وبيانات الماضي للتنبؤ بالمستقبل (مثل التنبؤ بمبيعات الربع التالي)."],
+  ["التحليل التوجيهي (Prescriptive)", "يجيب عن سؤال (كيف يمكن تحقيق ذلك؟)؛ النوع الأكثر تقدماً، يقترح إجراءات وقرارات للاستفادة من التنبؤات باستخدام التعلم الآلي والذكاء الاصطناعي."],
+  ["CRISP-DM", "اختصار Cross Industry Process for Data Mining؛ نموذج قياسي لعملية تحليل البيانات يتكون من 6 مراحل: فهم المشكلة، فهم البيانات، إعداد البيانات، النمذجة، التقييم، والتطبيق."],
+  ["Logistic Regression & Decision Trees", "الانحدار اللوجستي وأشجار القرار: من خوارزميات التعلم الآلي التي تُطبق في المرحلة الرابعة (النمذجة) من نموذج CRISP-DM."],
+  ["F1-score & Accuracy", "مقاييس تُحسَب في المرحلة الخامسة (التقييم) من نموذج CRISP-DM لتقييم مدى جودة أداء النماذج التنبؤية."],
+  ["NumPy", "أقوى مكتبات البايثون في التعامل مع المصفوفات متعددة الأبعاد وإجراء العمليات الرياضية."],
+  ["SciPy", "مكتبة بايثون مهمة جداً في الحسابات العلمية وتشمل مكتبات فرعية تساعد في إجراء العمليات الإحصائية."],
+  ["Pandas", "من أهم مكتبات البايثون في التعامل مع البيانات؛ لتحميل البيانات واستكشافها وإجراء بعض عمليات التحليل."],
+  ["Scikit-learn", "مكتبة بايثون خاصة بتطبيق خوارزميات تعلم الآلة (تقسيم البيانات، تحويلها، وبناء النماذج وتقييمها)."],
+  ["Matplotlib & Seaborn", "Matplotlib هي المكتبة الرئيسية لتمثيل البيانات في البايثون، و Seaborn مكتبة مبنية عليها تقدم مخططات تفاعلية منظمة بشكل مميز."],
+  ["البيانات الجدولية (Tabular Data)", "بيانات مرتبة في جدول؛ حيث تمثل الصفوف (العينات المتوفرة كبيانات موظف معين) وتمثل الأعمدة (السمات أو الحقول كالعمر أو الطول)."],
+  ["البيانات العلائقية (Relational Data)", "توسعة للبيانات الجدولية بحيث تُمثل البيانات في أكثر من جدول وتكون الجداول مرتبطة ببعضها عبر حقل مشترك (مثل حقل Name وحقل Friend)."],
+  ["كمي مطلق (Absolute)", "مقياس كمي له بداية طبيعية ويزداد في اتجاه واحد مثل (الطول)؛ فالطول صفر يعني أنه لا يوجد طول."],
+  ["كمي نسبي (Relative)", "مقياس كمي يبدأ عند نقطة اختيارية ويمتد في الجهتين مثل (درجة الحرارة)؛ فالصفر لا يعني أنه لا توجد حرارة."],
+  ["نوعي اسمي (Nominal) & ترتيبي (Ordinal)", "الاسمي (Nominal): لا يمكن ترتيبه مثل اسم الشخص أو نوعه | الترتيبي (Ordinal): يمكن ترتيبه مثل الجودة (جيد أو غير جيد)."],
+  ["JupyterLab", "واجهة مستخدم متقدمة تعتمد على الويب (تعمل محلياً بدون اشتراط اتصال بالإنترنت) وتضم محرر النصوص و Jupyter Notebooks و terminal و IPython."],
+  ["jupyter notebook --generate-config", "أمر يُكتب في Anaconda Prompt لإنشاء ملف الإعدادات الافتراضي (jupyter_notebook_config.py) لتغيير مجلد العمل."],
+  ["c.NotebookApp.notebook_dir", "المتغير الذي نبحث عنه في ملف الإعدادات ونزيل علامة التعليق (#) من أمامه لتحديد مسار مجلد العمل الجديد."],
+  ["Shift + Enter vs Enter", "في IPython و Jupyter Notebook: نضغط Enter لكتابة سطر أمر جديد، ونضغط Shift + Enter لتنفيذ الأوامر."]
+];
+
+const cards = [
+  ["ما هو المفهوم الرئيسي لتحليل البيانات (Data Analysis)؟", "هو طريقة شاملة لفحص البيانات وتنقيتها وتحويلها ونمذجتها لاكتشاف معلومات مفيدة واستخلاص النتائج ودعم اتخاذ القرار من مصادر مختلفة بتنسيقات منظمة وغير منظمة."],
+  ["ما المقصود بتمثيل البيانات (Data Visualization)؟ وما فائدته؟", "هو تحويل البيانات من شكلها الخام إلى تنسيق يمكن فهمه بسهولة من قبل البشر باستخدام العناصر المرئية (المخططات والرسوم البيانية والخرائط)؛ ليسهل رؤية الاتجاهات والقيم المتطرفة والأنماط."],
+  ["ما هي الفوائد الست لتحليل وتمثيل البيانات للمؤسسات؟", "1) اتخاذ القرارات المستنيرة (بناءً على أدلة ملموسة بدل التخمين).\n2) تحسين الفهم.\n3) إكساب المؤسسات ميزة تنافسية.\n4) تخفيف المخاطر (بتحليل البيانات التاريخية).\n5) كفاءة توزيع الموارد (كمثال المستشفيات).\n6) التحسين المستمر."],
+  ["ما هي الأنواع الأربعة الرئيسية لتحليل البيانات؟ وما السؤال الذي يجيب عنه كل نوع؟", "1) التحليل الوصفي: (ماذا حدث؟)\n2) التحليل التشخيصي: (لماذا حدث؟)\n3) التحليل التنبؤي: (ماذا سيحدث؟)\n4) التحليل التوجيهي: (كيف يمكن تحقيق ذلك؟)"],
+  ["ما الفرق بين (التحليل الوصفي) و(التحليل التشخيصي) مع ذكر مثال لكل منهما؟", "• الوصفي: يلخص البيانات التاريخية لفهم ما حدث في الماضي (مثال: فهم متوسط المبيعات الشهرية للعام الماضي).\n• التشخيصي: يحدد سبب حدوث شيء ما بمقارنة البيانات التفصيلية (مثال: معرفة سبب انخفاض مبيعات الشركة في شهر معين)."],
+  ["ما الفرق بين (التحليل التنبؤي) و(التحليل التوجيهي) مع ذكر مثال لكل منهما؟", "• التنبؤي: يستخدم النماذج الإحصائية وبيانات الماضي للتنبؤ بالمستقبل (مثال: التنبؤ بمبيعات الربع التالي).\n• التوجيهي: هو الأكثر تقدماً؛ يتنبأ ويقترح إجراءات وقرارات باستخدام التعلم الآلي والذكاء الاصطناعي (مثال: اقتراح أفضل استراتيجيات التسويق لزيادة المبيعات)."],
+  ["إلى ماذا يرمز اختصار نموذج (CRISP-DM)؟ وكم عدد مراحله؟", "يرمز إلى: Cross Industry Process for Data Mining، ويشمل (6 مراحل) قياسية لعملية تحليل البيانات."],
+  ["ما هي المراحل الست لنموذج (CRISP-DM) بالترتيب؟", "1) فهم المشكلة.\n2) فهم البيانات.\n3) إعداد البيانات.\n4) النمذجة.\n5) التقييم.\n6) التطبيق."],
+  ["ماذا يحدث في المرحلة الأولى (فهم المشكلة) والمرحلة الثانية (فهم البيانات) من نموذج CRISP-DM؟", "• فهم المشكلة: تحديد أهداف ومتطلبات العمل وفهم المشكلة أو الفرصة (كتحسين الاحتفاظ بالعملاء).\n• فهم البيانات: تحديد مصادر البيانات ذات الصلة وجمعها واستكشاف جودتها واكتمالها (كاسترجاع بيانات العملاء والشراء من نظام CRM)."],
+  ["ماذا يحدث في المرحلة الثالثة (إعداد البيانات) والمرحلة الرابعة (النمذجة) من نموذج CRISP-DM؟", "• إعداد البيانات: تنظيف البيانات وتحويلها وتنسيقها (إزالة السجلات المكررة ومعالجة القيم المفقودة وإزالة القيم غير المنطقية).\n• النمذجة: تطبيق تقنيات النمذجة وخوارزميات التعلم الآلي مثل (Logistic regression أو decision trees) لبناء نماذج تنبؤية."],
+  ["ماذا يحدث في المرحلة الخامسة (التقييم) والمرحلة السادسة (التطبيق) من نموذج CRISP-DM؟", "• التقييم: قياس مدى جودة وأداء النماذج باستخدام مقاييس التقييم مثل (الدقة و F1-score).\n• التطبيق (المرحلة النهائية): تنفيذ ودمج الرؤى والنماذج في العمليات التجارية الفعلية لاتخاذ تدابير استباقية."],
+  ["ما الفرق بين مكتبتي (NumPy) و (SciPy) في البايثون؟", "• NumPy: أقوى مكتبات البايثون في التعامل مع المصفوفات متعددة الأبعاد وإجراء العمليات الرياضية.\n• SciPy: مكتبة مهمة جداً في الحسابات العلمية وتشمل مكتبات فرعية تساعد في إجراء العمليات الإحصائية."],
+  ["ما الفرق بين مكتبتي (Pandas) و (Scikit-learn) في البايثون؟", "• Pandas: من أهم المكتبات في التعامل مع البيانات (تحميل البيانات واستكشافها وإجراء بعض عمليات التحليل).\n• Scikit-learn: مكتبة خاصة بتطبيق خوارزميات تعلم الآلة (تقسيم البيانات وتحويلها وبناء النماذج وتقييمها)."],
+  ["ما الفرق بين مكتبتي (Matplotlib) و (Seaborn) في البايثون؟", "• Matplotlib: المكتبة الرئيسية لتمثيل البيانات في البايثون وتعد الأساس لباقي المكتبات.\n• Seaborn: مكتبة مبنية على matplotlib وتقدم مخططات تفاعلية منظمة بشكل مميز."],
+  ["في البيانات الجدولية (Tabular Data)، ماذا تمثل (الصفوف) وماذا تمثل (الأعمدة)؟", "• الصفوف: تمثل العينات المتوفرة (مثل كل البيانات الخاصة بموظف معين).\n• الأعمدة: تمثل السمات أو الحقول (مثل الاسم أو العمر أو الطول أو الوزن)."],
+  ["ما المقصود بقواعد البيانات العلائقية (Relational Databases)؟ وكيف ترتبط الجداول فيها؟", "هي توسعة للبيانات الجدولية بحيث تُمثل البيانات في أكثر من جدول، وتكون الجداول مرتبطة ببعضها من خلال حقل مشترك (مثل ربط حقل الاسم Name بالجدول الأول مع حقل الصديق Friend بالجدول الثاني)."],
+  ["ما هي الأقسام الأربعة لمقاييس البيانات؟", "تنقسم إلى كمية ونوعية:\n1) كمي - مطلق (Absolute).\n2) كمي - نسبي (Relative).\n3) نوعي - اسمي (Nominal).\n4) نوعي - ترتيبي (Ordinal)."],
+  ["ما الفرق بين المقياس (الكمي المطلق - Absolute) والمقياس (الكمي النسبي - Relative) مع ذكر المثال لكل منهما؟", "• الكمي المطلق (Absolute): له بداية طبيعية ويزداد في اتجاه واحد مثل (الطول)؛ فالطول صفر يعني لا يوجد طول.\n• الكمي النسبي (Relative): يبدأ عند نقطة اختيارية ويمتد في الجهتين مثل (درجة الحرارة)؛ فالصفر لا يعني أنه لا توجد حرارة."],
+  ["ما الفرق بين المقياس (النوعي الاسمي - Nominal) والمقياس (النوعي الترتيبي - Ordinal) مع ذكر المثال لكل منهما؟", "• النوعي الاسمي (Nominal): لا يمكن ترتيبه مثل (اسم الشخص أو نوعه).\n• النوعي الترتيبي (Ordinal): يمكن ترتيبه مثل (الجودة: جيد أو غير جيد)."],
+  ["ما هو (JupyterLab)؟ وما الأدوات التي يقدمها؟", "هو واجهة مستخدم متقدمة تعتمد على الويب، ويقدم مجموعة من أدوات تحليل البيانات وتطوير التعلم الآلي مثل: محرر النصوص، و Jupyter Notebooks، وواجهة terminal، و IPython."],
+  ["كيف يتم تثبيت (JupyterLab) من خلال Anaconda، وكيف يتم تثبيته لأي نسخة بايثون أخرى؟", "• من خلال Anaconda (في Anaconda Prompt): نكتب الأمر:\nconda install -c conda-forge jupyterlab\n• لأي نسخة بايثون أخرى (في Terminal): نكتب الأمر:\npip install jupyterlab"],
+  ["عند تشغيل (JupyterLab) من خلال متصفح الويب، هل يشترط الاتصال بالإنترنت لكي يعمل؟", "لا، لا يجب أن تكون متصلاً بالإنترنت؛ لأنه يعمل بشكل محلي (Local) على جهازك عبر المتصفح."],
+  ["ما هو الأمر الذي نكتبه في Anaconda Prompt لإنشاء ملف الإعدادات لتغيير مجلد العمل الافتراضي؟", "الأمر هو:\njupyter notebook --generate-config"],
+  ["ما هو اسم المتغير الذي نبحث عنه داخل ملف الإعدادات لتغيير مجلد العمل؟ وماذا نفعل بعلامة التعليق (#)؟", "نبحث عن المتغير: c.NotebookApp.notebook_dir\nونقوم بإزالة علامة التعليق (#) من بدايته، ثم نسند له مسار المجلد الجديد مثل: 'C:\\DataAnalysisWork'"],
+  ["عند استخدام (IPython) أو (Jupyter Notebook)، ما الفرق بين الضغط على (Enter) والضغط على (Shift + Enter)؟", "• الضغط على (Enter): يضيف سطراً جديداً لكتابة أمر جديد داخل نفس الخلية دون تنفيذها.\n• الضغط على (Shift + Enter): يقوم بتنفيذ الأمر أو كل الأوامر المكتوبة في الخلية."],
+  ["على ماذا يمكن أن يحتوي ملف الـ (Jupyter Notebook)؟ وما هو امتداد ملفاته؟", "يمكن أن يحتوي على: تعليمات برمجية، ونصوص، وأشكال، وروابط، ومعادلات رياضية، ومخططات. وامتداد ملفاته هو (.ipynb)."],
+  ["كيف نقوم بحفظ وتخزين ملف (Jupyter Notebook) وإعطائه اسماً مميزاً؟", "1) نختار (Save Notebook) من قائمة (File) أو نضغط Ctrl+S.\n2) نغير الاسم في النافذة التي تظهر ونضغط على زر (Rename)."],
+  ["في المخطط الدائري (Pie Chart) لمبيعات قطع الحاسب في الوحدة الأولى، ما هي القطعة الأكثر مبيعاً وما هي القطعة الأقل مبيعاً؟", "• القطعة الأكثر مبيعاً هي القرص الصلب (HD) بنسبة 45.0% (تليها الذاكرة RAM بنسبة 30.0% ثم المعالج CPU بنسبة 15.0%).\n• القطعة الأقل مبيعاً هي كرت الشاشة (GPU) بنسبة 10.0%."]
+];
+
+const masterQuestions = [
+  {q:"طريقة شاملة لفحص البيانات وتنقيتها وتحويلها ونمذجتها لاكتشاف معلومات مفيدة واستخلاص النتائج ودعم اتخاذ القرار من مصادر مختلفة بتنسيقات منظمة وغير منظمة:",o:["تحليل البيانات (Data Analysis)","تمثيل البيانات (Data Visualization)","تثبيت حزمة Anaconda","قواعد البيانات العلائقية"],a:0,e:"تحليل البيانات هو الطريقة الشاملة لفحص البيانات وتنقيتها وتحويلها ونمذجتها لاكتشاف معلومات مفيدة ودعم اتخاذ القرار."},
+  {q:"تحويل البيانات من شكلها الخام إلى تنسيق يمكن فهمه بسهولة من قبل البشر باستخدام العناصر المرئية مثل المخططات والرسوم البيانية والخرائط لرؤية الاتجاهات والقيم المتطرفة والأنماط يُعرف بـ:",o:["تمثيل البيانات (Data Visualization)","إعداد البيانات وتنظيفها","قواعد البيانات العلائقية","الحوسبة السحابية"],a:0,e:"تمثيل البيانات هو تحويل البيانات من شكلها الخام إلى تنسيق مرئي يسهل فهمه من قبل البشر كالمخططات والرسوم البيانية."},
+  {q:"تمكين المؤسسات من بناء خياراتها على أدلة ملموسة بدلاً من الحدس أو التخمين يمثل إحدى فوائد تحليل وتمثيل البيانات وهي:",o:["اتخاذ القرارات المستنيرة","تخفيف المخاطر التاريخية فقط","كفاءة توزيع الموارد في المستشفيات فقط","تنصيب محرر النصوص"],a:0,e:"بناء الخيارات على أدلة ملموسة بدلاً من الحدس أو التخمين هو تعريف فائدة (اتخاذ القرارات المستنيرة)."},
+  {q:"قيام المستشفيات باستخدام تحليل البيانات لتخصيص الموظفين والموارد للمناطق التي تشهد أعلى طلب من المرضى لضمان رعايتهم بفاعلية يُعد مثالاً على فائدة:",o:["كفاءة توزيع الموارد","اتخاذ القرارات بالحدس والتخمين","إزالة السجلات المكررة","تغيير مجلد العمل الافتراضي"],a:0,e:"ضرب المنهج مثال المستشفيات وتخصيص الموظفين للمناطق الأعلى طلباً لتوضيح فائدة (كفاءة توزيع الموارد)."},
+  {q:"أي نوع من أنواع تحليل البيانات الأربعة يجيب عن سؤال (ماذا حدث؟) ويقوم بوصف أو تلخيص البيانات الأولية والتاريخية لفهم ما حدث في الماضي (مثل فهم متوسط المبيعات الشهرية للعام الماضي)؟",o:["التحليل الوصفي (Descriptive Analysis)","التحليل التشخيصي (Diagnostic Analysis)","التحليل التنبؤي (Predictive Analysis)","التحليل التوجيهي (Prescriptive Analysis)"],a:0,e:"التحليل الوصفي يجيب عن (ماذا حدث؟) ويلخص البيانات التاريخية لفهم الماضي مثل متوسط المبيعات الشهرية للعام الماضي."},
+  {q:"إذا انخفضت مبيعات الشركة في شهر معين، وأرادت الشركة استكشاف بيانات أكثر تفصيلاً ومقارنة مجموعات البيانات المختلفة لمعرفة سبب هذا الانخفاض (لماذا حدث؟)، فإنها تستخدم:",o:["التحليل التشخيصي (Diagnostic Analysis)","التحليل الوصفي (Descriptive Analysis)","التحليل التنبؤي (Predictive Analysis)","التحليل التوجيهي (Prescriptive Analysis)"],a:0,e:"التحليل التشخيصي يجيب عن (لماذا حدث؟) ويهتم بتحديد سبب حدوث نتيجة معينة مثل سبب انخفاض المبيعات في شهر معين."},
+  {q:"أي نوع من أنواع تحليل البيانات يجيب عن سؤال (ماذا سيحدث؟) ويستخدم النماذج الإحصائية وبيانات الماضي للتنبؤ بمبيعات الربع التالي أو تقييم المخاطر؟",o:["التحليل التنبؤي (Predictive Analysis)","التحليل الوصفي (Descriptive Analysis)","التحليل التشخيصي (Diagnostic Analysis)","إعداد وتنظيف البيانات"],a:0,e:"التحليل التنبؤي يجيب عن (ماذا سيحدث؟) ويستخدم النماذج الإحصائية وبيانات الماضي للتنبؤ بالمستقبل كمبيعات الربع التالي."},
+  {q:"ما هو النوع (الأكثر تقدماً) لتحليل البيانات والذي يجيب عن سؤال (كيف يمكن تحقيق ذلك؟)، حيث لا يتنبأ بالنتائج فحسب بل يقترح إجراءات ويوصي بالقرارات باستخدام التعلم الآلي والذكاء الاصطناعي؟",o:["التحليل التوجيهي (Prescriptive Analysis)","التحليل الوصفي (Descriptive Analysis)","التحليل التشخيصي (Diagnostic Analysis)","التحليل التنبؤي (Predictive Analysis)"],a:0,e:"التحليل التوجيهي هو النوع الأكثر تقدماً (كيف يمكن تحقيق ذلك؟) ويستخدم التعلم الآلي والذكاء الاصطناعي لاقتراح الإجراءات والتوصية بالقرارات."},
+  {q:"يرمز الاختصار (CRISP-DM) الذي يصف الخطوات القياسية لعملية تحليل البيانات إلى:",o:["Cross Industry Process for Data Mining","Computer Routine Information System for Data Modeling","Central Relational Index for Statistical Python","Code Running In Simple Python Data Module"],a:0,e:"يرمز CRISP-DM إلى Cross Industry Process for Data Mining ويشمل 6 مراحل قياسية."},
+  {q:"ما هو الترتيب الصحيح للمراحل الست في نموذج (CRISP-DM) القياسي لتحليل البيانات؟",o:["1) فهم المشكلة -> 2) فهم البيانات -> 3) إعداد البيانات -> 4) النمذجة -> 5) التقييم -> 6) التطبيق","1) إعداد البيانات -> 2) فهم المشكلة -> 3) النمذجة -> 4) فهم البيانات -> 5) التطبيق -> 6) التقييم","1) التقييم -> 2) النمذجة -> 3) إعداد البيانات -> 4) فهم البيانات -> 5) فهم المشكلة -> 6) التطبيق","1) التطبيق -> 2) فهم البيانات -> 3) التقييم -> 4) النمذجة -> 5) إعداد البيانات -> 6) فهم المشكلة"],a:0,e:"المراحل الست بالترتيب هي: فهم المشكلة، فهم البيانات، إعداد البيانات، النمذجة، التقييم، وأخيراً التطبيق."},
+  {q:"في أي مرحلة من مراحل نموذج (CRISP-DM) يتم تنظيف البيانات وإزالة السجلات المكررة ومعالجة القيم المفقودة وإزالة القيم غير المنطقية؟",o:["المرحلة الثالثة: إعداد البيانات (Data Preparation)","المرحلة الأولى: فهم المشكلة","المرحلة الرابعة: النمذجة","المرحلة السادسة: التطبيق"],a:0,e:"تنظيف البيانات ومعالجة القيم المفقودة وإزالة السجلات المكررة والقيم غير المنطقية يتم في المرحلة الثالثة (إعداد البيانات)."},
+  {q:"استخدام شركة البيع بالتجزئة لخوارزميات التعلم الآلي مثل (Logistic regression أو decision trees) للتنبؤ بفقدان العملاء يتم في مرحلة ____، بينما حساب الدقة و (F1-score) يتم في مرحلة ____:",o:["النمذجة (الرابعة) ثم التقييم (الخامسة)","فهم المشكلة (الأولى) ثم فهم البيانات (الثانية)","إعداد البيانات (الثالثة) ثم التطبيق (السادسة)","التقييم (الخامسة) ثم النمذجة (الرابعة)"],a:0,e:"تطبيق خوارزميات التعلم الآلي كالانحدار اللوجستي وأشجار القرار يتم في مرحلة (النمذجة)، وحساب الدقة و F1-score يتم في مرحلة (التقييم)."},
+  {q:"أي مكتبة من مكتبات البايثون التالية تُعد أقوى مكتبة في التعامل مع (المصفوفات متعددة الأبعاد وإجراء العمليات الرياضية)؟",o:["NumPy","Matplotlib","Seaborn","Scikit-learn"],a:0,e:"مكتبة NumPy هي أقوى مكتبات البايثون في التعامل مع المصفوفات متعددة الأبعاد وإجراء العمليات الرياضية."},
+  {q:"ما الفرق الدقيق بين وظيفة مكتبة (Pandas) ووظيفة مكتبة (Scikit-learn) في البايثون؟",o:["Pandas تُستخدم لتحميل البيانات واستكشافها وإجراء بعض عمليات التحليل، بينما Scikit-learn خاصة بتطبيق خوارزميات تعلم الآلة وتقسيم البيانات وبناء النماذج وتقييمها","Scikit-learn لرسم المخططات البيانية فقط، و Pandas للمصفوفات الرياضية فقط","كلتاهما تستخدمان فقط لتثبيت متصفح الويب","Pandas مبنية على Matplotlib لرسم الدوائر"],a:0,e:"مكتبة Pandas لتحميل البيانات واستكشافها وتحليلها، ومكتبة Scikit-learn خاصة بتطبيق خوارزميات تعلم الآلة وبناء النماذج وتقييمها."},
+  {q:"المكتبة الرئيسية لتمثيل البيانات في البايثون وتعد الأساس لباقي المكتبات هي ____، بينما المكتبة المبنية عليها وتقدم مخططات تفاعلية منظمة بشكل مميز هي ____:",o:["Matplotlib ثم Seaborn","SciPy ثم NumPy","Pandas ثم Scikit-learn","Seaborn ثم Pandas"],a:0,e:"مكتبة Matplotlib هي المكتبة الرئيسية لتمثيل البيانات والأساس لغيرها، ومكتبة Seaborn مبنية على matplotlib."},
+  {q:"في البيانات الجدولية (Tabular Data)، ماذا تمثل كل من (الصفوف) و (الأعمدة)؟",o:["تمثل الصفوف العينات المتوفرة (كبيانات موظف معين)، وتمثل الأعمدة السمات أو الحقول (كالعمر أو الطول أو الوزن)","تمثل الصفوف السمات والحقول، وتمثل الأعمدة العينات المتوفرة","كلاهما يمثلان قواعد بيانات غير منظمة","لا تحتوي البيانات الجدولية على صفوف أو أعمدة"],a:0,e:"في البيانات الجدولية: الصفوف تمثل العينات المتوفرة (Samples/Records)، والأعمدة تمثل السمات أو الحقول (Features/Fields)."},
+  {q:"توسعة للبيانات الجدولية بحيث تُمثل البيانات في أكثر من جدول وتكون الجداول مرتبطة ببعضها (مثل الربط عبر حقل Name في الجدول الأول وحقل Friend في الجدول الثاني) تُسمى:",o:["البيانات العلائقية (قواعد البيانات العلائقية)","المصفوفات أحادية البعد","الرسوم البيانية الدائرية","ملفات الإعدادات النصية"],a:0,e:"قواعد البيانات العلائقية هي توسعة للبيانات الجدولية تمثل البيانات في أكثر من جدول مرتبطة ببعضها بحقل مشترك."},
+  {q:"ضمن مقاييس البيانات الكمية، ما الفرق بين المقياس (الكمي المطلق - Absolute) والمقياس (الكمي النسبي - Relative)؟",o:["المطلق له بداية طبيعية ويزداد في اتجاه واحد مثل (الطول - الصفر يعني انعدام الطول)، بينما النسبي يبدأ عند نقطة اختيارية ويمتد في الجهتين مثل (درجة الحرارة - الصفر لا يعني انعدام الحرارة)","المطلق مثل اسم الشخص، والنسبي مثل الجودة (جيد أو سيئ)","كلاهما لا يقبلان الأرقام الحسابية","النسبي له بداية طبيعية مثل الطول، والمطلق يمتد في الجهتين مثل الحرارة"],a:0,e:"الكمي المطلق (Absolute) له بداية طبيعية كالطول، والكمي النسبي (Relative) يبدأ عند نقطة اختيارية ويمتد بالجهتين كدرجة الحرارة."},
+  {q:"أي مقياس من مقاييس البيانات يُعد (نوعياً اسمياً - Nominal) لا يمكن ترتيبه، وأي مقياس يُعد (نوعياً ترتيبياً - Ordinal) يمكن ترتيبه؟",o:["الاسمي (Nominal): مثل اسم الشخص أو نوعه | الترتيبي (Ordinal): مثل الجودة (جيد أو غير جيد)","الاسمي: مثل الطول والوزن | الترتيبي: مثل درجة الحرارة","الاسمي يمكن ترتيبه تصاعدياً، والترتيبي لا يمكن ترتيبه أبداً","كلاهما مقاييس كمية رقمية"],a:0,e:"النوعي الاسمي (Nominal) لا يمكن ترتيبه كاسم الشخص أو نوعه، والنوعي الترتيبي (Ordinal) يمكن ترتيبه كالجودة (Good / Bad)."},
+  {q:"لتثبيت (JupyterLab) من خلال حزمة Anaconda عبر نافذة (Anaconda Prompt)، ما هو الأمر الصحيح الذي نكتبه؟",o:["conda install -c conda-forge jupyterlab","jupyter notebook --generate-config","c.NotebookApp.notebook_dir","delete jupyterlab"],a:0,e:"لتثبيت JupyterLab عبر Anaconda Prompt نكتب: conda install -c conda-forge jupyterlab (ولأي نسخة بايثون أخرى نكتب: pip install jupyterlab)."},
+  {q:"عند تشغيل (JupyterLab)، أين يظهر؟ وهل يشترط الاتصال بالإنترنت لكي يعمل؟",o:["يتم تشغيله من خلال متصفح الويب لديك، ويعمل بشكل محلي في هذه الحالة ولا يجب أن تكون متصلاً بالإنترنت","لا يفتح في متصفح الويب أبداً، ويتطلب اتصالاً دائماً بالإنترنت السريع","يعمل فقط على الهواتف الذكية ولا يعمل على الويندوز","يتوقف عن العمل فور فصل كابل الإنترنت"],a:0,e:"ينص المنهج صراحةً على أنه يتم تشغيله من خلال متصفح الويب لديك، وأنه يعمل بشكل محلي ولا يجب أن تكون متصلاً بالإنترنت."},
+  {q:"لتغيير مجلد العمل الافتراضي في (JupyterLab)، ما هو الأمر الذي نكتبه أولاً في Anaconda Prompt لإنشاء ملف الإعدادات؟",o:["jupyter notebook --generate-config","pip install jupyterlab","conda install numpy","import pandas as pd"],a:0,e:"الخطوة الثانية لتغيير مجلد العمل هي فتح Anaconda Prompt وكتابة الأمر: jupyter notebook --generate-config لإنشاء ملف الإعدادات."},
+  {q:"بعد فتح ملف الإعدادات في محرر النصوص لتغيير مجلد العمل في JupyterLab، ما السطر الذي نبحث عنه؟ وماذا نفعل به؟",o:["نبحث عن 'c.NotebookApp.notebook_dir' ونزيل علامة التعليق '#' ونجعله يساوي مسار المجلد الجديد مثل 'C:\\DataAnalysisWork'","نبحث عن كلمة 'Delete' ونحذف الملف بالكامل","نضيف علامة '#' أمام جميع أسطر الملف","نغير اسم الملف إلى PyCharm.exe"],a:0,e:"نبحث في ملف الإعدادات عن c.NotebookApp.notebook_dir، ونزيل علامة التعليق '#'، ونسند له مسار المجلد الجديد ثم نحفظ الملف."},
+  {q:"عند كتابة أوامر البايثون في نافذة (IPython) أو خلية (Jupyter Notebook)، ما الفرق بين الضغط على زر (Enter) والضغط على (Shift + Enter)؟",o:["الضغط على (Enter) ينزل لكتابة أمر جديد داخل الخلية، بينما الضغط على (Shift + Enter) يقوم بتنفيذ الأوامر","الضغط على (Enter) يحذف الكود، والضغط على (Shift + Enter) يغلق المتصفح","كلاهما يقومان بحفظ الملف وتغيير اسمه فقط","الضغط على (Enter) ينفذ الكود فوراً، و (Shift + Enter) يمسح الشاشة"],a:0,e:"لكتابة أكثر من أمر في خلية واحدة نضغط (Enter) لكتابة أمر جديد، وفي النهاية نضغط (Shift + Enter) لتنفيذ كل الأوامر."},
+  {q:"لحفظ وتخزين ملف (Jupyter Notebook) وإعطائه اسماً مميزاً (مثل CH1_U3.ipynb)، ما هي الخطوات الصحيحة؟",o:["اختيار Save Notebook من قائمة File (أو Ctrl+S)، ثم تغيير الاسم والضغط على Rename","كتابة أمر pip install داخل الخلية","إغلاق المتصفح دون حفظ وسيُسمى تلقائياً","فتح Anaconda Prompt وحذف ملف الإعدادات"],a:0,e:"لتخزين الـ Notebook وإعطائه اسماً مميزاً: 1) اختيار Save Notebook من قائمة File، 2) تغيير الاسم والضغط على Rename."}
+];
+
+// بناء شبكة المصطلحات
+const termsGrid = document.getElementById("termsGrid");
+terms.forEach(([en, ar]) => {
+  const d = document.createElement("div");
+  d.className = "card";
+  d.style.margin = "0";
+  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
+  termsGrid.appendChild(d);
+});
+
+// إدارة البطاقات التعليمية
+let ci = 0, showAnswer = false;
+function renderCard() {
+  document.getElementById("flashTerm").textContent = cards[ci][0];
+  document.getElementById("flashAnswer").textContent = cards[ci][1];
+  document.getElementById("flashAnswer").hidden = !showAnswer;
+  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
+  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+}
+document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
+document.getElementById("flashcard").addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
+});
+document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
+document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
+renderCard();
+
+// التنقل بين التبويبات
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+// خوارزمية خلط عشوائي (Fisher-Yates Shuffle) للأسئلة والخيارات
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+let currentQuestions = [];
+let answers = {};
+
+function prepareShuffledQuiz() {
+  currentQuestions = shuffleArray(masterQuestions).map(item => {
+    const optsWithFlag = item.o.map((text, idx) => ({ text, isCorrect: idx === item.a }));
+    const shuffledOpts = shuffleArray(optsWithFlag);
+    return {
+      q: item.q,
+      o: shuffledOpts.map(x => x.text),
+      a: shuffledOpts.findIndex(x => x.isCorrect),
+      e: item.e
+    };
+  });
+}
+
+function renderQuiz() {
+  prepareShuffledQuiz();
+  const area = document.getElementById("quizArea");
+  area.innerHTML = "";
+  const letters = ["أ", "ب", "ج", "د"];
+  currentQuestions.forEach((item, i) => {
+    const box = document.createElement("div");
+    box.className = "qbox";
+    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
+    const opts = box.querySelector(".options");
+    item.o.forEach((opt, j) => {
+      const btn = document.createElement("button");
+      btn.className = "option";
+      btn.textContent = `${letters[j]}) ${opt}`;
+      btn.onclick = () => {
+        answers[i] = j;
+        [...opts.children].forEach((x, k) => {
+          x.classList.remove("correct", "wrong");
+          x.disabled = true;
+          if (k === item.a) x.classList.add("correct");
+          if (k === j && j !== item.a) x.classList.add("wrong");
+        });
+        const fb = document.getElementById("fb" + i);
+        fb.hidden = false;
+        fb.className = "feedback " + (j === item.a ? "good" : "bad");
+        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
+        updateScore();
+      };
+      opts.appendChild(btn);
+    });
+    area.appendChild(box);
+  });
+  updateScore();
+}
+
+function updateScore() {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
+  document.getElementById("score").textContent = `النتيجة: ${correct} / ${currentQuestions.length}`;
+  document.getElementById("progressBar").style.width = (Object.keys(answers).length / currentQuestions.length * 100) + "%";
+}
+
+document.getElementById("resetQuiz").onclick = () => {
+  answers = {};
+  document.getElementById("finalResult").textContent = "";
+  renderQuiz();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+document.getElementById("finishQuiz").onclick = () => {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
+  const pct = Math.round(correct / currentQuestions.length * 100);
+  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${currentQuestions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! أنتِ مستعدة تماماً للاختبار في هذا الفصل." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
+};
+
+renderQuiz();
+</script>
+</body>
+</html>

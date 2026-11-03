@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الفصل السابع الشامل (100%) | تحليل وتمثيل البيانات</title>
+<style>
+:root{
+  --bg:#f0f5ff;
+  --card:#ffffff;
+  --ink:#0f172a;
+  --muted:#475569;
+  --accent:#1d4ed8;
+  --accent-dark:#1e3a8a;
+  --accent2:#dbeafe;
+  --line:#cbd5e1;
+  --good:#059669;
+  --good-bg:#ecfdf5;
+  --bad:#dc2626;
+  --bad-bg:#fef2f2;
+  --warn:#d97706;
+  --warn-bg:#fffbeb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
+header{background:linear-gradient(135deg,#0f172a,#1d4ed8);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(15,23,42,0.2)}
+.wrap{max-width:1040px;margin:auto;padding:0 16px}
+.eyebrow{opacity:.92;font-size:.9rem;background:rgba(255,255,255,0.16);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
+h1{margin:5px 0;font-size:clamp(1.5rem,4vw,2.25rem)}
+header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
+nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:var(--accent2);color:var(--accent-dark);font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
+nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
+nav button.active,.btn.primary{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+main .btn.primary{background:var(--accent);color:white}
+main{padding:22px 0 48px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(15,23,42,0.04)}
+h2{font-size:1.35rem;margin:0 0 12px;color:#0f172a}
+h3{font-size:1.08rem;margin:0 0 8px;color:var(--accent-dark)}
+small,.muted{color:var(--muted)}
+ul,ol{padding-right:22px;margin:8px 0}
+li{margin:6px 0}
+details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
+summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f8fafc;color:#0f172a;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
+details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
+.details-body{padding:16px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
+.badge-new{display:inline-block;background:var(--warn-bg);color:var(--warn);border:1px solid #fcd34d;font-size:.78rem;padding:1px 8px;border-radius:6px;margin-right:6px;font-weight:bold}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#eff6ff;color:#1e3a8a;font-weight:bold}
+tr:last-child td{border-bottom:0}
+.note{border-right:4px solid var(--accent);padding:10px 14px;background:#eff6ff;border-radius:8px;margin:10px 0}
+.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
+.math-box{background:#f8fafc;border:2px solid #93c5fd;border-radius:12px;padding:12px 16px;margin:10px 0;text-align:center;font-size:1.03rem;font-weight:bold;color:#1e3a8a;direction:ltr}
+.step-box{background:#f0fdf4;border:1px solid #86efac;border-right:4px solid var(--good);border-radius:10px;padding:12px 16px;margin:10px 0;font-size:.95rem}
+.code-box{background:#0f172a;color:#e2e8f0;padding:14px 18px;border-radius:12px;font-family:Consolas,Monaco,monospace;direction:ltr;text-align:left;overflow-x:auto;margin:10px 0;border:1px solid #334155;line-height:1.65;font-size:.91rem}
+.code-box .kw{color:#38bdf8;font-weight:bold}
+.code-box .str{color:#4ade80}
+.code-box .num{color:#f472b6}
+.code-box .cmt{color:#94a3b8;font-style:italic}
+.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
+.options{display:grid;gap:8px;margin-top:12px}
+.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
+.option:hover:not(:disabled){border-color:var(--accent);background:#eff6ff}
+.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
+.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
+.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
+.feedback.good{color:var(--good);background:var(--good-bg)}
+.feedback.bad{color:var(--bad);background:var(--bad-bg)}
+.progress{height:10px;background:#cbd5e1;border-radius:9px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
+.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#dbeafe);border:2px solid #93c5fd;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
+.flashcard:hover{transform:scale(1.005)}
+.flashcard .term{font-size:1.32rem;font-weight:bold;color:#1e3a8a}
+.flashcard .answer{margin-top:16px;font-size:1.04rem;color:#0f172a;background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04);white-space:pre-line}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
+@media(max-width:600px){
+  .card{padding:14px}
+  nav button{flex:1 1 calc(50% - 8px);text-align:center}
+  .flashcard{min-height:200px;padding:18px}
+  th,td{padding:8px 10px;font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">نسخة شاملة ومحدثة 100% • مقرر تحليل وتمثيل البيانات</div>
+    <h1>الفصل السابع: تحسين جودة البيانات (Data Quality Improvement)</h1>
+    <p>يغطي الجوانب الستة لجودة البيانات، مشاكل البيانات الست، تصنيفات القيم المفقودة الثلاثة (MCAR, MAR, MNAR)، الطرق الخمس لمعالجة القيم المفقودة برمجياً، والطرق الأربع لاكتشاف ومعالجة القيم المتطرفة (Box plot, Scatter plot, Z-score, IQR)</p>
+    <nav>
+      <button class="active" data-tab="summary">الشرح والقوانين والأكواد (100%)</button>
+      <button data-tab="tables">جداول المقارنات والمعادلات</button>
+      <button data-tab="terms">قاموس المصطلحات والدوال</button>
+      <button data-tab="cards">البطاقات (28)</button>
+      <button data-tab="quiz">الاختبار العشوائي (25)</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="summary" class="panel active">
+    <div class="card">
+      <h2>خريطة الفصل السابع (الوحدات الثلاث الكاملة)</h2>
+      <div class="grid">
+        <div>
+          <span class="tag">الوحدة الأولى</span>
+          <h3>مفهوم ومشاكل جودة البيانات والـ Missing</h3>
+          <p>الجوانب الستة لجودة البيانات، مشاكل الجودة الست وقاعدة (<span dir="ltr">GIGO</span>)، التصنيفات الثلاثة للقيم المفقودة (<span dir="ltr">MCAR, MAR, MNAR</span>)، والبيانات المتكررة وغير المتسقة والمتطرفة.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثانية</span>
+          <h3>معالجة القيم المفقودة برمجياً</h3>
+          <p>اكتشاف المفقود بـ <span dir="ltr">isnull().sum()</span>، والطرق الخمس للمعالجة: الحذف (<span dir="ltr">dropna</span>)، الاستبدال بقيمة ثابتة (<span dir="ltr">fillna</span>)، بالمنوال (<span dir="ltr">Mode</span>)، بالمتوسط (<span dir="ltr">Mean</span>)، وبنموذج الانحدار (<span dir="ltr">Regression</span>).</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثالثة</span>
+          <h3>اكتشاف ومعالجة القيم المتطرفة (Outliers)</h3>
+          <p>الطرق الأربع لاكتشاف وتنقية القيم المتطرفة على بيانات السكري: <span dir="ltr">Box plot</span>، <span dir="ltr">Scatter plot</span>، درجة <span dir="ltr">Z-score</span> (مع عتبة <span dir="ltr">3</span>)، والمدى الربعي <span dir="ltr">IQR</span> (مع معامل <span dir="ltr">1.5</span>).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== الوحدة الأولى ==================== -->
+    <details open>
+      <summary>الوحدة الأولى: جوانب ومشاكل جودة البيانات، وأنواع القيم المفقودة (MCAR, MAR, MNAR)</summary>
+      <div class="details-body">
+        <h3>1) مفهوم جودة البيانات والجوانب الستة الأساسية لها</h3>
+        <ul>
+          <li>تُعد جودة البيانات حجر الأساس في نجاح أي مشروع لتحليل البيانات أو تعلم الآلة، وتلخصها القاعدة الشهيرة: <b><span dir="ltr">"Garbage In, Garbage Out (GIGO)"</span></b> (أي: إذا أدخلتَ بيانات رديئة ومعيبة إلى النموذج، فستحصل حتماً على نتائج وقرارات خاطئة ورديئة!).</li>
+          <li><b>الجوانب (الأبعاد) الستة لجودة البيانات:</b>
+            <ol>
+              <li><b>1. الدقة (<span dir="ltr">Accuracy</span>):</b> مدى صحة البيانات وتمثيلها للواقع الفعلي دون أخطاء.</li>
+              <li><b>2. الاكتمال (<span dir="ltr">Completeness</span>):</b> مدى توفر كافة البيانات المطلوبة وخلوها من القيم المفقودة.</li>
+              <li><b>3. الاتساق (<span dir="ltr">Consistency</span>):</b> توافق تنسيق ومعنى البيانات عبر الجداول والأنظمة المختلفة دون تعارض.</li>
+              <li><b>4. الموثوقية (<span dir="ltr">Reliability</span>):</b> مصداقية مصدر البيانات وثباتها عند تكرار القياس.</li>
+              <li><b>5. المرجعية / الحداثة (<span dir="ltr">Timeliness / Relevance</span>):</b> كون البيانات محدثة وملائمة للإطار الزمني للمشكلة.</li>
+              <li><b>6. الوضوح والتوضيح (<span dir="ltr">Clarity / Interpretability</span>):</b> سهولة فهم الحقول والرموز ووحدات القياس المستخدمة.</li>
+            </ol>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) مشاكل جودة البيانات الست (<span dir="ltr">Data Quality Problems</span>)</h3>
+        <ol>
+          <li><b>بيانات غير مكتملة / مفقودة (<span dir="ltr">Incomplete / Missing Data</span>):</b> غياب قيم بعض السمات في بعض السجلات (تظهر كـ <code dir="ltr">NaN</code> أو <code dir="ltr">Null</code>).</li>
+          <li><b>بيانات مشوشة / صاخبة (<span dir="ltr">Noisy Data</span>):</b> بيانات تحتوي على أخطاء عشوائية أو تباينات كبيرة أو <b>قيم متطرفة (<span dir="ltr">Outliers</span>)</b> شاذة عن النمط المعتاد.</li>
+          <li><b>بيانات غير متسقة (<span dir="ltr">Inconsistent Data</span>):</b> تناقض في طريقة كتابة أو ترميز نفس المعلومة (مثلاً كتابة الجنس مرة <code dir="ltr">Male/Female</code> ومرة <code dir="ltr">M/F</code> ومرة <code dir="ltr">1/0</code>، أو اختلاف صيغ التواريخ، أو وجود عمر سالب أو تاريخ انتهاء قبل تاريخ البداية).</li>
+          <li><b>بيانات غير صالحة (<span dir="ltr">Invalid Data</span>):</b> قيم تخرج عن النطاق أو النوع المسموح به للحقل.</li>
+          <li><b>بيانات متكررة / زائدة عن الحاجة (<span dir="ltr">Redundant / Duplicate Data</span>):</b> تكرار نفس العينة (الصف) أكثر من مرة، أو وجود عمودين يحملان نفس المعلومة بالضبط، مما يسبب تحيزاً في التحليل وإهداراً للموارد.</li>
+          <li><b>بيانات غير صحيحة (<span dir="ltr">Incorrect Data</span>):</b> أخطاء ناتجة عن الإدخال اليدوي الخاطئ أو تعطل أجهزة القياس.</li>
+        </ol>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) التصنيفات الثلاثة للقيم المفقودة (<span dir="ltr">MCAR vs MAR vs MNAR</span>)</h3>
+        <div class="exam-alert">
+          <b>🔥🔥 سؤال امتحاني مؤكد 100%: قارني بدقة بين الأنواع الثلاثة للقيم المفقودة من حيث السبب والخطورة والتحيز:</b><br><br>
+          <b>1) مفقودة بشكل عشوائي تماماً (<span dir="ltr">MCAR - Missing Completely at Random</span>):</b><br>
+          • <b>المفهوم:</b> سبب فقدان القيمة <b>عشوائي تماماً ولا يعتمد على أي متغير آخر في البيانات ولا على قيمة المتغير نفسه</b> (مثل ضياع عينة دم في المختبر بالخطأ، أو تعطل حساس لحظياً بشكل عشوائي).<br>
+          • <b>الخطورة والتحيز:</b> هي <b>الأقل ضرراً ولا تسبب تحيزاً (<span dir="ltr">Unbiased</span>)</b> عند حذفها أو تعويضها.<br><br>
+          <b>2) مفقودة بشكل عشوائي (<span dir="ltr">MAR - Missing at Random</span>):</b><br>
+          • <b>المفهوم:</b> سبب فقدان القيمة ليس عشوائياً بالكامل، بل <b>يرتبط بمتغير آخر معروف ومسجل في مجموعة البيانات</b> (وليس بقيمة المتغير المفقود نفسه).<br>
+          • <b>مثال:</b> امتناع الإناث عن الإجابة عن سؤال "العمر" أكثر من الذكور (هنا فقدان "العمر" مرتبط بمتغير "الجنس" المسجل لدينا). وقد تسبب <b>بعض التحيز</b> إذا لم تُعالج بشكل صحيح.<br><br>
+          <b>3) مفقودة بشكل غير عشوائي (<span dir="ltr">MNAR - Missing Not at Random</span>):</b><br>
+          • <b>المفهوم:</b> سبب فقدان القيمة <b>يرتبط بقيمة المتغير المفقود نفسه أو بعامل غير معروف</b>.<br>
+          • <b>مثال:</b> امتناع أصحاب الدخل المرتفع جداً (أو المنخفض جداً) عن كتابة قيمة "الراتب" بسبب قيمة الراتب نفسها، أو امتناع المرضى ذوي الكآبة الشديدة عن ملء استبيان الاكتئاب.<br>
+          • <b>الخطورة والتحيز:</b> هي <b>الأكثر إشكالية وخطورة وتسبب تحيزاً كبيراً (<span dir="ltr">Highly Biased</span>)</b> في النتائج!
+        </div>
+      </div>
+    </details>
+
+    <!-- ==================== الوحدة الثانية ==================== -->
+    <details>
+      <summary>الوحدة الثانية: الطرق الخمس لمعالجة القيم المفقودة برمجياً على بيانات الموظفين (employee.csv)</summary>
+      <div class="details-body">
+        <h3>1) اكتشاف القيم المفقودة وحساب عددها في كل عمود</h3>
+        <ul>
+          <li>نكتشف وجود القيم المفقودة وعددها في كل عمود باستخدام الدالة <b><code dir="ltr">data.info()</code></b> أو بجمع القيم المنطقية للدالة <b><code dir="ltr">data.isnull().sum()</code></b>:</li>
+        </ul>
+        <div class="code-box">
+data = pd.read_csv(<span class="str">'employee.csv'</span>)<br>
+data.info()            <span class="cmt"># يعرض عدد القيم Non-Null في كل عمود</span><br>
+data.isnull().sum()    <span class="cmt"># يحسب عدد القيم المفقودة (NaN) في كل عمود بالضبط</span>
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) الطرق الخمس لمعالجة القيم المفقودة (<span dir="ltr">Handling Missing Values</span>)</h3>
+        <div class="exam-alert">
+          <b>🌟 احفظي الطرق الخمس ومتى نستخدم كل طريقة والكود البرمجي الخاص بها:</b>
+        </div>
+        <ul>
+          <li><b>الطريقة (1): الحذف (<span dir="ltr">Deletion: dropna</span>):</b>
+            <ul>
+              <li>تُستخدم عندما تكون نسبة القيم المفقودة صغيرة جداً (أو عندما يكون العمود بأكمله مفقوداً)، ولكن عيبها أنها قد تؤدي لفقدان معلومات هامة إذا كانت البيانات المفقودة كثيرة:</li>
+            </ul>
+            <div class="code-box">
+data.dropna()                 <span class="cmt"># حذف أي صف يحتوي على قيمة مفقودة واحدة على الأقل (axis=0 افتراضياً)</span><br>
+data.dropna(axis=<span class="num">1</span>)           <span class="cmt"># حذف أي عمود يحتوي على قيمة مفقودة</span><br>
+data.dropna(how=<span class="str">"all"</span>)        <span class="cmt"># حذف الصف فقط إذا كانت (جميع) قيمه بالكامل مفقودة!</span>
+            </div>
+          </li>
+          <li><b>الطريقة (2): الاستبدال بقيمة ثابتة (<span dir="ltr">Constant Value Imputation: fillna</span>):</b>
+            <ul>
+              <li>تُعوض القيم المفقودة برقم ثابت مثل <code dir="ltr">0</code> للأعمدة الرقمية، أو نص ثابت مثل <code dir="ltr">"UNKNOWN"</code> للأعمدة النصية:</li>
+            </ul>
+            <div class="code-box">
+data[<span class="str">'salary'</span>].fillna(<span class="num">0</span>, inplace=<span class="kw">True</span>)<br>
+data[<span class="str">'department'</span>].fillna(<span class="str">"UNKNOWN"</span>, inplace=<span class="kw">True</span>)
+            </div>
+          </li>
+          <li><b>الطريقة (3): الاستبدال بأكثر القيم تكراراً — المنوال (<span dir="ltr">Mode Imputation</span>):</b>
+            <ul>
+              <li>تُعد الطريقة الأنسب لتعويض القيم المفقودة في <b>الحقول النوعية (الفئوية/النصية)</b> مثل عمود الجنس (<code dir="ltr">gender</code>):</li>
+            </ul>
+            <div class="code-box">
+mode_gender = data[<span class="str">'gender'</span>].mode()[<span class="num">0</span>]<br>
+data[<span class="str">'gender'</span>].fillna(mode_gender, inplace=<span class="kw">True</span>)
+            </div>
+          </li>
+          <li><b>الطريقة (4): الاستبدال بالمتوسط الحسابي (<span dir="ltr">Mean Imputation</span>):</b>
+            <ul>
+              <li>تُستخدم لتعويض القيم المفقودة في <b>الحقول الكمية (الرقمية)</b> مثل العمر (<code dir="ltr">age</code>)، ولكن <b>يُعاب عليها تأثرها بالقيم المتطرفة (<span dir="ltr">Outliers</span>)</b> (وفي حال وجود قيم متطرفة يُفضل استخدام الوسيط <code dir="ltr">median</code>):</li>
+            </ul>
+            <div class="code-box">
+data[<span class="str">'age'</span>].fillna(data[<span class="str">'age'</span>].mean(), inplace=<span class="kw">True</span>)
+            </div>
+          </li>
+          <li><b>الطريقة (5): الاستبدال بقيم مستنتجة من نموذج الانحدار (<span dir="ltr">Regression Imputation</span>):</b>
+            <ul>
+              <li>تُعد <b>أدق الطرق العلمية</b> عندما توجد علاقة خطية قوية بين العمود الذي يحتوي على قيم مفقودة وأعمدة أخرى مكتملة في الجدول؛ حيث نبني نموذج انحدار (<span dir="ltr">Regression Model</span>) يتنبأ بالقيمة المفقودة بناءً على بقية سمات الموظف.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- ==================== الوحدة الثالثة ==================== -->
+    <details>
+      <summary>الوحدة الثالثة: الطرق الأربع لاكتشاف ومعالجة القيم المتطرفة (Outliers) على بيانات السكري</summary>
+      <div class="details-body">
+        <h3>1) الطرق المرئية لاكتشاف القيم المتطرفة: (1) Box Plot و (2) Scatter Plot</h3>
+        <ul>
+          <li><b>الطريقة الأولى: باستخدام مخطط الصندوق (<span dir="ltr">Box Plot</span> — لمتغير واحد):</b>
+            <ul>
+              <li>نرسم مخطط الصندوق للعمود (مثل <code dir="ltr">BMI</code>) باستخدام <code dir="ltr">sns.boxplot(x=df['BMI'])</code>، فتظهر القيم المتطرفة كنقاط منفردة خارج الشوكة، ثم نقوم بإزالتها أو استبدالها بشرط منطقي:</li>
+            </ul>
+            <div class="code-box">
+sns.boxplot(x=df[<span class="str">'BMI'</span>])<br>
+<span class="cmt"># تنقية البيانات بالاحتفاظ بالقيم الواقعة ضمن النطاق الطبيعي فقط</span><br>
+df_clean = df[(df[<span class="str">'BMI'</span>] &gt; <span class="num">15</span>) &amp; (df[<span class="str">'BMI'</span>] &lt; <span class="num">50</span>)]
+            </div>
+          </li>
+          <li><b>الطريقة الثانية: باستخدام المخطط النقطي (<span dir="ltr">Scatter Plot</span> — لمتغيرين معاً):</b>
+            <ul>
+              <li>نرسم العلاقة بين حقلين كميين مثل (<code dir="ltr">BMI</code> و <code dir="ltr">BloodPressure</code>) باستخدام <code dir="ltr">plt.scatter(df['BMI'], df['BloodPressure'])</code>، فنلاحظ النقاط الشاذة التي تبتعد تماماً عن تجمع باقي النقاط في البعدين.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) الطرق الإحصائية الرياضية: (3) درجة Z-score و (4) المدى الربعي IQR</h3>
+        <div class="exam-alert">
+          <b>🔥🔥 قوانين ومسائل حسابية مؤكدة في الاختبار لاكتشاف القيم المتطرفة:</b>
+        </div>
+
+        <p><b>الطريقة الثالثة: استخدام الدرجة المعيارية (<span dir="ltr">Z-score</span>)</b></p>
+        <ul>
+          <li><b>المفهوم والقانون الرياضي:</b> تقيس درجة <span dir="ltr">Z-score</span> كم انحرافاً معيارياً تبتعد القيمة ($x$) عن المتوسط الحسابي ($\mu$):</li>
+        </ul>
+        <div class="math-box">
+          Z-score = ( data_point &minus; mean ) / std. deviation = ( x &minus; &mu; ) / &sigma;
+        </div>
+        <ul>
+          <li><b>قاعدة العتبة (<span dir="ltr">Threshold</span>):</b> عادةً نحدد عتبة <b><code dir="ltr">threshold_z = 3</code></b>؛ بحيث إن أي نقطة بيانات تزيد القيمة المطلقة لدرجتها المعيارية عن 3 (أي <b>$|Z| > 3$</b>، بمعنى $Z > +3$ أو $Z < -3$) تُصنف كـ <b>قيمة متطرفة (<span dir="ltr">Outlier</span>)</b> ويتم حذفها!</li>
+        </ul>
+        <div class="step-box">
+          <b>مثال حسابي يدوي على Z-score:</b> إذا كان متوسط عمود هو $\mu = 50$ والانحراف المعياري $\sigma = 10$، فهل القيمة $x = 85$ متطرفة عند عتبة $3$؟<br>
+          • نحسب: $Z = (85 - 50) \div 10 = 35 \div 10 = \mathbf{3.5}$.<br>
+          • بما أن $3.5 > 3$، إذن القيمة $85$ هي <b>قيمة متطرفة (<span dir="ltr">Outlier</span>)</b>!
+        </div>
+        <div class="code-box">
+<span class="kw">from</span> scipy <span class="kw">import</span> stats<br>
+<span class="kw">import</span> numpy <span class="kw">as</span> np<br><br>
+z = np.abs(stats.zscore(df[<span class="str">'Age'</span>]))   <span class="cmt"># حساب القيمة المطلقة لدرجة Z-score لكل عنصر</span><br>
+threshold_z = <span class="num">3</span><br>
+outlier_indices = np.where(z &gt; threshold_z)[<span class="num">0</span>] <span class="cmt"># استخراج مواقع القيم المتطرفة</span><br>
+no_outliers_df = df.drop(outlier_indices)       <span class="cmt"># حذف الصفوف المتطرفة</span>
+        </div>
+
+        <p><b>الطريقة الرابعة: استخدام المدى الربعي (<span dir="ltr">Interquartile Range - IQR</span>)</b></p>
+        <ul>
+          <li><b>الخطوات والقوانين الرياضية لحساب حدود القيم المتطرفة بـ <span dir="ltr">IQR</span>:</b>
+            <ol>
+              <li>نحسب الربع الأول ($Q_1 = 25\%$) والربع الثالث ($Q_3 = 75\%$).</li>
+              <li>نحسب المدى الربعي: $\text{IQR} = Q_3 - Q_1$.</li>
+              <li>نحسب <b>الحد الأدنى المسموح به (<span dir="ltr">Lower Bound</span>)</b> و<b>الحد الأعلى المسموح به (<span dir="ltr">Upper Bound</span>)</b> بضرب $\text{IQR}$ في المعامل الثابت <b>$1.5$</b>:</li>
+            </ol>
+          </li>
+        </ul>
+        <div class="math-box">
+          Lower Bound = Q<sub>1</sub> &minus; (1.5 &times; IQR) &nbsp;&nbsp;|&nbsp;&nbsp; Upper Bound = Q<sub>3</sub> + (1.5 &times; IQR)
+        </div>
+        <div class="step-box">
+          <b>مثال حسابي يدوي كامل على طريقة IQR (مهم جداً للاختبار!):</b><br>
+          إذا كان الربع الأول لعمود البيانات $Q_1 = 20$، والربع الثالث $Q_3 = 40$:<br>
+          1) <b>المدى الربعي:</b> $\text{IQR} = 40 - 20 = \mathbf{20}$.<br>
+          2) <b>مقدار الهامش:</b> $1.5 \times \text{IQR} = 1.5 \times 20 = \mathbf{30}$.<br>
+          3) <b>الحد الأدنى (<span dir="ltr">Lower</span>):</b> $Q_1 - 30 = 20 - 30 = \mathbf{-10}$.<br>
+          4) <b>الحد الأعلى (<span dir="ltr">Upper</span>):</b> $Q_3 + 30 = 40 + 30 = \mathbf{70}$.<br>
+          • <b>الاستنتاج:</b> أي قيمة في البيانات <b>أقل من $-10$ أو أكبر من $70$</b> تُعتبر <b>قيمة متطرفة (<span dir="ltr">Outlier</span>)</b>!
+        </div>
+        <div class="code-box">
+Q1 = df[<span class="str">'BMI'</span>].quantile(<span class="num">0.25</span>)<br>
+Q3 = df[<span class="str">'BMI'</span>].quantile(<span class="num">0.75</span>)<br>
+IQR = Q3 - Q1<br><br>
+lower = Q1 - <span class="num">1.5</span> * IQR<br>
+upper = Q3 + <span class="num">1.5</span> * IQR<br><br>
+<span class="cmt"># الاحتفاظ فقط بالصفوف الطبيعية الواقعة بين الحد الأدنى والحد الأعلى</span><br>
+df_filtered = df[(df[<span class="str">'BMI'</span>] &gt;= lower) &amp; (df[<span class="str">'BMI'</span>] &lt;= upper)]
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- التبويب الثاني: جداول المقارنات والمعادلات -->
+  <section id="tables" class="panel">
+    <div class="card">
+      <h2>1. مقارنة الأنواع الثلاثة للقيم المفقودة (MCAR vs MAR vs MNAR)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>نوع الفقدان</th>
+            <th>الاختصار الكامل</th>
+            <th>سبب الفقدان وعلاقته بالمتغيرات</th>
+            <th>درجة الخطورة والتحيز</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1. عشوائي تماماً</b></td>
+            <td dir="ltr"><b>MCAR</b><br><small>Missing Completely at Random</small></td>
+            <td>عشوائي بالكامل؛ <b>لا يعتمد</b> على أي متغير آخر في البيانات ولا على قيمة المتغير المفقود نفسه.</td>
+            <td><b>الأقل ضرراً؛</b> لا يسبب تحيزاً عند الحذف أو التعويض.</td>
+          </tr>
+          <tr>
+            <td><b>2. عشوائي</b></td>
+            <td dir="ltr"><b>MAR</b><br><small>Missing at Random</small></td>
+            <td><b>يرتبط بمتغير آخر مسجل ومعروف</b> في البيانات (وليس بقيمة المتغير المفقود نفسه).</td>
+            <td>متوسط الخطورة؛ قد يسبب <b>بعض التحيز</b>.</td>
+          </tr>
+          <tr>
+            <td><b>3. غير عشوائي</b></td>
+            <td dir="ltr"><b>MNAR</b><br><small>Missing Not at Random</small></td>
+            <td><b>يرتبط بقيمة المتغير المفقود نفسه</b> أو بعامل خارجي غير معروف.</td>
+            <td><b>الأكثر إشكالية وخطورة؛</b> يسبب تحيزاً كبيراً في التحليل.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>2. ملخص طرق معالجة القيم المفقودة وطرق اكتشاف القيم المتطرفة</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>العملية / الطريقة</th>
+            <th>الدالة أو المعادلة الرياضية</th>
+            <th>متى نستخدمها وأهم ملاحظاتها</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>حذف القيم المفقودة</b></td>
+            <td dir="ltr"><code>df.dropna(axis=0/1, how="all")</code></td>
+            <td>حذف الصفوف أو الأعمدة المفقودة (<code dir="ltr">how="all"</code> يحذف فقط إذا كانت كل القيم مفقودة).</td>
+          </tr>
+          <tr>
+            <td><b>التعويض بالمنوال (<span dir="ltr">Mode</span>)</b></td>
+            <td dir="ltr"><code>df['c'].fillna(df['c'].mode()[0])</code></td>
+            <td>الطريقة المثلى لتعويض القيم المفقودة في <b>الأعمدة النوعية (الفئوية/النصية)</b>.</td>
+          </tr>
+          <tr>
+            <td><b>التعويض بالمتوسط (<span dir="ltr">Mean</span>)</b></td>
+            <td dir="ltr"><code>df['c'].fillna(df['c'].mean())</code></td>
+            <td>لتعويض <b>الأعمدة الكمية (الرقمية)</b> الخالية من القيم المتطرفة.</td>
+          </tr>
+          <tr>
+            <td><b>كشف المتطرف بـ <span dir="ltr">Z-score</span></b></td>
+            <td dir="ltr">$Z = \frac{x - \mu}{\sigma}$ &nbsp; (<code dir="ltr">stats.zscore</code>)</td>
+            <td>تُعتبر القيمة متطرفة إذا كانت $|Z| > 3$ (<code dir="ltr">threshold_z = 3</code>).</td>
+          </tr>
+          <tr>
+            <td><b>كشف المتطرف بـ <span dir="ltr">IQR</span></b></td>
+            <td dir="ltr">$\text{Lower} = Q_1 - 1.5\text{IQR}$<br>$\text{Upper} = Q_3 + 1.5\text{IQR}$</td>
+            <td>تُعتبر القيمة متطرفة إذا كانت أصغر من <code dir="ltr">Lower</code> أو أكبر من <code dir="ltr">Upper</code>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- التبويب الثالث: قاموس المصطلحات والدوال -->
+  <section id="terms" class="panel">
+    <div class="card">
+      <h2>قاموس المصطلحات والدوال الشامل للفصل السابع</h2>
+      <p class="muted">جميع المفاهيم والدوال البرمجية الخاصة بتحسين جودة البيانات ومعالجة المفقود والمتطرف:</p>
+      <div id="termsGrid" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- التبويب الرابع: البطاقات التعليمية -->
+  <section id="cards" class="panel">
+    <div class="card">
+      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
+      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
+      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
+        <div class="term" id="flashTerm"></div>
+        <div class="answer" id="flashAnswer" hidden></div>
+        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="prevCard">السابق</button>
+        <span id="cardCount" class="muted"></span>
+        <button class="btn primary" id="nextCard">التالي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- التبويب الخامس: الاختبار الذاتي العشوائي -->
+  <section id="quiz" class="panel">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2>الاختبار الشامل المتغير للفصل السابع (25 سؤالاً) <span class="badge-new">ترتيب عشوائي ذكي 🎲</span></h2>
+          <p class="muted">يختبر فهمك لـ (MCAR, MAR, MNAR)، دوال dropna و fillna، وحسابات Z-score و IQR مع تصحيح وتعليل فوري!</p>
+        </div>
+        <div class="score" id="score">النتيجة: 0 / 25</div>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="quizArea"></div>
+      <div class="row">
+        <button class="btn" id="resetQuiz">إعادة الاختبار بترتيب عشوائي جديد 🔀</button>
+        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+      </div>
+      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
+    </div>
+  </section>
+</main>
+
+<footer>مبني بالكامل (100%) على محتوى الفصل السابع (تحسين جودة البيانات) من مقرر تحليل وتمثيل البيانات</footer>
+
+<script>
+const terms = [
+  ["Garbage In, Garbage Out (GIGO)", "قاعدة أساسية في جودة البيانات تعني أن إدخال بيانات رديئة وغير نظيفة إلى نظام التحليل سيؤدي حتماً إلى مخرجات وقرارات خاطئة."],
+  ["MCAR (Missing Completely at Random)", "قيم مفقودة بشكل عشوائي تماماً: لا يعتمد فقدانها على أي متغير آخر ولا على قيمة المتغير نفسه، وهي الأقل ضرراً ولا تسبب تحيزاً."],
+  ["MAR (Missing at Random)", "قيم مفقودة بشكل عشوائي: يرتبط سبب فقدانها بمتغير آخر مسجل في البيانات (وليس بالمتغير المفقود نفسه)، وقد تسبب بعض التحيز."],
+  ["MNAR (Missing Not at Random)", "قيم مفقودة بشكل غير عشوائي: يرتبط سبب فقدانها بقيمة المتغير المفقود نفسه أو بعامل غير معروف، وهي الأكثر إشكالية وتحيزاً."],
+  ["Redundant / Duplicate Data", "البيانات المتكررة أو الزائدة عن الحاجة: تكرار نفس العينة (الصف) أو وجود أعمدة مكررة المعنى، وتسبب تحيزاً في النماذج."],
+  ["Inconsistent Data", "البيانات غير المتسقة: تعارض أو اختلاف في طريقة ترميز أو كتابة نفس المعلومة (مثل اختلاف صيغ التواريخ أو ترميز الجنس)."],
+  ["Outliers (القيم المتطرفة / الشاذة)", "نقاط بيانات تبتعد بشكل كبير وشاذ عن بقية القيم الطبيعية في العينة، وتندرج تحت البيانات المشوشة (Noisy Data)."],
+  ["data.isnull().sum()", "كود في Pandas يحسب مجموع القيم المفقودة (NaN) في كل عمود من أعمدة الـ DataFrame."],
+  ["data.dropna(how='all')", "دالة حذف القيم المفقودة؛ وعند تمرير المعامل how='all' لا تحذف الصف إلا إذا كانت جميع قيمه بالكامل مفقودة."],
+  ["data.fillna(value, inplace=True)", "دالة استبدال وتعويض القيم المفقودة بقيمة محددة (سواء قيمة ثابتة، أو المتوسط الحسابي، أو المنوال)."],
+  ["Regression Imputation", "تعويض القيم المفقودة باستخدام نموذج انحدار يتنبأ بالقيمة المفقودة بناءً على علاقتها الخطية ببقية المتغيرات."],
+  ["Z-score for Outliers", "معادلة إحصائية لكشف القيم المتطرفة: Z = (x - mean) / std، وتُحسب بـ stats.zscore() مع عتبة قياسية threshold_z = 3."],
+  ["IQR Method for Outliers", "طريقة المدى الربعي لكشف القيم المتطرفة: تحسب الحد الأدنى (Q1 - 1.5*IQR) والحد الأعلى (Q3 + 1.5*IQR)."]
+];
+
+const cards = [
+  ["ما هي الجوانب (الأبعاد) الستة الرئيسية لجودة البيانات؟", "1) الدقة (Accuracy).\n2) الاكتمال (Completeness).\n3) الاتساق (Consistency).\n4) الموثوقية (Reliability).\n5) المرجعية / الحداثة (Timeliness).\n6) الوضوح والتوضيح (Clarity)."],
+  ["ما هي مشاكل جودة البيانات الست التي تواجه محلل البيانات؟", "1) بيانات غير مكتملة/مفقودة (Incomplete/Missing).\n2) بيانات مشوشة (Noisy).\n3) بيانات غير متسقة (Inconsistent).\n4) بيانات غير صالحة (Invalid).\n5) بيانات متكررة (Redundant).\n6) بيانات غير صحيحة (Incorrect)."],
+  ["ماذا تعني مقولة (Garbage In, Garbage Out - GIGO) في علم البيانات؟", "تعني أنه إذا قمت بتغذية نموذج التحليل أو تعلم الآلة ببيانات معيبة ومنخفضة الجودة، فستحصل حتماً على نتائج وتنبؤات خاطئة مهما كانت قوة الخوارزمية."],
+  ["ما هي الأنواع (التصنيفات) الثلاثة للقيم المفقودة؟", "1) مفقودة بشكل عشوائي تماماً (MCAR).\n2) مفقودة بشكل عشوائي (MAR).\n3) مفقودة بشكل غير عشوائي (MNAR)."],
+  ["ما الفرق الدقيق بين (MCAR) و (MAR) و (MNAR) من حيث سبب الفقدان والخطورة؟", "• MCAR: لا يعتمد الفقدان على أي متغير (الأقل ضرراً ولا تسبب تحيزاً).\n• MAR: يرتبط الفقدان بمتغير آخر معروف ومسجل في البيانات (قد تسبب بعض التحيز).\n• MNAR: يرتبط الفقدان بقيمة المتغير المفقود نفسه أو بعامل مجهول (الأكثر خطورة وإشكالية وتحيزاً)."],
+  ["ما المقصود بالبيانات غير المتسقة (Inconsistent Data)؟ مع ذكر مثال.", "هي وجود تناقض أو اختلاف في طريقة كتابة أو ترميز نفس المعلومة داخل البيانات (مثل كتابة اسم الدولة مرة KSA ومرة Saudi Arabia، أو وجود تاريخ تخرج قبل تاريخ الميلاد)."],
+  ["كيف نكتشف عدد القيم المفقودة في كل عمود من أعمدة الـ DataFrame برمجياً؟", "باستخدام الكود:\ndata.isnull().sum()\n(أو من خلال فحص عدد القيم Non-Null في دالة data.info())."],
+  ["ما هي الطرق الخمس لمعالجة القيم المفقودة؟", "1) الحذف (dropna).\n2) الاستبدال بقيمة ثابتة (fillna).\n3) الاستبدال بالمنوال - الأكثر تكراراً (Mode).\n4) الاستبدال بالمتوسط الحسابي (Mean).\n5) الاستبدال بقيم مستنتجة من نموذج الانحدار (Regression)."],
+  ["ما الفرق بين: data.dropna() ، و data.dropna(axis=1) ، و data.dropna(how='all')؟", "• data.dropna(): يحذف أي صف يحتوي على قيمة مفقودة واحدة على الأقل.\n• data.dropna(axis=1): يحذف أي عمود يحتوي على قيمة مفقودة.\n• data.dropna(how='all'): يحذف الصف فقط إذا كانت (جميع) خلاياه مفقودة بالكامل."],
+  ["متى نستخدم التعويض بالمنوال (Mode) ومتى نستخدم التعويض بالمتوسط الحسابي (Mean) لمعالجة القيم المفقودة؟", "• بالمنوال (Mode): مع البيانات النوعية (الفئوية/النصية) مثل الجنس data['gender'].fillna(data['gender'].mode()[0]).\n• بالمتوسط (Mean): مع البيانات الكمية (الرقمية) الخالية من القيم المتطرفة مثل العمر data['age'].fillna(data['age'].mean())."],
+  ["ما هو العيب الرئيسي لتعويض القيم المفقودة بالمتوسط الحسابي (Mean)؟ وما هي الطريقة الأدق للبيانات ذات الارتباط الخطي؟", "• عيب المتوسط: يتأثر بشدة بالقيم المتطرفة (Outliers).\n• الطريقة الأدق للبيانات الخطية: الاستبدال باستخدام نموذج الانحدار (Regression Imputation)."],
+  ["ما هي الطرق الأربع لاكتشاف القيم المتطرفة (Outliers) في البيانات؟", "طريقتان مرئيتان وطريقتان إحصائيتان:\n1) مخطط الصندوق (Box Plot).\n2) المخطط النقطي (Scatter Plot).\n3) الدرجة المعيارية (Z-score).\n4) المدى الربعي (IQR)."],
+  ["كيف نكتشف القيم المتطرفة باستخدام (Box Plot) و (Scatter Plot)؟", "• Box Plot: يكشف القيم المتطرفة في متغير واحد كنقاط خارجة عن الشوكة (Whiskers).\n• Scatter Plot: يكشف القيم المتطرفة ثنائية البعد (بين متغيرين معاً) كنقاط شاذة بعيدة عن تجمع البيانات."],
+  ["ما هي معادلة الدرجة المعيارية (Z-score)؟ وما هي قيمة العتبة (Threshold) الشائعة لاعتبار القيمة متطرفة؟", "• المعادلة: Z = (data_point - mean) / std. deviation\n• العتبة الشائعة: threshold_z = 3 (أي إذا كانت |Z| > 3 تعتبر القيمة متطرفة)."],
+  ["[مسألة حسابية] إذا كان المتوسط الحسابي لعمود هو 100 والانحراف المعياري هو 15، فكم تبلغ درجة Z-score للقيمة 160؟ وهل هي متطرفة؟", "Z = (160 - 100) / 15 = 60 / 15 = 4.\nبما أن 4 > 3، إذن القيمة 160 هي قيمة متطرفة (Outlier)."],
+  ["ما هي الدالة البرمجية المستخدمة لحساب Z-score في البايثون؟ ومن أي مكتبة نستوردها؟", "الدالة هي: stats.zscore(df['col'])\nونستوردها من مكتبة: from scipy import stats"],
+  ["ما هما المعادلتان لحساب الحد الأدنى (Lower) والحد الأعلى (Upper) لكشف القيم المتطرفة بطريقة المدى الربعي (IQR)؟", "• أولاً نحسب: IQR = Q3 - Q1\n• الحد الأدنى: Lower = Q1 - (1.5 * IQR)\n• الحد الأعلى: Upper = Q3 + (1.5 * IQR)\n(وأي قيمة أصغر من Lower أو أكبر من Upper هي قيمة متطرفة)."],
+  ["[مسألة حسابية] إذا كان Q1 = 10 و Q3 = 30، فاحسبي الحد الأدنى والحد الأعلى للقيم الطبيعية بطريقة IQR.", "1) IQR = 30 - 10 = 20.\n2) 1.5 * IQR = 1.5 * 20 = 30.\n3) الحد الأدنى (Lower) = 10 - 30 = -20.\n4) الحد الأعلى (Upper) = 30 + 30 = 60.\n(أي قيمة خارج الفترة [-20, 60] هي متطرفة)."],
+  ["كيف نكتب شرطاً برمجياً في Pandas للاحتفاظ فقط بالصفوف الطبيعية الواقعة بين الحد الأدنى (lower) والحد الأعلى (upper) لعمود BMI؟", "df_clean = df[(df['BMI'] >= lower) & (df['BMI'] <= upper)]"],
+  ["ماذا يفعل الكود التالي: np.where(z > 3)[0] عند اكتشاف القيم المتطرفة بطريقة Z-score؟", "يرجع مصفوفة تحتوي على أرقام فهارس (مواقع) الصفوف التي تتجاوز درجتها المعيارية العتبة 3 ليتم حذفها بـ df.drop()."],
+  ["تحت أي مشكلة من مشاكل جودة البيانات الست تندرج مشكلة (القيم المتطرفة - Outliers)؟", "تندرج تحت مشكلة البيانات المشوشة أو الصاخبة (Noisy Data)."],
+  ["ما خطورة بقاء البيانات المتكررة (Redundant / Duplicate Data) دون حذف قبل تدريب نماذج تعلم الآلة؟", "تؤدي إلى إهدار مساحة التخزين والوقت الحسابي، وتسبب تحيزاً في النموذج تجاه العينات المكررة."],
+  ["في الكود: data['salary'].fillna(0, inplace=True)، ماذا سيحدث لعمود الراتب؟", "سيتم استبدال جميع القيم المفقودة (NaN) في عمود الراتب بالرقم الثابت (0) وتثبيت التعديل في نفس الجدول."],
+  ["لماذا لا يصلح استخدام المتوسط الحسابي (Mean) لتعويض القيم المفقودة في عمود مثل 'gender' (الجنس: Male/Female)؟", "لأن عمود الجنس متغير نوعي (نصي/فئوي) لا يمكن جمع قيمه وحساب متوسطها، بل يجب تعويضه بالمنوال (Mode)."],
+  ["إذا امتنع المرضى ذوو الأوزان العالية جداً عن تسجيل أوزانهم في استبيان صحي بسبب حرجهم من وزنهم نفسه، فما نوع هذه القيم المفقودة؟", "تُصنف كـ MNAR (Missing Not at Random - مفقودة بشكل غير عشوائي) لأن سبب الفقدان يرتبط بقيمة المتغير المفقود نفسه."],
+  ["إذا سقطت ورقة استبيان واحدة من الباحث بسبب الرياح وضاعت بياناتها، فما نوع هذه القيم المفقودة؟", "تُصنف كـ MCAR (Missing Completely at Random - مفقودة بشكل عشوائي تماماً)."],
+  ["هل يجب دائماً حذف القيم المتطرفة (Outliers) فوراً دون فحصها؟", "لا؛ يجب أولاً التحقق مما إذا كانت ناتجة عن خطأ في القياس/الإدخال (فتُحذف أو تُصحح) أم أنها تمثل ظاهرة حقيقية نادرة ومهمة (مثل عملية احتيال مالي)."],
+  ["كيف نعوض القيم المفقودة في عمود 'age' بمتوسط الأعمار في سطر برمجي واحد؟", "data['age'].fillna(data['age'].mean(), inplace=True)"]
+];
+
+const masterQuestions = [
+  {q:"تشير القاعدة الشهيرة (Garbage In, Garbage Out - GIGO) في مجال تحليل البيانات وتعلم الآلة إلى أن:",o:["إدخال بيانات معيبة ومنخفضة الجودة سيؤدي حتماً إلى الحصول على نتائج وقرارات خاطئة","حذف جميع البيانات من القرص الصلب يسرع المعالج","البيانات المفقودة تزيد من دقة النماذج التنبؤية دائماً","الرسوم البيانية تغني عن تنظيف البيانات"],a:0,e:"تعني قاعدة GIGO أن جودة المخرجات تعتمد كلياً على جودة المدخلات؛ فالبيانات الرديئة تنتج قرارات رديئة."},
+  {q:"جميع ما يلي يُعد من الجوانب (الأبعاد) الستة لجودة البيانات كما وردت في الفصل السابع ما عدا:",o:["التكرار والضجيج (Redundancy and Noise)","الدقة (Accuracy) والاكتمال (Completeness)","الاتساق (Consistency) والموثوقية (Reliability)","المرجعية (Timeliness) والوضوح والتوضيح (Clarity)"],a:0,e:"الجوانب الستة لجودة البيانات هي: الدقة، الاكتمال، الاتساق، الموثوقية، المرجعية، والوضوح. أما التكرار والضجيج فهما من مشاكل البيانات."},
+  {q:"أي نوع من أنواع القيم المفقودة يُعد (الأقل ضرراً ولا يسبب تحيزاً في التحليل)، حيث يكون سبب الفقدان عشوائياً تماماً ولا يعتمد على أي متغير آخر؟",o:["MCAR (Missing Completely at Random - مفقودة بشكل عشوائي تماماً)","MAR (Missing at Random - مفقودة بشكل عشوائي)","MNAR (Missing Not at Random - مفقودة بشكل غير عشوائي)","Outliers (القيم المتطرفة)"],a:0,e:"النوع MCAR يحدث بشكل عشوائي تماماً دون ارتباط بأي متغير، ولذلك لا يسبب تحيزاً وهو الأقل ضرراً."},
+  {q:"أي نوع من أنواع القيم المفقودة يُعد (الأكثر إشكالية وخطورة ويسبب تحيزاً كبيراً)، حيث يرتبط سبب الفقدان بقيمة المتغير المفقود نفسه أو بعامل غير معروف؟",o:["MNAR (Missing Not at Random - مفقودة بشكل غير عشوائي)","MCAR (Missing Completely at Random)","MAR (Missing at Random)","Consistent Data"],a:0,e:"النوع MNAR يرتبط فيه الفقدان بقيمة المتغير المفقود نفسه (كإخفاء الدخل المرتفع جداً)، وهو الأكثر إشكالية وتحيزاً."},
+  {q:"عندما يرتبط سبب فقدان قيمة متغير معين بمتغير آخر (مسجل ومعروف في مجموعة البيانات) وليس بقيمة المتغير المفقود نفسه، فإن هذا يُصنف كـ:",o:["MAR (Missing at Random - مفقودة بشكل عشوائي)","MCAR (Missing Completely at Random)","MNAR (Missing Not at Random)","Duplicate Data"],a:0,e:"في MAR يعتمد احتمال الفقدان على متغيرات أخرى مرصودة ومسجلة لدينا في الجدول، وقد يسبب بعض التحيز."},
+  {q:"وجود اختلاف أو تناقض في طريقة كتابة أو ترميز نفس المعلومة في قاعدة البيانات (مثل كتابة الجنس مرة M/F ومرة Male/Female، أو وجود تاريخ انتهاء قبل تاريخ البداية) يُسمى:",o:["بيانات غير متسقة (Inconsistent Data)","بيانات مكتملة (Complete Data)","بيانات موثوقة (Reliable Data)","قيم عشوائية تماماً (MCAR)"],a:0,e:"عدم توحيد الترميز أو وجود تعارض منطقي بين الحقول هو تعريف البيانات غير المتسقة (Inconsistent Data)."},
+  {q:"ما هو الكود البرمجي الصحيح في مكتبة Pandas لحساب إجمالي عدد القيم المفقودة (NaN) في كل عمود من أعمدة الجدول data؟",o:["data.isnull().sum()","data.dropna().max()","data.fillna(0)","data.mode()[0]"],a:0,e:"الدالة data.isnull() تعطي True للقيم المفقودة، وتقوم .sum() بجمعها لحساب عدد القيم المفقودة في كل عمود."},
+  {q:"ما الفرق بين تنفيذ الكود data.dropna() وتنفيذ الكود data.dropna(how='all')؟",o:["dropna() يحذف الصف إذا كان فيه قيمة مفقودة واحدة على الأقل، بينما dropna(how='all') لا يحذف الصف إلا إذا كانت (جميع) قيمه مفقودة بالكامل","كلاهما يحذفان الأعمدة فقط ولا يحذفان الصفوف","how='all' يحذف الجدول بالكامل حتى لو لم توجد قيم مفقودة","لا يوجد معامل اسمه how في دالة dropna"],a:0,e:"الوضع الافتراضي هو how='any' (حذف الصف لوجود أي قيمة مفقودة)، بينما how='all' يشترط أن تكون كل خلايا الصف مفقودة لحذفه."},
+  {q:"لتعويض القيم المفقودة في عمود نوعي (فئوي/نصي) مثل عمود الجنس ('gender') بأكثر القيم تكراراً (المنوال)، ما هو الكود الصحيح؟",o:["data['gender'].fillna(data['gender'].mode()[0], inplace=True)","data['gender'].fillna(data['gender'].mean(), inplace=True)","data['gender'].dropna(axis=1)","data['gender'].zscore()"],a:0,e:"الحقول النوعية تُعوض بالقيمة الأكثر تكراراً (المنوال) عبر استخراجها بـ .mode()[0] وتمريرها لدالة .fillna()."},
+  {q:"لتعويض القيم المفقودة في عمود رقمي مثل العمر ('age') بالمتوسط الحسابي للأعمار، نستخدم الكود:",o:["data['age'].fillna(data['age'].mean(), inplace=True)","data['age'].fillna(0, inplace=True)","data['age'].dropna(how='all')","data['age'].isnull().sum()"],a:0,e:"تُستخدم الدالة .mean() لحساب المتوسط الحسابي للعمود الرقمي وتمريرها داخل .fillna() لتعويض القيم المفقودة."},
+  {q:"ما هو العيب الرئيسي لطريقة استبدال القيم المفقودة بالمتوسط الحسابي (Mean Imputation)؟ وما هي الطريقة الأدق عندما توجد علاقة خطية بين المتغيرات؟",o:["يتأثر المتوسط الحسابي بشدة بالقيم المتطرفة (Outliers)؛ والطريقة الأدق للبيانات الخطية هي الاستبدال باستخدام نموذج الانحدار (Regression Imputation)","المتوسط الحسابي يعمل مع النصوص فقط؛ والطريقة الأدق هي حذف الجدول","لا يوجد أي عيب للمتوسط الحسابي ولا يتأثر بالقيم المتطرفة","الطريقة الأدق هي وضع أصفار في جميع الأعمدة دائماً"],a:0,e:"يتأثر المتوسط الحسابي بالقيم المتطرفة، وتُعد طريقة الانحدار (Regression) الأدق عند وجود ارتباط خطي بين المتغيرات."},
+  {q:"ما هي الطرق الأربع المذكورة في الفصل السابع لاكتشاف القيم المتطرفة (Outliers) في البيانات؟",o:["1) مخطط الصندوق (Box Plot)، 2) المخطط النقطي (Scatter Plot)، 3) الدرجة المعيارية (Z-score)، 4) المدى الربعي (IQR)","1) المخطط الدائري، 2) جدول التقاطع، 3) الحذف، 4) الدمج","1) MCAR، 2) MAR، 3) MNAR، 4) GIGO","1) العنوان، 2) المحاور، 3) المفتاح، 4) الشبكة"],a:0,e:"طرق اكتشاف القيم المتطرفة أربع: طريقتان بصريتان (Box plot و Scatter plot) وطريقتان رياضيتان (Z-score و IQR)."},
+  {q:"ما هي المعادلة الرياضية لحساب الدرجة المعيارية (Z-score) لنقطة بيانات x بهدف اكتشاف القيم المتطرفة؟",o:["Z = (x - mean) / std. deviation","Z = Q3 - Q1","Z = max - min","Z = (x + mean) * variance"],a:0,e:"تقيس درجة Z-score بعد النقطة عن المتوسط الحسابي بوحدات الانحراف المعياري: (القيمة ناقص المتوسط) مقسوماً على الانحراف المعياري."},
+  {q:"[مسألة حسابية] إذا كان المتوسط الحسابي لعمود بيانات هو (60) والانحراف المعياري هو (10)، وكانت عتبة القيم المتطرفة هي (threshold_z = 3)، فأي قيمة مما يلي تُصنف كقيمة متطرفة (Outlier)؟",o:["القيمة 95 (لأن Z = (95 - 60) / 10 = 3.5 وهي أكبر من العتبة 3)","القيمة 60 (لأن Z = 0)","القيمة 70 (لأن Z = 1)","القيمة 80 (لأن Z = 2)"],a:0,e:"نحسب Z للقيمة 95: (95 - 60) / 10 = 35 / 10 = 3.5. وبما أن 3.5 > 3 فإنها قيمة متطرفة."},
+  {q:"من أي مكتبة في البايثون نستورد الدالة stats.zscore() لحساب الدرجة المعيارية؟",o:["من مكتبة scipy (from scipy import stats)","من مكتبة bokeh.models","من مكتبة matplotlib.pyplot","من مكتبة seaborn"],a:0,e:"توجد وحدة stats التي تضم الدالة zscore() داخل مكتبة الحسابات العلمية scipy."},
+  {q:"عند اكتشاف القيم المتطرفة بطريقة المدى الربعي (IQR)، كيف يتم حساب كلٍ من الحد الأدنى (Lower Bound) والحد الأعلى (Upper Bound)؟",o:["Lower = Q1 - (1.5 × IQR) ، و Upper = Q3 + (1.5 × IQR)","Lower = Q1 + IQR ، و Upper = Q3 - IQR","Lower = Mean - 3 ، و Upper = Mean + 3","Lower = Min ، و Upper = Max"],a:0,e:"في قاعدة IQR، نضرب المدى الربعي (IQR = Q3 - Q1) في المعامل 1.5، ونطرحه من Q1 للحد الأدنى ونجمعه مع Q3 للحد الأعلى."},
+  {q:"[مسألة حسابية] إذا كان الربع الأول لعمود البيانات Q1 = 30، والربع الثالث Q3 = 50، فما هما الحدان الأدنى (Lower) والأعلى (Upper) للقيم الطبيعية وفق طريقة IQR؟",o:["الحد الأدنى = 0 ، والحد الأعلى = 80 (لأن IQR = 20، و 1.5 × 20 = 30، فيكون 30-30=0 و 50+30=80)","الحد الأدنى = 20 ، والحد الأعلى = 60","الحد الأدنى = 30 ، والحد الأعلى = 50","الحد الأدنى = -50 ، والحد الأعلى = 100"],a:0,e:"نحسب أولاً: IQR = 50 - 30 = 20. ثم نضرب: 1.5 × 20 = 30. الحد الأدنى = 30 - 30 = 0، والحد الأعلى = 50 + 30 = 80."},
+  {q:"[مسألة حسابية] بناءً على السؤال السابق (حيث الحد الأدنى = 0 والحد الأعلى = 80 بطريقة IQR)، أي القيم التالية تُعتبر قيمة متطرفة (Outlier) يجب استبعادها؟",o:["القيمة 92 (لأنها أكبر من الحد الأعلى 80)","القيمة 40","القيمة 15","القيمة 75"],a:0,e:"أي قيمة تقع خارج الفترة [0, 80] (أصغر من 0 أو أكبر من 80) تُعد متطرفة، وبالتالي 92 قيمة متطرفة."},
+  {q:"كيف نستخدم دالة dropna() في مكتبة Pandas لحذف (الأعمدة) التي تحتوي على قيم مفقودة بدلاً من حذف الصفوف؟",o:["نمرر المعامل axis=1 (أي data.dropna(axis=1))","نمرر المعامل axis=0","نمرر المعامل inplace=False","نستخدم دالة fillna()"],a:0,e:"المحور الافتراضي هو الصفوف (axis=0)، ولحذف الأعمدة التي بها قيم مفقودة نمرر المعامل axis=1."},
+  {q:"لاستبدال جميع القيم المفقودة في عمود القسم 'department' بالنص الثابت 'UNKNOWN' مع حفظ التغيير في نفس الجدول، نكتب:",o:["data['department'].fillna('UNKNOWN', inplace=True)","data['department'].dropna('UNKNOWN')","data['department'].isnull('UNKNOWN')","pd.merge(data, 'UNKNOWN')"],a:0,e:"تُستخدم دالة fillna('UNKNOWN', inplace=True) لتعويض القيم المفقودة بقيمة نصية ثابتة في نفس الكائن."},
+  {q:"تندرج مشكلة وجود (القيم المتطرفة - Outliers) والأخطاء العشوائية في القياس تحت أي فئة من مشاكل جودة البيانات؟",o:["البيانات المشوشة / الصاخبة (Noisy Data)","البيانات المكتملة (Complete Data)","البيانات المرجعية (Timely Data)","البيانات الموثوقة (Reliable Data)"],a:0,e:"البيانات المشوشة (Noisy Data) هي البيانات التي تتضمن تباينات عشوائية كبيرة أو قيماً متطرفة شاذة (Outliers)."},
+  {q:"إذا وجدنا في جدول بيانات الموظفين أن نفس سجل الموظف (بنفس الرقم والاسم والراتب) مكرر 3 مرات، فما اسم هذه المشكلة في جودة البيانات؟",o:["بيانات متكررة / زائدة عن الحاجة (Redundant / Duplicate Data)","قيم مفقودة عشوائياً (MCAR)","درجة معيارية (Z-score)","مدى ربعي (IQR)"],a:0,e:"تكرار نفس العينات أو السجلات في قاعدة البيانات يُعرف بالبيانات المتكررة أو الزائدة عن الحاجة (Redundant / Duplicate Data)."},
+  {q:"أي رسم بياني يُستخدم في الفصل السابع لاكتشاف القيم المتطرفة بصرياً بين حقلين كميين معاً (مثل BMI و BloodPressure في بيانات السكري)؟",o:["المخطط النقطي (Scatter Plot)","المخطط الدائري (Pie Plot)","جدول التقاطع (Crosstab)","المدرج التكراري لعمود واحد"],a:0,e:"يكشف المخطط النقطي (plt.scatter) القيم المتطرفة ثنائية البعد التي تشذ عن العلاقة المشتركة بين متغيرين كميين."},
+  {q:"ماذا يُرجع الكود البرمجي التالي: np.where(z > 3) عندما تكون z هي مصفوفة القيم المطلقة للدرجات المعيارية Z-score؟",o:["يُرجع مواقع (فهارس / Indices) الصفوف التي تتجاوز درجتها المعيارية العتبة 3 (أي مواقع القيم المتطرفة)","يُرجع المتوسط الحسابي للجدول","يُرجع عدد الأعمدة النصية","يقوم برسم مخطط الصندوق"],a:0,e:"الدالة np.where(condition) في NumPy تُرجع فهارس (Indices) العناصر التي تحقق الشرط المحدد."},
+  {q:"بعد تحديد الحدود الطبيعية لعمود BMI باستخدام طريقة IQR (lower و upper)، ما هو الكود الصحيح لتنقية الجدول df والاحتفاظ بالبيانات الطبيعية فقط؟",o:["df_clean = df[(df['BMI'] >= lower) & (df['BMI'] <= upper)]","df_clean = df.fillna(lower + upper)","df_clean = df.dropna(axis=1)","df_clean = df[df['BMI'] > upper]"],a:0,e:"نستخدم التصفية المنطقية للاحتفاظ بالصفوف التي تكون قيمة BMI فيها أكبر من أو تساوي الحد الأدنى وأصغر من أو تساوي الحد الأعلى."}
+];
+
+const termsGrid = document.getElementById("termsGrid");
+terms.forEach(([en, ar]) => {
+  const d = document.createElement("div");
+  d.className = "card";
+  d.style.margin = "0";
+  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
+  termsGrid.appendChild(d);
+});
+
+let ci = 0, showAnswer = false;
+function renderCard() {
+  document.getElementById("flashTerm").textContent = cards[ci][0];
+  document.getElementById("flashAnswer").textContent = cards[ci][1];
+  document.getElementById("flashAnswer").hidden = !showAnswer;
+  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
+  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+}
+document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
+document.getElementById("flashcard").addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
+});
+document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
+document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
+renderCard();
+
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+let currentQuestions = [];
+let answers = {};
+
+function prepareShuffledQuiz() {
+  currentQuestions = shuffleArray(masterQuestions).map(item => {
+    const optsWithFlag = item.o.map((text, idx) => ({ text, isCorrect: idx === item.a }));
+    const shuffledOpts = shuffleArray(optsWithFlag);
+    return {
+      q: item.q,
+      o: shuffledOpts.map(x => x.text),
+      a: shuffledOpts.findIndex(x => x.isCorrect),
+      e: item.e
+    };
+  });
+}
+
+function renderQuiz() {
+  prepareShuffledQuiz();
+  const area = document.getElementById("quizArea");
+  area.innerHTML = "";
+  const letters = ["أ", "ب", "ج", "د"];
+  currentQuestions.forEach((item, i) => {
+    const box = document.createElement("div");
+    box.className = "qbox";
+    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
+    const opts = box.querySelector(".options");
+    item.o.forEach((opt, j) => {
+      const btn = document.createElement("button");
+      btn.className = "option";
+      btn.textContent = `${letters[j]}) ${opt}`;
+      btn.onclick = () => {
+        answers[i] = j;
+        [...opts.children].forEach((x, k) => {
+          x.classList.remove("correct", "wrong");
+          x.disabled = true;
+          if (k === item.a) x.classList.add("correct");
+          if (k === j && j !== item.a) x.classList.add("wrong");
+        });
+        const fb = document.getElementById("fb" + i);
+        fb.hidden = false;
+        fb.className = "feedback " + (j === item.a ? "good" : "bad");
+        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
+        updateScore();
+      };
+      opts.appendChild(btn);
+    });
+    area.appendChild(box);
+  });
+  updateScore();
+}
+
+function updateScore() {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
+  document.getElementById("score").textContent = `النتيجة: ${correct} / ${currentQuestions.length}`;
+  document.getElementById("progressBar").style.width = (Object.keys(answers).length / currentQuestions.length * 100) + "%";
+}
+
+document.getElementById("resetQuiz").onclick = () => {
+  answers = {};
+  document.getElementById("finalResult").textContent = "";
+  renderQuiz();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+document.getElementById("finishQuiz").onclick = () => {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
+  const pct = Math.round(correct / currentQuestions.length * 100);
+  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${currentQuestions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! أنتِ مستعدة تماماً للاختبار في هذا الفصل." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
+};
+
+renderQuiz();
+</script>
+</body>
+</html>

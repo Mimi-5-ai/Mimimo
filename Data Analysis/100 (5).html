@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الفصل السادس الشامل (100%) | تحليل وتمثيل البيانات</title>
+<style>
+:root{
+  --bg:#f0f5ff;
+  --card:#ffffff;
+  --ink:#0f172a;
+  --muted:#475569;
+  --accent:#1d4ed8;
+  --accent-dark:#1e3a8a;
+  --accent2:#dbeafe;
+  --line:#cbd5e1;
+  --good:#059669;
+  --good-bg:#ecfdf5;
+  --bad:#dc2626;
+  --bad-bg:#fef2f2;
+  --warn:#d97706;
+  --warn-bg:#fffbeb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
+header{background:linear-gradient(135deg,#0f172a,#1d4ed8);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(15,23,42,0.2)}
+.wrap{max-width:1040px;margin:auto;padding:0 16px}
+.eyebrow{opacity:.92;font-size:.9rem;background:rgba(255,255,255,0.16);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
+h1{margin:5px 0;font-size:clamp(1.5rem,4vw,2.25rem)}
+header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
+nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:var(--accent2);color:var(--accent-dark);font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
+nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
+nav button.active,.btn.primary{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+main .btn.primary{background:var(--accent);color:white}
+main{padding:22px 0 48px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(15,23,42,0.04)}
+h2{font-size:1.35rem;margin:0 0 12px;color:#0f172a}
+h3{font-size:1.08rem;margin:0 0 8px;color:var(--accent-dark)}
+small,.muted{color:var(--muted)}
+ul,ol{padding-right:22px;margin:8px 0}
+li{margin:6px 0}
+details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
+summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f8fafc;color:#0f172a;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
+details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
+.details-body{padding:16px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
+.badge-new{display:inline-block;background:var(--warn-bg);color:var(--warn);border:1px solid #fcd34d;font-size:.78rem;padding:1px 8px;border-radius:6px;margin-right:6px;font-weight:bold}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#eff6ff;color:#1e3a8a;font-weight:bold}
+tr:last-child td{border-bottom:0}
+.note{border-right:4px solid var(--accent);padding:10px 14px;background:#eff6ff;border-radius:8px;margin:10px 0}
+.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
+.step-box{background:#f0fdf4;border:1px solid #86efac;border-right:4px solid var(--good);border-radius:10px;padding:12px 16px;margin:10px 0;font-size:.95rem}
+.code-box{background:#0f172a;color:#e2e8f0;padding:14px 18px;border-radius:12px;font-family:Consolas,Monaco,monospace;direction:ltr;text-align:left;overflow-x:auto;margin:10px 0;border:1px solid #334155;line-height:1.65;font-size:.91rem}
+.code-box .kw{color:#38bdf8;font-weight:bold}
+.code-box .str{color:#4ade80}
+.code-box .num{color:#f472b6}
+.code-box .cmt{color:#94a3b8;font-style:italic}
+.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
+.options{display:grid;gap:8px;margin-top:12px}
+.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
+.option:hover:not(:disabled){border-color:var(--accent);background:#eff6ff}
+.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
+.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
+.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
+.feedback.good{color:var(--good);background:var(--good-bg)}
+.feedback.bad{color:var(--bad);background:var(--bad-bg)}
+.progress{height:10px;background:#cbd5e1;border-radius:9px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
+.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#dbeafe);border:2px solid #93c5fd;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
+.flashcard:hover{transform:scale(1.005)}
+.flashcard .term{font-size:1.32rem;font-weight:bold;color:#1e3a8a}
+.flashcard .answer{margin-top:16px;font-size:1.04rem;color:#0f172a;background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04);white-space:pre-line}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
+@media(max-width:600px){
+  .card{padding:14px}
+  nav button{flex:1 1 calc(50% - 8px);text-align:center}
+  .flashcard{min-height:200px;padding:18px}
+  th,td{padding:8px 10px;font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">نسخة شاملة ومحدثة 100% • مقرر تحليل وتمثيل البيانات</div>
+    <h1>الفصل السادس: تمثيل البيانات – الجزء الثالث (مكتبة Bokeh التفاعلية)</h1>
+    <p>يغطي أساسيات مكتبة Bokeh والرموز الرسومية (Glyphs)، رسم الخطوط والنقاط والأعمدة المكدسة، تخطيط الرسوم (Layouts: row, column, gridplot, layout)، الحواشي ومفتاح الرسم، شريط الأدوات (Toolbar)، التلميحات (Tooltips: $ vs @)، والمفتاح التفاعلي (hide vs mute)</p>
+    <nav>
+      <button class="active" data-tab="summary">الشرح والأكواد الشاملة (100%)</button>
+      <button data-tab="tables">ملخص الدوال والمقارنات</button>
+      <button data-tab="terms">قاموس الدوال والرموز</button>
+      <button data-tab="cards">البطاقات (28)</button>
+      <button data-tab="quiz">الاختبار العشوائي (25)</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="summary" class="panel active">
+    <div class="card">
+      <h2>خريطة الفصل السادس (الوحدات الثلاث الكاملة)</h2>
+      <div class="grid">
+        <div>
+          <span class="tag">الوحدة الأولى</span>
+          <h3>أساسيات مكتبة Bokeh والرسوم الأساسية</h3>
+          <p>مفهوم <span dir="ltr">Bokeh</span> وأدوات التحكم التفاعلية، مفهوم <span dir="ltr">Glyphs</span>، العناصر الأساسية (<span dir="ltr">figure, show, output_notebook</span>)، رسم الخطوط (<span dir="ltr">line, multi_line, vline_stack</span>)، النقاط (<span dir="ltr">circle, scatter</span>)، والأعمدة (<span dir="ltr">vbar, vbar_stack, hbar_stack</span>).</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثانية</span>
+          <h3>تخطيط الرسوم (Layouts) والحواشي (Annotations)</h3>
+          <p>تنظيم الرسوم من <span dir="ltr">bokeh.layouts</span> (<span dir="ltr">row, column, gridplot, layout</span>)، التحكم بخصائص العنوان (<span dir="ltr">p.title</span>)، والتحكم بمفتاح الرسم (<span dir="ltr">legend_label, legend_group, LegendItem</span>).</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثالثة</span>
+          <h3>شريط الأدوات، التلميحات (Tooltips)، والمفتاح التفاعلي</h3>
+          <p>تحديد موضع شريط الأدوات (<span dir="ltr">toolbar_location</span>) وإضافة الأدوات بـ <span dir="ltr">add_tools()</span>، إعداد <span dir="ltr">Tooltips</span> والفرق الجوهري بين الرمز (<span dir="ltr">$</span>) والرمز (<span dir="ltr">@</span>)، وتفعيل المفتاح التفاعلي (<span dir="ltr">click_policy: hide / mute</span>).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== الوحدة الأولى ==================== -->
+    <details open>
+      <summary>الوحدة الأولى: أساسيات مكتبة Bokeh، مفهوم الـ Glyphs، ورسم الخطوط والنقاط والأعمدة المكدسة</summary>
+      <div class="details-body">
+        <h3>1) نظرة عامة على مكتبة (<span dir="ltr">Bokeh</span>) ومفهوم الـ (<span dir="ltr">Glyphs</span>)</h3>
+        <ul>
+          <li><b>مفهوم مكتبة <span dir="ltr">Bokeh</span>:</b> هي مكتبة بايثون متقدمة متخصصة في إنشاء <b>رسوم بيانية تفاعلية (<span dir="ltr">Interactive Visualizations</span>)</b> موجهة لمتصفحات الويب الحديثة؛ حيث تتيح للمستخدم التفاعل المباشر مع الرسم (التكبير، التحريك، التحديد، وإظهار التلميحات عند تمرير الفأرة).</li>
+          <li><b>أدوات التحكم التفاعلية الافتراضية على يمين الرسم في <span dir="ltr">Bokeh</span>:</b>
+            <ol>
+              <li><b>أداة التحريك (<span dir="ltr">Pan Tool</span>):</b> لتحريك منطقة الرسم في كافة الاتجاهات.</li>
+              <li><b>أداة التكبير بالصندوق (<span dir="ltr">Box Zoom Tool</span>):</b> لتكبير منطقة محددة برسم مستطيل حولها.</li>
+              <li><b>أداة التكبير بعجلة الفأرة (<span dir="ltr">Wheel Zoom Tool</span>):</b> للتكبير والتصغير باستخدام عجلة الفأرة.</li>
+              <li><b>أداة الحفظ (<span dir="ltr">Save Tool</span>):</b> لحفظ لقطة من الرسم البياني كصورة <span dir="ltr">PNG</span>.</li>
+              <li><b>أداة إعادة الضبط (<span dir="ltr">Reset Tool</span>):</b> لإعادة الرسم إلى وضعه وأبعاده الأصلية.</li>
+            </ol>
+          </li>
+          <li><b>ما المقصود بالـ <span dir="ltr">Glyphs</span> في مكتبة <span dir="ltr">Bokeh</span>؟</b>
+            <ul>
+              <li>تُسمى الأشكال الهندسية والرموز الرسومية الأساسية التي تُبنى منها المخططات في <span dir="ltr">Bokeh</span> باسم <b><span dir="ltr">Glyphs</span></b>، ومن أشهر أمثلتها: (<b>الخطوط <span dir="ltr">Line</span>، الدوائر <span dir="ltr">Circle</span>، المربعات <span dir="ltr">Square</span>، المثلثات <span dir="ltr">Triangle</span>، النجمة <span dir="ltr">Asterisk</span>، التقاطع <span dir="ltr">Cross / X</span>، والمعين <span dir="ltr">Diamond</span></b>).</li>
+            </ul>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) العناصر الثلاثة الأساسية للرسم في (<span dir="ltr">bokeh.plotting</span>)</h3>
+        <div class="exam-alert">
+          <b>🔥 سؤال أساسي ومؤكد في الاختبار:</b> للرسم باستخدام <span dir="ltr">Bokeh</span> داخل بيئة <span dir="ltr">Jupyter Notebook</span>، نستورد <b>3 دوال أساسية</b> من الوحدة <b><code dir="ltr">bokeh.plotting</code></b>:<br>
+          1) <b><code dir="ltr">figure()</code>:</b> لإنشاء كائن الشكل البياني وتحديد عنوانه وأبعاده وأسماء محاوره.<br>
+          2) <b><code dir="ltr">output_notebook()</code>:</b> لتوجيه مخرجات الرسم التفاعلي لتظهر مباشرةً داخل خلية <span dir="ltr">Jupyter Notebook</span> (بينما تُستخدم <code dir="ltr">output_file('name.html')</code> لحفظها في ملف ويب مستقل).<br>
+          3) <b><code dir="ltr">show(p)</code>:</b> لعرض وإظهار الشكل النهائي <code dir="ltr">p</code> على الشاشة.
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) رسم الخطوط: (<span dir="ltr">line</span>)، (<span dir="ltr">multi_line</span>)، و (<span dir="ltr">vline_stack</span>)</h3>
+        <ul>
+          <li><b>1. رسم خط واحد (<code dir="ltr">p.line</code>):</b> يرسم خطاً يربط بين إحداثيات <code dir="ltr">x</code> و <code dir="ltr">y</code> مع تحديد عرض الخط بـ <code dir="ltr">line_width</code> ولونه بـ <code dir="ltr">line_color</code>.</li>
+          <li><b>2. رسم عدة خطوط معاً (<code dir="ltr">p.multi_line</code>):</b> يرسم عدة خطوط في أمر واحد بتمرير <b>قائمة من القوائم لإحداثيات $X$ وقائمة من القوائم لإحداثيات $Y$</b>.</li>
+          <li><b>3. رسم خطوط مكدسة تشترك في المحور الأفقي (<code dir="ltr">p.vline_stack</code>):</b> تُستخدم عندما يكون لدينا كائن مصدر بيانات (<code dir="ltr">ColumnDataSource</code>) ونريد تكديس عدة أعمدة صعوداً فوق بعضها على نفس المحور الأفقي <code dir="ltr">x</code>!</li>
+        </ul>
+        <div class="code-box">
+<span class="kw">from</span> bokeh.plotting <span class="kw">import</span> figure, show, output_notebook<br>
+<span class="kw">from</span> bokeh.models <span class="kw">import</span> ColumnDataSource<br>
+output_notebook()<br><br>
+<span class="cmt"># 1. رسم خط بسيط بدالة p.line()</span><br>
+p = figure(title=<span class="str">"Simple Line Plot"</span>, x_axis_label=<span class="str">'x'</span>, y_axis_label=<span class="str">'y'</span>, width=<span class="num">500</span>, height=<span class="num">350</span>)<br>
+p.line([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>], [<span class="num">6</span>, <span class="num">7</span>, <span class="num">2</span>, <span class="num">4</span>, <span class="num">5</span>], line_width=<span class="num">2</span>, color=<span class="str">"navy"</span>)<br>
+show(p)<br><br>
+<span class="cmt"># 2. رسم عدة خطوط بدالة p.multi_line()</span><br>
+p2 = figure(width=<span class="num">500</span>, height=<span class="num">350</span>)<br>
+p2.multi_line(xs=[[<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>], [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>]], ys=[[<span class="num">2</span>, <span class="num">5</span>, <span class="num">3</span>], [<span class="num">4</span>, <span class="num">1</span>, <span class="num">6</span>]], color=[<span class="str">"red"</span>, <span class="str">"green"</span>], line_width=<span class="num">3</span>)<br><br>
+<span class="cmt"># 3. رسم خطوط مكدسة تشترك في المحور الأفقي بدالة p.vline_stack()</span><br>
+source = ColumnDataSource(data=<span class="kw">dict</span>(x=[<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>], y1=[<span class="num">1</span>, <span class="num">2</span>, <span class="num">1</span>], y2=[<span class="num">2</span>, <span class="num">4</span>, <span class="num">3</span>]))<br>
+p3 = figure(width=<span class="num">500</span>, height=<span class="num">350</span>)<br>
+p3.vline_stack([<span class="str">'y1'</span>, <span class="str">'y2'</span>], x=<span class="str">'x'</span>, source=source)
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>4) رسم النقاط (<span dir="ltr">circle &amp; scatter</span>)، التلوين الأوتوماتيكي، ورسم الأعمدة (<span dir="ltr">vbar, vbar_stack, hbar_stack</span>)</h3>
+        <ul>
+          <li><b>أولاً: رسم النقاط المبعثرة (<code dir="ltr">fig.circle</code> و <code dir="ltr">p.scatter</code>):</b>
+            <ul>
+              <li>يمكن رسم النقاط بدالة <code dir="ltr">p.circle(x, y, size=10, color="red", alpha=0.5)</code>، أو باستخدام الدالة العامة <b><code dir="ltr">p.scatter(x, y, marker="...")</code></b> مع تحديد شكل العلامة في المعامل <code dir="ltr">marker</code> (مثل <code dir="ltr">'circle'</code>, <code dir="ltr">'square'</code>, <code dir="ltr">'triangle'</code>, <code dir="ltr">'asterisk'</code>, <code dir="ltr">'cross'</code>, <code dir="ltr">'x'</code>, <code dir="ltr">'diamond'</code>).</li>
+              <li>ويمكن دمج أكثر من شكل في نفس الرسم باستدعاء دالة الرسم أكثر من مرة على نفس الكائن <code dir="ltr">p</code> (مثلاً رسم خط <code dir="ltr">p.line()</code> وفوقه دوائر <code dir="ltr">p.circle()</code> عند النقاط!).</li>
+              <li><b>تلوين الفئات أوتوماتيكياً (<code dir="ltr">CategoricalColorMapper</code>):</b> لتلوين النقاط تلقائياً حسب عمود فئوي (مثل فصيلة البطريق أو الزهور)، نستخدم أداة <b><code dir="ltr">CategoricalColorMapper</code></b> من <code dir="ltr">bokeh.models</code> مع تحديد قائمة الفئات في <code dir="ltr">factors</code> ولوحة الألوان في <code dir="ltr">palette</code>.</li>
+            </ul>
+          </li>
+          <li><b>ثانياً: رسم الأعمدة البيانية الرأسية والأفقية والمكدسة:</b>
+            <ol>
+              <li><b>الأعمدة الرأسية (<code dir="ltr">p.vbar</code>):</b> تأخذ المحور الأفقي <code dir="ltr">x</code>، وارتفاع العمود في المعامل <b><code dir="ltr">top</code></b>، وعرض العمود <code dir="ltr">width</code>.</li>
+              <li><b>الأعمدة الرأسية المكدسة (<code dir="ltr">p.vbar_stack</code>):</b> تكدس عدة فئات رأسياً فوق بعضها على نفس المحور <code dir="ltr">x</code>.</li>
+              <li><b>الأعمدة الأفقية المكدسة (<code dir="ltr">p.hbar_stack</code>):</b> تكدس عدة فئات أفقياً بجانب بعضها على المحور الرأسي <code dir="ltr">y</code> باستخدام المعامل <code dir="ltr">height</code>.</li>
+            </ol>
+          </li>
+        </ul>
+        <div class="code-box">
+<span class="cmt"># 1. رسم أعمدة رأسية بسيطة بدالة p.vbar()</span><br>
+p_bar = figure(width=<span class="num">400</span>, height=<span class="num">300</span>)<br>
+p_bar.vbar(x=[<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>], top=[<span class="num">1.2</span>, <span class="num">2.5</span>, <span class="num">3.7</span>], width=<span class="num">0.5</span>, color=<span class="str">"royalblue"</span>)<br><br>
+<span class="cmt"># 2. رسم أعمدة رأسية مكدسة (vbar_stack) وأفقية مكدسة (hbar_stack)</span><br>
+p_bar.vbar_stack([<span class="str">'2021'</span>, <span class="str">'2022'</span>], x=<span class="str">'fruits'</span>, width=<span class="num">0.6</span>, color=[<span class="str">"blue"</span>, <span class="str">"orange"</span>], source=source)<br>
+p_bar.hbar_stack([<span class="str">'2021'</span>, <span class="str">'2022'</span>], y=<span class="str">'fruits'</span>, height=<span class="num">0.6</span>, color=[<span class="str">"blue"</span>, <span class="str">"orange"</span>], source=source)
+        </div>
+      </div>
+    </details>
+
+    <!-- ==================== الوحدة الثانية ==================== -->
+    <details>
+      <summary>الوحدة الثانية: تخطيط وتنظيم الرسوم (Layouts: row, column, gridplot, layout) والحواشي (Title &amp; Legend)</summary>
+      <div class="details-body">
+        <h3>1) تخطيط وتنظيم عدة رسوم معاً (<span dir="ltr">bokeh.layouts</span>)</h3>
+        <div class="exam-alert">
+          <b>🔥🔥 سؤال امتحاني مؤكد: من أي وحدة نستورد دوال تنظيم الرسوم الأربع في Bokeh؟ وما وظيفة كل دالة؟</b><br>
+          نستوردها من الوحدة: <b><code dir="ltr">from bokeh.layouts import row, column, gridplot, layout</code></b>:<br>
+          1) <b><code dir="ltr">row(s1, s2, s3)</code>:</b> يرتب الرسوم البيانية <b>أفقياً في صف واحد</b> بجانب بعضها.<br>
+          2) <b><code dir="ltr">column(s1, s2, s3)</code>:</b> يرتب الرسوم البيانية <b>رأسياً في عمود واحد</b> فوق بعضها.<br>
+          3) <b><code dir="ltr">gridplot([[s1, s2], [None, s3]])</code>:</b> يرتب الرسوم في <b>شبكة منتظمة من الصفوف والأعمدة</b> (ونضع القيمة <b><code dir="ltr">None</code></b> في المكان الذي نريد تركه فارغاً بدون رسم!).<br>
+          4) <b><code dir="ltr">layout([[s1, s2], [s3]])</code>:</b> تخطيط شبكي مرن يسمح بوضع عدد مختلف من الرسوم في كل صف.
+        </div>
+
+        <div class="code-box">
+<span class="kw">from</span> bokeh.layouts <span class="kw">import</span> row, column, gridplot, layout<br><br>
+show(row(s1, s2, s3))                          <span class="cmt"># عرض الرسوم أفقياً بجانب بعضها</span><br>
+show(column(s1, s2, s3))                       <span class="cmt"># عرض الرسوم رأسياً فوق بعضها</span><br>
+show(gridplot([[s1, s2], [<span class="kw">None</span>, s3]]))         <span class="cmt"># شبكة 2×2 مع ترك الخلية اليسرى السفلية فارغة بـ None</span><br>
+show(layout([[s1, s2], [s3]]))                 <span class="cmt"># تخطيط حر: رسمان في الصف الأول ورسم في الصف الثاني</span>
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) الحواشي والتعليقات التوضيحية (<span dir="ltr">Annotations: Titles &amp; Legends</span>)</h3>
+        <ul>
+          <li><b>أولاً: التحكم بخصائص عنوان الرسم البياني (<code dir="ltr">p.title</code>):</b>
+            <div class="code-box">
+p.title.text = <span class="str">"Main Chart Title"</span>                 <span class="cmt"># نص العنوان</span><br>
+p.title.align = <span class="str">"center"</span>                           <span class="cmt"># محاذاة العنوان ("left", "center", "right")</span><br>
+p.title.text_color = <span class="str">"darkblue"</span>                   <span class="cmt"># لون خط العنوان</span><br>
+p.title.text_font_size = <span class="str">"20px"</span>                   <span class="cmt"># حجم خط العنوان</span><br>
+p.title.background_fill_color = <span class="str">"lightyellow"</span>     <span class="cmt"># لون خلفية شريط العنوان</span>
+            </div>
+          </li>
+          <li><b>ثانياً: الطرق الثلاث لإعداد مفتاح الرسم (<span dir="ltr">Legend</span>) في <span dir="ltr">Bokeh</span>:</b>
+            <ol>
+              <li><b>الطريقة (1) البسيطة (<code dir="ltr">legend_label</code>):</b> تمرير اسم المنحنى كنص ثابت في المعامل <code dir="ltr">legend_label="sin(x)"</code> داخل دالة الرسم.</li>
+              <li><b>الطريقة (2) التلقائية حسب عمود الفئات (<code dir="ltr">legend_group</code>):</b> عند استخدام <code dir="ltr">ColumnDataSource</code>، نمرر اسم عمود الفئات للمعامل <b><code dir="ltr">legend_group="species"</code></b> فيقوم بتجميع التسميات تلقائياً.</li>
+              <li><b>الطريقة (3) اليدوية المتقدمة (<code dir="ltr">Legend &amp; LegendItem</code>):</b> إنشاء كائن <code dir="ltr">Legend</code> يضم قائمة من عناصر <code dir="ltr">LegendItem</code> وإضافته للشكل بالدالة <b><code dir="ltr">p.add_layout(legend)</code></b> (وتتيح وضع المفتاح خارج منطقة الرسم مثلاً على اليمين <code dir="ltr">'right'</code>).</li>
+            </ol>
+          </li>
+          <li><b>تخصيص مظهر وموقع المفتاح (<code dir="ltr">p.legend</code>):</b>
+            <div class="code-box">
+p.legend.location = <span class="str">"top_left"</span>                 <span class="cmt"># موقع المفتاح (مثل top_left, bottom_right)</span><br>
+p.legend.orientation = <span class="str">"horizontal"</span>            <span class="cmt"># اتجاه عرض عناصر المفتاح ("horizontal" أو "vertical")</span><br>
+p.legend.title = <span class="str">"Observations"</span>                <span class="cmt"># عنوان لمربع المفتاح</span><br>
+p.legend.label_text_color = <span class="str">"navy"</span>             <span class="cmt"># لون نص التسميات في المفتاح</span><br>
+p.legend.background_fill_color = <span class="str">"lightgray"</span>   <span class="cmt"># لون خلفية مربع المفتاح</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- ==================== الوحدة الثالثة ==================== -->
+    <details>
+      <summary>الوحدة الثالثة: شريط الأدوات (Toolbar)، التلميحات التفاعلية (Tooltips: $ vs @)، والمفتاح التفاعلي (hide vs mute)</summary>
+      <div class="details-body">
+        <h3>1) تخصيص شريط الأدوات (<span dir="ltr">Toolbar Location &amp; Adding Tools</span>)</h3>
+        <ul>
+          <li><b>1. تحديد موضع شريط الأدوات (<code dir="ltr">toolbar_location</code>):</b>
+            <ul>
+              <li>يمكن تحديد مكان ظهور شريط الأدوات حول الرسم عبر المعامل <b><code dir="ltr">toolbar_location</code></b>، ويقبل القيم التالية: <b><code dir="ltr">"above"</code> (أعلى)، <code dir="ltr">"below"</code> (أسفل)، <code dir="ltr">"left"</code> (يسار)، <code dir="ltr">"right"</code> (يمين - الافتراضي)، أو <code dir="ltr">None</code> (لإخفاء شريط الأدوات تماماً)</b>.</li>
+            </ul>
+          </li>
+          <li><b>2. إضافة أدوات تفاعلية جديدة للشكل (<code dir="ltr">p.add_tools</code>):</b>
+            <ul>
+              <li>نستورد الأدوات المطلوبة من الوحدة <b><code dir="ltr">bokeh.models</code></b> (مثل أداة ملء الشاشة <code dir="ltr">FullscreenTool</code>، وأداة تكبير الصندوق <code dir="ltr">BoxZoomTool</code>، وأداة إعادة الضبط <code dir="ltr">ResetTool</code>، وأداة التمرير <code dir="ltr">HoverTool</code>) ونضيفها إلى الرسم بالدالة <b><code dir="ltr">p.add_tools()</code></b>:</li>
+            </ul>
+          </li>
+        </ul>
+        <div class="code-box">
+<span class="kw">from</span> bokeh.models <span class="kw">import</span> FullscreenTool, BoxZoomTool, ResetTool<br><br>
+p = figure(width=<span class="num">400</span>, height=<span class="num">400</span>, toolbar_location=<span class="str">"below"</span>)<br>
+p.add_tools(FullscreenTool(), BoxZoomTool(), ResetTool())
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) التلميحات التفاعلية عند تمرير الفأرة (<span dir="ltr">Tooltips: $ vs @</span>)</h3>
+        <div class="exam-alert">
+          <b>🔥🔥 سؤال امتحاني مؤكد 100%: ما الفرق الدقيق بين الرمز (<code dir="ltr">$</code>) والرمز (<code dir="ltr">@</code>) عند إعداد <span dir="ltr">Tooltips</span> في مكتبة <span dir="ltr">Bokeh</span>؟</b><br><br>
+          <b>1) الحقول المسبوقة بعلامة الدولار (<code dir="ltr">$</code> — <span dir="ltr">Special / Built-in Fields</span>):</b><br>
+          تشير إلى <b>خصائص داخلية خاصة بالرسم البياني ومؤشر الفأرة نفسه</b> (بغض النظر عن أعمدة جدول البيانات)، ومن أهمها في الملزمة:<br>
+          • <b><code dir="ltr">$index</code>:</b> رقم فهرس النقطة في البيانات.<br>
+          • <b><code dir="ltr">$name</code>:</b> اسم الشكل الرسومي (<code dir="ltr">name</code>).<br>
+          • <b><code dir="ltr">$x</code> و <code dir="ltr">$y</code>:</b> إحداثيات $(x, y)$ في <b>فضاء البيانات</b> عند موقع مؤشر الفأرة.<br>
+          • <b><code dir="ltr">$sx</code> و <code dir="ltr">$sy</code>:</b> إحداثيات $(x, y)$ على <b>شاشة العرض بالبكسل (<span dir="ltr">Screen / Canvas coordinates</span>)</b>.<br>
+          • <b><code dir="ltr">$color</code>:</b> لون العنصر الرسومي.<br><br>
+          <b>2) الحقول المسبوقة بعلامة (<code dir="ltr">@</code> — <span dir="ltr">Data Source Columns</span>):</b><br>
+          تشير إلى <b>اسم عمود فعلي مخزن داخل كائن مصدر البيانات (<code dir="ltr">ColumnDataSource</code>)</b> (مثل <code dir="ltr">@desc</code> لعرض قيمة عمود الوصف، أو <code dir="ltr">@species</code> لعرض اسم الفصيلة)!
+        </div>
+
+        <div class="code-box">
+source = ColumnDataSource(data=<span class="kw">dict</span>(<br>
+    x=[<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>],<br>
+    y=[<span class="num">2</span>, <span class="num">5</span>, <span class="num">8</span>, <span class="num">2</span>, <span class="num">7</span>],<br>
+    desc=[<span class="str">'A'</span>, <span class="str">'b'</span>, <span class="str">'C'</span>, <span class="str">'d'</span>, <span class="str">'E'</span>]<br>
+))<br><br>
+<span class="cmt"># إعداد قائمة التلميحات (Tooltips) باستخدام $ للخصائص الخاصة و @ لأعمدة البيانات</span><br>
+TOOLTIPS = [<br>
+    (<span class="str">"index"</span>, <span class="str">"$index"</span>),<br>
+    (<span class="str">"(x,y)"</span>, <span class="str">"($x, $y)"</span>),<br>
+    (<span class="str">"desc"</span>, <span class="str">"@desc"</span>)<br>
+]<br><br>
+p = figure(width=<span class="num">400</span>, height=<span class="num">400</span>, tooltips=TOOLTIPS, title=<span class="str">"Mouse over the dots"</span>)<br>
+p.circle(<span class="str">'x'</span>, <span class="str">'y'</span>, size=<span class="num">20</span>, source=source)
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) تفعيل مفتاح الرسم التفاعلي (<span dir="ltr">Interactive Legend: hide vs mute</span>)</h3>
+        <div class="exam-alert">
+          <b>🌟 مقارنة هامة جداً للاختبار في <code dir="ltr">p.legend.click_policy</code>:</b><br>
+          يمكن جعل مفتاح الرسم (<span dir="ltr">Legend</span>) تفاعلياً بحيث يتأثر المنحنى عند النقر بالفأرة على اسمه في المفتاح عبر خاصية <b><code dir="ltr">p.legend.click_policy</code></b> بطريقتين:<br>
+          1) <b>الإخفاء الكامل (<code dir="ltr">p.legend.click_policy = "hide"</code>):</b> عند النقر على اسم المنحنى في المفتاح، <b>يختفي المنحنى تماماً</b> من الرسم البياني (وعند النقر عليه مرة أخرى يعود للظهور).<br>
+          2) <b>التخفيت / التبهيت (<code dir="ltr">p.legend.click_policy = "mute"</code>):</b> عند النقر على اسم المنحنى في المفتاح، لا يختفي تماماً بل <b>يصبح باهتاً / خافتاً (شفافاً)</b> حسب اللون والشفافية المحددين في المعاملين <b><code dir="ltr">muted_color</code></b> و <b><code dir="ltr">muted_alpha</code></b> داخل دالة الرسم!
+        </div>
+
+        <div class="code-box">
+p.line(x, y, legend_label=<span class="str">"sin(x)"</span>, color=<span class="str">"blue"</span>, muted_color=<span class="str">"blue"</span>, muted_alpha=<span class="num">0.2</span>)<br><br>
+<span class="cmt"># الخيار الأول: إخفاء المنحنى تماماً عند النقر على اسمه في المفتاح</span><br>
+p.legend.click_policy = <span class="str">"hide"</span><br><br>
+<span class="cmt"># الخيار الثاني: تخفيت (تبهيت) المنحنى إلى شفافية 0.2 عند النقر على اسمه</span><br>
+p.legend.click_policy = <span class="str">"mute"</span>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- التبويب الثاني: ملخص الدوال والمقارنات -->
+  <section id="tables" class="panel">
+    <div class="card">
+      <h2>1. جدول المقارنة الشامل لجميع دوال الرسم والتخطيط في مكتبة Bokeh</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>الدالة / الأداة</th>
+            <th>الوحدة في Bokeh</th>
+            <th>الوظيفة الدقيقة كما وردت في المنهج</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td dir="ltr"><code>figure()</code>, <code>show()</code>, <code>output_notebook()</code></td>
+            <td dir="ltr"><code>bokeh.plotting</code></td>
+            <td>إنشاء الشكل البياني، وعرضه، وتوجيه المخرجات لتظهر داخل <span dir="ltr">Jupyter Notebook</span>.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><code>p.line()</code> / <code>p.multi_line()</code> / <code>p.vline_stack()</code></td>
+            <td dir="ltr"><code>bokeh.plotting</code></td>
+            <td>رسم خط واحد، أو عدة خطوط منفصلة (<code dir="ltr">xs, ys</code>)، أو خطوط مكدسة تشترك في المحور الأفقي.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><code>p.circle()</code> / <code>p.scatter(marker=...)</code></td>
+            <td dir="ltr"><code>bokeh.plotting</code></td>
+            <td>رسم النقاط كدوائر أو بأشكال متنوعة (<code dir="ltr">square, triangle, asterisk, diamond...</code>).</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><code>p.vbar()</code> / <code>p.vbar_stack()</code> / <code>p.hbar_stack()</code></td>
+            <td dir="ltr"><code>bokeh.plotting</code></td>
+            <td>رسم أعمدة رأسية (<code dir="ltr">top</code>)، أو أعمدة رأسية مكدسة، أو أعمدة أفقية مكدسة (<code dir="ltr">height</code>).</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><code>row()</code>, <code>column()</code>, <code>gridplot()</code>, <code>layout()</code></td>
+            <td dir="ltr"><code>bokeh.layouts</code></td>
+            <td>تنظيم عدة رسوم أفقياً، أو رأسياً، أو في شبكة منتظمة (مع <code dir="ltr">None</code> للفراغ)، أو بتخطيط مرن.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><code>ColumnDataSource</code> &amp; <code>CategoricalColorMapper</code></td>
+            <td dir="ltr"><code>bokeh.models</code></td>
+            <td>هيكل تمرير جداول البيانات لـ <span dir="ltr">Bokeh</span>، وأداة التلوين الأوتوماتيكي للفئات.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><code>FullscreenTool</code>, <code>BoxZoomTool</code>, <code>ResetTool</code></td>
+            <td dir="ltr"><code>bokeh.models</code></td>
+            <td>أدوات تفاعلية تُضاف لشريط الأدوات بواسطة الدالة <code dir="ltr">p.add_tools()</code>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>2. جدول الفرق الحاسم بين رموز التلميحات ($ مقابل @) وسياسة نقر المفتاح (hide مقابل mute)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>البند</th>
+            <th>الخيار الأول</th>
+            <th>الخيار الثاني</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>رموز التلميحات (<span dir="ltr">Tooltips</span>)</b></td>
+            <td><b>الرمز <code dir="ltr">$</code> (خصائص الرسم والفأرة):</b><br><code dir="ltr">$index</code> (الفهرس)، <code dir="ltr">$x, $y</code> (إحداثيات البيانات)، <code dir="ltr">$sx, $sy</code> (إحداثيات الشاشة)، <code dir="ltr">$color</code>، <code dir="ltr">$name</code>.</td>
+            <td><b>الرمز <code dir="ltr">@</code> (أعمدة البيانات):</b><br>يوضع قبل اسم أي عمود موجود في <code dir="ltr">ColumnDataSource</code> مثل <code dir="ltr">@desc</code> أو <code dir="ltr">@price</code>.</td>
+          </tr>
+          <tr>
+            <td><b>تفاعل مفتاح الرسم (<code dir="ltr">click_policy</code>)</b></td>
+            <td><b><code dir="ltr">p.legend.click_policy = "hide"</code>:</b><br>يخفي المنحنى تماماً من الرسم عند النقر على اسمه في المفتاح.</td>
+            <td><b><code dir="ltr">p.legend.click_policy = "mute"</code>:</b><br>يجعل المنحنى باهتاً/خافتاً عند النقر عليه وفق <code dir="ltr">muted_color</code> و <code dir="ltr">muted_alpha</code>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- التبويب الثالث: قاموس الدوال والرموز -->
+  <section id="terms" class="panel">
+    <div class="card">
+      <h2>قاموس الدوال والمصطلحات الشامل للفصل السادس (مكتبة Bokeh)</h2>
+      <p class="muted">جميع الكائنات والدوال والمعاملات البرمجية الواردة في الوحدات الثلاث:</p>
+      <div id="termsGrid" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- التبويب الرابع: البطاقات التعليمية -->
+  <section id="cards" class="panel">
+    <div class="card">
+      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
+      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
+      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
+        <div class="term" id="flashTerm"></div>
+        <div class="answer" id="flashAnswer" hidden></div>
+        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="prevCard">السابق</button>
+        <span id="cardCount" class="muted"></span>
+        <button class="btn primary" id="nextCard">التالي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- التبويب الخامس: الاختبار الذاتي العشوائي -->
+  <section id="quiz" class="panel">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2>الاختبار الشامل المتغير للفصل السادس (25 سؤالاً) <span class="badge-new">ترتيب عشوائي ذكي 🎲</span></h2>
+          <p class="muted">يختبر فهمك لدوال Bokeh، والـ Glyphs، وتخطيطات Layouts، والفرق بين $ و @ في Tooltips، وسياسة hide و mute مع تصحيح فوري!</p>
+        </div>
+        <div class="score" id="score">النتيجة: 0 / 25</div>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="quizArea"></div>
+      <div class="row">
+        <button class="btn" id="resetQuiz">إعادة الاختبار بترتيب عشوائي جديد 🔀</button>
+        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+      </div>
+      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
+    </div>
+  </section>
+</main>
+
+<footer>مبني بالكامل (100%) على محتوى الفصل السادس (تمثيل البيانات - الجزء الثالث: مكتبة Bokeh) من مقرر تحليل وتمثيل البيانات</footer>
+
+<script>
+const terms = [
+  ["Bokeh Library", "مكتبة بايثون متخصصة في إنشاء الرسوم البيانية التفاعلية (Interactive plots) لعرضها في متصفحات الويب ودفاتر Jupyter."],
+  ["Glyphs (الرموز الرسومية)", "الأشكال الهندسية الأساسية التي تُبنى منها الرسوم في Bokeh مثل: Line, Circle, Square, Triangle, Asterisk, Cross, X, Diamond."],
+  ["figure, show, output_notebook", "العناصر الثلاثة الأساسية التي تُستورد من bokeh.plotting لإنشاء الشكل وعرضه داخل Jupyter Notebook."],
+  ["p.line() & p.multi_line()", "دالتا رسم الخطوط في Bokeh؛ الأولى لرسم خط واحد، والثانية لرسم عدة خطوط بتمرير قائمة قوائم xs و ys."],
+  ["p.vline_stack()", "دالة في Bokeh لرسم عدة خطوط مكدسة رأسياً فوق بعضها وتشترك في نفس المحور الأفقي x."],
+  ["p.vbar() & p.vbar_stack() & p.hbar_stack()", "دوال رسم الأعمدة في Bokeh: رأسية (vbar بمعامل top)، رأسية مكدسة (vbar_stack)، وأفقية مكدسة (hbar_stack)."],
+  ["CategoricalColorMapper", "أداة من bokeh.models لتلوين نقاط البيانات أوتوماتيكياً بناءً على فئات عمود نوعي (factors و palette)."],
+  ["ColumnDataSource", "الكائن الأساسي في bokeh.models لتمرير جداول وقواميس البيانات إلى دوال الرسم والـ Tooltips."],
+  ["row(), column(), gridplot(), layout()", "دوال تنظيم وتخطيط عدة رسوم معاً، وتُستورد من الوحدة bokeh.layouts."],
+  ["legend_label vs legend_group", "معاملان لمفتاح الرسم؛ الأول لتسمية ثابتة للمنحنى، والثاني لتوليد مفتاح تلقائي حسب فئات عمود في ColumnDataSource."],
+  ["toolbar_location & p.add_tools()", "معامل تحديد موقع شريط الأدوات ('above', 'below', 'left', 'right', None)، ودالة إضافة أدوات جديدة مثل FullscreenTool."],
+  ["Tooltips ($ vs @)", "تلميحات تمرير الفأرة: الرمز ($) يسبق خصائص الرسم والفأرة ($index, $x, $y, $sx, $sy, $color)، والرمز (@) يسبق أسماء أعمدة البيانات (@desc)."],
+  ["p.legend.click_policy ('hide' vs 'mute')", "خاصية تفعيل النقر على مفتاح الرسم: 'hide' لإخفاء المنحنى تماماً، و 'mute' لتبهيته/تخفيته حسب muted_alpha."]
+];
+
+const cards = [
+  ["بماذا تتميز مكتبة (Bokeh) عن مكتبتي Matplotlib و Seaborn؟", "تتميز بإنشاء رسوم بيانية تفاعلية (Interactive Visualizations) موجهة لمتصفحات الويب؛ تتيح للمستخدم التكبير والتحريك وإخفاء المنحنيات وإظهار التلميحات عند تمرير الفأرة."],
+  ["ما المقصود بمصطلح (Glyphs) في مكتبة Bokeh؟ مع ذكر 5 أمثلة عليها.", "هي الأشكال الهندسية والرموز الرسومية الأساسية التي تتكون منها المخططات في Bokeh، مثل:\nLine (خط)، Circle (دائرة)، Square (مربع)، Triangle (مثلث)، Asterisk (نجمة)، و Diamond (معين)."],
+  ["ما هي الدوال الثلاث الأساسية التي نستوردها من الوحدة (bokeh.plotting) لبدء الرسم في Jupyter Notebook؟", "1) figure (لإنشاء الشكل البياني).\n2) output_notebook (لعرض الرسم داخل خلية الدفتر).\n3) show (لإظهار الشكل النهائي)."],
+  ["ما الفرق بين الدوال الثلاث لرسم الخطوط في Bokeh: (p.line)، (p.multi_line)، و (p.vline_stack)؟", "• p.line(): ترسم خطاً واحداً.\n• p.multi_line(): ترسم عدة خطوط منفصلة بتمرير قائمة قوائم لـ xs و ys.\n• p.vline_stack(): ترسم عدة خطوط مكدسة فوق بعضها تشترك في نفس المحور الأفقي x."],
+  ["كيف ندمج أكثر من شكل هندسي (مثلاً خط وعليه نقاط دائرية) في نفس الرسم داخل Bokeh؟", "باستدعاء دالة p.line() ثم دالة p.circle() (أو p.scatter) متتاليتين على نفس كائن الشكل p قبل استدعاء show(p)."],
+  ["ما هي الأداة المستخدمة في Bokeh لتلوين نقاط البيانات أوتوماتيكياً بناءً على فئات عمود نصي؟ ومن أي وحدة نستوردها؟", "الأداة هي: CategoricalColorMapper\nونستوردها من الوحدة: bokeh.models (ونحدد فيها الفئات factors ولوحة الألوان palette)."],
+  ["ما الفرق بين دوال رسم الأعمدة في Bokeh: (p.vbar)، (p.vbar_stack)، و (p.hbar_stack)؟", "• p.vbar(): ترسم أعمدة رأسية بسيطة (ونحدد ارتفاعها بالمعامل top).\n• p.vbar_stack(): ترسم أعمدة رأسية مكدسة فوق بعضها.\n• p.hbar_stack(): ترسم أعمدة أفقية مكدسة بجانب بعضها على المحور y."],
+  ["من أي وحدة في مكتبة Bokeh نستورد دوال تخطيط وتنظيم الرسوم: (row, column, gridplot, layout)؟", "نستوردها من الوحدة:\nbokeh.layouts"],
+  ["ما الفرق بين وظيفة كل من: row() ، و column() ، و gridplot()؟", "• row(s1, s2): يرتب الرسوم أفقياً في صف واحد.\n• column(s1, s2): يرتب الرسوم رأسياً في عمود واحد.\n• gridplot([[s1, s2], [None, s3]]): يرتب الرسوم في شبكة صفوف وأعمدة (وتُوضع None لترك خلية فارغة)."],
+  ["كيف نتحكم في نص العنوان، محاذاته، لونه، حجم خطه، ولون خلفيته في Bokeh؟", "• النص: p.title.text\n• المحاذاة: p.title.align = 'center'\n• اللون: p.title.text_color\n• الحجم: p.title.text_font_size = '20px'\n• الخلفية: p.title.background_fill_color"],
+  ["ما هي الطرق الثلاث لإعداد مفتاح الرسم (Legend) في مكتبة Bokeh؟", "1) تمرير المعامل legend_label='...' داخل دالة الرسم.\n2) تمرير اسم عمود الفئات في المعامل legend_group='...' مع ColumnDataSource.\n3) يدوياً بإنشاء كائن Legend و LegendItem وإضافته بـ p.add_layout(legend)."],
+  ["كيف نغير موقع مفتاح الرسم (Legend) واتجاه عرض عناصره (أفقي أو رأسي)؟", "• الموقع: p.legend.location = 'top_left'\n• الاتجاه: p.legend.orientation = 'horizontal' (أو 'vertical')."],
+  ["ما هي القيم الممكنة للمعامل (toolbar_location) لتحديد موضع شريط الأدوات في Bokeh؟", "يقبل القيم: 'above' (أعلى)، 'below' (أسفل)، 'left' (يسار)، 'right' (يمين)، أو None (لإخفاء شريط الأدوات)."],
+  ["كيف نضيف أدوات جديدة مثل (FullscreenTool, BoxZoomTool, ResetTool) إلى الشكل البياني في Bokeh؟", "نستوردها من bokeh.models ثم نمررها داخل الدالة:\np.add_tools(FullscreenTool(), BoxZoomTool(), ResetTool())"],
+  ["ما هو الفرق الجوهري بين الرمز ($) والرمز (@) عند إعداد التلميحات التفاعلية (Tooltips) في Bokeh؟", "• الرمز ($): يُستخدم مع الخصائص الخاصة بالرسم ومؤشر الفأرة نفسه (مثل $index, $x, $y, $sx, $sy, $color, $name).\n• الرمز (@): يُستخدم مع أسماء أعمدة البيانات الموجودة داخل ColumnDataSource (مثل @desc أو @price)."],
+  ["في تلميحات Bokeh (Tooltips)، ما الفرق بين ($x, $y) وبين ($sx, $sy)؟", "• ($x, $y): إحداثيات النقطة في فضاء البيانات (على المحورين X و Y).\n• ($sx, $sy): إحداثيات النقطة على شاشة العرض بالبكسل (Screen/Canvas coordinates)."],
+  ["كيف نجعل مفتاح الرسم (Legend) تفاعلياً بحيث يختفي المنحنى تماماً عند النقر على اسمه في المفتاح؟", "بتعيين خاصية سياسة النقر إلى 'hide':\np.legend.click_policy = 'hide'"],
+  ["كيف نجعل المنحنى يصبح باهتاً/خافتاً (وليس مخفياً تماماً) عند النقر على اسمه في مفتاح الرسم؟", "نحدد muted_color و muted_alpha (مثلاً 0.2) داخل دالة الرسم، ثم نعين سياسة النقر إلى 'mute':\np.legend.click_policy = 'mute'"]
+];
+
+const masterQuestions = [
+  {q:"ما هي السمة الأبرز التي تميز مكتبة (Bokeh) في لغة البايثون؟ وماذا تُسمى الأشكال الهندسية الأساسية (مثل Line, Circle, Square, Triangle) التي تُبنى منها رسومها؟",o:["تتميز بإنشاء رسوم بيانية تفاعلية (Interactive) لمتصفحات الويب، وتُسمى أشكالها الهندسية الأساسية بـ (Glyphs)","تُستخدم فقط لتنظيف النصوص، وتُسمى أشكالها بـ (DataFrames)","لا تعمل داخل Jupyter Notebook أبداً","تُستخدم فقط لحساب مصفوفة التغاير في PCA"],a:0,e:"مكتبة Bokeh متخصصة في الرسوم البيانية التفاعلية، وتُعرف عناصرها الرسومية الهندسية باسم Glyphs."},
+  {q:"لإنشاء وعرض رسم بياني تفاعلي باستخدام مكتبة Bokeh داخل بيئة Jupyter Notebook، ما هي العناصر الثلاثة الأساسية التي نستوردها من الوحدة (bokeh.plotting)؟",o:["figure, show, output_notebook","plot, display, save_csv","Series, DataFrame, Index","KMeans, DBSCAN, PCA"],a:0,e:"نستورد figure لإنشاء الشكل، و output_notebook للعرض داخل الدفتر، و show لإظهار الرسم."},
+  {q:"في مكتبة Bokeh، أي دالة تُستخدم لرسم (عدة خطوط منفصلة في أمر واحد بتمرير قائمة قوائم للإحداثيات xs و ys)، وأي دالة تُستخدم لرسم (خطوط مكدسة تشترك في المحور الأفقي x)؟",o:["الدالة p.multi_line() لعدة خطوط، والدالة p.vline_stack() للخطوط المكدسة","الدالة p.vbar() و p.hbar()","الدالة p.circle() و p.square()","الدالة plt.pie() و plt.hist()"],a:0,e:"ترسم multi_line عدة خطوط منفصلة، بينما تكدس vline_stack عدة متغيرات صعوداً فوق نفس المحور الأفقي x."},
+  {q:"عند رسم أعمدة بيانية رأسية بسيطة باستخدام الدالة p.vbar(x=[1, 2, 3], ...) في مكتبة Bokeh، ما اسم المعامل الذي نمرر فيه (ارتفاعات الأعمدة)؟",o:["المعامل top (مثل top=[1.2, 2.5, 3.7])","المعامل bins","المعامل explode","المعامل autopct"],a:0,e:"في دالة p.vbar() بمكتبة Bokeh، يُحدد ارتفاع كل عمود رأسي عبر المعامل top."},
+  {q:"ما هي الأداة التي تُستورد من (bokeh.models) لتلوين نقاط البيانات أوتوماتيكياً بناءً على فئات عمود نوعي من خلال تحديد الفئات (factors) ولوحة الألوان (palette)؟",o:["CategoricalColorMapper","FullscreenTool","StandardScaler","LabelEncoder"],a:0,e:"تُستخدم أداة CategoricalColorMapper لربط كل فئة نصية بلون محدد تلقائياً أثناء الرسم في Bokeh."},
+  {q:"من أي وحدة فرعية في مكتبة Bokeh نستورد دوال تنظيم وتخطيط الرسوم البيانية الأربعة: (row, column, gridplot, layout)؟",o:["من الوحدة bokeh.layouts","من الوحدة bokeh.models","من الوحدة sklearn.metrics","من الوحدة matplotlib.pyplot"],a:0,e:"توجد جميع دوال ترتيب وتنظيم الأشكال البيانية (row, column, gridplot, layout) داخل الوحدة bokeh.layouts."},
+  {q:"ما الفرق بين استخدام الدالة row(s1, s2, s3) والدالة column(s1, s2, s3) في مكتبة Bokeh؟",o:["دالة row() ترتب الرسوم أفقياً بجانب بعضها في صف واحد، بينما دالة column() ترتب الرسوم رأسياً فوق بعضها في عمود واحد","دالة row() تحذف الصفوف، و column() تحذف الأعمدة","كلتاهما ترسمان مخططاً دائرياً","تُستخدمان فقط لحساب معامل الارتباط"],a:0,e:"ترتب row الرسوم في صف أفقي، وترتب column الرسوم في عمود رأسي."},
+  {q:"عند استخدام دالة الشبكة gridplot([[s1, s2], [None, s3]]) في مكتبة Bokeh، لماذا وضعنا القيمة (None) في المصفوفة؟",o:["لترك موقع تلك الخلية فارغاً بدون رسم بياني في الشبكة","لحذف جميع الرسوم s1 و s2 و s3","لإخفاء شريط الأدوات","لتلوين الخلفية باللون الأسود"],a:0,e:"تُستخدم القيمة None داخل قوائم gridplot لحجز مكان خلية فارغة في تخطيط الشبكة."},
+  {q:"أي خاصية من خصائص العنوان في Bokeh تُستخدم لتحديد محاذاة نص العنوان في المنتصف، وأي خاصية تحدد لون خلفية العنوان؟",o:["p.title.align = 'center' للمحاذاة، و p.title.background_fill_color للون الخلفية","p.title.location و p.title.cmap","p.legend.align و p.legend.color","plt.xlabel و plt.ylabel"],a:0,e:"نتحكم بمحاذاة العنوان عبر p.title.align، وبلون خلفيته عبر p.title.background_fill_color."},
+  {q:"عند استخدام كائن مصدر البيانات (ColumnDataSource) في Bokeh، ما اسم المعامل الذي نمرر له اسم عمود الفئات ليقوم بتوليد وتجميع عناصر مفتاح الرسم (Legend) تلقائياً؟",o:["legend_group","toolbar_location","click_policy","gridsize"],a:0,e:"المعامل legend_group يقوم بتجميع وتسمية عناصر المفتاح تلقائياً حسب قيم العمود المحدد في ColumnDataSource."},
+  {q:"لتغيير اتجاه عرض العناصر داخل مفتاح الرسم (Legend) في Bokeh ليكون أفقياً بدلاً من رأسي، نستخدم الكود:",o:["p.legend.orientation = 'horizontal'","p.legend.click_policy = 'hide'","p.title.align = 'horizontal'","p.toolbar_location = 'below'"],a:0,e:"الخاصية p.legend.orientation تقبل القيمة 'horizontal' (أفقي) أو 'vertical' (رأسي)."},
+  {q:"في دالة figure() بمكتبة Bokeh، كيف نضع شريط الأدوات التفاعلي (أسفل) الرسم البياني؟ وكيف نضيف أدوات جديدة إليه مثل FullscreenTool؟",o:["نمرر المعامل toolbar_location='below'، ونضيف الأدوات بالدالة p.add_tools(FullscreenTool())","نمرر المعامل legend='below'، ونضيف الأدوات بـ p.insert()","لا يمكن تغيير موقع شريط الأدوات في Bokeh","نستخدم دالة plt.xticks()"],a:0,e:"يتحكم المعامل toolbar_location في موضع الشريط ('above', 'below', 'left', 'right')، وتُضاف الأدوات بـ p.add_tools()."},
+  {q:"عند إعداد التلميحات التفاعلية (Tooltips) التي تظهر عند تمرير الفأرة فوق النقاط في Bokeh، ما الفرق الجوهري بين الرمز ($) والرمز (@)؟",o:["الرمز ($) يسبق الخصائص الخاصة بالرسم ومؤشر الفأرة (مثل $index, $x, $y, $color)، بينما الرمز (@) يسبق أسماء أعمدة البيانات في ColumnDataSource (مثل @desc)","الرمز (@) للخصائص الداخلية، والرمز ($) لأسماء الأعمدة","كلاهما يستخدمان فقط لكتابة التعليقات البرمجية","الرمز ($) يحذف العمود، والرمز (@) يجمع الأرقام"],a:0,e:"قاعدة هامة جداً في Bokeh Tooltips: علامة الدولار ($) للخصائص الداخلية الخاصة، وعلامة (@) لأسماء أعمدة مصدر البيانات."},
+  {q:"في تلميحات Bokeh (Tooltips)، ماذا يمثل كل من الحقلين ($x, $y) مقارنةً بالحقلين ($sx, $sy)؟",o:["($x, $y) هما إحداثيات النقطة في فضاء البيانات على المحورين، بينما ($sx, $sy) هما إحداثيات النقطة على شاشة العرض بالبكسل (Screen/Canvas)","كلاهما يمثلان رقم فهرس النقطة فقط","$sx و $sy يمثلان اسم العمود ولونه","لا يوجد حقل اسمه $sx في Bokeh"],a:0,e:"يمثل $x و $y قيم البيانات على المحاور، بينما يمثل $sx و $sy موقع المؤشر على شاشة العرض (Screen coordinates)."},
+  {q:"إذا كان لدينا في ColumnDataSource عمود اسمه 'price'، فكيف نكتبه داخل قائمة TOOLTIPS ليظهر سعر كل نقطة عند تمرير الفأرة عليها؟",o:["('Price', '@price')","('Price', '$price')","('Price', '#price')","('Price', '&price')"],a:0,e:"بما أن 'price' هو اسم عمود في مصدر البيانات ColumnDataSource، فيجب أن يسبقه الرمز (@) ليصبح '@price'."},
+  {q:"كيف نجعل مفتاح الرسم (Legend) في مكتبة Bokeh تفاعلياً بحيث (يختفي المنحنى تماماً) عند النقر بالفأرة على اسمه في المفتاح؟",o:["p.legend.click_policy = 'hide'","p.legend.click_policy = 'mute'","p.legend.location = 'none'","p.toolbar_location = 'hide'"],a:0,e:"تعيين p.legend.click_policy = 'hide' يؤدي إلى إخفاء وإظهار الـ Glyph عند النقر على اسمه في المفتاح."},
+  {q:"ما الفرق بين تعيين p.legend.click_policy = 'hide' وتعيين p.legend.click_policy = 'mute' في مكتبة Bokeh؟",o:["'hide' يخفي المنحنى تماماً عند النقر عليه، بينما 'mute' يجعل المنحنى باهتاً/خافتاً (شفافاً) وفق المعاملين muted_color و muted_alpha","'mute' يحذف الرسم البياني بالكامل، و 'hide' يكبر الشاشة","كلاهما يؤديان نفس الوظيفة تماماً","'mute' يغير عنوان الرسم فقط"],a:0,e:"السياسة 'hide' تخفي العنصر كلياً، بينما السياسة 'mute' تبقيه مرئياً ولكن بشفافية منخفضة (muted_alpha) ولون خافت (muted_color)."},
+  {q:"ما هي الدالتان المستخدمتان في مكتبة Bokeh لرسم (أعمدة رأسية مكدسة) و (أعمدة أفقية مكدسة) على التوالي؟",o:["p.vbar_stack() ثم p.hbar_stack()","p.line() ثم p.multi_line()","p.circle() ثم p.scatter()","row() ثم column()"],a:0,e:"تُستخدم vbar_stack لتكديس الأعمدة رأسياً، وتُستخدم hbar_stack لتكديس الأعمدة أفقياً."},
+  {q:"عند رسم نقاط مبعثرة باستخدام الدالة العامة p.scatter(x, y, marker='...') في Bokeh، أي مما يلي يُعد من أشكال العلامات (markers) الصحيحة المدعومة؟",o:["جميع ما ذكر ('circle', 'square', 'triangle', 'asterisk', 'cross', 'x', 'diamond')","فقط الشكل الدائري ولا تقبل أي شكل آخر","المعاملات ('inner', 'outer', 'left')","المعاملات ('mean', 'median', 'mode')"],a:0,e:"تدعم دالة scatter في Bokeh مجموعة واسعة من أشكال الـ Glyphs عبر المعامل marker."},
+  {q:"من أي وحدة فرعية في مكتبة Bokeh نستورد الكائن ColumnDataSource وأدوات شريط الأدوات مثل FullscreenTool و BoxZoomTool و ResetTool؟",o:["من الوحدة bokeh.models","من الوحدة bokeh.layouts","من الوحدة bokeh.plotting","من الوحدة seaborn"],a:0,e:"الكائنات والنماذج الأساسية مثل ColumnDataSource والأدوات التفاعلية ومفاتيح الرسم اليدوية تُستورد من bokeh.models."},
+  {q:"إذا أردنا إنشاء مفتاح رسم يدوي متقدم باستخدام الكائنين Legend و LegendItem ووضعه خارج منطقة الرسم على اليمين، فما الدالة التي نستخدمها لإضافته للشكل p؟",o:["p.add_layout(legend, 'right')","p.add_tools(legend)","p.vline_stack(legend)","show(legend)"],a:0,e:"تُستخدم الدالة p.add_layout(legend) لإضافة كائن المفتاح اليدوي إلى الشكل البياني وتحديد موضعه."},
+  {q:"في التلميحات التفاعلية (Tooltips) بمكتبة Bokeh، إلى ماذا يشير الحقل الخاص ($index)؟",o:["يشير إلى رقم فهرس (ترتيب) النقطة داخل مصفوفة البيانات","يشير إلى لون النقطة","يشير إلى عنوان الرسم الرئيسي","يشير إلى عرض العمود"],a:0,e:"الحقل الخاص $index يعرض رقم الفهرس التسلسلي (0, 1, 2...) للنقطة التي تقف عليها الفأرة."},
+  {q:"ما وظيفة الكود التالي في مكتبة Bokeh: p = figure(toolbar_location=None) ؟",o:["إنشاء شكل بياني بدون إظهار شريط الأدوات التفاعلي (إخفاء شريط الأدوات تماماً)","وضع شريط الأدوات في أعلى الرسم","حذف جميع البيانات من الشكل","تلوين النقاط باللون الأبيض"],a:0,e:"تمرير القيمة None للمعامل toolbar_location يخفي شريط الأدوات من الشكل البياني."},
+  {q:"أي دالة من دوال bokeh.layouts نستخدمها إذا أردنا عرض رسمين (s1, s2) في الصف الأول، ورسم واحد عريض (s3) تحتهما في الصف الثاني عبر الكود: show(____([[s1, s2], [s3]])) ؟",o:["layout","row","column","vbar"],a:0,e:"الدالة layout() توفر تخطيطاً مرناً يسمح بدمج صفوف تحتوي على أعداد مختلفة من الرسوم."},
+  {q:"عند استخدام سياسة التخفيت p.legend.click_policy = 'mute'، ما هما المعاملان اللذان نمررهما داخل دالة الرسم (مثل p.line) لتحديد لون وشفافية المنحنى عندما يتم تخفيته؟",o:["muted_color و muted_alpha","explode و autopct","vmin و vmax","left_on و right_on"],a:0,e:"يتحكم المعاملان muted_color و muted_alpha في مظهر الـ Glyph بعد النقر على اسمه في وضع التخفيت 'mute'."}
+];
+
+const termsGrid = document.getElementById("termsGrid");
+terms.forEach(([en, ar]) => {
+  const d = document.createElement("div");
+  d.className = "card";
+  d.style.margin = "0";
+  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
+  termsGrid.appendChild(d);
+});
+
+let ci = 0, showAnswer = false;
+function renderCard() {
+  document.getElementById("flashTerm").textContent = cards[ci][0];
+  document.getElementById("flashAnswer").textContent = cards[ci][1];
+  document.getElementById("flashAnswer").hidden = !showAnswer;
+  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
+  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+}
+document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
+document.getElementById("flashcard").addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
+});
+document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
+document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
+renderCard();
+
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+let currentQuestions = [];
+let answers = {};
+
+function prepareShuffledQuiz() {
+  currentQuestions = shuffleArray(masterQuestions).map(item => {
+    const optsWithFlag = item.o.map((text, idx) => ({ text, isCorrect: idx === item.a }));
+    const shuffledOpts = shuffleArray(optsWithFlag);
+    return {
+      q: item.q,
+      o: shuffledOpts.map(x => x.text),
+      a: shuffledOpts.findIndex(x => x.isCorrect),
+      e: item.e
+    };
+  });
+}
+
+function renderQuiz() {
+  prepareShuffledQuiz();
+  const area = document.getElementById("quizArea");
+  area.innerHTML = "";
+  const letters = ["أ", "ب", "ج", "د"];
+  currentQuestions.forEach((item, i) => {
+    const box = document.createElement("div");
+    box.className = "qbox";
+    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
+    const opts = box.querySelector(".options");
+    item.o.forEach((opt, j) => {
+      const btn = document.createElement("button");
+      btn.className = "option";
+      btn.textContent = `${letters[j]}) ${opt}`;
+      btn.onclick = () => {
+        answers[i] = j;
+        [...opts.children].forEach((x, k) => {
+          x.classList.remove("correct", "wrong");
+          x.disabled = true;
+          if (k === item.a) x.classList.add("correct");
+          if (k === j && j !== item.a) x.classList.add("wrong");
+        });
+        const fb = document.getElementById("fb" + i);
+        fb.hidden = false;
+        fb.className = "feedback " + (j === item.a ? "good" : "bad");
+        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
+        updateScore();
+      };
+      opts.appendChild(btn);
+    });
+    area.appendChild(box);
+  });
+  updateScore();
+}
+
+function updateScore() {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
+  document.getElementById("score").textContent = `النتيجة: ${correct} / ${currentQuestions.length}`;
+  document.getElementById("progressBar").style.width = (Object.keys(answers).length / currentQuestions.length * 100) + "%";
+}
+
+document.getElementById("resetQuiz").onclick = () => {
+  answers = {};
+  document.getElementById("finalResult").textContent = "";
+  renderQuiz();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+document.getElementById("finishQuiz").onclick = () => {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
+  const pct = Math.round(correct / currentQuestions.length * 100);
+  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${currentQuestions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! أنتِ مستعدة تماماً للاختبار في هذا الفصل." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
+};
+
+renderQuiz();
+</script>
+</body>
+</html>

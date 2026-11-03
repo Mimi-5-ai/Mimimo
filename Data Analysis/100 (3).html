@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الفصل الرابع الشامل (100%) | تحليل وتمثيل البيانات</title>
+<style>
+:root{
+  --bg:#f0f5ff;
+  --card:#ffffff;
+  --ink:#0f172a;
+  --muted:#475569;
+  --accent:#1d4ed8;
+  --accent-dark:#1e3a8a;
+  --accent2:#dbeafe;
+  --line:#cbd5e1;
+  --good:#059669;
+  --good-bg:#ecfdf5;
+  --bad:#dc2626;
+  --bad-bg:#fef2f2;
+  --warn:#d97706;
+  --warn-bg:#fffbeb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
+header{background:linear-gradient(135deg,#0f172a,#1d4ed8);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(15,23,42,0.2)}
+.wrap{max-width:1040px;margin:auto;padding:0 16px}
+.eyebrow{opacity:.92;font-size:.9rem;background:rgba(255,255,255,0.16);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
+h1{margin:5px 0;font-size:clamp(1.5rem,4vw,2.25rem)}
+header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
+nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:var(--accent2);color:var(--accent-dark);font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
+nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
+nav button.active,.btn.primary{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+main .btn.primary{background:var(--accent);color:white}
+main{padding:22px 0 48px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(15,23,42,0.04)}
+h2{font-size:1.35rem;margin:0 0 12px;color:#0f172a}
+h3{font-size:1.08rem;margin:0 0 8px;color:var(--accent-dark)}
+small,.muted{color:var(--muted)}
+ul,ol{padding-right:22px;margin:8px 0}
+li{margin:6px 0}
+details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
+summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f8fafc;color:#0f172a;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
+details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
+.details-body{padding:16px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
+.badge-new{display:inline-block;background:var(--warn-bg);color:var(--warn);border:1px solid #fcd34d;font-size:.78rem;padding:1px 8px;border-radius:6px;margin-right:6px;font-weight:bold}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#eff6ff;color:#1e3a8a;font-weight:bold}
+tr:last-child td{border-bottom:0}
+.note{border-right:4px solid var(--accent);padding:10px 14px;background:#eff6ff;border-radius:8px;margin:10px 0}
+.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
+.math-box{background:#f8fafc;border:2px solid #93c5fd;border-radius:12px;padding:12px 16px;margin:10px 0;text-align:center;font-size:1.03rem;font-weight:bold;color:#1e3a8a;direction:ltr}
+.step-box{background:#f0fdf4;border:1px solid #86efac;border-right:4px solid var(--good);border-radius:10px;padding:12px 16px;margin:10px 0;font-size:.95rem}
+.code-box{background:#0f172a;color:#e2e8f0;padding:14px 18px;border-radius:12px;font-family:Consolas,Monaco,monospace;direction:ltr;text-align:left;overflow-x:auto;margin:10px 0;border:1px solid #334155;line-height:1.65;font-size:.91rem}
+.code-box .kw{color:#38bdf8;font-weight:bold}
+.code-box .str{color:#4ade80}
+.code-box .num{color:#f472b6}
+.code-box .cmt{color:#94a3b8;font-style:italic}
+.svg-wrap{background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:14px;margin:12px 0;text-align:center}
+.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
+.options{display:grid;gap:8px;margin-top:12px}
+.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
+.option:hover:not(:disabled){border-color:var(--accent);background:#eff6ff}
+.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
+.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
+.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
+.feedback.good{color:var(--good);background:var(--good-bg)}
+.feedback.bad{color:var(--bad);background:var(--bad-bg)}
+.progress{height:10px;background:#cbd5e1;border-radius:9px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
+.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#dbeafe);border:2px solid #93c5fd;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
+.flashcard:hover{transform:scale(1.005)}
+.flashcard .term{font-size:1.32rem;font-weight:bold;color:#1e3a8a}
+.flashcard .answer{margin-top:16px;font-size:1.04rem;color:#0f172a;background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04);white-space:pre-line}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
+@media(max-width:600px){
+  .card{padding:14px}
+  nav button{flex:1 1 calc(50% - 8px);text-align:center}
+  .flashcard{min-height:200px;padding:18px}
+  th,td{padding:8px 10px;font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">نسخة شاملة ومحدثة 100% • مقرر تحليل وتمثيل البيانات</div>
+    <h1>الفصل الرابع: تمثيل البيانات – الجزء الأول (Matplotlib)</h1>
+    <p>يغطي تصنيف الرسوم البيانية (Univariate, Bivariate, Multivariate)، أساسيات ومكونات Figure في Matplotlib، الأعمدة البيانية (Bar Plot)، المدرج التكراري (Histogram)، المخطط الدائري (Pie Plot)، الخطي (Line Plot)، والصندوقي (Box Plot)</p>
+    <nav>
+      <button class="active" data-tab="summary">الشرح والأكواد والرسوم (100%)</button>
+      <button data-tab="tables">ملخص الدوال والمعاملات</button>
+      <button data-tab="terms">قاموس المصطلحات والدوال</button>
+      <button data-tab="cards">البطاقات (28)</button>
+      <button data-tab="quiz">الاختبار العشوائي (25)</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- التبويب الأول: الشرح الشامل -->
+  <section id="summary" class="panel active">
+    <div class="card">
+      <h2>خريطة الفصل الرابع (الوحدات الثلاث الكاملة)</h2>
+      <div class="grid">
+        <div>
+          <span class="tag">الوحدة الأولى</span>
+          <h3>أساسيات التمثيل ومكتبة Matplotlib</h3>
+          <p>مفهوم ومكتبات تمثيل البيانات (<span dir="ltr">Matplotlib, Seaborn, Bokeh</span>)، تصنيف الرسوم (<span dir="ltr">Univariate, Bivariate, Multivariate</span>)، دالة <span dir="ltr">np.linspace</span>، ومكونات الـ <span dir="ltr">Figure</span> الأساسية.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثانية</span>
+          <h3>الأعمدة البيانية والمدرج التكراري</h3>
+          <p>إنشاء الأعمدة البيانية (<span dir="ltr">Bar Plot</span>) بدالة <span dir="ltr">plt.bar()</span> لمجموعة أو مجموعتين جنباً إلى جنب مع <span dir="ltr">bar_width</span> و <span dir="ltr">xticks</span>، وإنشاء المدرج التكراري (<span dir="ltr">Histogram</span>) بدالة <span dir="ltr">plt.hist()</span> ومعامل <span dir="ltr">bins</span>.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثالثة</span>
+          <h3>المخطط الدائري، الخطي، والصندوقي</h3>
+          <p>المخطط الدائري (<span dir="ltr">Pie Plot</span>) ومعاملاته الستة وحساب نسبه، المخطط الخطي (<span dir="ltr">Line Plot</span>) عبر الزمن، ومخطط الصندوق (<span dir="ltr">Box Plot</span>) بمكوناته الثلاثة ومعاملات <span dir="ltr">plt.boxplot()</span>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== الوحدة الأولى كاملة في قائمة واحدة ==================== -->
+    <details open>
+      <summary>الوحدة الأولى: مفهوم تمثيل البيانات، تصنيف الرسوم البيانية، وأساسيات مكتبة Matplotlib</summary>
+      <div class="details-body">
+        <h3>1) مفهوم تمثيل البيانات ومكتباته وتصنيف الرسوم البيانية</h3>
+        <ul>
+          <li><b>مفهوم تمثيل البيانات (<span dir="ltr">Data Visualization</span>):</b> هو عملية تحويل البيانات الرقمية والجدولية إلى أشكال ورسوم بيانية مرئية تسهل على المحلل وصانع القرار فهم الأنماط، الاتجاهات، العلاقات، واكتشاف القيم المتطرفة بسرعة.</li>
+          <li><b>أشهر ثلاث مكتبات لتمثيل البيانات في لغة البايثون:</b>
+            <ol>
+              <li><b>مكتبة <span dir="ltr">Matplotlib</span>:</b> المكتبة الأساسية والأقدم والأكثر شمولاً لإنشاء الرسوم البيانية الثابتة ثنائية وثلاثية الأبعاد في البايثون.</li>
+              <li><b>مكتبة <span dir="ltr">Seaborn</span>:</b> مكتبة مبنية فوق <span dir="ltr">Matplotlib</span> توفر رسوماً إحصائية جذابة وبأوامر مختصرة.</li>
+              <li><b>مكتبة <span dir="ltr">Bokeh</span>:</b> مكتبة متخصصة في إنشاء الرسوم البيانية <b>التفاعلية (<span dir="ltr">Interactive</span>)</b> التي تعمل على متصفحات الويب.</li>
+            </ol>
+          </li>
+        </ul>
+
+        <div class="exam-alert">
+          <b>🔥 تصنيف الرسوم البيانية حسب عدد المتغيرات (مهم جداً للاختبار):</b><br>
+          1) <b>أحادي المتغير (<span dir="ltr">Univariate</span>):</b> يمثل بيانات <b>متغير واحد فقط (عمود واحد)</b> لدراسة توزيعه أو تكرار فئاته، مثل: (<span dir="ltr">Bar plot, Histogram, Pie plot, Box plot</span>).<br>
+          2) <b>ثنائي المتغير (<span dir="ltr">Bivariate</span>):</b> يمثل العلاقة بين <b>متغيرين اثنين ($X$ و $Y$)</b>، مثل: (<span dir="ltr">Scatter plot, Line plot</span>).<br>
+          3) <b>متعدد المتغيرات (<span dir="ltr">Multivariate</span>):</b> يمثل العلاقة بين <b>ثلاثة متغيرات أو أكثر</b> في رسم واحد (مثلاً بإضافة اللون أو الحجم لتمثيل متغير ثالث ورابع).
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) تثبيت واستدعاء مكتبة (<span dir="ltr">Matplotlib</span>) ورسم المنحنيات</h3>
+        <ul>
+          <li><b>تثبيت المكتبة:</b>
+            <div class="code-box">
+<span class="kw">pip</span> install matplotlib<br>
+<span class="cmt"># أو من خلال بيئة Anaconda:</span><br>
+<span class="kw">conda</span> install matplotlib
+            </div>
+          </li>
+          <li><b>الاستدعاء القياسي للمكتبة في البايثون:</b> نستدعي الوحدة الفرعية <code dir="ltr">pyplot</code> بالاسم المختصر <code dir="ltr">plt</code>:
+            <div class="code-box"><span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt<br><span class="kw">import</span> numpy <span class="kw">as</span> np</div>
+          </li>
+          <li><b>توليد نقاط متساوية المسافات بدالة <code dir="ltr">np.linspace</code> ورسمها بـ <code dir="ltr">plt.plot</code>:</b>
+            <ul>
+              <li>تُستخدم الدالة <code dir="ltr">np.linspace(start, stop, num)</code> لتوليد مصفوفة تحتوي على <code dir="ltr">num</code> من النقاط الموزعة بانتظام بين البداية <code dir="ltr">start</code> والنهاية <code dir="ltr">stop</code>.</li>
+            </ul>
+            <div class="code-box">
+x = np.linspace(<span class="num">0</span>, <span class="num">10</span>, <span class="num">100</span>)         <span class="cmt"># توليد 100 نقطة موزعة بانتظام بين 0 و 10</span><br>
+plt.plot(x, np.sin(x), label=<span class="str">'sin(x)'</span>) <span class="cmt"># رسم منحنى دالة الجيب</span><br>
+plt.plot(x, np.cos(x), label=<span class="str">'cos(x)'</span>) <span class="cmt"># رسم منحنى دالة جيب التمام في نفس الشكل</span><br>
+plt.xlabel(<span class="str">'x-axis'</span>)                  <span class="cmt"># تسمية المحور الأفقي X</span><br>
+plt.ylabel(<span class="str">'y-axis'</span>)                  <span class="cmt"># تسمية المحور الرأسي Y</span><br>
+plt.title(<span class="str">'Sine and Cosine Waves'</span>)    <span class="cmt"># إضافة عنوان للرسم البياني</span><br>
+plt.legend()                          <span class="cmt"># إظهار مربع مفتاح الرسم (يقرأ قيم label)</span><br>
+plt.show()                            <span class="cmt"># عرض وإظهار الشكل النهائي على الشاشة</span>
+            </div>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) ملحقات ومكونات الشكل البياني (<span dir="ltr">Anatomy of a Matplotlib Figure</span>)</h3>
+        <ul>
+          <li>يتكون الشكل البياني المتكامل في <span dir="ltr">Matplotlib</span> من العناصر الأساسية التالية:
+            <ol>
+              <li><b>الشكل العام (<span dir="ltr">Figure</span>):</b> النافذة أو الإطار الخارجي الكامل الذي يحتوي على كافة الرسوم والمحاور والعناوين (ويمكن تحديد أبعاده بـ <code dir="ltr">plt.figure(figsize=(width, height))</code>).</li>
+              <li><b>الرسوم والرسوم الفرعية (<span dir="ltr">Plots / Subplots</span>):</b> مساحات الرسم الفعلي داخل الـ <span dir="ltr">Figure</span> (يمكن أن يضم الشكل رسماً واحداً أو شبكة من الرسوم الفرعية).</li>
+              <li><b>المحاور (<span dir="ltr">Axes</span>):</b> المحور الأفقي (<span dir="ltr">X-axis</span>) والمحور الرأسي (<span dir="ltr">Y-axis</span>) اللذان يحددان نطاق وتدريج البيانات (<span dir="ltr">Ticks &amp; Limits</span>).</li>
+              <li><b>العنوان (<span dir="ltr">Title</span>):</b> النص العلوي الذي يوضح موضوع الرسم البياني، ويُضاف بالدالة <b><code dir="ltr">plt.title()</code></b>.</li>
+              <li><b>تسميات المحاور (<span dir="ltr">Axis Labels</span>):</b> النصوص التي توضح ماذا يمثل كل محور، وتُضاف بالدالتين <b><code dir="ltr">plt.xlabel()</code></b> و <b><code dir="ltr">plt.ylabel()</code></b>.</li>
+              <li><b>مفتاح الرسم / وسيلة الإيضاح (<span dir="ltr">Legend</span>):</b> المربع التوضيحي الذي يبين دلالة كل لون أو منحنى في الرسم (يعتمد على المعامل <code dir="ltr">label='...'</code> داخل دالة الرسم)، ويُفعل بالدالة <b><code dir="ltr">plt.legend()</code></b>.</li>
+            </ol>
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- ==================== الوحدة الثانية كاملة في قائمة واحدة ==================== -->
+    <details>
+      <summary>الوحدة الثانية: الأعمدة البيانية (Bar Plot) والمدرج التكراري (Histogram) والفرق بينهما</summary>
+      <div class="details-body">
+        <h3>1) الأعمدة البيانية (<span dir="ltr">Bar Plot</span>) — لمجموعة واحدة ولمجموعتين</h3>
+        <ul>
+          <li><b>متى نستخدم الأعمدة البيانية (<span dir="ltr">Bar Plot</span>)؟</b>
+            <ul>
+              <li>يُستخدم لمقارنة القيم الرقمية عبر <b>فئات منفصلة (<span dir="ltr">Categorical / Discrete data</span>)</b> لمتغير واحد (مثل مقارنة أعداد الطلاب في عدة تخصصات، أو مبيعات عدة منتجات)، وتكون الأعمدة <b>منفصلة عن بعضها بفراغات</b>.</li>
+            </ul>
+          </li>
+          <li><b>أولاً: رسم أعمدة بيانية لمجموعة واحدة بدالة <code dir="ltr">plt.bar()</code>:</b>
+            <div class="code-box">
+categories = [<span class="str">'A'</span>, <span class="str">'B'</span>, <span class="str">'C'</span>, <span class="str">'D'</span>]<br>
+values = [<span class="num">25</span>, <span class="num">40</span>, <span class="num">30</span>, <span class="num">55</span>]<br><br>
+plt.bar(categories, values, color=<span class="str">'royalblue'</span>, width=<span class="num">0.6</span>)<br>
+plt.xlabel(<span class="str">'Categories'</span>)<br>
+plt.ylabel(<span class="str">'Values'</span>)<br>
+plt.title(<span class="str">'Simple Bar Plot'</span>)<br>
+plt.show()
+            </div>
+          </li>
+          <li><b>ثانياً: رسم أعمدة بيانية لمقارنة مجموعتين جنباً إلى جنب (<span dir="ltr">Grouped Bar Plot</span>):</b>
+            <div class="exam-alert">
+              <b>🌟 فكرة برمجية هامة في السلايد:</b> لرسم مجموعتين من الأعمدة بجانب بعضهما دون أن يتداخلا فوق بعضهما:<br>
+              1) ننشئ مواقع رقمية للفئات باستخدام <code dir="ltr">x = np.arange(len(categories))</code>.<br>
+              2) نحدد عرض العمود بمتغير مثل <code dir="ltr">bar_width = 0.35</code>.<br>
+              3) نرسم المجموعة الأولى عند الموقع <code dir="ltr">x</code>، ونرسم المجموعة الثانية مزاحة بمقدار عرض العمود عند الموقع <b><code dir="ltr">x + bar_width</code></b>.<br>
+              4) نستخدم الدالة <b><code dir="ltr">plt.xticks(x + bar_width / 2, categories)</code></b> لوضع أسماء الفئات في المنتصف بين العمودين!
+            </div>
+            <div class="code-box">
+categories = [<span class="str">'G1'</span>, <span class="str">'G2'</span>, <span class="str">'G3'</span>, <span class="str">'G4'</span>]<br>
+men_means = [<span class="num">20</span>, <span class="num">35</span>, <span class="num">30</span>, <span class="num">35</span>]<br>
+women_means = [<span class="num">25</span>, <span class="num">32</span>, <span class="num">34</span>, <span class="num">20</span>]<br><br>
+x = np.arange(<span class="kw">len</span>(categories))  <span class="cmt"># مواقع الفئات: [0, 1, 2, 3]</span><br>
+bar_width = <span class="num">0.35</span>                <span class="cmt"># عرض كل عمود</span><br><br>
+plt.bar(x, men_means, width=bar_width, label=<span class="str">'Men'</span>)<br>
+plt.bar(x + bar_width, women_means, width=bar_width, label=<span class="str">'Women'</span>)<br><br>
+plt.xticks(x + bar_width / <span class="num">2</span>, categories) <span class="cmt"># وضع أسماء الفئات على المحور الأفقي في المنتصف</span><br>
+plt.legend()<br>
+plt.show()
+            </div>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) المدرج التكراري (<span dir="ltr">Histogram</span>) ومعامل الفترات (<span dir="ltr">bins</span>)</h3>
+        <ul>
+          <li><b>مفهوم المدرج التكراري (<span dir="ltr">Histogram</span>):</b>
+            <ul>
+              <li>هو رسم بياني أحادي المتغير يُستخدم لتمثيل <b>توزيع البيانات الكمية المتصلة (<span dir="ltr">Continuous Numerical Data</span>)</b>؛ حيث يقسم مدى البيانات إلى <b>فترات متساوية (<span dir="ltr">Bins / Intervals</span>)</b>، ويمثل ارتفاع كل عمود <b>تكرار (عدد) القيم (<span dir="ltr">Frequency</span>)</b> التي تقع داخل تلك الفترة.</li>
+            </ul>
+          </li>
+          <li><b>الفرق الجوهري بين (<span dir="ltr">Bar Plot</span>) و (<span dir="ltr">Histogram</span>) في الاختبار:</b>
+            <ul>
+              <li><b><span dir="ltr">Bar Plot</span>:</b> يقارن بين <b>فئات منفصلة (نوعية)</b>، وتكون الأعمدة متباعدة بينها فراغات، والدالة هي <code dir="ltr">plt.bar()</code>.</li>
+              <li><b><span dir="ltr">Histogram</span>:</b> يعرض توزيع <b>متغير كمي متصل</b> مقسم إلى فترات رقمية (<code dir="ltr">bins</code>)، وتكون الأعمدة <b>متلاصقة بدون فراغات</b>، والدالة هي <b><code dir="ltr">plt.hist()</code></b>.</li>
+            </ul>
+          </li>
+          <li><b>الكود البرمجي لإنشاء <span dir="ltr">Histogram</span> وتحديد الفترات (<code dir="ltr">bins</code>):</b>
+            <div class="code-box">
+data = np.random.randn(<span class="num">1000</span>)  <span class="cmt"># توليد 1000 رقم عشوائي يتبع التوزيع الطبيعي</span><br><br>
+<span class="cmt"># رسم المدرج التكراري بتقسيم البيانات إلى 20 فترة (bins=20)</span><br>
+plt.hist(data, bins=<span class="num">20</span>, color=<span class="str">'skyblue'</span>, edgecolor=<span class="str">'black'</span>)<br>
+plt.xlabel(<span class="str">'Value Intervals (Bins)'</span>)<br>
+plt.ylabel(<span class="str">'Frequency (التكرار)'</span>)<br>
+plt.title(<span class="str">'Histogram Example'</span>)<br>
+plt.show()
+            </div>
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- ==================== الوحدة الثالثة كاملة في قائمة واحدة ==================== -->
+    <details>
+      <summary>الوحدة الثالثة: المخطط الدائري (Pie Plot)، المخطط الخطي (Line Plot)، ومخطط الصندوق (Box Plot)</summary>
+      <div class="details-body">
+        <h3>1) المخطط الدائري (<span dir="ltr">Pie Plot</span>) ومعاملاته الستة وحساب النسب</h3>
+        <ul>
+          <li><b>متى نستخدم المخطط الدائري (<span dir="ltr">Pie Plot</span>)؟</b>
+            <ul>
+              <li>يُستخدم لتمثيل <b>الحصص أو النسب المئوية لفئات متغير واحد</b> كأجزاء من الكل (بحيث يكون مجموع النسب المئوية لجميع الشرائح يساوي $100\%$).</li>
+              <li><b>معادلة حساب النسبة المئوية لأي شريحة يدوياً:</b></li>
+            </ul>
+            <div class="math-box">
+              Percentage (%) = ( Slice Value / Total Sum of All Slices ) &times; 100
+            </div>
+            <div class="step-box">
+              <b>مثال حسابي سريع:</b> إذا كانت قيم 4 فئات هي $[15, 30, 45, 10]$ فإن مجموعها الكلي $= 100$، وتكون نسبة الفئة الثالثة $= (45 \div 100) \times 100 = 45.0\%$. أما لو كانت القيم $[10, 20, 10]$ فمجموعها $= 40$، وتكون نسبة الفئة الثانية ($20$) هي: $(20 \div 40) \times 100 = \mathbf{50\%}$.
+            </div>
+          </li>
+          <li><b>الدالة البرمجية <code dir="ltr">plt.pie()</code> ومعاملاتها الستة الهامة جداً للاختبار:</b>
+            <table>
+              <thead>
+                <tr>
+                  <th>اسم المعامل في <code dir="ltr">plt.pie()</code></th>
+                  <th>الوظيفة الدقيقة كما وردت في المنهج</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td dir="ltr"><b>1. labels</b></td>
+                  <td>قائمة النصوص (أسماء الفئات) التي تظهر بجانب كل شريحة من شرائح الدائرة.</td>
+                </tr>
+                <tr>
+                  <td dir="ltr"><b>2. colors</b></td>
+                  <td>قائمة الألوان المخصصة لكل شريحة.</td>
+                </tr>
+                <tr>
+                  <td dir="ltr"><b>3. startangle</b></td>
+                  <td>زاوية بدء رسم الشريحة الأولى عكس عقارب الساعة من محور X الموجب (مثلاً <code dir="ltr">startangle=90</code>).</td>
+                </tr>
+                <tr>
+                  <td dir="ltr"><b>4. shadow</b></td>
+                  <td>قيمة منطقية (<code dir="ltr">True</code> أو <code dir="ltr">False</code>) لرسم ظل تحت المخطط الدائري لإعطائه مظهراً ثلاثي الأبعاد.</td>
+                </tr>
+                <tr>
+                  <td dir="ltr"><b>5. explode</b></td>
+                  <td>مجموعة (<code dir="ltr">tuple</code>) أو قائمة تحدد مقدار <b>إبعاد أو فصل شريحة معينة عن مركز الدائرة</b> لإبرازها (مثلاً <code dir="ltr">explode=(0, 0.1, 0, 0)</code> يفصل الشريحة الثانية فقط).</td>
+                </tr>
+                <tr>
+                  <td dir="ltr"><b>6. autopct</b></td>
+                  <td>صيغة نصية لطباعة <b>قيمة النسبة المئوية تلقائياً</b> فوق كل شريحة (مثل <code dir="ltr">autopct='%1.1f%%'</code> لطباعة النسبة برقم عشري واحد وعلامة %).</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="code-box">
+labels = [<span class="str">'HD'</span>, <span class="str">'RAM'</span>, <span class="str">'CPU'</span>, <span class="str">'GPU'</span>]<br>
+sizes = [<span class="num">45</span>, <span class="num">30</span>, <span class="num">15</span>, <span class="num">10</span>]<br>
+explode = (<span class="num">0.1</span>, <span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>)  <span class="cmt"># إبعاد الشريحة الأولى (HD) بمقدار 0.1 عن المركز</span><br><br>
+plt.pie(sizes, explode=explode, labels=labels, autopct=<span class="str">'%1.1f%%'</span>, shadow=<span class="kw">True</span>, startangle=<span class="num">90</span>)<br>
+plt.title(<span class="str">'Computer Parts Sales'</span>)<br>
+plt.show()
+            </div>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) المخطط الخطي (<span dir="ltr">Line Plot</span>) لتغير البيانات عبر الزمن</h3>
+        <ul>
+          <li><b>متى نستخدم المخطط الخطي (<span dir="ltr">Line Plot</span>)؟</b>
+            <ul>
+              <li>يُستخدم بشكل أساسي لتمثيل <b>تغير البيانات المستمرة عبر الزمن (<span dir="ltr">Time Series</span>)</b> (مثل تتبع درجات الحرارة أو أسعار الأسهم أو المبيعات عبر الشهور والسنوات) لملاحظة الاتجاه العام (<span dir="ltr">Trend</span>).</li>
+            </ul>
+          </li>
+          <li><b>أهم المعاملات والدوال المرافقة للمخطط الخطي:</b>
+            <ul>
+              <li><b><code dir="ltr">plt.figure(figsize=(w, h))</code>:</b> لتحديد عرض وارتفاع نافذة الشكل البياني بالبوصة قبل الرسم.</li>
+              <li><b><code dir="ltr">marker</code>:</b> لتحديد شكل النقطة عند كل قراءة على الخط (مثل <code dir="ltr">marker='o'</code> لدائرة، أو <code dir="ltr">'s'</code> لمربع، أو <code dir="ltr">'^'</code> لمثلث).</li>
+              <li><b><code dir="ltr">linestyle</code>:</b> لتحديد نمط الخط (مثل <code dir="ltr">'-'</code> لخط متصل، أو <code dir="ltr">'--'</code> لخط متقطع، أو <code dir="ltr">':'</code> لمنقط).</li>
+              <li><b><code dir="ltr">plt.grid(True)</code>:</b> لإظهار خطوط الشبكة الخلفية لتسهيل قراءة القيم المقابلة على المحورين.</li>
+            </ul>
+            <div class="code-box">
+years = [<span class="num">2018</span>, <span class="num">2019</span>, <span class="num">2020</span>, <span class="num">2021</span>, <span class="num">2022</span>]<br>
+sales = [<span class="num">120</span>, <span class="num">150</span>, <span class="num">110</span>, <span class="num">180</span>, <span class="num">210</span>]<br><br>
+plt.figure(figsize=(<span class="num">8</span>, <span class="num">5</span>))<br>
+plt.plot(years, sales, marker=<span class="str">'o'</span>, linestyle=<span class="str">'--'</span>, color=<span class="str">'green'</span>)<br>
+plt.grid(<span class="kw">True</span>)<br>
+plt.show()
+            </div>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) مخطط الصندوق (<span dir="ltr">Box Plot</span>) — مكوناته الثلاثة ومعاملاته</h3>
+        <div class="exam-alert">
+          <b>🔥🔥 هام جداً للاختبار: المكونات الثلاثة لمخطط الصندوق (<span dir="ltr">Box Plot</span>):</b><br>
+          يلخص مخطط الصندوق توزيع البيانات ويكشف عن القيم المتطرفة (<span dir="ltr">Outliers</span>)، ويتكون من <b>3 أجزاء رئيسية</b>:<br>
+          1) <b>الصندوق (<span dir="ltr">Box</span>):</b> يمتد من <b>الربع الأول ($Q_1 = 25\%$)</b> إلى <b>الربع الثالث ($Q_3 = 75\%$)</b>، ويمثل طوله المدى الربعي ($\text{IQR} = Q_3 - Q_1$)، ويحتوي على50% الوسطى من البيانات. ويوجد بداخل الصندوق خط يمثل <b>الوسيط (<span dir="ltr">Median / $Q_2 = 50\%$</span>)</b>.<br>
+          2) <b>الشوكة / الشوارب (<span dir="ltr">Whiskers</span>):</b> الخطان الممتدان خارج الصندوق وصولاً إلى <b>أقل قيمة طبيعية</b> ($Q_1 - 1.5 \times \text{IQR}$) و<b>أعلى قيمة طبيعية</b> ($Q_3 + 1.5 \times \text{IQR}$) غير متطرفة.<br>
+          3) <b>القيم المتطرفة (<span dir="ltr">Outliers / Fliers</span>):</b> هي النقاط الفردية التي تقع <b>خارج حدود الشوكة (الشاربين)</b> (أصغر من الحد الأدنى أو أكبر من الحد الأعلى).
+        </div>
+
+        <!-- رسم توضيحي SVG لمكونات Box Plot -->
+        <div class="svg-wrap">
+          <svg viewBox="0 0 650 160" width="100%" style="max-width:620px;height:auto;font-family:Tahoma,sans-serif">
+            <!-- خط الشوكة الأفقي -->
+            <line x1="110" y1="80" x2="510" y2="80" stroke="#1e3a8a" stroke-width="2.5" stroke-dasharray="5,4"/>
+            <!-- حد الشوكة الأيسر (Min) -->
+            <line x1="110" y1="50" x2="110" y2="110" stroke="#1e3a8a" stroke-width="3"/>
+            <text x="110" y="135" text-anchor="middle" font-size="12" fill="#0f172a" font-weight="bold">الحد الأدنى (Whisker)</text>
+            <!-- الصندوق (Q1 إلى Q3) -->
+            <rect x="210" y="35" width="200" height="90" fill="#dbeafe" stroke="#1d4ed8" stroke-width="3" rx="4"/>
+            <text x="210" y="24" text-anchor="middle" font-size="13" fill="#1e3a8a" font-weight="bold">Q1 (25%)</text>
+            <text x="410" y="24" text-anchor="middle" font-size="13" fill="#1e3a8a" font-weight="bold">Q3 (75%)</text>
+            <text x="310" y="148" text-anchor="middle" font-size="13" fill="#1d4ed8" font-weight="bold">الصندوق (Box) = IQR (Q3 - Q1)</text>
+            <!-- خط الوسيط (Median) -->
+            <line x1="295" y1="35" x2="295" y2="125" stroke="#dc2626" stroke-width="3.5"/>
+            <text x="295" y="22" text-anchor="middle" font-size="13" fill="#dc2626" font-weight="bold">الوسيط (Median)</text>
+            <!-- حد الشوكة الأيمن (Max) -->
+            <line x1="510" y1="50" x2="510" y2="110" stroke="#1e3a8a" stroke-width="3"/>
+            <text x="510" y="135" text-anchor="middle" font-size="12" fill="#0f172a" font-weight="bold">الحد الأعلى (Whisker)</text>
+            <!-- القيم المتطرفة (Outliers) -->
+            <circle cx="45" cy="80" r="6" fill="#dc2626"/>
+            <circle cx="575" cy="80" r="6" fill="#dc2626"/>
+            <circle cx="605" cy="80" r="6" fill="#dc2626"/>
+            <text x="585" y="55" text-anchor="middle" font-size="12" fill="#dc2626" font-weight="bold">قيم متطرفة (Outliers)</text>
+            <text x="45" y="55" text-anchor="middle" font-size="12" fill="#dc2626" font-weight="bold">Outlier</text>
+          </svg>
+        </div>
+
+        <p><b>معاملات الدالة <code dir="ltr">plt.boxplot()</code> الخمسة في المنهج:</b></p>
+        <table>
+          <thead>
+            <tr>
+              <th>المعامل في <code dir="ltr">plt.boxplot()</code></th>
+              <th>الوظيفة الدقيقة كما وردت في السلايد</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td dir="ltr"><b>1. vert</b></td>
+              <td>يحدد اتجاه رسم الصندوق: <code dir="ltr">vert=True</code> (الافتراضي) يرسمه <b>رأسياً (عمودياً)</b>، و <code dir="ltr">vert=False</code> يرسمه <b>أفقياً</b>.</td>
+            </tr>
+            <tr>
+              <td dir="ltr"><b>2. patch_artist</b></td>
+              <td>عند جعله <code dir="ltr">patch_artist=True</code> يقوم <b>بتعبئة وتلوين الصندوق من الداخل</b> (بدلاً من كونه خطوطاً مفرغة).</td>
+            </tr>
+            <tr>
+              <td dir="ltr"><b>3. showfliers</b></td>
+              <td>يتحكم في <b>إظهار أو إخفاء القيم المتطرفة (<span dir="ltr">Outliers</span>)</b>: <code dir="ltr">showfliers=True</code> (الافتراضي) يظهرها، و <code dir="ltr">False</code> يخفيها.</td>
+            </tr>
+            <tr>
+              <td dir="ltr"><b>4. widths</b></td>
+              <td>يحدد <b>عرض الصندوق</b> (مثلاً <code dir="ltr">widths=0.5</code>).</td>
+            </tr>
+            <tr>
+              <td dir="ltr"><b>5. meanline &amp; showmeans</b></td>
+              <td>عند تفعيل <code dir="ltr">showmeans=True</code> و <code dir="ltr">meanline=True</code> يتم رسم خط إضافي داخل الصندوق يمثل <b>المتوسط الحسابي (<span dir="ltr">Mean</span>)</b>.</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="code-box">
+plt.boxplot(data, vert=<span class="kw">False</span>, patch_artist=<span class="kw">True</span>, showfliers=<span class="kw">True</span>, widths=<span class="num">0.5</span>, showmeans=<span class="kw">True</span>, meanline=<span class="kw">True</span>)<br>
+plt.title(<span class="str">'Horizontal Box Plot'</span>)<br>
+plt.show()
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- التبويب الثاني: ملخص الدوال والمعاملات -->
+  <section id="tables" class="panel">
+    <div class="card">
+      <h2>1. جدول المقارنة الشامل بين أنواع الرسوم البيانية الخمسة في الفصل الرابع</h2>
+      <p class="muted">يوضح هذا الجدول متى نستخدم كل رسم بياني، دالته البرمجية في Matplotlib، وأهم معاملاته:</p>
+      <table>
+        <thead>
+          <tr>
+            <th>نوع الرسم البياني</th>
+            <th>الدالة في Matplotlib</th>
+            <th>الاستخدام الأساسي ونوع البيانات</th>
+            <th>أهم المعاملات الخاصة به</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1. الأعمدة البيانية (<span dir="ltr">Bar Plot</span>)</b></td>
+            <td dir="ltr"><code>plt.bar(x, height)</code></td>
+            <td>مقارنة قيم <b>فئات منفصلة (نوعية)</b> لمجموعة واحدة أو مجموعتين جنباً إلى جنب (أعمدة متباعدة).</td>
+            <td dir="ltr"><code>width</code>, <code>color</code>, <code>label</code> (ومعها <code>plt.xticks()</code>)</td>
+          </tr>
+          <tr>
+            <td><b>2. المدرج التكراري (<span dir="ltr">Histogram</span>)</b></td>
+            <td dir="ltr"><code>plt.hist(data)</code></td>
+            <td>عرض توزيع وتكرارات <b>البيانات الكمية المتصلة</b> عبر تقسيمها إلى فترات رقمية (أعمدة متلاصقة).</td>
+            <td dir="ltr"><code>bins</code> (عدد الفترات أو حدودها), <code>color</code>, <code>edgecolor</code></td>
+          </tr>
+          <tr>
+            <td><b>3. المخطط الدائري (<span dir="ltr">Pie Plot</span>)</b></td>
+            <td dir="ltr"><code>plt.pie(sizes)</code></td>
+            <td>تمثيل <b>النسب المئوية أو الحصص</b> لفئات متغير واحد كأجزاء من الكل (مجموعها $100\%$).</td>
+            <td dir="ltr"><code>labels</code>, <code>colors</code>, <code>startangle</code>, <code>shadow</code>, <code>explode</code>, <code>autopct</code></td>
+          </tr>
+          <tr>
+            <td><b>4. المخطط الخطي (<span dir="ltr">Line Plot</span>)</b></td>
+            <td dir="ltr"><code>plt.plot(x, y)</code></td>
+            <td>تمثيل <b>تغير البيانات المستمرة عبر الزمن</b> أو رسم الدوال الرياضية وملاحظة الاتجاه العام.</td>
+            <td dir="ltr"><code>marker</code>, <code>linestyle</code>, <code>color</code>, <code>label</code> (ومعها <code>plt.grid(True)</code>)</td>
+          </tr>
+          <tr>
+            <td><b>5. مخطط الصندوق (<span dir="ltr">Box Plot</span>)</b></td>
+            <td dir="ltr"><code>plt.boxplot(data)</code></td>
+            <td>تلخيص التوزيع (الأرباع $Q_1, Q_3$ والوسيط والمدى الربعي $\text{IQR}$) و<b>اكتشاف القيم المتطرفة (<span dir="ltr">Outliers</span>)</b>.</td>
+            <td dir="ltr"><code>vert</code>, <code>patch_artist</code>, <code>showfliers</code>, <code>widths</code>, <code>meanline</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>2. جدول دوال تهيئة وتنسيق الشكل البياني (Figure Formatting Functions)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>الدالة البرمجية</th>
+            <th>الوظيفة الدقيقة</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td dir="ltr"><code>plt.figure(figsize=(w, h))</code></td>
+            <td>إنشاء شكل جديد وتحديد أبعاده (العرض <code dir="ltr">w</code> والارتفاع <code dir="ltr">h</code>).</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><code>plt.title('Text')</code></td>
+            <td>إضافة عنوان رئيسي أعلى الرسم البياني.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><code>plt.xlabel('X')</code> / <code>plt.ylabel('Y')</code></td>
+            <td>إضافة تسمية توضيحية للمحور الأفقي X والمحور الرأسي Y.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><code>plt.legend()</code></td>
+            <td>إظهار مربع وسيلة الإيضاح (مفتاح الرسم) لعرض التسميات المحددة في المعامل <code dir="ltr">label</code>.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><code>plt.xticks(ticks, labels)</code></td>
+            <td>تحديد مواقع وتسميات العلامات على المحور الأفقي X.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><code>plt.grid(True)</code></td>
+            <td>إظهار خطوط الشبكة الخلفية في منطقة الرسم.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><code>plt.show()</code></td>
+            <td>عرض وإظهار الشكل البياني النهائي على الشاشة.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- التبويب الثالث: قاموس المصطلحات والدوال -->
+  <section id="terms" class="panel">
+    <div class="card">
+      <h2>قاموس المصطلحات والدوال والمعاملات الشامل للفصل الرابع</h2>
+      <p class="muted">جميع المفاهيم والدوال البرمجية ومعاملات الرسوم البيانية الواردة في الوحدات الثلاث:</p>
+      <div id="termsGrid" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- التبويب الرابع: البطاقات التعليمية -->
+  <section id="cards" class="panel">
+    <div class="card">
+      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
+      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
+      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
+        <div class="term" id="flashTerm"></div>
+        <div class="answer" id="flashAnswer" hidden></div>
+        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="prevCard">السابق</button>
+        <span id="cardCount" class="muted"></span>
+        <button class="btn primary" id="nextCard">التالي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- التبويب الخامس: الاختبار الذاتي العشوائي -->
+  <section id="quiz" class="panel">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2>الاختبار الشامل المتغير للفصل الرابع (25 سؤالاً) <span class="badge-new">ترتيب عشوائي ذكي 🎲</span></h2>
+          <p class="muted">يختبر فهمك لتصنيف الرسوم البيانية، دوال ومعاملات Matplotlib، ومكونات Box Plot و Pie Plot مع تصحيح فوري!</p>
+        </div>
+        <div class="score" id="score">النتيجة: 0 / 25</div>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="quizArea"></div>
+      <div class="row">
+        <button class="btn" id="resetQuiz">إعادة الاختبار بترتيب عشوائي جديد 🔀</button>
+        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+      </div>
+      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
+    </div>
+  </section>
+</main>
+
+<footer>مبني بالكامل (100%) على محتوى الفصل الرابع (تمثيل البيانات - الجزء الأول Matplotlib) من مقرر تحليل وتمثيل البيانات</footer>
+
+<script>
+const terms = [
+  ["Univariate Visualization", "تمثيل أحادي المتغير: رسوم بيانية تعرض توزيع أو قيم متغير واحد فقط (مثل Bar plot, Histogram, Pie plot, Box plot)."],
+  ["Bivariate Visualization", "تمثيل ثنائي المتغير: رسوم بيانية تعرض العلاقة بين متغيرين اثنين (مثل Scatter plot و Line plot)."],
+  ["Multivariate Visualization", "تمثيل متعدد المتغيرات: رسوم بيانية تعرض العلاقة بين ثلاثة متغيرات أو أكثر في نفس الشكل."],
+  ["import matplotlib.pyplot as plt", "الصيغة القياسية لاستدعاء مكتبة الرسم البياني الأساسية في البايثون."],
+  ["np.linspace(start, stop, num)", "دالة في NumPy لتوليد مصفوفة تحتوي على عدد (num) من النقاط الموزعة بانتظام بين قيمة البداية (start) والنهاية (stop)."],
+  ["Figure & Subplots", "الـ Figure هو الإطار الخارجي الكامل للشكل البياني، والـ Subplots هي الرسوم الفرعية الموجودة بداخله."],
+  ["plt.legend()", "دالة لإظهار وسيلة الإيضاح (مفتاح الرسم) التي تعرض تسميات المنحنيات المحددة في المعامل label."],
+  ["plt.bar() vs plt.hist()", "دالة plt.bar() ترسم أعمدة منفصلة لمقارنة الفئات (Bar Plot)، بينما plt.hist() ترسم مدرجاً تكرارياً متلاصقاً لتوزيع البيانات المتصلة (Histogram)."],
+  ["bins (في plt.hist)", "معامل في دالة المدرج التكراري يحدد عدد الفترات (أو حدود الفئات) التي يتم تقسيم مدى البيانات المتصلة إليها لحساب التكرارات."],
+  ["plt.xticks()", "دالة لتحديد مواقع وتسميات العلامات على المحور الأفقي X (تُستخدم لضبط أسماء الفئات في منتصف الأعمدة المزدوجة)."],
+  ["plt.pie()", "دالة رسم المخطط الدائري لتمثيل النسب المئوية لفئات متغير واحد بحيث يكون مجموعها 100%."],
+  ["explode (في plt.pie)", "معامل في المخطط الدائري يحدد مقدار إبعاد أو فصل شريحة معينة عن مركز الدائرة لإبرازها."],
+  ["autopct (في plt.pie)", "معامل في المخطط الدائري لحساب وطباعة النسبة المئوية تلقائياً على كل شريحة (مثل '%1.1f%%')."],
+  ["startangle & shadow (في plt.pie)", "startangle يحدد زاوية بدء رسم الشريحة الأولى، و shadow=True يضيف ظلاً خلف الدائرة."],
+  ["Box Plot (مخطط الصندوق)", "رسم بياني يلخص توزيع البيانات عبر الأرباع والوسيط ويكشف القيم المتطرفة، ويتكون من 3 أجزاء: الصندوق (Box)، الشوكة (Whiskers)، والقيم المتطرفة (Outliers)."],
+  ["vert & patch_artist (في plt.boxplot)", "المعامل vert يتحكم باتجاه الصندوق (True رأسي، False أفقي)، و patch_artist=True يقوم بتلوين وتعبئة الصندوق من الداخل."],
+  ["showfliers & meanline (في plt.boxplot)", "المعامل showfliers يتحكم بإظهار أو إخفاء القيم المتطرفة، و meanline=True يرسم خطاً للمتوسط الحسابي داخل الصندوق."]
+];
+
+const cards = [
+  ["ما هي أشهر ثلاث مكتبات لتمثيل البيانات في لغة البايثون؟", "1) Matplotlib (المكتبة الأساسية والأشمل).\n2) Seaborn (مبنية على Matplotlib للرسوم الإحصائية الجذابة).\n3) Bokeh (للرسوم التفاعلية على متصفحات الويب)."],
+  ["ما الفرق بين التصنيفات الثلاثة للرسوم البيانية: (Univariate) و (Bivariate) و (Multivariate)؟", "• Univariate (أحادي المتغير): يمثل متغيراً واحداً فقط.\n• Bivariate (ثنائي المتغير): يمثل العلاقة بين متغيرين اثنين.\n• Multivariate (متعدد المتغيرات): يمثل 3 متغيرات أو أكثر."],
+  ["ما هي وظيفة الدالة np.linspace(0, 10, 100)؟", "توليد مصفوفة تحتوي على 100 نقطة موزعة بانتظام (بمسافات متساوية) تبدأ من 0 وتنتهي عند 10."],
+  ["ما هي المكونات والملحقات الأساسية للشكل البياني (Figure) في Matplotlib؟", "1) الإطار العام (Figure).\n2) الرسوم والرسوم الفرعية (Plots / Subplots).\n3) المحاور (Axes: X & Y).\n4) العنوان (Title -> plt.title).\n5) تسميات المحاور (plt.xlabel & plt.ylabel).\n6) مفتاح الرسم (Legend -> plt.legend)."],
+  ["كيف نربط منحنى معين بمفتاح الرسم (Legend) في Matplotlib؟", "نمرر المعامل (label='اسم المنحنى') داخل دالة الرسم plt.plot()، ثم نستدعي الدالة plt.legend() لإظهار المربع التوضيحي."],
+  ["متى نستخدم الأعمدة البيانية (Bar Plot)؟ وما هي دالتها في Matplotlib؟", "تُستخدم لمقارنة القيم الرقمية عبر فئات منفصلة (نوعية) لمجموعة أو أكثر، ودالتها هي: plt.bar()."],
+  ["كيف نرسم مجموعتين من الأعمدة البيانية جنباً إلى جنب (Grouped Bar Plot) دون أن تتداخلا فوق بعضهما؟", "1) نحدد مواقع الفئات بـ x = np.arange(len(categories)) وعرض العمود bar_width.\n2) نرسم المجموعة الأولى عند x، والثانية عند (x + bar_width).\n3) نضبط أسماء الفئات في المنتصف بـ plt.xticks(x + bar_width / 2, categories)."],
+  ["متى نستخدم المدرج التكراري (Histogram)؟ وما هي دالته في Matplotlib؟", "يُستخدم لعرض توزيع وتكرارات البيانات الكمية المتصلة عبر تقسيمها إلى فترات رقمية متلاصقة، ودالته هي: plt.hist()."],
+  ["ما هي وظيفة المعامل (bins) داخل الدالة plt.hist(data, bins=20)؟", "يحدد عدد الفترات (أو حدود الفترات) التي يتم تقسيم مدى البيانات المتصلة إليها لحساب عدد القيم (التكرار Frequency) في كل فترة."],
+  ["ما الفرق الجوهري بين (Bar Plot) و (Histogram)؟", "• Bar Plot: يقارن فئات منفصلة (نوعية)، وأعمدته متباعدة بينها فراغات.\n• Histogram: يعرض توزيع بيانات كمية متصلة مقسمة لفترات (bins)، وأعمدته متلاصقة."],
+  ["متى نستخدم المخطط الدائري (Pie Plot)؟ وما مجموع النسب المئوية لشرائحه؟", "يُستخدم لتمثيل الحصص أو النسب المئوية لفئات متغير واحد كأجزاء من الكل، ومجموع نسب شرائحه يساوي دائماً 100%."],
+  ["إذا كانت قيم 4 شرائح في مخطط دائري هي [10, 15, 25, 50]، فكيف نحسب النسبة المئوية للشريحة الثالثة؟", "نجمع القيم: 10 + 15 + 25 + 50 = 100.\nنسبة الشريحة الثالثة = (25 / 100) × 100 = 25%."],
+  ["في الدالة plt.pie()، ما هي وظيفة كل من المعاملين (explode) و (autopct)؟", "• explode: إبعاد أو فصل شريحة معينة عن مركز الدائرة لإبرازها (مثل explode=(0, 0.1, 0, 0)).\n• autopct: حساب وعرض النسبة المئوية تلقائياً كنص فوق كل شريحة (مثل autopct='%1.1f%%')."],
+  ["في الدالة plt.pie()، ما هي وظيفة كل من: (labels)، (colors)، (startangle)، و (shadow)؟", "• labels: قائمة أسماء الشرائح.\n• colors: قائمة ألوان الشرائح.\n• startangle: زاوية بداية رسم الشريحة الأولى.\n• shadow: إضافة ظل خلف الدائرة عند جعلها True."],
+  ["متى نستخدم المخطط الخطي (Line Plot)؟", "لتمثيل تغير البيانات المستمرة عبر الزمن (السلاسل الزمنية) وملاحظة الاتجاه العام (Trend) صعوداً أو هبوطاً."],
+  ["ما وظيفة كل من: plt.figure(figsize=(10,6))، والمعاملين marker و linestyle، والدالة plt.grid(True)؟", "• figsize=(10,6): تحديد عرض وارتفاع الشكل البياني.\n• marker: تحديد شكل النقطة على الخط (مثل 'o').\n• linestyle: تحديد نمط الخط (متصل '-' أو متقطع '--').\n• plt.grid(True): إظهار الشبكة الخلفية."],
+  ["ما هي المكونات الثلاثة الرئيسية لمخطط الصندوق (Box Plot)؟", "1) الصندوق (Box).\n2) الشوكة / الشوارب (Whiskers).\n3) القيم المتطرفة (Outliers / Fliers)."],
+  ["ماذا يمثل الصندوق (Box) في مخطط الصندوق (Box Plot)؟ وماذا يمثل الخط الموجود بداخله؟", "• يمتد الصندوق من الربع الأول (Q1 = 25%) إلى الربع الثالث (Q3 = 75%)، ويمثل طوله المدى الربعي (IQR = Q3 - Q1).\n• الخط الموجود داخل الصندوق يمثل الوسيط (Median / Q2 = 50%)."],
+  ["ماذا تمثل الشوكة (Whiskers) وماذا تمثل النقاط الواقعة خارجها في مخطط الصندوق (Box Plot)؟", "• الشوكة (Whiskers): الخطان الممتدان من الصندوق إلى أقل وأعلى قيمة طبيعية غير متطرفة في البيانات.\n• النقاط الواقعة خارج الشوكة: تمثل القيم المتطرفة (Outliers)."],
+  ["في الدالة plt.boxplot()، ما تأثير تغيير المعامل (vert) من True إلى False؟", "• vert=True (الافتراضي): يرسم مخطط الصندوق بشكل رأسي (عمودي).\n• vert=False: يرسم مخطط الصندوق بشكل أفقي."],
+  ["في الدالة plt.boxplot()، ما وظيفة المعاملين (patch_artist) و (showfliers)؟", "• patch_artist=True: يقوم بتعبئة وتلوين الصندوق من الداخل.\n• showfliers: يتحكم في إظهار (True) أو إخفاء (False) النقاط الممثلة للقيم المتطرفة (Outliers)."],
+  ["في الدالة plt.boxplot()، ما وظيفة المعاملين (widths) و (meanline)؟", "• widths: يحدد عرض الصندوق.\n• meanline=True (مع showmeans=True): يرسم خطاً داخل الصندوق يمثل المتوسط الحسابي (Mean)."],
+  ["لماذا نستخدم الدالة plt.show() في نهاية كود الرسم البياني؟", "لإظهار وعرض الشكل البياني النهائي على الشاشة بعد الانتهاء من إعداد كافة خصائصه."],
+  ["أي نوع من الرسوم البيانية في الفصل الرابع يُعد الأفضل لاكتشاف القيم المتطرفة (Outliers) بصرياً في متغير واحد؟", "مخطط الصندوق (Box Plot)."],
+  ["أي نوع من الرسوم البيانية يُعد الأنسب لتمثيل الحصص السوقية لـ 4 شركات بحيث يظهر نصيب كل شركة كنسبة مئوية من 100%؟", "المخطط الدائري (Pie Plot)."],
+  ["إذا أردنا معرفة عدد الطلاب الذين حصلوا على درجات بين (60 و 70) وبين (70 و 80) وهكذا في اختبار، فأي رسم نستخدم؟", "المدرج التكراري (Histogram) بتقسيم الدرجات إلى فترات (bins)."],
+  ["ما الفرق بين ما يمثله المحور الرأسي Y في (Bar Plot) وما يمثله في (Histogram)؟", "• في Bar Plot: يمثل قيمة كل فئة (مثل المبيعات أو المتوسط).\n• في Histogram: يمثل التكرار (Frequency) أي عدد العناصر التي وقعت داخل كل فترة (bin)."],
+  ["هل يمكن رسم أكثر من منحنى (مثلاً sin و cos) داخل نفس الـ Figure في Matplotlib؟ وكيف؟", "نعم، باستدعاء الدالة plt.plot() مرتين متتاليتين قبل استدعاء plt.show()، فيرسمهما معاً في نفس المحاور بألوان مختلفة."]
+];
+
+const masterQuestions = [
+  {q:"أي من المكتبات التالية تُعد متخصصة في إنشاء الرسوم البيانية (التفاعلية - Interactive) التي تعمل على متصفحات الويب مقارنةً بمكتبة Matplotlib الأساسية؟",o:["مكتبة Bokeh","مكتبة NumPy","مكتبة SciPy","مكتبة Scikit-learn"],a:0,e:"مكتبات التمثيل الرسومي الثلاث هي Matplotlib (الأساسية)، و Seaborn (المبنية عليها)، و Bokeh (للرسوم التفاعلية)."},
+  {q:"الرسوم البيانية التي تُستخدم لتمثيل بيانات (متغير واحد فقط - عمود واحد) لدراسة توزيعه أو تكرار فئاته تُصنف كرسوم:",o:["أحادية المتغير (Univariate)","ثنائية المتغير (Bivariate)","متعددة المتغيرات (Multivariate)","علائقية (Relational)"],a:0,e:"الرسوم أحادية المتغير (Univariate) تمثل متغيراً واحداً فقط، بينما Bivariate لمتغيرين، و Multivariate لثلاثة متغيرات أو أكثر."},
+  {q:"ما وظيفة السطر البرمجي التالي: x = np.linspace(0, 10, 100) ؟",o:["توليد مصفوفة تحتوي على 100 نقطة موزعة بانتظام (بمسافات متساوية) بين 0 و 10","رسم 100 دائرة عشوائية","حذف الأرقام من 0 إلى 10","تقسيم الشاشة إلى 100 نافذة فرعية"],a:0,e:"تُستخدم دالة np.linspace(start, stop, num) لتوليد عدد num من النقاط المتساوية المسافات بين البداية والنهاية."},
+  {q:"في مكتبة Matplotlib، ما هي الدالة التي يجب استدعاؤها لإظهار مربع وسيلة الإيضاح (مفتاح الرسم) الذي يعرض التسميات المحددة في المعامل label؟",o:["plt.legend()","plt.title()","plt.xlabel()","plt.xticks()"],a:0,e:"الدالة plt.legend() هي المسؤولة عن إظهار مفتاح الرسم (Legend) بناءً على قيم المعامل label."},
+  {q:"أي رسم بياني يُستخدم لمقارنة القيم عبر (فئات منفصلة - Categorical) بأعمدة متباعدة، وما هي دالته في Matplotlib؟",o:["الأعمدة البيانية (Bar Plot) ودالته plt.bar()","المدرج التكراري (Histogram) ودالته plt.hist()","مخطط الصندوق (Box Plot) ودالته plt.boxplot()","المخطط الدائري (Pie Plot) ودالته plt.pie()"],a:0,e:"الأعمدة البيانية (Bar Plot) تقارن الفئات المنفصلة بأعمدة متباعدة باستخدام الدالة plt.bar()."},
+  {q:"عند رسم مجموعتين من الأعمدة البيانية جنباً إلى جنب (Grouped Bar Plot)، إذا رسمنا المجموعة الأولى عند الموقع x بعرض عمود bar_width، فعند أي موقع نرسم المجموعة الثانية حتى لا تتداخل معها؟",o:["عند الموقع (x + bar_width)","عند نفس الموقع (x) تماماً","عند الموقع (x * 0)","عند الموقع (bar_width / 100)"],a:0,e:"لرسم العمود الثاني بجانب العمود الأول مباشرةً دون تداخل، نزيح موقعه بمقدار عرض العمود فيصبح (x + bar_width)."},
+  {q:"في رسم الأعمدة البيانية المزدوجة، أي دالة نستخدمها لضبط مواقع وأسماء الفئات النصية على المحور الأفقي X لتكون في المنتصف بين العمودين؟",o:["plt.xticks(x + bar_width / 2, categories)","plt.legend()","plt.pie()","plt.grid()"],a:0,e:"الدالة plt.xticks(ticks, labels) تحدد مواقع العلامات على المحور الأفقي والتسميات النصية المقابلة لها."},
+  {q:"ما الفرق الجوهري بين (الأعمدة البيانية - Bar Plot) و (المدرج التكراري - Histogram)؟",o:["Bar Plot يقارن بين فئات منفصلة بأعمدة متباعدة، بينما Histogram يعرض توزيع بيانات كمية متصلة مقسمة إلى فترات (bins) بأعمدة متلاصقة","Histogram يقارن بين الأسماء النصية فقط، و Bar Plot للأرقام المتصلة فقط","كلاهما يستخدمان الدالة plt.pie()","لا يوجد أي فرق بينهما"],a:0,e:"الـ Bar Plot للفئات المنفصلة، بينما الـ Histogram يقسم البيانات الكمية المتصلة إلى فترات (bins) لحساب التكرارات بأعمدة متلاصقة."},
+  {q:"في دالة المدرج التكراري plt.hist(data, bins=10)، ماذا يحدد المعامل (bins)؟",o:["يحدد عدد الفترات (أو حدود الفترات) التي يتم تقسيم مدى البيانات المتصلة إليها لحساب تكرار القيم في كل فترة","يحدد لون الخلفية فقط","يحدد زاوية دوران الدائرة","يحدد اسم المحور الرأسي"],a:0,e:"المعامل bins في plt.hist() يحدد عدد الفترات الرقمية المتساوية (أو حدودها) التي تُفرز البيانات داخلها لحساب التكرار."},
+  {q:"أي نوع من الرسوم البيانية يُستخدم لتمثيل النسب المئوية أو الحصص لفئات متغير واحد كأجزاء من الكل (بحيث يكون مجموعها 100%)؟",o:["المخطط الدائري (Pie Plot) ودالته plt.pie()","مخطط الصندوق (Box Plot) ودالته plt.boxplot()","المدرج التكراري (Histogram) ودالته plt.hist()","المخطط الخطي (Line Plot) ودالته plt.plot()"],a:0,e:"المخطط الدائري (Pie Plot) يمثل النسب المئوية لفئات متغير واحد كشرائح من دائرة مجموعها 100%."},
+  {q:"[مسألة حسابية] إذا قمنا برسم مخطط دائري (Pie Plot) لأربع فئات قيمها هي: [20, 30, 10, 40]، فكم ستكون النسبة المئوية للشريحة الرابعة (40)؟",o:["40.0% (لأن مجموع القيم = 100، ونسبة الشريحة = 40 / 100 × 100)","10.0%","80.0%","25.0%"],a:0,e:"مجموع القيم = 20 + 30 + 10 + 40 = 100. النسبة المئوية = (قيمة الشريحة ÷ المجموع الكلي) × 100 = 40%."},
+  {q:"[مسألة حسابية] إذا كانت القيم الممررة لدالة plt.pie() هي: [15, 15, 30]، فكم ستكون النسبة المئوية التي سيطبعها المعامل autopct على الشريحة الثالثة (30)؟",o:["50.0% (لأن المجموع الكلي = 60، ونسبتها = 30 / 60 × 100 = 50%)","30.0%","15.0%","100.0%"],a:0,e:"المجموع الكلي = 15 + 15 + 30 = 60. نسبة الشريحة الثالثة = (30 ÷ 60) × 100 = 50%."},
+  {q:"في الدالة plt.pie()، ما اسم المعامل المسؤول عن (إبعاد أو فصل شريحة معينة عن مركز الدائرة) لإبرازها؟",o:["explode","autopct","startangle","shadow"],a:0,e:"المعامل explode يأخذ tuple مثل (0.1, 0, 0, 0) لتحديد مقدار فصل وإبعاد كل شريحة عن مركز المخطط الدائري."},
+  {q:"في الدالة plt.pie()، ما وظيفة المعامل (autopct='%1.1f%%')؟",o:["حساب وطباعة قيمة النسبة المئوية تلقائياً كنص فوق كل شريحة من شرائح الدائرة","تغيير ألوان الشرائح إلى اللون الأسود","تحويل المخطط الدائري إلى مدرج تكراري","إخفاء أسماء الفئات من الرسم"],a:0,e:"المعامل autopct يقوم بتنسيق وطباعة النسبة المئوية المحسوبة تلقائياً داخل كل شريحة."},
+  {q:"في الدالة plt.pie()، ماذا يفعل كل من المعاملين (startangle=90) و (shadow=True)؟",o:["startangle يحدد زاوية بدء رسم الشريحة الأولى بـ 90 درجة، و shadow=True يضيف ظلاً خلف المخطط الدائري","startangle يرسم 90 شريحة، و shadow يخفي الدائرة","كلاهما يستخدمان لحذف القيم المتطرفة","يستخدمان فقط في مخطط الصندوق Box Plot"],a:0,e:"المعامل startangle يضبط زاوية بداية الشريحة الأولى، والمعامل shadow=True يرسم ظلاً تحت الدائرة."},
+  {q:"عند رسم مخطط خطي (Line Plot) لتتبع تغير البيانات عبر الزمن باستخدام plt.plot()، ما وظيفة الكود: plt.figure(figsize=(10, 6)) و plt.grid(True)؟",o:["figsize=(10, 6) يحدد أبعاد (عرض وارتفاع) نافذة الشكل البياني، و plt.grid(True) يظهر خطوط الشبكة الخلفية","figsize يرسم 10 خطوط و 6 دوائر، و grid يحذف المحاور","كلاهما يستخدمان لحساب الوسيط والمدى الربعي","يستخدمان لتثبيت مكتبة Matplotlib"],a:0,e:"تُستخدم plt.figure(figsize=(w, h)) لضبط حجم الشكل، وتُستخدم plt.grid(True) لإظهار الشبكة الخلفية لتسهيل قراءة النقاط."},
+  {q:"في الدالة plt.plot(x, y, marker='o', linestyle='--')، ما وظيفة المعاملين (marker) و (linestyle)؟",o:["marker يحدد شكل علامة النقطة عند كل قراءة (دائرة 'o')، و linestyle يحدد نمط الخط (متقطع '--')","marker يحدد عنوان الرسم، و linestyle يحدد لون الخلفية","كلاهما يستخدمان لحذف العمود الأول من البيانات","يستخدمان فقط في دالة plt.pie()"],a:0,e:"المعامل marker يميز نقاط البيانات على الخط برمز كالدائرة 'o'، و linestyle يتحكم في شكل الخط كالمتقطع '--'."},
+  {q:"ما هي المكونات الثلاثة الرئيسية التي يتألف منها مخطط الصندوق (Box Plot)؟",o:["1) الصندوق (Box)، 2) الشوكة / الشوارب (Whiskers)، 3) القيم المتطرفة (Outliers)","1) الشرائح، 2) زاوية البداية، 3) الظل","1) الفترات (Bins)، 2) التكرار، 3) العرض","1) الجيب، 2) جيب التمام، 3) الظل"],a:0,e:"يتكون مخطط الصندوق (Box Plot) من 3 أجزاء: الصندوق (Box)، الشوكة (Whiskers)، والقيم المتطرفة (Outliers)."},
+  {q:"في مخطط الصندوق (Box Plot)، ماذا يمثل كل من: (طرفي الصندوق)، و(الخط المرسوم داخل الصندوق)؟",o:["يمثل طرفا الصندوق الربع الأول (Q1 = 25%) والربع الثالث (Q3 = 75%)، ويمثل الخط الذي بداخله الوسيط (Median / Q2 = 50%)","يمثل طرفا الصندوق أقل قيمة وأعلى قيمة متطرفة، والخط بداخله يمثل الانحراف المعياري","يمثل الصندوق 100% من البيانات، والخط بداخله يمثل المنوال دائماً","لا علاقة لمخطط الصندوق بالأرباع أو الوسيط"],a:0,e:"يمتد الصندوق من Q1 إلى Q3 (وطوله هو المدى الربعي IQR)، والخط المرسوم داخل الصندوق يمثل الوسيط (Median)."},
+  {q:"في مخطط الصندوق (Box Plot)، ماذا نسمي النقاط الفردية التي تقع خارج حدود الشوكة (Whiskers)؟",o:["القيم المتطرفة (Outliers / Fliers)","الأرباع الوسطى (Quartiles)","مفتاح الرسم (Legend)","الفئات الاسمية (Labels)"],a:0,e:"النقاط التي تتجاوز حدود الشوكة (أقل من Q1 - 1.5*IQR أو أكبر من Q3 + 1.5*IQR) هي القيم المتطرفة (Outliers)."},
+  {q:"في الدالة plt.boxplot()، ما الفرق بين تمرير المعامل (vert=True) وتمرير (vert=False)؟",o:["vert=True (الافتراضي) يرسم الصندوق بشكل رأسي (عمودي)، بينما vert=False يرسم الصندوق بشكل أفقي","vert=True يخفي الصندوق، و vert=False يظهره","vert=True يلون الصندوق، و vert=False يفرغه","لا يوجد معامل اسمه vert في plt.boxplot"],a:0,e:"المعامل vert (اختصار vertical) يتحكم في اتجاه مخطط الصندوق: رأسي عند True وأفقي عند False."},
+  {q:"أي معامل في الدالة plt.boxplot() يُستخدم لتعبئة وتلوين الصندوق من الداخل بدلاً من تركه مفرغاً؟",o:["patch_artist=True","showfliers=False","vert=False","explode=True"],a:0,e:"تمرير patch_artist=True في دالة plt.boxplot() يقوم بتعبئة الصندوق باللون من الداخل."},
+  {q:"في الدالة plt.boxplot()، إذا أردنا إخفاء النقاط التي تمثل القيم المتطرفة (Outliers) من الرسم البياني، فأي معامل نستخدم؟",o:["showfliers=False","patch_artist=False","vert=True","widths=0"],a:0,e:"تُسمى القيم المتطرفة في Matplotlib بـ fliers، ويتحكم المعامل showfliers=False في إخفائها من الرسم."},
+  {q:"ما وظيفة المعاملين (widths) و (meanline=True مع showmeans=True) في دالة plt.boxplot()؟",o:["widths يحدد عرض الصندوق، و meanline=True يرسم خطاً داخل الصندوق يمثل المتوسط الحسابي (Mean)","widths يحدد عدد الصناديق، و meanline يحذف الوسيط","يستخدمان لتقسيم المدرج التكراري إلى فترات","يستخدمان لحساب النسب المئوية في المخطط الدائري"],a:0,e:"المعامل widths يتحكم في عرض الصندوق، وتفعيل meanline مع showmeans يرسم خطاً يمثل المتوسط الحسابي."},
+  {q:"لإضافة عنوان رئيسي للرسم البياني، وتسمية المحور الأفقي X، وتسمية المحور الرأسي Y في مكتبة Matplotlib، نستخدم الدوال التالية على التوالي:",o:["plt.title() ثم plt.xlabel() ثم plt.ylabel()","plt.header() ثم plt.xname() ثم plt.yname()","plt.legend() ثم plt.xticks() ثم plt.yticks()","plt.show() ثم plt.plot() ثم plt.bar()"],a:0,e:"العنوان يُضاف بـ plt.title()، وتسمية المحور الأفقي بـ plt.xlabel()، وتسمية المحور الرأسي بـ plt.ylabel()."}
+];
+
+// بناء شبكة المصطلحات
+const termsGrid = document.getElementById("termsGrid");
+terms.forEach(([en, ar]) => {
+  const d = document.createElement("div");
+  d.className = "card";
+  d.style.margin = "0";
+  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
+  termsGrid.appendChild(d);
+});
+
+// إدارة البطاقات التعليمية
+let ci = 0, showAnswer = false;
+function renderCard() {
+  document.getElementById("flashTerm").textContent = cards[ci][0];
+  document.getElementById("flashAnswer").textContent = cards[ci][1];
+  document.getElementById("flashAnswer").hidden = !showAnswer;
+  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
+  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+}
+document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
+document.getElementById("flashcard").addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
+});
+document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
+document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
+renderCard();
+
+// التنقل بين التبويبات
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+// خوارزمية خلط عشوائي (Fisher-Yates Shuffle) للأسئلة والخيارات
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+let currentQuestions = [];
+let answers = {};
+
+function prepareShuffledQuiz() {
+  currentQuestions = shuffleArray(masterQuestions).map(item => {
+    const optsWithFlag = item.o.map((text, idx) => ({ text, isCorrect: idx === item.a }));
+    const shuffledOpts = shuffleArray(optsWithFlag);
+    return {
+      q: item.q,
+      o: shuffledOpts.map(x => x.text),
+      a: shuffledOpts.findIndex(x => x.isCorrect),
+      e: item.e
+    };
+  });
+}
+
+function renderQuiz() {
+  prepareShuffledQuiz();
+  const area = document.getElementById("quizArea");
+  area.innerHTML = "";
+  const letters = ["أ", "ب", "ج", "د"];
+  currentQuestions.forEach((item, i) => {
+    const box = document.createElement("div");
+    box.className = "qbox";
+    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
+    const opts = box.querySelector(".options");
+    item.o.forEach((opt, j) => {
+      const btn = document.createElement("button");
+      btn.className = "option";
+      btn.textContent = `${letters[j]}) ${opt}`;
+      btn.onclick = () => {
+        answers[i] = j;
+        [...opts.children].forEach((x, k) => {
+          x.classList.remove("correct", "wrong");
+          x.disabled = true;
+          if (k === item.a) x.classList.add("correct");
+          if (k === j && j !== item.a) x.classList.add("wrong");
+        });
+        const fb = document.getElementById("fb" + i);
+        fb.hidden = false;
+        fb.className = "feedback " + (j === item.a ? "good" : "bad");
+        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
+        updateScore();
+      };
+      opts.appendChild(btn);
+    });
+    area.appendChild(box);
+  });
+  updateScore();
+}
+
+function updateScore() {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
+  document.getElementById("score").textContent = `النتيجة: ${correct} / ${currentQuestions.length}`;
+  document.getElementById("progressBar").style.width = (Object.keys(answers).length / currentQuestions.length * 100) + "%";
+}
+
+document.getElementById("resetQuiz").onclick = () => {
+  answers = {};
+  document.getElementById("finalResult").textContent = "";
+  renderQuiz();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+document.getElementById("finishQuiz").onclick = () => {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
+  const pct = Math.round(correct / currentQuestions.length * 100);
+  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${currentQuestions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! أنتِ مستعدة تماماً للاختبار في هذا الفصل." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
+};
+
+renderQuiz();
+</script>
+</body>
+</html>

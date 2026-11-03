@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الفصل الثاني عشر الشامل (100%) | تحليل وتمثيل البيانات</title>
+<style>
+:root{
+  --bg:#f0f5ff;
+  --card:#ffffff;
+  --ink:#0f172a;
+  --muted:#475569;
+  --accent:#1d4ed8;
+  --accent-dark:#1e3a8a;
+  --accent2:#dbeafe;
+  --line:#cbd5e1;
+  --good:#059669;
+  --good-bg:#ecfdf5;
+  --bad:#dc2626;
+  --bad-bg:#fef2f2;
+  --warn:#d97706;
+  --warn-bg:#fffbeb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
+header{background:linear-gradient(135deg,#0f172a,#1d4ed8);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(15,23,42,0.2)}
+.wrap{max-width:1040px;margin:auto;padding:0 16px}
+.eyebrow{opacity:.92;font-size:.9rem;background:rgba(255,255,255,0.16);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
+h1{margin:5px 0;font-size:clamp(1.5rem,4vw,2.25rem)}
+header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
+nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:var(--accent2);color:var(--accent-dark);font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
+nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
+nav button.active,.btn.primary{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+main .btn.primary{background:var(--accent);color:white}
+main{padding:22px 0 48px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(15,23,42,0.04)}
+h2{font-size:1.35rem;margin:0 0 12px;color:#0f172a}
+h3{font-size:1.08rem;margin:0 0 8px;color:var(--accent-dark)}
+small,.muted{color:var(--muted)}
+ul,ol{padding-right:22px;margin:8px 0}
+li{margin:6px 0}
+details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
+summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f8fafc;color:#0f172a;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
+details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
+.details-body{padding:16px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
+.badge-new{display:inline-block;background:var(--warn-bg);color:var(--warn);border:1px solid #fcd34d;font-size:.78rem;padding:1px 8px;border-radius:6px;margin-right:6px;font-weight:bold}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#eff6ff;color:#1e3a8a;font-weight:bold}
+tr:last-child td{border-bottom:0}
+.note{border-right:4px solid var(--accent);padding:10px 14px;background:#eff6ff;border-radius:8px;margin:10px 0}
+.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
+.math-box{background:#f8fafc;border:2px solid #93c5fd;border-radius:12px;padding:12px 16px;margin:10px 0;text-align:center;font-size:1.03rem;font-weight:bold;color:#1e3a8a;direction:ltr}
+.step-box{background:#f0fdf4;border:1px solid #86efac;border-right:4px solid var(--good);border-radius:10px;padding:12px 16px;margin:10px 0;font-size:.95rem}
+.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
+.options{display:grid;gap:8px;margin-top:12px}
+.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
+.option:hover:not(:disabled){border-color:var(--accent);background:#eff6ff}
+.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
+.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
+.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
+.feedback.good{color:var(--good);background:var(--good-bg)}
+.feedback.bad{color:var(--bad);background:var(--bad-bg)}
+.progress{height:10px;background:#cbd5e1;border-radius:9px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
+.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#dbeafe);border:2px solid #93c5fd;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
+.flashcard:hover{transform:scale(1.005)}
+.flashcard .term{font-size:1.32rem;font-weight:bold;color:#1e3a8a}
+.flashcard .answer{margin-top:16px;font-size:1.04rem;color:#0f172a;background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04);white-space:pre-line}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
+@media(max-width:600px){
+  .card{padding:14px}
+  nav button{flex:1 1 calc(50% - 8px);text-align:center}
+  .flashcard{min-height:200px;padding:18px}
+  th,td{padding:8px 10px;font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">نسخة شاملة ومحدثة 100% • مقرر تحليل وتمثيل البيانات</div>
+    <h1>الفصل الثاني عشر: التعلم الآلي بإشراف - الجزء الثاني (خوارزميات التصنيف Classification)</h1>
+    <p>يغطي مفهوم التصنيف وأقسامه الأربعة، خوارزمية أقرب الجيران (K-NN)، خوارزمية بايز الساذج (Naive Bayes) ومسألة تصنيف البريد Spam، الانحدار اللوجستي (Logistic Regression) ودالة السيجمويد، آلات المتجهات الداعمة (SVM) وخدعة النواة، وأشجار القرار (Decision Trees - Gini) والغابات العشوائية (Random Forests)</p>
+    <nav>
+      <button class="active" data-tab="summary">الشرح والقوانين والمسائل (100%)</button>
+      <button data-tab="tables">ملخص الخوارزميات والمعادلات</button>
+      <button data-tab="terms">قاموس المصطلحات والقوانين</button>
+      <button data-tab="cards">البطاقات (28)</button>
+      <button data-tab="quiz">الاختبار العشوائي (25)</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="summary" class="panel active">
+    <div class="card">
+      <h2>خريطة الفصل الثاني عشر (الوحدات الثلاث الكاملة)</h2>
+      <div class="grid">
+        <div>
+          <span class="tag">الوحدة الأولى</span>
+          <h3>مفهوم التصنيف، K-NN، و Naive Bayes</h3>
+          <p>مفهوم التصنيف والحد الفاصل (<span dir="ltr">Decision boundary</span>)، تقسيم الخوارزميات الأربعة، خوارزمية (<span dir="ltr">K-NN</span>) وأثر $K$، وخوارزمية (<span dir="ltr">Naive Bayes</span>) ومسألة تصنيف البريد الإلكتروني (<span dir="ltr">Spam</span>).</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثانية</span>
+          <h3>الانحدار اللوجستي وآلات المتجهات الداعمة (SVM)</h3>
+          <p>الانحدار اللوجستي (<span dir="ltr">Logistic Regression</span>) ودالة السيجمويد ومسألة احتمالية نجاح الطالب، وآلات المتجهات الداعمة (<span dir="ltr">SVM</span>) والهامش وخدعة النواة (<span dir="ltr">Kernel Trick</span>) ومسألة تصنيف النقطة.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثالثة</span>
+          <h3>أشجار القرار والغابات العشوائية</h3>
+          <p>بنية أشجار القرار (<span dir="ltr">Decision Trees</span>)، حساب معامل جيني للنقاء (<span dir="ltr">Gini Impurity &amp; Gain</span>) بالمسألة الكاملة، والغابات العشوائية (<span dir="ltr">Random Forests</span>) والتصويت بالأغلبية.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== الوحدة الأولى ==================== -->
+    <details open>
+      <summary>الوحدة الأولى: مفهوم التصنيف، خوارزمية أقرب الجيران (K-NN)، وخوارزمية بايز الساذج (Naive Bayes)</summary>
+      <div class="details-body">
+        <h3>1) مفهوم التصنيف (<span dir="ltr">Classification</span>) وتقسيم خوارزمياته الأربعة</h3>
+        <ul>
+          <li><b>مفهوم التصنيف:</b> هو أحد فروع التعلم الآلي بإشراف (<span dir="ltr">Supervised Learning</span>)، ويُستخدم عندما تكون <b>سمة الهدف ($Y$) فئوية محددة (<span dir="ltr">Categorical / Discrete Class Labels</span>)</b>؛ سواء كانت ثنائية الفئة (مثل: مريض/سليم، بريد مزعج <span dir="ltr">Spam</span>/سليم) أو متعددة الفئات.</li>
+          <li>تقوم خوارزمية التصنيف بتعلم رسم <b>الحد الفاصل للقرار (<span dir="ltr">Decision Boundary</span>)</b> الذي يفصل بين الفئات المختلفة في فضاء السمات.</li>
+        </ul>
+
+        <div class="exam-alert">
+          <b>🔥 التقسيمات الأربعة لخوارزميات التصنيف في الملزمة:</b><br>
+          1) <b>خوارزميات معتمدة على المسافة (<span dir="ltr">Distance-based</span>):</b> مثل خوارزمية أقرب الجيران (<b><span dir="ltr">K-NN</span></b>).<br>
+          2) <b>خوارزميات معتمدة على الاحتمالات (<span dir="ltr">Probability-based</span>):</b> مثل خوارزمية بايز الساذج (<b><span dir="ltr">Naive Bayes</span></b>).<br>
+          3) <b>خوارزميات معتمدة على البحث والأشجار (<span dir="ltr">Search / Tree-based</span>):</b> مثل أشجار القرار (<b><span dir="ltr">Decision Trees</span></b>) والغابات العشوائية (<b><span dir="ltr">Random Forests</span></b>).<br>
+          4) <b>خوارزميات معتمدة على التحسين (<span dir="ltr">Optimization-based</span>):</b> مثل الانحدار اللوجستي (<b><span dir="ltr">Logistic Regression</span></b>) وآلات المتجهات الداعمة (<b><span dir="ltr">SVM</span></b>).
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) خوارزمية أقرب الجيران (<span dir="ltr">K-Nearest Neighbors - K-NN</span>)</h3>
+        <ul>
+          <li><b>الفرضية الأساسية لـ <span dir="ltr">K-NN</span>:</b> العينات المتشابهة في السمات تكون قريبة من بعضها في المسافة وتنتمي لنفس الفئة ("قل لي مَن جيرانك أقل لك مَن أنت").</li>
+          <li><b>خطوات عمل خوارزمية <span dir="ltr">K-NN</span> الأربع لتصنيف نقطة جديدة:</b>
+            <ol>
+              <li>تحديد عدد الجيران المطلوب ($K$).</li>
+              <li>حساب المسافة (الإقليدية أو مانهاتن) بين النقطة الجديدة المجهولة وجميع نقاط بيانات التدريب.</li>
+              <li>ترتيب المسافات تصاعدياً واختيار <b>أقرب $K$ نقاط (جيران)</b> للنقطة الجديدة.</li>
+              <li>إعطاء النقطة الجديدة الفئة الأكثر تكراراً بين هؤلاء الجيران الـ $K$ عن طريق <b>التصويت بالأغلبية (<span dir="ltr">Majority Voting</span>)</b> (ويُفضل اختيار $K$ <b>عدداً فردياً</b> في التصنيف الثنائي لمنع التعادل!).</li>
+            </ol>
+          </li>
+          <li><b>أثر تغيير قيمة $K$ في خوارزمية <span dir="ltr">K-NN</span>:</b>
+            <ul>
+              <li><b>قيمة $K$ صغيرة جداً (مثل $K=1$):</b> يصبح الحد الفاصل متعرجاً جداً وحساساً للضجيج، مما يسبب <b>الإفراط في التخصيص (<span dir="ltr">Overfitting</span>)</b>.</li>
+              <li><b>قيمة $K$ كبيرة جداً:</b> يصبح الحد الفاصل أكثر نعومة واستقراراً، ولكن المبالغة فيه قد تسبب <b>نقص التخصيص (<span dir="ltr">Underfitting</span>)</b>.</li>
+            </ul>
+          </li>
+          <li><b>مزايا وعيوب <span dir="ltr">K-NN</span>:</b>
+            <ul>
+              <li><b>المزايا:</b> بسيطة جداً، لا تفترض شكلاً مسبقاً للبيانات، ولا تحتاج لمرحلة تدريب (<span dir="ltr">Lazy Learner</span> - متعلم كسول).</li>
+              <li><b>العيوب:</b> بطيئة ومكلفة حسابياً وقت الاختبار (لأنها تحسب المسافة مع كل بيانات التدريب)، وتحتاج لـ <b>تحجيم السمات (<span dir="ltr">Feature Scaling</span>)</b>، وحساسة للقيم المتطرفة والسمات غير المهمة.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) خوارزمية بايز الساذج (<span dir="ltr">Naive Bayes Classifier</span>) — القانون والمسألة الكاملة</h3>
+        <ul>
+          <li><b>لماذا سُميت بـ "الساذج" (<span dir="ltr">Naive</span>)؟</b> لأنها تفترض أن جميع السمات ($X_1, X_2, \dots, X_n$) <b>مستقلة تماماً عن بعضها البعض إحصائياً</b> بشرط معرفة الفئة (وهو افتراض مبسط يسهل الحسابات بشكل هائل).</li>
+          <li><b>قانون بايز للاحتمال الشرطي (<span dir="ltr">Bayes' Theorem</span>):</b></li>
+        </ul>
+        <div class="math-box">
+          P(A | B) = [ P(B | A) &middot; P(A) ] / P(B)
+        </div>
+        <ul>
+          <li>حيث عند وجود عدة سمات مستقلة ($x_1, x_2$)، يكون البسط المتناسب مع احتمال الفئة $C_k$ هو:
+            <div class="math-box">P(C<sub>k</sub> | x<sub>1</sub>, x<sub>2</sub>) &prop; P(C<sub>k</sub>) &times; P(x<sub>1</sub> | C<sub>k</sub>) &times; P(x<sub>2</sub> | C<sub>k</sub>)</div>
+          </li>
+        </ul>
+
+        <div class="step-box">
+          <b>مسألة الكتاب الكاملة لتصنيف البريد الإلكتروني (Spam vs Not Spam) باستخدام Naive Bayes:</b><br>
+          لنفترض أن لدينا احتمالات مسبقة (<span dir="ltr">Priors</span>): احتمال أن الرسالة مزعجة $P(\text{Spam}) = 0.4$، واحتمال أنها سليمة $P(\text{Not Spam}) = 0.6$.<br>
+          وظهرت في رسالة جديدة الكلمتان: <code dir="ltr">"free"</code> و <code dir="ltr">"win"</code>، وكانت الاحتمالات الشرطية من بيانات التدريب كالتالي:<br>
+          • في رسائل الـ <b>Spam</b>: $P(\text{"free"} | \text{Spam}) = 0.5$ ، و $P(\text{"win"} | \text{Spam}) = 0.4$.<br>
+          • في رسائل الـ <b>Not Spam</b>: $P(\text{"free"} | \text{Not Spam}) = 0.1$ ، و $P(\text{"win"} | \text{Not Spam}) = 0.05$.<br><br>
+          <b>خطوات الحل لتصنيف الرسالة الجديدة:</b><br>
+          1) <b>حساب درجة احتمال كونها <span dir="ltr">Spam</span>:</b><br>
+          $S(\text{Spam}) = P(\text{Spam}) \times P(\text{"free"}|\text{Spam}) \times P(\text{"win"}|\text{Spam}) = 0.4 \times 0.5 \times 0.4 = \mathbf{0.08}$.<br>
+          2) <b>حساب درجة احتمال كونها <span dir="ltr">Not Spam</span>:</b><br>
+          $S(\text{Not Spam}) = P(\text{Not Spam}) \times P(\text{"free"}|\text{Not Spam}) \times P(\text{"win"}|\text{Not Spam}) = 0.6 \times 0.1 \times 0.05 = \mathbf{0.003}$.<br>
+          3) <b>القرار النهائي:</b> بما أن $0.08 > 0.003$، يتم تصنيف الرسالة على أنها <b>بريد مزعج (<span dir="ltr">Spam</span>)</b>!
+        </div>
+      </div>
+    </details>
+
+    <!-- ==================== الوحدة الثانية ==================== -->
+    <details>
+      <summary>الوحدة الثانية: الانحدار اللوجستي (Logistic Regression) وآلات المتجهات الداعمة (SVM)</summary>
+      <div class="details-body">
+        <h3>1) الانحدار اللوجستي (<span dir="ltr">Logistic Regression</span>) ودالة السيجمويد والمسألة الحسابية</h3>
+        <div class="exam-alert">
+          <b>🔥🔥 تنبيه امتحاني هام جداً:</b> على الرغم من وجود كلمة "انحدار" في اسمه، فإن <b>الانحدار اللوجستي (<span dir="ltr">Logistic Regression</span>) هو خوارزمية تصنيف (<span dir="ltr">Classification</span>)</b> (وتحديداً للتصنيف الثنائي <span dir="ltr">Binary Classification</span>: $0$ أو $1$) وليس خوارزمية انحدار!
+        </div>
+        <ul>
+          <li><b>كيف يعمل الانحدار اللوجستي؟</b>
+            <ol>
+              <li>يحسب أولاً المعادلة الخطية: $z = w_1 x + w_0$ (أو $\theta^T x$).</li>
+              <li>يمرر القيمة $z$ داخل <b>دالة السيجمويد اللوجستية (<span dir="ltr">Sigmoid / Logistic Function - $\sigma(z)$</span>)</b> التي تحول أي رقم حقيقي إلى <b>احتمال يقع دائماً بين $[0, 1]$</b>:</li>
+            </ol>
+          </li>
+        </ul>
+        <div class="math-box">
+          &sigma;(z) = 1 / ( 1 + e<sup>&minus;z</sup> ) &nbsp;&nbsp; where &nbsp;&nbsp; z = w<sub>1</sub>x + w<sub>0</sub>
+        </div>
+        <ul>
+          <li><b>قاعدة اتخاذ قرار التصنيف عند العتبة الافتراضية ($0.5$):</b>
+            <ul>
+              <li>إذا كان الاحتمال <b>$\sigma(z) \ge 0.5$</b> (أي عندما تكون $z \ge 0$) &larr; تُصنف العينة في <b>الفئة الموجبة ($y = 1$)</b>.</li>
+              <li>إذا كان الاحتمال <b>$\sigma(z) < 0.5$</b> (أي عندما تكون $z < 0$) &larr; تُصنف العينة في <b>الفئة السالبة ($y = 0$)</b>.</li>
+            </ul>
+          </li>
+          <li><b>دالة الخسارة المستخدمة في الانحدار اللوجستي:</b> لا يستخدم مربع الخطأ، بل يستخدم دالة <b><span dir="ltr">Binary Cross-Entropy Loss (Log Loss)</span></b>.</li>
+        </ul>
+
+        <div class="step-box">
+          <b>مسألة الكتاب الكاملة (حساب احتمالية نجاح طالب درس $x = 6$ ساعات):</b><br>
+          لنفترض أن نموذج الانحدار اللوجستي لتوقع نجاح الطالب ($1$ ناجح، $0$ راسب) بناءً على ساعات الدراسة ($x$) يمتلك المعاملات: $w_1 = 1.5$ و $w_0 = -7.0$:<br>
+          • <b>المطلوب:</b> ما احتمالية نجاح طالب درس $x = 6$ ساعات؟ وما قرار تصنيفه؟<br>
+          1) <b>نحسب قيمة $z$ الخطية:</b> $z = (1.5 \times 6) - 7.0 = 9.0 - 7.0 = \mathbf{+2.0}$.<br>
+          2) <b>نطبق دالة السيجمويد $\sigma(z)$:</b><br>
+          $\sigma(2) = \frac{1}{1 + e^{-2}} = \frac{1}{1 + 0.1353} = \frac{1}{1.1353} \approx \mathbf{0.8808}$ (أي احتمالية نجاحه $88.1\%$).<br>
+          3) <b>قرار التصنيف:</b> بما أن $0.8808 \ge 0.5$ (أو لأن $z = +2 \ge 0$)، يُصنف الطالب بأنه <b>ناجح ($1$)</b>!
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) آلات المتجهات الداعمة (<span dir="ltr">Support Vector Machines - SVM</span>) وخدعة النواة</h3>
+        <ul>
+          <li><b>الفكرة الأساسية لـ <span dir="ltr">SVM</span>:</b> تبحث عن <b>أفضل مستوى أو خط فاصل (<span dir="ltr">Optimal Hyperplane</span>)</b> يفصل بين الفئتين بحيث يحقق <b>أكبر هامش أمان ممكن (<span dir="ltr">Maximum Margin</span>)</b> بين الخط الفاصل وأقرب النقاط إليه من الفئتين.</li>
+          <li><b>ما هي المتجهات الداعمة (<span dir="ltr">Support Vectors</span>)؟</b> هي <b>النقاط الحدية الأقرب للخط الفاصل</b> من كلا الفئتين والتي تقع على حافة الهامش وتحدد اتجاه وموقع الخط الفاصل.</li>
+          <li><b>كيف تتعامل <span dir="ltr">SVM</span> مع البيانات غير القابلة للفصل خطياً؟ — خدعة النواة (<span dir="ltr">Kernel Trick</span>):</b>
+            <ul>
+              <li>تقوم <b>دالة النواة (<span dir="ltr">Kernel Function</span>)</b> بتحويل البيانات غير الخطية من فضائها الأصلي منخفض الأبعاد إلى <b>فضاء أعلى أبعاداً (<span dir="ltr">Higher-dimensional space</span>)</b> بحيث تصبح قابلة للفصل خطياً!</li>
+              <li><b>أشهر 3 أنواع لدوال النواة (<span dir="ltr">Kernels</span>) في <span dir="ltr">SVM</span>:</b>
+                <ol>
+                  <li><b>النواة الخطية (<span dir="ltr">Linear Kernel</span>):</b> للبيانات القابلة للفصل خطياً.</li>
+                  <li><b>النواة كثيرة الحدود (<span dir="ltr">Polynomial Kernel - <code>'poly'</code></span>):</b> للحدود المنحنية متعددة الحدود.</li>
+                  <li><b>نواة دالة الأساس الشعاعي / جاوس (<span dir="ltr">RBF / Gaussian Kernel - <code>'rbf'</code></span>):</b> الأكثر قوة ومرونة للبيانات المعقدة غير الخطية.</li>
+                </ol>
+              </li>
+            </ul>
+          </li>
+        </ul>
+
+        <div class="step-box">
+          <b>مسألة الكتاب لتصنيف نقطة جديدة باستخدام معادلة الخط الفاصل في SVM:</b><br>
+          إذا كانت معادلة الخط الفاصل في نموذج <span dir="ltr">SVM</span> هي: $f(x_1, x_2) = 2x_1 + 3x_2 - 12 = 0$:<br>
+          • <b>المطلوب:</b> صنّفي النقطة الجديدة $P = (4, 3)$ (حيث الفئة الموجبة $+1$ إذا كان الناتج $>0$، والفئة السالبة $-1$ إذا كان الناتج $<0$):<br>
+          1) نعوض بإحداثيات النقطة $(x_1 = 4, x_2 = 3)$ في المعادلة:<br>
+          $f(4, 3) = (2 \times 4) + (3 \times 3) - 12 = 8 + 9 - 12 = 17 - 12 = \mathbf{+5}$.<br>
+          2) بما أن الناتج $+5 > 0$ (موجب)، إذن تقع النقطة فوق الخط الفاصل وتنتمي إلى <b>الفئة الموجبة ($+1$)</b>!
+        </div>
+      </div>
+    </details>
+
+    <!-- ==================== الوحدة الثالثة ==================== -->
+    <details>
+      <summary>الوحدة الثالثة: أشجار القرار (Decision Trees - Gini Gain) والغابات العشوائية (Random Forests)</summary>
+      <div class="details-body">
+        <h3>1) أشجار القرار (<span dir="ltr">Decision Trees</span>) وحساب معامل جيني (<span dir="ltr">Gini Impurity &amp; Gain</span>)</h3>
+        <ul>
+          <li><b>بنية شجرة القرار:</b> تتكون من:
+            <ol>
+              <li><b>عقدة الجذر (<span dir="ltr">Root Node</span>):</b> أعلى عقدة في الشجرة وتمثل السمة الأهم التي تبدأ بتقسيم كافة البيانات.</li>
+              <li><b>العقد الداخلية / الفروع (<span dir="ltr">Internal / Branch Nodes</span>):</b> تمثل اختبارات وشروطاً على السمات.</li>
+              <li><b>العقد الورقية / النهائية (<span dir="ltr">Leaf / Terminal Nodes</span>):</b> تقع في أسفل الشجرة وتمثل <b>قرار التصنيف النهائي (الفئة المتوقعة)</b>.</li>
+            </ol>
+          </li>
+          <li><b>كيف تختار شجرة القرار أفضل سمة لتقسيم العقدة؟ — معامل جيني لعدم النقاء (<span dir="ltr">Gini Impurity</span>):</b>
+            <ul>
+              <li>يقيس معامل جيني ($G$) مدى اختلاط الفئات داخل العقدة؛ فإذا كانت كل عينات العقدة من فئة واحدة فقط (نقية تماماً <span dir="ltr">Pure</span>) يكون <b>$G = 0$ (وهو الأفضل!)</b>، وإذا كانت مقسمة بالتساوي $50\% / 50\%$ يكون $G = 0.5$ (أقصى عدم نقاء).</li>
+              <li><b>معادلة معامل جيني لعقدة تضم $C$ من الفئات:</b></li>
+            </ul>
+          </li>
+        </ul>
+        <div class="math-box">
+          Gini (G) = &sum;<sub>i=1</sub><sup>C</sup> P<sub>i</sub> ( 1 &minus; P<sub>i</sub> ) = 1 &minus; &sum;<sub>i=1</sub><sup>C</sup> (P<sub>i</sub>)<sup>2</sup>
+        </div>
+        <ul>
+          <li><b>معادلة كسب جيني (<span dir="ltr">Gini Gain</span>) لاختيار أفضل تقسيم:</b>
+            <div class="math-box">
+              Gini Gain = G<sub>parent</sub> &minus; [ (N<sub>left</sub> / N) &middot; G<sub>left</sub> + (N<sub>right</sub> / N) &middot; G<sub>right</sub> ]
+            </div>
+            ونختار السمة التي تحقق <b>أكبر قيمة لكسب جيني (<span dir="ltr">Maximum Gini Gain</span>)</b>!
+          </li>
+        </ul>
+
+        <div class="step-box">
+          <b>مسألة الكتاب الكاملة لحساب ($G$, $G_{\text{left}}$, $G_{\text{right}}$, و $\text{Gini Gain}$):</b><br>
+          لنفترض أن العقدة الأب (<span dir="ltr">Parent</span>) تحتوي على $N = 10$ عينات: منها $6$ من الفئة الموجبة و $4$ من الفئة السالبة:<br>
+          1) <b>حساب جيني للعقدة الأب ($G_{\text{parent}}$):</b><br>
+          $P_+ = \frac{6}{10} = 0.6$ ، و $P_- = \frac{4}{10} = 0.4$.<br>
+          $G_{\text{parent}} = 0.6(1 - 0.6) + 0.4(1 - 0.4) = (0.6 \times 0.4) + (0.4 \times 0.6) = 0.24 + 0.24 = \mathbf{0.48}$.<br><br>
+          2) عند تقسيم العقدة بشرط معين، نتجت عقدتان فرعيتان:<br>
+          • <b>الفرع الأيسر ($N_{\text{left}} = 5$ عينات):</b> يضم $5$ موجبة و $0$ سالبة (نقية تماماً!) &larr; $G_{\text{left}} = 1(1-1) + 0 = \mathbf{0.0}$.<br>
+          • <b>الفرع الأيمن ($N_{\text{right}} = 5$ عينات):</b> يضم $1$ موجبة ($P_+=0.2$) و $4$ سالبة ($P_-=0.8$) &larr; $G_{\text{right}} = 0.2(0.8) + 0.8(0.2) = 0.16 + 0.16 = \mathbf{0.32}$.<br><br>
+          3) <b>حساب كسب جيني (<span dir="ltr">Gini Gain</span>):</b><br>
+          $\text{Gini Gain} = 0.48 - \left[ \frac{5}{10}(0.0) + \frac{5}{10}(0.32) \right] = 0.48 - [0 + 0.16] = \mathbf{0.32}$.
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) الغابات العشوائية (<span dir="ltr">Random Forests</span>)</h3>
+        <div class="exam-alert">
+          <b>🌟 لماذا نستخدم الغابات العشوائية (<span dir="ltr">Random Forests</span>) بدلاً من شجرة قرار واحدة؟</b><br>
+          • شجرة القرار الواحدة سهلة الفهم والتفسير، ولكن عيبها الأكبر أنها <b>عرضة بشدة للإفراط في التخصيص (<span dir="ltr">Overfitting</span>)</b>!<br>
+          • تعالج خوارزمية <b>الغابات العشوائية (<span dir="ltr">Random Forests</span>)</b> هذه المشكلة عبر بناء <b>عدد كبير من أشجار القرار المستقلة</b>؛ حيث تُدرَّب كل شجرة على <b>عينة عشوائية مع الإرجاع (<span dir="ltr">Bootstrap sample</span>)</b> ومجموعة فرعية عشوائية من السمات، وعند تصنيف عينة جديدة تصوت كل شجرة، ويتم اختيار الفئة النهائية عن طريق <b>التصويت بالأغلبية (<span dir="ltr">Majority Voting</span>)</b> مما يرفع الدقة ويقلل الـ <span dir="ltr">Overfitting</span> بشكل كبير!
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- التبويب الثاني: ملخص الخوارزميات والمعادلات -->
+  <section id="tables" class="panel">
+    <div class="card">
+      <h2>1. مقارنة شاملة لخوارزميات التصنيف الست في الفصل الثاني عشر</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>الخوارزمية</th>
+            <th>عائلة التصنيف</th>
+            <th>المبدأ الرياضي وأهم خصائصها</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1. أقرب الجيران (<span dir="ltr">K-NN</span>)</b></td>
+            <td>معتمدة على المسافة</td>
+            <td>تصنف النقطة حسب أغلبية أقرب $K$ جيران لها؛ متعلم كسول لا يحتاج لتدريب لكنه بطيء بالاختبار ويحتاج لتحجيم السمات.</td>
+          </tr>
+          <tr>
+            <td><b>2. بايز الساذج (<span dir="ltr">Naive Bayes</span>)</b></td>
+            <td>معتمدة على الاحتمالات</td>
+            <td>تطبق قانون بايز $P(A|B) = \frac{P(B|A)P(A)}{P(B)}$ بافتراض استقلال السمات؛ سريعة جداً وممتازة لتصنيف النصوص والـ <span dir="ltr">Spam</span>.</td>
+          </tr>
+          <tr>
+            <td><b>3. الانحدار اللوجستي (<span dir="ltr">Logistic Regression</span>)</b></td>
+            <td>معتمدة على التحسين</td>
+            <td>للتصنيف الثنائي عبر دالة السيجمويد $\sigma(z) = \frac{1}{1+e^{-z}}$ بين $[0, 1]$ مع عتبة $0.5$ ودالة خسارة <span dir="ltr">Binary Cross-Entropy</span>.</td>
+          </tr>
+          <tr>
+            <td><b>4. آلات المتجهات الداعمة (<span dir="ltr">SVM</span>)</b></td>
+            <td>معتمدة على التحسين</td>
+            <td>تعظم الهامش (<span dir="ltr">Margin</span>) بين المتجهات الداعمة، وتفصل البيانات غير الخطية عبر <b>خدعة النواة (<span dir="ltr">Kernel Trick: Linear, Poly, RBF</span>)</b>.</td>
+          </tr>
+          <tr>
+            <td><b>5. أشجار القرار (<span dir="ltr">Decision Trees</span>)</b></td>
+            <td>معتمدة على البحث</td>
+            <td>تقسم البيانات في هيكل شجري باختيار السمة التي تحقق أعلى كسب في النقاء (<span dir="ltr">Gini Gain</span>)؛ سهلة التفسير لكنها عرضة للـ <span dir="ltr">Overfitting</span>.</td>
+          </tr>
+          <tr>
+            <td><b>6. الغابات العشوائية (<span dir="ltr">Random Forests</span>)</b></td>
+            <td>تجميعية (<span dir="ltr">Ensemble</span>)</td>
+            <td>تجمع عدة أشجار قرار مدربة بعينات <span dir="ltr">Bootstrap</span> وتصوت بالأغلبية (<span dir="ltr">Majority Voting</span>) للقضاء على الـ <span dir="ltr">Overfitting</span>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- التبويب الثالث: قاموس المصطلحات والقوانين -->
+  <section id="terms" class="panel">
+    <div class="card">
+      <h2>قاموس المصطلحات والقوانين الشامل للفصل الثاني عشر</h2>
+      <p class="muted">جميع المفاهيم والخوارزميات والمعادلات الخاصة بالتصنيف:</p>
+      <div id="termsGrid" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- التبويب الرابع: البطاقات التعليمية -->
+  <section id="cards" class="panel">
+    <div class="card">
+      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
+      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
+      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
+        <div class="term" id="flashTerm"></div>
+        <div class="answer" id="flashAnswer" hidden></div>
+        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="prevCard">السابق</button>
+        <span id="cardCount" class="muted"></span>
+        <button class="btn primary" id="nextCard">التالي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- التبويب الخامس: الاختبار الذاتي العشوائي -->
+  <section id="quiz" class="panel">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2>الاختبار الشامل المتغير للفصل الثاني عشر (25 سؤالاً) <span class="badge-new">ترتيب عشوائي ذكي 🎲</span></h2>
+          <p class="muted">يختبر فهمك لخوارزميات التصنيف ومسائل Naive Bayes، و Sigmoid، و SVM، وحسابات Gini في أشجار القرار مع تعليل فوري!</p>
+        </div>
+        <div class="score" id="score">النتيجة: 0 / 25</div>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="quizArea"></div>
+      <div class="row">
+        <button class="btn" id="resetQuiz">إعادة الاختبار بترتيب عشوائي جديد 🔀</button>
+        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+      </div>
+      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
+    </div>
+  </section>
+</main>
+
+<footer>مبني بالكامل (100%) على محتوى الفصل الثاني عشر (التعلم الآلي بإشراف - التصنيف) من مقرر تحليل وتمثيل البيانات</footer>
+
+<script>
+const terms = [
+  ["Classification (التصنيف)", "أحد أساليب التعلم الآلي بإشراف يُستخدم عندما تكون سمة الهدف (Y) فئوية منفصلة (مثل مريض/سليم أو Spam/Not Spam)."],
+  ["Decision Boundary (الحد الفاصل للقرار)", "الخط أو السطح الذي يتعلمه المصنف للفصل بين الفئات المختلفة في فضاء السمات."],
+  ["K-Nearest Neighbors (K-NN)", "خوارزمية أقرب الجيران: خوارزمية تصنيف معتمدة على المسافة تصنف العينة الجديدة حسب أغلبية أقرب K جيران لها."],
+  ["Naive Bayes Classifier", "خوارزمية بايز الساذج: خوارزمية تصنيف احتمالية تعتمد على قانون بايز وتفترض الاستقلال الشرطي بين السمات."],
+  ["Logistic Regression (الانحدار اللوجستي)", "خوارزمية تصنيف (وليست انحداراً!) تعتمد على التحسين وتستخدم دالة السيجمويد لحساب احتمالية الانتماء للفئة بين [0, 1]."],
+  ["Sigmoid Function σ(z)", "دالة السيجمويد: σ(z) = 1 / (1 + e^-z) تحول القيمة الخطية z إلى احتمال بين 0 و 1 مع عتبة قرار 0.5."],
+  ["Binary Cross-Entropy Loss", "دالة الخسارة اللوغاريتمية المستخدمة لتدريب نموذج الانحدار اللوجستي."],
+  ["Support Vector Machines (SVM)", "آلات المتجهات الداعمة: خوارزمية تصنيف تبحث عن أفضل مستوى فاصل يحقق أقصى هامش (Margin) بين المتجهات الداعمة."],
+  ["Kernel Trick (خدعة النواة)", "تقنية في SVM تحول البيانات غير القابلة للفصل خطياً إلى فضاء أعلى أبعاداً لتصبح قابلة للفصل خطياً (ومن أنواعها: Linear, Poly, RBF)."],
+  ["Decision Trees (أشجار القرار)", "خوارزمية تصنيف شجرية تتكون من جذر وفروع وأوراق، وتختار أفضل سمة للتقسيم بناءً على نقاء العقدة (Gini Gain)."],
+  ["Gini Impurity (معامل جيني)", "مقياس لعدم نقاء العقدة في شجرة القرار: G = Σ P_i (1 - P_i)، ويساوي 0 عندما تكون العقدة نقية تماماً."],
+  ["Random Forests (الغابات العشوائية)", "خوارزمية تجميعية تدرب عدة أشجار قرار على عينات Bootstrap وسمات عشوائية وتستخدم التصويت بالأغلبية لتقليل الـ Overfitting."]
+];
+
+const cards = [
+  ["ما الفرق بين الانحدار (Regression) والتصنيف (Classification) في التعلم الآلي بإشراف؟", "• الانحدار: سمة الهدف (Y) كمية رقمية متصلة (مثل السعر أو الحرارة).\n• التصنيف: سمة الهدف (Y) فئوية محددة (مثل مريض/سليم أو Spam/Not Spam)."],
+  ["ما هي الأقسام الأربعة لخوارزميات التصنيف مع ذكر مثال لكل قسم؟", "1) المعتمدة على المسافة: مثل K-NN.\n2) المعتمدة على الاحتمالات: مثل Naive Bayes.\n3) المعتمدة على البحث والأشجار: مثل Decision Trees و Random Forests.\n4) المعتمدة على التحسين (Optimization): مثل Logistic Regression و SVM."],
+  ["ما هي الخطوات الأربع لعمل خوارزمية أقرب الجيران (K-NN)؟", "1) تحديد عدد الجيران K.\n2) حساب المسافة بين النقطة الجديدة وجميع نقاط التدريب.\n3) اختيار أقرب K جيران للنقطة.\n4) إسناد النقطة للفئة الأكثر تكراراً بين الجيران الـ K (بالتصويت بالأغلبية)."],
+  ["ما أثر اختيار قيمة K صغيرة جداً (مثل K=1) مقارنة بقيمة K كبيرة جداً في خوارزمية K-NN؟", "• قيمة K صغيرة جداً: تجعل الحد الفاصل متعرجاً وحساساً للضجيج وتسبب (Overfitting).\n• قيمة K كبيرة جداً: تجعل الحد الفاصل ناعماً، ولكن المبالغة فيها قد تسبب (Underfitting)."],
+  ["لماذا سُميت خوارزمية بايز الساذج (Naive Bayes) بهذا الاسم؟ وما هو قانون بايز؟", "لأنها تفترض (بسذاجة/تبسيط) أن جميع السمات مستقلة تماماً عن بعضها البعض بشرط الفئة.\nوقانون بايز هو: P(A|B) = [ P(B|A) * P(A) ] / P(B)"],
+  ["[مسألة حسابية - Naive Bayes] إذا كان P(Spam)=0.5 و P(free|Spam)=0.6 و P(win|Spam)=0.5، فكم تبلغ درجة احتمال كون رسالة تحتوي على الكلمتين معاً هي Spam؟", "نضرب الاحتمالات معاً:\nScore(Spam) = 0.5 × 0.6 × 0.5 = 0.15."],
+  ["هل الانحدار اللوجستي (Logistic Regression) خوارزمية انحدار أم خوارزمية تصنيف؟ وما الدالة التي يستخدمها؟", "هو خوارزمية (تصنيف - Classification) رغم اسمه!\nويستخدم دالة السيجمويد (Sigmoid Function) لحساب احتمالية الانتماء للفئة بين [0 و 1]."],
+  ["ما هي معادلة دالة السيجمويد (Sigmoid Function) في الانحدار اللوجستي؟ وما هي عتبة التصنيف؟", "σ(z) = 1 / (1 + e^-z) حيث z = w1*x + w0\nوعتبة التصنيف الافتراضية هي (0.5): فإذا كان الناتج >= 0.5 تصنف الفئة (1)، وإذا كان < 0.5 تصنف الفئة (0)."],
+  ["[مسألة حسابية - Logistic Regression] إذا كانت معادلة الطالب هي z = 2x - 8، ودرس الطالب x = 4 ساعات، فكم تبلغ قيمة z وكم تبلغ احتمالية نجاحه σ(z)؟", "1) z = (2 × 4) - 8 = 8 - 8 = 0.\n2) σ(0) = 1 / (1 + e^0) = 1 / (1 + 1) = 1 / 2 = 0.5 (أي 50%)."],
+  ["ما هي الفكرة الأساسية لخوارزمية آلات المتجهات الداعمة (SVM)؟ وما هي المتجهات الداعمة؟", "تبحث SVM عن أفضل خط/مستوى فاصل يحقق أكبر هامش (Maximum Margin) بين الفئتين.\nوالمتجهات الداعمة (Support Vectors) هي النقاط الحدية الأقرب للخط الفاصل التي تحدد موقعه."],
+  ["ما هي خدعة النواة (Kernel Trick) في خوارزمية SVM؟ وما أشهر 3 أنواع لدوال النواة؟", "هي تحويل البيانات غير القابلة للفصل خطياً إلى فضاء أعلى أبعاداً لتصبح قابلة للفصل خطياً.\nوأشهر 3 أنواع هي:\n1) Linear kernel.\n2) Polynomial kernel ('poly').\n3) RBF / Gaussian kernel ('rbf')."],
+  ["[مسألة حسابية - SVM] إذا كانت معادلة الفاصل في SVM هي: 3x1 - 2x2 - 4 = 0، فما تصنيف النقطة (2, 2)؟", "نعوض بالنقطة (x1=2, x2=2):\n3(2) - 2(2) - 4 = 6 - 4 - 4 = -2.\nبما أن الناتج سالب (-2 < 0)، فالنقطة تنتمي للفئة السالبة (-1)."],
+  ["ما هي المكونات الثلاثة لبنية شجرة القرار (Decision Tree)؟", "1) عقدة الجذر (Root Node): أعلى عقدة في الشجرة.\n2) العقد الداخلية / الفروع (Internal / Branch Nodes): شروط التقسيم.\n3) العقد الورقية (Leaf Nodes): قرار التصنيف النهائي."],
+  ["ما هي معادلة معامل جيني لعدم النقاء (Gini Impurity)؟ ومتى يساوي صفراً؟", "G = Σ P_i (1 - P_i) = 1 - Σ (P_i)²\nويساوي صفراً (G = 0) عندما تكون العقدة نقية تماماً (جميع عيناتها تنتمي لفئة واحدة فقط)."],
+  ["[مسألة حسابية - Gini] إذا كانت عقدة في شجرة القرار تحتوي على 10 عينات: 5 موجبة و 5 سالبة، فكم تبلغ قيمة معامل جيني (G) لها؟", "P+ = 5/10 = 0.5 ، و P- = 5/10 = 0.5.\nG = 0.5(1 - 0.5) + 0.5(1 - 0.5) = 0.25 + 0.25 = 0.50 (أقصى عدم نقاء)."],
+  ["[مسألة حسابية - Gini] إذا كانت عقدة تحتوي على 8 عينات جميعها من الفئة الموجبة (8 موجبة و 0 سالبة)، فكم تبلغ قيمة معامل جيني (G) لها؟", "P+ = 8/8 = 1.0 ، و P- = 0.\nG = 1(1 - 1) + 0 = 0.0 (عقدة نقية تماماً!)."],
+  ["كيف تختار شجرة القرار السمة الأفضل لتقسيم العقدة؟", "تحسب كسب جيني (Gini Gain = G_parent - Weighted_G_children) لكل سمة، وتختار السمة التي تحقق أعلى كسب جيني (Maximum Gini Gain)."],
+  ["ما العيب الرئيسي لشجرة القرار الواحدة؟ وكيف تعالجه خوارزمية الغابات العشوائية (Random Forests)؟", "• عيب شجرة القرار: عرضة بشدة للإفراط في التخصيص (Overfitting).\n• تعالجه الغابات العشوائية بتدريب عدة أشجار قرار على عينات Bootstrap وسمات عشوائية، ثم أخذ التصويت بالأغلبية (Majority Voting)."]
+];
+
+const masterQuestions = [
+  {q:"أي نوع من خوارزميات التعلم الآلي بإشراف يُستخدم عندما تكون سمة الهدف (Y) عبارة عن (فئات محددة ومنفصلة مثل: مريض/سليم أو Spam/Not Spam)؟",o:["خوارزميات التصنيف (Classification)","خوارزميات الانحدار الخطي (Linear Regression)","خوارزميات التجميع بدون إشراف (Clustering)","التحويل اللوغاريتمي"],a:0,e:"التصنيف (Classification) يتنبأ بسمة هدف فئوية منفصلة، بينما الانحدار يتنبأ بقيمة رقمية متصلة."},
+  {q:"وفقاً لتقسيم خوارزميات التصنيف الأربعة في الملزمة، إلى أي فئة تنتمي كل من (K-NN) و (Naive Bayes) على التوالي؟",o:["K-NN معتمدة على المسافة (Distance-based)، و Naive Bayes معتمدة على الاحتمالات (Probability-based)","K-NN معتمدة على الأشجار، و Naive Bayes معتمدة على المسافة","كلتاهما معتمدتان على التحسين (Optimization)","كلتاهما خوارزميات تجميع بدون إشراف"],a:0,e:"K-NN تصنف بحساب المسافات، بينما Naive Bayes تصنف بحساب الاحتمالات الشرطية."},
+  {q:"في خوارزمية أقرب الجيران (K-NN)، ماذا يحدث إذا اخترنا قيمة (K) صغيرة جداً مثل (K = 1)؟",o:["يصبح الحد الفاصل متعرجاً جداً وحساساً للضجيج والقيم الشاذة، مما يسبب الإفراط في التخصيص (Overfitting)","يصبح النموذج أسرع بمئة مرة ولا يتأثر بالضجيج","يتحول النموذج إلى شجرة قرار","تُحذف جميع نقاط التدريب"],a:0,e:"عند K=1 تتأثر النقطة بأقرب جار واحد فقط حتى لو كان نقطة ضجيج، مما يسبب Overfitting."},
+  {q:"ما هي الفرضية الأساسية التي تقوم عليها خوارزمية بايز الساذج (Naive Bayes)؟",o:["تفترض أن جميع السمات (Features) مستقلة تماماً عن بعضها البعض إحصائياً بشرط معرفة الفئة","تفترض أن جميع السمات متطابقة ومكررة 100%","تفترض عدم وجود سمة هدف في البيانات","تفترض أن البيانات مقسمة بحدود دائرية فقط"],a:0,e:"سُميت Naive (ساذجة/مبسطة) لافتراضها الاستقلال الشرطي التام بين السمات لتبسيط حساب قانون بايز."},
+  {q:"[مسألة حسابية - Naive Bayes] لتصنيف رسالة بريد إلكتروني تحتوي على كلمتي ('free' و 'win')، إذا كان P(Spam) = 0.5 ، و P('free'|Spam) = 0.4 ، و P('win'|Spam) = 0.5 ، فكم تبلغ قيمة البسط (درجة احتمال Spam)؟",o:["0.10 (لأن 0.5 × 0.4 × 0.5 = 0.10)","1.40","0.50","0.01"],a:0,e:"بضرب الاحتمال المسبق في الاحتمالات الشرطية للكلمات: 0.5 × 0.4 × 0.5 = 0.10."},
+  {q:"[مسألة حسابية - Naive Bayes] إذا كانت درجة احتمال كون الرسالة مزعجة S(Spam) = 0.08 ، ودرجة احتمال كونها سليمة S(Not Spam) = 0.003 ، فما هو قرار خوارزمية Naive Bayes؟",o:["تُصنف الرسالة على أنها بريد مزعج (Spam) لأن 0.08 أكبر من 0.003","تُصنف الرسالة على أنها سليمة (Not Spam)","ترفض الخوارزمية تصنيف الرسالة","تُصنف الرسالة كقيمة مفقودة NaN"],a:0,e:"تختار خوارزمية Naive Bayes الفئة صاحبة الاحتمال الأعلى (MAP)، وبما أن 0.08 > 0.003 فالرسالة Spam."},
+  {q:"على الرغم من اسمه، فإن (الانحدار اللوجستي - Logistic Regression) يُستخدم في التعلم الآلي كخوارزمية:",o:["تصنيف (Classification - وخاصة التصنيف الثنائي 0 أو 1)","انحدار للتنبؤ بدرجات الحرارة المتصلة فقط","تجميع بدون إشراف (Clustering)","تقليص أبعاد بدون هدف"],a:0,e:"الانحدار اللوجستي هو خوارزمية تصنيف معتمدة على التحسين (Optimization-based classification)."},
+  {q:"ما هي الدالة الرياضية التي يستخدمها الانحدار اللوجستي لتحويل المجموع الخطي (z) إلى قيمة احتمالية تقع دائماً بين [0 و 1]؟",o:["دالة السيجمويد (Sigmoid Function): σ(z) = 1 / (1 + e^-z)","دالة الجذر التربيعي","دالة القيمة المطلقة","معادلة مسافة مانهاتن"],a:0,e:"دالة السيجمويد تحصر أي رقم حقيقي z من (-∞, +∞) ليقع داخل نطاق الاحتمال [0, 1]."},
+  {q:"[مسألة حسابية - Logistic Regression] في نموذج انحدار لوجستي لتوقع نجاح الطالب، إذا كانت المعادلة الخطية هي z = 1.5x - 6 ، ودرس الطالب x = 6 ساعات، فما هي قيمة z وما قرار تصنيف الطالب؟",o:["z = +3.0 ، وبما أن σ(3) أكبر من 0.5 يُصنف الطالب بأنه ناجح (الفئة 1)","z = -3.0 ، ويُصنف الطالب بأنه راسب (الفئة 0)","z = 0.0 ، ولا يمكن تصنيفه","z = 100"],a:0,e:"نعوض بـ x=6: z = (1.5 × 6) - 6 = 9 - 6 = +3.0. وعندما تكون z موجبة (> 0) تكون σ(z) > 0.5 فيُصنف في الفئة الموجبة (1)."},
+  {q:"ما هي دالة الخسارة (Loss Function) القياسية المستخدمة في تدريب نموذج الانحدار اللوجستي؟",o:["Binary Cross-Entropy Loss (Log Loss)","مجموع الأخطاء المطلقة (SAE)","معامل الظل (Silhouette)","مسافة مانهاتن"],a:0,e:"يستخدم الانحدار اللوجستي دالة الخسارة اللوغاريتمية Binary Cross-Entropy بدلاً من MSE."},
+  {q:"تهدف خوارزمية آلات المتجهات الداعمة (SVM) عند الفصل بين فئتين إلى إيجاد المستوى الفاصل الذي يحقق:",o:["أكبر هامش أمان ممكن (Maximum Margin) بين الخط الفاصل وأقرب النقاط من الفئتين (المتجهات الداعمة)","أصغر مسافة ممكنة بحيث يلامس جميع النقاط","تصفير جميع المعاملات كما في Lasso","بناء شجرة من الجذر إلى الأوراق"],a:0,e:"جوهر خوارزمية SVM هو تعظيم الهامش (Margin) بين الفئتين لزيادة قدرة النموذج على التعميم."},
+  {q:"كيف تتعامل خوارزمية (SVM) مع البيانات غير القابلة للفصل خطياً في فضائها الأصلي؟",o:["باستخدام خدعة النواة (Kernel Trick) مثل نواة (Polynomial أو RBF) لرفع البيانات إلى فضاء أعلى أبعاداً تصبح فيه قابلة للفصل خطياً","عن طريق حذف جميع البيانات غير الخطية","عن طريق تحويلها إلى نص","لا تستطيع SVM التعامل مع البيانات غير الخطية إطلاقاً"],a:0,e:"تُستخدم دوال النواة (Kernels مثل poly و rbf) لتمكين SVM من فصل البيانات غير الخطية بكفاءة عالية."},
+  {q:"[مسألة حسابية - SVM] إذا كانت معادلة المستوى الفاصل في نموذج SVM هي: 2x1 + x2 - 7 = 0 ، فما هو تصنيف النقطة الجديدة P = (5, 1)؟",o:["تنتمي للفئة الموجبة (+1) لأن التعويض يعطي: 2(5) + 1 - 7 = +4 (أكبر من الصفر)","تنتمي للفئة السالبة (-1) لأن الناتج سالب","تقع النقطة على الخط الفاصل تماماً لأن الناتج صفر","تُصنف كنقطة ضجيج (-1)"],a:0,e:"نعوض بإحداثيات النقطة (x1=5, x2=1): 2(5) + (1) - 7 = 10 + 1 - 7 = +4. وبما أن +4 > 0 فهي في الفئة الموجبة (+1)."},
+  {q:"في بنية شجرة القرار (Decision Tree)، ماذا تمثل كل من: (عقدة الجذر - Root Node) و (العقد الورقية - Leaf Nodes)؟",o:["عقدة الجذر هي أعلى عقدة وتضم كامل البيانات، والعقد الورقية تقع في أسفل الشجرة وتمثل قرار التصنيف النهائي (الفئة المتوقعة)","عقدة الجذر تقع في أسفل الشجرة، والعقد الورقية تقع في قمتها","كلاهما يمثلان القيم المفقودة","لا تحتوي شجرة القرار على عقد ورقية"],a:0,e:"تبدأ الشجرة من الجذر (Root) في الأعلى، وتتفرع عبر العقد الداخلية، وتنتهي بالعقد الورقية (Leaf nodes) التي تحمل قرار التصنيف."},
+  {q:"ما هي معادلة حساب معامل جيني لعدم النقاء (Gini Impurity) لعقدة في شجرة القرار؟ ومتى تكون العقدة نقية تماماً (Pure)؟",o:["G = Σ P_i (1 - P_i) ، وتكون العقدة نقية تماماً عندما يساوي معامل جيني صفراً (G = 0)","G = Q3 - Q1 ، وتكون نقية عندما G = 100","G = (x - μ) / σ ، وتكون نقية عندما G = -1","G = b(x) - a(x)"],a:0,e:"معامل جيني G = Σ P_i(1 - P_i) يقيس عدم النقاء؛ فإذا كانت كل عينات العقدة من فئة واحدة يكون P=1 وبالتالي G = 1(1-1) = 0."},
+  {q:"[مسألة حسابية - Gini] إذا كانت عقدة في شجرة القرار تحتوي على 10 عينات: 6 منها من الفئة (A) و 4 منها من الفئة (B)، فكم تبلغ قيمة معامل جيني (G) لهذه العقدة؟",o:["0.48 (لأن P(A)=0.6 و P(B)=0.4، فيكون G = 0.6×0.4 + 0.4×0.6 = 0.24 + 0.24 = 0.48)","0.00","1.00","0.24"],a:0,e:"نحسب الاحتمالات: P(A) = 6/10 = 0.6، و P(B) = 4/10 = 0.4. ثم نعوض: G = 0.6(0.4) + 0.4(0.6) = 0.24 + 0.24 = 0.48."},
+  {q:"[مسألة حسابية - Gini Gain] إذا كان معامل جيني للعقدة الأب G_parent = 0.48 (تضم 10 عينات)، وقسمناها إلى فرعين متساويين (5 عينات لكل فرع) فكان G_left = 0.0 و G_right = 0.40، فكم يبلغ كسب جيني (Gini Gain)؟",o:["0.28 (لأن المتوسط الموزون للفرعين = (5/10)×0 + (5/10)×0.40 = 0.20، فيكون الكسب = 0.48 - 0.20 = 0.28)","0.48","0.20","0.88"],a:0,e:"نحسب جيني الموزون للأبناء: (0.5 × 0) + (0.5 × 0.40) = 0.20. ثم نطرحه من جيني الأب: Gini Gain = 0.48 - 0.20 = 0.28."},
+  {q:"على أي أساس تختار شجرة القرار السمة الأفضل لتقسيم العقدة الحالية؟",o:["تختار السمة التي تحقق أكبر قيمة لكسب جيني (Maximum Gini Gain - أي أكبر تقليل لعدم النقاء)","تختار السمة التي تحقق أقل كسب جيني","تختار السمة التي تحتوي على أكبر عدد من القيم المفقودة","تختار أول عمود في الجدول دائماً دون حساب"],a:0,e:"السمة الأفضل للتقسيم هي التي تزيد من نقاء العقد الناتجة بأكبر قدر ممكن، أي صاحبة أعلى Gini Gain."},
+  {q:"ما هي الميزة الرئيسية لاستخدام خوارزمية (الغابات العشوائية - Random Forests) مقارنة باستخدام شجرة قرار واحدة؟",o:["تقلل بشكل كبير من مشكلة الإفراط في التخصيص (Overfitting) وترفع دقة التعميم عن طريق تجميع عدة أشجار والتصويت بالأغلبية","تعتمد على شجرة واحدة فقط وتلغي بقية الأشجار","تحول مشكلة التصنيف إلى تجميع بدون إشراف","لا تحتاج إلى أي بيانات للتدريب"],a:0,e:"شجرة القرار الواحدة تعاني من الـ Overfitting، بينما تعالج الغابات العشوائية ذلك بتدريب غابة من الأشجار على عينات Bootstrap وأخذ التصويت بالأغلبية."},
+  {q:"كيف تتخذ خوارزمية الغابات العشوائية (Random Forests) قرار التصنيف النهائي لعينة اختبار جديدة بعد أن تتنبأ بها جميع الأشجار في الغابة؟",o:["عن طريق التصويت بالأغلبية (Majority Voting) بين جميع الأشجار","عن طريق أخذ رأي الشجرة الأولى فقط وتجاهل الباقي","عن طريق جمع أرقام الفئات وضربها في 100","عن طريق حذف العينة الجديدة"],a:0,e:"في التصنيف، تصوت كل شجرة في الغابة العشوائية لصالح فئة، والفئة التي تحصل على أغلبية الأصوات (Majority Voting) تكون هي التوقع النهائي."},
+  {q:"لماذا يُنصح باختيار قيمة (K) عدداً فردياً (مثل K=3 أو K=5) في خوارزمية أقرب الجيران (K-NN) عند التصنيف بين فئتين؟",o:["لتجنب حدوث تعادل في الأصوات بين الفئتين عند إجراء التصويت بالأغلبية","لأن الأعداد الزوجية غير مقبولة برمجياً في لغة البايثون","لأن الأعداد الفردية تحذف القيم المتطرفة تلقائياً","لجعل المسافة الإقليدية تساوي صفراً"],a:0,e:"اختيار K عدداً فردياً في التصنيف الثنائي يمنع تساوي عدد الجيران من الفئة الأولى مع عدد الجيران من الفئة الثانية."},
+  {q:"أي خوارزمية من خوارزميات التصنيف التالية توصف بأنها (متعلم كسول - Lazy Learner) لأنها لا تبني نموذجاً رياضياً أثناء التدريب بل تؤجل كل الحسابات إلى وقت الاختبار؟",o:["خوارزمية أقرب الجيران (K-NN)","الانحدار اللوجستي (Logistic Regression)","آلات المتجهات الداعمة (SVM)","شجرة القرار (Decision Tree)"],a:0,e:"خوارزمية K-NN تحفظ بيانات التدريب فقط، وعند وصول نقطة اختبار جديدة تبدأ بحساب المسافات مع كافة النقاط."},
+  {q:"في خوارزمية (SVM)، ماذا نسمي النقاط الحدية القريبة جداً من المستوى الفاصل والتي تقع على حافة الهامش وتتحكم في تحديد موقع واتجاه المستوى الفاصل؟",o:["المتجهات الداعمة (Support Vectors)","العقد الورقية (Leaf Nodes)","المراكز العشوائية (Centroids)","القيم المفقودة (Missing Values)"],a:0,e:"سُميت الخوارزمية بآلات المتجهات الداعمة لأن هذه النقاط الحدية القريبة (Support Vectors) هي التي تدعم وتحدد موقع الفاصل."},
+  {q:"في دالة السيجمويد σ(z) بالانحدار اللوجستي، كم تبلغ قيمة الاحتمال σ(z) عندما تكون القيمة الخطية (z = 0)؟",o:["0.5 (لأن 1 / (1 + e^0) = 1 / (1 + 1) = 0.5)","0.0","1.0","-1.0"],a:0,e:"بما أن e^0 = 1، فإن σ(0) = 1 / (1 + 1) = 1/2 = 0.5 (وهي نقطة العتبة الفاصلة بين الفئتين)."},
+  {q:"أي زوج من الخوارزميات التالية ينتمي كلاهما إلى فئة خوارزميات التصنيف المعتمدة على التحسين (Optimization-based classification algorithms)؟",o:["الانحدار اللوجستي (Logistic Regression) وآلات المتجهات الداعمة (SVM)","أقرب الجيران (K-NN) وبايز الساذج (Naive Bayes)","K-means و DBSCAN","PCA و Chi-squared"],a:0,e:"يُصنف كل من Logistic Regression و SVM ضمن خوارزميات التصنيف المعتمدة على التحسين الرياضي (Optimization)."}
+];
+
+const termsGrid = document.getElementById("termsGrid");
+terms.forEach(([en, ar]) => {
+  const d = document.createElement("div");
+  d.className = "card";
+  d.style.margin = "0";
+  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
+  termsGrid.appendChild(d);
+});
+
+let ci = 0, showAnswer = false;
+function renderCard() {
+  document.getElementById("flashTerm").textContent = cards[ci][0];
+  document.getElementById("flashAnswer").textContent = cards[ci][1];
+  document.getElementById("flashAnswer").hidden = !showAnswer;
+  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
+  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+}
+document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
+document.getElementById("flashcard").addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
+});
+document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
+document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
+renderCard();
+
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+let currentQuestions = [];
+let answers = {};
+
+function prepareShuffledQuiz() {
+  currentQuestions = shuffleArray(masterQuestions).map(item => {
+    const optsWithFlag = item.o.map((text, idx) => ({ text, isCorrect: idx === item.a }));
+    const shuffledOpts = shuffleArray(optsWithFlag);
+    return {
+      q: item.q,
+      o: shuffledOpts.map(x => x.text),
+      a: shuffledOpts.findIndex(x => x.isCorrect),
+      e: item.e
+    };
+  });
+}
+
+function renderQuiz() {
+  prepareShuffledQuiz();
+  const area = document.getElementById("quizArea");
+  area.innerHTML = "";
+  const letters = ["أ", "ب", "ج", "د"];
+  currentQuestions.forEach((item, i) => {
+    const box = document.createElement("div");
+    box.className = "qbox";
+    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
+    const opts = box.querySelector(".options");
+    item.o.forEach((opt, j) => {
+      const btn = document.createElement("button");
+      btn.className = "option";
+      btn.textContent = `${letters[j]}) ${opt}`;
+      btn.onclick = () => {
+        answers[i] = j;
+        [...opts.children].forEach((x, k) => {
+          x.classList.remove("correct", "wrong");
+          x.disabled = true;
+          if (k === item.a) x.classList.add("correct");
+          if (k === j && j !== item.a) x.classList.add("wrong");
+        });
+        const fb = document.getElementById("fb" + i);
+        fb.hidden = false;
+        fb.className = "feedback " + (j === item.a ? "good" : "bad");
+        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
+        updateScore();
+      };
+      opts.appendChild(btn);
+    });
+    area.appendChild(box);
+  });
+  updateScore();
+}
+
+function updateScore() {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
+  document.getElementById("score").textContent = `النتيجة: ${correct} / ${currentQuestions.length}`;
+  document.getElementById("progressBar").style.width = (Object.keys(answers).length / currentQuestions.length * 100) + "%";
+}
+
+document.getElementById("resetQuiz").onclick = () => {
+  answers = {};
+  document.getElementById("finalResult").textContent = "";
+  renderQuiz();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+document.getElementById("finishQuiz").onclick = () => {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
+  const pct = Math.round(correct / currentQuestions.length * 100);
+  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${currentQuestions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! أنتِ مستعدة تماماً للاختبار في هذا الفصل." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
+};
+
+renderQuiz();
+</script>
+</body>
+</html>

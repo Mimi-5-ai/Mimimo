@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الفصل العاشر الشامل (100%) | تحليل وتمثيل البيانات</title>
+<style>
+:root{
+  --bg:#f0f5ff;
+  --card:#ffffff;
+  --ink:#0f172a;
+  --muted:#475569;
+  --accent:#1d4ed8;
+  --accent-dark:#1e3a8a;
+  --accent2:#dbeafe;
+  --line:#cbd5e1;
+  --good:#059669;
+  --good-bg:#ecfdf5;
+  --bad:#dc2626;
+  --bad-bg:#fef2f2;
+  --warn:#d97706;
+  --warn-bg:#fffbeb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
+header{background:linear-gradient(135deg,#0f172a,#1d4ed8);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(15,23,42,0.2)}
+.wrap{max-width:1040px;margin:auto;padding:0 16px}
+.eyebrow{opacity:.92;font-size:.9rem;background:rgba(255,255,255,0.16);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
+h1{margin:5px 0;font-size:clamp(1.5rem,4vw,2.25rem)}
+header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
+nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:var(--accent2);color:var(--accent-dark);font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
+nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
+nav button.active,.btn.primary{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+main .btn.primary{background:var(--accent);color:white}
+main{padding:22px 0 48px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(15,23,42,0.04)}
+h2{font-size:1.35rem;margin:0 0 12px;color:#0f172a}
+h3{font-size:1.08rem;margin:0 0 8px;color:var(--accent-dark)}
+small,.muted{color:var(--muted)}
+ul,ol{padding-right:22px;margin:8px 0}
+li{margin:6px 0}
+details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
+summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f8fafc;color:#0f172a;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
+details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
+.details-body{padding:16px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
+.badge-new{display:inline-block;background:var(--warn-bg);color:var(--warn);border:1px solid #fcd34d;font-size:.78rem;padding:1px 8px;border-radius:6px;margin-right:6px;font-weight:bold}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#eff6ff;color:#1e3a8a;font-weight:bold}
+tr:last-child td{border-bottom:0}
+.note{border-right:4px solid var(--accent);padding:10px 14px;background:#eff6ff;border-radius:8px;margin:10px 0}
+.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
+.math-box{background:#f8fafc;border:2px solid #93c5fd;border-radius:12px;padding:12px 16px;margin:10px 0;text-align:center;font-size:1.03rem;font-weight:bold;color:#1e3a8a;direction:ltr}
+.step-box{background:#f0fdf4;border:1px solid #86efac;border-right:4px solid var(--good);border-radius:10px;padding:12px 16px;margin:10px 0;font-size:.95rem}
+.code-box{background:#0f172a;color:#e2e8f0;padding:14px 18px;border-radius:12px;font-family:Consolas,Monaco,monospace;direction:ltr;text-align:left;overflow-x:auto;margin:10px 0;border:1px solid #334155;line-height:1.65;font-size:.91rem}
+.code-box .kw{color:#38bdf8;font-weight:bold}
+.code-box .str{color:#4ade80}
+.code-box .num{color:#f472b6}
+.code-box .cmt{color:#94a3b8;font-style:italic}
+.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
+.options{display:grid;gap:8px;margin-top:12px}
+.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
+.option:hover:not(:disabled){border-color:var(--accent);background:#eff6ff}
+.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
+.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
+.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
+.feedback.good{color:var(--good);background:var(--good-bg)}
+.feedback.bad{color:var(--bad);background:var(--bad-bg)}
+.progress{height:10px;background:#cbd5e1;border-radius:9px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
+.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#dbeafe);border:2px solid #93c5fd;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
+.flashcard:hover{transform:scale(1.005)}
+.flashcard .term{font-size:1.32rem;font-weight:bold;color:#1e3a8a}
+.flashcard .answer{margin-top:16px;font-size:1.04rem;color:#0f172a;background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04);white-space:pre-line}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
+@media(max-width:600px){
+  .card{padding:14px}
+  nav button{flex:1 1 calc(50% - 8px);text-align:center}
+  .flashcard{min-height:200px;padding:18px}
+  th,td{padding:8px 10px;font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">نسخة شاملة ومحدثة 100% • مقرر تحليل وتمثيل البيانات</div>
+    <h1>الفصل العاشر: التعلم الآلي بدون إشراف (Unsupervised Learning - Clustering)</h1>
+    <p>يغطي الفرق بين التعلم بإشراف وبدون إشراف، مقاييس المسافة (مانهاتن والإقليدية)، مقاييس كفاءة التجميع (الخارجية كجاكارد والداخلية كمعامل الظل Silhouette)، خوارزمية K-means وطريقة المرفق (Elbow)، وخوارزمية DBSCAN والتجميع الهرمي</p>
+    <nav>
+      <button class="active" data-tab="summary">الشرح والقوانين والأكواد (100%)</button>
+      <button data-tab="tables">جداول المقارنات والمعادلات</button>
+      <button data-tab="terms">قاموس المصطلحات والدوال</button>
+      <button data-tab="cards">البطاقات (28)</button>
+      <button data-tab="quiz">الاختبار العشوائي (25)</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="summary" class="panel active">
+    <div class="card">
+      <h2>خريطة الفصل العاشر (الوحدات الثلاث الكاملة)</h2>
+      <div class="grid">
+        <div>
+          <span class="tag">الوحدة الأولى</span>
+          <h3>أساسيات التجميع ومقاييس المسافة والكفاءة</h3>
+          <p>مقارنة التعلم بإشراف وبدون إشراف، مسافة كتلة المدينة (مانهاتن) والمسافة الإقليدية، وطرق التحقق من كفاءة التجميع الثلاث (الخارجية كجاكارد، الداخلية كـ <span dir="ltr">Silhouette</span> و <span dir="ltr">WSS</span>، والنسبية).</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثانية</span>
+          <h3>خوارزمية K-means وطريقة المرفق</h3>
+          <p>خطوات عمل <span dir="ltr">K-means</span> الخمس، مسألة تتبع النقاط وتحديث المراكز (<span dir="ltr">Centroids</span>)، المزايا والعيوب، التطبيق البرمجي بـ <span dir="ltr">Scikit-learn</span>، وتحديد $K$ الأمثل بطريقة المرفق (<span dir="ltr">Elbow method</span>).</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثالثة</span>
+          <h3>خوارزمية DBSCAN والتجميع الهرمي</h3>
+          <p>خوارزمية <span dir="ltr">DBSCAN</span> ومعاملاها (<span dir="ltr">eps, minPts</span>) وتصنيف النقاط الثلاث (<span dir="ltr">Core, Border, Noise</span>)، والتجميع الهرمي (<span dir="ltr">Agglomerative &amp; Divisive</span>) وطرق الربط الأربع ورسم <span dir="ltr">Dendrogram</span>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== الوحدة الأولى ==================== -->
+    <details open>
+      <summary>الوحدة الأولى: أساسيات التجميع (Clustering)، مقاييس المسافة، ومقاييس كفاءة التجميع</summary>
+      <div class="details-body">
+        <h3>1) المقارنة بين التعلم بإشراف (Supervised) والتعلم بدون إشراف (Unsupervised)</h3>
+        <div class="exam-alert">
+          <b>🔥 فرق جوهري ومؤكد في الاختبار:</b><br>
+          • <b>التعلم الآلي بإشراف (<span dir="ltr">Supervised Learning</span>):</b> تتوفر فيه <b>سمة الهدف / المخرج المعروف مسبقاً ($Y$ - <span dir="ltr">Target / Label</span>)</b> إلى جانب السمات المستقلة ($X$)، والهدف هو تدريب نموذج للتنبؤ بقيمة $Y$ للبيانات الجديدة. وينقسم إلى: <b>الانحدار (<span dir="ltr">Regression</span>)</b> إذا كان الهدف كمياً متصلاً، و<b>التصنيف (<span dir="ltr">Classification</span>)</b> إذا كان الهدف فئوياً محدداً.<br>
+          • <b>التعلم الآلي بدون إشراف (<span dir="ltr">Unsupervised Learning</span>):</b> <b>لا تتوفر فيه سمة الهدف ($Y$) نهائياً</b> (بيانات غير معنونة <span dir="ltr">Unlabeled Data</span> تحتوي على $X$ فقط)، والهدف هو اكتشاف الأنماط الخفية والهياكل وتقسيم البيانات إلى مجموعات متشابهة فيما يُعرف بـ <b>التجميع العنقودي (<span dir="ltr">Clustering</span>)</b>!
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) مقاييس المسافة في التجميع (<span dir="ltr">Distance Measures</span>) — القوانين والمسائل الحسابية</h3>
+        <p>لتجميع النقاط المتشابهة في عنقود واحد، نحتاج إلى قياس المسافة بين أي نقطتين $A = (a_1, a_2, \dots, a_p)$ و $B = (b_1, b_2, \dots, b_p)$:</p>
+        <ul>
+          <li><b>1. مسافة كتلة المدينة / مسافة مانهاتن (<span dir="ltr">City-Block / Manhattan Distance - $D_c$</span>):</b>
+            <ul>
+              <li>تساوي مجموع القيم المطلقة للفروق بين إحداثيات النقطتين:</li>
+            </ul>
+            <div class="math-box">
+              D<sub>c</sub>(A, B) = &sum;<sub>j=1</sub><sup>p</sup> | a<sub>j</sub> &minus; b<sub>j</sub> | = |x<sub>1</sub> &minus; x<sub>2</sub>| + |y<sub>1</sub> &minus; y<sub>2</sub>|
+            </div>
+          </li>
+          <li><b>2. المسافة الإقليدية (<span dir="ltr">Euclidean Distance - $D_e$</span>):</b>
+            <ul>
+              <li>هي المسافة المستقيمة المباشرة، وتساوي الجذر التربيعي لمجموع مربعات الفروق بين إحداثيات النقطتين:</li>
+            </ul>
+            <div class="math-box">
+              D<sub>e</sub>(A, B) = &radic;[ &sum;<sub>j=1</sub><sup>p</sup> ( a<sub>j</sub> &minus; b<sub>j</sub> )<sup>2</sup> ] = &radic;[ (x<sub>1</sub> &minus; x<sub>2</sub>)<sup>2</sup> + (y<sub>1</sub> &minus; y<sub>2</sub>)<sup>2</sup> ]
+            </div>
+          </li>
+        </ul>
+        <div class="step-box">
+          <b>مسألة حسابية شاملة على المسافتين (مهمة جداً للاختبار!):</b><br>
+          لتكن لدينا النقطة $A = (1, 2)$ والنقطة $B = (4, 6)$:<br>
+          1) <b>مسافة كتلة المدينة (مانهاتن $D_c$):</b><br>
+          $D_c = |1 - 4| + |2 - 6| = |-3| + |-4| = 3 + 4 = \mathbf{7}$.<br>
+          2) <b>المسافة الإقليدية ($D_e$):</b><br>
+          $D_e = \sqrt{(1 - 4)^2 + (2 - 6)^2} = \sqrt{(-3)^2 + (-4)^2} = \sqrt{9 + 16} = \sqrt{25} = \mathbf{5}$.
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) طرق التحقق من كفاءة التجميع الثلاث (<span dir="ltr">Cluster Validation Measures</span>)</h3>
+        <div class="exam-alert">
+          <b>🌟 تنقسم مقاييس تقييم جودة وكفاءة التجميع إلى 3 أنواع رئيسية:</b>
+        </div>
+        <ul>
+          <li><b>أولاً: المقاييس الخارجية (<span dir="ltr">1. External Measures</span>):</b>
+            <ul>
+              <li>تُستخدم عندما تتوفر لدينا <b>تسميات مرجعية خارجية (حقيقية)</b> نقارن بها نتائج التجميع، وتعتمد على أزواج النقاط ($M_{11}$: أزواج في نفس المجموعة في الاثنين، $M_{00}$: أزواج في مجموعات مختلفة في الاثنين، $M_{10}$ و $M_{01}$: أزواج اختلف تصنيفها):</li>
+              <li><b>1) مؤشر راند (<span dir="ltr">RAND-correct Index</span>):</b> يقيس نسبة الأزواج المتفق عليها من إجمالي كافة الأزواج:
+                <div class="math-box">RAND = ( M<sub>00</sub> + M<sub>11</sub> ) / ( M<sub>00</sub> + M<sub>01</sub> + M<sub>10</sub> + M<sub>11</sub> )</div>
+              </li>
+              <li><b>2) معامل جاكارد (<span dir="ltr">Jaccard Index - $J$</span>):</b> يستثني $M_{00}$ ويركز على الأزواج المتواجدة معاً:
+                <div class="math-box">J = M<sub>11</sub> / ( M<sub>01</sub> + M<sub>10</sub> + M<sub>11</sub> )</div>
+              </li>
+            </ul>
+          </li>
+          <li><b>ثانياً: المقاييس الداخلية (<span dir="ltr">2. Internal Measures</span>):</b>
+            <ul>
+              <li>تُقيّم جودة التجميع بالاعتماد على <b>البيانات نفسها فقط دون أي تسميات خارجية</b> (تقيس مدى تماسك النقاط داخل نفس العنقود <span dir="ltr">Cohesion</span> وتباعد العناقيد عن بعضها <span dir="ltr">Separation</span>)، ومن أشهرها:</li>
+              <li><b>1) معامل الظل (<span dir="ltr">Silhouette Index - $s(x_i)$</span>):</b>
+                <div class="math-box">
+                  s(x<sub>i</sub>) = [ b(x<sub>i</sub>) &minus; a(x<sub>i</sub>) ] / max( b(x<sub>i</sub>), a(x<sub>i</sub>) )
+                </div>
+                حيث:<br>
+                • <b>$a(x_i)$:</b> متوسط المسافة بين النقطة $x_i$ وجميع النقاط الأخرى <b>داخل نفس مجموعتها</b> (يقيس التماسك، وكلما كان أصغر كان أفضل).<br>
+                • <b>$b(x_i)$:</b> أقل متوسط مسافة بين النقطة $x_i$ وجميع النقاط في <b>أقرب مجموعة مجاورة أخرى</b> (يقيس الانفصال، وكلما كان أكبر كان أفضل).<br>
+                • <b>نطاق قيمة معامل الظل:</b> تتراوح قيمته بين $[-1, +1]$؛ وكلما اقتربت من <b>$+1$</b> دلّ ذلك على تجميع ممتاز ومثالي!
+              </li>
+              <li><b>2) مجموع المربعات داخل المجموعات (<span dir="ltr">Within-groups Sum of Squares - WSS / WCSS</span>):</b> يقيس مجموع مربعات المسافات بين كل نقطة ومركز مجموعتها (وكلما كان أصغر كانت المجموعة أكثر تماسكاً).</li>
+            </ul>
+          </li>
+          <li><b>ثالثاً: المقاييس النسبية (<span dir="ltr">3. Relative Measures</span>):</b>
+            <ul>
+              <li>تُستخدم لمقارنة نتائج تجميعات مختلفة ناتجة عن نفس الخوارزمية عند تغيير معاملاتها (مثل مقارنة كفاءة <span dir="ltr">K-means</span> عند قيم مختلفة لعدد العناقيد $K=2, 3, 4\dots$).</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- ==================== الوحدة الثانية ==================== -->
+    <details>
+      <summary>الوحدة الثانية: خوارزمية K-means Clustering، مسألة التتبع، وطريقة المرفق (The Elbow Method)</summary>
+      <div class="details-body">
+        <h3>1) خوارزمية التجميع بالمتوسطات (<span dir="ltr">K-Means Clustering</span>) وخطواتها الخمس</h3>
+        <ul>
+          <li><b>مفهومها:</b> هي أشهر خوارزميات التجميع التقسيمي (<span dir="ltr">Partitioning Clustering</span>)؛ وتهدف إلى تقسيم $N$ من العينات إلى <b>$K$ من المجموعات (العناقيد)</b> بحيث تنتمي كل نقطة إلى المجموعة ذات <b>المركز الأقرب إليها (<span dir="ltr">Nearest Centroid</span>)</b>.</li>
+          <li><b>خطوات عمل خوارزمية <span dir="ltr">K-means</span> الخمس بالترتيب:</b>
+            <ol>
+              <li><b>الخطوة (1):</b> تحديد عدد المجموعات المطلوب ($K$)، واختيار $K$ من النقاط عشوائياً لتكون <b>المراكز الأولية للمجموعات (<span dir="ltr">Initial Centroids</span>)</b>.</li>
+              <li><b>الخطوة (2):</b> حساب المسافة (الإقليدية أو مانهاتن) بين كل نقطة في البيانات وبين جميع المراكز الـ $K$.</li>
+              <li><b>الخطوة (3):</b> إسناد (تخصيص) كل نقطة إلى المجموعة التي يمتلك مركزها <b>أقرب (أصغر) مسافة</b> إليها.</li>
+              <li><b>الخطوة (4):</b> <b>تحديث مراكز المجموعات (<span dir="ltr">Update Centroids</span>)</b> عن طريق حساب <b>المتوسط الحسابي لإحداثيات جميع النقاط</b> التي انضمت لكل مجموعة.</li>
+              <li><b>الخطوة (5):</b> تكرار الخطوات (2 و 3 و 4) حتى نصل إلى حالة <b>التقارب / الثبات (<span dir="ltr">Convergence</span>)</b> (أي لا يتغير انتماء النقاط للمجموعات أو لا تتغير مواقع المراكز).</li>
+            </ol>
+          </li>
+        </ul>
+
+        <div class="step-box">
+          <b>مسألة تتبع حسابية على K-means (كيف نسند النقطة وكيف نحدث المركز في الاختبار؟):</b><br>
+          لنفترض أن لدينا $K = 2$، والمركز الأول $C_1 = (2, 2)$ والمركز الثاني $C_2 = (8, 8)$:<br>
+          • <b>سؤال (أ): لأي مجموعة تنتمي النقطة $P = (3, 4)$؟</b><br>
+          - نحسب المسافة للمركز الأول $C_1$: $|3-2| + |4-2| = 1 + 2 = 3$ (أو إقليدياً $\sqrt{1+4} = \sqrt{5} \approx 2.24$).<br>
+          - نحسب المسافة للمركز الثاني $C_2$: $|3-8| + |4-8| = 5 + 4 = 9$ (أو إقليدياً $\sqrt{25+16} \approx 6.4$).<br>
+          - بما أن المسافة إلى $C_1$ أصغر، إذن تنضم النقطة $P$ إلى <b>المجموعة الأولى ($C_1$)</b>!<br>
+          • <b>سؤال (ب): إذا أصبحت المجموعة الأولى تضم 3 نقاط هي: $(1, 2), (3, 4), (5, 6)$، فما هو موقع المركز الجديد المحدث ($C_1^{\text{new}}$)؟</b><br>
+          - نحسب متوسط الإحداثي السيني $X$: $(1 + 3 + 5) \div 3 = 9 \div 3 = \mathbf{3}$.<br>
+          - نحسب متوسط الإحداثي الصادي $Y$: $(2 + 4 + 6) \div 3 = 12 \div 3 = \mathbf{4}$.<br>
+          - إذن المركز الجديد هو: $C_1^{\text{new}} = \mathbf{(3, 4)}$.
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) مميزات وعيوب (<span dir="ltr">K-means</span>)، وطريقة المرفق (<span dir="ltr">The Elbow Method</span>)</h3>
+        <ul>
+          <li><b>مميزات <span dir="ltr">K-means</span>:</b> بسيطة وسهلة الفهم والتنفيذ، سريعة جداً وفعالة حسابياً مع البيانات الكبيرة.</li>
+          <li><b>عيوب <span dir="ltr">K-means</span> (مهمة جداً في الاختبار!):</b>
+            <ol>
+              <li>تتطلب من المستخدم <b>تحديد عدد المجموعات ($K$) مسبقاً</b> قبل التشغيل.</li>
+              <li><b>حساسة لاختيار المراكز الأولية</b> (قد تصل لحل محلي غير مثالي، ويعالج ذلك بـ <code dir="ltr">init='k-means++'</code>).</li>
+              <li><b>حساسة جداً للقيم المتطرفة والضجيج (<span dir="ltr">Sensitive to Outliers &amp; Noise</span>)</b> لأن المتوسط الحسابي يتأثر بالقيم الشاذة.</li>
+              <li>تفترض أن المجموعات كروية الشكل ومتقاربة الحجم، وتفشل في اكتشاف الأشكال الهندسية غير المنتظمة أو المتداخلة.</li>
+            </ol>
+          </li>
+          <li><b>كيف نحدد العدد الأمثل للمجموعات ($K$)؟ — طريقة المرفق (<span dir="ltr">The Elbow Method</span>):</b>
+            <ul>
+              <li>نقوم بتشغيل خوارزمية <span dir="ltr">K-means</span> لعدة قيم متتالية لـ $K$ (مثلاً من $K=1$ إلى $K=10$)، وفي كل مرة نحسب قيمة مجموع مربعات المسافات داخل المجموعات <b><span dir="ltr">WCSS</span></b> (والتي تُخزن في خاصية <b><code dir="ltr">kmeans.inertia_</code></b>).</li>
+              <li>نرسم منحنى يربط بين $K$ على المحور الأفقي و <span dir="ltr">WCSS</span> على المحور الرأسي؛ فنلاحظ أن <span dir="ltr">WCSS</span> تنخفض بشدة في البداية، وعند نقطة معينة ينكسر المنحنى على شكل <b>"مرفق / كوع" (<span dir="ltr">Elbow</span>)</b> ويصبح الانخفاض بعدها طفيفاً جداً &larr; <b>قيمة $K$ عند نقطة انحناء المرفق هي العدد الأمثل للمجموعات!</b></li>
+            </ul>
+          </li>
+        </ul>
+
+        <div class="code-box">
+<span class="kw">from</span> sklearn.cluster <span class="kw">import</span> KMeans<br><br>
+<span class="cmt"># 1. حساب WCSS (inertia_) لتحديد أفضل K بطريقة المرفق (Elbow Method)</span><br>
+wcss = []<br>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="kw">range</span>(<span class="num">1</span>, <span class="num">11</span>):<br>
+    kmeans = KMeans(n_clusters=i, init=<span class="str">'k-means++'</span>, random_state=<span class="num">42</span>)<br>
+    kmeans.fit(X)<br>
+    wcss.append(kmeans.inertia_)  <span class="cmt"># خاصية inertia_ ترجع قيمة WCSS</span><br><br>
+plt.plot(<span class="kw">range</span>(<span class="num">1</span>, <span class="num">11</span>), wcss, marker=<span class="str">'o'</span>)<br>
+plt.title(<span class="str">'The Elbow Method'</span>)<br><br>
+<span class="cmt"># 2. تدريب نموذج K-means بالعدد الأمثل (مثلاً K=5) واستخراج المراكز والتصنيفات</span><br>
+kmeans = KMeans(n_clusters=<span class="num">5</span>, init=<span class="str">'k-means++'</span>, random_state=<span class="num">42</span>)<br>
+y_kmeans = kmeans.fit_predict(X)<br>
+centroids = kmeans.cluster_centers_  <span class="cmt"># استخراج إحداثيات مراكز المجموعات</span>
+        </div>
+      </div>
+    </details>
+
+    <!-- ==================== الوحدة الثالثة ==================== -->
+    <details>
+      <summary>الوحدة الثالثة: خوارزمية DBSCAN (الكثافة) والتجميع الهرمي (Hierarchical Clustering)</summary>
+      <div class="details-body">
+        <h3>1) خوارزمية التجميع المعتمد على الكثافة (<span dir="ltr">DBSCAN</span>) وتصنيف النقاط الثلاث</h3>
+        <ul>
+          <li><b>مفهوم <span dir="ltr">DBSCAN</span> (<span dir="ltr">Density-Based Spatial Clustering of Applications with Noise</span>):</b>
+            <ul>
+              <li>خوارزمية تجميع تعتمد على <b>كثافة النقاط</b>؛ حيث تبحث عن المناطق عالية الكثافة وتفصلها عن المناطق منخفضة الكثافة (الضجيج).</li>
+            </ul>
+          </li>
+          <li><b>المعاملان الأساسيان لخوارزمية <span dir="ltr">DBSCAN</span>:</b>
+            <ol>
+              <li><b>1. نصف القطر (<code dir="ltr">eps</code> أو $\epsilon$):</b> أقصى مسافة حول النقطة لاعتبار النقاط الأخرى جيراناً لها (نطاق الجوار).</li>
+              <li><b>2. الحد الأدنى للنقاط (<code dir="ltr">minPts</code> أو <code dir="ltr">min_samples</code>):</b> أقل عدد من النقاط يجب أن يتواجد داخل دائرة نصف قطرها <code dir="ltr">eps</code> (بما فيها النقطة نفسها) لكي تُعتبر المنطقة كثيفة.</li>
+            </ol>
+          </li>
+        </ul>
+
+        <div class="exam-alert">
+          <b>🔥🔥 سؤال امتحاني مؤكد: كيف تصنف خوارزمية <span dir="ltr">DBSCAN</span> نقاط البيانات إلى 3 أنواع؟</b><br>
+          1) <b>نقطة أساسية / مركزية (<span dir="ltr">Core Point</span>):</b> هي نقطة يقع داخل جوارها (<code dir="ltr">eps</code>) عدد من النقاط <b>أكبر من أو يساوي <code dir="ltr">minPts</code></b> ($\text{Neighbors} \ge \text{minPts}$).<br>
+          2) <b>نقطة حدية / طرفية (<span dir="ltr">Border Point</span>):</b> هي نقطة يقع داخل جوارها عدد من النقاط <b>أقل من <code dir="ltr">minPts</code></b>، ولكنها <b>تقع في جوار نقطة أساسية (<span dir="ltr">Core Point</span>)</b>.<br>
+          3) <b>نقطة ضجيج / شاذة (<span dir="ltr">Noise / Outlier Point</span>):</b> هي نقطة <b>ليست نقطة أساسية ولا تقع في جوار أي نقطة أساسية</b> (وفي كود <span dir="ltr">Scikit-learn</span> تُعطى التسمية <b><code dir="ltr">-1</code></b>!).
+        </div>
+
+        <div class="step-box">
+          <b>مسألة تتبع خوارزمية DBSCAN (كما في جدول النقاط الست بالملزمة):</b><br>
+          إذا كان لدينا $\text{eps} = 1.5$ و $\text{minPts} = 3$:<br>
+          • إذا كانت النقطة $P_1$ يقع ضمن مسافة $\le 1.5$ منها <b>3 نقاط</b> (بما فيها $P_1$) &larr; إذن $P_1$ هي <b>نقطة أساسية (<span dir="ltr">Core Point</span>)</b> لأن $3 \ge 3$.<br>
+          • إذا كانت النقطة $P_5$ يقع ضمن مسافة $\le 1.5$ منها نقطتان فقط ($2 < 3$)، ولكن إحدى هاتين النقطتين هي النقطة الأساسية $P_1$ &larr; إذن $P_5$ هي <b>نقطة حدية (<span dir="ltr">Border Point</span>)</b>.<br>
+          • إذا كانت النقطة $P_6$ بعيدة عن جميع النقاط بمسافة أكبر من $1.5$ (عدد نقاط جوارها $= 1 < 3$ وليست جارة لأي نقطة أساسية) &larr; إذن $P_6$ هي <b>نقطة ضجيج (<span dir="ltr">Noise Point</span>)</b>!
+        </div>
+
+        <ul>
+          <li><b>مميزات وعيوب <span dir="ltr">DBSCAN</span> مقارنة بـ <span dir="ltr">K-means</span>:</b>
+            <ul>
+              <li><b>المميزات:</b> (1) <b>لا تتطلب تحديد عدد المجموعات $K$ مسبقاً</b>، (2) قادرة على اكتشاف عناقيد ذات <b>أشكال هندسية عشوائية وغير منتظمة</b>، (3) <b>قوية جداً في التعامل مع الضجيج والقيم المتطرفة (<span dir="ltr">Outliers</span>)</b> وعزلها.</li>
+              <li><b>العيوب:</b> (1) تفشل عندما تكون المجموعات ذات <b>كثافات متفاوتة جداً (<span dir="ltr">Varying densities</span>)</b>، (2) حساسة لاختيار قيمتي <code dir="ltr">eps</code> و <code dir="ltr">minPts</code>.</li>
+            </ul>
+          </li>
+        </ul>
+        <div class="code-box">
+<span class="kw">from</span> sklearn.cluster <span class="kw">import</span> DBSCAN<br><br>
+dbscan = DBSCAN(eps=<span class="num">0.5</span>, min_samples=<span class="num">5</span>)<br>
+clusters = dbscan.fit_predict(X)  <span class="cmt"># النقاط التي تأخذ الرقم -1 هي نقاط الضجيج (Noise)</span>
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) التجميع الهرمي (<span dir="ltr">Hierarchical Clustering</span>) وطرق الربط الأربع</h3>
+        <ul>
+          <li><b>مفهومه ونوعاه الأساسيان:</b> يبني التجميع الهرمي شجرة متدرجة من المجموعات تُسمى <b>مخطط الشجرة (<span dir="ltr">Dendrogram</span>)</b> دون الحاجة لتحديد $K$ مسبقاً، وينقسم إلى نوعين:
+            <ol>
+              <li><b>1. التجميع الهرمي التصاعدي / التراكمي (<span dir="ltr">Agglomerative - Bottom-Up</span>):</b> هو الأكثر شيوعاً؛ يبدأ من الأسفل باعتبار <b>كل نقطة مجموعة مستقلة بذاتها</b>، ثم يدمج في كل خطوة أقرب مجموعتين معاً حتى تتجمع كل النقاط في مجموعة واحدة في القمة.</li>
+              <li><b>2. التجميع الهرمي التنازلي / التقسيمي (<span dir="ltr">Divisive - Top-Down</span>):</b> عكس السابق؛ يبدأ من الأعلى باعتبار <b>جميع النقاط في مجموعة واحدة كبيرة</b>، ثم يقسمها تدريجياً إلى مجموعات أصغر حتى تصبح كل نقطة منفردة.</li>
+            </ol>
+          </li>
+        </ul>
+
+        <div class="exam-alert">
+          <b>🔥 طرق حساب المسافة بين المجموعات الأربع في التجميع الهرمي (<span dir="ltr">Linkage Methods</span>):</b><br>
+          1) <b>الربط الفردي / الأقرب (<span dir="ltr">Single Linkage</span>):</b> المسافة بين مجموعتين هي <b>أقصر (أقل) مسافة</b> بين أقرب نقطتين في المجموعتين: $\min d(x_i, x_j)$.<br>
+          2) <b>الربط الكامل / الأبعد (<span dir="ltr">Complete Linkage</span>):</b> المسافة بين مجموعتين هي <b>أكبر (أبعد) مسافة</b> بين أبعد نقطتين في المجموعتين: $\max d(x_i, x_j)$.<br>
+          3) <b>الربط المتوسط (<span dir="ltr">Average Linkage</span>):</b> المسافة بين مجموعتين هي <b>متوسط جميع المسافات</b> الممكنة بين كل نقطة في المجموعة الأولى وكل نقطة في المجموعة الثانية.<br>
+          4) <b>طريقة وارد (<span dir="ltr">Ward Linkage</span>):</b> تدمج المجموعتين اللتين يؤدي دمجهما إلى <b>أقل زيادة ممكنة في التباين الكلي (مجموع المربعات الداخلي <span dir="ltr">WSS</span>)</b> (وهي الطريقة الافتراضية في <span dir="ltr">Scikit-learn</span>).
+        </div>
+
+        <div class="code-box">
+<span class="kw">import</span> scipy.cluster.hierarchy <span class="kw">as</span> sch<br>
+<span class="kw">from</span> sklearn.cluster <span class="kw">import</span> AgglomerativeClustering<br><br>
+<span class="cmt"># 1. رسم شجرة التجميع الهرمي (Dendrogram) لتحديد عدد العناقيد المناسب</span><br>
+dendrogram = sch.dendrogram(sch.linkage(X, method=<span class="str">'ward'</span>))<br>
+plt.title(<span class="str">'Dendrogram'</span>)<br><br>
+<span class="cmt"># 2. تطبيق التجميع الهرمي التصاعدي (AgglomerativeClustering)</span><br>
+hc = AgglomerativeClustering(n_clusters=<span class="num">5</span>, linkage=<span class="str">'ward'</span>)<br>
+y_hc = hc.fit_predict(X)
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- التبويب الثاني: جداول المقارنات والمعادلات -->
+  <section id="tables" class="panel">
+    <div class="card">
+      <h2>1. مقارنة شاملة بين خوارزميات التجميع الثلاث (K-means vs DBSCAN vs Hierarchical)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>وجه المقارنة</th>
+            <th>خوارزمية K-means</th>
+            <th>خوارزمية DBSCAN</th>
+            <th>التجميع الهرمي (Hierarchical)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>مبدأ العمل</b></td>
+            <td>تقسيمي يعتمد على المسافة من <b>مراكز المجموعات (<span dir="ltr">Centroids</span>)</b>.</td>
+            <td>يعتمد على <b>كثافة النقاط</b> (<code dir="ltr">eps</code> و <code dir="ltr">minPts</code>).</td>
+            <td>يبني شجرة هرمية (<span dir="ltr">Dendrogram</span>) تصاعدياً (<span dir="ltr">Agglomerative</span>) أو تنازلياً (<span dir="ltr">Divisive</span>).</td>
+          </tr>
+          <tr>
+            <td><b>هل يتطلب تحديد $K$ مسبقاً؟</b></td>
+            <td><b>نعم،</b> يجب تحديد $K$ مسبقاً (ويمكن الاستعانة بطريقة المرفق <span dir="ltr">Elbow</span>).</td>
+            <td><b>لا</b> يتطلب تحديد عدد المجموعات $K$ مسبقاً.</td>
+            <td><b>لا</b> يتطلب تحديد $K$ لبناء شجرة الـ <span dir="ltr">Dendrogram</span>.</td>
+          </tr>
+          <tr>
+            <td><b>التعامل مع الضجيج والمتطرفات</b></td>
+            <td><b>ضعيف جداً؛</b> يتأثر بشدة بالقيم المتطرفة.</td>
+            <td><b>ممتاز؛</b> يعزل القيم الشاذة كنقاط ضجيج (<span dir="ltr">Noise = -1</span>).</td>
+            <td>يتأثر بالضجيج خاصة في طريقة <span dir="ltr">Single linkage</span>.</td>
+          </tr>
+          <tr>
+            <td><b>شكل المجموعات المكتشفة</b></td>
+            <td>يكتشف المجموعات <b>الكروية/الدائرية</b> فقط.</td>
+            <td>يكتشف المجموعات ذات <b>الأشكال الهندسية العشوائية وغير المنتظمة</b>.</td>
+            <td>يعتمد على طريقة الربط (<span dir="ltr">Single, Complete, Average, Ward</span>).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>2. ملخص القوانين الرياضية في الفصل العاشر</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>المقياس</th>
+            <th>المعادلة الرياضية</th>
+            <th>التصنيف والاستخدام</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>مسافة مانهاتن (<span dir="ltr">City-Block</span>)</b></td>
+            <td dir="ltr">$D_c = \sum |a_j - b_j|$</td>
+            <td>مقياس مسافة (مجموع الفروق المطلقة).</td>
+          </tr>
+          <tr>
+            <td><b>المسافة الإقليدية (<span dir="ltr">Euclidean</span>)</b></td>
+            <td dir="ltr">$D_e = \sqrt{\sum (a_j - b_j)^2}$</td>
+            <td>مقياس مسافة (الجذر التربيعي لمجموع مربعات الفروق).</td>
+          </tr>
+          <tr>
+            <td><b>مؤشر راند (<span dir="ltr">RAND-correct</span>)</b></td>
+            <td dir="ltr">$\frac{M_{00} + M_{11}}{M_{00} + M_{01} + M_{10} + M_{11}}$</td>
+            <td>مقياس كفاءة تجميع <b>خارجي (<span dir="ltr">External</span>)</b>.</td>
+          </tr>
+          <tr>
+            <td><b>معامل جاكارد (<span dir="ltr">Jaccard Index</span>)</b></td>
+            <td dir="ltr">$J = \frac{M_{11}}{M_{01} + M_{10} + M_{11}}$</td>
+            <td>مقياس كفاءة تجميع <b>خارجي (<span dir="ltr">External</span>)</b> يستثني $M_{00}$.</td>
+          </tr>
+          <tr>
+            <td><b>معامل الظل (<span dir="ltr">Silhouette Index</span>)</b></td>
+            <td dir="ltr">$s(x_i) = \frac{b(x_i) - a(x_i)}{\max(b(x_i), a(x_i))}$</td>
+            <td>مقياس كفاءة تجميع <b>داخلي (<span dir="ltr">Internal</span>)</b> يتراوح بين $[-1, +1]$.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- التبويب الثالث: قاموس المصطلحات والدوال -->
+  <section id="terms" class="panel">
+    <div class="card">
+      <h2>قاموس المصطلحات والدوال الشامل للفصل العاشر</h2>
+      <p class="muted">جميع المفاهيم والخوارزميات والدوال البرمجية الخاصة بالتعلم الآلي بدون إشراف:</p>
+      <div id="termsGrid" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- التبويب الرابع: البطاقات التعليمية -->
+  <section id="cards" class="panel">
+    <div class="card">
+      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
+      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
+      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
+        <div class="term" id="flashTerm"></div>
+        <div class="answer" id="flashAnswer" hidden></div>
+        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="prevCard">السابق</button>
+        <span id="cardCount" class="muted"></span>
+        <button class="btn primary" id="nextCard">التالي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- التبويب الخامس: الاختبار الذاتي العشوائي -->
+  <section id="quiz" class="panel">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2>الاختبار الشامل المتغير للفصل العاشر (25 سؤالاً) <span class="badge-new">ترتيب عشوائي ذكي 🎲</span></h2>
+          <p class="muted">يختبر فهمك لمسائل المسافات، مقاييس الكفاءة، تتبع K-means و DBSCAN، والتجميع الهرمي مع تصحيح فوري!</p>
+        </div>
+        <div class="score" id="score">النتيجة: 0 / 25</div>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="quizArea"></div>
+      <div class="row">
+        <button class="btn" id="resetQuiz">إعادة الاختبار بترتيب عشوائي جديد 🔀</button>
+        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+      </div>
+      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
+    </div>
+  </section>
+</main>
+
+<footer>مبني بالكامل (100%) على محتوى الفصل العاشر (التعلم الآلي بدون إشراف) من مقرر تحليل وتمثيل البيانات</footer>
+
+<script>
+const terms = [
+  ["Supervised vs Unsupervised Learning", "التعلم بإشراف يعتمد على وجود سمة الهدف المعروفة (Y) للتنبؤ بها، بينما التعلم بدون إشراف يعمل على بيانات غير معنونة (بدون Y) لاكتشاف المجموعات (Clustering)."],
+  ["City-Block / Manhattan Distance", "مسافة كتلة المدينة (مانهاتن): مجموع القيم المطلقة للفروق بين إحداثيات النقطتين: Dc = sum(|a_j - b_j|)."],
+  ["Euclidean Distance", "المسافة الإقليدية: الجذر التربيعي لمجموع مربعات الفروق بين إحداثيات النقطتين: De = sqrt(sum((a_j - b_j)^2))."],
+  ["RAND-correct & Jaccard Index", "من المقاييس الخارجية (External Measures) لتقييم كفاءة التجميع بمقارنته بتصنيف مرجعي."],
+  ["Silhouette Index (معامل الظل)", "من المقاييس الداخلية (Internal Measures) لكفاءة التجميع: s(x) = (b(x) - a(x)) / max(b(x), a(x))، وتتراوح قيمته بين [-1, +1]."],
+  ["WSS / WCSS (kmeans.inertia_)", "Within-groups Sum of Squares: مجموع مربعات المسافات بين النقاط ومراكز مجموعاتها (مقياس داخلي، وتستخرجه خاصية inertia_)."],
+  ["K-Means Clustering", "خوارزمية تجميع تقسم البيانات إلى K مجموعات عبر تحديث مواقع المراكز (Centroids) بالمتوسط الحسابي حتى التقارب."],
+  ["The Elbow Method (طريقة المرفق)", "طريقة بصرية لتحديد العدد الأمثل للمجموعات (K) في K-means عبر رسم منحنى WCSS مقابل K واختيار نقطة انحناء المرفق."],
+  ["DBSCAN", "خوارزمية تجميع تعتمد على الكثافة، تكتشف الأشكال غير المنتظمة وتعزل الضجيج دون الحاجة لتحديد K مسبقاً."],
+  ["eps & minPts (في DBSCAN)", "المعامل eps هو نصف قطر جوار النقطة، و minPts (أو min_samples) هو الحد الأدنى لعدد النقاط داخل الجوار لتكوين منطقة كثيفة."],
+  ["Core / Border / Noise Points", "تصنيف النقاط في DBSCAN: أساسية (Core >= minPts)، حدية (Border < minPts لكنها بجوار Core)، وضجيج (Noise لا تنتمي لأي مجموعة وتأخذ -1)."],
+  ["Agglomerative vs Divisive", "نوعا التجميع الهرمي: التصاعدي (Agglomerative) يبدأ بكل نقطة كمجموعة ويدمجها، والتنازلي (Divisive) يبدأ بمجموعة واحدة ويقسمها."],
+  ["Single / Complete / Average / Ward Linkage", "طرق حساب المسافة بين المجموعات في التجميع الهرمي: الأقرب (Single)، الأبعد (Complete)، المتوسط (Average)، وتقليل التباين (Ward)."],
+  ["Dendrogram (مخطط الشجرة)", "التمثيل المرئي الشجري لخطوات الدمج في التجميع الهرمي، ويُرسم بدالة sch.dendrogram()."]
+];
+
+const cards = [
+  ["ما الفرق الأساسي بين التعلم الآلي بإشراف (Supervised) والتعلم الآلي بدون إشراف (Unsupervised)؟", "• التعلم بإشراف: تتوفر فيه سمة الهدف (Y) لتدريب النموذج على التنبؤ بها (مثل الانحدار والتصنيف).\n• التعلم بدون إشراف: لا تتوفر فيه سمة الهدف (Y)، ويهدف لاكتشاف الأنماط وتقسيم البيانات إلى عناقيد متشابهة (Clustering)."],
+  ["ما هما قانونا حساب المسافة بين نقطتين A و B: 1) مسافة مانهاتن (City-block)، و 2) المسافة الإقليدية (Euclidean)؟", "1) مسافة مانهاتن: Dc = Σ |a_j - b_j|\n2) المسافة الإقليدية: De = √[ Σ (a_j - b_j)² ]"],
+  ["[مسألة حسابية] احسبي مسافة مانهاتن (Dc) والمسافة الإقليدية (De) بين النقطتين A(2, 3) و B(5, 7).", "• مسافة مانهاتن: Dc = |2 - 5| + |3 - 7| = 3 + 4 = 7.\n• المسافة الإقليدية: De = √[ (2 - 5)² + (3 - 7)² ] = √[ 9 + 16 ] = √25 = 5."],
+  ["ما هي الأنواع الثلاثة لطرق التحقق من كفاءة التجميع (Cluster Validation)؟", "1) المقاييس الخارجية (External Measures): مثل مؤشر RAND ومعامل جاكارد.\n2) المقاييس الداخلية (Internal Measures): مثل معامل الظل (Silhouette) و WSS.\n3) المقاييس النسبية (Relative Measures)."],
+  ["ما الفرق بين معادلة مؤشر راند (RAND-correct) ومعادلة معامل جاكارد (Jaccard Index)؟", "• RAND = (M00 + M11) / (M00 + M01 + M10 + M11)\n• Jaccard (J) = M11 / (M01 + M10 + M11) — (يستثني M00 من البسط والمقام)."],
+  ["ما هي معادلة معامل الظل (Silhouette Index)؟ وماذا يمثل الرمزان a(xi) و b(xi) فيها؟", "s(xi) = (b(xi) - a(xi)) / max(b(xi), a(xi))\n• a(xi): متوسط المسافة بين النقطة والنقاط الأخرى في (نفس مجموعتها).\n• b(xi): أقل متوسط مسافة بين النقطة والنقاط في (أقرب مجموعة أخرى)."],
+  ["ما هو النطاق الرياضي لقيمة معامل الظل (Silhouette Index)؟ ومتى يكون التجميع مثالياً؟", "يتراوح بين [-1 و +1].\nويكون التجميع ممتازاً ومثالياً كلما اقتربت القيمة من (+1) (أي عندما تكون a صغيرة جداً و b كبيرة جداً)."],
+  ["ما هي الخطوات الخمس لعمل خوارزمية (K-means Clustering)؟", "1) اختيار K مراكز أولية عشوائية (Centroids).\n2) حساب المسافة بين كل نقطة وجميع المراكز.\n3) إسناد كل نقطة إلى المركز الأقرب إليها.\n4) تحديث موقع كل مركز بحساب المتوسط الحسابي لنقاط مجموعته.\n5) تكرار الخطوات حتى التقارب (Convergence) وثبات المراكز."],
+  ["[مسألة حسابية] إذا ضمت مجموعة في K-means ثلاث نقاط هي: (2, 4)، (4, 6)، (6, 8)، فما هو موقع المركز المحدث (New Centroid) لهذه المجموعة؟", "نحسب متوسط X ومتوسط Y:\n• X_new = (2 + 4 + 6) / 3 = 12 / 3 = 4.\n• Y_new = (4 + 6 + 8) / 3 = 18 / 3 = 6.\nإذن المركز الجديد هو: (4, 6)."],
+  ["ما هي أبرز عيوب خوارزمية (K-means)؟", "1) تتطلب تحديد عدد المجموعات K مسبقاً.\n2) حساسة جداً للقيم المتطرفة والضجيج (Outliers).\n3) حساسة لاختيار المراكز الأولية.\n4) تفشل في اكتشاف المجموعات ذات الأشكال غير الكروية."],
+  ["كيف نحدد العدد الأمثل للمجموعات (K) في خوارزمية K-means؟ وما الخاصية البرمجية التي تعطي قيمة WCSS؟", "باستخدام طريقة المرفق (The Elbow Method) عبر رسم قيم WCSS مقابل K واختيار نقطة انحناء المرفق.\nوالخاصية في Scikit-learn هي: kmeans.inertia_"],
+  ["كيف نستخرج إحداثيات المراكز النهائية بعد تدريب نموذج KMeans في Scikit-learn؟", "باستخدام الخاصية:\nkmeans.cluster_centers_"],
+  ["على ماذا تعتمد خوارزمية (DBSCAN)؟ وما هما معاملاها الأساسيان؟", "تعتمد على كثافة النقاط (Density-based).\nومعاملاها هما:\n1) eps (نصف قطر الجوار).\n2) minPts / min_samples (الحد الأدنى لعدد النقاط داخل الجوار)."],
+  ["ما هي الأنواع الثلاثة للنقاط في خوارزمية (DBSCAN)؟", "1) نقطة أساسية (Core Point): عدد نقاط جوارها >= minPts.\n2) نقطة حدية (Border Point): عدد نقاط جوارها < minPts ولكنها تقع في جوار نقطة أساسية.\n3) نقطة ضجيج (Noise Point): ليست أساسية ولا تقع في جوار أي نقطة أساسية."],
+  ["بأي رقم ترمز مكتبة Scikit-learn لنقاط الضجيج (Noise Points) في مخرجات خوارزمية DBSCAN؟", "ترمز لها بالرقم السالب (-1)."],
+  ["ما هي مميزات خوارزمية (DBSCAN) التي تتفوق بها على خوارزمية (K-means)؟", "1) لا تحتاج لتحديد عدد المجموعات K مسبقاً.\n2) تكتشف المجموعات ذات الأشكال الهندسية العشوائية وغير المنتظمة.\n3) قوية في التعامل مع الضجيج والقيم المتطرفة وعزلها."],
+  ["ما هو العيب الرئيسي لخوارزمية (DBSCAN)؟", "تواجه صعوبة وتفشل عندما تكون المجموعات في البيانات ذات كثافات متفاوتة بشكل كبير (Varying densities)، كما أنها حساسة لاختيار eps و minPts."],
+  ["ما الفرق بين النوعين الرئيسيين للتجميع الهرمي: (Agglomerative) و (Divisive)؟", "• التصاعدي (Agglomerative - Bottom-up): يبدأ باعتبار كل نقطة مجموعة مستقلة، ثم يدمج الأقرب تدريجياً حتى تصبح مجموعة واحدة.\n• التنازلي (Divisive - Top-down): يبدأ بوضع كل النقاط في مجموعة واحدة كبيرة، ثم يقسمها تدريجياً."],
+  ["ما هي الطرق الأربع لحساب المسافة بين المجموعات (Linkage Methods) في التجميع الهرمي؟", "1) Single linkage (أقصر مسافة بين نقطتين).\n2) Complete linkage (أبعد مسافة بين نقطتين).\n3) Average linkage (متوسط المسافات بين كل الأزواج).\n4) Ward linkage (تقليل الزيادة في التباين الداخلي WSS)."],
+  ["ما هو مخطط الشجرة (Dendrogram)؟ وكيف نرسمه في البايثون؟", "هو رسم شجري يوضح التسلسل الهرمي لعمليات دمج أو تقسيم المجموعات في التجميع الهرمي.\nويُرسم باستخدام مكتبة scipy: sch.dendrogram(sch.linkage(X, method='ward'))."],
+  ["[مسألة حسابية] في مقاييس التجميع الخارجية، إذا كان M11 = 20، و M00 = 30، و M01 = 5، و M10 = 5، فكم تبلغ قيمة مؤشر RAND وقيمة معامل جاكارد J؟", "• مؤشر RAND = (30 + 20) / (30 + 5 + 5 + 20) = 50 / 60 = 0.833.\n• معامل جاكارد J = 20 / (5 + 5 + 20) = 20 / 30 = 0.667."],
+  ["[مسألة حسابية] إذا كان متوسط مسافة النقطة لمجموعتها a(x) = 2، وأقل متوسط مسافة لأقرب مجموعة أخرى b(x) = 6، فكم تبلغ قيمة معامل الظل Silhouette؟", "s(x) = (6 - 2) / max(6, 2) = 4 / 6 = 2/3 ≈ +0.67."],
+  ["لماذا يُصنف معامل الظل (Silhouette) ومجموع المربعات داخل المجموعات (WSS) كمقاييس داخلية (Internal Measures)؟", "لأنها تقيس جودة التجميع (التماسك والانفصال) بالاعتماد على إحداثيات البيانات نفسها فقط دون الحاجة لأي تسميات خارجية مسبقة."],
+  ["من أي وحدة في مكتبة Scikit-learn نستورد الخوارزميات: KMeans، و DBSCAN، و AgglomerativeClustering؟", "نستوردها جميعاً من الوحدة:\nsklearn.cluster"],
+  ["ما وظيفة المعامل (init='k-means++') داخل الفئة KMeans() في Scikit-learn؟", "اختيار المراكز الأولية للمجموعات بطريقة ذكية ومتباعدة لتسريع التقارب وتجنب الوقوع في الحلول المحلية السيئة."],
+  ["متى تتوقف خوارزمية K-means عن التكرار (حالة التقارب Convergence)؟", "عندما لا تنتقل أي نقطة من مجموعة إلى أخرى في التكرار الجديد (أي تثبت مواقع مراكز المجموعات Centroids ولا تتغير)."],
+  ["إذا كانت نقطة البيانات تقع على مسافة 4 من المركز C1، وعلى مسافة 2.5 من المركز C2، وعلى مسافة 6 من المركز C3، فإلى أي مجموعة تسندها خوارزمية K-means؟", "تسندها إلى المجموعة الثانية (C2) لأنها صاحبة المسافة الأصغر (الأقرب = 2.5)."],
+  ["في خوارزمية DBSCAN، إذا كان minPts = 5، وكانت النقطة A في جوارها 6 نقاط، والنقطة B في جوارها 2 فقط ولكن إحداهما هي النقطة A، فما تصنيف A و B؟", "• النقطة A: نقطة أساسية (Core Point) لأن 6 >= 5.\n• النقطة B: نقطة حدية (Border Point) لأن 2 < 5 ولكنها تقع في جوار النقطة الأساسية A."]
+];
+
+const masterQuestions = [
+  {q:"ما الفرق الجوهري بين التعلم الآلي بإشراف (Supervised Learning) والتعلم الآلي بدون إشراف (Unsupervised Learning)؟",o:["التعلم بإشراف تتوفر فيه سمة الهدف المعروفة (Y) للتنبؤ بها، بينما التعلم بدون إشراف لا تتوفر فيه سمة الهدف (Y) ويهدف لاكتشاف المجموعات والأنماط الخفية (Clustering)","التعلم بدون إشراف يتطلب وجود سمة الهدف (Y) دائماً، والتعلم بإشراف يعمل بدونها","كلاهما لا يستخدمان أي بيانات رقمية","التعلم بدون إشراف يُسمى الانحدار الخطي فقط"],a:0,e:"غياب سمة الهدف (Y) هو السمة المميزة للتعلم بدون إشراف (Unsupervised Learning) مثل خوارزميات التجميع العنقودي (Clustering)."},
+  {q:"[مسألة حسابية] احسبي مسافة كتلة المدينة (مانهاتن - City-block distance) بين النقطتين A = (1, 5) و B = (4, 1).",o:["7 (لأن |1 - 4| + |5 - 1| = 3 + 4 = 7)","5","1","25"],a:0,e:"قانون مسافة مانهاتن هو مجموع الفروق المطلقة: |1 - 4| + |5 - 1| = |-3| + |4| = 3 + 4 = 7."},
+  {q:"[مسألة حسابية] احسبي المسافة الإقليدية (Euclidean distance) بين النقطتين A = (1, 5) و B = (4, 1).",o:["5 (لأن الجذر التربيعي لـ (1-4)² + (5-1)² = جذر (9 + 16) = جذر 25 = 5)","7","25","12"],a:0,e:"المسافة الإقليدية = الجذر التربيعي لـ ((-3)^2 + (4)^2) = جذر (9 + 16) = جذر 25 = 5."},
+  {q:"أي من مقاييس التحقق من كفاءة التجميع التالية يُصنف كمقياس (خارجي - External Measure)، وما هي معادلته؟",o:["معامل جاكارد (Jaccard Index): J = M11 / (M01 + M10 + M11)","معامل الظل (Silhouette Index)","مجموع المربعات داخل المجموعات (WSS)","طريقة المرفق (Elbow Method)"],a:0,e:"مؤشر RAND ومعامل جاكارد (Jaccard Index) هما من المقاييس الخارجية التي تقارن التجميع بتصنيف مرجعي خارجي."},
+  {q:"يُعد معامل الظل (Silhouette Index) من أشهر المقاييس الداخلية لكفاءة التجميع؛ فما هي معادلته الرياضية وما نطاق قيمه؟",o:["s(x) = (b(x) - a(x)) / max(b(x), a(x)) ، وتتراوح قيمته بين [-1 و +1]","s(x) = a(x) + b(x) ، وتتراوح قيمته بين [0 و 100]","s(x) = Q3 - Q1 ، وتتراوح قيمته بين [0 و 1]","s(x) = M11 / M00"],a:0,e:"يحسب معامل الظل الفرق بين مسافة الانفصال b(x) ومسافة التماسك a(x) مقسوماً على الأكبر منهما، ويتراوح بين -1 و +1."},
+  {q:"في معادلة معامل الظل (Silhouette Index)، ماذا يمثل الرمز a(x_i) والرمز b(x_i)؟",o:["a(x_i) هو متوسط المسافة بين النقطة ونقاط مجموعتها نفسها، و b(x_i) هو أقل متوسط مسافة بين النقطة ونقاط أقرب مجموعة مجاورة أخرى","a(x_i) هو عدد المجموعات، و b(x_i) هو عدد الصفوف المفقودة","كلاهما يمثلان المتوسط الحسابي للعمود الأول","a(x_i) هو الربع الأول، و b(x_i) هو الربع الثالث"],a:0,e:"يقيس a(x_i) مدى التماسك الداخلي للمجموعة (كلما صغر كان أفضل)، ويقيس b(x_i) مدى الانفصال عن أقرب مجموعة أخرى (كلما كبر كان أفضل)."},
+  {q:"[مسألة حسابية] إذا كان متوسط مسافة النقطة لنفس مجموعتها a(x) = 1، وأقل متوسط مسافة لأقرب مجموعة مجاورة b(x) = 4، فكم تبلغ قيمة معامل الظل s(x)؟",o:["+0.75 (لأن (4 - 1) / max(4, 1) = 3 / 4 = 0.75)","-0.75","5.0","0.25"],a:0,e:"نعوض في قانون Silhouette مباشرة: (b - a) / max(b, a) = (4 - 1) / 4 = 3 / 4 = +0.75."},
+  {q:"في خوارزمية (K-means Clustering)، كيف يتم تحديث موقع مركز المجموعة (Centroid) في كل تكرار؟",o:["عن طريق حساب المتوسط الحسابي لإحداثيات جميع النقاط التي تم إسنادها إلى تلك المجموعة","عن طريق اختيار أبعد نقطة متطرفة في الجدول","عن طريق حذف جميع نقاط المجموعة","عن طريق ضرب المركز القديم في صفر"],a:0,e:"في الخطوة الرابعة من K-means، يتم تحديث كل مركز (Centroid) بحساب المتوسط الحسابي (Mean) لجميع النقاط المنتمية لمجموعته."},
+  {q:"[مسألة حسابية] في خوارزمية K-means، إذا انضمت النقاط الثلاث: (0, 2)، (4, 4)، (8, 6) إلى المجموعة الأولى، فما هي إحداثيات المركز المحدث الجديد (New Centroid) لهذه المجموعة؟",o:["(4, 4) — لأن متوسط X = (0+4+8)/3 = 4، ومتوسط Y = (2+4+6)/3 = 4","(12, 12)","(0, 2)","(8, 6)"],a:0,e:"نحسب متوسط الإحداثيات السينية: (0+4+8)/3 = 12/3 = 4، ومتوسط الإحداثيات الصادية: (2+4+6)/3 = 12/3 = 4. إذن المركز هو (4, 4)."},
+  {q:"جميع ما يلي يُعد من عيوب ونقاط ضعف خوارزمية (K-means) ما عدا:",o:["قدرتها الفائقة على اكتشاف المجموعات ذات الأشكال الهندسية المتعرجة وعزل الضجيج دون تحديد K","تتطلب من المستخدم تحديد عدد المجموعات (K) مسبقاً","حساسة جداً للقيم المتطرفة والضجيج (Outliers)","حساسة لاختيار المراكز الأولية وتفترض أن المجموعات كروية الشكل"],a:0,e:"اكتشاف الأشكال غير المنتظمة وعزل الضجيج دون تحديد K هي من مميزات خوارزمية DBSCAN وليست K-means."},
+  {q:"ما هي الطريقة الشائعة لتحديد العدد الأمثل للمجموعات (K) في خوارزمية K-means عن طريق رسم منحنى مجموع مربعات المسافات داخل المجموعات (WCSS)؟",o:["طريقة المرفق (The Elbow Method)","طريقة بايز الساذج (Naive Bayes)","اختبار مربع كاي (Chi-squared)","طريقة الانحدار اللوجستي"],a:0,e:"تُستخدم طريقة المرفق (The Elbow Method) برسم WCSS مقابل K واختيار قيمة K عند نقطة انحناء المرفق."},
+  {q:"في مكتبة Scikit-learn، ما اسم الخاصية التي تُرجع قيمة مجموع المربعات داخل المجموعات (WCSS)، وما اسم الخاصية التي تُرجع إحداثيات مراكز المجموعات بعد تدريب KMeans؟",o:["الخاصية kmeans.inertia_ لقيمة WCSS، والخاصية kmeans.cluster_centers_ للمراكز","الخاصية kmeans.wcss_ و kmeans.means_","الخاصية kmeans.score_ و kmeans.labels_","الخاصية kmeans.eps_ و kmeans.min_samples_"],a:0,e:"في كائن KMeans المدرب: تُخزن قيمة WCSS في inertia_، وتُخزن إحداثيات المراكز في cluster_centers_."},
+  {q:"على ماذا تعتمد خوارزمية (DBSCAN) في تجميع البيانات؟ وما هما معاملاها الأساسيان؟",o:["تعتمد على كثافة النقاط (Density)، ومعاملاها هما: نصف القطر (eps) والحد الأدنى لعدد النقاط (minPts / min_samples)","تعتمد على شجرة القرار، ومعاملاها هما: الجذر والأوراق","تعتمد على تحديد عدد المجموعات K مسبقاً فقط","تعتمد على الانحدار الخطي ومعدل التعلم"],a:0,e:"خوارزمية DBSCAN هي خوارزمية تجميع مكانية معتمدة على الكثافة، وتستخدم المعاملين eps و minPts."},
+  {q:"في خوارزمية (DBSCAN)، كيف يتم تصنيف النقطة التي يقع داخل جوارها (eps) عدد من النقاط أكبر من أو يساوي (minPts)؟",o:["نقطة أساسية / مركزية (Core Point)","نقطة حدية / طرفية (Border Point)","نقطة ضجيج / شاذة (Noise Point)","نقطة مفقودة (NaN Point)"],a:0,e:"النقطة التي تحقق شرط الكثافة (عدد جيرانها ضمن eps >= minPts) تُصنف كنقطة أساسية (Core Point)."},
+  {q:"في خوارزمية (DBSCAN)، ما هي النقطة الحدية (Border Point)؟",o:["هي نقطة يقل عدد النقاط في جوارها عن minPts، ولكنها تقع ضمن جوار نقطة أساسية (Core Point)","هي نقطة يزيد عدد النقاط في جوارها عن minPts","هي نقطة بعيدة عن جميع النقاط ولا تنتمي لأي مجموعة","هي مركز المجموعة الحسابي"],a:0,e:"النقطة الحدية (Border Point) لا تمتلك جيراناً كافين لتكون أساسية بنفسها (< minPts)، لكنها تقع في جوار نقطة أساسية فتتبع لمجموعتها."},
+  {q:"[مسألة تتبع] في خوارزمية DBSCAN، إذا كان (eps = 2) و (minPts = 4)، وكانت النقطة P يقع ضمن مسافة <= 2 منها نقطة واحدة فقط (هي نفسها) ولا تقع في جوار أي نقطة أساسية، فما تصنيف النقطة P وما رقم مجموعتها في Scikit-learn؟",o:["نقطة ضجيج (Noise Point)، وتأخذ الرقم (-1) في Scikit-learn","نقطة أساسية (Core Point)، وتأخذ الرقم (0)","نقطة حدية (Border Point)، وتأخذ الرقم (+1)","يتم استبدالها بالمتوسط الحسابي"],a:0,e:"النقطة المعزولة التي لا تحقق شرط الكثافة ولا تجاور أي نقطة أساسية تُصنف كنقطة ضجيج (Noise) ويعطيها DBSCAN في بايثون التسمية -1."},
+  {q:"بماذا تتميز خوارزمية (DBSCAN) عن خوارزمية (K-means)؟",o:["لا تتطلب تحديد عدد المجموعات مسبقاً، وتكتشف المجموعات ذات الأشكال الهندسية العشوائية، وتتعامل بكفاءة مع الضجيج والقيم المتطرفة","تشترط تحديد عدد المجموعات K مسبقاً ولا تكتشف إلا الدوائر","تتأثر بشدة بأي نقطة ضجيج واحدة","تعتمد على حساب المتوسط الحسابي لكل مجموعة"],a:0,e:"هذه المزايا الثلاث هي أهم نقاط تفوق DBSCAN على K-means."},
+  {q:"متى تواجه خوارزمية (DBSCAN) صعوبة وتفشل في التجميع بشكل جيد؟",o:["عندما تحتوي البيانات على مجموعات ذات كثافات متفاوتة ومختلفة بشكل كبير (Varying densities)","عندما تحتوي البيانات على نقاط ضجيج متطرفة","عندما لا نعرف عدد المجموعات K مسبقاً","عندما تكون المجموعات غير كروية الشكل"],a:0,e:"من أبرز عيوب DBSCAN عدم قدرتها على التعامل مع العناقيد ذات الكثافات المختلفة جداً لأن قيمتي eps و minPts ثابتتان لكل البيانات."},
+  {q:"ما الفرق بين التجميع الهرمي التصاعدي (Agglomerative) والتجميع الهرمي التنازلي (Divisive)؟",o:["التصاعدي (Agglomerative) يبدأ باعتبار كل نقطة مجموعة مستقلة ثم يدمجها تدريجياً من أسفل لأعلى، بينما التنازلي (Divisive) يبدأ بمجموعة واحدة تضم كل النقاط ثم يقسمها من أعلى لأسفل","التصاعدي يبدأ بمجموعة واحدة ويقسمها، والتنازلي يبدأ بنقاط منفردة ويدمجها","كلاهما يتطلبان تحديد K قبل رسم الشجرة","التصاعدي يعتمد على الانحدار اللوجستي فقط"],a:0,e:"Agglomerative هو نهج من أسفل لأعلى (يدمج المجموعات)، بينما Divisive هو نهج من أعلى لأسفل (يقسم المجموعة الكلية)."},
+  {q:"في التجميع الهرمي، أي طريقة من طرق الربط (Linkage Methods) تحسب المسافة بين مجموعتين على أنها (أقصر / أقل مسافة بين أقرب نقطتين في المجموعتين)؟",o:["الربط الفردي (Single Linkage)","الربط الكامل (Complete Linkage)","الربط المتوسط (Average Linkage)","طريقة وارد (Ward Linkage)"],a:0,e:"طريقة Single Linkage تعتمد على أقصر مسافة (min distance) بين نقطتين في المجموعتين."},
+  {q:"في التجميع الهرمي، ما الفرق بين طريقة (Complete Linkage) وطريقة (Ward Linkage)؟",o:["Complete Linkage تحسب أبعد (أكبر) مسافة بين نقطتين في المجموعتين، بينما Ward Linkage تدمج المجموعتين اللتين تحققان أقل زيادة في التباين الداخلي الكلي (WSS)","Complete Linkage تحسب أقصر مسافة، و Ward تحسب مسافة مانهاتن فقط","كلتاهما تحذفان النقاط الحدية","لا تُستخدمان في التجميع الهرمي"],a:0,e:"Complete Linkage تأخذ أقصى مسافة (max distance)، بينما Ward Linkage تعتمد على تقليل التباين المدمج (وهي الافتراضية في Scikit-learn)."},
+  {q:"ماذا نسمي الرسم البياني الشجري الذي يوضح خطوات دمج المجموعات في التجميع الهرمي ويساعد في تحديد عدد العناقيد المناسب؟",o:["مخطط الشجرة (Dendrogram)","مخطط الصندوق (Box Plot)","خريطة الحرارة (Heatmap)","المخطط الدائري (Pie Plot)"],a:0,e:"يُسمى التمثيل الشجري للتجميع الهرمي بـ Dendrogram ويُرسم بواسطة مكتبة scipy.cluster.hierarchy."},
+  {q:"من أي مكتبة فرعية نستورد الفئات البرمجية: KMeans و DBSCAN و AgglomerativeClustering؟",o:["من sklearn.cluster","من sklearn.preprocessing","من sklearn.feature_selection","من scipy.stats"],a:0,e:"توجد جميع خوارزميات التجميع العنقودي في مكتبة Scikit-learn داخل الوحدة الفرعية sklearn.cluster."},
+  {q:"إذا أردنا مقارنة كفاءة نتائج خوارزمية K-means عند تغيير عدد المجموعات (K=2 ثم K=3 ثم K=4) لاختيار الأفضل بينها، فإلى أي نوع من مقاييس التحقق ينتمي هذا الإجراء؟",o:["المقاييس النسبية (Relative Measures)","المقاييس الخارجية (External Measures)","التحويل اللوغاريتمي","ترميز التسميات"],a:0,e:"مقارنة تجميعات مختلفة ناتجة عن تغيير معاملات الخوارزمية (مثل تغيير K) تُعرف بالمقاييس النسبية (Relative Measures)."},
+  {q:"[مسألة حسابية] إذا كان لدينا المركز C1=(0, 0) والمركز C2=(10, 10)، فأي مركز منهما هو الأقرب للنقطة P=(2, 1)؟ ولأي مجموعة ستنضم؟",o:["المركز C1=(0, 0) هو الأقرب (بمسافة مانهاتن = 3)، وستنضم النقطة P للمجموعة الأولى","المركز C2=(10, 10) هو الأقرب، وستنضم للمجموعة الثانية","المسافة متساوية تماماً للمركزين","سيتم حذف النقطة P"],a:0,e:"المسافة إلى C1 هي |2-0| + |1-0| = 3، بينما المسافة إلى C2 هي |2-10| + |1-10| = 8 + 9 = 17. إذن C1 أقرب بكثير فتنضم للمجموعة الأولى."}
+];
+
+const termsGrid = document.getElementById("termsGrid");
+terms.forEach(([en, ar]) => {
+  const d = document.createElement("div");
+  d.className = "card";
+  d.style.margin = "0";
+  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
+  termsGrid.appendChild(d);
+});
+
+let ci = 0, showAnswer = false;
+function renderCard() {
+  document.getElementById("flashTerm").textContent = cards[ci][0];
+  document.getElementById("flashAnswer").textContent = cards[ci][1];
+  document.getElementById("flashAnswer").hidden = !showAnswer;
+  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
+  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+}
+document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
+document.getElementById("flashcard").addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
+});
+document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
+document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
+renderCard();
+
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+let currentQuestions = [];
+let answers = {};
+
+function prepareShuffledQuiz() {
+  currentQuestions = shuffleArray(masterQuestions).map(item => {
+    const optsWithFlag = item.o.map((text, idx) => ({ text, isCorrect: idx === item.a }));
+    const shuffledOpts = shuffleArray(optsWithFlag);
+    return {
+      q: item.q,
+      o: shuffledOpts.map(x => x.text),
+      a: shuffledOpts.findIndex(x => x.isCorrect),
+      e: item.e
+    };
+  });
+}
+
+function renderQuiz() {
+  prepareShuffledQuiz();
+  const area = document.getElementById("quizArea");
+  area.innerHTML = "";
+  const letters = ["أ", "ب", "ج", "د"];
+  currentQuestions.forEach((item, i) => {
+    const box = document.createElement("div");
+    box.className = "qbox";
+    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
+    const opts = box.querySelector(".options");
+    item.o.forEach((opt, j) => {
+      const btn = document.createElement("button");
+      btn.className = "option";
+      btn.textContent = `${letters[j]}) ${opt}`;
+      btn.onclick = () => {
+        answers[i] = j;
+        [...opts.children].forEach((x, k) => {
+          x.classList.remove("correct", "wrong");
+          x.disabled = true;
+          if (k === item.a) x.classList.add("correct");
+          if (k === j && j !== item.a) x.classList.add("wrong");
+        });
+        const fb = document.getElementById("fb" + i);
+        fb.hidden = false;
+        fb.className = "feedback " + (j === item.a ? "good" : "bad");
+        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
+        updateScore();
+      };
+      opts.appendChild(btn);
+    });
+    area.appendChild(box);
+  });
+  updateScore();
+}
+
+function updateScore() {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
+  document.getElementById("score").textContent = `النتيجة: ${correct} / ${currentQuestions.length}`;
+  document.getElementById("progressBar").style.width = (Object.keys(answers).length / currentQuestions.length * 100) + "%";
+}
+
+document.getElementById("resetQuiz").onclick = () => {
+  answers = {};
+  document.getElementById("finalResult").textContent = "";
+  renderQuiz();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+document.getElementById("finishQuiz").onclick = () => {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
+  const pct = Math.round(correct / currentQuestions.length * 100);
+  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${currentQuestions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! أنتِ مستعدة تماماً للاختبار في هذا الفصل." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
+};
+
+renderQuiz();
+</script>
+</body>
+</html>

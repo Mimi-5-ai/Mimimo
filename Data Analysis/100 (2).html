@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الفصل الثالث الشامل (100%) | تحليل وتمثيل البيانات</title>
+<style>
+:root{
+  --bg:#f0f5ff;
+  --card:#ffffff;
+  --ink:#0f172a;
+  --muted:#475569;
+  --accent:#1d4ed8;
+  --accent-dark:#1e3a8a;
+  --accent2:#dbeafe;
+  --line:#cbd5e1;
+  --good:#059669;
+  --good-bg:#ecfdf5;
+  --bad:#dc2626;
+  --bad-bg:#fef2f2;
+  --warn:#d97706;
+  --warn-bg:#fffbeb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
+header{background:linear-gradient(135deg,#0f172a,#1d4ed8);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(15,23,42,0.2)}
+.wrap{max-width:1040px;margin:auto;padding:0 16px}
+.eyebrow{opacity:.92;font-size:.9rem;background:rgba(255,255,255,0.16);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
+h1{margin:5px 0;font-size:clamp(1.5rem,4vw,2.25rem)}
+header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
+nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:var(--accent2);color:var(--accent-dark);font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
+nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
+nav button.active,.btn.primary{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+main .btn.primary{background:var(--accent);color:white}
+main{padding:22px 0 48px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(15,23,42,0.04)}
+h2{font-size:1.35rem;margin:0 0 12px;color:#0f172a}
+h3{font-size:1.08rem;margin:0 0 8px;color:var(--accent-dark)}
+small,.muted{color:var(--muted)}
+ul,ol{padding-right:22px;margin:8px 0}
+li{margin:6px 0}
+details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
+summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f8fafc;color:#0f172a;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
+details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
+.details-body{padding:16px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
+.badge-new{display:inline-block;background:var(--warn-bg);color:var(--warn);border:1px solid #fcd34d;font-size:.78rem;padding:1px 8px;border-radius:6px;margin-right:6px;font-weight:bold}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#eff6ff;color:#1e3a8a;font-weight:bold}
+tr:last-child td{border-bottom:0}
+.note{border-right:4px solid var(--accent);padding:10px 14px;background:#eff6ff;border-radius:8px;margin:10px 0}
+.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
+.math-box{background:#f8fafc;border:2px solid #93c5fd;border-radius:12px;padding:14px 18px;margin:10px 0;text-align:center;font-size:1.05rem;font-weight:bold;color:#1e3a8a;direction:ltr}
+.step-box{background:#f0fdf4;border:1px solid #86efac;border-right:4px solid var(--good);border-radius:10px;padding:12px 16px;margin:10px 0;font-size:.95rem}
+.code-box{background:#0f172a;color:#e2e8f0;padding:14px 18px;border-radius:12px;font-family:Consolas,Monaco,monospace;direction:ltr;text-align:left;overflow-x:auto;margin:10px 0;border:1px solid #334155;line-height:1.65;font-size:.91rem}
+.code-box .kw{color:#38bdf8;font-weight:bold}
+.code-box .str{color:#4ade80}
+.code-box .num{color:#f472b6}
+.code-box .cmt{color:#94a3b8;font-style:italic}
+.code-box .out{color:#fde047;display:block;margin-top:4px;border-top:1px dashed #334155;padding-top:4px}
+.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
+.options{display:grid;gap:8px;margin-top:12px}
+.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
+.option:hover:not(:disabled){border-color:var(--accent);background:#eff6ff}
+.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
+.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
+.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
+.feedback.good{color:var(--good);background:var(--good-bg)}
+.feedback.bad{color:var(--bad);background:var(--bad-bg)}
+.progress{height:10px;background:#cbd5e1;border-radius:9px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
+.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#dbeafe);border:2px solid #93c5fd;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
+.flashcard:hover{transform:scale(1.005)}
+.flashcard .term{font-size:1.32rem;font-weight:bold;color:#1e3a8a}
+.flashcard .answer{margin-top:16px;font-size:1.04rem;color:#0f172a;background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04);white-space:pre-line}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
+@media(max-width:600px){
+  .card{padding:14px}
+  nav button{flex:1 1 calc(50% - 8px);text-align:center}
+  .flashcard{min-height:200px;padding:18px}
+  th,td{padding:8px 10px;font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">نسخة شاملة ومحدثة 100% • مقرر تحليل وتمثيل البيانات</div>
+    <h1>الفصل الثالث: الإحصاء الوصفي (Descriptive Statistics)</h1>
+    <p>يغطي مقاييس النزعة المركزية (المتوسط، الوسيط، المنوال)، القيم الصغرى والكبرى والمدى، المركز المئوي والأرباع والمدى الربعي (IQR)، مقاييس التشتت (MAD، التباين، الانحراف المعياري)، والميل (Skewness) والتحدب (Kurtosis)</p>
+    <nav>
+      <button class="active" data-tab="summary">الشرح والقوانين والأكواد (100%)</button>
+      <button data-tab="tables">ملخص القوانين والدوال</button>
+      <button data-tab="terms">قاموس المصطلحات والدوال</button>
+      <button data-tab="cards">البطاقات (28)</button>
+      <button data-tab="quiz">الاختبار العشوائي (25)</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- التبويب الأول: الشرح الشامل -->
+  <section id="summary" class="panel active">
+    <div class="card">
+      <h2>خريطة الفصل الثالث (الوحدات الثلاث الكاملة)</h2>
+      <div class="grid">
+        <div>
+          <span class="tag">الوحدة الأولى</span>
+          <h3>مقاييس النزعة المركزية الأساسية</h3>
+          <p>دالة الملخص الإحصائي (<span dir="ltr">describe</span>)، القيمة الصغرى (<span dir="ltr">min</span>)، القيمة الكبرى (<span dir="ltr">max</span>)، النطاق/المدى (<span dir="ltr">Range</span>)، المتوسط الحسابي (<span dir="ltr">Mean</span>)، والمنوال (<span dir="ltr">Mode</span>).</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثانية</span>
+          <h3>المركز المئوي، الأرباع، والوسيط</h3>
+          <p>حساب المركز المئوي (<span dir="ltr">Percentile</span>) يدوياً وبرمجياً بدالة (<span dir="ltr">quantile</span>)، الربع الأول ($Q_1$)، الربع الثالث ($Q_3$)، المدى الربعي (<span dir="ltr">IQR</span>)، والوسيط (<span dir="ltr">Median</span>).</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثالثة</span>
+          <h3>مقاييس التشتت وشكل التوزيع</h3>
+          <p>متوسط الانحراف المطلق (<span dir="ltr">MAD</span>)، التباين (<span dir="ltr">Variance</span>)، الانحراف المعياري (<span dir="ltr">Std</span>) ومعامل (<span dir="ltr">ddof=0</span>)، الميل (<span dir="ltr">Skewness</span>)، والتحدب (<span dir="ltr">Kurtosis</span>).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== الوحدة الأولى كاملة في قائمة واحدة ==================== -->
+    <details open>
+      <summary>الوحدة الأولى: مقاييس النزعة المركزية الأساسية (describe, min, max, Range, Mean, Mode)</summary>
+      <div class="details-body">
+        <h3>1) مقدمة الإحصاء الوصفي ودالة الملخص الإحصائي (<span dir="ltr">describe()</span>)</h3>
+        <ul>
+          <li>يُستخدم <b>الإحصاء الوصفي (<span dir="ltr">Descriptive Statistics</span>)</b> لتلخيص ووصف الخصائص الأساسية لمجموعة البيانات بطريقة كمية واضحة تساعد المحلل على فهم مركز البيانات وتشتتها وشكل توزيعها.</li>
+          <li><b>دالة <code dir="ltr">df.describe()</code> في مكتبة <span dir="ltr">Pandas</span>:</b>
+            <ul>
+              <li>تُعطي ملخصاً إحصائياً شاملاً يتضمن (العدد <code dir="ltr">count</code>، المتوسط <code dir="ltr">mean</code>، الانحراف المعياري <code dir="ltr">std</code>، أقل قيمة <code dir="ltr">min</code>، الربع الأول <code dir="ltr">25%</code>، الوسيط <code dir="ltr">50%</code>، الربع الثالث <code dir="ltr">75%</code>، وأعلى قيمة <code dir="ltr">max</code>).</li>
+              <li><b>ملاحظة هامة جداً للاختبار:</b> تعمل الدالة <code dir="ltr">describe()</code> بشكل افتراضي على <b>الأعمدة الكمية (الرقمية) فقط</b>، وتستبعد الأعمدة النوعية (النصية).</li>
+            </ul>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) أقل قيمة (<span dir="ltr">Min</span>)، أعلى قيمة (<span dir="ltr">Max</span>)، والنطاق / المدى (<span dir="ltr">Range</span>)</h3>
+        <ul>
+          <li><b>1. أقل قيمة (<span dir="ltr">Minimum</span>):</b> أصغر قيمة في العمود، ونحسبها برمجياً بالدالة <b><code dir="ltr">df['col'].min()</code></b>.</li>
+          <li><b>2. أعلى قيمة (<span dir="ltr">Maximum</span>):</b> أكبر قيمة في العمود، ونحسبها برمجياً بالدالة <b><code dir="ltr">df['col'].max()</code></b>.</li>
+          <li><b>3. النطاق أو المدى (<span dir="ltr">Range</span>):</b> هو الفرق بين أعلى قيمة وأقل قيمة في البيانات:</li>
+        </ul>
+        <div class="math-box">
+          Range = Max &minus; Min
+        </div>
+        <div class="code-box">
+<span class="cmt"># حساب أقل قيمة، أعلى قيمة، والنطاق (Range) لعمود Glucose</span><br>
+min_val = df[<span class="str">'Glucose'</span>].min()<br>
+max_val = df[<span class="str">'Glucose'</span>].max()<br>
+data_range = max_val - min_val<br>
+<span class="kw">print</span>(<span class="str">"Range ="</span>, data_range)
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) المتوسط الحسابي (<span dir="ltr">Mean</span>)</h3>
+        <ul>
+          <li><b>تعريفه:</b> هو مجموع كافة القيم مقسوماً على عددها الكلي ($N$).</li>
+          <li><b>معادلة المتوسط الحسابي:</b></li>
+        </ul>
+        <div class="math-box">
+          Mean (&mu;) = (1 / N) &sum;<sub>i=1</sub><sup>N</sup> x<sub>i</sub> = (x<sub>1</sub> + x<sub>2</sub> + ... + x<sub>N</sub>) / N
+        </div>
+        <div class="step-box">
+          <b>مثال حسابي يدوي:</b> إذا كانت درجات 5 طلاب هي: $[50, 60, 70, 80, 90]$، فإن:<br>
+          • مجموع القيم = $50 + 60 + 70 + 80 + 90 = 350$.<br>
+          • عدد القيم ($N$) = $5$.<br>
+          • <b>المتوسط الحسابي (<span dir="ltr">Mean</span>)</b> = $350 \div 5 = \mathbf{70}$.
+        </div>
+        <ul>
+          <li><b>حساب المتوسط برمجياً في <span dir="ltr">Pandas</span>:</b> نستخدم الدالة <b><code dir="ltr">df['col'].mean()</code></b>.</li>
+          <li><b>عيوب المتوسط الحسابي:</b> حساس جداً ويتأثر بشدة بوجود <b>القيم المتطرفة (<span dir="ltr">Outliers</span>)</b>.</li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>4) المنوال — القيمة الأكثر تكراراً (<span dir="ltr">Mode</span>)</h3>
+        <div class="exam-alert">
+          <b>🔥 ميزة هامة جداً للمنوال (<span dir="ltr">Mode</span>) في الاختبار:</b><br>
+          المنوال هو المقياس الوحيد من مقاييس النزعة المركزية الذي <b>ينطبق على الأعمدة الكمية (الرقمية) والأعمدة النوعية (النصية/الفئوية) على حد سواء</b>!
+        </div>
+        <ul>
+          <li><b>تعريفه:</b> هو القيمة الأكثر تكراراً وشيوعاً في مجموعة البيانات (وقد يحتوي العمود على منوال واحد أو أكثر من منوال).</li>
+          <li><b>مثال يدوي:</b> في القيم $[10, 20, 20, 30, 40]$، المنوال هو $\mathbf{20}$ لأنه تكرر مرتين.</li>
+          <li><b>حساب المنوال برمجياً في <span dir="ltr">Pandas</span>:</b> نستخدم الدالة <b><code dir="ltr">df['col'].mode()</code></b>، وللحصول على القيمة الأولى مباشرة نكتب <b><code dir="ltr">df['col'].mode()[0]</code></b>:</li>
+        </ul>
+        <div class="code-box">
+mean_val = df[<span class="str">'Glucose'</span>].mean()       <span class="cmt"># حساب المتوسط الحسابي</span><br>
+mode_val = df[<span class="str">'Glucose'</span>].mode()[<span class="num">0</span>]   <span class="cmt"># حساب المنوال (أول قيمة أكثر تكراراً)</span>
+        </div>
+      </div>
+    </details>
+
+    <!-- ==================== الوحدة الثانية كاملة في قائمة واحدة ==================== -->
+    <details>
+      <summary>الوحدة الثانية: المركز المئوي (Percentile)، الأرباع ($Q_1, Q_3$)، المدى الربعي (IQR)، والوسيط (Median)</summary>
+      <div class="details-body">
+        <h3>1) المركز المئوي (<span dir="ltr">Percentile</span>) — الحساب اليدوي والبرمجي</h3>
+        <ul>
+          <li><b>تعريف المركز المئوي ($p$):</b> هو القيمة التي يقع تحتها (أقل منها أو يساويها) نسبة $p\%$ من البيانات بعد ترتيبها تصاعدياً.</li>
+          <li><b>خطوات الحساب اليدوي للمركز المئوي كما في المنهج:</b>
+            <ol>
+              <li><b>الخطوة (1):</b> نرتب البيانات <b>ترتيباً تصاعدياً</b> (من الأصغر إلى الأكبر)، ونعطي كل عنصر فهرساً (أو موقعاً).</li>
+              <li><b>الخطوة (2):</b> نحسب موقع المركز المئوي ($l$) باستخدام القانون التالي (حيث $p$ هي النسبة المئوية المطلوبة، و $n$ هو عدد عناصر البيانات):</li>
+            </ol>
+          </li>
+        </ul>
+        <div class="math-box">
+          l = (p / 100) &times; n
+        </div>
+        <div class="step-box">
+          <b>مثال تطبيقي شامل (يدوياً وبرمجياً بطريقة <code dir="ltr">interpolation='higher'</code> المعتمدة في الملزمة):</b><br>
+          لنفترض أن لدينا قائمة مرتبة تصاعدياً من $n = 10$ أرقام فهارسها من $0$ إلى $9$:<br>
+          <span dir="ltr"><code>data = [12, 15, 18, 22, 25, 30, 35, 40, 45, 50]</code></span><br>
+          • إذا أردنا حساب <b>المركز المئوي الخامس والعشرين ($p = 25$)</b>:<br>
+          1) نحسب الموقع: $l = \frac{25}{100} \times 10 = 2.5$.<br>
+          2) عند استخدام طريقة التقريب للأعلى (<code dir="ltr">interpolation='higher'</code> في Pandas)، نأخذ العنصر المقابل للموقع الصحيح الأعلى، وعند الحساب القياسي نأخذ القيمة التي تقابل هذا الترتيب في المصفوفة المرتبة.
+        </div>
+
+        <ul>
+          <li><b>حساب المركز المئوي برمجياً في <span dir="ltr">Pandas</span>:</b>
+            <ul>
+              <li>نستخدم الدالة <b><code dir="ltr">df['col'].quantile(q, interpolation='higher')</code></b>، حيث $q = \frac{p}{100}$ (رقم عشري بين $0$ و $1$):</li>
+            </ul>
+          </li>
+        </ul>
+        <div class="code-box">
+<span class="cmt"># حساب المركز المئوي الـ 25 والـ 75 باستخدام دالة quantile</span><br>
+p25 = df[<span class="str">'Age'</span>].quantile(<span class="num">0.25</span>, interpolation=<span class="str">'higher'</span>)<br>
+p75 = df[<span class="str">'Age'</span>].quantile(<span class="num">0.75</span>, interpolation=<span class="str">'higher'</span>)
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) الأرباع (<span dir="ltr">Quartiles: $Q_1, Q_2, Q_3$</span>) والمدى الربعي (<span dir="ltr">IQR</span>)</h3>
+        <ul>
+          <li>تقسم الأرباع البيانات المرتبة تصاعدياً إلى <b>أربعة أجزاء متساوية</b>:
+            <ul>
+              <li><b>الربع الأول ($Q_1$ - <span dir="ltr">First Quartile</span>):</b> هو المركز المئوي الخامس والعشرون (<b>$p = 25\%$</b> أو $0.25$)، أي أن 25% من البيانات أقل منه.</li>
+              <li><b>الربع الثاني ($Q_2$ - <span dir="ltr">Second Quartile</span>):</b> هو المركز المئوي الخمسون (<b>$p = 50\%$</b> أو $0.50$)، وهو نفسه <b>الوسيط (<span dir="ltr">Median</span>)</b>.</li>
+              <li><b>الربع الثالث ($Q_3$ - <span dir="ltr">Third Quartile</span>):</b> هو المركز المئوي الخامس والسبعون (<b>$p = 75\%$</b> أو $0.75$)، أي أن 75% من البيانات أقل منه.</li>
+            </ul>
+          </li>
+          <li><b>المدى الربعي (<span dir="ltr">Interquartile Range - IQR</span>):</b>
+            <ul>
+              <li>هو الفرق بين الربع الثالث ($Q_3$) والربع الأول ($Q_1$)، ويمثل مدى النصف الأوسط (50% الوسطى) من البيانات:</li>
+            </ul>
+          </li>
+        </ul>
+        <div class="math-box">
+          IQR = Q<sub>3</sub> &minus; Q<sub>1</sub>
+        </div>
+        <div class="code-box">
+Q1 = df[<span class="str">'Age'</span>].quantile(<span class="num">0.25</span>)<br>
+Q3 = df[<span class="str">'Age'</span>].quantile(<span class="num">0.75</span>)<br>
+IQR = Q3 - Q1
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) الوسيط (<span dir="ltr">Median</span>) وطريقتا حسابه في البايثون</h3>
+        <div class="exam-alert">
+          <b>🌟 لماذا نفضل الوسيط (<span dir="ltr">Median</span>) على المتوسط الحسابي أحياناً؟ وكيف نحسبه بطريقتين في Pandas؟</b><br>
+          • يمتاز الوسيط بأنه <b>لا يتأثر بالقيم المتطرفة (<span dir="ltr">Robust to Outliers</span>)</b>!<br>
+          • <b>طريقتا حسابه في <span dir="ltr">Pandas</span>:</b><br>
+          1) الطريقة الأولى: <b><code dir="ltr">df['col'].median()</code></b><br>
+          2) الطريقة الثانية: <b><code dir="ltr">df['col'].quantile(0.5)</code></b> (لأن الوسيط هو المركز المئوي 50%).
+        </div>
+        <div class="step-box">
+          <b>مثال حساب الوسيط يدوياً (بعد ترتيب الأرقام تصاعدياً دائماً!):</b><br>
+          1) <b>إذا كان عدد العناصر فردياً:</b> مثل $[10, 20, \mathbf{30}, 40, 1000]$ &larr; الوسيط هو الرقم الأوسط تماماً = $\mathbf{30}$ (لاحظي أنه لم يتأثر بالقيمة المتطرفة $1000$!).<br>
+          2) <b>إذا كان عدد العناصر زوجياً:</b> مثل $[10, \mathbf{20, 30}, 40]$ &larr; الوسيط هو متوسط الرقمين الأوسطين: $(20 + 30) \div 2 = \mathbf{25}$.
+        </div>
+      </div>
+    </details>
+
+    <!-- ==================== الوحدة الثالثة كاملة في قائمة واحدة ==================== -->
+    <details>
+      <summary>الوحدة الثالثة: مقاييس التشتت (MAD، التباين، الانحراف المعياري) وشكل التوزيع (Skewness &amp; Kurtosis)</summary>
+      <div class="details-body">
+        <h3>1) متوسط الانحراف المطلق (<span dir="ltr">Mean Absolute Deviation - MAD</span>)</h3>
+        <ul>
+          <li><b>مفهومه:</b> يقيس متوسط المسافات المطلقة بين كل قيمة من قيم البيانات ($x_i$) وبين المتوسط الحسابي لهذه البيانات ($\mu_x$).</li>
+          <li><b>المعادلة الرياضية لمتوسط الانحراف المطلق (<span dir="ltr">MAD</span>):</b></li>
+        </ul>
+        <div class="math-box">
+          MAD = (1 / n) &sum;<sub>i=1</sub><sup>n</sup> |x<sub>i</sub> &minus; &mu;<sub>x</sub>|
+        </div>
+        <div class="step-box">
+          <b>مثال حسابي يدوي كامل لحساب (MAD) والتباين والانحراف المعياري (مهم جداً للاختبار!):</b><br>
+          لتكن لدينا القيم الثلاث: $x = [2, 4, 6]$ (عددها $n = 3$):<br>
+          1) <b>نحسب المتوسط الحسابي ($\mu_x$):</b> $\mu_x = (2 + 4 + 6) \div 3 = 12 \div 3 = \mathbf{4}$.<br>
+          2) <b>نحسب الانحرافات المطلقة $|x_i - \mu_x|$:</b><br>
+          • $|2 - 4| = |-2| = 2$<br>
+          • $|4 - 4| = |0| = 0$<br>
+          • $|6 - 4| = |2| = 2$<br>
+          3) <b>نحسب متوسط الانحراف المطلق (<span dir="ltr">MAD</span>):</b> $\text{MAD} = (2 + 0 + 2) \div 3 = \mathbf{4 / 3 \approx 1.33}$.
+        </div>
+        <div class="code-box">
+<span class="cmt"># حساب متوسط الانحراف المطلق (MAD) برمجياً باستخدام مكتبة NumPy</span><br>
+<span class="kw">import</span> numpy <span class="kw">as</span> np<br>
+mad = np.mean(np.absolute(df[<span class="str">'Age'</span>] - np.mean(df[<span class="str">'Age'</span>])))
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) التباين (<span dir="ltr">Variance</span>) والانحراف المعياري (<span dir="ltr">Standard Deviation</span>)</h3>
+        <ul>
+          <li><b>1. التباين (<span dir="ltr">Variance - $\sigma^2$</span>):</b>
+            <ul>
+              <li>هو متوسط <b>مربعات</b> انحرافات القيم عن متوسطها الحسابي (نربع الفروق للتخلص من الإشارة السالبة وتضخيم الفروق الكبيرة):</li>
+            </ul>
+          </li>
+        </ul>
+        <div class="math-box">
+          Variance (&sigma;<sup>2</sup>) = (1 / n) &sum;<sub>i=1</sub><sup>n</sup> (x<sub>i</sub> &minus; &mu;<sub>x</sub>)<sup>2</sup>
+        </div>
+        <ul>
+          <li><b>2. الانحراف المعياري (<span dir="ltr">Standard Deviation - $\sigma$</span>):</b>
+            <ul>
+              <li>هو <b>الجذر التربيعي الموجب للتباين</b> (ويُفضل لأنه يعود لنفس وحدة قياس البيانات الأصلية):</li>
+            </ul>
+          </li>
+        </ul>
+        <div class="math-box">
+          Standard Deviation (&sigma;) = &radic;Variance = &radic;[ (1 / n) &sum;<sub>i=1</sub><sup>n</sup> (x<sub>i</sub> &minus; &mu;<sub>x</sub>)<sup>2</sup> ]
+        </div>
+        <div class="step-box">
+          <b>تكملة المثال اليدوي للقيم $[2, 4, 6]$ (حيث المتوسط $\mu_x = 4$ و $n = 3$):</b><br>
+          • <b>مربعات الانحرافات $(x_i - \mu_x)^2$:</b> $(2-4)^2 = 4$ ، $(4-4)^2 = 0$ ، $(6-4)^2 = 4$.<br>
+          • <b>التباين (<span dir="ltr">Variance</span>):</b> $(4 + 0 + 4) \div 3 = \mathbf{8 / 3 \approx 2.67}$.<br>
+          • <b>الانحراف المعياري (<span dir="ltr">Std</span>):</b> $\sqrt{2.67} \approx \mathbf{1.63}$.
+        </div>
+        <div class="exam-alert">
+          <b>🔥 ملاحظة برمجية دقيقة في السلايد حول المعامل (<code dir="ltr">ddof=0</code>):</b><br>
+          في مكتبة <span dir="ltr">Pandas</span>، الدالتان <code dir="ltr">.var()</code> و <code dir="ltr">.std()</code> تقسمان افتراضياً على $(n - 1)$ (<code dir="ltr">ddof=1</code> للعينة). ولكي نجعلهما تقسمان على العدد الكلي $n$ تماماً كما في القانون الرياضي أعلاه، نمرر المعامل <b><code dir="ltr">ddof=0</code></b>!
+        </div>
+        <div class="code-box">
+variance = df[<span class="str">'Age'</span>].var(ddof=<span class="num">0</span>)   <span class="cmt"># حساب التباين بالقسمة على n</span><br>
+std_dev  = df[<span class="str">'Age'</span>].std(ddof=<span class="num">0</span>)   <span class="cmt"># حساب الانحراف المعياري بالقسمة على n</span>
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) مقاييس شكل التوزيع: الميل (<span dir="ltr">Skewness</span>) والتحدب (<span dir="ltr">Kurtosis</span>)</h3>
+        <div class="exam-alert">
+          <b>🌟 مقارنة جوهرية للاختبار بين الميل (<span dir="ltr">Skewness</span>) والتحدب (<span dir="ltr">Kurtosis</span>):</b>
+        </div>
+        <ul>
+          <li><b>أولاً: الميل / الالتواء (<span dir="ltr">Skewness</span>):</b>
+            <ul>
+              <li><b>وظيفته:</b> يقيس <b>مدى تناسق (تماثل) توزيع البيانات حول المتوسط الحسابي</b>.</li>
+              <li><b>حالاته الثلاث:</b>
+                <ol>
+                  <li><b>الميل يساوي صفراً ($\text{Skewness} = 0$):</b> التوزيع <b>متماثل تماماً (طبيعي)</b> حول المتوسط.</li>
+                  <li><b>الميل موجب ($\text{Skewness} > 0$ — <span dir="ltr">Positive Skew</span>):</b> التوزيع <b>مائل لليمين</b> (يمتد الذيل الطويل للتوزيع باتجاه اليمين نحو القيم الكبيرة).</li>
+                  <li><b>الميل سالب ($\text{Skewness} < 0$ — <span dir="ltr">Negative Skew</span>):</b> التوزيع <b>مائل لليسار</b> (يمتد الذيل الطويل للتوزيع باتجاه اليسار نحو القيم الصغيرة).</li>
+                </ol>
+              </li>
+              <li><b>الدالة البرمجية في <span dir="ltr">Pandas</span>:</b> <b><code dir="ltr">df['col'].skew()</code></b>.</li>
+            </ul>
+          </li>
+          <li><b>ثانياً: التحدب / التفرطح (<span dir="ltr">Kurtosis</span>):</b>
+            <ul>
+              <li><b>وظيفته:</b> يقيس <b>تفاوت ذيول التوزيع ومدى تدبب القمة</b> مقارنة بالتوزيع الطبيعي، مما يكشف عن مدى وجود <b>قيم متطرفة (<span dir="ltr">Outliers</span>)</b> في البيانات!</li>
+              <li><b>حالاته:</b>
+                <ol>
+                  <li><b>تحدب زائد موجب ($\text{Kurtosis} > 0$ — <span dir="ltr">Positive Kurtosis</span>):</b> قمة مدببة وذيول ثقيلة؛ ويدل على <b>وجود قيم متطرفة كثيرة</b> تبتعد عن المتوسط.</li>
+                  <li><b>تحدب سالب ($\text{Kurtosis} < 0$ — <span dir="ltr">Negative Kurtosis</span>):</b> قمة مسطحة وذيول خفيفة؛ ويدل على قلة أو عدم وجود قيم متطرفة.</li>
+                </ol>
+              </li>
+              <li><b>الدالة البرمجية في <span dir="ltr">Pandas</span>:</b> <b><code dir="ltr">df['col'].kurtosis()</code></b>.</li>
+            </ul>
+          </li>
+        </ul>
+        <div class="code-box">
+skew_val = df[<span class="str">'Age'</span>].skew()       <span class="cmt"># حساب الميل (Skewness)</span><br>
+kurt_val = df[<span class="str">'Age'</span>].kurtosis()   <span class="cmt"># حساب التحدب (Kurtosis)</span>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- التبويب الثاني: جداول القوانين والدوال -->
+  <section id="tables" class="panel">
+    <div class="card">
+      <h2>1. الجدول المرجعي الشامل لجميع القوانين الرياضية ودوال البايثون في الفصل الثالث</h2>
+      <p class="muted">يجمع هذا الجدول كل مقياس إحصائي، معادلته الرياضية، دالته البرمجية في Pandas/NumPy، وأهم ملاحظاته الامتحانية:</p>
+      <table>
+        <thead>
+          <tr>
+            <th>المقياس الإحصائي</th>
+            <th>القانون الرياضي / العلاقة</th>
+            <th>الدالة البرمجية في البايثون</th>
+            <th>ملاحظات هامة للاختبار</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>الملخص الإحصائي</b></td>
+            <td>يشمل 8 مقاييس أساسية</td>
+            <td dir="ltr"><code>df.describe()</code></td>
+            <td>يعمل افتراضياً على <b>الأعمدة الكمية (الرقمية) فقط</b>.</td>
+          </tr>
+          <tr>
+            <td><b>النطاق / المدى (<span dir="ltr">Range</span>)</b></td>
+            <td dir="ltr">$\text{Range} = \text{Max} - \text{Min}$</td>
+            <td dir="ltr"><code>df['c'].max() - df['c'].min()</code></td>
+            <td>الفرق بين أعلى قيمة وأقل قيمة في العمود.</td>
+          </tr>
+          <tr>
+            <td><b>المتوسط الحسابي (<span dir="ltr">Mean</span>)</b></td>
+            <td dir="ltr">$\mu = \frac{1}{N}\sum_{i=1}^{N} x_i$</td>
+            <td dir="ltr"><code>df['c'].mean()</code></td>
+            <td>مجموع القيم على عددها؛ يتأثر بشدة بالقيم المتطرفة.</td>
+          </tr>
+          <tr>
+            <td><b>المنوال (<span dir="ltr">Mode</span>)</b></td>
+            <td>القيمة الأكثر تكراراً</td>
+            <td dir="ltr"><code>df['c'].mode()[0]</code></td>
+            <td>المقياس الوحيد الذي ينطبق على <b>البيانات الكمية والنوعية معاً</b>.</td>
+          </tr>
+          <tr>
+            <td><b>المركز المئوي (<span dir="ltr">Percentile</span>)</b></td>
+            <td dir="ltr">الموقع: $l = \frac{p}{100} \cdot n$</td>
+            <td dir="ltr"><code>df['c'].quantile(p/100, interpolation='higher')</code></td>
+            <td>يتطلب ترتيب البيانات <b>تصاعدياً</b> أولاً قبل حساب الموقع.</td>
+          </tr>
+          <tr>
+            <td><b>الوسيط (<span dir="ltr">Median / $Q_2$</span>)</b></td>
+            <td>القيمة الوسطى ($p = 50\%$)</td>
+            <td dir="ltr"><code>df['c'].median()</code> أو <code>.quantile(0.5)</code></td>
+            <td>يقسم البيانات نصفين ولا يتأثر بالقيم المتطرفة.</td>
+          </tr>
+          <tr>
+            <td><b>المدى الربعي (<span dir="ltr">IQR</span>)</b></td>
+            <td dir="ltr">$\text{IQR} = Q_3 - Q_1$</td>
+            <td dir="ltr"><code>df['c'].quantile(.75) - df['c'].quantile(.25)</code></td>
+            <td>الفرق بين الربع الثالث ($75\%$) والربع الأول ($25\%$).</td>
+          </tr>
+          <tr>
+            <td><b>متوسط الانحراف المطلق (<span dir="ltr">MAD</span>)</b></td>
+            <td dir="ltr">$\text{MAD} = \frac{1}{n}\sum |x_i - \mu_x|$</td>
+            <td dir="ltr"><code>np.mean(np.absolute(x - np.mean(x)))</code></td>
+            <td>يستخدم القيمة المطلقة $|x_i - \mu_x|$ لمنع تلاشي الفروق.</td>
+          </tr>
+          <tr>
+            <td><b>التباين (<span dir="ltr">Variance</span>)</b></td>
+            <td dir="ltr">$\sigma^2 = \frac{1}{n}\sum (x_i - \mu_x)^2$</td>
+            <td dir="ltr"><code>df['c'].var(ddof=0)</code></td>
+            <td>متوسط مربعات الانحرافات عن المتوسط (نمرر <code dir="ltr">ddof=0</code> للقسمة على $n$).</td>
+          </tr>
+          <tr>
+            <td><b>الانحراف المعياري (<span dir="ltr">Std</span>)</b></td>
+            <td dir="ltr">$\sigma = \sqrt{\text{Variance}}$</td>
+            <td dir="ltr"><code>df['c'].std(ddof=0)</code></td>
+            <td>الجذر التربيعي الموجب للتباين.</td>
+          </tr>
+          <tr>
+            <td><b>الميل (<span dir="ltr">Skewness</span>)</b></td>
+            <td>تناسق التوزيع حول المتوسط</td>
+            <td dir="ltr"><code>df['c'].skew()</code></td>
+            <td>$0$: متماثل | $>0$: مائل لليمين | $<0$: مائل لليسار.</td>
+          </tr>
+          <tr>
+            <td><b>التحدب (<span dir="ltr">Kurtosis</span>)</b></td>
+            <td>تفاوت ذيول التوزيع والقيم المتطرفة</td>
+            <td dir="ltr"><code>df['c'].kurtosis()</code></td>
+            <td>موجب ($>0$): ذيول ثقيلة ووجود قيم متطرفة | سالب ($<0$): قمة مسطحة.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- التبويب الثالث: قاموس المصطلحات والدوال -->
+  <section id="terms" class="panel">
+    <div class="card">
+      <h2>قاموس المصطلحات والدوال الإحصائية الشامل للفصل الثالث</h2>
+      <p class="muted">جميع المقاييس الإحصائية والدوال البرمجية الواردة في الوحدات الثلاث:</p>
+      <div id="termsGrid" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- التبويب الرابع: البطاقات التعليمية -->
+  <section id="cards" class="panel">
+    <div class="card">
+      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
+      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
+      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
+        <div class="term" id="flashTerm"></div>
+        <div class="answer" id="flashAnswer" hidden></div>
+        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="prevCard">السابق</button>
+        <span id="cardCount" class="muted"></span>
+        <button class="btn primary" id="nextCard">التالي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- التبويب الخامس: الاختبار الذاتي العشوائي -->
+  <section id="quiz" class="panel">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2>الاختبار الشامل المتغير للفصل الثالث (25 سؤالاً) <span class="badge-new">ترتيب عشوائي ذكي 🎲</span></h2>
+          <p class="muted">يختبر فهمك للقوانين والمسائل الحسابية والأكواد البرمجية في الوحدات الثلاث مع تصحيح وتعليل فوري!</p>
+        </div>
+        <div class="score" id="score">النتيجة: 0 / 25</div>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="quizArea"></div>
+      <div class="row">
+        <button class="btn" id="resetQuiz">إعادة الاختبار بترتيب عشوائي جديد 🔀</button>
+        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+      </div>
+      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
+    </div>
+  </section>
+</main>
+
+<footer>مبني بالكامل (100%) على محتوى الفصل الثالث (الإحصاء الوصفي) من مقرر تحليل وتمثيل البيانات</footer>
+
+<script>
+const terms = [
+  ["df.describe()", "دالة في Pandas تعرض الملخص الإحصائي للأعمدة الكمية (الرقمية) فقط، شاملاً: count, mean, std, min, 25%, 50%, 75%, max."],
+  ["Min & Max", "أقل قيمة (.min()) وأعلى قيمة (.max()) في العمود الرقمي."],
+  ["النطاق / المدى (Range)", "مقياس لتشتت البيانات يساوي الفرق بين أعلى قيمة وأقل قيمة: Range = Max - Min."],
+  ["المتوسط الحسابي (Mean)", "مقياس للنزعة المركزية يساوي مجموع القيم مقسوماً على عددها الكلي (N)، ويُحسب برمجياً بالدالة .mean()."],
+  ["المنوال (Mode)", "القيمة الأكثر تكراراً في البيانات، ويُحسب بـ .mode()[0]، وينطبق على الأعمدة الكمية والنوعية معاً."],
+  ["المركز المئوي (Percentile)", "القيمة التي يقع تحتها نسبة p% من البيانات بعد ترتيبها تصاعدياً، ويُحسب موقعها بالقانون l = (p/100) * n."],
+  ["df['col'].quantile(q)", "الدالة البرمجية في Pandas لحساب المركز المئوي والأرباع، وتقبل المعامل interpolation='higher'."],
+  ["الربع الأول (Q1)", "هو المركز المئوي الخامس والعشرون (p = 25% أو q = 0.25)، ويقع تحته ربع البيانات."],
+  ["الربع الثالث (Q3)", "هو المركز المئوي الخامس والسبعون (p = 75% أو q = 0.75)، ويقع تحته ثلاثة أرباع البيانات."],
+  ["المدى الربعي (IQR)", "Interquartile Range: يساوي الفرق بين الربع الثالث والربع الأول (IQR = Q3 - Q1)."],
+  ["الوسيط (Median / Q2)", "القيمة التي تتوسط البيانات بعد ترتيبها تصاعدياً (المركز المئوي 50%)، ويُحسب بـ .median() أو .quantile(0.5)."],
+  ["متوسط الانحراف المطلق (MAD)", "Mean Absolute Deviation: متوسط القيم المطلقة لفروق القيم عن متوسطها الحسابي: (1/n) * sum(|x_i - mean|)."],
+  ["التباين (Variance)", "متوسط مربعات انحرافات القيم عن متوسطها الحسابي: (1/n) * sum((x_i - mean)^2)، ويُحسب بـ .var(ddof=0)."],
+  ["الانحراف المعياري (Standard Deviation)", "الجذر التربيعي الموجب للتباين، ويُحسب برمجياً بالدالة .std(ddof=0)."],
+  ["ddof=0", "معامل يُمرر في دالتي .var(ddof=0) و .std(ddof=0) لجعل القسمة على العدد الكلي (n) بدلاً من (n-1)."],
+  ["الميل / الالتواء (Skewness)", "مقياس لتناسق (تماثل) توزيع البيانات حول المتوسط الحسابي، ويُحسب بالدالة .skew()."],
+  ["Positive vs Negative Skewness", "الميل الموجب (>0) يعني أن التوزيع مائل لليمين، والميل السالب (<0) يعني أن التوزيع مائل لليسار، والصفر يعني متماثل."],
+  ["التحدب / التفرطح (Kurtosis)", "مقياس لتفاوت ذيول التوزيع ومدى وجود قيم متطرفة (Outliers) مقارنة بالتوزيع الطبيعي، ويُحسب بالدالة .kurtosis()."]
+];
+
+const cards = [
+  ["على أي نوع من الأعمدة تعمل الدالة df.describe() بشكل افتراضي؟ وما المقاييس الثمانية التي تعرضها؟", "تعمل على الأعمدة الكمية (الرقمية) فقط.\nوتعرض: العدد (count)، المتوسط (mean)، الانحراف المعياري (std)، أقل قيمة (min)، الربع الأول (25%)، الوسيط (50%)، الربع الثالث (75%)، وأعلى قيمة (max)."],
+  ["كيف نحسب النطاق (Range) رياضياً وبرمجياً في Pandas؟", "• رياضياً: Range = Max - Min (أعلى قيمة ناقص أقل قيمة).\n• برمجياً: df['col'].max() - df['col'].min()"],
+  ["ما هي معادلة المتوسط الحسابي (Mean)؟ وكيف نحسبه في Pandas؟", "• رياضياً: مجموع كافة القيم مقسوماً على عددها الكلي (N).\n• برمجياً: df['col'].mean()"],
+  ["احسبي المتوسط الحسابي والمدى (Range) للقيم التالية: [10, 20, 30, 40, 50].", "• المدى (Range) = 50 - 10 = 40.\n• المتوسط الحسابي (Mean) = (10+20+30+40+50) / 5 = 150 / 5 = 30."],
+  ["ما هو المنوال (Mode)؟ وبماذا يتميز عن المتوسط والوسيط من حيث نوع البيانات؟", "المنوال هو القيمة الأكثر تكراراً في البيانات (df['col'].mode()[0]).\nويتميز بأنه ينطبق على الأعمدة الكمية (الرقمية) والأعمدة النوعية (النصية) على حد سواء!"],
+  ["ما هي الخطوة الأولى الإلزامية قبل حساب المركز المئوي (Percentile) أو الوسيط (Median) يدوياً؟", "ترتيب عناصر البيانات ترتيباً تصاعدياً (من الأصغر إلى الأكبر)."],
+  ["ما هو القانون الرياضي لحساب موقع المركز المئوي (l)؟", "l = (p / 100) * n\nحيث (p) هي النسبة المئوية المطلوبة، و (n) هو العدد الكلي لعناصر البيانات."],
+  ["ما هي الدالة البرمجية المستخدمة في Pandas لحساب المركز المئوي والأرباع؟", "الدالة هي: df['col'].quantile(q, interpolation='higher')\nحيث q = p / 100 (مثلاً 0.25 للربع الأول)."],
+  ["ماذا يمثل كل من: الربع الأول (Q1)، الربع الثاني (Q2)، والربع الثالث (Q3)؟", "• الربع الأول (Q1): المركز المئوي 25% (0.25).\n• الربع الثاني (Q2): المركز المئوي 50% (0.50) وهو نفسه الوسيط (Median).\n• الربع الثالث (Q3): المركز المئوي 75% (0.75)."],
+  ["ما هو قانون المدى الربعي (IQR)؟", "IQR = Q3 - Q1\n(الربع الثالث ناقص الربع الأول)."],
+  ["إذا كان الربع الأول لعمود العمر Q1 = 24، والربع الثالث Q3 = 41، فكم يبلغ المدى الربعي (IQR)؟", "IQR = Q3 - Q1 = 41 - 24 = 17."],
+  ["ما هما الطريقتان البرمجيتان لحساب الوسيط (Median) لعمود في Pandas؟", "1) الطريقة المباشرة: df['col'].median()\n2) باستخدام دالة المركز المئوي عند النص (0.5): df['col'].quantile(0.5)"],
+  ["احسبي الوسيط (Median) والمنوال (Mode) للقيم التالية: [40, 10, 20, 50, 20].", "1) نرتبها تصاعدياً أولاً: [10, 20, 20, 40, 50].\n2) الوسيط (الرقم الأوسط) = 20.\n3) المنوال (الأكثر تكراراً) = 20."],
+  ["ما هو قانون متوسط الانحراف المطلق (MAD)؟", "MAD = (1 / n) * sum(|x_i - mean|)\nأي متوسط القيم المطلقة للفروق بين كل قيمة والمتوسط الحسابي."],
+  ["كيف نحسب متوسط الانحراف المطلق (MAD) برمجياً باستخدام مكتبة NumPy؟", "np.mean(np.absolute(data - np.mean(data)))"],
+  ["ما هو قانون التباين (Variance)؟ ولماذا نربع الفروق فيه؟", "Variance = (1 / n) * sum((x_i - mean)^2)\nنربع الفروق للتخلص من الإشارة السالبة ولإعطاء وزن أكبر للانحرافات الكبيرة عن المتوسط."],
+  ["ما هي العلاقة الرياضية بين التباين (Variance) والانحراف المعياري (Standard Deviation)؟", "الانحراف المعياري هو الجذر التربيعي الموجب للتباين:\nStandard Deviation = sqrt(Variance)\n(وبالعكس: التباين هو مربع الانحراف المعياري)."],
+  ["إذا كان التباين (Variance) لمجموعة بيانات يساوي 16، فكم يساوي الانحراف المعياري (Standard Deviation)؟", "الانحراف المعياري = الجذر التربيعي لـ 16 = 4."],
+  ["لماذا نمرر المعامل (ddof=0) داخل دالتي df['col'].var(ddof=0) و df['col'].std(ddof=0)؟", "لجعل الدالة تقسم مجموع المربعات على العدد الكلي للعناصر (n) بدلاً من القسمة الافتراضية على (n - 1)."],
+  ["احسبي يدوياً: المتوسط، و MAD، والتباين للقيم الثلاث: [1, 4, 7].", "1) المتوسط = (1+4+7)/3 = 4.\n2) الفروق المطلقة عن 4 هي: |1-4|=3، |4-4|=0، |7-4|=3 -> إذن MAD = (3+0+3)/3 = 2.\n3) مربعات الفروق هي: 9، 0، 9 -> إذن التباين (Variance) = (9+0+9)/3 = 6."],
+  ["ما الذي يقيسه الميل (Skewness)؟ وما هي دالته في Pandas؟", "يقيس مدى تناسق (تماثل) توزيع البيانات حول المتوسط الحسابي.\nودالته في Pandas هي: df['col'].skew()"],
+  ["ما هي الحالات الثلاث لقيمة الميل (Skewness)؟", "1) يساوي صفراً (0): توزيع متماثل تماماً حول المتوسط.\n2) قيمة موجبة (> 0): توزيع مائل لليمين (Positive skew).\n3) قيمة سالبة (< 0): توزيع مائل لليسار (Negative skew)."],
+  ["ما الذي يقيسه التحدب (Kurtosis)؟ وما هي دالته في Pandas؟", "يقيس تفاوت ذيول التوزيع ومدى وجود قيم متطرفة (Outliers) مقارنة بالتوزيع الطبيعي.\nودالته في Pandas هي: df['col'].kurtosis()"],
+  ["على ماذا يدل التحدب الزائد الموجب (Positive Kurtosis) والتحدب السالب (Negative Kurtosis)؟", "• التحدب الموجب (> 0): يدل على قمة مدببة وذيول ثقيلة تحتوي على قيم متطرفة (Outliers).\n• التحدب السالب (< 0): يدل على قمة مسطحة وذيول خفيفة خالية تقريباً من القيم المتطرفة."],
+  ["أي مقياس من مقاييس النزعة المركزية يتأثر بشدة بالقيم المتطرفة، وأي مقياس لا يتأثر بها؟", "• الذي يتأثر بشدة بالقيم المتطرفة هو: المتوسط الحسابي (Mean).\n• الذي لا يتأثر بالقيم المتطرفة هو: الوسيط (Median)."],
+  ["في مخرجات دالة df.describe()، ماذا يمثل السطر المكتوب أمامه (50%)؟", "يمثل الوسيط (Median) أو الربع الثاني (Q2)."],
+  ["إذا كان لدينا 20 عنصراً مرتباً تصاعدياً، فما هو موقع المركز المئوي الـ 75 (Q3) باستخدام قانون l = (p/100)*n؟", "l = (75 / 100) * 20 = 0.75 * 20 = 15."],
+  ["متى يكون التباين (Variance) والانحراف المعياري (Std) و (MAD) لمجموعة بيانات مساوياً للصفر (0)؟", "عندما تكون جميع القيم في المجموعة متساوية تماماً (لا يوجد أي تشتت أو اختلاف بينها، مثل: [5, 5, 5, 5])."]
+];
+
+const masterQuestions = [
+  {q:"عند استدعاء الدالة df.describe() على جدول بيانات يحتوي على أعمدة رقمية وأعمدة نصية، فعلى أي أعمدة تعمل هذه الدالة بشكل افتراضي؟",o:["تعمل على الأعمدة الكمية (الرقمية) فقط وتعرض ملخصها الإحصائي","تعمل على الأعمدة النصية (النوعية) فقط","تحذف جميع الأعمدة الرقمية من الجدول","ترسم مخططاً دائرياً للبيانات"],a:0,e:"تعمل الدالة describe() بشكل افتراضي على الأعمدة الكمية (الرقمية) فقط وتعرض (count, mean, std, min, 25%, 50%, 75%, max)."},
+  {q:"أي مقياس من مقاييس النزعة المركزية التالية يمتاز بأنه ينطبق على كلٍ من (الأعمدة الكمية الرقمية) و(الأعمدة النوعية النصية) على حد سواء؟",o:["المنوال - القيمة الأكثر تكراراً (Mode)","المتوسط الحسابي (Mean)","التباين (Variance)","الانحراف المعياري (Standard Deviation)"],a:0,e:"المنوال (Mode) هو القيمة الأكثر تكراراً، وهو المقياس الوحيد الذي يمكن حسابه للبيانات الكمية والبيانات النوعية (الفئوية/النصية) معاً."},
+  {q:"[مسألة حسابية] إذا كانت القيم في عمود معين هي: [15, 25, 10, 40, 35]، فكم يبلغ النطاق/المدى (Range) لهذه البيانات؟",o:["30 (لأن 40 - 10 = 30)","25","50","15"],a:0,e:"النطاق (Range) = أعلى قيمة (Max = 40) ناقص أقل قيمة (Min = 10) = 40 - 10 = 30."},
+  {q:"[مسألة حسابية] إذا كانت درجات 4 طلاب في اختبار هي: [60, 70, 80, 90]، فما هي قيمة المتوسط الحسابي (Mean)؟",o:["75","70","80","300"],a:0,e:"المتوسط الحسابي = مجموع القيم مقسوماً على عددها = (60 + 70 + 80 + 90) / 4 = 300 / 4 = 75."},
+  {q:"ما هو الكود البرمجي الصحيح لاستخراج أول قيمة للمنوال (القيمة الأكثر تكراراً) لعمود 'Glucose' في مكتبة Pandas؟",o:["df['Glucose'].mode()[0]","df['Glucose'].mean()","df['Glucose'].skew()","df['Glucose'].var()"],a:0,e:"تُرجع الدالة .mode() سلسلة (Series) بالقيم الأكثر تكراراً، ونستخدم [0] لاستخراج القيمة الأولى منها مباشرةً."},
+  {q:"عند حساب المركز المئوي (Percentile) أو الوسيط (Median) يدوياً لمجموعة من الأرقام، ما هي الخطوة الأولى الأساسية التي يجب القيام بها دائماً؟",o:["ترتيب البيانات ترتيباً تصاعدياً","تربيع جميع القيم وقسمتها على عددها","طرح المتوسط الحسابي من كل قيمة","حذف النصف الأول من البيانات"],a:0,e:"لا يمكن حساب المركز المئوي أو الوسيط أو الأرباع إلا بعد ترتيب البيانات ترتيباً تصاعدياً أولاً."},
+  {q:"[مسألة حسابية] باستخدام قانون موقع المركز المئوي l = (p / 100) * n، إذا كان عدد عناصر البيانات n = 40 عنصراً، فما هو موقع المركز المئوي الخامس والعشرين (p = 25)؟",o:["10 (لأن 25/100 × 40 = 10)","25","4","100"],a:0,e:"بتطبيق القانون مباشرةً: l = (25 / 100) × 40 = 0.25 × 40 = 10."},
+  {q:"ما هي الدالة البرمجية في مكتبة Pandas التي تُستخدم لحساب المركز المئوي والأرباع (وتقبل المعامل interpolation='higher')؟",o:["df['col'].quantile()","df['col'].kurtosis()","df['col'].mode()","df['col'].std()"],a:0,e:"تُستخدم الدالة .quantile(q, interpolation='higher') لحساب المركز المئوي في مكتبة Pandas."},
+  {q:"ماذا يمثل كل من الربع الأول (Q1) والربع الثالث (Q3) من حيث النسبة المئوية للبيانات المرتبة تصاعدياً؟",o:["الربع الأول (Q1) هو المركز المئوي 25%، والربع الثالث (Q3) هو المركز المئوي 75%","الربع الأول هو 10%، والربع الثالث هو 90%","الربع الأول هو 50%، والربع الثالث هو 100%","كلاهما يساويان المتوسط الحسابي"],a:0,e:"الربع الأول Q1 يكافئ المركز المئوي 25% (0.25)، والربع الثاني Q2 يكافئ 50% (الوسيط)، والربع الثالث Q3 يكافئ 75% (0.75)."},
+  {q:"[مسألة حسابية] إذا كانت قيمة الربع الأول لعمود البيانات Q1 = 20، وقيمة الربع الثالث Q3 = 55، فكم تبلغ قيمة المدى الربعي (IQR)؟",o:["35 (لأن IQR = Q3 - Q1 = 55 - 20)","75","20","2.75"],a:0,e:"قانون المدى الربعي هو: IQR = Q3 - Q1 = 55 - 20 = 35."},
+  {q:"أي من العبارات البرمجية التالية تُعد صحيحة لحساب الوسيط (Median) لعمود 'Age' بطريقتين مختلفتين في مكتبة Pandas؟",o:["df['Age'].median() أو df['Age'].quantile(0.5)","df['Age'].mean() أو df['Age'].mode()","df['Age'].max() أو df['Age'].min()","df['Age'].var() أو df['Age'].std()"],a:0,e:"الوسيط هو نفسه المركز المئوي الخمسون (50% = 0.5)، لذا يُحسب إما بـ .median() أو بـ .quantile(0.5)."},
+  {q:"[مسألة حسابية] ما هي قيمة الوسيط (Median) لمجموعة القيم غير المرتبة التالية: [50, 10, 30, 20, 40]؟",o:["30 (بعد ترتيبها تصاعدياً: 10, 20, 30, 40, 50 يكون الرقم الأوسط هو 30)","10","50","20"],a:0,e:"نرتب القيم تصاعدياً أولاً: [10, 20, 30, 40, 50]، وبما أن عددها 5 (فردي) فالوسيط هو القيمة الوسطى رقم 3 وهي 30."},
+  {q:"ما هو المقياس الإحصائي الذي تُكتب معادلته الرياضية على الصورة: (1 / n) * Σ |x_i - μ_x| ؟",o:["متوسط الانحراف المطلق (Mean Absolute Deviation - MAD)","التباين (Variance)","المدى الربعي (IQR)","الميل (Skewness)"],a:0,e:"وجود علامة القيمة المطلقة |x_i - μ_x| مقسوماً على n هو قانون متوسط الانحراف المطلق (MAD)."},
+  {q:"[مسألة حسابية] للقيم الثلاث [2, 5, 8]، المتوسط الحسابي هو (5). كم تبلغ قيمة متوسط الانحراف المطلق (MAD) لهذه القيم؟",o:["2 (لأن الفروق المطلقة عن 5 هي: |2-5|=3 و |5-5|=0 و |8-5|=3، ومتوسطها 6 / 3 = 2)","0","6","9"],a:0,e:"المتوسط = 5. الانحرافات المطلقة هي: |2-5|=3، |5-5|=0، |8-5|=3. مجموعها = 6. نقسم على عددها (3): MAD = 6 / 3 = 2."},
+  {q:"ما هو الكود الصحيح لحساب متوسط الانحراف المطلق (MAD) للمصفوفة x باستخدام مكتبة NumPy كما ورد في الملزمة؟",o:["np.mean(np.absolute(x - np.mean(x)))","np.std(x) * 2","np.max(x) - np.min(x)","np.median(x)"],a:0,e:"نطرح المتوسط np.mean(x) من كل عنصر، ثم نأخذ القيمة المطلقة np.absolute، ثم نحسب المتوسط np.mean."},
+  {q:"ما الفرق الرياضي بين معادلة التباين (Variance) ومعادلة الانحراف المعياري (Standard Deviation)؟",o:["التباين هو متوسط مربعات انحرافات القيم عن المتوسط، بينما الانحراف المعياري هو الجذر التربيعي للتباين","التباين هو الجذر التربيعي للانحراف المعياري","كلاهما يستخدمان القيمة المطلقة بدون تربيع","التباين يقسم على 100 دائماً"],a:0,e:"التباين يربع الفروق عن المتوسط (x_i - μ)^2 ويقسم على n، والانحراف المعياري يأخذ الجذر التربيعي للتباين."},
+  {q:"[مسألة حسابية] إذا كان الانحراف المعياري (Standard Deviation) لمجموعة بيانات يساوي (5)، فكم تبلغ قيمة التباين (Variance) لهذه البيانات؟",o:["25 (لأن التباين هو مربع الانحراف المعياري: 5 × 5 = 25)","5","2.23","10"],a:0,e:"بما أن الانحراف المعياري = جذر التباين، فإن التباين = مربع الانحراف المعياري = 5^2 = 25."},
+  {q:"لماذا نمرر المعامل (ddof=0) داخل دالتي التباين والانحراف المعياري في Pandas مثل: df['col'].var(ddof=0) و df['col'].std(ddof=0)؟",o:["لجعل الدالة تقسم على العدد الكلي للعناصر (n) بدلاً من القسمة الافتراضية على (n - 1)","لحذف القيم السالبة من العمود","لتقريب النتيجة إلى أقرب عدد صحيح","لتحويل العمود النصي إلى رقمي"],a:0,e:"في Pandas القيمة الافتراضية هي ddof=1 (القسمة على n-1)، وبتمرير ddof=0 يتم القسمة على n كما في القانون القياسي للمجتمع."},
+  {q:"أي مقياس إحصائي يُستخدم لقياس مدى (تناسق أو تماثل توزيع البيانات حول المتوسط الحسابي)، وما هي دالته في Pandas؟",o:["الميل / الالتواء (Skewness) ودالته .skew()","التحدب (Kurtosis) ودالته .kurtosis()","المدى الربعي (IQR) ودالته .quantile()","المنوال (Mode) ودالته .mode()"],a:0,e:"الميل (Skewness) يقيس تناسق وتماثل التوزيع حول المتوسط الحسابي، ويُحسب بالدالة .skew()."},
+  {q:"إذا كانت قيمة الميل (Skewness) لعمود بيانات تساوي قيمة موجبة أكبر من الصفر (Skewness > 0)، فماذا يعني ذلك لشكل التوزيع؟",o:["التوزيع مائل لليمين (Positive Skew - ذيله الطويل يمتد نحو اليمين)","التوزيع مائل لليسار (Negative Skew)","التوزيع متماثل تماماً حول المتوسط","لا توجد أي بيانات في العمود"],a:0,e:"إذا كان الميل يساوي 0 فالتوزيع متماثل، وإذا كان موجباً (>0) فهو مائل لليمين، وإذا كان سالباً (<0) فهو مائل لليسار."},
+  {q:"أي مقياس إحصائي يقيس (تفاوت ذيول التوزيع) مقارنة بالتوزيع الطبيعي، ويكشف عن مدى وجود قيم متطرفة (Outliers) في البيانات؟",o:["التحدب / التفرطح (Kurtosis) ودالته .kurtosis()","المتوسط الحسابي (Mean) ودالته .mean()","الوسيط (Median) ودالته .median()","النطاق (Range)"],a:0,e:"التحدب (Kurtosis) يقيس ثقل ذيول التوزيع وتدبب قمته، ويُحسب بالدالة .kurtosis()."},
+  {q:"على ماذا يدل وجود (تحدب زائد موجب - Positive Kurtosis) في توزيع البيانات؟",o:["يدل على وجود قيم متطرفة (Outliers) كثيرة في ذيول التوزيع","يدل على عدم وجود أي قيم متطرفة وأن القمة مسطحة تماماً","يدل على أن جميع القيم تساوي صفراً","يدل على أن المتوسط الحسابي يساوي صفر"],a:0,e:"التحدب الزائد الموجب (Positive Kurtosis) يعني ذيولاً ثقيلة وقمة مدببة نتيجة وجود قيم متطرفة، بينما السالب يعني قمة مسطحة وذيولاً خفيفة."},
+  {q:"[مسألة حسابية] للقيم الثلاث [10, 10, 10]، كم تبلغ قيمة كل من: المتوسط الحسابي (Mean)، والنطاق (Range)، والانحراف المعياري (Std)؟",o:["المتوسط = 10، والنطاق = 0، والانحراف المعياري = 0","المتوسط = 0، والنطاق = 10، والانحراف المعياري = 10","المتوسط = 30، والنطاق = 10، والانحراف المعياري = 5","جميعها تساوي 10"],a:0,e:"عندما تتساوى جميع القيم (10، 10، 10)، يكون المتوسط مساوياً لنفس القيمة (10)، وينعدم التشتت تماماً فيكون المدى والتباين والانحراف المعياري و MAD كلها تساوي صفراً (0)!"},
+  {q:"في جدول المخرجات الذي تنتجه الدالة df.describe()، ماذا تمثل القيمتان الموجودتان أمام (25%) وأمام (50%) على التوالي؟",o:["تمثل (25%) الربع الأول Q1، وتمثل (50%) الوسيط Median (أو Q2)","تمثل (25%) المتوسط الحسابي، وتمثل (50%) المنوال","تمثل (25%) التباين، وتمثل (50%) الانحراف المعياري","تمثل (25%) أقل قيمة، وتمثل (50%) أعلى قيمة"],a:0,e:"في مخرجات describe(): 25% هي الربع الأول Q1، و 50% هي الوسيط (Median / Q2)، و 75% هي الربع الثالث Q3."},
+  {q:"إذا أضفنا قيمة متطرفة كبيرة جداً (مثلاً 10000) إلى مجموعة البيانات [10, 20, 30, 40]، فأي مقياس سيتأثر ويتغير بشكل كبير جداً، وأي مقياس سيظل مستقراً ومقاوماً للتغيير؟",o:["سيتأثر المتوسط الحسابي (Mean) بشدة، بينما يظل الوسيط (Median) مستقراً وأقل تأثراً","سيتأثر الوسيط (Median) بشدة، بينما لا يتأثر المتوسط الحسابي أبداً","لن يتأثر لا المتوسط ولا الوسيط ولا المدى","سيتحول المنوال إلى قيمة سالبة"],a:0,e:"المتوسط الحسابي يدخل في حسابه مجموع كل القيم فيتأثر بشدة بالقيم المتطرفة، بينما الوسيط يعتمد فقط على ترتيب القيمة الوسطى فلا يتأثر بالقيم المتطرفة."}
+];
+
+// بناء شبكة المصطلحات
+const termsGrid = document.getElementById("termsGrid");
+terms.forEach(([en, ar]) => {
+  const d = document.createElement("div");
+  d.className = "card";
+  d.style.margin = "0";
+  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
+  termsGrid.appendChild(d);
+});
+
+// إدارة البطاقات التعليمية
+let ci = 0, showAnswer = false;
+function renderCard() {
+  document.getElementById("flashTerm").textContent = cards[ci][0];
+  document.getElementById("flashAnswer").textContent = cards[ci][1];
+  document.getElementById("flashAnswer").hidden = !showAnswer;
+  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
+  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+}
+document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
+document.getElementById("flashcard").addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
+});
+document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
+document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
+renderCard();
+
+// التنقل بين التبويبات
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+// خوارزمية خلط عشوائي (Fisher-Yates Shuffle) للأسئلة والخيارات
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+let currentQuestions = [];
+let answers = {};
+
+function prepareShuffledQuiz() {
+  currentQuestions = shuffleArray(masterQuestions).map(item => {
+    const optsWithFlag = item.o.map((text, idx) => ({ text, isCorrect: idx === item.a }));
+    const shuffledOpts = shuffleArray(optsWithFlag);
+    return {
+      q: item.q,
+      o: shuffledOpts.map(x => x.text),
+      a: shuffledOpts.findIndex(x => x.isCorrect),
+      e: item.e
+    };
+  });
+}
+
+function renderQuiz() {
+  prepareShuffledQuiz();
+  const area = document.getElementById("quizArea");
+  area.innerHTML = "";
+  const letters = ["أ", "ب", "ج", "د"];
+  currentQuestions.forEach((item, i) => {
+    const box = document.createElement("div");
+    box.className = "qbox";
+    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
+    const opts = box.querySelector(".options");
+    item.o.forEach((opt, j) => {
+      const btn = document.createElement("button");
+      btn.className = "option";
+      btn.textContent = `${letters[j]}) ${opt}`;
+      btn.onclick = () => {
+        answers[i] = j;
+        [...opts.children].forEach((x, k) => {
+          x.classList.remove("correct", "wrong");
+          x.disabled = true;
+          if (k === item.a) x.classList.add("correct");
+          if (k === j && j !== item.a) x.classList.add("wrong");
+        });
+        const fb = document.getElementById("fb" + i);
+        fb.hidden = false;
+        fb.className = "feedback " + (j === item.a ? "good" : "bad");
+        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
+        updateScore();
+      };
+      opts.appendChild(btn);
+    });
+    area.appendChild(box);
+  });
+  updateScore();
+}
+
+function updateScore() {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
+  document.getElementById("score").textContent = `النتيجة: ${correct} / ${currentQuestions.length}`;
+  document.getElementById("progressBar").style.width = (Object.keys(answers).length / currentQuestions.length * 100) + "%";
+}
+
+document.getElementById("resetQuiz").onclick = () => {
+  answers = {};
+  document.getElementById("finalResult").textContent = "";
+  renderQuiz();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+document.getElementById("finishQuiz").onclick = () => {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
+  const pct = Math.round(correct / currentQuestions.length * 100);
+  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${currentQuestions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! أنتِ مستعدة تماماً للاختبار في هذا الفصل." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
+};
+
+renderQuiz();
+</script>
+</body>
+</html>

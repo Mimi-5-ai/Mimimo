@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الفصل الثاني الشامل (100%) | تحليل وتمثيل البيانات</title>
+<style>
+:root{
+  --bg:#f0f5ff;
+  --card:#ffffff;
+  --ink:#0f172a;
+  --muted:#475569;
+  --accent:#1d4ed8;
+  --accent-dark:#1e3a8a;
+  --accent2:#dbeafe;
+  --line:#cbd5e1;
+  --good:#059669;
+  --good-bg:#ecfdf5;
+  --bad:#dc2626;
+  --bad-bg:#fef2f2;
+  --warn:#d97706;
+  --warn-bg:#fffbeb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
+header{background:linear-gradient(135deg,#0f172a,#1d4ed8);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(15,23,42,0.2)}
+.wrap{max-width:1040px;margin:auto;padding:0 16px}
+.eyebrow{opacity:.92;font-size:.9rem;background:rgba(255,255,255,0.16);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
+h1{margin:5px 0;font-size:clamp(1.5rem,4vw,2.25rem)}
+header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
+nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:var(--accent2);color:var(--accent-dark);font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
+nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
+nav button.active,.btn.primary{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+main .btn.primary{background:var(--accent);color:white}
+main{padding:22px 0 48px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(15,23,42,0.04)}
+h2{font-size:1.35rem;margin:0 0 12px;color:#0f172a}
+h3{font-size:1.08rem;margin:0 0 8px;color:var(--accent-dark)}
+small,.muted{color:var(--muted)}
+ul,ol{padding-right:22px;margin:8px 0}
+li{margin:6px 0}
+details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
+summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f8fafc;color:#0f172a;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
+details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
+.details-body{padding:16px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
+.badge-new{display:inline-block;background:var(--warn-bg);color:var(--warn);border:1px solid #fcd34d;font-size:.78rem;padding:1px 8px;border-radius:6px;margin-right:6px;font-weight:bold}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#eff6ff;color:#1e3a8a;font-weight:bold}
+tr:last-child td{border-bottom:0}
+.note{border-right:4px solid var(--accent);padding:10px 14px;background:#eff6ff;border-radius:8px;margin:10px 0}
+.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
+.code-box{background:#0f172a;color:#e2e8f0;padding:14px 18px;border-radius:12px;font-family:Consolas,Monaco,monospace;direction:ltr;text-align:left;overflow-x:auto;margin:10px 0;border:1px solid #334155;line-height:1.65;font-size:.91rem}
+.code-box .kw{color:#38bdf8;font-weight:bold}
+.code-box .str{color:#4ade80}
+.code-box .num{color:#f472b6}
+.code-box .cmt{color:#94a3b8;font-style:italic}
+.code-box .out{color:#fde047;display:block;margin-top:4px;border-top:1px dashed #334155;padding-top:4px}
+.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
+.options{display:grid;gap:8px;margin-top:12px}
+.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
+.option:hover:not(:disabled){border-color:var(--accent);background:#eff6ff}
+.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
+.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
+.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
+.feedback.good{color:var(--good);background:var(--good-bg)}
+.feedback.bad{color:var(--bad);background:var(--bad-bg)}
+.progress{height:10px;background:#cbd5e1;border-radius:9px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
+.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#dbeafe);border:2px solid #93c5fd;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
+.flashcard:hover{transform:scale(1.005)}
+.flashcard .term{font-size:1.35rem;font-weight:bold;color:#1e3a8a}
+.flashcard .answer{margin-top:16px;font-size:1.05rem;color:#0f172a;background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04);white-space:pre-line}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
+@media(max-width:600px){
+  .card{padding:14px}
+  nav button{flex:1 1 calc(50% - 8px);text-align:center}
+  .flashcard{min-height:200px;padding:18px}
+  th,td{padding:8px 10px;font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">نسخة شاملة ومحدثة 100% • مقرر تحليل وتمثيل البيانات</div>
+    <h1>الفصل الثاني: مراجعة مكتبة Pandas (الوحدات الأربع)</h1>
+    <p>يغطي هياكل البيانات (Series و DataFrame)، الفهرسة والاسترجاع، تعديل الفهارس والحذف والترتيب، قراءة واستكشاف ملفات CSV، ودمج وتخزين البيانات بالكامل</p>
+    <nav>
+      <button class="active" data-tab="summary">الشرح الشامل والأكواد (100%)</button>
+      <button data-tab="tables">جداول الدوال والمقارنات</button>
+      <button data-tab="terms">قاموس الدوال والمعاملات</button>
+      <button data-tab="cards">البطاقات (28)</button>
+      <button data-tab="quiz">الاختبار العشوائي (25)</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- التبويب الأول: الشرح الشامل -->
+  <section id="summary" class="panel active">
+    <div class="card">
+      <h2>خريطة الفصل الثاني (الوحدات الأربع الكاملة)</h2>
+      <div class="grid">
+        <div>
+          <span class="tag">الوحدة الأولى</span>
+          <h3>نظرة عامة وهيكل البيانات Series</h3>
+          <p>استدعاء <span dir="ltr">Pandas</span>، الفرق بين <span dir="ltr">Series</span> و <span dir="ltr">DataFrame</span>، إنشاء <span dir="ltr">Series</span> من قائمة أو قاموس، خصائص <span dir="ltr">values / index</span>، التصفية الشرطية، وكشف القيم المفقودة (<span dir="ltr">isnull / notnull</span>).</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثانية</span>
+          <h3>التعامل الشامل مع DataFrame</h3>
+          <p>إنشاء <span dir="ltr">DataFrame</span>، ترتيب وإضافة الأعمدة، استرجاع الأعمدة بطريقتين واسترجاع الصفوف بـ <span dir="ltr">loc</span>، إسناد القيم، وإنشاء وحذف الأعمدة المنطقية بأمر <span dir="ltr">del</span>.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثالثة</span>
+          <h3>إعادة الفهرسة والحذف والترتيب</h3>
+          <p>تعديل الفهارس بدالة <span dir="ltr">reindex</span>، حذف الصفوف والأعمدة بدالة <span dir="ltr">drop</span> ومعاملي <span dir="ltr">axis=1</span> و <span dir="ltr">inplace=True</span>، والترتيب بدالة <span dir="ltr">sort_index</span>.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الرابعة</span>
+          <h3>ملفات CSV والدمج والتخزين</h3>
+          <p>قراءة الملفات بـ <span dir="ltr">read_csv</span>، دوال الاستكشاف (<span dir="ltr">head, info, describe</span>)، دمج الجداول بدالة <span dir="ltr">merge</span> (<span dir="ltr">inner / outer</span>)، تغيير أسماء الأعمدة بـ <span dir="ltr">rename</span>، والحفظ بـ <span dir="ltr">to_csv</span>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== الوحدة الأولى كاملة في قائمة واحدة ==================== -->
+    <details open>
+      <summary>الوحدة الأولى: نظرة عامة على مكتبة Pandas، هياكل البيانات، والتعامل الشامل مع Series</summary>
+      <div class="details-body">
+        <h3>1) نظرة عامة على مكتبة (<span dir="ltr">Pandas</span>) واستدعاؤها</h3>
+        <ul>
+          <li>تحتوي مكتبة <b><span dir="ltr">Pandas</span></b> على هياكل بيانات وأدوات معالجة بيانات مصممة لجعل عملية تنظيف البيانات وتحليلها سريعة وسهلة في لغة البايثون.</li>
+          <li>تُستخدم مكتبة <span dir="ltr">Pandas</span> غالباً جنباً إلى جنب مع مكتبات الحوسبة العددية مثل <b><span dir="ltr">NumPy</span></b> و <b><span dir="ltr">SciPy</span></b>، وأدوات التحليل الإحصائي مثل <b><span dir="ltr">Statsmodels</span></b> و <b><span dir="ltr">Scikit-learn</span></b>، ومكتبات التمثيل المرئي مثل <b><span dir="ltr">Matplotlib</span></b>.</li>
+          <li><b>الفرق الجوهري بين <span dir="ltr">Pandas</span> و <span dir="ltr">NumPy</span>:</b> بينما صُممت <span dir="ltr">NumPy</span> للتعامل مع بيانات المصفوفات المتجانسة (من نفس النوع الرقمي)، صُممت <b><span dir="ltr">Pandas</span></b> للعمل مع <b>البيانات الجدولية أو غير المتجانسة (<span dir="ltr">Tabular or Heterogeneous data</span>)</b> (أي جداول تحتوي على أرقام ونصوص وتواريخ معاً).</li>
+          <li><b>طريقة استدعاء المكتبة القياسية في البايثون:</b>
+            <div class="code-box"><span class="kw">import</span> pandas <span class="kw">as</span> pd<br><span class="kw">import</span> numpy <span class="kw">as</span> np</div>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) هياكل البيانات الأساسية في Pandas: (<span dir="ltr">Series</span>) و (<span dir="ltr">DataFrame</span>)</h3>
+        <div class="exam-alert">
+          <b>🔥 مقارنة أساسية في الاختبار:</b><br>
+          • <b><span dir="ltr">Series</span> (السلسلة):</b> هي هيكل بيانات <b>أحادي البعد (<span dir="ltr">One-dimensional</span>)</b> يشبه المصفوفة، يحتوي على سلسلة من القيم ومصفوفة مرتبطة بها من تسميات البيانات تُسمى الفهرس (<b><span dir="ltr">Index</span></b>).<br>
+          • <b><span dir="ltr">DataFrame</span> (إطار البيانات):</b> هو هيكل بيانات <b>ثنائي البعد (<span dir="ltr">Two-dimensional</span>)</b> يمثل جدولاً مستطيلاً من البيانات يحتوي على مجموعة مرتبة من الأعمدة، ويمكن أن يكون كل عمود من نوع بيانات مختلف (رقمي، نصي، منطقي)، وله فهرس للصفوف وفهرس للأعمدة.
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) إنشاء (<span dir="ltr">Series</span>) وخصائصها والوصول لعناصرها</h3>
+        <ul>
+          <li><b>أولاً: إنشاء <span dir="ltr">Series</span> بفهرس افتراضي تلقائي (من $0$ إلى $N-1$):</b>
+            <div class="code-box">
+obj = pd.Series([<span class="num">4</span>, <span class="num">7</span>, <span class="num">-5</span>, <span class="num">3</span>])<br>
+obj
+<span class="out">0    4
+1    7
+2   -5
+3    3
+dtype: int64</span>
+            </div>
+            <ul>
+              <li>لعرض مصفوفة القيم فقط نستخدم الخاصية <b><code dir="ltr">obj.values</code></b> &larr; تخرج <code dir="ltr">array([ 4, 7, -5, 3])</code>.</li>
+              <li>لعرض كائن الفهرس نستخدم الخاصية <b><code dir="ltr">obj.index</code></b> &larr; تخرج <code dir="ltr">RangeIndex(start=0, stop=4, step=1)</code>.</li>
+            </ul>
+          </li>
+          <li><b>ثانياً: إنشاء <span dir="ltr">Series</span> بفهرس مخصص (<span dir="ltr">Custom Index</span>) والوصول للعناصر:</b>
+            <div class="code-box">
+obj2 = pd.Series([<span class="num">4</span>, <span class="num">7</span>, <span class="num">-5</span>, <span class="num">3</span>], index=[<span class="str">'d'</span>, <span class="str">'b'</span>, <span class="str">'a'</span>, <span class="str">'c'</span>])<br>
+obj2[<span class="str">'a'</span>]        <span class="cmt"># استرجاع عنصر واحد عبر تسمية الفهرس -> -5</span><br>
+obj2[<span class="str">'d'</span>] = <span class="num">6</span>   <span class="cmt"># تعديل قيمة العنصر ذي الفهرس 'd' إلى 6</span><br>
+obj2[[<span class="str">'c'</span>, <span class="str">'a'</span>, <span class="str">'d'</span>]]  <span class="cmt"># استرجاع قائمة من الفهارس (لاحظي الأقواس المزدوجة)</span>
+            </div>
+          </li>
+          <li><b>ثالثاً: العمليات الرياضية والتصفية الشرطية على <span dir="ltr">Series</span> (تحتفظ دائماً بارتباط الفهرس بالقيمة!):</b>
+            <div class="code-box">
+obj2[obj2 &gt; <span class="num">0</span>]   <span class="cmt"># تصفية العناصر الأكبر من صفر فقط</span><br>
+obj2 * <span class="num">2</span>         <span class="cmt"># ضرب جميع القيم في 2 مع بقاء الفهارس كما هي</span><br>
+np.exp(obj2)     <span class="cmt"># تطبيق دالة الأس الطبيعي من مكتبة NumPy</span><br>
+<span class="str">'b'</span> <span class="kw">in</span> obj2      <span class="cmt"># التحقق من وجود الفهرس 'b' (يعيد True)</span><br>
+<span class="str">'e'</span> <span class="kw">in</span> obj2      <span class="cmt"># التحقق من وجود الفهرس 'e' (يعيد False)</span>
+            </div>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>4) إنشاء (<span dir="ltr">Series</span>) من قاموس بايثون (<span dir="ltr">Dict</span>) والتعامل مع القيم المفقودة (<span dir="ltr">NaN</span>)</h3>
+        <ul>
+          <li>يمكن إنشاء <span dir="ltr">Series</span> مباشرةً من قاموس بايثون (<code dir="ltr">dict</code>)، حيث تصبح <b>مفاتيح القاموس (<span dir="ltr">Keys</span>) هي الفهرس (<span dir="ltr">Index</span>)</b>:
+            <div class="code-box">
+sdata = {<span class="str">'Ohio'</span>: <span class="num">35000</span>, <span class="str">'Texas'</span>: <span class="num">71000</span>, <span class="str">'Oregon'</span>: <span class="num">16000</span>, <span class="str">'Utah'</span>: <span class="num">5000</span>}<br>
+obj3 = pd.Series(sdata)
+            </div>
+          </li>
+          <li><b>تحديد فهرس مخصص عند الإنشاء من قاموس (وظهور <span dir="ltr">NaN</span>):</b>
+            <div class="code-box">
+states = [<span class="str">'California'</span>, <span class="str">'Ohio'</span>, <span class="str">'Oregon'</span>, <span class="str">'Texas'</span>]<br>
+obj4 = pd.Series(sdata, index=states)<br>
+obj4
+<span class="out">California        NaN
+Ohio          35000.0
+Oregon        16000.0
+Texas         71000.0
+dtype: float64</span>
+            </div>
+            <ul>
+              <li>بما أنه لا توجد قيمة لـ <code dir="ltr">'California'</code> في القاموس <code dir="ltr">sdata</code>، فقد ظهرت قيمتها كـ <b><span dir="ltr">NaN</span> (<span dir="ltr">Not a Number</span>)</b> وهي العلامة المستخدمة في <span dir="ltr">Pandas</span> للدلالة على <b>البيانات المفقودة (<span dir="ltr">Missing data</span> أو <span dir="ltr">NA</span>)</b>.</li>
+              <li>وتم استبعاد <code dir="ltr">'Utah'</code> لأنها لم تكن ضمن قائمة <code dir="ltr">states</code>.</li>
+            </ul>
+          </li>
+          <li><b>دوال اكتشاف البيانات المفقودة في <span dir="ltr">Pandas</span>:</b>
+            <ul>
+              <li>الدالة <b><code dir="ltr">pd.isnull(obj4)</code></b> (أو <code dir="ltr">obj4.isnull()</code>): تعيد <code dir="ltr">True</code> عند القيمة المفقودة (<code dir="ltr">California</code>) و <code dir="ltr">False</code> عند الباقي.</li>
+              <li>الدالة <b><code dir="ltr">pd.notnull(obj4)</code></b> (أو <code dir="ltr">obj4.notnull()</code>): عكس السابقة؛ تعيد <code dir="ltr">True</code> للقيم الموجودة و <code dir="ltr">False</code> للمفقودة.</li>
+            </ul>
+          </li>
+          <li><b>المحاذاة التلقائية للفهارس في العمليات الحسابية (<span dir="ltr">Index Alignment</span>):</b>
+            <ul>
+              <li>من أهم ميزات <span dir="ltr">Series</span> أنها تحاذي البيانات تلقائياً حسب تسمية الفهرس عند جمع سلسلتين (<code dir="ltr">obj3 + obj4</code>)؛ فتجمع القيم ذات الفهارس المشتركة، وتضع <b><span dir="ltr">NaN</span></b> لأي فهرس غير مشترك بينهما (مثل <code dir="ltr">California</code> و <code dir="ltr">Utah</code>).</li>
+            </ul>
+          </li>
+          <li><b>تسمية السلسلة وتسمية فهرسها وتعديل الفهرس مكانياً:</b>
+            <div class="code-box">
+obj4.name = <span class="str">'population'</span>       <span class="cmt"># إعطاء اسم للسلسلة نفسها</span><br>
+obj4.index.name = <span class="str">'state'</span>     <span class="cmt"># إعطاء اسم لعمود الفهرس</span><br>
+obj.index = [<span class="str">'Bob'</span>, <span class="str">'Steve'</span>, <span class="str">'Jeff'</span>, <span class="str">'Ryan'</span>] <span class="cmt"># تغيير الفهرس مباشرة بالإسناد</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- ==================== الوحدة الثانية كاملة في قائمة واحدة ==================== -->
+    <details>
+      <summary>الوحدة الثانية: التعامل الشامل مع هيكل البيانات DataFrame (الإنشاء، الاسترجاع، الإسناد، والحذف)</summary>
+      <div class="details-body">
+        <h3>1) إنشاء (<span dir="ltr">DataFrame</span>) وترتيب الأعمدة</h3>
+        <ul>
+          <li>الطريقة الأكثر شيوعاً لإنشاء <span dir="ltr">DataFrame</span> هي من خلال <b>قاموس يحتوي على قوائم متساوية الطول (<span dir="ltr">dict of equal-length lists</span>)</b> أو مصفوفات <span dir="ltr">NumPy</span>:
+            <div class="code-box">
+data = {<span class="str">'state'</span>: [<span class="str">'Ohio'</span>, <span class="str">'Ohio'</span>, <span class="str">'Ohio'</span>, <span class="str">'Nevada'</span>, <span class="str">'Nevada'</span>, <span class="str">'Nevada'</span>],<br>
+        <span class="str">'year'</span>: [<span class="num">2000</span>, <span class="num">2001</span>, <span class="num">2002</span>, <span class="num">2001</span>, <span class="num">2002</span>, <span class="num">2003</span>],<br>
+        <span class="str">'pop'</span>: [<span class="num">1.5</span>, <span class="num">1.7</span>, <span class="num">3.6</span>, <span class="num">2.4</span>, <span class="num">2.9</span>, <span class="num">3.2</span>]}<br>
+frame = pd.DataFrame(data)<br>
+frame.head()  <span class="cmt"># تعرض أول 5 صفوف فقط من الجدول</span>
+            </div>
+          </li>
+          <li><b>تحديد ترتيب الأعمدة وإضافة عمود غير موجود في القاموس:</b>
+            <ul>
+              <li>إذا حددتِ تسلسلاً للأعمدة باستخدام المعامل <code dir="ltr">columns</code>، فسيتم ترتيب أعمدة الـ <span dir="ltr">DataFrame</span> وفقاً لهذا الترتيب بالضبط.</li>
+              <li>وإذا مررتِ اسم عمود غير موجود في القاموس الأصلي (مثل <code dir="ltr">'debt'</code>)، فسيظهر العمود الجديد في الجدول وتكون جميع قيمه <b><span dir="ltr">NaN</span></b>:</li>
+            </ul>
+            <div class="code-box">
+frame2 = pd.DataFrame(data, columns=[<span class="str">'year'</span>, <span class="str">'state'</span>, <span class="str">'pop'</span>, <span class="str">'debt'</span>],<br>
+                      index=[<span class="str">'one'</span>, <span class="str">'two'</span>, <span class="str">'three'</span>, <span class="str">'four'</span>, <span class="str">'five'</span>, <span class="str">'six'</span>])<br>
+frame2.columns  <span class="cmt"># يعرض أسماء الأعمدة: Index(['year', 'state', 'pop', 'debt'], dtype='object')</span>
+            </div>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) استرجاع الأعمدة واسترجاع الصفوف من (<span dir="ltr">DataFrame</span>)</h3>
+        <div class="exam-alert">
+          <b>🌟 موضع سؤال متكرر جداً في الاختبار: كيف نسترجع عموداً وكيف نسترجع صفاً؟</b><br>
+          1) <b>استرجاع عمود (<span dir="ltr">Column</span>) كـ <span dir="ltr">Series</span> يتم بطريقتين:</b><br>
+          • <b>الطريقة الأولى (طريقة القاموس - الأقواس المربعة):</b> <code dir="ltr">frame2['state']</code> (تصلح مع أي اسم عمود حتى لو كان فيه مسافات).<br>
+          • <b>الطريقة الثانية (طريقة النقطة - الخصائص):</b> <code dir="ltr">frame2.year</code> (تصلح فقط إذا كان اسم العمود اسم متغير بايثون صالحاً بدون مسافات أو رموز).<br>
+          2) <b>استرجاع صف (<span dir="ltr">Row</span>) حسب تسمية الفهرس:</b> يتم باستخدام خاصية <b><code dir="ltr">loc</code></b> مثل: <code dir="ltr">frame2.loc['three']</code>.
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) تعديل وإسناد قيم للأعمدة، وإنشاء وحذف الأعمدة (<span dir="ltr">del</span>)</h3>
+        <ul>
+          <li><b>1. إسناد قيمة ثابتة أو مصفوفة لعمود:</b>
+            <div class="code-box">
+frame2[<span class="str">'debt'</span>] = <span class="num">16.5</span>           <span class="cmt"># يجعل جميع صفوف العمود 'debt' تساوي 16.5</span><br>
+frame2[<span class="str">'debt'</span>] = np.arange(<span class="num">6.</span>)  <span class="cmt"># يسند القيم من 0.0 إلى 5.0 (يجب أن يتطابق طول المصفوفة مع طول الجدول)</span>
+            </div>
+          </li>
+          <li><b>2. إسناد <span dir="ltr">Series</span> إلى عمود:</b>
+            <ul>
+              <li>عند إسناد <span dir="ltr">Series</span> إلى عمود في <span dir="ltr">DataFrame</span>، سيتم مطابقة فهارسها تماماً مع فهرس الـ <span dir="ltr">DataFrame</span>، وملء أي فهارس غير موجودة (الفجوات) بقيمة <b><span dir="ltr">NaN</span></b>:</li>
+            </ul>
+            <div class="code-box">
+val = pd.Series([<span class="num">-1.2</span>, <span class="num">-1.5</span>, <span class="num">-1.7</span>], index=[<span class="str">'two'</span>, <span class="str">'four'</span>, <span class="str">'five'</span>])<br>
+frame2[<span class="str">'debt'</span>] = val  <span class="cmt"># الصفوف one و three و six ستأخذ NaN</span>
+            </div>
+          </li>
+          <li><b>3. إنشاء عمود جديد وحذفه بالكلمة المفتاحية (<span dir="ltr">del</span>):</b>
+            <ul>
+              <li>إسناد قيم لعمود غير موجود ينشئ عموداً جديداً، ولكن <b>انتبهي: لا يمكن إنشاء عمود جديد بطريقة النقطة (<code dir="ltr">frame2.eastern</code>)</b> بل يجب استخدام الأقواس المربعة (<code dir="ltr">frame2['eastern']</code>)!</li>
+              <li>تُستخدم الكلمة المفتاحية <b><code dir="ltr">del</code></b> لحذف العمود كما في قواميس البايثون:</li>
+            </ul>
+            <div class="code-box">
+frame2[<span class="str">'eastern'</span>] = frame2.state == <span class="str">'Ohio'</span>  <span class="cmt"># ينشئ عموداً منطقياً True عندما تكون الولاية Ohio</span><br>
+<span class="kw">del</span> frame2[<span class="str">'eastern'</span>]                       <span class="cmt"># يحذف العمود 'eastern' نهائياً</span>
+            </div>
+          </li>
+          <li><b>4. خاصية (<span dir="ltr">values</span>) في <span dir="ltr">DataFrame</span>:</b>
+            <ul>
+              <li>كتابة <b><code dir="ltr">frame2.values</code></b> تُرجع جميع البيانات الموجودة داخل الـ <span dir="ltr">DataFrame</span> على شكل <b>مصفوفة ثنائية الأبعاد (<span dir="ltr">2D ndarray</span>)</b>.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- ==================== الوحدة الثالثة كاملة في قائمة واحدة ==================== -->
+    <details>
+      <summary>الوحدة الثالثة: تعديل الفهارس (Re-indexing)، حذف العناصر (drop)، الترتيب (sort_index)، والعمليات الحسابية</summary>
+      <div class="details-body">
+        <h3>1) تعديل وإعادة ترتيب الفهارس (<span dir="ltr">Re-indexing</span>)</h3>
+        <ul>
+          <li>الدالة <b><code dir="ltr">reindex</code></b> هي أداة مهمة في كائنات <span dir="ltr">Pandas</span>؛ وتعني إنشاء كائن جديد ببيانات متوافقة مع الفهرس الجديد، مع إدخال قيم <b><span dir="ltr">NaN</span></b> إذا لم يكن أحد الفهارس الجديدة موجوداً مسبقاً:
+            <div class="code-box">
+obj = pd.Series([<span class="num">4.5</span>, <span class="num">7.2</span>, <span class="num">-5.3</span>, <span class="num">3.6</span>], index=[<span class="str">'d'</span>, <span class="str">'b'</span>, <span class="str">'a'</span>, <span class="str">'c'</span>])<br>
+obj2 = obj.reindex([<span class="str">'a'</span>, <span class="str">'b'</span>, <span class="str">'c'</span>, <span class="str">'d'</span>, <span class="str">'e'</span>]) <span class="cmt"># يرتب الفهارس ويضع NaN أمام 'e'</span>
+            </div>
+          </li>
+          <li>في <b><span dir="ltr">DataFrame</span></b>، يمكن لـ <code dir="ltr">reindex</code> تعديل فهرس الصفوف (افتراضياً)، أو تعديل <b>الأعمدة</b> باستخدام المعامل <b><code dir="ltr">columns</code></b>:
+            <div class="code-box">
+frame = pd.DataFrame(np.arange(<span class="num">9</span>).reshape((<span class="num">3</span>, <span class="num">3</span>)), index=[<span class="str">'a'</span>, <span class="str">'c'</span>, <span class="str">'d'</span>], columns=[<span class="str">'Ohio'</span>, <span class="str">'Texas'</span>, <span class="str">'California'</span>])<br>
+frame2 = frame.reindex([<span class="str">'a'</span>, <span class="str">'b'</span>, <span class="str">'c'</span>, <span class="str">'d'</span>])             <span class="cmt"># إعادة فهرسة الصفوف (الصف 'b' سيأخذ NaN)</span><br>
+states = [<span class="str">'Texas'</span>, <span class="str">'Utah'</span>, <span class="str">'California'</span>]<br>
+frame.reindex(columns=states)                             <span class="cmt"># إعادة فهرسة الأعمدة (العمود 'Utah' سيأخذ NaN)</span>
+            </div>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) حذف العناصر من المحاور (<span dir="ltr">Dropping Entries from an Axis: drop</span>)</h3>
+        <div class="exam-alert">
+          <b>🔥 انتبهي جيداً لمعاملين مهمين جداً داخل دالة <code dir="ltr">drop()</code>:</b><br>
+          1) <b>تحديد المحور (<span dir="ltr">axis</span>) في <span dir="ltr">DataFrame</span>:</b><br>
+          • <b>حذف الصفوف (الافتراضي <code dir="ltr">axis=0</code>):</b> <code dir="ltr">data.drop(['Colorado', 'Ohio'])</code>.<br>
+          • <b>حذف الأعمدة (يجب تمرير <code dir="ltr">axis=1</code> أو <code dir="ltr">axis='columns'</code>):</b> <code dir="ltr">data.drop('two', axis=1)</code> أو <code dir="ltr">data.drop(['two', 'four'], axis='columns')</code>.<br>
+          2) <b>التعديل المباشر على الكائن الأصلي (<code dir="ltr">inplace=True</code>):</b><br>
+          • الوضع الافتراضي لدالة <code dir="ltr">drop</code> هو إرجاع كائن جديد دون تغيير الكائن الأصلي. أما إذا مررتِ <b><code dir="ltr">inplace=True</code></b> فإنها تحذف العناصر من الكائن الأصلي مباشرةً وتدمر البيانات المحذوفة دون إرجاع كائن جديد!
+        </div>
+
+        <div class="code-box">
+<span class="cmt"># حذف من Series</span><br>
+obj = pd.Series(np.arange(<span class="num">5.</span>), index=[<span class="str">'a'</span>, <span class="str">'b'</span>, <span class="str">'c'</span>, <span class="str">'d'</span>, <span class="str">'e'</span>])<br>
+new_obj = obj.drop(<span class="str">'c'</span>)<br>
+obj.drop([<span class="str">'d'</span>, <span class="str">'c'</span>])<br><br>
+<span class="cmt"># حذف من DataFrame</span><br>
+data = pd.DataFrame(np.arange(<span class="num">16</span>).reshape((<span class="num">4</span>, <span class="num">4</span>)),<br>
+                    index=[<span class="str">'Ohio'</span>, <span class="str">'Colorado'</span>, <span class="str">'Utah'</span>, <span class="str">'New York'</span>],<br>
+                    columns=[<span class="str">'one'</span>, <span class="str">'two'</span>, <span class="str">'three'</span>, <span class="str">'four'</span>])<br>
+data.drop([<span class="str">'Colorado'</span>, <span class="str">'Ohio'</span>])                  <span class="cmt"># حذف صفوف (axis=0)</span><br>
+data.drop(<span class="str">'two'</span>, axis=<span class="num">1</span>)                         <span class="cmt"># حذف عمود بتحديد axis=1</span><br>
+data.drop([<span class="str">'two'</span>, <span class="str">'four'</span>], axis=<span class="str">'columns'</span>)      <span class="cmt"># حذف عدة أعمدة بتحديد axis='columns'</span><br>
+obj.drop(<span class="str">'c'</span>, inplace=<span class="kw">True</span>)                      <span class="cmt"># حذف مباشر من الكائن الأصلي</span>
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) ترتيب الصفوف أو الأعمدة (<span dir="ltr">Sorting: sort_index</span>) والعمليات الحسابية</h3>
+        <ul>
+          <li><b>الترتيب الأبجدي/الرقمي للفهارس باستخدام الدالة (<code dir="ltr">sort_index</code>):</b>
+            <ul>
+              <li>تقوم بترتيب الكائن حسب فهرس الصفوف (<code dir="ltr">axis=0</code> افتراضياً) أو حسب أسماء الأعمدة (<code dir="ltr">axis=1</code>).</li>
+              <li>يتم الترتيب <b>تصاعدياً (<span dir="ltr">Ascending</span>) بشكل افتراضي</b>، وللترتيب <b>تنازلياً (<span dir="ltr">Descending</span>)</b> نمرر المعامل <b><code dir="ltr">ascending=False</code></b>:</li>
+            </ul>
+            <div class="code-box">
+frame = pd.DataFrame(np.arange(<span class="num">8</span>).reshape((<span class="num">2</span>, <span class="num">4</span>)), index=[<span class="str">'three'</span>, <span class="str">'one'</span>], columns=[<span class="str">'d'</span>, <span class="str">'a'</span>, <span class="str">'b'</span>, <span class="str">'c'</span>])<br>
+frame.sort_index()                         <span class="cmt"># يرتب الصفوف أبجدياً: 'one' ثم 'three'</span><br>
+frame.sort_index(axis=<span class="num">1</span>)                   <span class="cmt"># يرتب الأعمدة أبجدياً تصاعدياً: a, b, c, d</span><br>
+frame.sort_index(axis=<span class="num">1</span>, ascending=<span class="kw">False</span>)  <span class="cmt"># يرتب الأعمدة أبجدياً تنازلياً: d, c, b, a</span>
+            </div>
+          </li>
+          <li><b>العمليات الحسابية على كامل الجدول (<span dir="ltr">DataFrame</span>):</b>
+            <ul>
+              <li>عند تنفيذ عملية رياضية مثل <code dir="ltr">data * 2</code>، يتم ضرب كل عنصر في جميع الصفوف والأعمدة في الرقم 2 تلقائياً.</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- ==================== الوحدة الرابعة كاملة في قائمة واحدة ==================== -->
+    <details>
+      <summary>الوحدة الرابعة: قراءة واستكشاف ملفات CSV، استرجاع البيانات بـ loc، دمج الجداول (merge)، والتخزين</summary>
+      <div class="details-body">
+        <h3>1) قراءة واستكشاف ملفات البيانات (<span dir="ltr">Reading &amp; Exploring CSV Files</span>)</h3>
+        <ul>
+          <li><b>1. قراءة ملف <span dir="ltr">CSV</span>:</b> نستخدم الدالة <b><code dir="ltr">pd.read_csv('filename.csv')</code></b> لتحميل البيانات من ملف نصي مفصول بفواصل إلى <span dir="ltr">DataFrame</span>.</li>
+          <li><b>2. الدوال الثلاث الأساسية لاستكشاف البيانات بعد تحميلها:</b>
+            <div class="code-box">
+df = pd.read_csv(<span class="str">'data.csv'</span>)<br>
+df.head(<span class="num">5</span>)      <span class="cmt"># (1) عرض أول 5 صفوف من البيانات لأخذ نظرة سريعة</span><br>
+df.info()       <span class="cmt"># (2) عرض معلومات شاملة: عدد الصفوف، أسماء الأعمدة، عدد القيم غير الفارغة (Non-Null)، وأنواع البيانات (Dtypes)</span><br>
+df.describe()   <span class="cmt"># (3) عرض ملخص إحصائي للأعمدة الرقمية (count, mean, std, min, 25%, 50%, 75%, max)</span>
+            </div>
+          </li>
+          <li><b>3. استرجاع صف أو عمود أو خلية محددة باستخدام (<code dir="ltr">loc</code>):</b>
+            <div class="code-box">
+df.loc[<span class="num">10</span>]           <span class="cmt"># استرجاع كافة بيانات الصف ذي الفهرس 10</span><br>
+df.loc[<span class="num">10</span>, <span class="str">'Name'</span>]   <span class="cmt"># استرجاع عنصر (خلية) محدد يقع في الصف 10 والعمود 'Name'</span>
+            </div>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) ربط ودمج أكثر من DataFrame باستخدام الدالة (<span dir="ltr">pd.merge</span>)</h3>
+        <div class="exam-alert">
+          <b>🌟 قواعد ومعاملات دمج الجداول (<code dir="ltr">pd.merge</code>) — موضع أسئلة أكيدة في الاختبار:</b><br>
+          تربط الدالة <code dir="ltr">pd.merge</code> الصفوف في الجداول بناءً على مفتاح مشترك أو أكثر:<br>
+          1) <b>إذا كان اسم عمود الربط متشابهاً في الجدولين:</b> نستخدم المعامل <b><code dir="ltr">on='key'</code></b>.<br>
+          2) <b>إذا كان اسم عمود الربط مختلفاً بين الجدولين:</b> نحدد اسم العمود في الجدول الأيسر بـ <b><code dir="ltr">left_on='lkey'</code></b> وفي الأيمن بـ <b><code dir="ltr">right_on='rkey'</code></b>.<br>
+          3) <b>أنواع الدمج (المعامل <code dir="ltr">how</code>):</b><br>
+          • <b><code dir="ltr">how='inner'</code> (الافتراضي - التقاطع):</b> يأخذ فقط المفاتيح المشتركة الموجودة في <b>كلا الجدولين معاً</b>.<br>
+          • <b><code dir="ltr">how='outer'</code> (الاتحاد الشامل):</b> يأخذ <b>جميع المفاتيح من كلا الجدولين</b>، ويضع <span dir="ltr">NaN</span> أمام القيم غير المتوفرة في أحد الجدولين.
+        </div>
+
+        <div class="code-box">
+<span class="cmt"># الحالة 1: عمود الربط له نفس الاسم 'key'</span><br>
+df1 = pd.DataFrame({<span class="str">'key'</span>: [<span class="str">'b'</span>, <span class="str">'b'</span>, <span class="str">'a'</span>, <span class="str">'c'</span>, <span class="str">'a'</span>, <span class="str">'a'</span>, <span class="str">'b'</span>], <span class="str">'data1'</span>: <span class="kw">range</span>(<span class="num">7</span>)})<br>
+df2 = pd.DataFrame({<span class="str">'key'</span>: [<span class="str">'a'</span>, <span class="str">'b'</span>, <span class="str">'d'</span>], <span class="str">'data2'</span>: <span class="kw">range</span>(<span class="num">3</span>)})<br>
+pd.merge(df1, df2, on=<span class="str">'key'</span>)               <span class="cmt"># دمج داخلي افتراضي (inner): يحتفظ بـ 'a' و 'b' فقط ويستبعد 'c' و 'd'</span><br>
+pd.merge(df1, df2, how=<span class="str">'outer'</span>)            <span class="cmt"># دمج خارجي (outer): يحتفظ بجميع المفاتيح a, b, c, d</span><br><br>
+<span class="cmt"># الحالة 2: عمود الربط له اسمان مختلفان ('lkey' و 'rkey')</span><br>
+df3 = pd.DataFrame({<span class="str">'lkey'</span>: [<span class="str">'b'</span>, <span class="str">'b'</span>, <span class="str">'a'</span>, <span class="str">'c'</span>, <span class="str">'a'</span>, <span class="str">'a'</span>, <span class="str">'b'</span>], <span class="str">'data1'</span>: <span class="kw">range</span>(<span class="num">7</span>)})<br>
+df4 = pd.DataFrame({<span class="str">'rkey'</span>: [<span class="str">'a'</span>, <span class="str">'b'</span>, <span class="str">'d'</span>], <span class="str">'data2'</span>: <span class="kw">range</span>(<span class="num">3</span>)})<br>
+pd.merge(df3, df4, left_on=<span class="str">'lkey'</span>, right_on=<span class="str">'rkey'</span>)
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) تغيير عنوان عمود (<span dir="ltr">rename</span>) وتخزين الملف (<span dir="ltr">to_csv</span>)</h3>
+        <ul>
+          <li><b>1. تغيير اسم عمود أو أكثر في <span dir="ltr">DataFrame</span>:</b>
+            <ul>
+              <li>نستخدم الدالة <b><code dir="ltr">df.rename()</code></b> ونمرر للمعامل <code dir="ltr">columns</code> قاموساً يربط الاسم القديم بالاسم الجديد، مع وضع <code dir="ltr">inplace=True</code> لتثبيت التغيير:</li>
+            </ul>
+            <div class="code-box">
+df.rename(columns={<span class="str">'old_name'</span>: <span class="str">'new_name'</span>}, inplace=<span class="kw">True</span>)
+            </div>
+          </li>
+          <li><b>2. حفظ وتخزين الـ <span dir="ltr">DataFrame</span> في ملف <span dir="ltr">CSV</span> جديد:</b>
+            <ul>
+              <li>نستخدم الدالة <b><code dir="ltr">to_csv()</code></b>، ونمرر المعامل <b><code dir="ltr">index=False</code></b> لمنع تخزين أرقام فهرس الصفوف كعمود إضافي غير مرغوب فيه داخل الملف:</li>
+            </ul>
+            <div class="code-box">
+df.to_csv(<span class="str">'combined.csv'</span>, index=<span class="kw">False</span>)
+            </div>
+          </li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- التبويب الثاني: جداول الدوال والمقارنات -->
+  <section id="tables" class="panel">
+    <div class="card">
+      <h2>1. مقارنة شاملة بين هيكلي البيانات (Series) و (DataFrame) في Pandas</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>وجه المقارنة</th>
+            <th>السلسلة (Series)</th>
+            <th>إطار البيانات (DataFrame)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>عدد الأبعاد</b></td>
+            <td>هيكل بيانات <b>أحادي البعد (<span dir="ltr">1D</span>)</b> يشبه المصفوفة أو العمود الواحد.</td>
+            <td>هيكل بيانات <b>ثنائي البعد (<span dir="ltr">2D</span>)</b> يشبه الجدول الكامل أو ورقة العمل.</td>
+          </tr>
+          <tr>
+            <td><b>الفهارس (<span dir="ltr">Indices</span>)</b></td>
+            <td>يمتلك فهرساً واحداً فقط (<code dir="ltr">obj.index</code>) يرتبط بمصفوفة القيم (<code dir="ltr">obj.values</code>).</td>
+            <td>يمتلك فهرسين: فهرساً للصفوف (<code dir="ltr">frame.index</code>) وفهرساً للأعمدة (<code dir="ltr">frame.columns</code>).</td>
+          </tr>
+          <tr>
+            <td><b>تجانس البيانات</b></td>
+            <td>عناصر السلسلة الواحدة تكون من نوع بيانات واحد (<code dir="ltr">dtype</code>).</td>
+            <td>يمكن أن يكون كل عمود فيه من نوع بيانات مختلف (أرقام، نصوص، منطقي).</td>
+          </tr>
+          <tr>
+            <td><b>طريقة الإنشاء</b></td>
+            <td><code dir="ltr">pd.Series(list_or_dict, index=...)</code></td>
+            <td><code dir="ltr">pd.DataFrame(dict_of_lists, columns=..., index=...)</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>2. الدليل المرجعي الشامل لجميع دوال ومعاملات Pandas في الفصل الثاني</h2>
+      <p class="muted">جدول ذهبي يجمع كافة الدوال البرمجية ومعاملاتها الدقيقة للمراجعة السريعة قبل الاختبار:</p>
+      <table>
+        <thead>
+          <tr>
+            <th>الدالة / الخاصية</th>
+            <th>المعاملات الهامة (<span dir="ltr">Parameters</span>)</th>
+            <th>الوظيفة الدقيقة كما وردت في المنهج</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td dir="ltr"><code>pd.isnull(obj)</code> / <code>pd.notnull(obj)</code></td>
+            <td>كائن <span dir="ltr">Series</span> أو <span dir="ltr">DataFrame</span></td>
+            <td>كشف القيم المفقودة (<code dir="ltr">NaN</code>)؛ الأولى تعيد <code dir="ltr">True</code> للمفقود، والثانية تعيد <code dir="ltr">True</code> للموجود.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><code>frame['col']</code> / <code>frame.col</code></td>
+            <td>اسم العمود</td>
+            <td>استرجاع عمود من <span dir="ltr">DataFrame</span> على شكل <span dir="ltr">Series</span> (طريقة القاموس تصلح دائماً، وطريقة النقطة للأسماء الصالحة فقط).</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><code>frame.loc[row, col]</code></td>
+            <td>تسمية الصف، واسم العمود (اختياري)</td>
+            <td>استرجاع صف كامل عبر تسمية فهرسه (<code dir="ltr">df.loc[10]</code>) أو خلية محددة (<code dir="ltr">df.loc[10, 'Name']</code>).</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><code>del frame['col']</code></td>
+            <td>اسم العمود المراد حذفه</td>
+            <td>أمر بايثون لحذف عمود من <span dir="ltr">DataFrame</span> بشكل مباشر.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><code>obj.reindex(...)</code></td>
+            <td><code dir="ltr">index=...</code>, <code dir="ltr">columns=...</code></td>
+            <td>إنشاء كائن جديد مرتب وفق الفهارس أو الأعمدة الجديدة، ووضع <code dir="ltr">NaN</code> للفهارس غير الموجودة سابقاً.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><code>df.drop(...)</code></td>
+            <td><code dir="ltr">axis=0 / 1</code>, <code dir="ltr">inplace=True</code></td>
+            <td>حذف صفوف (<code dir="ltr">axis=0</code> افتراضياً) أو حذف أعمدة (<code dir="ltr">axis=1</code> أو <code dir="ltr">'columns'</code>)، و <code dir="ltr">inplace=True</code> للتعديل في نفس الكائن.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><code>df.sort_index(...)</code></td>
+            <td><code dir="ltr">axis=0 / 1</code>, <code dir="ltr">ascending=False</code></td>
+            <td>ترتيب الجدول أبجدياً/رقمياً حسب فهرس الصفوف (<code dir="ltr">axis=0</code>) أو الأعمدة (<code dir="ltr">axis=1</code>)، وتنازلياً بـ <code dir="ltr">ascending=False</code>.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><code>pd.read_csv('file.csv')</code></td>
+            <td>مسار واسم الملف</td>
+            <td>قراءة وتحميل ملف بيانات بتنسيق <span dir="ltr">CSV</span> إلى <span dir="ltr">DataFrame</span>.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><code>df.head(n)</code> / <code>df.info()</code> / <code>df.describe()</code></td>
+            <td><code dir="ltr">n=5</code> افتراضياً في <code dir="ltr">head</code></td>
+            <td>استكشاف البيانات: <code dir="ltr">head</code> لأول الصفوف، <code dir="ltr">info</code> لمعلومات الأعمدة والأنواع و <span dir="ltr">Null</span>، و <code dir="ltr">describe</code> للإحصاء الوصفي.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><code>pd.merge(df1, df2, ...)</code></td>
+            <td><code dir="ltr">on</code>, <code dir="ltr">left_on</code>, <code dir="ltr">right_on</code>, <code dir="ltr">how='inner'/'outer'</code></td>
+            <td>دمج جدولين بناءً على عمود مشترك (<code dir="ltr">on</code>) أو عمودين مختلفين بالاسم، بالتقاطع (<code dir="ltr">inner</code>) أو الاتحاد (<code dir="ltr">outer</code>).</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><code>df.rename(...)</code></td>
+            <td><code dir="ltr">columns={'old':'new'}</code>, <code dir="ltr">inplace=True</code></td>
+            <td>تغيير عناوين الأعمدة في <span dir="ltr">DataFrame</span>.</td>
+          </tr>
+          <tr>
+            <td dir="ltr"><code>df.to_csv('out.csv', ...)</code></td>
+            <td><code dir="ltr">index=False</code></td>
+            <td>تخزين وحفظ الـ <span dir="ltr">DataFrame</span> في ملف <span dir="ltr">CSV</span> بدون كتابة أرقام الفهرس كعمود إضافي.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- التبويب الثالث: قاموس الدوال والمعاملات -->
+  <section id="terms" class="panel">
+    <div class="card">
+      <h2>قاموس المصطلحات والدوال البرمجية الشامل للفصل الثاني</h2>
+      <p class="muted">جميع الكائنات والدوال والمعاملات البرمجية الواردة في الوحدات الأربع من مراجعة Pandas:</p>
+      <div id="termsGrid" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- التبويب الرابع: البطاقات التعليمية -->
+  <section id="cards" class="panel">
+    <div class="card">
+      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
+      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
+      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
+        <div class="term" id="flashTerm"></div>
+        <div class="answer" id="flashAnswer" hidden></div>
+        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="prevCard">السابق</button>
+        <span id="cardCount" class="muted"></span>
+        <button class="btn primary" id="nextCard">التالي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- التبويب الخامس: الاختبار الذاتي العشوائي -->
+  <section id="quiz" class="panel">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2>الاختبار الشامل المتغير للفصل الثاني (25 سؤالاً) <span class="badge-new">ترتيب عشوائي ذكي 🎲</span></h2>
+          <p class="muted">يختبر فهمك للأكواد ومخرجاتها وجميع دوال ومعاملات Pandas في الوحدات الأربع مع خلط عشوائي للأسئلة والخيارات!</p>
+        </div>
+        <div class="score" id="score">النتيجة: 0 / 25</div>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="quizArea"></div>
+      <div class="row">
+        <button class="btn" id="resetQuiz">إعادة الاختبار بترتيب عشوائي جديد 🔀</button>
+        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+      </div>
+      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
+    </div>
+  </section>
+</main>
+
+<footer>مبني بالكامل (100%) على محتوى الفصل الثاني (مراجعة مكتبة Pandas - الوحدات الأربع) من مقرر تحليل وتمثيل البيانات</footer>
+
+<script>
+const terms = [
+  ["import pandas as pd", "الصيغة القياسية لاستدعاء مكتبة Pandas في لغة البايثون وإعطائها الاسم المختصر pd."],
+  ["Series (السلسلة)", "هيكل بيانات أحادي البعد (1D) يشبه المصفوفة، يتكون من سلسلة من القيم (values) ومصفوفة تسميات مرتبطة بها تسمى الفهرس (index)."],
+  ["DataFrame (إطار البيانات)", "هيكل بيانات ثنائي البعد (2D) يمثل جدولاً مستطيلاً من البيانات له فهرس للصفوف وفهرس للأعمدة، ويمكن أن يضم أنواع بيانات مختلفة."],
+  ["obj.values & obj.index", "خاصيتان في Series؛ الأولى ترجع مصفوفة القيم، والثانية ترجع كائن الفهرس (مثل RangeIndex)."],
+  ["NaN (Not a Number)", "العلامة القياسية في Pandas للدلالة على القيم المفقودة أو غير المتوفرة (Missing / NA data)."],
+  ["pd.isnull() & pd.notnull()", "دالتان في Pandas لاكتشاف البيانات المفقودة؛ isnull تعيد True عند وجود NaN، و notnull تعيد True عند وجود قيمة صالحة."],
+  ["obj.name & obj.index.name", "خاصيتان لتعيين اسم لكائن الـ Series نفسه، واسم لعمود الفهرس الخاص به."],
+  ["frame.head(n)", "دالة تعرض أول n صفوف من الـ DataFrame (وافتراضياً أول 5 صفوف عند عدم تمرير رقم)."],
+  ["frame['col'] vs frame.col", "طريقتا استرجاع عمود من DataFrame كـ Series: الأقواس المربعة تصلح لأي اسم عمود، والنقطة تصلح فقط لأسماء المتغيرات الصالحة بدون مسافات."],
+  ["frame.loc[label]", "خاصية لاسترجاع صف معين من DataFrame عبر تسمية الفهرس، أو استرجاع خلية محددة بتمرير (الصف، العمود) مثل df.loc[10, 'Name']."],
+  ["del frame['col']", "كلمة مفتاحية تُستخدم لحذف عمود محدد من الـ DataFrame."],
+  ["reindex()", "دالة لإنشاء كائن جديد ببيانات متوافقة مع فهرس جديد للصفوف أو للأعمدة (columns=...)، وتضع NaN للفهارس غير الموجودة مسبقاً."],
+  ["drop()", "دالة لحذف عناصر من فهرس الصفوف (افتراضياً axis=0) أو حذف أعمدة بتمرير (axis=1 أو axis='columns')."],
+  ["inplace=True", "معامل منطقي يُمرر في دوال مثل drop و sort_index و rename لتطبيق التعديل مباشرةً على الكائن الأصلي دون إرجاع كائن جديد."],
+  ["sort_index()", "دالة لترتيب الكائن أبجدياً أو رقمياً حسب فهرس الصفوف (axis=0) أو فهرس الأعمدة (axis=1)."],
+  ["ascending=False", "معامل يُمرر داخل دالة الترتيب (مثل sort_index) لجعل الترتيب تنازلياً بدلاً من الترتيب التصاعدي الافتراضي."],
+  ["pd.read_csv('file.csv')", "دالة لقراءة وتحميل ملف بيانات مفصول بفواصل (CSV) وتحويله إلى DataFrame."],
+  ["df.info()", "دالة تطبع ملخصاً شاملاً عن الـ DataFrame يشمل عدد الصفوف، أسماء الأعمدة، عدد القيم غير الفارغة (Non-Null)، وأنواع البيانات."],
+  ["df.describe()", "دالة تحسب وتعرض الإحصاءات الوصفية الأساسية (العدد، المتوسط، الانحراف، الأقل، الأرباع، الأعلى) للأعمدة الرقمية."],
+  ["pd.merge(df1, df2)", "دالة لدمج وربط صفوف جدولين DataFrame بناءً على مفتاح مشترك (on='key') أو مفتاحين مختلفين بالاسم (left_on, right_on)."],
+  ["how='inner' vs how='outer'", "معامل تحديد نوع الدمج في merge: النوع inner (الافتراضي) يأخذ تقاطع المفاتيح المشتركة فقط، و outer يأخذ اتحاد جميع المفاتيح من الجدولين."],
+  ["df.rename(columns={...})", "دالة لتغيير أسماء وعناوين الأعمدة في DataFrame بتمرير قاموس يربط الاسم القديم بالجديد."],
+  ["df.to_csv('file.csv', index=False)", "دالة لتخزين وحفظ الـ DataFrame في ملف CSV، ويمنع المعامل index=False حفظ أرقام الفهرس كعمود إضافي في الملف."],
+  ["frame.values", "خاصية في DataFrame ترجع جميع البيانات المخزنة في الجدول على شكل مصفوفة ثنائية الأبعاد (2D ndarray)."]
+];
+
+const cards = [
+  ["ما الفرق الجوهري بين مكتبة (Pandas) ومكتبة (NumPy) من حيث نوع البيانات التي صُممت كل منهما للتعامل معها؟", "• NumPy: صُممت للتعامل مع بيانات المصفوفات الرقمية المتجانسة (Homogeneous array data).\n• Pandas: صُممت للتعامل مع البيانات الجدولية أو غير المتجانسة (Tabular or Heterogeneous data)."],
+  ["ما الفرق بين هيكلي البيانات الأساسيين في Pandas: (Series) و (DataFrame)؟", "• Series: هيكل بيانات أحادي البعد (1D) يضم سلسلة من القيم ومصفوفة تسميات تسمى الفهرس (Index).\n• DataFrame: هيكل بيانات ثنائي البعد (2D) يمثل جدولاً مكوناً من صفوف وأعمدة (يمكن أن يضم كل عمود نوع بيانات مختلفاً)."],
+  ["عند إنشاء Series بدون تحديد فهرس مثل: obj = pd.Series([4, 7, -5, 3])، ما هو الفهرس الافتراضي الذي يُنشأ لها؟ وكيف نستخرج القيم والفهرس؟", "• يُنشأ فهرس رقمي افتراضي يبدأ من 0 إلى N-1 (أي من 0 إلى 3).\n• لاستخراج القيم: obj.values\n• لاستخراج الفهرس: obj.index"],
+  ["ماذا يحدث للروابط بين الفهرس والقيمة عند تطبيق عمليات رياضية أو تصفية شرطية على Series مثل: obj2[obj2 > 0] أو obj2 * 2؟", "تحتفظ الـ Series دائماً بالارتباط بين تسمية الفهرس والقيمة المقابلة لها بعد التصفية أو العمليات الرياضية."],
+  ["عند إنشاء Series من قاموس بايثون (dict)، أين تذهب مفاتيح القاموس (Keys)؟ وماذا يحدث إذا مررنا قائمة index تحتوي على مفتاح غير موجود في القاموس؟", "• تصبح مفاتيح القاموس هي الفهرس (Index).\n• أي مفتاح في القائمة الجديدة غير موجود في القاموس يظهر في السلسلة بقيمة مفقودة (NaN - Not a Number)."],
+  ["ما هما الدالتان المستخدمتان في Pandas لاكتشاف البيانات المفقودة (NaN)؟", "1) pd.isnull(obj) أو obj.isnull() -> تعيد True عند القيم المفقودة.\n2) pd.notnull(obj) أو obj.notnull() -> تعيد True عند القيم الموجودة غير المفقودة."],
+  ["ماذا يحدث عند جمع سلسلتين (obj3 + obj4) تختلفان في بعض تسميات الفهارس؟", "تقوم Pandas بمحاذاة الفهارس تلقائياً (Index Alignment)؛ فتجمع القيم ذات الفهارس المتطابقة، وتضع القيمة (NaN) أمام أي فهرس موجود في إحدى السلسلتين فقط."],
+  ["كيف نعطي اسماً لكائن الـ Series نفسه، وكيف نعطي اسماً لعمود الفهرس الخاص به؟", "• اسم الـ Series: obj4.name = 'population'\n• اسم الفهرس: obj4.index.name = 'state'"],
+  ["ما هي الطريقة الأكثر شيوعاً لإنشاء DataFrame؟ وما وظيفة الدالة frame.head()؟", "• الطريقة الأكثر شيوعاً: من قاموس يحتوي على قوائم متساوية الطول (dict of equal-length lists).\n• وظيفة frame.head(): عرض أول 5 صفوف فقط من الـ DataFrame."],
+  ["ماذا يحدث إذا مررنا اسم عمود غير موجود في البيانات الأصلية داخل المعامل columns عند إنشاء DataFrame؟", "يتم إنشاء العمود الجديد في الـ DataFrame وتظهر جميع قيمه كقيم مفقودة (NaN)."],
+  ["ما هما الطريقتان لاسترجاع عمود من DataFrame على شكل Series؟ وما الفرق بينهما؟", "1) طريقة القاموس (الأقواس المربعة): frame2['state'] -> تعمل مع أي اسم عمود بلا استثناء.\n2) طريقة النقطة (Attribute): frame2.year -> تعمل فقط إذا كان اسم العمود اسم متغير بايثون صالحاً (بدون مسافات أو رموز)."],
+  ["كيف نسترجع صفاً كاملاً من DataFrame باستخدام تسمية الفهرس الخاص به (مثلاً الصف 'three')؟", "باستخدام خاصية (loc) مع الأقواس المربعة:\nframe2.loc['three']"],
+  ["ماذا يحدث عند إسناد كائن Series إلى عمود داخل DataFrame؟", "تتم مطابقة تسميات فهرس الـ Series مع فهرس الـ DataFrame بدقة، وتُملأ أي صفوف لا يوجد لها فهرس مقابل في الـ Series بقيمة (NaN)."],
+  ["كيف ننشئ عموداً جديداً في DataFrame؟ وهل يصح إنشاؤه بطريقة النقطة؟ وكيف نحذف العمود؟", "• ننشئه بطريقة الأقواس المربعة فقط مثل: frame2['eastern'] = frame2.state == 'Ohio' (ولا يصح إنشاؤه بطريقة النقطة frame2.eastern!).\n• نحذف العمود باستخدام الكلمة المفتاحية: del frame2['eastern']"],
+  ["ماذا ترجع الخاصية (frame2.values) في DataFrame؟", "ترجع جميع البيانات الموجودة في الـ DataFrame على شكل مصفوفة ثنائية الأبعاد (two-dimensional ndarray)."],
+  ["ما هي وظيفة الدالة (reindex) في Series وفي DataFrame؟", "تقوم بإنشاء كائن جديد ببيانات مرتبة ومتوافقة مع الفهرس الجديد (أو الأعمدة الجديدة عند تمرير columns=...)، وتدخل NaN لأي فهرس لم يكن موجوداً مسبقاً."],
+  ["في دالة الحذف df.drop()، كيف نحذف صفاً وكيف نحذف عموداً من DataFrame؟", "• لحذف صف أو قائمة صفوف: نمرر أسماء الصفوف مباشرة (لأن المحور الافتراضي هو axis=0).\n• لحذف عمود أو قائمة أعمدة: يجب تمرير المعامل (axis=1) أو (axis='columns') مثل: data.drop('two', axis=1)."],
+  ["ما فائدة تمرير المعامل (inplace=True) داخل الدالة drop() أو sort_index() أو rename()؟", "يقوم بتطبيق التعديل أو الحذف مباشرةً على الكائن الأصلي في الذاكرة دون إرجاع كائن جديد."],
+  ["كيف نرتب DataFrame حسب أسماء الأعمدة تنازلياً باستخدام الدالة sort_index()؟", "نحدد محور الأعمدة (axis=1) ونلغي الترتيب التصاعدي بـ (ascending=False):\nframe.sort_index(axis=1, ascending=False)"],
+  ["ما الفرق بين وظيفة كل من الدوال الثلاث: df.head(5)، و df.info()، و df.describe()؟", "• df.head(5): تعرض أول 5 صفوف من البيانات.\n• df.info(): تعرض معلومات هيكلية (عدد الصفوف، الأعمدة، عدد القيم غير الفارغة Non-Null، وأنواع البيانات).\n• df.describe(): تعرض ملخصاً إحصائياً للأعمدة الرقمية (المتوسط، الانحراف، الأقل، الأرباع، الأعلى)."],
+  ["كيف نصل إلى عنصر محدد (خلية بعينها) يقع في الصف ذي الفهرس 10 والعمود المسمى 'Name' داخل DataFrame؟", "نستخدم الخاصية loc بتمرير الصف ثم العمود:\ndf.loc[10, 'Name']"],
+  ["ما هي الدالة المستخدمة لربط ودمج جدولين DataFrame بناءً على عمود مشترك؟ وما المعامل المستخدم إذا كان للعمود نفس الاسم في الجدولين؟", "الدالة هي: pd.merge(df1, df2)\nوإذا كان لعمود الربط نفس الاسم في الجدولين نستخدم المعامل: on='key'"],
+  ["في دالة pd.merge()، ماذا نستخدم إذا كان اسم عمود الربط في الجدول الأول يختلف عن اسمه في الجدول الثاني؟", "نستخدم المعاملين: left_on لتحديد اسم العمود في الجدول الأيسر، و right_on لتحديد اسمه في الجدول الأيمن:\npd.merge(df3, df4, left_on='lkey', right_on='rkey')"],
+  ["ما الفرق الجوهري بين الدمج الداخلي (how='inner') والدمج الخارجي (how='outer') في دالة pd.merge()؟", "• how='inner' (الافتراضي): يأخذ تقاطع المفاتيح (المفاتيح المشتركة الموجودة في كلا الجدولين فقط).\n• how='outer': يأخذ اتحاد المفاتيح (جميع المفاتيح من كلا الجدولين، مع وضع NaN للقيم غير المتوفرة)."],
+  ["في مثال المنهج: إذا كان df1 يحتوي على 3 صفوف للمفتاح 'b'، و df2 يحتوي على صف واحد للمفتاح 'b'، فكم صفاً للمفتاح 'b' سينتج عند دمجهما بـ pd.merge(df1, df2)؟", "سينتج 3 صفوف للمفتاح 'b' (لأن 3 × 1 = 3، حيث يقترن كل صف من الجدول الأول بالصف المقابل له في الجدول الثاني)."],
+  ["كيف نغير اسم عمود في DataFrame من 'old_name' إلى 'new_name' مع تثبيت التغيير على نفس الجدول؟", "باستخدام الدالة rename وتمرير قاموس للمعامل columns مع inplace=True:\ndf.rename(columns={'old_name': 'new_name'}, inplace=True)"],
+  ["كيف نحفظ DataFrame في ملف CSV باسم 'combined.csv'؟ ولماذا نكتب المعامل (index=False)؟", "نستخدم الكود:\ndf.to_csv('combined.csv', index=False)\nونكتب (index=False) لمنع حفظ أرقام فهرس الصفوف كعمود إضافي داخل ملف الـ CSV."],
+  ["لو كان لدينا جدول data يحتوي على أرقام، فما نتيجة تنفيذ الكود (data * 2)؟", "سيتم ضرب جميع القيم الرقمية في كافة صفوف وأعمدة الجدول في العدد 2 مع الاحتفاظ بنفس الفهارس وأسماء الأعمدة."]
+];
+
+const masterQuestions = [
+  {q:"ما الفرق الجوهري بين مكتبة (Pandas) ومكتبة (NumPy) من حيث طبيعة البيانات التي صُممت كل منهما للتعامل معها؟",o:["صُممت Pandas للعمل مع البيانات الجدولية أو غير المتجانسة (Tabular/Heterogeneous)، بينما صُممت NumPy للعمل مع بيانات المصفوفات المتجانسة","صُممت Pandas للصور الثلاثية الأبعاد فقط، و NumPy للنصوص فقط","كلاهما لا يدعمان الأرقام العشرية","لا يمكن استخدام Pandas و NumPy في نفس البرنامج أبداً"],a:0,e:"صُممت Pandas للتعامل مع البيانات الجدولية غير المتجانسة (أرقام ونصوص وتواريخ)، بينما NumPy للمصفوفات المتجانسة."},
+  {q:"أي هيكل بيانات في مكتبة Pandas يُعرف بأنه هيكل (أحادي البعد - One-dimensional) يحتوي على سلسلة من القيم ومصفوفة مرتبطة بها من التسميات تُسمى الفهرس (index)؟",o:["Series","DataFrame","2D ndarray","Relational Database"],a:0,e:"الـ Series هي هيكل البيانات أحادي البعد في Pandas، بينما الـ DataFrame هو الهيكل ثنائي البعد."},
+  {q:"عند تنفيذ الكود: obj = pd.Series([4, 7, -5, 3]) بدون تحديد معامل الفهرس (index)، ما هو الفهرس الافتراضي الذي يتم إنشاؤه؟ وكيف نستخرج مصفوفة القيم فقط؟",o:["فهرس بأعداد صحيحة من 0 إلى N-1 (أي 0 إلى 3)، ونستخرج القيم عبر الخاصية obj.values","فهرس بحروف أبجدية من a إلى d، ونستخرج القيم عبر obj.index","لا يتم إنشاء أي فهرس، ونستخرج القيم عبر obj.columns","فهرس يبدأ من 10 إلى 40"],a:0,e:"الفهرس الافتراضي يتكون من الأعداد الصحيحة من 0 إلى N-1، وتُستخرج القيم بالخاصية obj.values والفهرس بـ obj.index."},
+  {q:"إذا كان لدينا: sdata = {'Ohio': 35000, 'Texas': 71000}، وقمنا بتنفيذ: obj4 = pd.Series(sdata, index=['California', 'Ohio', 'Texas'])، فماذا ستكون قيمة 'California' في obj4؟",o:["NaN (Not a Number) لأنها غير موجودة في القاموس sdata","0 (صفر صحيح)","35000 مثل ولاية Ohio","سيتوقف البرنامج ويعطي خطأ SyntaxError"],a:0,e:"بما أن المفتاح 'California' غير موجود في القاموس sdata، تضع Pandas أمامه القيمة NaN للدلالة على أنها قيمة مفقودة."},
+  {q:"أي من الدوال التالية تُستخدم في مكتبة Pandas للكشف عن القيم المفقودة (Missing data / NaN)؟",o:["pd.isnull() و pd.notnull()","pd.find_zero() و pd.remove()","pd.sort_index() فقط","pd.merge() فقط"],a:0,e:"الدالتان pd.isnull و pd.notnull (أو تابعا الكائن .isnull() و .notnull()) تُستخدمان لاكتشاف البيانات المفقودة في Pandas."},
+  {q:"عند جمع كائني Series معاً (obj3 + obj4)، وكان الفهرس 'Utah' موجوداً في obj3 فقط وغير موجود في obj4، فما هي نتيجة جمعهما للفهرس 'Utah'؟",o:["تظهر قيمته NaN بسبب المحاذاة التلقائية للفهارس في العمليات الحسابية","تظهر قيمته مضاعفة مرتين","يتم حذف الفهرس 'Utah' نهائياً من النتيجة","تكون النتيجة صفراً دائماً"],a:0,e:"تقوم Series بمحاذاة الفهارس تلقائياً؛ فتجمع القيم المشتركة وتضع NaN أمام أي فهرس موجود في إحدى السلسلتين فقط."},
+  {q:"كيف نقوم بتسمية كائن الـ Series نفسه باسم 'population'، وتسمية الفهرس الخاص به باسم 'state'؟",o:["obj4.name = 'population' ثم obj4.index.name = 'state'","obj4.columns = 'population' ثم obj4.rows = 'state'","pd.rename(obj4, 'population')","del obj4['state']"],a:0,e:"نستخدم الخاصية .name لتسمية السلسلة، والخاصية .index.name لتسمية فهرس السلسلة."},
+  {q:"عند إنشاء DataFrame وتمرير اسم عمود في المعامل columns غير موجود في قاموس البيانات الأصلي (مثل العمود 'debt')، فماذا يحدث؟",o:["يظهر العمود 'debt' في الجدول وتكون جميع قيمه المبدئية NaN","يتم تجاهل العمود 'debt' ولا يظهر في الجدول","تُملأ قيم العمود بالأرقام من 1 إلى 10 تلقائياً","يتم حذف جميع الأعمدة الأخرى"],a:0,e:"تمرير اسم عمود غير موجود في القاموس ضمن المعامل columns ينشئ العمود في الـ DataFrame بقيم مفقودة NaN."},
+  {q:"ما هما الطريقتان الصحيحتان لاسترجاع عمود (مثلاً العمود 'year') من DataFrame يُسمى frame2 على شكل Series؟",o:["frame2['year'] أو frame2.year","frame2.loc['year'] أو frame2(0)","frame2.index['year'] فقط","del frame2['year']"],a:0,e:"يتم استرجاع العمود كـ Series إما بطريقة القاموس frame2['year'] أو بطريقة النقطة frame2.year."},
+  {q:"كيف نسترجع صفاً كاملاً (مثلاً الصف الذي يحمل تسمية الفهرس 'three') من كائن DataFrame يُسمى frame2؟",o:["frame2.loc['three']","frame2['three']","frame2.three","frame2.columns['three']"],a:0,e:"يتم استرجاع الصفوف من DataFrame عبر تسمية الفهرس باستخدام خاصية الموقع frame2.loc['three']."},
+  {q:"إذا أردنا إنشاء عمود جديد باسم 'eastern' في الجدول frame2، فأي عبارة برمجية مما يلي تُعد صحيحة؟ وكيف نحذف هذا العمود لاحقاً؟",o:["للإنشاء: frame2['eastern'] = ... (ولا يصح إنشاؤه بطريقة النقطة frame2.eastern)، وللحذف: del frame2['eastern']","للإنشاء: frame2.eastern = ... ، وللحذف: frame2.remove('eastern')","للإنشاء: frame2.loc['eastern'] = ... ، وللحذف: clear(frame2)","لا يمكن إضافة أو حذف أعمدة بعد إنشاء الـ DataFrame"],a:0,e:"لا يمكن إنشاء أعمدة جديدة بطريقة النقطة، بل يجب استخدام الأقواس المربعة frame2['eastern']، ويتم حذفها بالكلمة المفتاحية del."},
+  {q:"ماذا تُرجع الخاصية (frame2.values) عند استدعائها على كائن DataFrame؟",o:["تُرجع البيانات الموجودة في الـ DataFrame على شكل مصفوفة ثنائية الأبعاد (2D ndarray)","تُرجع أسماء الأعمدة فقط","تُرجع عدد القيم المفقودة فقط","تُرجع أول 5 صفوف فقط"],a:0,e:"الخاصية .values تُرجع البيانات المحتواة داخل الـ DataFrame كمصفوفة NumPy ثنائية الأبعاد (2D ndarray)."},
+  {q:"ما هي الدالة التي تُنشئ كائناً جديداً ببيانات متوافقة مع فهرس جديد (وتقبل المعامل columns=... لإعادة ترتيب أو فهرسة الأعمدة في DataFrame)؟",o:["reindex()","drop()","describe()","info()"],a:0,e:"الدالة reindex() تُستخدم لإعادة فهرسة الصفوف أو الأعمدة وفق قائمة فهارس جديدة."},
+  {q:"لحذف العمود المسمى 'two' من كائن DataFrame يُسمى data باستخدام الدالة drop()، ما هو الكود الصحيح؟",o:["data.drop('two', axis=1) أو data.drop('two', axis='columns')","data.drop('two', axis=0)","data.drop_column('two')","data.reindex('two')"],a:0,e:"المحور الافتراضي في drop هو الصفوف (axis=0)، ولحذف الأعمدة يجب تحديد axis=1 أو axis='columns'."},
+  {q:"ما تأثير تمرير المعامل (inplace=True) داخل الدالة: obj.drop('c', inplace=True)؟",o:["يقوم بتعديل الكائن الأصلي obj مباشرةً وحذف العنصر منه دون إرجاع كائن جديد","يمنع حذف العنصر 'c' ويحتفظ بنسخة احتياطية","يقوم بترتيب العناصر تنازلياً","يحول الـ Series إلى ملف CSV"],a:0,e:"المعامل inplace=True يطبق التعديل مكانياً على نفس الكائن الأصلي دون الحاجة لإسناده لمتغير جديد."},
+  {q:"كيف نقوم بترتيب أعمدة الـ DataFrame المسمى frame ترتيباً أبجدياً (تنازلياً - من الأكبر للأصغر)؟",o:["frame.sort_index(axis=1, ascending=False)","frame.sort_index(axis=0, ascending=True)","frame.drop(axis=1, inplace=True)","frame.reindex(ascending=False)"],a:0,e:"نستخدم الدالة sort_index مع تحديد محور الأعمدة (axis=1) وتحديد الترتيب التنازلي بـ (ascending=False)."},
+  {q:"بعد قراءة ملف البيانات بـ df = pd.read_csv('file.csv')، أي دالة تُستخدم لعرض معلومات عن عدد الصفوف وأسماء الأعمدة وعدد القيم غير الفارغة (non-null) وأنواع البيانات؟",o:["df.info()","df.head(5)","df.loc[0]","df.to_csv()"],a:0,e:"الدالة df.info() تعرض الملخص الهيكلي للجدول شاملاً أنواع البيانات وعدد القيم غير المفقودة في كل عمود."},
+  {q:"ما هي الدالة التي تعرض ملخصاً إحصائياً للأعمدة الرقمية في الـ DataFrame (مثل count, mean, std, min, 25%, 50%, 75%, max)؟",o:["df.describe()","df.info()","df.head()","df.reindex()"],a:0,e:"الدالة df.describe() تحسب وتعرض الإحصاءات الوصفية الأساسية لجميع الأعمدة الرقمية في الجدول."},
+  {q:"كيف نسترجع القيمة الموجودة في الصف ذي الفهرس (10) والعمود المسمى ('Name') من الـ DataFrame المسمى df؟",o:["df.loc[10, 'Name']","df.info(10, 'Name')","df.drop(10, 'Name')","df.merge(10, 'Name')"],a:0,e:"نستخدم خاصية df.loc[row_indexer, column_indexer] للوصول المباشر إلى خلية محددة بتقاطع الصف والعمود."},
+  {q:"عند دمج جدولين df3 و df4 باستخدام الدالة pd.merge()، إذا كان عمود الربط في الجدول الأول اسمه 'lkey' وفي الجدول الثاني اسمه 'rkey'، فكيف نكتب أمر الدمج؟",o:["pd.merge(df3, df4, left_on='lkey', right_on='rkey')","pd.merge(df3, df4, on='lkey_rkey')","pd.merge(df3, df4, axis=1)","df3.drop(df4)"],a:0,e:"عند اختلاف اسم عمود الربط بين الجدولين، نستخدم المعاملين left_on للجدول الأيسر و right_on للجدول الأيمن."},
+  {q:"ما هو نوع الدمج الافتراضي في دالة pd.merge(df1, df2) إذا لم نحدد المعامل how؟ وماذا يفعل؟",o:["النوع الافتراضي هو 'inner'، ويقوم بأخذ تقاطع المفاتيح (المفاتيح المشتركة الموجودة في كلا الجدولين فقط)","النوع الافتراضي هو 'outer'، ويأخذ جميع المفاتيح غير المشتركة فقط","النوع الافتراضي هو 'delete'، ويحذف الجدولين","لا يعمل أمر merge بدون كتابة المعامل how"],a:0,e:"بشكل افتراضي تقوم merge بعمل دمج داخلي ('inner' join) يقتصر على المفاتيح المشتركة الموجودة في كلا الجدولين."},
+  {q:"إذا أردنا دمج جدولين بحيث نحتفظ بجميع المفاتيح الموجودة في كلا الجدولين (الاتحاد) مع وضع NaN للقيم غير المتوفرة، فما قيمة المعامل how التي نمررها لـ pd.merge؟",o:["how='outer'","how='inner'","how='drop'","how='axis'"],a:0,e:"الدمج الخارجي (how='outer') يأخذ اتحاد المفاتيح من كلا الجدولين ولا يستبعد أي مفتاح."},
+  {q:"ما هو الكود الصحيح لتغيير عنوان العمود من 'old_col' إلى 'new_col' في الجدول df مع تطبيق التغيير مباشرةً على الجدول؟",o:["df.rename(columns={'old_col': 'new_col'}, inplace=True)","df.sort_index(columns='new_col')","df.drop('old_col', axis=0)","pd.isnull(df, 'new_col')"],a:0,e:"نستخدم الدالة df.rename ونمرر قاموس التسمية للمعامل columns مع inplace=True."},
+  {q:"لحفظ الـ DataFrame النهائي في ملف CSV باسم 'combined.csv' بدون كتابة أرقام فهرس الصفوف كعمود داخل الملف، نستخدم الكود:",o:["df.to_csv('combined.csv', index=False)","pd.read_csv('combined.csv', index=True)","df.describe('combined.csv')","df.info('combined.csv', axis=1)"],a:0,e:"تُستخدم الدالة to_csv لحفظ البيانات، ويمنع المعامل index=False تصدير فهرس الصفوف إلى الملف."},
+  {q:"إذا كان لدينا كائن Series باسم obj2 يحتوي على القيم: d: 6, b: 7, a: -5, c: 3، فما هي العناصر التي ستظهر عند تنفيذ الكود: obj2[obj2 > 0]؟",o:["ستظهر العناصر الموجبة فقط مع فهارسها وهي: d: 6, b: 7, c: 3 (ويتم استبعاد a: -5)","سيظهر العنصر السالب فقط a: -5","ستتحول جميع الأرقام إلى أصفار","سيتم حذف الفهارس النصية وتبقى الأرقام فقط بدون فهرس"],a:0,e:"التصفية الشرطية obj2[obj2 > 0] تختار فقط العناصر التي تحقق الشرط (الأكبر من صفر) مع الاحتفاظ بتسميات فهارسها."}
+];
+
+// بناء شبكة المصطلحات
+const termsGrid = document.getElementById("termsGrid");
+terms.forEach(([en, ar]) => {
+  const d = document.createElement("div");
+  d.className = "card";
+  d.style.margin = "0";
+  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
+  termsGrid.appendChild(d);
+});
+
+// إدارة البطاقات التعليمية
+let ci = 0, showAnswer = false;
+function renderCard() {
+  document.getElementById("flashTerm").textContent = cards[ci][0];
+  document.getElementById("flashAnswer").textContent = cards[ci][1];
+  document.getElementById("flashAnswer").hidden = !showAnswer;
+  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
+  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+}
+document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
+document.getElementById("flashcard").addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
+});
+document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
+document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
+renderCard();
+
+// التنقل بين التبويبات
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+// خوارزمية خلط عشوائي (Fisher-Yates Shuffle) للأسئلة والخيارات
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+let currentQuestions = [];
+let answers = {};
+
+function prepareShuffledQuiz() {
+  currentQuestions = shuffleArray(masterQuestions).map(item => {
+    const optsWithFlag = item.o.map((text, idx) => ({ text, isCorrect: idx === item.a }));
+    const shuffledOpts = shuffleArray(optsWithFlag);
+    return {
+      q: item.q,
+      o: shuffledOpts.map(x => x.text),
+      a: shuffledOpts.findIndex(x => x.isCorrect),
+      e: item.e
+    };
+  });
+}
+
+function renderQuiz() {
+  prepareShuffledQuiz();
+  const area = document.getElementById("quizArea");
+  area.innerHTML = "";
+  const letters = ["أ", "ب", "ج", "د"];
+  currentQuestions.forEach((item, i) => {
+    const box = document.createElement("div");
+    box.className = "qbox";
+    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
+    const opts = box.querySelector(".options");
+    item.o.forEach((opt, j) => {
+      const btn = document.createElement("button");
+      btn.className = "option";
+      btn.textContent = `${letters[j]}) ${opt}`;
+      btn.onclick = () => {
+        answers[i] = j;
+        [...opts.children].forEach((x, k) => {
+          x.classList.remove("correct", "wrong");
+          x.disabled = true;
+          if (k === item.a) x.classList.add("correct");
+          if (k === j && j !== item.a) x.classList.add("wrong");
+        });
+        const fb = document.getElementById("fb" + i);
+        fb.hidden = false;
+        fb.className = "feedback " + (j === item.a ? "good" : "bad");
+        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
+        updateScore();
+      };
+      opts.appendChild(btn);
+    });
+    area.appendChild(box);
+  });
+  updateScore();
+}
+
+function updateScore() {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
+  document.getElementById("score").textContent = `النتيجة: ${correct} / ${currentQuestions.length}`;
+  document.getElementById("progressBar").style.width = (Object.keys(answers).length / currentQuestions.length * 100) + "%";
+}
+
+document.getElementById("resetQuiz").onclick = () => {
+  answers = {};
+  document.getElementById("finalResult").textContent = "";
+  renderQuiz();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+document.getElementById("finishQuiz").onclick = () => {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
+  const pct = Math.round(correct / currentQuestions.length * 100);
+  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${currentQuestions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! أنتِ مستعدة تماماً للاختبار في هذا الفصل." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
+};
+
+renderQuiz();
+</script>
+</body>
+</html>

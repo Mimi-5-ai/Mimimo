@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الفصل الحادي عشر الشامل (100%) | تحليل وتمثيل البيانات</title>
+<style>
+:root{
+  --bg:#f0f5ff;
+  --card:#ffffff;
+  --ink:#0f172a;
+  --muted:#475569;
+  --accent:#1d4ed8;
+  --accent-dark:#1e3a8a;
+  --accent2:#dbeafe;
+  --line:#cbd5e1;
+  --good:#059669;
+  --good-bg:#ecfdf5;
+  --bad:#dc2626;
+  --bad-bg:#fef2f2;
+  --warn:#d97706;
+  --warn-bg:#fffbeb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
+header{background:linear-gradient(135deg,#0f172a,#1d4ed8);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(15,23,42,0.2)}
+.wrap{max-width:1040px;margin:auto;padding:0 16px}
+.eyebrow{opacity:.92;font-size:.9rem;background:rgba(255,255,255,0.16);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
+h1{margin:5px 0;font-size:clamp(1.5rem,4vw,2.25rem)}
+header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
+nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:var(--accent2);color:var(--accent-dark);font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
+nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
+nav button.active,.btn.primary{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+main .btn.primary{background:var(--accent);color:white}
+main{padding:22px 0 48px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(15,23,42,0.04)}
+h2{font-size:1.35rem;margin:0 0 12px;color:#0f172a}
+h3{font-size:1.08rem;margin:0 0 8px;color:var(--accent-dark)}
+small,.muted{color:var(--muted)}
+ul,ol{padding-right:22px;margin:8px 0}
+li{margin:6px 0}
+details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
+summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f8fafc;color:#0f172a;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
+details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
+.details-body{padding:16px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
+.badge-new{display:inline-block;background:var(--warn-bg);color:var(--warn);border:1px solid #fcd34d;font-size:.78rem;padding:1px 8px;border-radius:6px;margin-right:6px;font-weight:bold}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#eff6ff;color:#1e3a8a;font-weight:bold}
+tr:last-child td{border-bottom:0}
+.note{border-right:4px solid var(--accent);padding:10px 14px;background:#eff6ff;border-radius:8px;margin:10px 0}
+.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
+.math-box{background:#f8fafc;border:2px solid #93c5fd;border-radius:12px;padding:12px 16px;margin:10px 0;text-align:center;font-size:1.03rem;font-weight:bold;color:#1e3a8a;direction:ltr}
+.step-box{background:#f0fdf4;border:1px solid #86efac;border-right:4px solid var(--good);border-radius:10px;padding:12px 16px;margin:10px 0;font-size:.95rem}
+.code-box{background:#0f172a;color:#e2e8f0;padding:14px 18px;border-radius:12px;font-family:Consolas,Monaco,monospace;direction:ltr;text-align:left;overflow-x:auto;margin:10px 0;border:1px solid #334155;line-height:1.65;font-size:.91rem}
+.code-box .kw{color:#38bdf8;font-weight:bold}
+.code-box .str{color:#4ade80}
+.code-box .num{color:#f472b6}
+.code-box .cmt{color:#94a3b8;font-style:italic}
+.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
+.options{display:grid;gap:8px;margin-top:12px}
+.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
+.option:hover:not(:disabled){border-color:var(--accent);background:#eff6ff}
+.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
+.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
+.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
+.feedback.good{color:var(--good);background:var(--good-bg)}
+.feedback.bad{color:var(--bad);background:var(--bad-bg)}
+.progress{height:10px;background:#cbd5e1;border-radius:9px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
+.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#dbeafe);border:2px solid #93c5fd;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
+.flashcard:hover{transform:scale(1.005)}
+.flashcard .term{font-size:1.32rem;font-weight:bold;color:#1e3a8a}
+.flashcard .answer{margin-top:16px;font-size:1.04rem;color:#0f172a;background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04);white-space:pre-line}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
+@media(max-width:600px){
+  .card{padding:14px}
+  nav button{flex:1 1 calc(50% - 8px);text-align:center}
+  .flashcard{min-height:200px;padding:18px}
+  th,td{padding:8px 10px;font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">نسخة شاملة ومحدثة 100% • مقرر تحليل وتمثيل البيانات</div>
+    <h1>الفصل الحادي عشر: التعلم الآلي بإشراف - الجزء الأول (الانحدار Regression)</h1>
+    <p>يغطي التنبؤ الخطي ودالة الفقد، خوارزمية انحدار الميل (Gradient Descent) ومعدل التعلم، الانحدار الخطي المتعدد وكثير الحدود، مقاييس الخطأ الأربعة (SAE, MAE, SSE, MSE)، انحدار Ridge و Lasso، وطرق تقسيم البيانات الخمس</p>
+    <nav>
+      <button class="active" data-tab="summary">الشرح والقوانين والأكواد (100%)</button>
+      <button data-tab="tables">جداول المقارنات والمعادلات</button>
+      <button data-tab="terms">قاموس المصطلحات والدوال</button>
+      <button data-tab="cards">البطاقات (28)</button>
+      <button data-tab="quiz">الاختبار العشوائي (25)</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="summary" class="panel active">
+    <div class="card">
+      <h2>خريطة الفصل الحادي عشر (الوحدات الثلاث الكاملة)</h2>
+      <div class="grid">
+        <div>
+          <span class="tag">الوحدة الأولى</span>
+          <h3>التنبؤ الخطي، دالة الفقد، وانحدار الميل</h3>
+          <p>معادلة الخط المستقيم ومسألة التنبؤ باستهلاك الكهرباء، دالة الفقد/الهدف (<span dir="ltr">Loss Function</span>)، وخوارزمية انحدار الميل (<span dir="ltr">Gradient Descent</span>) ودور معدل التعلم ($\alpha$).</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثانية</span>
+          <h3>الانحدار المتعدد، كثير الحدود، و Ridge &amp; Lasso</h3>
+          <p>دالة الفرضية والخسارة، مقاييس كفاءة التنبؤ الأربعة (<span dir="ltr">SAE, MAE, SSE, MSE</span>)، الانحدار كثير الحدود (<span dir="ltr">Polynomial</span>)، وعلاج التعددية الخطية بـ <span dir="ltr">Ridge</span> و <span dir="ltr">Lasso</span>.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثالثة</span>
+          <h3>طرق تقسيم البيانات الخمس والتطبيق البرمجي</h3>
+          <p>طرق تقسيم البيانات الخمس (<span dir="ltr">Holdout, Random sub-sampling, K-fold, Leave-one-out, Bootstrap</span>)، والتطبيق البرمجي الكامل بـ <span dir="ltr">Scikit-learn</span> على بيانات الإعلانات.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== الوحدة الأولى ==================== -->
+    <details open>
+      <summary>الوحدة الأولى: التنبؤ الخطي البسيط، دالة الفقد (Loss Function)، وخوارزمية انحدار الميل (Gradient Descent)</summary>
+      <div class="details-body">
+        <h3>1) مفهوم الانحدار البسيط ومعادلة الخط المستقيم (مثال استهلاك الكهرباء)</h3>
+        <ul>
+          <li><b>مفهوم الانحدار (<span dir="ltr">Regression</span>):</b> هو أحد فروع التعلم الآلي بإشراف (<span dir="ltr">Supervised Learning</span>)، ويُستخدم عندما تكون <b>سمة الهدف ($Y$) قيمة كمية رقمية متصلة</b> (مثل التنبؤ باستهلاك الكهرباء، أو سعر منزل، أو حجم المبيعات).</li>
+          <li><b>معادلة الانحدار الخطي البسيط (<span dir="ltr">Simple Linear Regression</span>):</b> تربط بين متغير مستقل واحد ($x$) ومتغير تابع ($y$) بمعادلة خط مستقيم، والتي تسمى <b>دالة الفرضية (<span dir="ltr">Hypothesis Function - $h_\theta(x)$</span>)</b>:</li>
+        </ul>
+        <div class="math-box">
+          h<sub>&theta;</sub>(x) = &theta;<sub>1</sub> x + &theta;<sub>2</sub> &nbsp;&nbsp;&nbsp; (أو بالصورة: Peak Demand = &theta;<sub>1</sub> &middot; Temp + &theta;<sub>2</sub>)
+        </div>
+        <ul>
+          <li>حيث: <b>$\theta_1$ (أو $w_1$)</b> هو <b>ميل الخط المستقيم (<span dir="ltr">Slope / Weight</span>)</b>، و <b>$\theta_2$ (أو $w_0$)</b> هو <b>الجزء المقطوع من محور الصادات (<span dir="ltr">Intercept / Bias</span>)</b>.</li>
+        </ul>
+        <div class="step-box">
+          <b>مسألة تعويض مباشر (مثال استهلاك الكهرباء بدلالة درجة الحرارة في الملزمة):</b><br>
+          إذا كانت معادلة التنبؤ بذروة الطلب على الكهرباء هي: $\text{Peak Demand} = 0.15 \times \text{Temp} - 8.5$، فكم يبلغ الطلب المتوقع عندما تكون درجة الحرارة $\text{Temp} = 90^\circ\text{F}$؟<br>
+          • نعوض مباشرة: $\text{Peak Demand} = (0.15 \times 90) - 8.5 = 13.5 - 8.5 = \mathbf{5.0\text{ GW}}$.
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) دالة الفقد / دالة الهدف (<span dir="ltr">Loss / Objective / Cost Function</span>)</h3>
+        <ul>
+          <li><b>كيف نختار أفضل خط مستقيم يمر بين النقاط؟</b> نختار المعاملات ($\theta_1, \theta_2$) التي تجعل <b>مجموع مربعات الأخطاء (الفروق بين القيمة المتوقعة $h_\theta(x_i)$ والقيمة الحقيقية $y_i$) أقل ما يمكن</b>!</li>
+          <li>تُعرف هذه الدالة بـ <b>دالة الفقد أو دالة التكلفة (<span dir="ltr">Loss / Cost Function - $E(\theta)$</span>)</b> وتُحسَب بطريقة متوسط مربع الخطأ:</li>
+        </ul>
+        <div class="math-box">
+          E(&theta;) = ( 1 / 2n ) &sum;<sub>i=1</sub><sup>n</sup> ( h<sub>&theta;</sub>(x<sub>i</sub>) &minus; y<sub>i</sub> )<sup>2</sup>
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) خوارزمية انحدار الميل (<span dir="ltr">Gradient Descent Algorithm</span>) ودور معدل التعلم ($\alpha$)</h3>
+        <div class="exam-alert">
+          <b>🔥🔥 سؤال امتحاني مؤكد حول خوارزمية انحدار الميل (<span dir="ltr">Gradient Descent</span>):</b><br>
+          • <b>وظيفتها:</b> هي خوارزمية تحسين تكرارية (<span dir="ltr">Optimization Algorithm</span>) تُستخدم لإيجاد <b>أفضل قيم لمعاملات النموذج ($\theta$) التي تقلل دالة الفقد $E(\theta)$ إلى أدنى قيمة ممكنة (<span dir="ltr">Minimum</span>)</b>.<br>
+          • <b>قاعدة تحديث المعاملات في كل خطوة:</b>
+        </div>
+        <div class="math-box">
+          &theta;<sub>j</sub> &larr; &theta;<sub>j</sub> &minus; &alpha; &middot; [ &part;E(&theta;) / &part;&theta;<sub>j</sub> ]
+        </div>
+        <ul>
+          <li><b>دور معدل التعلم ($\alpha$ - <span dir="ltr">Learning Rate</span>) وأثر قيمته:</b>
+            <ol>
+              <li>يحدد المعامل $\alpha$ <b>حجم الخطوة (<span dir="ltr">Step size</span>)</b> التي نتحرك بها نحو القاع في كل تكرار.</li>
+              <li><b>إذا كان معدل التعلم $\alpha$ صغيراً جداً:</b> ستكون الخطوات قصيرة جداً، مما يجعل الخوارزمية <b>بطيئة جداً وتستغرق وقتاً طويلاً</b> للوصول إلى الحل الأمثل.</li>
+              <li><b>إذا كان معدل التعلم $\alpha$ كبيراً جداً:</b> ستكون الخطوات واسعة جداً، مما قد يؤدي إلى <b>تجاوز نقطة القاع (<span dir="ltr">Overshooting</span>) والفشل في التقارب (التباعد <span dir="ltr">Divergence</span>)</b>!</li>
+            </ol>
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- ==================== الوحدة الثانية ==================== -->
+    <details>
+      <summary>الوحدة الثانية: الانحدار المتعدد، مقاييس الخطأ الأربعة (SAE, MAE, SSE, MSE)، كثير الحدود، و Ridge &amp; Lasso</summary>
+      <div class="details-body">
+        <h3>1) الانحدار الخطي المتعدد ومقاييس كفاءة التنبؤ الأربعة</h3>
+        <ul>
+          <li><b>الانحدار الخطي المتعدد (<span dir="ltr">Multiple Linear Regression</span>):</b> يعمم الانحدار البسيط ليتنبأ بالهدف $y$ باستخدام <b>أكثر من سمة مستقلة واحدة ($x_1, x_2, \dots, x_p$)</b>:
+            <div class="math-box">
+              y&#770; = w<sub>0</sub> + w<sub>1</sub>x<sub>1</sub> + w<sub>2</sub>x<sub>2</sub> + ... + w<sub>p</sub>x<sub>p</sub>
+            </div>
+          </li>
+        </ul>
+
+        <div class="exam-alert">
+          <b>🔥🔥 القوانين الأربعة لقياس خطأ التنبؤ في الانحدار (مؤكدة في المسائل الحسابية بالاختبار!):</b><br>
+          ليكن الخطأ في العينة $i$ هو الفرق بين القيمة الحقيقية $y_i$ والقيمة المتوقعة $\hat{y}_i$ (أي $e_i = y_i - \hat{y}_i$):
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>مقياس الخطأ</th>
+              <th>الاختصار والمصطلح الإنجليزي</th>
+              <th>المعادلة الرياضية</th>
+              <th>طريقة حسابه بكلمتين</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>1. مجموع الأخطاء المطلقة</b></td>
+              <td dir="ltr"><b>SAE</b> (Sum of Absolute Errors)</td>
+              <td dir="ltr">$\text{SAE} = \sum_{i=1}^{n} |y_i - \hat{y}_i|$</td>
+              <td>جمع الفروق المطلقة <b>بدون قسمة</b>.</td>
+            </tr>
+            <tr>
+              <td><b>2. متوسط الخطأ المطلق</b></td>
+              <td dir="ltr"><b>MAE</b> (Mean Absolute Error)</td>
+              <td dir="ltr">$\text{MAE} = \frac{1}{n}\sum_{i=1}^{n} |y_i - \hat{y}_i|$</td>
+              <td>قسمة <span dir="ltr">SAE</span> على عدد العينات $n$.</td>
+            </tr>
+            <tr>
+              <td><b>3. مجموع مربعات الأخطاء</b></td>
+              <td dir="ltr"><b>SSE</b> (Sum of Squared Errors)</td>
+              <td dir="ltr">$\text{SSE} = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2$</td>
+              <td>تربيع الفروق وجمعها <b>بدون قسمة</b>.</td>
+            </tr>
+            <tr>
+              <td><b>4. متوسط مربع الخطأ</b></td>
+              <td dir="ltr"><b>MSE</b> (Mean Squared Error)</td>
+              <td dir="ltr">$\text{MSE} = \frac{1}{n}\sum_{i=1}^{n} (y_i - \hat{y}_i)^2$</td>
+              <td>قسمة <span dir="ltr">SSE</span> على عدد العينات $n$.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="step-box">
+          <b>مسألة حسابية شاملة للمقاييس الأربعة (SAE, MAE, SSE, MSE):</b><br>
+          لنفترض أن لدينا $n = 2$ عينتين: القيم الحقيقية هي $y = [10, 20]$، والقيم المتوقعة من النموذج هي $\hat{y} = [12, 16]$:<br>
+          • <b>حساب الفروق $|y_i - \hat{y}_i|$:</b> للعينة الأولى $|10 - 12| = \mathbf{2}$ ، وللعينة الثانية $|20 - 16| = \mathbf{4}$.<br>
+          1) <b>$\text{SAE}$</b> = $2 + 4 = \mathbf{6}$.<br>
+          2) <b>$\text{MAE}$</b> = $\text{SAE} \div 2 = 6 \div 2 = \mathbf{3.0}$.<br>
+          • <b>حساب مربعات الفروق $(y_i - \hat{y}_i)^2$:</b> للعينة الأولى $(2)^2 = \mathbf{4}$ ، وللعينة الثانية $(4)^2 = \mathbf{16}$.<br>
+          3) <b>$\text{SSE}$</b> = $4 + 16 = \mathbf{20}$.<br>
+          4) <b>$\text{MSE}$</b> = $\text{SSE} \div 2 = 20 \div 2 = \mathbf{10.0}$.
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) الانحدار كثير الحدود (<span dir="ltr">Polynomial Regression</span>)</h3>
+        <ul>
+          <li><b>متى نستخدمه؟</b> عندما تكون العلاقة بين المتغير المستقل $x$ والمتغير التابع $y$ <b>علاقة غير خطية (منحنية <span dir="ltr">Non-linear</span>)</b> لا يمكن تمثيلها بخط مستقيم؛ فنقوم بإضافة قوى (أسس) للمتغير المستقل ($x^2, x^3, \dots, x^m$):</li>
+        </ul>
+        <div class="math-box">
+          y&#770; = w<sub>0</sub> + w<sub>1</sub>x + w<sub>2</sub>x<sup>2</sup> + ... + w<sub>m</sub>x<sup>m</sup>
+        </div>
+        <ul>
+          <li><b>ملاحظة هامة:</b> زيادة درجة كثيرة الحدود ($m$) بشكل مبالغ فيه يؤدي إلى مشكلة <b>الإفراط في التخصيص / الحفظ (<span dir="ltr">Overfitting</span>)</b>!</li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) علاج التعددية الخطية والـ Overfitting: انحدار (<span dir="ltr">Ridge</span>) مقابل انحدار (<span dir="ltr">Lasso</span>)</h3>
+        <div class="exam-alert">
+          <b>🔥🔥 مقارنة امتحانية مؤكدة 100% بين <span dir="ltr">Ridge Regression</span> و <span dir="ltr">Lasso Regression</span>:</b><br>
+          عند وجود ارتباط عالٍ بين المتغيرات المستقلة (مشكلة <b>التعددية الخطية <span dir="ltr">Multicollinearity</span></b>) أو مشكلة <b><span dir="ltr">Overfitting</span></b>، نضيف حد عقوبة (<span dir="ltr">Penalty / Regularization term</span>) مضروباً في معامل التنظيم $\lambda$ (أو <code dir="ltr">alpha</code>) إلى دالة الخسارة لتقليص المعاملات $w_j$:<br><br>
+          <b>1) انحدار ريدج (<span dir="ltr">Ridge Regression - L2 Regularization</span>):</b><br>
+          • <b>حد العقوبة المضاف:</b> يضيف <b>مجموع مربعات المعاملات</b>: $\lambda \sum_{j=1}^{p} w_j^2$.<br>
+          • <b>تأثيره على المعاملات:</b> يقلص المعاملات غير المهمة لتقترب جداً من الصفر، ولكنه <b>لا يجعلها تساوي صفراً تماماً</b> (يحتفظ بجميع المتغيرات).<br><br>
+          <b>2) انحدار لاسو (<span dir="ltr">Lasso Regression - L1 Regularization</span>):</b><br>
+          • <b>حد العقوبة المضاف:</b> يضيف <b>مجموع القيم المطلقة للمعاملات</b>: $\lambda \sum_{j=1}^{p} |w_j|$.<br>
+          • <b>تأثيره على المعاملات (ميزة فريدة!):</b> يستطيع تقليص معاملات المتغيرات غير المهمة لتصبح <b>مساوية للصفر تماماً ($w_j = 0$)</b>، وبالتالي يقوم بعملية <b>اختيار السمات واستبعاد المتغيرات الزائدة تلقائياً (<span dir="ltr">Feature Selection</span>)</b>!
+        </div>
+      </div>
+    </details>
+
+    <!-- ==================== الوحدة الثالثة ==================== -->
+    <details>
+      <summary>الوحدة الثالثة: طرق تقسيم البيانات الخمس للتدريب والتقييم، والتطبيق البرمجي بـ Scikit-learn</summary>
+      <div class="details-body">
+        <h3>1) طرق تقسيم البيانات الخمس للتدريب والاختبار (<span dir="ltr">Data Splitting Methods</span>)</h3>
+        <div class="exam-alert">
+          <b>🌟 احفظي الطرق الخمس لتقسيم البيانات والفرق الدقيق بين كل طريقة:</b>
+        </div>
+        <ol>
+          <li><b>1. طريقة الاحتجاز / التقسيم الثابت (<span dir="ltr">Holdout Method</span>):</b>
+            <ul>
+              <li>أبسط الطرق؛ تقسم مجموعة البيانات مرة واحدة عشوائياً إلى مجموعتين منفصلتين: مجموعة تدريب (<span dir="ltr">Training set</span> مثلاً $70\%$ أو $80\%$) ومجموعة اختبار (<span dir="ltr">Testing set</span> مثلاً $30\%$ أو $20\%$).</li>
+            </ul>
+          </li>
+          <li><b>2. أخذ العينات الفرعية العشوائي المتكرر (<span dir="ltr">Random Sub-sampling</span>):</b>
+            <ul>
+              <li>تكرر طريقة الـ <span dir="ltr">Holdout</span> عدة مرات ($K$ مرات) بتقسيمات عشوائية مختلفة، وتأخذ متوسط دقة التقييم النهائي.</li>
+            </ul>
+          </li>
+          <li><b>3. التحقق المتقاطع ذو الـ $K$ طيات (<span dir="ltr">K-Fold Cross-Validation</span>):</b>
+            <ul>
+              <li>تقسم البيانات إلى <b>$K$ من الأجزاء (الطيات) المتساوية الحجم</b>؛ وفي كل مرة نستخدم <b>$(K - 1)$ جزءاً للتدريب</b> وجزءاً <b>واحداً فقط للاختبار</b>، ونكرر العملية $K$ مرات بالتناوب حتى يُختبر كل جزء مرة واحدة بالضبط.</li>
+            </ul>
+          </li>
+          <li><b>4. طريقة استبعاد عينة واحدة (<span dir="ltr">Leave-One-Out Cross-Validation - LOOCV</span>):</b>
+            <ul>
+              <li>هي حالة خاصة من <span dir="ltr">K-Fold</span> حيث يكون عدد الأجزاء مساوياً لعدد جميع العينات ($K = N$)؛ أي في كل مرة <b>ندرب النموذج على $(N - 1)$ عينة ونختبره على عينة واحدة فقط</b>! (دقيقة لكنها مكلفة جداً حسابياً).</li>
+            </ul>
+          </li>
+          <li><b>5. طريقة البوتستراب (<span dir="ltr">Bootstrap Method</span>):</b>
+            <ul>
+              <li>تقوم باختيار عينات التدريب عشوائياً <b>مع الإرجاع (<span dir="ltr">Sampling with replacement</span>)</b> (أي يمكن اختيار نفس العينة أكثر من مرة في مجموعة التدريب)، والعينات التي لم يتم اختيارها أبداً تُستخدم كمجموعة اختبار!</li>
+            </ul>
+          </li>
+        </ol>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) التطبيق البرمجي الكامل للانحدار على بيانات الإعلانات (<span dir="ltr">Advertising.csv</span>)</h3>
+        <div class="code-box">
+<span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> train_test_split<br>
+<span class="kw">from</span> sklearn.linear_model <span class="kw">import</span> LinearRegression, Lasso, Ridge<br>
+<span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> PolynomialFeatures<br>
+<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> mean_squared_error, r2_score<br><br>
+<span class="cmt"># 1. تقسيم البيانات إلى تدريب واختبار (Holdout)</span><br>
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="num">0.2</span>, random_state=<span class="num">42</span>)<br><br>
+<span class="cmt"># 2. بناء وتدريب نموذج الانحدار الخطي المتعدد (LinearRegression)</span><br>
+lr = LinearRegression()<br>
+lr.fit(X_train, y_train)<br>
+y_pred = lr.predict(X_test)<br>
+<span class="kw">print</span>(<span class="str">"Intercept (w0):"</span>, lr.intercept_, <span class="str">"Coefficients (w):"</span>, lr.coef_)<br>
+<span class="kw">print</span>(<span class="str">"MSE:"</span>, mean_squared_error(y_test, y_pred), <span class="str">"R2:"</span>, r2_score(y_test, y_pred))<br><br>
+<span class="cmt"># 3. تطبيق انحدار Lasso لاستبعاد السمات غير المهمة</span><br>
+lasso = Lasso(alpha=<span class="num">0.1</span>)<br>
+lasso.fit(X_train, y_train)<br><br>
+<span class="cmt"># 4. تطبيق الانحدار كثير الحدود من الدرجة الثانية (Polynomial Regression)</span><br>
+poly = PolynomialFeatures(degree=<span class="num">2</span>)<br>
+X_poly_train = poly.fit_transform(X_train)<br>
+X_poly_test  = poly.transform(X_test)<br>
+poly_reg = LinearRegression()<br>
+poly_reg.fit(X_poly_train, y_train)
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- التبويب الثاني: جداول المقارنات والمعادلات -->
+  <section id="tables" class="panel">
+    <div class="card">
+      <h2>1. مقارنة شاملة لأنواع الانحدار الأربعة في الفصل الحادي عشر</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>نوع الانحدار</th>
+            <th>الفئة البرمجية في Scikit-learn</th>
+            <th>الخصائص ومتى يُستخدم</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1. الانحدار الخطي (<span dir="ltr">Linear Regression</span>)</b></td>
+            <td dir="ltr"><code>LinearRegression()</code></td>
+            <td>يمثل العلاقة الخطية المباشرة؛ بسيط وسريع لكنه يتأثر بالتعددية الخطية والقيم المتطرفة ولا يلتقط العلاقات المنحنية.</td>
+          </tr>
+          <tr>
+            <td><b>2. الانحدار كثير الحدود (<span dir="ltr">Polynomial</span>)</b></td>
+            <td dir="ltr"><code>PolynomialFeatures(degree=m)</code><br>مع <code>LinearRegression()</code></td>
+            <td>يلتقط <b>العلاقات غير الخطية (المنحنية)</b> بإضافة أسس للمتغيرات ($x^2, x^3\dots$)، والمبالغة في درجته تسبب <span dir="ltr">Overfitting</span>.</td>
+          </tr>
+          <tr>
+            <td><b>3. انحدار ريدج (<span dir="ltr">Ridge - L2</span>)</b></td>
+            <td dir="ltr"><code>Ridge(alpha=...)</code></td>
+            <td>يعالج التعددية الخطية والـ <span dir="ltr">Overfitting</span> بإضافة <b>مجموع مربعات المعاملات ($\lambda \sum w_j^2$)</b>؛ يقلص المعاملات دون تصفيرها.</td>
+          </tr>
+          <tr>
+            <td><b>4. انحدار لاسو (<span dir="ltr">Lasso - L1</span>)</b></td>
+            <td dir="ltr"><code>Lasso(alpha=...)</code></td>
+            <td>يضيف <b>مجموع القيم المطلقة للمعاملات ($\lambda \sum |w_j|$)</b>؛ يصفر معاملات السمات غير المهمة ($w_j=0$) فيقوم باختيار السمات تلقائياً.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>2. مقارنة طرق تقسيم البيانات الخمس (Data Splitting Methods)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>طريقة التقسيم</th>
+            <th>آلية العمل باختصار</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1. <span dir="ltr">Holdout</span></b></td>
+            <td>تقسيم البيانات مرة واحدة عشوائياً إلى مجموعة تدريب (مثلاً $80\%$) ومجموعة اختبار ($20\%$).</td>
+          </tr>
+          <tr>
+            <td><b>2. <span dir="ltr">Random Sub-sampling</span></b></td>
+            <td>تكرار تقسيم الـ <span dir="ltr">Holdout</span> العشوائي عدة مرات وأخذ متوسط دقة الاختبار.</td>
+          </tr>
+          <tr>
+            <td><b>3. <span dir="ltr">K-Fold Cross-Validation</span></b></td>
+            <td>تقسيم البيانات إلى $K$ طيات متساوية؛ التدريب على $(K-1)$ والاختبار على طية واحدة بالتناوب $K$ مرات.</td>
+          </tr>
+          <tr>
+            <td><b>4. <span dir="ltr">Leave-One-Out (LOOCV)</span></b></td>
+            <td>التدريب على $(N-1)$ عينة والاختبار على عينة واحدة فقط في كل مرة وتكرار ذلك $N$ مرات.</td>
+          </tr>
+          <tr>
+            <td><b>5. <span dir="ltr">Bootstrap</span></b></td>
+            <td>اختيار عينات التدريب عشوائياً <b>مع الإرجاع (<span dir="ltr">With replacement</span>)</b>، واختبار النموذج على العينات التي لم تُختر.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- التبويب الثالث: قاموس المصطلحات والدوال -->
+  <section id="terms" class="panel">
+    <div class="card">
+      <h2>قاموس المصطلحات والدوال الشامل للفصل الحادي عشر</h2>
+      <p class="muted">جميع المفاهيم الرياضية والخوارزميات والدوال البرمجية الخاصة بالانحدار:</p>
+      <div id="termsGrid" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- التبويب الرابع: البطاقات التعليمية -->
+  <section id="cards" class="panel">
+    <div class="card">
+      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
+      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
+      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
+        <div class="term" id="flashTerm"></div>
+        <div class="answer" id="flashAnswer" hidden></div>
+        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="prevCard">السابق</button>
+        <span id="cardCount" class="muted"></span>
+        <button class="btn primary" id="nextCard">التالي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- التبويب الخامس: الاختبار الذاتي العشوائي -->
+  <section id="quiz" class="panel">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2>الاختبار الشامل المتغير للفصل الحادي عشر (25 سؤالاً) <span class="badge-new">ترتيب عشوائي ذكي 🎲</span></h2>
+          <p class="muted">يختبر فهمك لـ Gradient Descent، وحسابات SAE/MAE/SSE/MSE، والفرق بين Ridge و Lasso، وطرق تقسيم البيانات مع تعليل فوري!</p>
+        </div>
+        <div class="score" id="score">النتيجة: 0 / 25</div>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="quizArea"></div>
+      <div class="row">
+        <button class="btn" id="resetQuiz">إعادة الاختبار بترتيب عشوائي جديد 🔀</button>
+        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+      </div>
+      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
+    </div>
+  </section>
+</main>
+
+<footer>مبني بالكامل (100%) على محتوى الفصل الحادي عشر (التعلم الآلي بإشراف - الانحدار) من مقرر تحليل وتمثيل البيانات</footer>
+
+<script>
+const terms = [
+  ["Regression (الانحدار)", "أحد أساليب التعلم الآلي بإشراف يُستخدم للتنبؤ بقيمة سمة هدف كمية رقمية متصلة (Continuous target)."],
+  ["Hypothesis Function h_θ(x)", "دالة الفرضية: المعادلة الرياضية التي يستخدمها النموذج لإجراء التنبؤ (مثل معادلة الخط المستقيم θ1*x + θ2)."],
+  ["Loss / Objective Function E(θ)", "دالة الفقد أو الهدف: تقيس مقدار الخطأ بين توقعات النموذج والقيم الحقيقية، ونسعى لتقليلها لأدنى قيمة."],
+  ["Gradient Descent (انحدار الميل)", "خوارزمية تحسين تكرارية تحدث معاملات النموذج في عكس اتجاه الميل للوصول إلى أقل قيمة لدالة الفقد."],
+  ["Learning Rate (α - معدل التعلم)", "معامل يحدد حجم الخطوة في خوارزمية انحدار الميل أثناء تحديث المعاملات."],
+  ["SAE & MAE", "مجموع الأخطاء المطلقة SAE = Σ|y - ŷ|، ومتوسط الخطأ المطلق MAE = (1/n) Σ|y - ŷ|."],
+  ["SSE & MSE", "مجموع مربعات الأخطاء SSE = Σ(y - ŷ)²، ومتوسط مربع الخطأ MSE = (1/n) Σ(y - ŷ)²."],
+  ["Polynomial Regression", "الانحدار كثير الحدود: يُستخدم لنمذجة العلاقات غير الخطية بإضافة أسس للمتغيرات المستقلة (x², x³...)."],
+  ["Multicollinearity (التعددية الخطية)", "مشكلة وجود ارتباط خطي قوي بين متغيرين مستقلين أو أكثر، وتُعالج باستخدام انحدار Ridge أو Lasso."],
+  ["Ridge Regression (L2)", "انحدار يضيف مجموع مربعات المعاملات (λ Σ w²) لدالة الخسارة لتقليص المعاملات وتقليل الـ Overfitting دون تصفيرها."],
+  ["Lasso Regression (L1)", "انحدار يضيف مجموع القيم المطلقة للمعاملات (λ Σ |w|) لدالة الخسارة، ويتميز بقدرته على تصفير معاملات السمات غير المهمة."],
+  ["Holdout & K-Fold Cross-Validation", "طرق تقسيم البيانات: Holdout تقسمها مرة واحدة، و K-Fold تقسمها لـ K طيات وتدرب على K-1 وتختبر على طية بالتناوب."],
+  ["Leave-One-Out & Bootstrap", "LOOCV تختبر عينة واحدة في كل مرة (K=N)، و Bootstrap تختار عينات التدريب عشوائياً مع الإرجاع (with replacement)."]
+];
+
+const cards = [
+  ["متى نستخدم خوارزميات الانحدار (Regression) في التعلم الآلي بإشراف؟", "عندما تكون سمة الهدف (Y) المراد التنبؤ بها قيمة كمية رقمية متصلة (مثل درجة الحرارة، السعر، المبيعات، أو استهلاك الكهرباء)."],
+  ["ما هي معادلة الانحدار الخطي البسيط (دالة الفرضية Hypothesis function)؟", "h_θ(x) = θ1 * x + θ2\nحيث θ1 هو ميل الخط (Slope)، و θ2 هو الجزء المقطوع من محور الصادات (Intercept)."],
+  ["[مسألة حسابية] إذا كانت معادلة التنبؤ بالمبيعات هي: y = 3x + 10، فكم تبلغ المبيعات المتوقعة عندما تكون ميزانية الإعلان x = 20؟", "y = (3 × 20) + 10 = 60 + 10 = 70."],
+  ["ما هي دالة الفقد / الهدف (Loss / Objective Function) في الانحدار الخطي؟", "هي الدالة التي تقيس متوسط مربعات الأخطاء بين القيم المتوقعة h_θ(x) والقيم الحقيقية y:\nE(θ) = (1 / 2n) * Σ (h_θ(x_i) - y_i)²\nوالهدف من التدريب هو تقليل هذه الدالة لأدنى قيمة ممكنة."],
+  ["ما هي وظيفة خوارزمية انحدار الميل (Gradient Descent)؟ وما معادلة تحديث المعاملات فيها؟", "هي خوارزمية تحسين تكرارية تبحث عن أفضل قيم للمعاملات θ التي تقلل دالة الفقد لأدنى قيمة.\nومعادلتها: θ_j ← θ_j - α * (∂E / ∂θ_j)"],
+  ["ما هو دور معدل التعلم (α - Learning rate) في انحدار الميل؟ وماذا يحدث إذا كان صغيراً جداً أو كبيراً جداً؟", "يحدد حجم الخطوة في كل تكرار:\n• إذا كان صغيراً جداً: يصبح التقارب بطيئاً جداً ويستغرق وقتاً طويلاً.\n• إذا كان كبيراً جداً: قد يتجاوز نقطة القاع (Overshooting) ويفشل في التقارب (يتباعد)."],
+  ["ما الفرق بين المقاييس الأربعة لخطأ التنبؤ: (SAE)، (MAE)، (SSE)، و (MSE)؟", "• SAE: مجموع الأخطاء المطلقة Σ|y - ŷ|\n• MAE: متوسط الخطأ المطلق (1/n) Σ|y - ŷ|\n• SSE: مجموع مربعات الأخطاء Σ(y - ŷ)²\n• MSE: متوسط مربع الخطأ (1/n) Σ(y - ŷ)²"],
+  ["[مسألة حسابية] إذا كانت القيم الحقيقية لعينتين هي [5, 10]، والقيم المتوقعة هي [4, 13]، فاحسبي: SAE و MAE و SSE و MSE.", "• الفروق المطلقة: |5-4| = 1 ، و |10-13| = 3.\n1) SAE = 1 + 3 = 4.\n2) MAE = 4 / 2 = 2.0.\n• مربعات الفروق: (1)² = 1 ، و (3)² = 9.\n3) SSE = 1 + 9 = 10.\n4) MSE = 10 / 2 = 5.0."],
+  ["متى نستخدم الانحدار كثير الحدود (Polynomial Regression)؟ وما الفئة البرمجية المستخدمة لإنشاء حدوده في Scikit-learn؟", "نستخدمه عندما تكون العلاقة بين X و Y غير خطية (منحنية).\nوالفئة البرمجية هي: PolynomialFeatures(degree=...) من sklearn.preprocessing."],
+  ["ما هي المشكلة التي تحدث إذا رفعنا درجة الانحدار كثير الحدود (degree) إلى رقم كبير جداً؟", "تحدث مشكلة الإفراط في التخصيص / الحفظ (Overfitting)، حيث يحفظ النموذج ضجيج بيانات التدريب ويفشل في التعميم على بيانات الاختبار."],
+  ["ما المقصود بمشكلة التعددية الخطية (Multicollinearity) في الانحدار المتعدد؟ وكيف نعالجها؟", "هي وجود ارتباط خطي قوي بين متغيرين مستقلين أو أكثر، مما يجعل تقدير المعاملات غير مستقر.\nونعالجها باستخدام انحدار التنظيم: Ridge Regression أو Lasso Regression."],
+  ["ما الفرق الرياضي والعملي بين انحدار (Ridge) وانحدار (Lasso)؟", "• Ridge (L2): يضيف مجموع مربعات المعاملات (λ Σ w²)؛ يقلص المعاملات لتقترب من الصفر دون أن يلغيها.\n• Lasso (L1): يضيف مجموع القيم المطلقة للمعاملات (λ Σ |w|)؛ يستطيع تصفير معاملات السمات غير المهمة تماماً (w = 0) فيقوم باختيار السمات!"],
+  ["ما هي الطرق الخمس لتقسيم البيانات للتدريب والتقييم؟", "1) Holdout method.\n2) Random sub-sampling.\n3) K-fold cross-validation.\n4) Leave-one-out (LOOCV).\n5) Bootstrap."],
+  ["كيف تعمل طريقة (K-fold cross-validation)؟", "تقسم البيانات إلى K أجزاء متساوية؛ وتقوم بالتدريب K مرات بحيث تستخدم في كل مرة (K - 1) جزءاً للتدريب وجزءاً واحداً فقط للاختبار بالتناوب."],
+  ["ما هي طريقة (Leave-One-Out - LOOCV)؟ وكم مرة يتم تدريب النموذج فيها إذا كان لدينا 100 عينة؟", "هي حالة خاصة من K-fold حيث K = N؛ فيتم التدريب على (N - 1) عينة والاختبار على عينة واحدة فقط.\nوإذا كان لدينا 100 عينة يتم تدريب النموذج 100 مرة!"],
+  ["بماذا تتميز طريقة البوتستراب (Bootstrap) في سحب عينات التدريب؟", "تتميز بسحب عينات التدريب عشوائياً مع الإرجاع (Sampling with replacement)، أي يمكن أن تتكرر نفس العينة أكثر من مرة في مجموعة التدريب."],
+  ["بعد تدريب نموذج LinearRegression() في Scikit-learn، كيف نستخرج قيمة الجزء المقطوع (w0) وقيم المعاملات/الأوزان (w)؟", "• الجزء المقطوع: model.intercept_\n• أوزان/معاملات السمات: model.coef_"],
+  ["من أي وحدة في مكتبة Scikit-learn نستورد الدالة train_test_split؟ ومن أي وحدة نستورد LinearRegression و Lasso؟", "• train_test_split من: sklearn.model_selection\n• LinearRegression و Lasso من: sklearn.linear_model"]
+];
+
+const masterQuestions = [
+  {q:"أي نوع من خوارزميات التعلم الآلي بإشراف يُستخدم عندما تكون سمة الهدف (Y) المراد التنبؤ بها (قيمة كمية رقمية متصلة مثل استهلاك الكهرباء أو المبيعات)؟",o:["الانحدار (Regression)","التجميع بدون إشراف (Clustering)","الترميز الثنائي (One-hot)","خريطة الحرارة (Heatmap)"],a:0,e:"يُستخدم الانحدار (Regression) للتنبؤ بمتغير تابع كمي متصل، بينما يُستخدم التصنيف (Classification) للتنبؤ بفئات منفصلة."},
+  {q:"[مسألة حسابية] إذا كانت معادلة خط الانحدار للتنبؤ بالطلب على الكهرباء هي: Peak Demand = 0.2 * Temp - 5 ، فكم يبلغ الطلب المتوقع عند درجة حرارة Temp = 100؟",o:["15 (لأن 0.2 × 100 - 5 = 20 - 5 = 15)","20","25","95"],a:0,e:"نعوض عن Temp بـ 100 في المعادلة: (0.2 × 100) - 5 = 20 - 5 = 15."},
+  {q:"ماذا نسمي الدالة الرياضية E(θ) = (1 / 2n) Σ (h_θ(x_i) - y_i)² التي تقيس مقدار الخطأ بين توقعات النموذج والقيم الحقيقية ونسعى لتقليلها؟",o:["دالة الفقد / دالة الهدف (Loss / Objective Function)","دالة التجميع الهرمي (Dendrogram)","دالة التقطيع (Discretization)","مصفوفة الارتباك (Confusion Matrix)"],a:0,e:"الدالة التي تحسب خطأ النموذج ونهدف لتقليلها أثناء التدريب تُسمى دالة الفقد أو دالة التكلفة/الهدف (Loss / Objective Function)."},
+  {q:"ما هي الخوارزمية التكرارية التي تُستخدم لتحديث معاملات النموذج (θ) تدريجياً في عكس اتجاه المشتقة للوصول إلى أقل قيمة ممكنة لدالة الفقد؟",o:["خوارزمية انحدار الميل (Gradient Descent)","خوارزمية DBSCAN","خوارزمية K-means","طريقة المرفق (Elbow Method)"],a:0,e:"خوارزمية انحدار الميل (Gradient Descent) تحدث المعاملات بالمعادلة θ ← θ - α (∂E/∂θ) لتقليل دالة الفقد."},
+  {q:"في خوارزمية انحدار الميل (Gradient Descent)، ماذا يحدث إذا تم اختيار معدل التعلم (α - Learning rate) بقيمة كبيرة جداً؟",o:["قد يتجاوز النموذج نقطة القاع الصغرى (Overshooting) ويفشل في التقارب (يتباعد)","سيصل إلى الحل الأمثل بدقة متناهية في خطوة واحدة دائماً","سيتحول النموذج إلى تجميع هرمي","ستصبح جميع البيانات صفراً"],a:0,e:"إذا كان معدل التعلم α صغيراً جداً يصبح التقارب بطيئاً جداً، وإذا كان كبيراً جداً يقفز فوق نقطة القاع ويفشل في التقارب."},
+  {q:"[مسألة حسابية] إذا كانت القيم الحقيقية لثلاث عينات هي [10, 20, 30]، والقيم المتوقعة من نموذج الانحدار هي [12, 18, 33]، فكم تبلغ قيمة مجموع الأخطاء المطلقة (SAE)؟",o:["7 (لأن |10-12| + |20-18| + |30-33| = 2 + 2 + 3 = 7)","17","3","2.33"],a:0,e:"نحسب الفروق المطلقة: |10-12|=2، و |20-18|=2، و |30-33|=3. مجموعها SAE = 2 + 2 + 3 = 7."},
+  {q:"[مسألة حسابية] لنفس العينات الثلاث السابقة (حيث الفروق المطلقة هي 2 و 2 و 3)، كم تبلغ قيمة مجموع مربعات الأخطاء (SSE)؟",o:["17 (لأن 2² + 2² + 3² = 4 + 4 + 9 = 17)","7","49","5.67"],a:0,e:"نربع كل فرق ثم نجمع: (2)^2 + (2)^2 + (3)^2 = 4 + 4 + 9 = 17."},
+  {q:"[مسألة حسابية] إذا كان مجموع مربعات الأخطاء (SSE) لنموذج انحدار على (n = 5) عينات يساوي (40)، فكم تبلغ قيمة متوسط مربع الخطأ (MSE)؟",o:["8.0 (لأن MSE = SSE / n = 40 / 5 = 8)","200.0","40.0","2.0"],a:0,e:"متوسط مربع الخطأ (MSE) يساوي مجموع مربعات الأخطاء (SSE) مقسوماً على عدد العينات (n): 40 / 5 = 8.0."},
+  {q:"متى نلجأ لاستخدام (الانحدار كثير الحدود - Polynomial Regression) بدلاً من الانحدار الخطي البسيط؟",o:["عندما تكون العلاقة بين المتغير المستقل X والمتغير التابع Y علاقة غير خطية (منحنية)","عندما تكون جميع البيانات نصية غير مرقمة","عندما لا توجد سمة هدف Y في البيانات","عندما نريد رسم مخطط دائري"],a:0,e:"يُستخدم الانحدار كثير الحدود لنمذجة البيانات ذات الاتجاه المنحني غير الخطي عبر إضافة حدود مرفوعة لأسس (x², x³...)."},
+  {q:"ما الفرق الجوهري بين انحدار (Ridge) وانحدار (Lasso) في معالجة التعددية الخطية والإفراط في التخصيص (Overfitting)؟",o:["Ridge يضيف مجموع مربعات المعاملات (L2) ويقلصها دون تصفيرها، بينما Lasso يضيف مجموع القيم المطلقة للمعاملات (L1) ويستطيع تصفير معاملات السمات غير المهمة تماماً (Feature Selection)","Ridge يصفر جميع المعاملات دائماً، و Lasso يضاعف قيمتها","كلاهما يستخدمان فقط في التجميع بدون إشراف","لا يوجد أي فرق في معادلتيهما"],a:0,e:"يتميز Lasso (L1) بقدرته على جعل معاملات المتغيرات غير المهمة تساوي صفراً تماماً، مما يحقق اختيار السمات تلقائياً."},
+  {q:"أي طريقة من طرق تقسيم البيانات تقوم بتقسيم البيانات إلى K أجزاء متساوية، وتدرب النموذج على (K - 1) جزءاً وتختبره على جزء واحد بالتناوب K مرات؟",o:["التحقق المتقاطع ذو الـ K طيات (K-Fold Cross-Validation)","طريقة الاحتجاز البسيطة (Holdout Method)","طريقة البوتستراب (Bootstrap)","طريقة المرفق (Elbow Method)"],a:0,e:"في K-Fold Cross-Validation تُقسم البيانات إلى K طيات، وتُستخدم كل طية كاختبار مرة واحدة والباقي للتدريب."},
+  {q:"أي طريقة من طرق تقسيم البيانات تقوم باختيار عينات التدريب عشوائياً (مع الإرجاع - Sampling with replacement)، وتستخدم العينات التي لم يتم اختيارها كمجموعة اختبار؟",o:["طريقة البوتستراب (Bootstrap Method)","طريقة الاحتجاز (Holdout Method)","طريقة استبعاد عينة واحدة (Leave-One-Out)","طريقة K-Fold"],a:0,e:"السمة المميزة لطريقة Bootstrap هي السحب العشوائي مع الإرجاع (with replacement)."},
+  {q:"في طريقة استبعاد عينة واحدة (Leave-One-Out Cross-Validation - LOOCV)، إذا كان لدينا جدول بيانات يضم 50 عينة، فكم عينة تُستخدم للتدريب وكم عينة للاختبار في كل تكرار؟",o:["49 عينة للتدريب وعينة واحدة (1) فقط للاختبار في كل مرة (ويتكرر ذلك 50 مرة)","25 عينة للتدريب و 25 للاختبار مرة واحدة","50 عينة للتدريب و 0 للاختبار","عينة واحدة للتدريب و 49 للاختبار"],a:0,e:"في LOOCV نترك عينة واحدة فقط للاختبار وندرب على باقي العينات (N - 1 = 49)، ونكرر العملية بعدد العينات N."},
+  {q:"في مكتبة Scikit-learn، ما هي الفئة المستخدمة لتوليد الحدود الأسية ($x^2, x^3\dots$) قبل تدريب نموذج الانحدار كثير الحدود؟",o:["PolynomialFeatures من sklearn.preprocessing","StandardScaler من sklearn.preprocessing","KMeans من sklearn.cluster","SelectKBest من sklearn.feature_selection"],a:0,e:"تُستخدم الفئة PolynomialFeatures(degree=...) لتحويل السمات الأصلية إلى سمات مرفوعة لأسس متعددة."},
+  {q:"بعد تدريب نموذج الانحدار الخطي lr = LinearRegression() في Scikit-learn، ما اسم الخاصيتين اللتين نستخدمهما لاستخراج (الجزء المقطوع w0) و (معاملات/أوزان السمات w) على التوالي؟",o:["lr.intercept_ ثم lr.coef_","lr.inertia_ ثم lr.cluster_centers_","lr.mean_ ثم lr.std_","lr.min_ ثم lr.max_"],a:0,e:"في نماذج الانحدار الخطي بـ Scikit-learn: تُخزن قيمة التقاطع في intercept_ وتُخزن مصفوفة المعاملات في coef_."},
+  {q:"[مسألة حسابية] إذا كان مجموع الأخطاء المطلقة (SAE) لنموذج انحدار على 10 عينات يساوي 25، فكم تبلغ قيمة متوسط الخطأ المطلق (MAE)؟",o:["2.5 (لأن MAE = SAE / n = 25 / 10 = 2.5)","250","5.0","0.4"],a:0,e:"متوسط الخطأ المطلق MAE يساوي مجموع الأخطاء المطلقة SAE مقسوماً على عدد العينات n: 25 / 10 = 2.5."},
+  {q:"ما اسم المشكلة التي تنشأ في الانحدار الخطي المتعدد عندما يكون هناك ارتباط خطي قوي جداً بين متغيرين مستقلين أو أكثر (تُحل بواسطة Ridge و Lasso)؟",o:["التعددية الخطية (Multicollinearity)","القيم المفقودة عشوائياً (MCAR)","انحدار الميل (Gradient Descent)","الترميز الاسمي (Nominal Encoding)"],a:0,e:"وجود ارتباط قوي بين المتغيرات المستقلة نفسها يُعرف بمشكلة التعددية الخطية (Multicollinearity)."},
+  {q:"في الكود: X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)، ماذا يعني المعامل (test_size=0.2)؟",o:["تخصيص 20% من البيانات لمجموعة الاختبار، و 80% لمجموعة التدريب (طريقة Holdout)","تخصيص 2% فقط للاختبار","تكرار التدريب 20 مرة","حذف 20 عموداً من البيانات"],a:0,e:"المعامل test_size=0.2 يحدد نسبة بيانات الاختبار بـ 20% (0.20) والباقي 80% للتدريب."},
+  {q:"ما الذي يحدث لنموذج الانحدار كثير الحدود (Polynomial Regression) إذا اخترنا درجة عالية جداً لكثيرة الحدود (مثلاً degree = 20) مع عدد قليل من العينات؟",o:["يقع النموذج في مشكلة الإفراط في التخصيص (Overfitting)؛ فيكون خطؤه على التدريب قريباً من الصفر ولكنه يفشل بشدة على بيانات الاختبار الجديدة","يصبح النموذج خطاً مستقيماً أفقياً","تزداد سرعة التدريب وتقل الذاكرة","يتحول إلى خوارزمية تجميع K-means"],a:0,e:"رفع درجة كثيرة الحدود بشكل مفرط يجعل المنحنى يتعرج بشدة ليمر بكل نقطة تدريب شاملاً الضجيج، وهو ما يُعرف بالـ Overfitting."},
+  {q:"في معادلة تحديث المعاملات بانحدار الميل: θ_j ← θ_j - α * (∂E / ∂θ_j) ، إلى ماذا يرمز الحرف اللاتيني (α - ألفا)؟",o:["معدل التعلم (Learning rate)","المدى الربعي (IQR)","معامل الارتباط (Correlation)","عدد العناقيد (Clusters)"],a:0,e:"يرمز α (ألفا) في خوارزمية Gradient Descent إلى معدل التعلم (Learning Rate) الذي يضبط طول خطوة التحديث."},
+  {q:"أي مقياس من مقاييس خطأ الانحدار الأربعة يُعاقب بشكل أكبر وأشد على الأخطاء الكبيرة (القيم الشاذة في الخطأ) بسبب تربيعه للفروق مع أخذ المتوسط؟",o:["متوسط مربع الخطأ (MSE)","متوسط الخطأ المطلق (MAE)","مجموع الأخطاء المطلقة (SAE)","الوسيط الحسابي"],a:0,e:"تربيع الفروق في MSE و SSE يضخم الأخطاء الكبيرة مقارنة بأخذ القيمة المطلقة في MAE و SAE."},
+  {q:"لتقييم دقة وكفاءة نموذج الانحدار في مكتبة Scikit-learn، نستورد الدالتين mean_squared_error و r2_score من الوحدة:",o:["sklearn.metrics","sklearn.cluster","sklearn.preprocessing","sklearn.decomposition"],a:0,e:"جميع دوال قياس الأداء والخطأ في Scikit-learn توجد داخل الوحدة الفرعية sklearn.metrics."},
+  {q:"في الكود: lasso = Lasso(alpha=0.1) ، ماذا يمثل المعامل (alpha) داخل فئة Lasso أو Ridge في مكتبة Scikit-learn؟",o:["معامل قوة التنظيم / العقوبة (λ) الذي يتحكم في مقدار تقليص المعاملات","شفافية النقاط في الرسم البياني","عدد طيات التحقق المتقاطع","درجة كثيرة الحدود"],a:0,e:"يُسمى معامل العقوبة التنظيمي (λ) في فئتي Ridge و Lasso بمكتبة Scikit-learn باسم alpha."},
+  {q:"إذا قمنا بتدريب نموذج Lasso Regression ووجدنا أن معامل الميزة الثالثة أصبح مساوياً للصفر (w3 = 0)، فماذا يعني ذلك؟",o:["أن خوارزمية Lasso قامت باستبعاد الميزة الثالثة تلقائياً لعدم أهميتها في التنبؤ بالهدف","أن الميزة الثالثة هي أهم ميزة في الجدول","أن هناك خطأ برمجياً في الكود","أن جميع قيم الميزة الثالثة مفقودة"],a:0,e:"عندما يصفر Lasso معامل ميزة معينة (w = 0)، فهذا يعني أن ضربها في المعادلة سيعطي صفراً، أي تم استبعادها تماماً."},
+  {q:"ما الفرق بين المرحلة التي نستخدم فيها الدالة fit() والمرحلة التي نستخدم فيها الدالة predict() في نماذج الانحدار بـ Scikit-learn؟",o:["نستخدم fit(X_train, y_train) لتدريب النموذج وتعلم المعاملات من بيانات التدريب، ونستخدم predict(X_test) للتنبؤ بقيم الهدف لبيانات الاختبار","نستخدم predict للتدريب و fit لحذف البيانات","كلاهما يستخدمان لرسم المخطط الدائري فقط","لا نحتاج لاستخدام دالة fit قبل predict"],a:0,e:"الدالة fit() تقوم بعملية التدريب وحساب الأوزان، والدالة predict() تطبق المعادلة المتعلمة لإنتاج التوقعات."}
+];
+
+const termsGrid = document.getElementById("termsGrid");
+terms.forEach(([en, ar]) => {
+  const d = document.createElement("div");
+  d.className = "card";
+  d.style.margin = "0";
+  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
+  termsGrid.appendChild(d);
+});
+
+let ci = 0, showAnswer = false;
+function renderCard() {
+  document.getElementById("flashTerm").textContent = cards[ci][0];
+  document.getElementById("flashAnswer").textContent = cards[ci][1];
+  document.getElementById("flashAnswer").hidden = !showAnswer;
+  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
+  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+}
+document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
+document.getElementById("flashcard").addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
+});
+document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
+document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
+renderCard();
+
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+let currentQuestions = [];
+let answers = {};
+
+function prepareShuffledQuiz() {
+  currentQuestions = shuffleArray(masterQuestions).map(item => {
+    const optsWithFlag = item.o.map((text, idx) => ({ text, isCorrect: idx === item.a }));
+    const shuffledOpts = shuffleArray(optsWithFlag);
+    return {
+      q: item.q,
+      o: shuffledOpts.map(x => x.text),
+      a: shuffledOpts.findIndex(x => x.isCorrect),
+      e: item.e
+    };
+  });
+}
+
+function renderQuiz() {
+  prepareShuffledQuiz();
+  const area = document.getElementById("quizArea");
+  area.innerHTML = "";
+  const letters = ["أ", "ب", "ج", "د"];
+  currentQuestions.forEach((item, i) => {
+    const box = document.createElement("div");
+    box.className = "qbox";
+    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
+    const opts = box.querySelector(".options");
+    item.o.forEach((opt, j) => {
+      const btn = document.createElement("button");
+      btn.className = "option";
+      btn.textContent = `${letters[j]}) ${opt}`;
+      btn.onclick = () => {
+        answers[i] = j;
+        [...opts.children].forEach((x, k) => {
+          x.classList.remove("correct", "wrong");
+          x.disabled = true;
+          if (k === item.a) x.classList.add("correct");
+          if (k === j && j !== item.a) x.classList.add("wrong");
+        });
+        const fb = document.getElementById("fb" + i);
+        fb.hidden = false;
+        fb.className = "feedback " + (j === item.a ? "good" : "bad");
+        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
+        updateScore();
+      };
+      opts.appendChild(btn);
+    });
+    area.appendChild(box);
+  });
+  updateScore();
+}
+
+function updateScore() {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
+  document.getElementById("score").textContent = `النتيجة: ${correct} / ${currentQuestions.length}`;
+  document.getElementById("progressBar").style.width = (Object.keys(answers).length / currentQuestions.length * 100) + "%";
+}
+
+document.getElementById("resetQuiz").onclick = () => {
+  answers = {};
+  document.getElementById("finalResult").textContent = "";
+  renderQuiz();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+document.getElementById("finishQuiz").onclick = () => {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
+  const pct = Math.round(correct / currentQuestions.length * 100);
+  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${currentQuestions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! أنتِ مستعدة تماماً للاختبار في هذا الفصل." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
+};
+
+renderQuiz();
+</script>
+</body>
+</html>

@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الفصل التاسع الشامل (100%) | تحليل وتمثيل البيانات</title>
+<style>
+:root{
+  --bg:#f0f5ff;
+  --card:#ffffff;
+  --ink:#0f172a;
+  --muted:#475569;
+  --accent:#1d4ed8;
+  --accent-dark:#1e3a8a;
+  --accent2:#dbeafe;
+  --line:#cbd5e1;
+  --good:#059669;
+  --good-bg:#ecfdf5;
+  --bad:#dc2626;
+  --bad-bg:#fef2f2;
+  --warn:#d97706;
+  --warn-bg:#fffbeb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
+header{background:linear-gradient(135deg,#0f172a,#1d4ed8);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(15,23,42,0.2)}
+.wrap{max-width:1040px;margin:auto;padding:0 16px}
+.eyebrow{opacity:.92;font-size:.9rem;background:rgba(255,255,255,0.16);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
+h1{margin:5px 0;font-size:clamp(1.5rem,4vw,2.25rem)}
+header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
+nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:var(--accent2);color:var(--accent-dark);font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
+nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
+nav button.active,.btn.primary{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+main .btn.primary{background:var(--accent);color:white}
+main{padding:22px 0 48px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(15,23,42,0.04)}
+h2{font-size:1.35rem;margin:0 0 12px;color:#0f172a}
+h3{font-size:1.08rem;margin:0 0 8px;color:var(--accent-dark)}
+small,.muted{color:var(--muted)}
+ul,ol{padding-right:22px;margin:8px 0}
+li{margin:6px 0}
+details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
+summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f8fafc;color:#0f172a;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
+details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
+.details-body{padding:16px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
+.badge-new{display:inline-block;background:var(--warn-bg);color:var(--warn);border:1px solid #fcd34d;font-size:.78rem;padding:1px 8px;border-radius:6px;margin-right:6px;font-weight:bold}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#eff6ff;color:#1e3a8a;font-weight:bold}
+tr:last-child td{border-bottom:0}
+.note{border-right:4px solid var(--accent);padding:10px 14px;background:#eff6ff;border-radius:8px;margin:10px 0}
+.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
+.math-box{background:#f8fafc;border:2px solid #93c5fd;border-radius:12px;padding:12px 16px;margin:10px 0;text-align:center;font-size:1.03rem;font-weight:bold;color:#1e3a8a;direction:ltr}
+.step-box{background:#f0fdf4;border:1px solid #86efac;border-right:4px solid var(--good);border-radius:10px;padding:12px 16px;margin:10px 0;font-size:.95rem}
+.code-box{background:#0f172a;color:#e2e8f0;padding:14px 18px;border-radius:12px;font-family:Consolas,Monaco,monospace;direction:ltr;text-align:left;overflow-x:auto;margin:10px 0;border:1px solid #334155;line-height:1.65;font-size:.91rem}
+.code-box .kw{color:#38bdf8;font-weight:bold}
+.code-box .str{color:#4ade80}
+.code-box .num{color:#f472b6}
+.code-box .cmt{color:#94a3b8;font-style:italic}
+.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
+.options{display:grid;gap:8px;margin-top:12px}
+.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
+.option:hover:not(:disabled){border-color:var(--accent);background:#eff6ff}
+.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
+.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
+.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
+.feedback.good{color:var(--good);background:var(--good-bg)}
+.feedback.bad{color:var(--bad);background:var(--bad-bg)}
+.progress{height:10px;background:#cbd5e1;border-radius:9px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
+.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#dbeafe);border:2px solid #93c5fd;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
+.flashcard:hover{transform:scale(1.005)}
+.flashcard .term{font-size:1.32rem;font-weight:bold;color:#1e3a8a}
+.flashcard .answer{margin-top:16px;font-size:1.04rem;color:#0f172a;background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04);white-space:pre-line}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
+@media(max-width:600px){
+  .card{padding:14px}
+  nav button{flex:1 1 calc(50% - 8px);text-align:center}
+  .flashcard{min-height:200px;padding:18px}
+  th,td{padding:8px 10px;font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">نسخة شاملة ومحدثة 100% • مقرر تحليل وتمثيل البيانات</div>
+    <h1>الفصل التاسع: اختيار السمات وتقليصها (Feature Selection &amp; Reduction)</h1>
+    <p>يغطي الوحدات الأربع كاملة: تقنيات اختيار السمات (Filter, Wrapper, Model-based)، اختبار مربع كاي (Chi-squared)، المعلومات المتبادلة (Mutual Information)، ارتباط بيرسون، تحليل المكونات الرئيسية (PCA)، والتطبيق البرمجي بـ Scikit-learn</p>
+    <nav>
+      <button class="active" data-tab="summary">الشرح والقوانين والأكواد (100%)</button>
+      <button data-tab="tables">ملخص القوانين والمقارنات</button>
+      <button data-tab="terms">قاموس المصطلحات والدوال</button>
+      <button data-tab="cards">البطاقات (28)</button>
+      <button data-tab="quiz">الاختبار العشوائي (25)</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="summary" class="panel active">
+    <div class="card">
+      <h2>خريطة الفصل التاسع (الوحدات الأربع الكاملة)</h2>
+      <div class="grid">
+        <div>
+          <span class="tag">الوحدة الأولى</span>
+          <h3>اختيار السمات واختبار مربع كاي ($\chi^2$)</h3>
+          <p>مفهوم وفوائد اختيار السمات الأربعة، تقنيات الاختيار الثلاث (<span dir="ltr">Filter, Wrapper, Model-based</span>)، ومعادلة ومسألة اختبار مربع كاي (<span dir="ltr">Chi-squared test</span>) لجدول التوافق.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثانية</span>
+          <h3>المعلومات المتبادلة وارتباط بيرسون</h3>
+          <p>مفهوم ومعادلة ومسألة المعلومات المتبادلة (<span dir="ltr">Mutual Information</span>) لجدول الاحتمالات، ومعادلة وخصائص معامل ارتباط بيرسون (<span dir="ltr">Pearson Correlation</span>).</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثالثة</span>
+          <h3>تقليص السمات وتحليل المكونات (PCA)</h3>
+          <p>الفرق الجوهري بين اختيار السمات وتقليص السمات، والخطوات الخمس لحساب (<span dir="ltr">PCA</span>) بالمعادلات (المتوسط، التمركز، مصفوفة التغاير، <span dir="ltr">SVD</span>، والإسقاط).</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الرابعة</span>
+          <h3>التطبيق البرمجي على بيانات سرطان الثدي</h3>
+          <p>تطبيق <span dir="ltr">SelectKBest</span> مع <span dir="ltr">chi2</span> ومع <span dir="ltr">mutual_info_classif</span>، وتطبيق <span dir="ltr">PCA</span> من <span dir="ltr">sklearn.decomposition</span> ومقارنة دقة نموذج <span dir="ltr">LogisticRegression</span>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== الوحدة الأولى ==================== -->
+    <details open>
+      <summary>الوحدة الأولى: هندسة واختيار السمات (Feature Selection) واختبار مربع كاي (Chi-squared Test)</summary>
+      <div class="details-body">
+        <h3>1) مفهوم السمات، هندسة السمات، وفوائد اختيار السمات</h3>
+        <ul>
+          <li><b>مفهوم السمات (<span dir="ltr">Features</span>) وهندسة السمات (<span dir="ltr">Feature Engineering</span>):</b>
+            <ul>
+              <li>السمات هي المتغيرات أو الأعمدة المستقلة ($X$) التي نستخدمها كمدخلات لنموذج التعلم الآلي للتنبؤ بسمة الهدف ($Y$).</li>
+              <li><b>اختيار السمات (<span dir="ltr">Feature Selection</span>):</b> هو عملية انتقاء <b>أهم وأفضل مجموعة فرعية من السمات الأصلية</b> الأكثر ارتباطاً بسمة الهدف، وحذف السمات غير المهمة أو الزائدة عن الحاجة (<span dir="ltr">Irrelevant or Redundant features</span>).</li>
+            </ul>
+          </li>
+          <li><b>الفوائد الأربع لاختيار السمات (<span dir="ltr">Benefits of Feature Selection</span>):</b>
+            <ol>
+              <li><b>1. تقليل الإفراط في التخصيص (<span dir="ltr">Reduce Overfitting</span>):</b> حذف السمات المشوشة وغير المهمة يجعل النموذج أكثر قدرة على التعميم على البيانات الجديدة.</li>
+              <li><b>2. تحسين دقة النموذج (<span dir="ltr">Improve Accuracy</span>):</b> التركيز على السمات القوية يرفع من دقة التنبؤ أو التصنيف.</li>
+              <li><b>3. تقليل وقت التدريب والتعقيد الحسابي (<span dir="ltr">Reduce Training Time</span>):</b> عدد سمات أقل يعني حسابات أسرع واستهلاكاً أقل للذاكرة.</li>
+              <li><b>4. تبسيط النماذج وسهولة تفسيرها (<span dir="ltr">Simplify Models</span>):</b> جعل النموذج أسهل في الفهم والتفسير البشري.</li>
+            </ol>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) التقنيات الثلاث لاختيار السمات (<span dir="ltr">3 Feature Selection Techniques</span>)</h3>
+        <div class="exam-alert">
+          <b>🔥🔥 مقارنة امتحانية مؤكدة بين الطرق الثلاث لاختيار السمات:</b><br>
+          1) <b>طرق التصفية / الفلترة (<span dir="ltr">Filter Methods</span>):</b> تقيس أهمية كل سمة وعلاقتها بسمة الهدف باستخدام <b>مقاييس إحصائية بحتة بشكل مستقل تماماً عن أي خوارزمية تعلم آلي</b> (وهي سريعة جداً). ومن أشهر أمثلتها: (<b>اختبار مربع كاي <span dir="ltr">Chi-squared</span></b>، <b>المعلومات المتبادلة <span dir="ltr">Mutual Information</span></b>، و<b>ارتباط بيرسون <span dir="ltr">Pearson Correlation</span></b>).<br>
+          2) <b>طرق التغليف (<span dir="ltr">Wrapper Methods</span>):</b> تبحث عن أفضل مجموعة فرعية من السمات من خلال <b>تدريب وتقييم نموذج تعلم آلي فعلي مراراً وتكراراً</b> على مجموعات مختلفة من السمات (مثل الاختيار الأمامي <span dir="ltr">Forward Selection</span> والحذف الخلفي <span dir="ltr">Backward Elimination</span>). وهي دقيقة لكنها مكلفة وبطيئة حسابياً.<br>
+          3) <b>الطرق المعتمدة على النموذج / المدمجة (<span dir="ltr">Model-based / Embedded Methods</span>):</b> تتم عملية اختيار السمات <b>تلقائياً أثناء عملية تدريب النموذج نفسه</b> كجزء مدمج من الخوارزمية (مثل انحدار <span dir="ltr">Lasso</span> الذي يصفر معاملات السمات غير المهمة، وأشجار القرار <span dir="ltr">Decision Trees</span>).
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) اختبار مربع كاي (<span dir="ltr">Chi-Squared Test - $\chi^2$</span>) — المعادلة والمسألة الحسابية الكاملة</h3>
+        <ul>
+          <li><b>متى نستخدمه؟</b> هو أحد أشهر طرق التصفية (<span dir="ltr">Filter methods</span>)، ويُستخدم لاختبار <b>مدى الاستقلالية أو الارتباط بين سمتين نوعيتين (فئويتين <span dir="ltr">Categorical features</span>)</b> من خلال جدول التوافق (<span dir="ltr">Contingency Table</span>).</li>
+          <li><b>القاعدة الذهبية لتفسير قيمة $\chi^2$:</b>
+            <ul>
+              <li>إذا كانت السمة <b>مستقلة تماماً</b> عن الهدف، تكون قيمة $\chi^2$ قريبة من <b>الصفر ($0$)</b> (أي أن السمة غير مهمة).</li>
+              <li><b>كلما زادت قيمة $\chi^2$</b>، دلّ ذلك على وجود <b>ارتباط واعتمادية أقوى</b> بين السمة والهدف، وبالتالي تكون السمة <b>أكثر أهمية</b> ونختارها!</li>
+            </ul>
+          </li>
+          <li><b>المعادلة الرياضية لاختبار مربع كاي ($\chi^2$):</b></li>
+        </ul>
+        <div class="math-box">
+          &chi;<sup>2</sup> = &sum; [ ( O<sub>ij</sub> &minus; E<sub>ij</sub> )<sup>2</sup> / E<sub>ij</sub> ] &nbsp;&nbsp; where &nbsp;&nbsp; E<sub>ij</sub> = ( Row Total<sub>i</sub> &times; Column Total<sub>j</sub> ) / Grand Total
+        </div>
+        <ul>
+          <li>حيث:
+            <ul>
+              <li><b>$O_{ij}$ (<span dir="ltr">Observed Frequency</span>):</b> التكرار المشاهد (الفعلي) في الخلية $(i, j)$ من جدول البيانات.</li>
+              <li><b>$E_{ij}$ (<span dir="ltr">Expected Frequency</span>):</b> التكرار المتوقع للخلية في حال الاستقلالية، ويساوي: <b>(مجموع الصف $\times$ مجموع العمود) $\div$ المجموع الكلي للعينات</b>.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <div class="step-box">
+          <b>مسألة الكتاب الكاملة (مقارنة سمة <code>Outlook</code> وسمة <code>Wind</code> مع الهدف <code>Play Tennis</code> لـ 14 يوماً):</b><br>
+          في بيانات لعب التنس (المجموع الكلي $N = 14$ يوماً: منها $9$ أيام <code dir="ltr">Yes</code> و $5$ أيام <code dir="ltr">No</code>):<br><br>
+          <b>أولاً: حساب $\chi^2$ لسمة حالة الطقس (<code dir="ltr">Outlook</code>: Sunny, Overcast, Rain):</b><br>
+          • <b>Sunny (مجموعه 5 أيام):</b> المشاهد ($O$): $\text{Yes}=2, \text{No}=3$.<br>
+          &nbsp;&nbsp;- المتوقع ($E$): $E_{\text{Yes}} = \frac{5 \times 9}{14} = 3.21$ ، و $E_{\text{No}} = \frac{5 \times 5}{14} = 1.79$.<br>
+          • <b>Overcast (مجموعه 4 أيام):</b> المشاهد ($O$): $\text{Yes}=4, \text{No}=0$.<br>
+          &nbsp;&nbsp;- المتوقع ($E$): $E_{\text{Yes}} = \frac{4 \times 9}{14} = 2.57$ ، و $E_{\text{No}} = \frac{4 \times 5}{14} = 1.43$.<br>
+          • <b>Rain (مجموعه 5 أيام):</b> المشاهد ($O$): $\text{Yes}=3, \text{No}=2$.<br>
+          &nbsp;&nbsp;- المتوقع ($E$): $E_{\text{Yes}} = \frac{5 \times 9}{14} = 3.21$ ، و $E_{\text{No}} = \frac{5 \times 5}{14} = 1.79$.<br>
+          • <b>مجموع $\chi^2$ لسمة <code dir="ltr">Outlook</code>:</b> بجمع $\frac{(O-E)^2}{E}$ للخلايا الست نحصل على: <b>$\chi^2(\text{Outlook}) \approx \mathbf{3.55}$</b>.<br><br>
+          <b>ثانياً: حساب $\chi^2$ لسمة الرياح (<code dir="ltr">Wind</code>: Weak=8, Strong=6):</b><br>
+          • بنفس الطريقة نحسب المتوقع ونجمع الفروق فنحصل على: <b>$\chi^2(\text{Wind}) \approx \mathbf{0.93}$</b>.<br><br>
+          <b>✅ القرار النهائي:</b> بما أن $\chi^2(\text{Outlook}) = 3.55$ <b>أكبر من</b> $\chi^2(\text{Wind}) = 0.93$، فإن سمة <b><code dir="ltr">Outlook</code> هي الأهم والأقوى ارتباطاً</b> بالهدف!
+        </div>
+      </div>
+    </details>
+
+    <!-- ==================== الوحدة الثانية ==================== -->
+    <details>
+      <summary>الوحدة الثانية: المعلومات المتبادلة (Mutual Information) ومعامل ارتباط بيرسون (Pearson Correlation)</summary>
+      <div class="details-body">
+        <h3>1) المعلومات المتبادلة (<span dir="ltr">Mutual Information - MI</span>)</h3>
+        <ul>
+          <li><b>مفهومها:</b> تقيس <b>المعلومات المتبادلة $I(X; Y)$</b> مقدار المعلومات التي يقدمها متغير عشوائي ($X$ - السمة) حول متغير عشوائي آخر ($Y$ - الهدف)؛ أي كم يقل عدم اليقين بشأن الهدف $Y$ عند معرفتنا بقيمة السمة $X$.</li>
+          <li><b>خصائصها:</b>
+            <ul>
+              <li>تكون قيمتها دائماً غير سالبة ($I(X; Y) \ge 0$).</li>
+              <li>تساوي <b>صفراً ($0$)</b> إذا وفقط إذا كان المتغيران $X$ و $Y$ <b>مستقلين تماماً</b> (لأنه عند الاستقلال يكون $P(X,Y) = P(X)P(Y)$، وبالتالي $\log(1) = 0$).</li>
+              <li><b>كلما زادت قيمة المعلومات المتبادلة</b>، زادت أهمية السمة في التنبؤ بالهدف.</li>
+            </ul>
+          </li>
+          <li><b>المعادلة الرياضية للمعلومات المتبادلة (<span dir="ltr">Mutual Information</span>):</b></li>
+        </ul>
+        <div class="math-box">
+          I(X; Y) = &sum;<sub>x&in;X</sub> &sum;<sub>y&in;Y</sub> P(x, y) &middot; log [ P(x, y) / ( P(x) &middot; P(y) ) ]
+        </div>
+        <ul>
+          <li>حيث:
+            <ul>
+              <li><b>$P(x, y)$:</b> الاحتمال المشترك (<span dir="ltr">Joint Probability</span>) لحدوث القيمة $x$ والقيمة $y$ معاً (عدد مرات ظهورهما معاً مقسوماً على العدد الكلي $N$).</li>
+              <li><b>$P(x)$ و $P(y)$:</b> الاحتمالات الهامشية (<span dir="ltr">Marginal Probabilities</span>) لكل من $x$ و $y$ على حدة.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <div class="step-box">
+          <b>مثال حساب حد واحد في معادلة Mutual Information (من مسألة الكتاب):</b><br>
+          إذا كان الاحتمال المشترك لكون الطقس مشمساً واللعب نعم هو $P(\text{Sunny}, \text{Yes}) = \frac{2}{14} \approx 0.143$، وكان احتمال الطقس المشمس $P(\text{Sunny}) = \frac{5}{14} \approx 0.357$، واحتمال اللعب نعم $P(\text{Yes}) = \frac{9}{14} \approx 0.643$:<br>
+          • نحسب مساهمة هذه الخلية: $0.143 \times \log\left(\frac{0.143}{0.357 \times 0.643}\right)$.<br>
+          • وعند جمع جميع الخلايا نجد أن $I(\text{Outlook}; \text{Play}) = \mathbf{0.246}$ (أو باللوغاريتم الطبيعي $0.171$)، بينما $I(\text{Wind}; \text{Play}) = \mathbf{0.048}$ (أو $0.033$)؛ مما يؤكد مجدداً أن سمة <b><code dir="ltr">Outlook</code> هي الأهم</b>!
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) معامل ارتباط بيرسون (<span dir="ltr">Pearson Correlation Coefficient</span>)</h3>
+        <ul>
+          <li><b>متى نستخدمه في اختيار السمات؟</b> يُستخدم لقياس قوة واتجاه <b>العلاقة الخطية بين المتغيرات الكمية (الرقمية المتصلة)</b>.</li>
+          <li><b>المعادلة الرياضية لمعامل ارتباط بيرسون ($r$):</b></li>
+        </ul>
+        <div class="math-box">
+          r = &sum; (x<sub>i</sub> &minus; x&#772;)(y<sub>i</sub> &minus; y&#772;) / &radic;[ &sum; (x<sub>i</sub> &minus; x&#772;)<sup>2</sup> &middot; &sum; (y<sub>i</sub> &minus; y&#772;)<sup>2</sup> ]
+        </div>
+        <ul>
+          <li><b>كيف نختار السمات باستخدام ارتباط بيرسون؟</b>
+            <ol>
+              <li>نختار السمات التي لها <b>ارتباط قوي (موجب قريب من $+1$ أو سالب قريب من $-1$) مع سمة الهدف ($Y$)</b>.</li>
+              <li>إذا وجدنا سمتين مستقلتين ($X_1$ و $X_2$) بينهما ارتباط عالٍ جداً ببعضهما (تعددية خطية)، نحذف إحداهما لأنها زائدة عن الحاجة (<span dir="ltr">Redundant</span>) وتحمل نفس المعلومة.</li>
+            </ol>
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- ==================== الوحدة الثالثة ==================== -->
+    <details>
+      <summary>الوحدة الثالثة: تقليص السمات وتحليل المكونات الرئيسية (PCA - Principal Component Analysis)</summary>
+      <div class="details-body">
+        <h3>1) الفرق الجوهري بين اختيار السمات (Selection) وتقليص السمات (Reduction)</h3>
+        <div class="exam-alert">
+          <b>🔥🔥 سؤال امتحاني كلاسيكي مهم جداً: ما الفرق بين اختيار السمات وتقليص السمات؟</b><br>
+          • <b>اختيار السمات (<span dir="ltr">Feature Selection</span>):</b> يحتفظ بمجموعة فرعية من <b>السمات الأصلية كما هي دون تغيير في قيمها</b>، ويحذف بقية السمات الأقل أهمية.<br>
+          • <b>تقليص السمات (<span dir="ltr">Feature Reduction / Dimensionality Reduction</span>):</b> يقوم <b>بدمج وتحويل كافة السمات الأصلية رياضياً لإنشاء مجموعة جديدة أصغر من السمات المركبة (المكونات الرئيسية <span dir="ltr">Principal Components</span>)</b> مع الحفاظ على <b>غالبية المعلومات (التباين <span dir="ltr">Variance</span>)</b> الموجودة في البيانات الأصلية!
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) تحليل المكونات الرئيسية (<span dir="ltr">PCA</span>) — الخطوات الخمس بالترتيب والمعادلات</h3>
+        <p>تعمل خوارزمية <b>تحليل المكونات الرئيسية (<span dir="ltr">Principal Component Analysis - PCA</span>)</b> على إسقاط البيانات من فضاء عالي الأبعاد إلى فضاء أقل أبعاداً باتجاه المحاور التي تمتلك <b>أكبر تباين ممكن (<span dir="ltr">Maximum Variance</span>)</b>، وتتم عبر <b>5 خطوات رياضية متسلسلة</b>:</p>
+
+        <ol>
+          <li><b>الخطوة (1): حساب المتوسط الحسابي ($\mu$) لكل سمة (عمود):</b>
+            <div class="math-box">&mu; = (1 / N) &sum;<sub>i=1</sub><sup>N</sup> x<sub>i</sub></div>
+          </li>
+          <li><b>الخطوة (2): تمركز البيانات حول المتوسط (<span dir="ltr">Mean-Centered Data Matrix $X$</span>):</b>
+            <p style="margin:4px 0">نطرح المتوسط الحسابي لكل عمود من جميع قيم ذلك العمود ليصبح متوسط البيانات الجديدة صفراً:</p>
+            <div class="math-box">X = Data &minus; &mu;</div>
+          </li>
+          <li><b>الخطوة (3): حساب مصفوفة التغاير (<span dir="ltr">Covariance Matrix $\Sigma$</span>):</b>
+            <p style="margin:4px 0">تُحسَب مصفوفة التغاير بضرب منقول مصفوفة البيانات المتمركزة ($X^T$) في نفسها ($X$) والقسمة على $(N - 1)$:</p>
+            <div class="math-box">&Sigma; = [ 1 / (N &minus; 1) ] &middot; X<sup>T</sup> X</div>
+          </li>
+          <li><b>الخطوة (4): تفكيك القيمة المفردة (<span dir="ltr">SVD</span>) لحساب القيم الذاتية والمتجهات الذاتية:</b>
+            <p style="margin:4px 0">نطبق <span dir="ltr">SVD</span> (أو تحليل القيم الذاتية) على مصفوفة التغاير $\Sigma$ للحصول على:</p>
+            <ul>
+              <li><b>القيم الذاتية (<span dir="ltr">Eigenvalues - $\lambda$</span>):</b> تمثل <b>مقدار التباين (كمية المعلومات)</b> الذي يفسره كل مكون رئيسي؛ فنرتبها تنازلياً ونختار المكونات ذات القيم الذاتية الأكبر!</li>
+              <li><b>المتجهات الذاتية (<span dir="ltr">Eigenvectors - $e$</span>):</b> تمثل <b>اتجاهات المحاور الجديدة (المكونات الرئيسية <span dir="ltr">Principal Components</span>)</b>.</li>
+            </ul>
+          </li>
+          <li><b>الخطوة (5): إسقاط البيانات على المكونات الرئيسية المختارة (<span dir="ltr">Projection $X'$</span>):</b>
+            <p style="margin:4px 0">نضرب مصفوفة البيانات المتمركزة ($X$) في المتجه الذاتي الأول ($e_1$) للحصول على البيانات المقلصة في بُعد واحد:</p>
+            <div class="math-box">X' = X &middot; e<sub>1</sub></div>
+          </li>
+        </ol>
+
+        <div class="step-box">
+          <b>ملخص مسألة المنازل في الكتاب (تقليص سمتي المساحة والسعر لـ $N = 4$ منازل إلى سمة واحدة بـ PCA):</b><br>
+          1) نحسب متوسط المساحة ومتوسط السعر للمنازل الأربعة.<br>
+          2) نطرح المتوسط من كل عمود فنحصل على المصفوفة المتمركزة $X$ (أبعادها $4 \times 2$).<br>
+          3) نحسب مصفوفة التغاير $\Sigma = \frac{1}{4-1} X^T X = \frac{1}{3} X^T X$ (وتنتج مصفوفة مربعة $2 \times 2$).<br>
+          4) نوجد القيم الذاتية ($\lambda_1, \lambda_2$) ونختار المتجه الذاتي $e_1$ المقابل لأكبر قيمة ذاتية $\lambda_1$.<br>
+          5) نضرب $X' = X \cdot e_1$ فنحصل على عمود واحد فقط ($4 \times 1$) يمثل السمة الجديدة المقلصة للمنازل الأربعة!
+        </div>
+      </div>
+    </details>
+
+    <!-- ==================== الوحدة الرابعة ==================== -->
+    <details>
+      <summary>الوحدة الرابعة: التطبيق البرمجي لاختيار وتقليص السمات على بيانات سرطان الثدي (breast-cancer.csv)</summary>
+      <div class="details-body">
+        <h3>1) إعداد البيانات وبناء النموذج الأساسي (Baseline Model)</h3>
+        <ul>
+          <li>في ملف بيانات سرطان الثدي (<code dir="ltr">breast-cancer.csv</code>)، نقوم أولاً بترميز عمود الهدف النصي (<span dir="ltr">Class</span>) إلى أرقام ($0$ و $1$) باستخدام <code dir="ltr">LabelEncoder</code>، وتقسيم البيانات إلى تدريب واختبار بـ <code dir="ltr">train_test_split</code>.</li>
+          <li>عند تدريب مصنف الانحدار اللوجستي (<code dir="ltr">LogisticRegression</code>) على <b>جميع السمات الأصلية</b> بدون اختيار سمات، بلغت دقة النموذج: <b>$95.6\%$</b>.</li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) اختيار أفضل $K$ سمات باستخدام (<span dir="ltr">SelectKBest</span>) مع (<span dir="ltr">chi2</span>) ومع (<span dir="ltr">mutual_info_classif</span>)</h3>
+        <div class="exam-alert">
+          <b>🌟 الدوال والفئات البرمجية في الوحدة الرابعة (مهمة جداً في أسئلة الأكواد):</b><br>
+          • نستورد أداة اختيار أفضل $K$ سمات <b><code dir="ltr">SelectKBest</code></b>، ودالة مربع كاي <b><code dir="ltr">chi2</code></b>، ودالة المعلومات المتبادلة للتصنيف <b><code dir="ltr">mutual_info_classif</code></b> من الوحدة: <b><code dir="ltr">sklearn.feature_selection</code></b>.<br>
+          • نستورد فئة تحليل المكونات الرئيسية <b><code dir="ltr">PCA</code></b> من الوحدة: <b><code dir="ltr">sklearn.decomposition</code></b>.
+        </div>
+
+        <div class="code-box">
+<span class="kw">from</span> sklearn.feature_selection <span class="kw">import</span> SelectKBest, chi2, mutual_info_classif<br>
+<span class="kw">from</span> sklearn.decomposition <span class="kw">import</span> PCA<br>
+<span class="kw">from</span> sklearn.linear_model <span class="kw">import</span> LogisticRegression<br>
+<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> accuracy_score<br><br>
+<span class="cmt"># 1. اختيار أفضل 5 سمات باستخدام اختبار مربع كاي (chi2)</span><br>
+fs_chi2 = SelectKBest(score_func=chi2, k=<span class="num">5</span>)<br>
+X_train_chi2 = fs_chi2.fit_transform(X_train, y_train)<br>
+X_test_chi2  = fs_chi2.transform(X_test)<br>
+<span class="cmt"># عند تدريب LogisticRegression على هذه الـ 5 سمات فقط، ارتفعت الدقة من 95.6% إلى 97.4%!</span><br><br>
+<span class="cmt"># 2. اختيار أفضل 6 سمات باستخدام المعلومات المتبادلة (mutual_info_classif)</span><br>
+fs_mi = SelectKBest(score_func=mutual_info_classif, k=<span class="num">6</span>)<br>
+X_train_mi = fs_mi.fit_transform(X_train, y_train)<br>
+X_test_mi  = fs_mi.transform(X_test)<br>
+<span class="cmt"># حقق النموذج أيضاً دقة ممتازة بلغت 97.4%!</span><br><br>
+<span class="cmt"># 3. تقليص جميع السمات إلى 3 مكونات رئيسية فقط باستخدام PCA</span><br>
+pca = PCA(n_components=<span class="num">3</span>)<br>
+X_train_pca = pca.fit_transform(X_train)<br>
+X_test_pca  = pca.transform(X_test)<br>
+<span class="cmt"># لاحظي أن pca.fit_transform(X_train) لا تحتاج لتمرير y_train لأن PCA غير خاضع للإشراف!</span>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- التبويب الثاني: ملخص القوانين والمقارنات -->
+  <section id="tables" class="panel">
+    <div class="card">
+      <h2>1. جدول المقارنة الشامل لطرق اختيار وتقليص السمات في الفصل التاسع</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>الطريقة / الخوارزمية</th>
+            <th>التصنيف</th>
+            <th>المعادلة أو المبدأ الرياضي</th>
+            <th>الأداة في Scikit-learn</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1. اختبار مربع كاي (<span dir="ltr">Chi-squared</span>)</b></td>
+            <td>اختيار سمات (<span dir="ltr">Filter</span>)</td>
+            <td dir="ltr">$\chi^2 = \sum \frac{(O_{ij} - E_{ij})^2}{E_{ij}}$</td>
+            <td dir="ltr"><code>SelectKBest(score_func=chi2, k=...)</code></td>
+          </tr>
+          <tr>
+            <td><b>2. المعلومات المتبادلة (<span dir="ltr">Mutual Info</span>)</b></td>
+            <td>اختيار سمات (<span dir="ltr">Filter</span>)</td>
+            <td dir="ltr">$I(X;Y) = \sum\sum P(x,y)\log\frac{P(x,y)}{P(x)P(y)}$</td>
+            <td dir="ltr"><code>SelectKBest(score_func=mutual_info_classif, k=...)</code></td>
+          </tr>
+          <tr>
+            <td><b>3. ارتباط بيرسون (<span dir="ltr">Pearson</span>)</b></td>
+            <td>اختيار سمات (<span dir="ltr">Filter</span>)</td>
+            <td>يقيس الارتباط الخطي للمتغيرات الكمية في $[-1, 1]$.</td>
+            <td dir="ltr"><code>df.corr()</code> / <code>f_regression</code></td>
+          </tr>
+          <tr>
+            <td><b>4. تحليل المكونات الرئيسية (<span dir="ltr">PCA</span>)</b></td>
+            <td>تقليص سمات (<span dir="ltr">Reduction</span>)</td>
+            <td>مصفوفة التغاير $\Sigma = \frac{1}{N-1}X^TX$ ثم <span dir="ltr">SVD</span> والإسقاط $X'=Xe$.</td>
+            <td dir="ltr"><code>PCA(n_components=...)</code><br><small>(من <code>sklearn.decomposition</code>)</small></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- التبويب الثالث: قاموس المصطلحات والدوال -->
+  <section id="terms" class="panel">
+    <div class="card">
+      <h2>قاموس المصطلحات والدوال الشامل للفصل التاسع</h2>
+      <p class="muted">جميع المفاهيم الرياضية والفئات البرمجية لاختيار وتقليص السمات:</p>
+      <div id="termsGrid" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- التبويب الرابع: البطاقات التعليمية -->
+  <section id="cards" class="panel">
+    <div class="card">
+      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
+      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
+      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
+        <div class="term" id="flashTerm"></div>
+        <div class="answer" id="flashAnswer" hidden></div>
+        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="prevCard">السابق</button>
+        <span id="cardCount" class="muted"></span>
+        <button class="btn primary" id="nextCard">التالي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- التبويب الخامس: الاختبار الذاتي العشوائي -->
+  <section id="quiz" class="panel">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2>الاختبار الشامل المتغير للفصل التاسع (25 سؤالاً) <span class="badge-new">ترتيب عشوائي ذكي 🎲</span></h2>
+          <p class="muted">يختبر فهمك لطرق الاختيار، مسائل Chi-squared و Mutual Information، خطوات PCA، وأكواد Scikit-learn مع تعليل فوري!</p>
+        </div>
+        <div class="score" id="score">النتيجة: 0 / 25</div>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="quizArea"></div>
+      <div class="row">
+        <button class="btn" id="resetQuiz">إعادة الاختبار بترتيب عشوائي جديد 🔀</button>
+        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+      </div>
+      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
+    </div>
+  </section>
+</main>
+
+<footer>مبني بالكامل (100%) على محتوى الفصل التاسع (اختيار السمات وتقليصها - الوحدات الأربع) من مقرر تحليل وتمثيل البيانات</footer>
+
+<script>
+const terms = [
+  ["Feature Selection (اختيار السمات)", "انتقاء أفضل مجموعة فرعية من السمات الأصلية الأكثر ارتباطاً بالهدف وحذف السمات غير المهمة دون تغيير قيم السمات المختارة."],
+  ["Feature Reduction (تقليص السمات)", "دمج وتحويل السمات الأصلية رياضياً لإنشاء عدد أقل من السمات الجديدة المركبة مع الحفاظ على غالبية المعلومات (مثل PCA)."],
+  ["Filter Methods (طرق التصفية)", "تقنيات تختار السمات بناءً على مقاييس إحصائية بحتة (مثل Chi-squared و Mutual Information و Pearson) بشكل مستقل عن خوارزمية التعلم الآلي."],
+  ["Wrapper Methods (طرق التغليف)", "تقنيات تقيم مجموعات فرعية مختلفة من السمات عبر تدريب واختبار نموذج تعلم آلي فعلي لاختيار المجموعة الأفضل أداءً."],
+  ["Model-based / Embedded Methods", "طرق مدمجة تقوم باختيار السمات تلقائياً كجزء من عملية تدريب النموذج نفسه (مثل Lasso وأشجار القرار)."],
+  ["Chi-Squared Test (اختبار مربع كاي)", "اختبار إحصائي يقيس درجة الارتباط أو الاستقلالية بين السمات الفئوية عبر مقارنة التكرار المشاهد (O) بالتكرار المتوقع (E)."],
+  ["Contingency Table (جدول التوافق)", "جدول تكراري يعرض توزيع الحالات المشتركة بين متغيرين فئويين لحساب اختبار مربع كاي."],
+  ["Mutual Information (المعلومات المتبادلة)", "مقياس يحسب كمية المعلومات التي تقدمها سمة معينة (X) حول سمة الهدف (Y) بناءً على الاحتمالات المشتركة والهامشية."],
+  ["PCA (Principal Component Analysis)", "تحليل المكونات الرئيسية: خوارزمية لتقليص الأبعاد تحول السمات المترابطة إلى مكونات رئيسية متعامدة تحتفظ بأكبر قدر من التباين."],
+  ["Mean-Centered Data (بيانات متمركزة)", "طرح المتوسط الحسابي لكل عمود من جميع قيم ذلك العمود (X = Data - μ) كخطوة أساسية في PCA."],
+  ["Covariance Matrix (مصفوفة التغاير)", "مصفوفة مربعة تقيس التباين المشترك بين السمات: Σ = (1 / (N - 1)) * X^T * X."],
+  ["Eigenvalues & Eigenvectors", "القيم الذاتية (تمثل مقدار التباين/المعلومات لكل مكون) والمتجهات الذاتية (تمثل اتجاهات المحاور الجديدة للمكونات الرئيسية في PCA)."],
+  ["SelectKBest", "فئة في sklearn.feature_selection لاختيار أفضل K سمات بناءً على دالة تقييم إحصائية مثل chi2 أو mutual_info_classif."],
+  ["sklearn.decomposition.PCA", "الفئة البرمجية في مكتبة Scikit-learn لتطبيق خوارزمية تحليل المكونات الرئيسية بتحديد عدد المكونات n_components."]
+];
+
+const cards = [
+  ["ما هي الفوائد الأربع الرئيسية لعملية اختيار السمات (Feature Selection)؟", "1) تقليل الإفراط في التخصيص (Reduce Overfitting).\n2) تحسين دقة النموذج (Improve Accuracy).\n3) تقليل وقت التدريب والتعقيد الحسابي.\n4) تبسيط النماذج وسهولة تفسيرها."],
+  ["ما هي التقنيات (الطرق) الثلاث الرئيسية لاختيار السمات؟", "1) طرق التصفية / الفلترة (Filter methods).\n2) طرق التغليف (Wrapper methods).\n3) الطرق المعتمدة على النموذج / المدمجة (Model-based / Embedded methods)."],
+  ["ما الفرق بين (Filter methods) و (Wrapper methods) و (Model-based methods)؟", "• Filter: تقيم السمات بمقاييس إحصائية (كـ Chi-squared و MI) بشكل مستقل عن أي نموذج تعلم آلي.\n• Wrapper: تجرب مجموعات سمات مختلفة بتدريب نموذج تعلم آلي فعلي لاختيار الأفضل.\n• Model-based: تختار السمات تلقائياً أثناء تدريب النموذج نفسه."],
+  ["ما هي المعادلة الرياضية لاختبار مربع كاي (Chi-squared Test)؟", "χ² = Σ [ (O_ij - E_ij)² / E_ij ]\nحيث O_ij هو التكرار المشاهد الفعلي، و E_ij هو التكرار المتوقع."],
+  ["كيف نحسب التكرار المتوقع (E_ij) لأي خلية في جدول التوافق (Contingency Table)؟", "E_ij = (مجموع الصف i × مجموع العمود j) ÷ المجموع الكلي للعينات (Grand Total)."],
+  ["[مسألة حسابية] في جدول توافق إجمالي عيناته 20، إذا كان مجموع الصف الأول = 10، ومجموع العمود الأول = 8، فكم يبلغ التكرار المتوقع (E_11)؟", "E_11 = (10 × 8) ÷ 20 = 80 ÷ 20 = 4."],
+  ["[مسألة حسابية] إذا كان التكرار المشاهد لخلية هو O = 7، والتكرار المتوقع لها هو E = 4، فكم تبلغ مساهمة هذه الخلية في مجموع مربع كاي (χ²)؟", "(O - E)² / E = (7 - 4)² / 4 = (3)² / 4 = 9 / 4 = 2.25."],
+  ["عند المقارنة بين سمتين باستخدام اختبار مربع كاي، أيهما نختار: السمة ذات قيمة χ² الأكبر أم الأصغر؟ ولماذا؟", "نختار السمة ذات قيمة (χ² الأكبر)؛ لأن القيمة الأكبر تعني انحرافاً أكبر عن فرضية الاستقلال، أي ارتباطاً واعتمادية أقوى مع سمة الهدف!"],
+  ["في مسألة لعب التنس بالكتاب، كانت χ²(Outlook) = 3.55 و χ²(Wind) = 0.93، فأي السمتين أهم لتحديد قرار اللعب؟", "سمة (Outlook - حالة الطقس) هي الأهم لأن قيمة χ² لها (3.55) أكبر بكثير من سمة الرياح (0.93)."],
+  ["ما هي المعادلة الرياضية للمعلومات المتبادلة (Mutual Information - I(X; Y))؟", "I(X; Y) = Σ_x Σ_y P(x, y) * log( P(x, y) / (P(x) * P(y)) )"],
+  ["متى تساوي قيمة المعلومات المتبادلة I(X; Y) صفراً (0)؟", "تساوي صفراً عندما تكون السمة X والهدف Y مستقلين تماماً عن بعضهما؛ لأن P(x,y) = P(x)*P(y) فيكون ناتج القسمة 1، و log(1) = 0."],
+  ["فيماذا يُستخدم معامل ارتباط بيرسون (Pearson Correlation) في اختيار السمات؟ وما هو نطاقه؟", "يُستخدم لقياس قوة واتجاه العلاقة الخطية بين المتغيرات الكمية (الرقمية المتصلة)، ويقع نطاقه دائماً بين [-1 و +1]."],
+  ["ما الفرق الجوهري بين (اختيار السمات - Feature Selection) و (تقليص السمات - Feature Reduction)؟", "• اختيار السمات: ينتقي مجموعة فرعية من السمات الأصلية كما هي ويحذف الباقي.\n• تقليص السمات (مثل PCA): يدمج ويحول كافة السمات الأصلية رياضياً إلى عدد أقل من السمات المركبة الجديدة مع الحفاظ على غالبية المعلومات."],
+  ["ما هي الخطوات الخمس المتسلسلة لحساب تحليل المكونات الرئيسية (PCA)؟", "1) حساب المتوسط الحسابي (μ) لكل سمة.\n2) تمركز البيانات حول المتوسط (X = Data - μ).\n3) حساب مصفوفة التغاير: Σ = (1 / (N - 1)) * X^T * X.\n4) تطبيق SVD لإيجاد القيم الذاتية (Eigenvalues) والمتجهات الذاتية (Eigenvectors).\n5) إسقاط البيانات على المتجهات الذاتية المختارة: X' = X * e."],
+  ["في خطوات PCA، كيف نحسب مصفوفة التغاير (Covariance Matrix Σ) من مصفوفة البيانات المتمركزة حول المتوسط (X)؟", "نضرب منقول المصفوفة (X^T) في المصفوفة (X) ونقسم على (N - 1):\nΣ = (1 / (N - 1)) * X^T * X"],
+  ["في خوارزمية PCA، ماذا تمثل كل من: القيم الذاتية (Eigenvalues) والمتجهات الذاتية (Eigenvectors)؟", "• القيم الذاتية (Eigenvalues): تمثل مقدار التباين (كمية المعلومات) الذي يفسره كل مكون رئيسي.\n• المتجهات الذاتية (Eigenvectors): تمثل اتجاهات المحاور الجديدة (المكونات الرئيسية)."],
+  ["على أي أساس نختار المكونات الرئيسية الأهم في خوارزمية PCA بعد تطبيق SVD؟", "نرتب المكونات تنازلياً حسب قيمها الذاتية (Eigenvalues)، ونختار المتجهات الذاتية المقابلة لأكبر القيم الذاتية لأنها تحتفظ بأكبر قدر من التباين (المعلومات)."],
+  ["كيف نحصل على البيانات الجديدة المقلصة (X') في الخطوة الأخيرة من خوارزمية PCA؟", "عن طريق ضرب مصفوفة البيانات المتمركزة حول المتوسط (X) في مصفوفة المتجهات الذاتية المختارة (e):\nX' = X * e"],
+  ["من أي وحدة في مكتبة Scikit-learn نستورد الفئة SelectKBest والدالتين chi2 و mutual_info_classif؟", "من الوحدة: sklearn.feature_selection"],
+  ["من أي وحدة في مكتبة Scikit-learn نستورد الفئة PCA لتحليل المكونات الرئيسية؟", "من الوحدة: sklearn.decomposition"],
+  ["كيف نكتب الكود البرمجي لاختيار أفضل 5 سمات باستخدام اختبار مربع كاي في Scikit-learn؟", "fs = SelectKBest(score_func=chi2, k=5)\nX_train_fs = fs.fit_transform(X_train, y_train)\nX_test_fs = fs.transform(X_test)"],
+  ["كيف نكتب الكود البرمجي لاختيار أفضل 6 سمات باستخدام المعلومات المتبادلة للتصنيف في Scikit-learn؟", "fs = SelectKBest(score_func=mutual_info_classif, k=6)\nX_train_fs = fs.fit_transform(X_train, y_train)"],
+  ["كيف نكتب الكود البرمجي لتقليص أبعاد البيانات إلى 3 مكونات رئيسية باستخدام PCA في Scikit-learn؟", "pca = PCA(n_components=3)\nX_train_pca = pca.fit_transform(X_train)\nX_test_pca = pca.transform(X_test)"],
+  ["لماذا نمرر (X_train, y_train) معاً في SelectKBest.fit_transform، بينما نمرر (X_train) فقط بدون y_train في PCA.fit_transform؟", "لأن SelectKBest طريقة خاضعة للإشراف تحسب علاقة كل سمة X بالهدف y، بينما PCA طريقة غير خاضعة للإشراف (Unsupervised) تعتمد فقط على تباين السمات X نفسها!"],
+  ["ماذا حدث لدقة مصنف LogisticRegression على بيانات سرطان الثدي في الوحدة الرابعة بعد اختيار أفضل 5 سمات بـ chi2؟", "ارتفعت دقة المصنف من 95.6% (عند استخدام كل السمات) إلى 97.4% (بعد اختيار أهم 5 سمات فقط)!"],
+  ["[مسألة حسابية] إذا كانت قيم سمة لـ 3 عينات هي [10, 20, 30]، فما هي قيمها بعد خطوة التمركز حول المتوسط (Mean-centering) في PCA؟", "1) المتوسط μ = (10 + 20 + 30) / 3 = 20.\n2) نطرح 20 من كل قيمة: [10-20, 20-20, 30-20] = [-10, 0, +10]."],
+  ["ما هو مجموع عناصر أي عمود دائماً بعد إجراء خطوة التمركز حول المتوسط (X = Data - μ) في PCA؟", "مجموع عناصر أي عمود متمركز حول المتوسط يساوي دائماً صفراً (0)!"],
+  ["إذا كانت مصفوفة البيانات الأصلية تحتوي على 100 عينة و 10 سمات (100 × 10)، وطبقنا عليها PCA(n_components=3)، فما أبعاد المصفوفة الناتجة؟", "تصبح أبعاد المصفوفة الناتجة: (100 × 3) أي 100 عينة و 3 مكونات رئيسية فقط."]
+];
+
+const masterQuestions = [
+  {q:"جميع ما يلي يُعد من الفوائد الأربع الرئيسية لعملية اختيار السمات (Feature Selection) ما عدا:",o:["زيادة الإفراط في التخصيص (Overfitting) وزيادة وقت التدريب","تقليل الإفراط في التخصيص (Reduce Overfitting)","تحسين دقة النموذج (Improve Accuracy)","تقليل وقت التدريب وتبسيط النماذج لسهولة تفسيرها"],a:0,e:"اختيار السمات يقلل من الـ Overfitting، ويحسن الدقة، ويقلل وقت التدريب، ويبسط النموذج."},
+  {q:"أي تقنية من تقنيات اختيار السمات تعتمد على المقاييس الإحصائية البحتة (مثل مربع كاي Chi-squared والمعلومات المتبادلة Mutual Information) بشكل مستقل تماماً عن أي خوارزمية تعلم آلي؟",o:["طرق التصفية / الفلترة (Filter methods)","طرق التغليف (Wrapper methods)","الطرق المعتمدة على النموذج (Model-based methods)","التجميع الهرمي (Hierarchical clustering)"],a:0,e:"طرق التصفية (Filter methods) تقيم أهمية السمات إحصائياً بمعزل عن خوارزميات التعلم الآلي."},
+  {q:"تُعرف طرق اختيار السمات التي تقوم بتجربة وتقييم مجموعات فرعية مختلفة من السمات عن طريق تدريب واختبار نموذج تعلم آلي فعلي مراراً وتكراراً باسم:",o:["طرق التغليف (Wrapper methods)","طرق التصفية (Filter methods)","تحليل المكونات الرئيسية (PCA)","التحجيم القياسي (Standard Scaling)"],a:0,e:"طرق التغليف (Wrapper methods) تستخدم نموذج تعلم آلي كمعيار لتقييم المجموعات الفرعية المختلفة من السمات."},
+  {q:"يُستخدم اختبار مربع كاي (Chi-squared Test) في اختيار السمات لقياس مدى الارتباط أو الاستقلالية بين:",o:["السمات النوعية (الفئوية - Categorical features) من خلال جدول التوافق (Contingency table)","المصفوفات الصوتية فقط","الصور ثلاثية الأبعاد فقط","المتغيرات الزمنية بدون هدف"],a:0,e:"اختبار مربع كاي يختبر الاستقلالية بين المتغيرات الفئوية بمقارنة التكرارات المشاهدة بالتكرارات المتوقعة في جدول التوافق."},
+  {q:"في معادلة اختبار مربع كاي: χ² = Σ [ (O_ij - E_ij)² / E_ij ] ، ماذا يمثل الرمز (O_ij) والرمز (E_ij)؟",o:["O_ij هو التكرار المشاهد (الفعلي) في الجدول، و E_ij هو التكرار المتوقع المحسوب بـ (مجموع الصف × مجموع العمود) / المجموع الكلي","O_ij هو المتوسط الحسابي، و E_ij هو الانحراف المعياري","O_ij هو الربع الأول، و E_ij هو الربع الثالث","كلاهما يمثلان القيم المتطرفة"],a:0,e:"في معادلة مربع كاي: O هو Observed frequency (التكرار المشاهد)، و E هو Expected frequency (التكرار المتوقع)."},
+  {q:"[مسألة حسابية] في جدول توافق إجمالي عدد عيناته (N = 50)، إذا كان مجموع الصف الأول = 20، ومجموع العمود الأول = 15، فكم تبلغ قيمة التكرار المتوقع (E_11) لهذه الخلية؟",o:["6.0 (لأن E = (20 × 15) / 50 = 300 / 50 = 6)","35.0","15.0","300.0"],a:0,e:"التكرار المتوقع = (مجموع الصف × مجموع العمود) ÷ المجموع الكلي = (20 × 15) ÷ 50 = 300 ÷ 50 = 6."},
+  {q:"[مسألة حسابية] إذا كان التكرار المشاهد لخلية في جدول التوافق هو (O = 10) والتكرار المتوقع لها هو (E = 5)، فكم تبلغ مساهمة هذه الخلية في قيمة مربع كاي (χ²)؟",o:["5.0 (لأن (10 - 5)² / 5 = 25 / 5 = 5)","1.0","25.0","0.0"],a:0,e:"نعوض في قانون الخلية: (O - E)² / E = (10 - 5)² / 5 = (5)² / 5 = 25 / 5 = 5.0."},
+  {q:"عند حساب اختبار مربع كاي لسمتين فحصلنا على: χ²(Outlook) = 3.55 و χ²(Wind) = 0.93، فأي السمتين نختار كسمة أهم للتنبؤ بالهدف؟ ولماذا؟",o:["نختار سمة (Outlook) لأن قيمة χ² لها أكبر، مما يدل على ارتباط واعتمادية أقوى مع سمة الهدف","نختار سمة (Wind) لأن قيمتها أقرب إلى الصفر","نحذف السمتين معاً لأن مجموعهما أقل من 10","لهما نفس الأهمية تماماً"],a:0,e:"كلما زادت قيمة χ² دلّ ذلك على رفض فرضية الاستقلال ووجود علاقة أقوى بين السمة والهدف، لذا Outlook هي الأهم."},
+  {q:"أي مقياس من مقاييس التصفية تُكتب معادلته على الصورة: I(X; Y) = Σ Σ P(x, y) log [ P(x, y) / (P(x)P(y)) ] ؟",o:["المعلومات المتبادلة (Mutual Information)","اختبار مربع كاي (Chi-squared)","معامل ارتباط بيرسون (Pearson Correlation)","تحليل المكونات الرئيسية (PCA)"],a:0,e:"هذه هي معادلة المعلومات المتبادلة (Mutual Information) التي تعتمد على الاحتمال المشترك P(x,y) والاحتمالات الهامشية P(x) و P(y)."},
+  {q:"متى تكون قيمة المعلومات المتبادلة I(X; Y) بين سمة X وسمة الهدف Y مساوية للصفر (0)؟",o:["عندما تكون السمة X والهدف Y مستقلين إحصائياً بشكل تام (حيث P(x,y) = P(x)P(y) فلا تقدم السمة أي معلومة عن الهدف)","عندما تكون السمة X مطابقة تماماً للهدف Y","عندما تكون جميع القيم سالبة","لا يمكن أن تساوي صفراً أبداً"],a:0,e:"عند الاستقلال التام يكون P(x,y) = P(x)P(y)، فيصبح الكسر داخل اللوغاريتم مساوياً لـ 1، وبما أن log(1) = 0 فإن I(X;Y) = 0."},
+  {q:"أي مقياس من مقاييس اختيار السمات يُستخدم لقياس قوة واتجاه (العلاقة الخطية بين المتغيرات الكمية المتصلة) في النطاق [-1, 1]؟",o:["معامل ارتباط بيرسون (Pearson Correlation)","اختبار مربع كاي للبيانات النصية","التحويل اللوغاريتمي","الترميز الثنائي الساخن (One-Hot)"],a:0,e:"معامل ارتباط بيرسون يقيس الارتباط الخطي بين المتغيرات الكمية ويتراوح بين -1 و +1."},
+  {q:"ما الفرق الجوهري الصحيح بين (اختيار السمات - Feature Selection) و (تقليص السمات - Feature Reduction)؟",o:["اختيار السمات ينتقي مجموعة فرعية من السمات الأصلية كما هي ويحذف الباقي، بينما تقليص السمات يدمج ويحول السمات الأصلية رياضياً لإنشاء عدد أقل من السمات المركبة الجديدة","تقليص السمات يحذف الصفوف المفقودة فقط، واختيار السمات يضاعف عدد الأعمدة","كلاهما يقومان بنفس العملية الحسابية تماماً دون أي اختلاف","اختيار السمات يغير قيم جميع الأعمدة باستخدام المتجهات الذاتية"],a:0,e:"في اختيار السمات تبقى السمات المختارة كما هي، أما في تقليص السمات (مثل PCA) فيتم دمج وتحويل السمات الأصلية إلى مكونات جديدة أقل عدداً."},
+  {q:"ما هي الخوارزمية الأشهر لتقليص أبعاد السمات (Dimensionality Reduction) عن طريق إسقاط البيانات باتجاه المحاور التي تمتلك أكبر تباين؟",o:["تحليل المكونات الرئيسية (Principal Component Analysis - PCA)","خوارزمية بايز الساذج (Naive Bayes)","اختبار مربع كاي (Chi-squared)","الترميز الترتيبي (Ordinal Encoding)"],a:0,e:"خوارزمية تحليل المكونات الرئيسية (PCA) هي التقنية القياسية لتقليص أبعاد السمات مع الحفاظ على أقصى تباين ممكن."},
+  {q:"ما هو الترتيب الصحيح للخطوات الخمس لحساب تحليل المكونات الرئيسية (PCA)؟",o:["1) حساب المتوسط μ -> 2) تمركز البيانات (X = Data - μ) -> 3) حساب مصفوفة التغاير Σ -> 4) تطبيق SVD لإيجاد القيم والمتجهات الذاتية -> 5) إسقاط البيانات (X' = X e)","1) إسقاط البيانات -> 2) حساب المتوسط -> 3) حذف الأعمدة -> 4) حساب مربع كاي -> 5) الترتيب","1) تطبيق SVD -> 2) جمع البيانات -> 3) قسمة المصفوفات -> 4) حساب المنوال -> 5) الرسم","لا يحتاج PCA إلى حساب المتوسط أو مصفوفة التغاير"],a:0,e:"تتم خوارزمية PCA عبر هذه الخطوات الخمس المتسلسلة بالضبط بدءاً من المتوسط والتمركز وحتى الإسقاط النهائي."},
+  {q:"[مسألة حسابية] في الخطوة الثانية من خوارزمية PCA (تمركز البيانات حول المتوسط Mean-centering)، إذا كانت قيم عمود لـ 3 عينات هي [4, 6, 8]، فما هي قيم هذا العمود بعد التمركز حول المتوسط؟",o:["[-2, 0, +2] (لأن المتوسط μ = 6، ونطرح 6 من كل قيمة)","[2, 3, 4]","[16, 36, 64]","[0, 0, 0]"],a:0,e:"نحسب المتوسط: μ = (4 + 6 + 8) / 3 = 18 / 3 = 6. ثم نطرح المتوسط من كل عنصر: 4-6 = -2، 6-6 = 0، 8-6 = +2."},
+  {q:"في الخطوة الثالثة من خوارزمية PCA، ما هي المعادلة الرياضية لحساب مصفوفة التغاير (Covariance Matrix Σ) من مصفوفة البيانات المتمركزة X (حيث N عدد العينات)؟",o:["Σ = [ 1 / (N - 1) ] * X^T * X","Σ = X + μ","Σ = (O - E)² / E","Σ = Q3 - Q1"],a:0,e:"تُحسب مصفوفة التغاير بضرب منقول مصفوفة البيانات المتمركزة (X^T) في المصفوفة (X) والقسمة على (N - 1)."},
+  {q:"عند تطبيق تفكيك القيمة المفردة (SVD) على مصفوفة التغاير في خوارزمية PCA، ماذا تمثل كل من (القيم الذاتية - Eigenvalues) و (المتجهات الذاتية - Eigenvectors)؟",o:["القيم الذاتية تمثل مقدار التباين (كمية المعلومات) لكل مكون، والمتجهات الذاتية تمثل اتجاهات المحاور الجديدة (المكونات الرئيسية)","القيم الذاتية تمثل عدد الصفوف المفقودة، والمتجهات الذاتية تمثل أسماء الأعمدة","كلاهما يمثلان المتوسط الحسابي للبيانات الأصلية","لا تُستخدم القيم الذاتية أو المتجهات الذاتية في PCA"],a:0,e:"القيم الذاتية (λ) تقيس التباين المفسر فنختار الأكبر منها، والمتجهات الذاتية (e) تحدد اتجاه المكونات الرئيسية التي نسقط البيانات عليها."},
+  {q:"في الخطوة الخامسة والأخيرة من خوارزمية PCA، كيف نحسب مصفوفة البيانات الجديدة المقلصة (X') من مصفوفة البيانات المتمركزة (X) والمتجه الذاتي المختار (e)؟",o:["بضرب المصفوفتين: X' = X · e","بقسمة المتوسط على الانحراف المعياري","بطرح الربع الأول من الربع الثالث","بجمع احتمالات اللوغاريتم"],a:0,e:"يتم إسقاط البيانات المتمركزة X على الفضاء الجديد بضربها نقطياً في المتجهات الذاتية المختارة: X' = X · e."},
+  {q:"من أي وحدة في مكتبة Scikit-learn يتم استيراد الأداة SelectKBest والدالتين chi2 و mutual_info_classif؟",o:["sklearn.feature_selection","sklearn.decomposition","sklearn.preprocessing","sklearn.cluster"],a:0,e:"توجد جميع أدوات اختيار السمات (SelectKBest, chi2, mutual_info_classif) داخل الوحدة sklearn.feature_selection."},
+  {q:"من أي وحدة في مكتبة Scikit-learn يتم استيراد الفئة PCA لتحليل المكونات الرئيسية؟",o:["sklearn.decomposition","sklearn.feature_selection","sklearn.linear_model","sklearn.metrics"],a:0,e:"توجد فئة PCA لتفكيك المصفوفات وتقليص الأبعاد داخل الوحدة sklearn.decomposition."},
+  {q:"ما وظيفة الكود البرمجي التالي: fs = SelectKBest(score_func=chi2, k=5) ؟",o:["تهيئة أداة لاختيار أفضل 5 سمات من البيانات بالاعتماد على درجات اختبار مربع كاي (chi2)","تقليص البيانات إلى 5 صفوف فقط باستخدام PCA","تقسيم البيانات إلى 5 مجموعات عنقودية بـ K-means","حذف أول 5 أعمدة من الجدول عشوائياً"],a:0,e:"تقوم SelectKBest بتقييم جميع السمات باستخدام الدالة المحددة في score_func (هنا chi2) والاحتفاظ بأعلى k=5 سمات."},
+  {q:"لماذا نمرر المتغير التابع (y_train) في الكود fs.fit_transform(X_train, y_train) مع SelectKBest، بينما لا نمرره في pca.fit_transform(X_train) مع PCA؟",o:["لأن SelectKBest طريقة خاضعة للإشراف تحسب ارتباط كل سمة بالهدف y، بينما PCA طريقة غير خاضعة للإشراف تعتمد فقط على تباين السمات المستقلة X","لأن PCA يحذف المتغير التابع y_train من الذاكرة","لأن SelectKBest لا تقبل مصفوفة X_train","لا يوجد أي فرق بينهما"],a:0,e:"طرق التصفية مثل chi2 و mutual_info_classif تقيس العلاقة بين X و y، بينما يعتمد PCA على مصفوفة التغاير للسمات X وحدها دون النظر إلى y."},
+  {q:"في التجربة العملية على بيانات سرطان الثدي بالوحدة الرابعة، كيف أثر اختيار أفضل 5 سمات بواسطة (chi2) أو أفضل 6 سمات بواسطة (mutual_info_classif) على دقة مصنف LogisticRegression؟",o:["تحسنت وارتفعت دقة المصنف من 95.6% (بكل السمات) إلى 97.4% (بالسمات المختارة فقط) مع تقليل عدد السمات","انخفضت الدقة إلى 50%","توقف النموذج عن العمل بسبب نقص السمات","لم تتغير الدقة وبقيت 0%"],a:0,e:"أثبتت التجربة العملية فائدة اختيار السمات؛ حيث ارتفعت الدقة من 95.6% إلى 97.4% رغم استخدام 5 أو 6 سمات فقط."},
+  {q:"في الكود: pca = PCA(n_components=3) ، إلى ماذا يشير المعامل (n_components=3)؟",o:["عدد المكونات الرئيسية (السمات المركبة الجديدة) التي نريد تقليص البيانات إليها وهو 3 مكونات","عدد الصفوف التي سيتم حذفها من الجدول","درجة الحدود في الانحدار كثير الحدود","عتبة القيم المتطرفة Z-score"],a:0,e:"يحدد المعامل n_components في فئة PCA عدد الأبعاد أو المكونات الرئيسية التي سيتم الاحتفاظ بها بعد التقليص."},
+  {q:"إذا كان لدينا جدول بيانات يضم 500 عينة و 20 سمة (أبعاده 500 × 20)، وطبقنا عليه SelectKBest(score_func=chi2, k=5)، فما هي أبعاد مصفوفة المخرجات الناتجة؟",o:["500 صف × 5 أعمدة (500 × 5)","5 صفوف × 20 عموداً (5 × 20)","500 صف × 20 عموداً","5 صفوف × 5 أعمدة"],a:0,e:"اختيار السمات لا يغير عدد العينات (الصفوف = 500)، بل يختار أفضل k=5 أعمدة فقط بدلاً من 20 عموداً، فتصبح الأبعاد 500 × 5."}
+];
+
+const termsGrid = document.getElementById("termsGrid");
+terms.forEach(([en, ar]) => {
+  const d = document.createElement("div");
+  d.className = "card";
+  d.style.margin = "0";
+  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
+  termsGrid.appendChild(d);
+});
+
+let ci = 0, showAnswer = false;
+function renderCard() {
+  document.getElementById("flashTerm").textContent = cards[ci][0];
+  document.getElementById("flashAnswer").textContent = cards[ci][1];
+  document.getElementById("flashAnswer").hidden = !showAnswer;
+  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
+  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+}
+document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
+document.getElementById("flashcard").addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
+});
+document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
+document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
+renderCard();
+
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+let currentQuestions = [];
+let answers = {};
+
+function prepareShuffledQuiz() {
+  currentQuestions = shuffleArray(masterQuestions).map(item => {
+    const optsWithFlag = item.o.map((text, idx) => ({ text, isCorrect: idx === item.a }));
+    const shuffledOpts = shuffleArray(optsWithFlag);
+    return {
+      q: item.q,
+      o: shuffledOpts.map(x => x.text),
+      a: shuffledOpts.findIndex(x => x.isCorrect),
+      e: item.e
+    };
+  });
+}
+
+function renderQuiz() {
+  prepareShuffledQuiz();
+  const area = document.getElementById("quizArea");
+  area.innerHTML = "";
+  const letters = ["أ", "ب", "ج", "د"];
+  currentQuestions.forEach((item, i) => {
+    const box = document.createElement("div");
+    box.className = "qbox";
+    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
+    const opts = box.querySelector(".options");
+    item.o.forEach((opt, j) => {
+      const btn = document.createElement("button");
+      btn.className = "option";
+      btn.textContent = `${letters[j]}) ${opt}`;
+      btn.onclick = () => {
+        answers[i] = j;
+        [...opts.children].forEach((x, k) => {
+          x.classList.remove("correct", "wrong");
+          x.disabled = true;
+          if (k === item.a) x.classList.add("correct");
+          if (k === j && j !== item.a) x.classList.add("wrong");
+        });
+        const fb = document.getElementById("fb" + i);
+        fb.hidden = false;
+        fb.className = "feedback " + (j === item.a ? "good" : "bad");
+        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
+        updateScore();
+      };
+      opts.appendChild(btn);
+    });
+    area.appendChild(box);
+  });
+  updateScore();
+}
+
+function updateScore() {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
+  document.getElementById("score").textContent = `النتيجة: ${correct} / ${currentQuestions.length}`;
+  document.getElementById("progressBar").style.width = (Object.keys(answers).length / currentQuestions.length * 100) + "%";
+}
+
+document.getElementById("resetQuiz").onclick = () => {
+  answers = {};
+  document.getElementById("finalResult").textContent = "";
+  renderQuiz();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+document.getElementById("finishQuiz").onclick = () => {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
+  const pct = Math.round(correct / currentQuestions.length * 100);
+  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${currentQuestions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! أنتِ مستعدة تماماً للاختبار في هذا الفصل." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
+};
+
+renderQuiz();
+</script>
+</body>
+</html>

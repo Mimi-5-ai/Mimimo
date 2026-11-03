@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الفصل الخامس الشامل (100%) | تحليل وتمثيل البيانات</title>
+<style>
+:root{
+  --bg:#f0f5ff;
+  --card:#ffffff;
+  --ink:#0f172a;
+  --muted:#475569;
+  --accent:#1d4ed8;
+  --accent-dark:#1e3a8a;
+  --accent2:#dbeafe;
+  --line:#cbd5e1;
+  --good:#059669;
+  --good-bg:#ecfdf5;
+  --bad:#dc2626;
+  --bad-bg:#fef2f2;
+  --warn:#d97706;
+  --warn-bg:#fffbeb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
+header{background:linear-gradient(135deg,#0f172a,#1d4ed8);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(15,23,42,0.2)}
+.wrap{max-width:1040px;margin:auto;padding:0 16px}
+.eyebrow{opacity:.92;font-size:.9rem;background:rgba(255,255,255,0.16);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
+h1{margin:5px 0;font-size:clamp(1.5rem,4vw,2.25rem)}
+header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
+nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:var(--accent2);color:var(--accent-dark);font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
+nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
+nav button.active,.btn.primary{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+main .btn.primary{background:var(--accent);color:white}
+main{padding:22px 0 48px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(15,23,42,0.04)}
+h2{font-size:1.35rem;margin:0 0 12px;color:#0f172a}
+h3{font-size:1.08rem;margin:0 0 8px;color:var(--accent-dark)}
+small,.muted{color:var(--muted)}
+ul,ol{padding-right:22px;margin:8px 0}
+li{margin:6px 0}
+details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
+summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f8fafc;color:#0f172a;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
+details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
+.details-body{padding:16px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
+.badge-new{display:inline-block;background:var(--warn-bg);color:var(--warn);border:1px solid #fcd34d;font-size:.78rem;padding:1px 8px;border-radius:6px;margin-right:6px;font-weight:bold}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#eff6ff;color:#1e3a8a;font-weight:bold}
+tr:last-child td{border-bottom:0}
+.note{border-right:4px solid var(--accent);padding:10px 14px;background:#eff6ff;border-radius:8px;margin:10px 0}
+.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
+.math-box{background:#f8fafc;border:2px solid #93c5fd;border-radius:12px;padding:12px 16px;margin:10px 0;text-align:center;font-size:1.03rem;font-weight:bold;color:#1e3a8a;direction:ltr}
+.step-box{background:#f0fdf4;border:1px solid #86efac;border-right:4px solid var(--good);border-radius:10px;padding:12px 16px;margin:10px 0;font-size:.95rem}
+.code-box{background:#0f172a;color:#e2e8f0;padding:14px 18px;border-radius:12px;font-family:Consolas,Monaco,monospace;direction:ltr;text-align:left;overflow-x:auto;margin:10px 0;border:1px solid #334155;line-height:1.65;font-size:.91rem}
+.code-box .kw{color:#38bdf8;font-weight:bold}
+.code-box .str{color:#4ade80}
+.code-box .num{color:#f472b6}
+.code-box .cmt{color:#94a3b8;font-style:italic}
+.svg-wrap{background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:14px;margin:12px 0;text-align:center}
+.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
+.options{display:grid;gap:8px;margin-top:12px}
+.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
+.option:hover:not(:disabled){border-color:var(--accent);background:#eff6ff}
+.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
+.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
+.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
+.feedback.good{color:var(--good);background:var(--good-bg)}
+.feedback.bad{color:var(--bad);background:var(--bad-bg)}
+.progress{height:10px;background:#cbd5e1;border-radius:9px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
+.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#dbeafe);border:2px solid #93c5fd;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
+.flashcard:hover{transform:scale(1.005)}
+.flashcard .term{font-size:1.32rem;font-weight:bold;color:#1e3a8a}
+.flashcard .answer{margin-top:16px;font-size:1.04rem;color:#0f172a;background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04);white-space:pre-line}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
+@media(max-width:600px){
+  .card{padding:14px}
+  nav button{flex:1 1 calc(50% - 8px);text-align:center}
+  .flashcard{min-height:200px;padding:18px}
+  th,td{padding:8px 10px;font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">نسخة شاملة ومحدثة 100% • مقرر تحليل وتمثيل البيانات</div>
+    <h1>الفصل الخامس: تمثيل البيانات – الجزء الثاني (Seaborn &amp; Pandas)</h1>
+    <p>يغطي المخطط النقطي (Scatter Plot) وأنواع العلاقات، مكتبة Seaborn، الجداول التقاطعية (crosstab) والمحورية (pivot_table)، معامل الارتباط وخريطة الحرارة (Heatmap)، والتمثيل الرسومي المباشر عبر Pandas (df.plot)</p>
+    <nav>
+      <button class="active" data-tab="summary">الشرح والأكواد والرسوم (100%)</button>
+      <button data-tab="tables">ملخص الدوال والمعاملات</button>
+      <button data-tab="terms">قاموس المصطلحات والدوال</button>
+      <button data-tab="cards">البطاقات (28)</button>
+      <button data-tab="quiz">الاختبار العشوائي (25)</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- التبويب الأول: الشرح الشامل -->
+  <section id="summary" class="panel active">
+    <div class="card">
+      <h2>خريطة الفصل الخامس (الوحدات الثلاث الكاملة)</h2>
+      <div class="grid">
+        <div>
+          <span class="tag">الوحدة الأولى</span>
+          <h3>المخطط النقطي (Scatter Plot) و Seaborn</h3>
+          <p>مفهوم وأهمية <span dir="ltr">Scatter Plot</span>، استنتاج نوع العلاقة (طردية أو عكسية: ضعيفة/قوية/مثالية)، تطبيقه على بيانات البطريق بـ <span dir="ltr">plt.scatter()</span> وبسطر واحد عبر <span dir="ltr">sns.scatterplot()</span>.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثانية</span>
+          <h3>الجداول التقاطعية والمحورية وخريطة الحرارة</h3>
+          <p>جدول التقاطع <span dir="ltr">pd.crosstab()</span>، الجدول المحوري <span dir="ltr">pd.pivot_table()</span>، التمثيل الثنائي بـ <span dir="ltr">sns.barplot</span> و <span dir="ltr">sns.boxplot</span>، معامل الارتباط <span dir="ltr">.corr()</span> وخريطة الحرارة <span dir="ltr">sns.heatmap()</span>.</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثالثة</span>
+          <h3>التمثيل الرسومي المباشر عبر Pandas</h3>
+          <p>دالة <span dir="ltr">df.plot()</span> ومعاملاتها الـ 13، وتطبيقاتها على أسهم فيسبوك (<span dir="ltr">fb</span>): رسم <span dir="ltr">line</span>، التقسيم الفرعي <span dir="ltr">subplots &amp; layout</span>، دالة <span dir="ltr">assign()</span>، ورسم <span dir="ltr">scatter, hexbin, hist, box</span>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== الوحدة الأولى كاملة في قائمة واحدة ==================== -->
+    <details open>
+      <summary>الوحدة الأولى: المخطط النقطي (Scatter Plot)، استنتاج العلاقات، وتطبيقه بـ Matplotlib و Seaborn</summary>
+      <div class="details-body">
+        <h3>1) مفهوم وأهمية المخطط النقطي (<span dir="ltr">Scatter Plot</span>) واستنتاج نوع العلاقة</h3>
+        <ul>
+          <li><b>مفهوم المخطط النقطي (<span dir="ltr">Scatter Plot</span>):</b> هو رسم بياني <b>ثنائي المتغير (<span dir="ltr">Bivariate</span>)</b> (ويمكن توسيعه لمتعدد المتغيرات <span dir="ltr">Multivariate</span>)، يُستخدم لتمثيل العلاقة بين <b>متغيرين كميين (مقياسين رقميين متصلين)</b>؛ حيث يوضع المتغير الأول على المحور الأفقي ($X$) والمتغير الثاني على المحور الرأسي ($Y$)، وتُمثل كل عينة بنقطة عند تقاطع قيمتيها.</li>
+          <li><b>أهميته في تحليل البيانات:</b>
+            <ol>
+              <li>اكتشاف وجود علاقة (ارتباط) بين متغيرين كميين وتحديد اتجاهها وقوتها.</li>
+              <li>ملاحظة تجمعات البيانات (<span dir="ltr">Clusters</span>) أو الفجوات بينها.</li>
+              <li>اكتشاف القيم المتطرفة ثنائية البعد (<span dir="ltr">Outliers</span>) التي تبتعد عن نمط انتشار باقي النقاط.</li>
+            </ol>
+          </li>
+        </ul>
+
+        <div class="exam-alert">
+          <b>🔥 استنتاج نوع وقوة العلاقة من المخطط النقطي (مهم جداً للاختبار):</b><br>
+          1) <b>علاقة طردية / موجبة (<span dir="ltr">Positive Correlation</span>):</b> كلما زادت قيمة $X$ <b>زادت</b> قيمة $Y$ (تتجه النقاط صعوداً من اليسار لليمين)، وتكون:
+          • <b>مثالية (<span dir="ltr">Perfect</span>):</b> جميع النقاط تقع على خط مستقيم واحد صاعد.<br>
+          • <b>قوية (<span dir="ltr">Strong</span>):</b> النقاط متقاربة جداً حول خط مستقيم صاعد.<br>
+          • <b>ضعيفة (<span dir="ltr">Weak</span>):</b> النقاط متباعدة ولكنها تميل للصعود العام.<br>
+          2) <b>علاقة عكسية / سالبة (<span dir="ltr">Negative Correlation</span>):</b> كلما زادت قيمة $X$ <b>نقصت</b> قيمة $Y$ (تتجه النقاط هبوطاً من اليسار لليمين)، وتكون أيضاً: (<b>مثالية</b>، أو <b>قوية</b>، أو <b>ضعيفة</b>).<br>
+          3) <b>لا توجد علاقة (<span dir="ltr">No Correlation</span>):</b> النقاط مبعثرة عشوائياً ولا تشكل أي اتجاه صاعد أو هابط.
+        </div>
+
+        <!-- رسم توضيحي SVG لأنواع العلاقات في Scatter Plot -->
+        <div class="svg-wrap">
+          <svg viewBox="0 0 680 155" width="100%" style="max-width:660px;height:auto;font-family:Tahoma,sans-serif">
+            <!-- 1. طردية قوية -->
+            <rect x="15" y="15" width="145" height="105" fill="#fff" stroke="#94a3b8" stroke-width="1.5"/>
+            <circle cx="35" cy="100" r="4" fill="#1d4ed8"/><circle cx="50" cy="88" r="4" fill="#1d4ed8"/>
+            <circle cx="65" cy="80" r="4" fill="#1d4ed8"/><circle cx="85" cy="65" r="4" fill="#1d4ed8"/>
+            <circle cx="105" cy="52" r="4" fill="#1d4ed8"/><circle cx="120" cy="40" r="4" fill="#1d4ed8"/>
+            <circle cx="140" cy="28" r="4" fill="#1d4ed8"/><circle cx="75" cy="70" r="4" fill="#1d4ed8"/>
+            <text x="87" y="140" text-anchor="middle" font-size="12" fill="#1e3a8a" font-weight="bold">طردية قوية (Strong +)</text>
+
+            <!-- 2. طردية ضعيفة -->
+            <rect x="180" y="15" width="145" height="105" fill="#fff" stroke="#94a3b8" stroke-width="1.5"/>
+            <circle cx="200" cy="105" r="4" fill="#059669"/><circle cx="215" cy="75" r="4" fill="#059669"/>
+            <circle cx="235" cy="95" r="4" fill="#059669"/><circle cx="250" cy="55" r="4" fill="#059669"/>
+            <circle cx="270" cy="80" r="4" fill="#059669"/><circle cx="285" cy="35" r="4" fill="#059669"/>
+            <circle cx="305" cy="55" r="4" fill="#059669"/><circle cx="225" cy="60" r="4" fill="#059669"/>
+            <text x="252" y="140" text-anchor="middle" font-size="12" fill="#059669" font-weight="bold">طردية ضعيفة (Weak +)</text>
+
+            <!-- 3. عكسية قوية -->
+            <rect x="345" y="15" width="145" height="105" fill="#fff" stroke="#94a3b8" stroke-width="1.5"/>
+            <circle cx="365" cy="28" r="4" fill="#dc2626"/><circle cx="380" cy="40" r="4" fill="#dc2626"/>
+            <circle cx="400" cy="52" r="4" fill="#dc2626"/><circle cx="415" cy="65" r="4" fill="#dc2626"/>
+            <circle cx="435" cy="78" r="4" fill="#dc2626"/><circle cx="455" cy="90" r="4" fill="#dc2626"/>
+            <circle cx="470" cy="102" r="4" fill="#dc2626"/><circle cx="425" cy="72" r="4" fill="#dc2626"/>
+            <text x="417" y="140" text-anchor="middle" font-size="12" fill="#dc2626" font-weight="bold">عكسية قوية (Strong -)</text>
+
+            <!-- 4. لا توجد علاقة -->
+            <rect x="510" y="15" width="150" height="105" fill="#fff" stroke="#94a3b8" stroke-width="1.5"/>
+            <circle cx="530" cy="35" r="4" fill="#64748b"/><circle cx="560" cy="95" r="4" fill="#64748b"/>
+            <circle cx="585" cy="40" r="4" fill="#64748b"/><circle cx="615" cy="90" r="4" fill="#64748b"/>
+            <circle cx="640" cy="35" r="4" fill="#64748b"/><circle cx="540" cy="85" r="4" fill="#64748b"/>
+            <circle cx="585" cy="68" r="4" fill="#64748b"/><circle cx="635" cy="75" r="4" fill="#64748b"/>
+            <text x="585" y="140" text-anchor="middle" font-size="12" fill="#475569" font-weight="bold">لا توجد علاقة (None)</text>
+          </svg>
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) تطبيق (<span dir="ltr">Scatter Plot</span>) على بيانات البطريق باستخدام (<span dir="ltr">Matplotlib</span>)</h3>
+        <ul>
+          <li>في ملف بيانات البطريق (<code dir="ltr">penguins_size.csv</code>)، لدينا متغيرات كمية مثل: طول المنقار (<code dir="ltr">culmen_length_mm</code>)، عمق المنقار (<code dir="ltr">culmen_depth_mm</code>)، طول الزعنفة (<code dir="ltr">flipper_length_mm</code>)، وكتلة الجسم (<code dir="ltr">body_mass_g</code>)، ومتغيرات نوعية مثل: الفصيلة (<code dir="ltr">species</code>: Adelie, Chinstrap, Gentoo)، الجزيرة (<code dir="ltr">island</code>)، والجنس (<code dir="ltr">sex</code>).</li>
+          <li><b>معاملات الدالة <code dir="ltr">plt.scatter()</code> في مكتبة <span dir="ltr">Matplotlib</span>:</b>
+            <ol>
+              <li><b><code dir="ltr">x, y</code>:</b> العمودان الكميان على المحور الأفقي والرأسي.</li>
+              <li><b><code dir="ltr">s</code> (<span dir="ltr">Size</span>):</b> حجم النقاط (يمكن تمرير رقم ثابت مثل <code dir="ltr">s=50</code>، أو تمرير عمود كمي ثالث مثل <code dir="ltr">s=df['body_mass_g']*0.03</code> ليصبح الرسم متعدد المتغيرات!).</li>
+              <li><b><code dir="ltr">c</code> (<span dir="ltr">Color</span>):</b> لون النقاط.</li>
+              <li><b><code dir="ltr">alpha</code>:</b> درجة شفافية النقاط (قيمة بين <code dir="ltr">0</code> شفاف تماماً و <code dir="ltr">1</code> معتم تماماً، مثل <code dir="ltr">alpha=0.6</code>؛ وتُستخدم <b>لملاحظة كثافة وتداخل النقاط المتراكمة فوق بعضها</b>).</li>
+              <li><b><code dir="ltr">marker</code>:</b> شكل النقطة (مثل <code dir="ltr">'o'</code> دائرة، <code dir="ltr">'^'</code> مثلث، <code dir="ltr">'s'</code> مربع).</li>
+            </ol>
+          </li>
+        </ul>
+        <div class="code-box">
+<span class="cmt"># رسم Scatter Plot باستخدام Matplotlib مع التحكم بالحجم s والشفافية alpha</span><br>
+plt.figure(figsize=(<span class="num">8</span>, <span class="num">6</span>))<br>
+plt.scatter(df[<span class="str">'culmen_length_mm'</span>], df[<span class="str">'culmen_depth_mm'</span>],<br>
+            s=df[<span class="str">'body_mass_g'</span>] * <span class="num">0.03</span>, color=<span class="str">'royalblue'</span>, alpha=<span class="num">0.6</span>, marker=<span class="str">'o'</span>)<br>
+plt.xlabel(<span class="str">'Culmen Length (mm)'</span>)<br>
+plt.ylabel(<span class="str">'Culmen Depth (mm)'</span>)<br>
+plt.title(<span class="str">'Penguins Culmen Length vs Depth'</span>)<br>
+plt.show()
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) تطبيق (<span dir="ltr">Scatter Plot</span>) بسطر واحد عبر مكتبة (<span dir="ltr">Seaborn</span>)</h3>
+        <div class="exam-alert">
+          <b>🌟 لماذا نفضل دالة <code dir="ltr">sns.scatterplot()</code> في مكتبة <span dir="ltr">Seaborn</span> على <span dir="ltr">Matplotlib</span>؟</b><br>
+          لأنها تتيح تمثيل <b>عدة متغيرات (<span dir="ltr">Multivariate</span>) بسطر كود واحد فقط</b> مع إنشاء تسميات المحاور ومفتاح الرسم (<span dir="ltr">Legend</span>) تلقائياً! احفظي معاملاتها الستة:
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>المعامل في <code dir="ltr">sns.scatterplot()</code></th>
+              <th>الوظيفة الدقيقة كما وردت في المنهج</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td dir="ltr"><b>1. data</b></td>
+              <td>اسم إطار البيانات (<code dir="ltr">DataFrame</code>) الذي نأخذ منه الأعمدة مباشرًة.</td>
+            </tr>
+            <tr>
+              <td dir="ltr"><b>2. x, y</b></td>
+              <td>اسما العمودين على المحور الأفقي $X$ والمحور الرأسي $Y$ كنصوص.</td>
+            </tr>
+            <tr>
+              <td dir="ltr"><b>3. hue</b></td>
+              <td>اسم <b>العمود الفئوي (أو الرقمي) الذي يتم تلوين النقاط بناءً على فئاته</b> (مثل <code dir="ltr">hue='species'</code> لتلوين كل فصيلة بطريق بلون مختلف).</td>
+            </tr>
+            <tr>
+              <td dir="ltr"><b>4. palette</b></td>
+              <td>تحديد لوحة أو تدريج الألوان المستخدم مع <code dir="ltr">hue</code> (أو قاموس يحدد لون كل فئة).</td>
+            </tr>
+            <tr>
+              <td dir="ltr"><b>5. style</b></td>
+              <td>اسم <b>عمود فئوي يتم تغيير شكل علامة النقطة (<span dir="ltr">Marker style</span>) بناءً على فئاته</b> (مثل <code dir="ltr">style='sex'</code> أو <code dir="ltr">style='island'</code>).</td>
+            </tr>
+            <tr>
+              <td dir="ltr"><b>6. markers</b></td>
+              <td>قاموس أو قائمة لتخصيص أشكال العلامات المستخدمة مع المعامل <code dir="ltr">style</code> (مثل <code dir="ltr">markers={'Male':'s', 'Female':'X'}</code>).</td>
+            </tr>
+            <tr>
+              <td dir="ltr"><b>7. size</b></td>
+              <td>اسم عمود يتم تغيير <b>حجم النقاط</b> بناءً على قيمه (مثل <code dir="ltr">size='body_mass_g'</code>).</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="code-box">
+<span class="kw">import</span> seaborn <span class="kw">as</span> sns<br><br>
+<span class="cmt"># رسم متعدد المتغيرات بسطر واحد في Seaborn (X, Y + اللون حسب الفصيلة + الشكل حسب الجنس)</span><br>
+sns.scatterplot(data=df, x=<span class="str">'culmen_length_mm'</span>, y=<span class="str">'culmen_depth_mm'</span>,<br>
+                hue=<span class="str">'species'</span>, style=<span class="str">'sex'</span>, size=<span class="str">'body_mass_g'</span>, palette=<span class="str">'deep'</span>)<br>
+plt.show()
+        </div>
+      </div>
+    </details>
+
+    <!-- ==================== الوحدة الثانية كاملة في قائمة واحدة ==================== -->
+    <details>
+      <summary>الوحدة الثانية: الجداول التقاطعية (crosstab)، المحورية (pivot_table)، الارتباط (.corr)، وخريطة الحرارة (Heatmap)</summary>
+      <div class="details-body">
+        <h3>1) جدول التقاطع (<span dir="ltr">Crosstab</span>) مقابل الجدول المحوري (<span dir="ltr">Pivot Table</span>)</h3>
+        <div class="exam-alert">
+          <b>🔥🔥 مقارنة حاسمة في الاختبار بين <code dir="ltr">pd.crosstab()</code> و <code dir="ltr">pd.pivot_table()</code>:</b><br>
+          • <b>جدول التقاطع (<code dir="ltr">pd.crosstab</code>):</b> يُستخدم لعرض جدول تكراري يوضح العلاقة (عدد مرات الظهور المشترك) بين <b>متغيرين نوعيين (فئويين)</b> (مثل توزيع فصائل البطريق <code dir="ltr">species</code> عبر الجزر <code dir="ltr">island</code>).<br>
+          • <b>الجدول المحوري (<code dir="ltr">pd.pivot_table</code>):</b> يُستخدم لتلخيص وتجميع <b>متغير كمي (أو أكثر)</b> عبر فئات <b>متغير نوعي</b> باستخدام دوال تجميع إحصائية نحددها في المعامل <b><code dir="ltr">aggfunc</code></b> (مثل حساب المتوسط <code dir="ltr">'mean'</code> والمجموع <code dir="ltr">'sum'</code>).
+        </div>
+
+        <div class="code-box">
+<span class="cmt"># 1. جدول التقاطع (Crosstab) بين متغيرين نوعيين (الفصيلة والجزيرة)</span><br>
+ct = pd.crosstab(df[<span class="str">'species'</span>], df[<span class="str">'island'</span>], margins=<span class="kw">True</span>)<br><br>
+<span class="cmt"># 2. الجدول المحوري (Pivot Table) لتلخيص متغيرات كمية حسب متغير نوعي بدالتي mean و sum</span><br>
+pt = pd.pivot_table(df, values=[<span class="str">'culmen_length_mm'</span>, <span class="str">'body_mass_g'</span>],<br>
+                    index=<span class="str">'species'</span>, aggfunc=[<span class="str">'mean'</span>, <span class="str">'sum'</span>])
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) التمثيل الثنائي (<span dir="ltr">Bivariate</span>) لمتغير نوعي مع متغير كمي في (<span dir="ltr">Seaborn</span>)</h3>
+        <ul>
+          <li>لمقارنة متغير كمي (مثل كتلة الجسم <code dir="ltr">body_mass_g</code>) عبر فئات متغير نوعي (مثل الفصيلة <code dir="ltr">species</code>) في مكتبة <span dir="ltr">Seaborn</span>، نستخدم:
+            <ol>
+              <li><b>الأعمدة البيانية الإحصائية (<code dir="ltr">sns.barplot</code>):</b>
+                <ul>
+                  <li>تقوم افتراضياً بحساب وعرض <b>المتوسط الحسابي (<span dir="ltr">mean</span>)</b> للمتغير الكمي لكل فئة.</li>
+                  <li>ويمكن تغيير دالة التجميع عبر المعامل <b><code dir="ltr">estimator</code></b> (مثلاً <code dir="ltr">estimator='median'</code> أو <code dir="ltr">estimator=np.median</code> لحساب الوسيط بدلاً من المتوسط!).</li>
+                </ul>
+              </li>
+              <li><b>مخطط الصندوق المقارن (<code dir="ltr">sns.boxplot</code>):</b>
+                <ul>
+                  <li>يرسم صندوقاً كاملاً ($Q_1, \text{Median}, Q_3$ والقيم المتطرفة) لكل فئة من فئات المتغير النوعي لمقارنة توزيعها، مع إمكانية إضافة متغير فئوي ثالث عبر المعامل <code dir="ltr">hue='sex'</code>.</li>
+                </ul>
+              </li>
+            </ol>
+          </li>
+        </ul>
+        <div class="code-box">
+<span class="cmt"># رسم أعمدة بيانية تعرض الوسيط (median) لكتلة الجسم لكل فصيلة</span><br>
+sns.barplot(data=df, x=<span class="str">'species'</span>, y=<span class="str">'body_mass_g'</span>, estimator=<span class="str">'median'</span>)<br><br>
+<span class="cmt"># رسم مخطط صندوقي يقارن طول الزعنفة عبر الفصائل مع التقسيم اللوني حسب الجنس</span><br>
+sns.boxplot(data=df, x=<span class="str">'species'</span>, y=<span class="str">'flipper_length_mm'</span>, hue=<span class="str">'sex'</span>)
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) معامل الارتباط (<span dir="ltr">Correlation</span>) وخريطة الحرارة (<span dir="ltr">Heatmap</span>)</h3>
+        <ul>
+          <li><b>مفهوم معامل الارتباط (<span dir="ltr">Correlation Coefficient - $r$</span>):</b>
+            <ul>
+              <li>مقياس إحصائي رقمي يقيس <b>قوة واتجاه العلاقة الخطية</b> بين متغيرين كميين.</li>
+              <li>تقع قيمة معامل الارتباط دائماً في النطاق المغلق <b>$[-1, +1]$</b>:
+                <ul>
+                  <li><b>قريب من $+1$:</b> ارتباط <b>طردي (إيجابي) قوي</b> (إذا زاد الأول زاد الثاني).</li>
+                  <li><b>قريب من $-1$:</b> ارتباط <b>عكسي (سلبي) قوي</b> (إذا زاد الأول نقص الثاني).</li>
+                  <li><b>قريب من $0$:</b> ارتباط ضعيف جداً أو <b>لا توجد علاقة خطية</b> بين المتغيرين.</li>
+                  <li><b>ملاحظة بديهية:</b> ارتباط أي متغير مع نفسه يساوي دائماً <b>$+1.00$</b> (وهو القطر الرئيسي في مصفوفة الارتباط).</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li><b>حساب مصفوفة الارتباط في <span dir="ltr">Pandas</span> وتمثيلها بخريطة الحرارة (<code dir="ltr">sns.heatmap</code>):</b>
+            <ul>
+              <li>نحسب مصفوفة الارتباط لجميع الأعمدة الكمية بالدالة <b><code dir="ltr">df.corr()</code></b>.</li>
+              <li>نمثل المصفوفة بصرياً باستخدام دالة <b><code dir="ltr">sns.heatmap()</code></b> في مكتبة <span dir="ltr">Seaborn</span>، وأهم معاملاتها:
+                <ol>
+                  <li><b><code dir="ltr">vmin=-1, vmax=1</code>:</b> تثبيت القيمة الدنيا والعليا لمفتاح الألوان بين $-1$ و $+1$.</li>
+                  <li><b><code dir="ltr">annot=True</code> (<span dir="ltr">Annotations</span>):</b> <b>إظهار وطباعة القيم الرقمية لمعامل الارتباط داخل كل خلية</b> في الخريطة.</li>
+                  <li><b><code dir="ltr">fmt='.2f'</code> (<span dir="ltr">Format</span>):</b> تنسيق الأرقام المكتوبة داخل الخلايا لتظهر برقمين عشريين فقط بعد الفاصلة.</li>
+                  <li><b><code dir="ltr">cmap</code> (<span dir="ltr">Colormap</span>):</b> تحديد تدرج الألوان (مثل <code dir="ltr">'coolwarm'</code> أو <code dir="ltr">'Blues'</code>).</li>
+                </ol>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <div class="code-box">
+corr = df.corr(numeric_only=<span class="kw">True</span>)  <span class="cmt"># حساب مصفوفة الارتباط للأعمدة الرقمية</span><br><br>
+plt.figure(figsize=(<span class="num">8</span>, <span class="num">6</span>))<br>
+sns.heatmap(corr, vmin=<span class="num">-1</span>, vmax=<span class="num">1</span>, annot=<span class="kw">True</span>, fmt=<span class="str">'.2f'</span>, cmap=<span class="str">'coolwarm'</span>)<br>
+plt.title(<span class="str">'Correlation Heatmap'</span>)<br>
+plt.show()
+        </div>
+      </div>
+    </details>
+
+    <!-- ==================== الوحدة الثالثة كاملة في قائمة واحدة ==================== -->
+    <details>
+      <summary>الوحدة الثالثة: التمثيل الرسومي المباشر باستخدام Pandas (الدالة df.plot ومعاملاتها الـ 13)</summary>
+      <div class="details-body">
+        <h3>1) دالة التمثيل الرسومي المباشر (<span dir="ltr">df.plot()</span>) ومعاملاتها الـ 13</h3>
+        <ul>
+          <li>تحتوي كائنات <span dir="ltr">Pandas</span> (<span dir="ltr">Series</span> و <span dir="ltr">DataFrame</span>) على دالة مدمجة هي <b><code dir="ltr">.plot()</code></b> تعتمد داخلياً على مكتبة <span dir="ltr">Matplotlib</span>، وتسمح برسم الأعمدة مباشرةً دون الحاجة لاستدعاء دوال <span dir="ltr">Matplotlib</span> بشكل منفصل.</li>
+        </ul>
+
+        <table>
+          <thead>
+            <tr>
+              <th>رقم</th>
+              <th>المعامل في <code dir="ltr">df.plot()</code></th>
+              <th>الوظيفة الدقيقة كما وردت في الملزمة</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td dir="ltr"><b>kind</b></td>
+              <td>يحدد <b>نوع الرسم البياني</b> (الافتراضي <code dir="ltr">'line'</code>، ومن أنواعه: <code dir="ltr">'bar'</code>, <code dir="ltr">'barh'</code>, <code dir="ltr">'hist'</code>, <code dir="ltr">'box'</code>, <code dir="ltr">'kde'</code>, <code dir="ltr">'area'</code>, <code dir="ltr">'pie'</code>, <code dir="ltr">'scatter'</code>, <code dir="ltr">'hexbin'</code>).</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td dir="ltr"><b>x, y</b></td>
+              <td>تحديد اسم العمود للمحور الأفقي <code dir="ltr">x</code> واسم العمود (أو قائمة الأعمدة) للمحور الرأسي <code dir="ltr">y</code>.</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td dir="ltr"><b>subplots</b></td>
+              <td>عند جعله <code dir="ltr">subplots=True</code> يقوم <b>بفصل كل عمود في رسم بياني فرعي مستقل</b> بدلاً من رسمها كلها فوق بعضها في شكل واحد.</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td dir="ltr"><b>layout</b></td>
+              <td>يُستخدم مع <code dir="ltr">subplots=True</code> لتحديد <b>أبعاد شبكة الرسوم الفرعية (عدد الصفوف، عدد الأعمدة)</b> مثل <code dir="ltr">layout=(2, 2)</code>.</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td dir="ltr"><b>figsize</b></td>
+              <td>تحديد عرض وارتفاع الشكل الكلي بالبوصة على هيئة <code dir="ltr">(width, height)</code>.</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td dir="ltr"><b>title</b></td>
+              <td>إضافة عنوان للرسم البياني (أو قائمة عناوين للرسوم الفرعية).</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td dir="ltr"><b>legend</b></td>
+              <td>قيمة منطقية (<code dir="ltr">True</code>/<code dir="ltr">False</code>) لإظهار أو إخفاء وسيلة الإيضاح (مفتاح الرسم).</td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td dir="ltr"><b>style</b></td>
+              <td>نص أو قائمة نصوص لتحديد لون ونمط الخط وشكل النقاط (مثل <code dir="ltr">style='r--o'</code> أو <code dir="ltr">['-', '--']</code>).</td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td dir="ltr"><b>xticks / yticks</b></td>
+              <td>تحديد القيم التي تظهر عندها علامات التدريج على المحور الأفقي أو الرأسي.</td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td dir="ltr"><b>xlim / ylim</b></td>
+              <td>تحديد حدود (بداية ونهاية) المحور الأفقي أو الرأسي مثل <code dir="ltr">ylim=(0, 500)</code>.</td>
+            </tr>
+            <tr>
+              <td>11</td>
+              <td dir="ltr"><b>rot</b></td>
+              <td>زاوية تدوير نصوص العلامات على المحور (<span dir="ltr">Rotation angle</span>، مثل <code dir="ltr">rot=45</code>).</td>
+            </tr>
+            <tr>
+              <td>12</td>
+              <td dir="ltr"><b>fontsize</b></td>
+              <td>حجم خط الأرقام والنصوص على المحاور.</td>
+            </tr>
+            <tr>
+              <td>13</td>
+              <td dir="ltr"><b>grid</b></td>
+              <td>إظهار خطوط الشبكة الخلفية عند جعله <code dir="ltr">grid=True</code>.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) التطبيقات البرمجية على بيانات أسهم فيسبوك (<span dir="ltr">Facebook Stock Data - fb</span>)</h3>
+        <ul>
+          <li><b>أولاً: رسم المخطط الخطي (<code dir="ltr">kind='line'</code>) وتقسيم الرسوم الفرعية (<code dir="ltr">subplots &amp; layout</code>):</b>
+            <div class="code-box">
+<span class="cmt"># 1. رسم خطي لسعري الفتح والإغلاق لأول 20 يوماً فقط باستخدام iloc</span><br>
+fb.iloc[<span class="num">0</span>:<span class="num">20</span>].plot(y=[<span class="str">'open'</span>, <span class="str">'close'</span>], figsize=(<span class="num">10</span>, <span class="num">5</span>), style=[<span class="str">'-'</span>, <span class="str">'--'</span>], title=<span class="str">'FB Open vs Close'</span>)<br><br>
+<span class="cmt"># 2. رسم الأعمدة الأربعة في شبكة رسوم فرعية منفصلة (2 صف × 2 عمود)</span><br>
+fb.plot(y=[<span class="str">'open'</span>, <span class="str">'high'</span>, <span class="str">'low'</span>, <span class="str">'close'</span>], subplots=<span class="kw">True</span>, layout=(<span class="num">2</span>, <span class="num">2</span>), figsize=(<span class="num">12</span>, <span class="num">8</span>), legend=<span class="kw">True</span>)
+            </div>
+          </li>
+          <li><b>ثانياً: إضافة عمود محسوب مؤقت بدالة (<code dir="ltr">assign</code>) ورسم (<code dir="ltr">scatter</code>) مقابل (<code dir="ltr">hexbin</code>):</b>
+            <div class="exam-alert">
+              <b>🌟 متى نستخدم <code dir="ltr">kind='hexbin'</code> بدلاً من <code dir="ltr">kind='scatter'</code>؟ وما وظيفة <code dir="ltr">df.assign()</code>؟</b><br>
+              • الدالة <b><code dir="ltr">fb.assign(log_vol = np.log(fb.volume))</code></b> تُستخدم <b>لإضافة عمود جديد محسوب إلى نسخة من الجدول أثناء الرسم</b> (مثل حساب اللوغاريتم الطبيعي لحجم التداول أو أقصى فرق بالسعر).<br>
+              • عندما يكون عدد النقاط في <code dir="ltr">scatter</code> كبيراً جداً وتتراكم النقاط فوق بعضها بحيث يصبح من الصعب تمييز الكثافة الحقيقية، نستخدم <b>مخطط الخلايا السداسية (<code dir="ltr">kind='hexbin'</code>)</b> الذي يقسم منطقة الرسم إلى خلايا سداسية (<code dir="ltr">gridsize</code>) ويلون كل خلية حسب كثافة (عدد) النقاط الواقعة بداخلها!
+            </div>
+            <div class="code-box">
+<span class="cmt"># إضافة عمود لوغاريتم حجم التداول بدالة assign ثم رسم scatter و hexbin</span><br>
+fb_mod = fb.assign(log_volume=np.log(fb.volume), max_diff=fb.high - fb.low)<br><br>
+<span class="cmt"># أ) رسم Scatter مع شفافية alpha</span><br>
+fb_mod.plot(kind=<span class="str">'scatter'</span>, x=<span class="str">'log_volume'</span>, y=<span class="str">'max_diff'</span>, alpha=<span class="num">0.3</span>)<br><br>
+<span class="cmt"># ب) رسم Hexbin لتمثيل الكثافة في خلايا سداسية</span><br>
+fb_mod.plot(kind=<span class="str">'hexbin'</span>, x=<span class="str">'log_volume'</span>, y=<span class="str">'max_diff'</span>, gridsize=<span class="num">25</span>, cmap=<span class="str">'Blues'</span>)
+            </div>
+          </li>
+          <li><b>ثالثاً: رسم المدرج التكراري (<code dir="ltr">kind='hist'</code>) ومخطط الصندوق (<code dir="ltr">kind='box'</code>) عبر Pandas:</b>
+            <div class="code-box">
+fb[<span class="str">'volume'</span>].plot(kind=<span class="str">'hist'</span>, bins=<span class="num">30</span>, title=<span class="str">'Volume Histogram'</span>)<br>
+fb[[<span class="str">'open'</span>, <span class="str">'high'</span>, <span class="str">'low'</span>, <span class="str">'close'</span>]].plot(kind=<span class="str">'box'</span>, title=<span class="str">'Prices Box Plot'</span>)
+            </div>
+          </li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- التبويب الثاني: ملخص الدوال والمعاملات -->
+  <section id="tables" class="panel">
+    <div class="card">
+      <h2>1. مقارنة شاملة بين دوال الرسم والتحليل في الفصل الخامس</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>الدالة البرمجية</th>
+            <th>المكتبة</th>
+            <th>الوظيفة الأساسية ونوع المتغيرات</th>
+            <th>أهم المعاملات الخاصة بها</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td dir="ltr"><code>plt.scatter(x, y)</code></td>
+            <td>Matplotlib</td>
+            <td>رسم مخطط نقطي لمتغيرين كميين لمعرفة العلاقة بينهما.</td>
+            <td dir="ltr"><code>s</code> (الحجم), <code>c</code> (اللون), <code>alpha</code> (الشفافية), <code>marker</code></td>
+          </tr>
+          <tr>
+            <td dir="ltr"><code>sns.scatterplot(...)</code></td>
+            <td>Seaborn</td>
+            <td>رسم مخطط نقطي متقدم يدعم متغيرات إضافية (اللون، الشكل، الحجم) بسطر واحد.</td>
+            <td dir="ltr"><code>data, x, y, hue, palette, style, markers, size</code></td>
+          </tr>
+          <tr>
+            <td dir="ltr"><code>pd.crosstab(c1, c2)</code></td>
+            <td>Pandas</td>
+            <td>بناء جدول تقاطعي يحسب التكرارات المشتركة بين <b>متغيرين نوعيين (فئويين)</b>.</td>
+            <td dir="ltr"><code>index, columns, margins=True</code></td>
+          </tr>
+          <tr>
+            <td dir="ltr"><code>pd.pivot_table(...)</code></td>
+            <td>Pandas</td>
+            <td>بناء جدول محوري يلخص <b>متغيرات كمية</b> عبر <b>متغير نوعي</b> بدوال إحصائية.</td>
+            <td dir="ltr"><code>data, values, index, columns, aggfunc=['mean','sum']</code></td>
+          </tr>
+          <tr>
+            <td dir="ltr"><code>sns.barplot(...)</code></td>
+            <td>Seaborn</td>
+            <td>أعمدة بيانية تقارن متغيراً كمياً عبر فئات متغير نوعي (تحسب المتوسط افتراضياً).</td>
+            <td dir="ltr"><code>data, x, y, hue, estimator='median'</code></td>
+          </tr>
+          <tr>
+            <td dir="ltr"><code>sns.heatmap(corr)</code></td>
+            <td>Seaborn</td>
+            <td>تمثيل مصفوفة الارتباط (<code dir="ltr">df.corr()</code>) كخريطة حرارية ملونة.</td>
+            <td dir="ltr"><code>vmin=-1, vmax=1, annot=True, fmt='.2f', cmap</code></td>
+          </tr>
+          <tr>
+            <td dir="ltr"><code>df.plot(...)</code></td>
+            <td>Pandas</td>
+            <td>رسم بياني مباشر من الـ DataFrame بجميع الأنواع.</td>
+            <td dir="ltr"><code>kind, subplots, layout, figsize, rot, grid, xlim, ylim</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- التبويب الثالث: قاموس المصطلحات والدوال -->
+  <section id="terms" class="panel">
+    <div class="card">
+      <h2>قاموس المصطلحات والدوال والمعاملات الشامل للفصل الخامس</h2>
+      <p class="muted">جميع المفاهيم والدوال البرمجية ومعاملات Seaborn و Pandas الواردة في الوحدات الثلاث:</p>
+      <div id="termsGrid" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- التبويب الرابع: البطاقات التعليمية -->
+  <section id="cards" class="panel">
+    <div class="card">
+      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
+      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
+      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
+        <div class="term" id="flashTerm"></div>
+        <div class="answer" id="flashAnswer" hidden></div>
+        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="prevCard">السابق</button>
+        <span id="cardCount" class="muted"></span>
+        <button class="btn primary" id="nextCard">التالي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- التبويب الخامس: الاختبار الذاتي العشوائي -->
+  <section id="quiz" class="panel">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2>الاختبار الشامل المتغير للفصل الخامس (25 سؤالاً) <span class="badge-new">ترتيب عشوائي ذكي 🎲</span></h2>
+          <p class="muted">يختبر فهمك لـ Scatter Plot، ومعاملات Seaborn، و crosstab vs pivot_table، ومعامل الارتباط و Heatmap، ودالة df.plot مع تصحيح فوري!</p>
+        </div>
+        <div class="score" id="score">النتيجة: 0 / 25</div>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="quizArea"></div>
+      <div class="row">
+        <button class="btn" id="resetQuiz">إعادة الاختبار بترتيب عشوائي جديد 🔀</button>
+        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+      </div>
+      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
+    </div>
+  </section>
+</main>
+
+<footer>مبني بالكامل (100%) على محتوى الفصل الخامس (تمثيل البيانات - الجزء الثاني) من مقرر تحليل وتمثيل البيانات</footer>
+
+<script>
+const terms = [
+  ["Scatter Plot (المخطط النقطي)", "رسم بياني ثنائي المتغير (أو متعدد المتغيرات) يعرض العلاقة بين متغيرين كميين (X و Y) لاستكشاف اتجاه وقوة الارتباط والقيم المتطرفة."],
+  ["Positive vs Negative Correlation", "العلاقة الطردية (الموجبة): زيادة X يصاحبها زيادة Y (اتجاه صاعد) | العلاقة العكسية (السالبة): زيادة X يصاحبها نقصان Y (اتجاه هابط)."],
+  ["alpha (في plt.scatter)", "معامل يحدد درجة شفافية النقاط (بين 0 و 1) لمعالجة مشكلة تراكم وتداخل النقاط الكثيفة فوق بعضها."],
+  ["s & c & marker (في plt.scatter)", "المعامل s يحدد حجم النقاط (Size)، و c يحدد اللون (Color)، و marker يحدد شكل النقطة."],
+  ["sns.scatterplot()", "دالة في مكتبة Seaborn لرسم المخطط النقطي وتتميز بدعم التمثيل متعدد المتغيرات بسطر واحد مع إنشاء مفتاح الرسم تلقائياً."],
+  ["hue & palette (في Seaborn)", "المعامل hue يلون عناصر الرسم تلقائياً بناءً على قيم عمود فئوي (مثل hue='species')، و palette يحدد لوحة الألوان المستخدمة."],
+  ["style & markers (في Seaborn)", "المعامل style يغير شكل علامة النقطة حسب فئات عمود معين (مثل style='sex')، و markers يخصص الأشكال الهندسية لكل فئة."],
+  ["pd.crosstab()", "دالة في Pandas لإنشاء جدول تقاطعي يحسب التكرارات المشتركة بين متغيرين نوعيين (فئويين)."],
+  ["pd.pivot_table()", "دالة في Pandas لإنشاء جدول محوري يلخص متغيراً كمياً (أو أكثر) عبر فئات متغير نوعي باستخدام دالة تجميع إحصائية (aggfunc)."],
+  ["aggfunc (في pivot_table)", "معامل يحدد دالة أو قائمة دوال التجميع الإحصائية المطبقة في الجدول المحوري مثل aggfunc=['mean', 'sum']."],
+  ["estimator (في sns.barplot)", "معامل في دالة الأعمدة البيانية لـ Seaborn يحدد الدالة الإحصائية المحسوبة لكل فئة (الافتراضي هو المتوسط mean، ويمكن جعله estimator='median')."],
+  ["Correlation Coefficient (معامل الارتباط)", "مقياس إحصائي يقع دائماً بين [-1, +1] لقياس قوة واتجاه العلاقة الخطية بين المتغيرات الكمية، ويُحسب بـ df.corr()."],
+  ["sns.heatmap()", "دالة في Seaborn لتمثيل المصفوفات (مثل مصفوفة الارتباط) كخريطة حرارية ملونة."],
+  ["vmin, vmax, annot, fmt (في heatmap)", "vmin=-1 و vmax=1 لتثبيت حدود الألوان، و annot=True لطباعة القيم الرقمية داخل المربعات، و fmt='.2f' لتنسيق الكسور العشرية."],
+  ["df.plot()", "دالة مدمجة في Pandas للرسم المباشر من إطار البيانات عبر تحديد نوع الرسم في المعامل kind."],
+  ["subplots=True & layout=(r, c)", "معاملان في df.plot() لفصل كل عمود في رسم فرعي مستقل وترتيبها في شبكة مكونة من r صفوف و c أعمدة."],
+  ["df.assign()", "دالة في Pandas لإضافة عمود جديد محسوب (مؤقت) إلى نسخة من إطار البيانات لاستخدامه مباشرة في الرسم."],
+  ["kind='hexbin'", "نوع رسم في df.plot() يقسم منطقة الرسم إلى خلايا سداسية ملونة حسب كثافة النقاط، ويُستخدم كبديل لـ scatter عند التزاحم الشديد للنقاط."]
+];
+
+const cards = [
+  ["ما هو المخطط النقطي (Scatter Plot)؟ وما نوع المتغيرات التي يربط بينها؟", "هو رسم بياني ثنائي المتغير (Bivariate) يُستخدم لتمثيل العلاقة بين متغيرين كميين (رقميين متصلين) بوضع أحدهما على محور X والآخر على محور Y."],
+  ["كيف نستنتج من المخطط النقطي أن العلاقة (طردية موجبة) أو (عكسية سالبة) أو (لا توجد علاقة)؟", "• طردية (Positive): تتجه النقاط صعوداً من اليسار لليمين (كلما زاد X زاد Y).\n• عكسية (Negative): تتجه النقاط هبوطاً من اليسار لليمين (كلما زاد X نقص Y).\n• لا توجد علاقة (None): النقاط مبعثرة عشوائياً بلا اتجاه."],
+  ["ما الفرق البصري بين العلاقة (المثالية Perfect) و(القوية Strong) و(الضعيفة Weak) في Scatter Plot؟", "• المثالية: تقع جميع النقاط تماماً على خط مستقيم واحد.\n• القوية: تتجمع النقاط بشكل متقارب جداً حول مسار خطي.\n• الضعيفة: تكون النقاط متباعدة ومنتشرة ولكن مع ميل عام صاعد أو هابط."],
+  ["في دالة plt.scatter()، ما وظيفة المعاملين (s) و (alpha)؟", "• المعامل s: يتحكم في حجم النقاط (ويمكن ربطه بعمود كمي ثالث لتمثيل 3 متغيرات).\n• المعامل alpha: يتحكم في درجة شفافية النقاط (بين 0 و 1) لمعالجة تداخل وتراكم النقاط."],
+  ["ما الميزة الرئيسية لاستخدام دالة sns.scatterplot() في مكتبة Seaborn مقارنة بـ plt.scatter()؟", "تتيح تمثيل عدة متغيرات (Multivariate) بسطر كود واحد فقط (عبر تمرير أسماء الأعمدة للمعاملات hue و style و size) مع إنشاء مفتاح الرسم (Legend) وتسميات المحاور تلقائياً."],
+  ["في دالة sns.scatterplot()، ما الفرق بين وظيفة المعامل (hue) ووظيفة المعامل (style)؟", "• المعامل hue: يغير (لون) النقاط تلقائياً حسب فئات عمود معين (مثل hue='species').\n• المعامل style: يغير (شكل علامة النقطة Marker) حسب فئات عمود معين (مثل style='sex')."],
+  ["في دالة sns.scatterplot()، ما وظيفة المعاملين (palette) و (markers)؟", "• palette: يحدد لوحة أو تدريج الألوان المستخدم مع المعامل hue.\n• markers: يحدد الأشكال الهندسية المخصصة لكل فئة في المعامل style."],
+  ["ما الفرق الجوهري بين دالة pd.crosstab() ودالة pd.pivot_table() في مكتبة Pandas؟", "• pd.crosstab(): تحسب جدول التكرارات المشتركة بين (متغيرين نوعيين/فئويين).\n• pd.pivot_table(): تلخص (متغيراً كمياً أو أكثر) عبر فئات (متغير نوعي) باستخدام دوال تجميع إحصائية نحددها في aggfunc."],
+  ["ما وظيفة المعامل (aggfunc=['mean', 'sum']) داخل دالة pd.pivot_table()؟", "يقوم بحساب المتوسط الحسابي (mean) والمجموع (sum) للمتغيرات الكمية المحددة لكل فئة من فئات الفهرس."],
+  ["ماذا تعرض دالة sns.barplot(data=df, x='species', y='body_mass_g') بشكل افتراضي؟ وكيف نجعلها تعرض الوسيط؟", "• تعرض افتراضياً: المتوسط الحسابي (mean) للمتغير الكمي لكل فئة.\n• لجعلها تعرض الوسيط: نمرر المعامل estimator='median' (أو estimator=np.median)."],
+  ["كيف نستخدم دالة sns.boxplot() لمقارنة توزيع متغير كمي عبر متغيرين نوعيين في نفس الرسم؟", "نضع المتغير النوعي الأول على محور X، والمتغير الكمي على محور Y، ونمرر المتغير النوعي الثاني للمعامل hue:\nsns.boxplot(data=df, x='species', y='flipper_length_mm', hue='sex')"],
+  ["ما هو معامل الارتباط (Correlation Coefficient)؟ وما هو النطاق الرياضي لقيمه؟", "هو مقياس إحصائي يقيس قوة واتجاه العلاقة الخطية بين المتغيرات الكمية، وتقع قيمته دائماً في النطاق المغلق بين [-1 و +1]."],
+  ["ماذا تعني قيم معامل الارتباط التالية: (+1)، (-1)، و (0)؟", "• (+1): ارتباط طردي (موجب) مثالي.\n• (-1): ارتباط عكسي (سالب) مثالي.\n• (0): لا يوجد ارتباط خطي بين المتغيرين."],
+  ["ما هي الدالة المستخدمة لحساب مصفوفة الارتباط في Pandas؟ وما قيمة العناصر الواقعة على القطر الرئيسي للمصفوفة دائماً؟", "• الدالة هي: df.corr()\n• قيمة عناصر القطر الرئيسي تساوي دائماً (+1.00) لأنها تمثل ارتباط كل متغير مع نفسه!"],
+  ["ما هي الدالة المستخدمة لتمثيل مصفوفة الارتباط بصرياً كخريطة حرارية؟ وفي أي مكتبة توجد؟", "الدالة هي: sns.heatmap() وتوجد في مكتبة Seaborn."],
+  ["في دالة sns.heatmap()، ما وظيفة المعاملات: (vmin=-1, vmax=1)، و (annot=True)، و (fmt='.2f')؟", "• vmin=-1, vmax=1: تثبيت حدود تدريج الألوان بين -1 و +1.\n• annot=True: كتابة وإظهار قيم الارتباط الرقمية داخل مربعات الخريطة.\n• fmt='.2f': تنسيق الأرقام المكتوبة لتظهر بمنزلتين عشريتين بعد الفاصلة."],
+  ["ما هي الدالة الشاملة المدمجة في كائنات Pandas للرسم البياني المباشر؟ وما هو نوع الرسم الافتراضي فيها؟", "الدالة هي: df.plot()\nونوع الرسم الافتراضي (عند عدم تحديد المعامل kind) هو المخطط الخطي (kind='line')."],
+  ["في دالة df.plot()، كيف نغير نوع الرسم البياني؟ واذكري 6 أنواع مدعومة في المعامل kind.", "نغيره عبر المعامل (kind)، ومن الأنواع المدعومة:\n'line', 'bar', 'hist', 'box', 'pie', 'scatter', 'hexbin'."],
+  ["ما وظيفة تمرير المعاملين (subplots=True) و (layout=(2, 2)) داخل دالة df.plot()؟", "• subplots=True: يفصل كل عمود من أعمدة البيانات في رسم فرعي مستقل بدلاً من دمجها في رسم واحد.\n• layout=(2, 2): يرتب هذه الرسوم الفرعية في شبكة مكونة من صفين وعمودين."],
+  ["في دالة df.plot()، ما الفرق بين المعاملين (xticks / yticks) والمعاملين (xlim / ylim)؟", "• xticks / yticks: تحدد القيم التي توضع عندها علامات التدريج على المحاور.\n• xlim / ylim: تحدد حدود البداية والنهاية (النطاق المرئي) للمحور الأفقي أو الرأسي."],
+  ["في دالة df.plot()، ما وظيفة المعاملات: (rot)، (fontsize)، و (grid=True)؟", "• rot: زاوية تدوير نصوص العلامات على المحور (Rotation).\n• fontsize: حجم خط النصوص والأرقام.\n• grid=True: إظهار خطوط الشبكة الخلفية في الرسم."],
+  ["كيف نرسم المخطط الخطي لسعري الفتح والإغلاق ('open', 'close') لأول 20 صفاً فقط من جدول الأسهم fb؟", "نقتطع أول 20 صفاً بـ iloc[0:20] ثم نستدعي دالة plot:\nfb.iloc[0:20].plot(y=['open', 'close'])"],
+  ["ما هي وظيفة الدالة df.assign() التي استُخدمت قبل رسم بيانات أسهم فيسبوك؟", "تقوم بإنشاء وإضافة عمود جديد محسوب (مثل لوغاريتم حجم التداول log_volume = np.log(fb.volume)) إلى نسخة من الجدول لاستخدامه في الرسم دون تخريب الجدول الأصلي."],
+  ["متى نستخدم الرسم البياني (kind='hexbin') في دالة df.plot() بدلاً من (kind='scatter')؟", "نستخدم hexbin عندما يكون حجم البيانات كبيراً جداً وتتزاحم النقاط فوق بعضها في المخطط النقطي؛ حيث يقسم hexbin المساحة إلى خلايا سداسية ملونة تعكس كثافة النقاط بوضوح."],
+  ["في رسم (kind='hexbin')، ما وظيفة المعامل (gridsize)؟", "يحدد عدد الخلايا السداسية (Hexagons) في الاتجاه الأفقي؛ فكلما زاد الرقم أصبحت الخلايا السداسية أصغر وأكثر دقة."],
+  ["كيف نرسم مدرجاً تكرارياً (Histogram) ومخطط صندوق (Box plot) مباشرة باستخدام دالة df.plot()؟", "• للمدرج التكراري: df['col'].plot(kind='hist')\n• لمخطط الصندوق: df.plot(kind='box')"],
+  ["إذا كان معامل الارتباط بين متغيرين A و B هو (-0.89)، وبين A و C هو (+0.45)، فأي المتغيرين يرتبط بعلاقة أقوى مع A؟ وما نوعها؟", "المتغير B يرتبط بعلاقة أقوى مع A لأن القيمة المطلقة |-0.89| = 0.89 أقرب إلى 1 من 0.45، ونوع العلاقة بين A و B هي علاقة عكسية (سالبة) قوية."],
+  ["هل يمكن تمرير قائمة من أنماط الخطوط للمعامل style في دالة df.plot(y=['open', 'close'], style=['-', '--'])؟ وماذا تفعل؟", "نعم، تقوم برسم العمود الأول ('open') بخط متصل '-'، ورسم العمود الثاني ('close') بخط متقطع '--'."]
+];
+
+const masterQuestions = [
+  {q:"أي نوع من الرسوم البيانية يُعد الأنسب لتمثيل العلاقة بين متغيرين كميين (رقميين متصلين) واكتشاف اتجاه وقوة العلاقة بينهما؟",o:["المخطط النقطي (Scatter Plot)","المخطط الدائري (Pie Plot)","جدول التقاطع (Crosstab)","المدرج التكراري أحادي المتغير"],a:0,e:"المخطط النقطي (Scatter Plot) يربط بين متغيرين كميين على المحورين X و Y لتوضيح اتجاه وقوة العلاقة بينهما."},
+  {q:"إذا لاحظنا في المخطط النقطي (Scatter Plot) أن النقاط تتجمع بشكل متقارب جداً وتتجه (هبوطاً من اليسار إلى اليمين - كلما زادت X نقصت Y)، فما نوع هذه العلاقة؟",o:["علاقة عكسية (سالبة) قوية (Strong Negative Correlation)","علاقة طردية (موجبة) قوية (Strong Positive Correlation)","علاقة طردية ضعيفة","لا توجد أي علاقة بين المتغيرين"],a:0,e:"اتجاه النقاط هبوطاً (زيادة X يصاحبها نقصان Y) يعني علاقة عكسية (سالبة)، وتقاربها الشديد حول مسار خطي يعني أنها قوية."},
+  {q:"في دالة plt.scatter() بمكتبة Matplotlib، أي معامل يُستخدم للتحكم في (درجة شفافية النقاط) لمعالجة مشكلة تداخل وتراكم النقاط فوق بعضها؟",o:["alpha","marker","s","label"],a:0,e:"المعامل alpha يأخذ قيمة بين 0 و 1 لتحديد شفافية النقاط وإظهار كثافة المناطق المتداخلة."},
+  {q:"إذا أردنا في دالة plt.scatter(x, y) تمثيل متغير كمي ثالث (مثل كتلة جسم البطريق body_mass_g) عن طريق تغيير (حجم النقاط)، فأي معامل نستخدم؟",o:["المعامل s (مثل s = df['body_mass_g'] * 0.03)","المعامل alpha","المعامل fmt","المعامل vmin"],a:0,e:"المعامل s (اختصار Size) في plt.scatter يتحكم في حجم النقاط ويمكن ربطه بمتغير كمي ثالث."},
+  {q:"في دالة sns.scatterplot() بمكتبة Seaborn، ما هو المعامل المسؤول عن (تلوين النقاط تلقائياً بألوان مختلفة بناءً على فئات عمود معين مثل فصيلة البطريق 'species')؟",o:["hue (مثل hue='species')","style","size","annot"],a:0,e:"المعامل hue في Seaborn يقوم بتلوين عناصر الرسم حسب فئات العمود المحدد وينشئ مفتاح الرسم (Legend) تلقائياً."},
+  {q:"في دالة sns.scatterplot()، إذا أردنا تغيير (شكل علامة النقطة - Marker style) بناءً على فئات عمود الجنس ('sex')، وتحديد لوحة الألوان، فأي معاملين نستخدم على التوالي؟",o:["style='sex' ثم palette='...'","hue='sex' ثم fmt='...'","size='sex' ثم layout='...'","annot='sex' ثم subplots=True"],a:0,e:"المعامل style يغير شكل العلامة حسب الفئة، والمعامل palette يحدد لوحة الألوان المستخدمة."},
+  {q:"ما الفرق الجوهري بين دالة pd.crosstab() ودالة pd.pivot_table() في مكتبة Pandas؟",o:["crosstab تحسب التكرارات المشتركة بين متغيرين نوعيين (فئويين)، بينما pivot_table تلخص متغيرات كمية عبر فئات متغير نوعي باستخدام دالة تجميع إحصائية (aggfunc)","crosstab للمتغيرات الكمية فقط، و pivot_table لرسم المخطط الدائري فقط","كلاهما يستخدمان فقط لحذف القيم المفقودة","لا يوجد أي فرق بينهما"],a:0,e:"جدول التقاطع crosstab يربط بين متغيرين نوعيين لحساب التكرارات، بينما الجدول المحوري pivot_table يجمع المتغيرات الكمية عبر فئات متغير نوعي بدوال مثل mean و sum."},
+  {q:"في الدالة pd.pivot_table(df, values='body_mass_g', index='species', aggfunc=['mean', 'sum'])، ما وظيفة المعامل (aggfunc)؟",o:["يحدد دوال التجميع الإحصائية التي ستُطبق على القيم الكمية (هنا يحسب المتوسط الحسابي والمجموع لكل فصيلة)","يحدد لون الخلفية للجدول","يحذف العمود 'species' من الجدول","يرتب الفصائل تنازلياً"],a:0,e:"المعامل aggfunc (اختصار Aggregation Function) يحدد الدوال الإحصائية المطبقة لتلخيص القيم في الجدول المحوري."},
+  {q:"تقوم الدالة sns.barplot(data=df, x='species', y='body_mass_g') افتراضياً بعرض المتوسط الحسابي لكل فئة؛ فكيف نجعلها تعرض (الوسيط - Median) بدلاً من المتوسط؟",o:["نمرر المعامل estimator='median' (أو estimator=np.median)","نمرر المعامل annot=True","نمرر المعامل subplots=True","نمرر المعامل kind='box'"],a:0,e:"المعامل estimator في sns.barplot يحدد الدالة الإحصائية المحسوبة لكل عمود، وبتمرير 'median' يحسب الوسيط."},
+  {q:"ما هو النطاق الرياضي الذي تقع فيه دائماً قيمة معامل الارتباط (Correlation Coefficient)؟",o:["بين -1 و +1 ([-1, 1])","بين 0 و 100 فقط","بين 0 و +1 فقط (لا يقبل القيم السالبة)","من سالب ما لا نهاية إلى موجب ما لا نهاية"],a:0,e:"معامل الارتباط يتراوح دائماً بين -1 (ارتباط عكسي تام) و +1 (ارتباط طردي تام)، ومروراً بـ 0 (انعدام الارتباط الخطي)."},
+  {q:"إذا قمنا بحساب مصفوفة الارتباط لجدول بيانات، فماذا تعني قيمة معامل ارتباط تساوي (-0.92) بين متغيرين؟ وما قيمة ارتباط أي متغير مع نفسه على القطر الرئيسي؟",o:["(-0.92) تعني ارتباطاً عكسياً (سالباً) قوياً جداً، وارتباط أي متغير مع نفسه يساوي دائماً (+1.00)","(-0.92) تعني ارتباطاً طردياً ضعيفاً، وارتباط المتغير مع نفسه يساوي (0)","(-0.92) تعني خطأ في الحساب لأن الارتباط لا يكون سالباً","لا توجد أي علاقة بين المتغيرين"],a:0,e:"الإشارة السالبة تعني علاقة عكسية، وقرب القيمة من -1 (-0.92) يعني أنها قوية جداً، وارتباط المتغير مع نفسه على القطر الرئيسي يساوي دائماً 1."},
+  {q:"لتمثيل مصفوفة الارتباط بصرياً على شكل (خريطة حرارية - Heatmap) في مكتبة Seaborn، نستخدم الكود التالي:",o:["sns.heatmap(corr, vmin=-1, vmax=1, annot=True, fmt='.2f')","sns.scatterplot(corr, hue='species')","pd.crosstab(corr)","plt.pie(corr)"],a:0,e:"الدالة sns.heatmap تمثل مصفوفة الارتباط حرارياً بالألوان والقيم."},
+  {q:"في دالة خريطة الحرارة sns.heatmap(corr, vmin=-1, vmax=1, annot=True, fmt='.2f')، ما هي الوظيفة الدقيقة للمعاملين (annot=True) و (fmt='.2f')؟",o:["annot=True يطبع ويظهر قيم الارتباط الرقمية داخل كل مربع، و fmt='.2f' ينسق هذه الأرقام لتظهر بمنزلتين عشريتين","annot=True يخفي الأرقام، و fmt='.2f' يرسم خطين متقطعين","annot=True يحذف القيم السالبة، و fmt='.2f' يضرب القيم في 2","يستخدمان لتحديد عرض وارتفاع النافذة"],a:0,e:"المعامل annot (اختصار annotation) يكتب الأرقام داخل الخلايا، والمعامل fmt يضبط صيغة عرض الأرقام العشرية."},
+  {q:"ما هو نوع الرسم البياني الافتراضي الذي ترسمه الدالة df.plot() في مكتبة Pandas إذا لم نمرر لها المعامل kind؟",o:["المخطط الخطي (kind='line')","المخطط الدائري (kind='pie')","خريطة الخلايا السداسية (kind='hexbin')","مخطط الصندوق (kind='box')"],a:0,e:"القيمة الافتراضية للمعامل kind في دالة df.plot() هي 'line' (مخطط خطي)."},
+  {q:"في الكود: fb.plot(y=['open', 'high', 'low', 'close'], subplots=True, layout=(2, 2))، ما وظيفة المعاملين (subplots=True) و (layout=(2, 2))؟",o:["subplots=True يفصل كل عمود في رسم فرعي مستقل، و layout=(2, 2) يرتب الرسوم الأربعة في شبكة من صفين وعمودين","يرسمان الأعمدة الأربعة فوق بعضها في مربع واحد صغير","يحذفان أول صفين وأول عمودين من البيانات","يقومان بحساب مصفوفة الارتباط للأعمدة الأربعة"],a:0,e:"تفعيل subplots=True ينشئ رسماً فرعياً مستقلاً لكل عمود، ويحدد layout=(rows, cols) شكل شبكة توزيع هذه الرسوم."},
+  {q:"في دالة df.plot()، أي معامل يُستخدم لتحديد (زاوية تدوير نصوص العلامات على المحور)، وأي معامل يُستخدم لتحديد (حدود البداية والنهاية للمحور الرأسي)؟",o:["المعامل rot لتدوير النصوص، والمعامل ylim لحدود المحور الرأسي","المعامل style لتدوير النصوص، والمعامل yticks لحدود المحور","المعامل grid لتدوير النصوص، والمعامل figsize لحدود المحور","المعامل kind لتدوير النصوص، والمعامل layout للحدود"],a:0,e:"المعامل rot (اختصار rotation) يدور تسميات المحور، والمعاملان xlim و ylim يحددان نطاق البداية والنهاية للمحورين."},
+  {q:"ماذا يفعل الكود التالي على بيانات أسهم فيسبوك: fb.iloc[0:20].plot(y=['open', 'close'], style=['-', '--']) ؟",o:["يرسم مخططاً خطياً لأول 20 صفاً فقط، بحيث يظهر عمود 'open' بخط متصل '-' وعمود 'close' بخط متقطع '--'","يرسم مخططاً دائرياً لآخر 20 عموداً","يحذف أول 20 صفاً من الجدول","يرسم مدرجاً تكرارياً من 20 فترة"],a:0,e:"الخاصية iloc[0:20] تختار أول 20 صفاً، ودالة plot ترسم العمودين بالأنماط المحددة في قائمة style."},
+  {q:"ما هي الدالة في مكتبة Pandas التي استُخدمت في الكود: fb.assign(log_volume = np.log(fb.volume)) قبل استدعاء دالة الرسم؟ وما وظيفتها؟",o:["الدالة assign()، وتقوم بإضافة عمود جديد محسوب (لوغاريتم حجم التداول) إلى نسخة من إطار البيانات لاستخدامه في الرسم","الدالة drop()، وتقوم بحذف عمود حجم التداول","الدالة crosstab()، وتقوم بدمج جدولين","الدالة corr()، وتقوم بحساب الارتباط"],a:0,e:"تُستخدم دالة df.assign() لإنشاء وإضافة أعمدة جديدة مشتقة من الأعمدة الحالية بطريقة سلسة دون تعديل الكائن الأصلي."},
+  {q:"متى يُنصح باستخدام نوع الرسم (kind='hexbin') في دالة df.plot() بدلاً من المخطط النقطي التقليدي (kind='scatter')؟",o:["عندما تكون نقاط البيانات كثيفة جداً ومتزاحمة فوق بعضها؛ حيث يقسم hexbin المساحة إلى خلايا سداسية ملونة حسب كثافة النقاط","عندما نريد رسم متغير نوعي واحد فقط يحتوي على 3 فئات","عندما نريد عرض النسب المئوية كشرائح دائرية","عندما يكون لدينا 5 نقاط بيانات فقط"],a:0,e:"يعالج مخطط hexbin مشكلة التداخل الشديد للنقاط في scatter عبر تجميع النقاط في شبكة من الخلايا السداسية وتلوينها حسب الكثافة."},
+  {q:"في مخطط الخلايا السداسية df.plot(kind='hexbin', x='log_volume', y='max_diff', gridsize=25)، ما وظيفة المعامل (gridsize)؟",o:["يحدد عدد الخلايا السداسية (Hexagons) في الاتجاه الأفقي للتحكم في دقة وحجم الخلايا","يحدد حجم خط العنوان الرئيسي","يحدد عدد الرسوم الفرعية في الشكل","يحدد زاوية تدوير المحور الأفقي"],a:0,e:"المعامل gridsize في رسم hexbin يتحكم في عدد الخلايا السداسية في الشبكة."},
+  {q:"أي كود مما يلي يُستخدم لرسم (مخطط صندوق - Box Plot) للأعمدة ['open', 'close'] مباشرةً باستخدام دالة الرسم في Pandas؟",o:["fb[['open', 'close']].plot(kind='box')","fb[['open', 'close']].plot(kind='pie')","fb[['open', 'close']].plot(kind='hexbin')","pd.crosstab(fb['open'], fb['close'])"],a:0,e:"بتمرير المعامل kind='box' داخل دالة .plot() في Pandas يتم رسم مخطط الصندوق للأعمدة المحددة."},
+  {q:"لمقارنة توزيع متغير كمي (مثل طول الزعنفة flipper_length_mm) عبر فئات متغير نوعي (species) مع تقسيم كل فئة حسب الجنس (sex) باستخدام مخطط الصندوق في Seaborn، نكتب:",o:["sns.boxplot(data=df, x='species', y='flipper_length_mm', hue='sex')","sns.heatmap(data=df, x='species', y='sex')","plt.pie(df['flipper_length_mm'])","pd.pivot_table(df, index='sex')"],a:0,e:"تدعم دالة sns.boxplot تمرير المتغير النوعي للمحور X والكمي للمحور Y وتقسيم الصناديق لونياً بمتغير ثالث عبر المعامل hue."},
+  {q:"في دالة sns.heatmap()، لماذا يفضل تمرير المعاملين (vmin=-1, vmax=1) عند رسم مصفوفة الارتباط؟",o:["لضمان تثبيت تدريج شريط الألوان على النطاق الكامل لمعامل الارتباط من -1 إلى +1 لسهولة تفسير قوة الارتباط بصرياً","لحذف جميع القيم التي تقع بين -1 و +1","لتحويل الخريطة الحرارية إلى رسم خطي","لإخفاء شريط الألوان من الرسم"],a:0,e:"تثبيت vmin=-1 و vmax=1 يربط طرفي تدريج الألوان بأقصى ارتباط عكسي (-1) وأقصى ارتباط طردي (+1) بدقة."},
+  {q:"إذا أردنا حساب مصفوفة الارتباط لإطار البيانات df في مكتبة Pandas قبل تمريرها لدالة sns.heatmap()، فما هي الدالة التي نستدعيها؟",o:["df.corr()","df.describe()","df.info()","df.reindex()"],a:0,e:"الدالة df.corr() تحسب مصفوفة معاملات الارتباط الثنائية لجميع الأعمدة الرقمية في الـ DataFrame."},
+  {q:"أي مما يلي يُعد من المعاملات الصحيحة المدعومة داخل دالة التمثيل الرسومي المباشر df.plot() في مكتبة Pandas؟",o:["جميع ما ذكر (kind, x, y, subplots, layout, figsize, title, legend, xticks, xlim, rot, fontsize, grid)","المعاملات (vmin, vmax, annot, fmt) الخاصة بخريطة الحرارة فقط","المعاملات (left_on, right_on, how) الخاصة بدمج الجداول فقط","المعامل (ddof=0) الخاص بالتباين فقط"],a:0,e:"هذه هي قائمة المعاملات الـ 13 القياسية المدعومة في دالة df.plot() للتحكم الكامل في الرسوم البيانية داخل Pandas."}
+];
+
+// بناء شبكة المصطلحات
+const termsGrid = document.getElementById("termsGrid");
+terms.forEach(([en, ar]) => {
+  const d = document.createElement("div");
+  d.className = "card";
+  d.style.margin = "0";
+  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
+  termsGrid.appendChild(d);
+});
+
+// إدارة البطاقات التعليمية
+let ci = 0, showAnswer = false;
+function renderCard() {
+  document.getElementById("flashTerm").textContent = cards[ci][0];
+  document.getElementById("flashAnswer").textContent = cards[ci][1];
+  document.getElementById("flashAnswer").hidden = !showAnswer;
+  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
+  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+}
+document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
+document.getElementById("flashcard").addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
+});
+document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
+document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
+renderCard();
+
+// التنقل بين التبويبات
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+// خوارزمية خلط عشوائي (Fisher-Yates Shuffle) للأسئلة والخيارات
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+let currentQuestions = [];
+let answers = {};
+
+function prepareShuffledQuiz() {
+  currentQuestions = shuffleArray(masterQuestions).map(item => {
+    const optsWithFlag = item.o.map((text, idx) => ({ text, isCorrect: idx === item.a }));
+    const shuffledOpts = shuffleArray(optsWithFlag);
+    return {
+      q: item.q,
+      o: shuffledOpts.map(x => x.text),
+      a: shuffledOpts.findIndex(x => x.isCorrect),
+      e: item.e
+    };
+  });
+}
+
+function renderQuiz() {
+  prepareShuffledQuiz();
+  const area = document.getElementById("quizArea");
+  area.innerHTML = "";
+  const letters = ["أ", "ب", "ج", "د"];
+  currentQuestions.forEach((item, i) => {
+    const box = document.createElement("div");
+    box.className = "qbox";
+    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
+    const opts = box.querySelector(".options");
+    item.o.forEach((opt, j) => {
+      const btn = document.createElement("button");
+      btn.className = "option";
+      btn.textContent = `${letters[j]}) ${opt}`;
+      btn.onclick = () => {
+        answers[i] = j;
+        [...opts.children].forEach((x, k) => {
+          x.classList.remove("correct", "wrong");
+          x.disabled = true;
+          if (k === item.a) x.classList.add("correct");
+          if (k === j && j !== item.a) x.classList.add("wrong");
+        });
+        const fb = document.getElementById("fb" + i);
+        fb.hidden = false;
+        fb.className = "feedback " + (j === item.a ? "good" : "bad");
+        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
+        updateScore();
+      };
+      opts.appendChild(btn);
+    });
+    area.appendChild(box);
+  });
+  updateScore();
+}
+
+function updateScore() {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
+  document.getElementById("score").textContent = `النتيجة: ${correct} / ${currentQuestions.length}`;
+  document.getElementById("progressBar").style.width = (Object.keys(answers).length / currentQuestions.length * 100) + "%";
+}
+
+document.getElementById("resetQuiz").onclick = () => {
+  answers = {};
+  document.getElementById("finalResult").textContent = "";
+  renderQuiz();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+document.getElementById("finishQuiz").onclick = () => {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
+  const pct = Math.round(correct / currentQuestions.length * 100);
+  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${currentQuestions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! أنتِ مستعدة تماماً للاختبار في هذا الفصل." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
+};
+
+renderQuiz();
+</script>
+</body>
+</html>

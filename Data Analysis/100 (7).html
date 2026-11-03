@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الفصل الثامن الشامل (100%) | تحليل وتمثيل البيانات</title>
+<style>
+:root{
+  --bg:#f0f5ff;
+  --card:#ffffff;
+  --ink:#0f172a;
+  --muted:#475569;
+  --accent:#1d4ed8;
+  --accent-dark:#1e3a8a;
+  --accent2:#dbeafe;
+  --line:#cbd5e1;
+  --good:#059669;
+  --good-bg:#ecfdf5;
+  --bad:#dc2626;
+  --bad-bg:#fef2f2;
+  --warn:#d97706;
+  --warn-bg:#fffbeb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
+header{background:linear-gradient(135deg,#0f172a,#1d4ed8);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(15,23,42,0.2)}
+.wrap{max-width:1040px;margin:auto;padding:0 16px}
+.eyebrow{opacity:.92;font-size:.9rem;background:rgba(255,255,255,0.16);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
+h1{margin:5px 0;font-size:clamp(1.5rem,4vw,2.25rem)}
+header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
+nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:var(--accent2);color:var(--accent-dark);font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
+nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
+nav button.active,.btn.primary{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+main .btn.primary{background:var(--accent);color:white}
+main{padding:22px 0 48px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(15,23,42,0.04)}
+h2{font-size:1.35rem;margin:0 0 12px;color:#0f172a}
+h3{font-size:1.08rem;margin:0 0 8px;color:var(--accent-dark)}
+small,.muted{color:var(--muted)}
+ul,ol{padding-right:22px;margin:8px 0}
+li{margin:6px 0}
+details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
+summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f8fafc;color:#0f172a;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
+details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
+.details-body{padding:16px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
+.badge-new{display:inline-block;background:var(--warn-bg);color:var(--warn);border:1px solid #fcd34d;font-size:.78rem;padding:1px 8px;border-radius:6px;margin-right:6px;font-weight:bold}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#eff6ff;color:#1e3a8a;font-weight:bold}
+tr:last-child td{border-bottom:0}
+.note{border-right:4px solid var(--accent);padding:10px 14px;background:#eff6ff;border-radius:8px;margin:10px 0}
+.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
+.math-box{background:#f8fafc;border:2px solid #93c5fd;border-radius:12px;padding:12px 16px;margin:10px 0;text-align:center;font-size:1.03rem;font-weight:bold;color:#1e3a8a;direction:ltr}
+.step-box{background:#f0fdf4;border:1px solid #86efac;border-right:4px solid var(--good);border-radius:10px;padding:12px 16px;margin:10px 0;font-size:.95rem}
+.code-box{background:#0f172a;color:#e2e8f0;padding:14px 18px;border-radius:12px;font-family:Consolas,Monaco,monospace;direction:ltr;text-align:left;overflow-x:auto;margin:10px 0;border:1px solid #334155;line-height:1.65;font-size:.91rem}
+.code-box .kw{color:#38bdf8;font-weight:bold}
+.code-box .str{color:#4ade80}
+.code-box .num{color:#f472b6}
+.code-box .cmt{color:#94a3b8;font-style:italic}
+.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
+.options{display:grid;gap:8px;margin-top:12px}
+.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
+.option:hover:not(:disabled){border-color:var(--accent);background:#eff6ff}
+.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
+.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
+.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
+.feedback.good{color:var(--good);background:var(--good-bg)}
+.feedback.bad{color:var(--bad);background:var(--bad-bg)}
+.progress{height:10px;background:#cbd5e1;border-radius:9px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
+.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#dbeafe);border:2px solid #93c5fd;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
+.flashcard:hover{transform:scale(1.005)}
+.flashcard .term{font-size:1.32rem;font-weight:bold;color:#1e3a8a}
+.flashcard .answer{margin-top:16px;font-size:1.04rem;color:#0f172a;background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04);white-space:pre-line}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
+@media(max-width:600px){
+  .card{padding:14px}
+  nav button{flex:1 1 calc(50% - 8px);text-align:center}
+  .flashcard{min-height:200px;padding:18px}
+  th,td{padding:8px 10px;font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">نسخة شاملة ومحدثة 100% • مقرر تحليل وتمثيل البيانات</div>
+    <h1>الفصل الثامن: تهيئة السمات وتحويلها (Feature Engineering &amp; Transformation)</h1>
+    <p>يغطي تقنيات ترميز السمات الثلاث (One-hot, Label, Ordinal Encoding)، طرق تحجيم السمات الثلاث ومعادلاتها (Standard, Min-Max, Robust Scaling)، وطرق تحويل السمات الثلاث (Discretization, Log Transformation, Attribute Construction)</p>
+    <nav>
+      <button class="active" data-tab="summary">الشرح والقوانين والأكواد (100%)</button>
+      <button data-tab="tables">ملخص القوانين والمقارنات</button>
+      <button data-tab="terms">قاموس المصطلحات والدوال</button>
+      <button data-tab="cards">البطاقات (28)</button>
+      <button data-tab="quiz">الاختبار العشوائي (25)</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="summary" class="panel active">
+    <div class="card">
+      <h2>خريطة الفصل الثامن (الوحدات الثلاث الكاملة)</h2>
+      <div class="grid">
+        <div>
+          <span class="tag">الوحدة الأولى</span>
+          <h3>تقنيات ترميز السمات (Feature Encoding)</h3>
+          <p>مفهوم وأهمية ترميز السمات الأربعة، وتقنيات الترميز الثلاث: <span dir="ltr">One-hot encoding</span> (<span dir="ltr">get_dummies</span>)، و <span dir="ltr">Label encoding</span> (<span dir="ltr">LabelEncoder</span>)، و <span dir="ltr">Ordinal encoding</span> (<span dir="ltr">OrdinalEncoder</span>).</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثانية</span>
+          <h3>طرق تحجيم السمات (Feature Scaling)</h3>
+          <p>مفهوم وأهمية التحجيم، والطرق الثلاث بمعادلاتها وأكوادها: <span dir="ltr">Standard Scaling (Z-score)</span>، و <span dir="ltr">Min-Max Scaling</span>، و <span dir="ltr">Robust Scaling</span> (المقاوم للقيم المتطرفة).</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثالثة</span>
+          <h3>تحويل وإنشاء السمات (Transformation)</h3>
+          <p>التقطيع والتحويل لفئات (<span dir="ltr">Discretization: Equal width, Equal frequency, Ad hoc</span>)، التحويل اللوغاريتمي (<span dir="ltr">Log transformation</span>)، وإنشاء السمات (<span dir="ltr">Attribute construction: BMI</span>).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== الوحدة الأولى ==================== -->
+    <details open>
+      <summary>الوحدة الأولى: تقنيات ترميز السمات الفئوية (Feature Encoding: One-hot, Label, Ordinal)</summary>
+      <div class="details-body">
+        <h3>1) مفهوم وأهمية ترميز السمات (<span dir="ltr">Feature Encoding</span>)</h3>
+        <ul>
+          <li><b>مفهوم ترميز السمات:</b> هو عملية تحويل <b>السمات النوعية (الفئوية / النصية <span dir="ltr">Categorical Features</span>)</b> إلى <b>تمثيل رقمي (<span dir="ltr">Numerical Representation</span>)</b>؛ لأن معظم خوارزميات التعلم الآلي والنماذج الرياضية لا تستطيع التعامل مباشرةً مع النصوص وتعتمد على العمليات الحسابية.</li>
+          <li><b>الفوائد الأربع لترميز السمات:</b>
+            <ol>
+              <li><b>1. تقليل الحجم والتعقيد:</b> تمثيل النصوص بأرقام يقلل من استهلاك الذاكرة ويبسط المعالجة الحسابية.</li>
+              <li><b>2. تحسين الأداء:</b> تسريع عملية تدريب نماذج التعلم الآلي ورفع دقتها.</li>
+              <li><b>3. تجنب المشاكل البرمجية:</b> منع الأخطاء التي تحدث عند إدخال بيانات نصية لخوارزميات تتطلب أرقاماً فقط.</li>
+              <li><b>4. تحسين التفاعلية والتوافق:</b> جعل البيانات متوافقة مع كافة مكتبات التحليل وتعلم الآلة مثل <span dir="ltr">Scikit-learn</span>.</li>
+            </ol>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) التقنيات الثلاث لترميز السمات الفئوية (<span dir="ltr">3 Encoding Techniques</span>)</h3>
+        <div class="exam-alert">
+          <b>🔥🔥 مقارنة حاسمة ومؤكدة في الاختبار بين تقنيات الترميز الثلاث: متى نستخدم كل تقنية وكيف نكتب كودها؟</b>
+        </div>
+
+        <p><b>أولاً: الترميز الثنائي الساخن (<span dir="ltr">1. One-Hot Encoding</span>)</b></p>
+        <ul>
+          <li><b>متى نستخدمه؟</b> يُستخدم مع <b>البيانات النوعية الاسمية (<span dir="ltr">Nominal Data</span>) التي لا يوجد بينها ترتيب منطقي</b> (مثل أسماء المدن، أو الألوان، أو التخصصات).</li>
+          <li><b>آلية عمله:</b> يقوم باستبدال العمود الفئوي بعدد من <b>الأعمدة الثنائية الجديدة (<span dir="ltr">Binary / Dummy Columns</span>) يساوي عدد الفئات الفريدة</b> في ذلك العمود؛ بحيث يأخذ العمود المقابل لفئة العينة القيمة <b>$1$</b> وتأخذ بقية الأعمدة القيمة <b>$0$</b>.</li>
+          <li><b>التنفيذ البرمجي في <span dir="ltr">Pandas</span>:</b> نستخدم الدالة <b><code dir="ltr">pd.get_dummies()</code></b>، ثم ندمج الأعمدة الجديدة مع الجدول الأصلي بالدالة <b><code dir="ltr">.join()</code></b>:</li>
+        </ul>
+        <div class="code-box">
+<span class="cmt"># إنشاء أعمدة ثنائية (0 و 1) لعمود الفئات باستخدام pd.get_dummies</span><br>
+dummies = pd.get_dummies(df[<span class="str">'Country'</span>])<br>
+df_encoded = df.join(dummies)  <span class="cmt"># دمج الأعمدة الجديدة مع الجدول الأصلي</span>
+        </div>
+
+        <p><b>ثانياً: ترميز التسميات / الأعداد الصحيحة (<span dir="ltr">2. Label Encoding / Integer Encoding</span>)</b></p>
+        <ul>
+          <li><b>آلية عمله:</b> يقوم بتحويل كل فئة نصية فريدة في العمود إلى <b>رقم صحيح متتابع يبدأ من الصفر ($0, 1, 2, \dots, k-1$) في نفس العمود</b> دون إنشاء أعمدة جديدة (وترتب الفئات أبجدياً بشكل افتراضي).</li>
+          <li><b>التنفيذ البرمجي في <span dir="ltr">Scikit-learn</span>:</b> نستخدم الفئة <b><code dir="ltr">LabelEncoder</code></b> من <code dir="ltr">sklearn.preprocessing</code>:
+            <ul>
+              <li>الدالة <b><code dir="ltr">fit_transform()</code>:</b> لتعلم الفئات وتحويل النصوص إلى أرقام صحيحة.</li>
+              <li>الدالة <b><code dir="ltr">inverse_transform()</code>:</b> للقيام <b>بالتحويل العكسي</b> (إرجاع الأرقام الصحيحة إلى أسمائها النصية الأصلية!).</li>
+            </ul>
+          </li>
+        </ul>
+        <div class="code-box">
+<span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> LabelEncoder<br><br>
+le = LabelEncoder()<br>
+df[<span class="str">'Country_Code'</span>] = le.fit_transform(df[<span class="str">'Country'</span>])          <span class="cmt"># تحويل النصوص إلى أرقام 0, 1, 2...</span><br>
+original_names = le.inverse_transform(df[<span class="str">'Country_Code'</span>])    <span class="cmt"># استرجاع النصوص الأصلية من الأرقام</span>
+        </div>
+
+        <p><b>ثالثاً: الترميز الترتيبي (<span dir="ltr">3. Ordinal Encoding</span>)</b></p>
+        <ul>
+          <li><b>متى نستخدمه؟</b> يُستخدم مع <b>البيانات النوعية الترتيبية (<span dir="ltr">Ordinal Data</span>) التي يوجد بين فئاتها ترتيب منطقي وتدرج</b> (مثل التقدير: مقبول &larr; جيد &larr; ممتاز، أو الجودة: <code dir="ltr">Low &lt; Medium &lt; High</code>).</li>
+          <li><b>لماذا لا نستخدم <span dir="ltr">LabelEncoder</span> مع البيانات الترتيبية؟</b> لأن <code dir="ltr">LabelEncoder</code> يرتب الكلمات أبجدياً فيعطي (<code dir="ltr">High=0, Low=1, Medium=2</code>) مما يفسد الترتيب المنطقي! بينما تتيح لنا الفئة <b><code dir="ltr">OrdinalEncoder</code></b> تحديد الترتيب الصحيح للفئات يدوياً عبر المعامل <b><code dir="ltr">categories</code></b>:</li>
+        </ul>
+        <div class="code-box">
+<span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> OrdinalEncoder<br><br>
+<span class="cmt"># تحديد الترتيب المنطقي للفئات: Low تاخذ 0، ثم Medium تاخذ 1، ثم High تاخذ 2</span><br>
+oe = OrdinalEncoder(categories=[[<span class="str">'Low'</span>, <span class="str">'Medium'</span>, <span class="str">'High'</span>]])<br>
+df[<span class="str">'Quality_Encoded'</span>] = oe.fit_transform(df[[<span class="str">'Quality'</span>]])
+        </div>
+      </div>
+    </details>
+
+    <!-- ==================== الوحدة الثانية ==================== -->
+    <details>
+      <summary>الوحدة الثانية: طرق تحجيم السمات الرقمية (Feature Scaling: Standard, Min-Max, Robust)</summary>
+      <div class="details-body">
+        <h3>1) مفهوم وأهمية تحجيم السمات (<span dir="ltr">Feature Scaling</span>)</h3>
+        <ul>
+          <li><b>المشكلة:</b> في كثير من جداول البيانات، تختلف نطاقات ووحدات قياس السمات الرقمية بشكل شاسع (مثلاً: عمود "العمر" يتراوح بين $20$ و $60$، بينما عمود "الدخل السنوي" يتراوح بين $50,000$ و $500,000$).</li>
+          <li><b>الحل وأهمية التحجيم:</b> إذا أدخلنا هذه البيانات مباشرة لخوارزميات تعتمد على المسافة أو الانحدار (مثل <span dir="ltr">K-NN, K-means, SVM, Gradient Descent</span>)، فإن السمة ذات الأرقام الأكبر ستهيمن تماماً على الحسابات! لذلك نقوم بـ <b>تحجيم السمات (<span dir="ltr">Feature Scaling</span>)</b> لتوحيد نطاقات جميع السمات الرقمية وجعلها على مقياس متقارب دون تغيير شكل العلاقات بينها.</li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) الطرق الثلاث لتحجيم السمات (المعادلات، المسائل اليدوية، والأكواد)</h3>
+        <div class="exam-alert">
+          <b>🔥🔥 قوانين ومسائل حسابية مؤكدة في الاختبار: احفظي المعادلات الثلاث واسم الفئة البرمجية لكل طريقة في <code dir="ltr">sklearn.preprocessing</code>:</b>
+        </div>
+
+        <p><b>الطريقة الأولى: التحجيم القياسي / المعياري (<span dir="ltr">1. Standard Scaling / Z-Score Normalization</span>)</b></p>
+        <ul>
+          <li><b>فكرتها:</b> تقوم بتحويل السمة بحيث يصبح <b>متوسطها الحسابي يساوي صفراً ($\mu = 0$)</b> و<b>انحرافها المعياري يساوي واحداً ($\sigma = 1$)</b>.</li>
+          <li><b>المعادلة الرياضية:</b></li>
+        </ul>
+        <div class="math-box">
+          Z<sub>i</sub> = ( X<sub>i</sub> &minus; &mu; ) / &sigma;
+        </div>
+        <div class="step-box">
+          <b>مثال حسابي يدوي على Standard Scaling:</b><br>
+          إذا كان متوسط عمود الطول $\mu = 170$ والانحراف المعياري $\sigma = 10$، فما هي القيمة المحجمة قياسياً لشخص طوله $X_i = 185$؟<br>
+          • $Z_i = (185 - 170) \div 10 = 15 \div 10 = \mathbf{+1.5}$.
+        </div>
+        <div class="code-box">
+<span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> StandardScaler<br><br>
+scaler = StandardScaler()<br>
+df_standard = scaler.fit_transform(df[[<span class="str">'Age'</span>, <span class="str">'Salary'</span>]])
+        </div>
+
+        <p><b>الطريقة الثانية: تحجيم الحد الأدنى والأقصى (<span dir="ltr">2. Min-Max Scaling</span>)</b></p>
+        <ul>
+          <li><b>فكرتها:</b> تقوم بضغط وتحجيم جميع قيم السمة لتقع داخل <b>نطاق محدد مسبقاً $[\text{new\_min}_x, \text{new\_max}_x]$</b>، وافتراضياً هو النطاق <b>$[0, 1]$</b> (بحيث تتحول أصغر قيمة في العمود إلى $0$ وأكبر قيمة إلى $1$).</li>
+          <li><b>المعادلة الرياضية العامة (والمعادلة المختصرة للنطاق $[0, 1]$):</b></li>
+        </ul>
+        <div class="math-box">
+          x<sub>i</sub>' = [ ( x<sub>i</sub> &minus; Min<sub>x</sub> ) / ( Max<sub>x</sub> &minus; Min<sub>x</sub> ) ] &times; ( new_max<sub>x</sub> &minus; new_min<sub>x</sub> ) + new_min<sub>x</sub><br>
+          <span style="font-size:.92rem;color:#059669">في النطاق الافتراضي [0, 1] تصبح المعادلة: &nbsp; x<sub>i</sub>' = ( x<sub>i</sub> &minus; Min<sub>x</sub> ) / ( Max<sub>x</sub> &minus; Min<sub>x</sub> )</span>
+        </div>
+        <div class="step-box">
+          <b>مثال حسابي يدوي على Min-Max Scaling (مهم جداً!):</b><br>
+          إذا كانت أقل قيمة في عمود هي $\text{Min}_x = 10$، وأعلى قيمة هي $\text{Max}_x = 50$، فما هي قيمة العنصر $x_i = 30$ بعد تحجيمه في النطاق $[0, 1]$؟<br>
+          • $x_i' = (30 - 10) \div (50 - 10) = 20 \div 40 = \mathbf{0.5}$.<br>
+          • (ولو طلب تحجيمه في النطاق $[-1, 1]$: نضرب $0.5 \times (1 - (-1)) + (-1) = 0.5 \times 2 - 1 = \mathbf{0}$).
+        </div>
+        <div class="code-box">
+<span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> MinMaxScaler<br><br>
+minmax = MinMaxScaler(feature_range=(<span class="num">0</span>, <span class="num">1</span>))<br>
+df_minmax = minmax.fit_transform(df[[<span class="str">'Age'</span>, <span class="str">'Salary'</span>]])
+        </div>
+
+        <p><b>الطريقة الثالثة: التحجيم المتين المقاوم للقيم المتطرفة (<span dir="ltr">3. Robust Scaling</span>)</b></p>
+        <div class="exam-alert">
+          <b>🌟 متى نستخدم <span dir="ltr">Robust Scaling</span>؟ ولماذا يتفوق على الطريقتين السابقتين عند وجود Outliers؟</b><br>
+          كلا الطريقتين السابقتين تتأثران بشدة بوجود <b>القيم المتطرفة (<span dir="ltr">Outliers</span>)</b> (لأن <span dir="ltr">Standard</span> يستخدم المتوسط والانحراف، و <span dir="ltr">Min-Max</span> يستخدم أقصى وأدنى قيمة). أما <b><span dir="ltr">Robust Scaling</span></b> فيتغلب على القيم المتطرفة لأنه يعتمد في معادلته على <b>الوسيط (<span dir="ltr">Median</span>) والمدى الربعي ($\text{IQR} = Q_3 - Q_1$)</b> اللذين لا يتأثران بالقيم المتطرفة!
+        </div>
+        <div class="math-box">
+          x<sub>i</sub>' = ( x<sub>i</sub> &minus; Median<sub>x</sub> ) / ( Q<sub>3x</sub> &minus; Q<sub>1x</sub> ) = ( x<sub>i</sub> &minus; Median<sub>x</sub> ) / IQR
+        </div>
+        <div class="step-box">
+          <b>مثال حسابي يدوي على Robust Scaling:</b><br>
+          إذا كان وسيط العمود $\text{Median} = 50$، والربع الأول $Q_1 = 40$، والربع الثالث $Q_3 = 60$، فما هي القيمة المحجمة للعنصر $x_i = 70$؟<br>
+          • $x_i' = (70 - 50) \div (60 - 40) = 20 \div 20 = \mathbf{1.0}$.
+        </div>
+        <div class="code-box">
+<span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> RobustScaler<br><br>
+robust = RobustScaler()<br>
+df_robust = robust.fit_transform(df[[<span class="str">'Age'</span>, <span class="str">'Salary'</span>]])
+        </div>
+      </div>
+    </details>
+
+    <!-- ==================== الوحدة الثالثة ==================== -->
+    <details>
+      <summary>الوحدة الثالثة: تحويل السمات (Discretization، التحويل اللوغاريتمي Log، وإنشاء السمات BMI)</summary>
+      <div class="details-body">
+        <h3>1) التقطيع / تحويل السمات الرقمية إلى فئات (<span dir="ltr">1. Discretization / Binning</span>)</h3>
+        <ul>
+          <li><b>مفهوم التقطيع (<span dir="ltr">Discretization</span>):</b> هو عملية تحويل <b>السمات الرقمية المتصلة (<span dir="ltr">Continuous Numerical Features</span>)</b> إلى <b>فئات أو فترات منفصلة (<span dir="ltr">Discrete Categories / Bins</span>)</b> لتبسيط البيانات وتقليل أثر الضجيج.</li>
+          <li><b>الأنواع الثلاثة لطرق التقطيع (<span dir="ltr">Discretization Methods</span>):</b>
+            <ol>
+              <li><b>التقطيع بعرض متساوٍ (<span dir="ltr">Equal Width Discretization</span>):</b>
+                <ul>
+                  <li>يقسم مدى البيانات (من الأصغر للأكبر) إلى $K$ فترات لها <b>نفس الطول الرياضي (نفس العرض)</b>، ويُنفذ في <span dir="ltr">Pandas</span> بالدالة <b><code dir="ltr">pd.cut()</code></b>.</li>
+                </ul>
+              </li>
+              <li><b>التقطيع بتكرار متساوٍ (<span dir="ltr">Equal Frequency Discretization</span>):</b>
+                <ul>
+                  <li>يقسم البيانات إلى $K$ فترات بحيث تحتوي كل فترة على <b>نفس العدد تقريباً من العينات (الأفراد)</b> بالاعتماد على المئينات (<span dir="ltr">Quantiles</span>)، ويُنفذ في <span dir="ltr">Pandas</span> بالدالة <b><code dir="ltr">pd.qcut()</code></b>.</li>
+                </ul>
+              </li>
+              <li><b>التقطيع المخصص حسب المجال (<span dir="ltr">Ad-hoc Discretization</span>):</b>
+                <ul>
+                  <li>تقسيم يحدده محلل البيانات بنفسه بناءً على الخبرة والمعرفة بطبيعة المجال (مثل تقسيم الأعمار إلى فترات محددة: $[0-12]$ طفل، $[13-19]$ مراهق، $[20-59]$ بالغ، $[60+]$ مسن).</li>
+                </ul>
+              </li>
+            </ol>
+          </li>
+        </ul>
+        <div class="code-box">
+<span class="cmt"># 1. Equal Width (عرض متساوٍ) باستخدام pd.cut</span><br>
+df[<span class="str">'Age_EqualWidth'</span>] = pd.cut(df[<span class="str">'Age'</span>], bins=<span class="num">4</span>)<br><br>
+<span class="cmt"># 2. Equal Frequency (تكرار متساوٍ - ربعيات) باستخدام pd.qcut</span><br>
+df[<span class="str">'Age_EqualFreq'</span>] = pd.qcut(df[<span class="str">'Age'</span>], q=<span class="num">4</span>, labels=[<span class="str">'Q1'</span>, <span class="str">'Q2'</span>, <span class="str">'Q3'</span>, <span class="str">'Q4'</span>])<br><br>
+<span class="cmt"># 3. Ad-hoc (تقسيم مخصص بحدود وتسميات يختارها المحلل)</span><br>
+df[<span class="str">'Age_Group'</span>] = pd.cut(df[<span class="str">'Age'</span>], bins=[<span class="num">0</span>, <span class="num">18</span>, <span class="num">35</span>, <span class="num">60</span>, <span class="num">100</span>], labels=[<span class="str">'Youth'</span>, <span class="str">'Young Adult'</span>, <span class="str">'Adult'</span>, <span class="str">'Senior'</span>])
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) التحويل اللوغاريتمي (<span dir="ltr">2. Log Transformation</span>)</h3>
+        <ul>
+          <li><b>متى ولماذا نستخدمه؟</b> يُستخدم لمعالجة السمات الرقمية التي تعاني من <b>ميل/التواء شديد (<span dir="ltr">Highly Skewed Data</span>)</b> أو التي تشهد <b>معدلات نمو أو انخفاض هائلة (أُسيّة)</b> مثل بيانات الناتج المحلي الإجمالي للدول (<span dir="ltr">GDP</span>) أو أسعار العقارات أو أعداد السكان.</li>
+          <li>يساعد تطبيق دالة اللوغاريتم <b><code dir="ltr">np.log()</code></b> على ضغط القيم الكبيرة جداً، وتقليل التباين، وجعل توزيع السمة أكثر تماثلاً وأقرب للتوزيع الطبيعي:</li>
+        </ul>
+        <div class="code-box">
+df[<span class="str">'Log_GDP'</span>] = np.log(df[<span class="str">'GDP'</span>])
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) إنشاء وبناء السمات (<span dir="ltr">3. Attribute Construction / Feature Creation</span>)</h3>
+        <ul>
+          <li><b>مفهومه:</b> هو ابتكار وإنشاء سمة جديدة ذات دلالة أقوى من خلال دمج سمتين أو أكثر من السمات الموجودة في الجدول عبر علاقة رياضية أو منطقية.</li>
+          <li><b>المثال القياسي في المنهج (حساب مؤشر كتلة الجسم <span dir="ltr">BMI</span>):</b>
+            <ul>
+              <li>إذا كان لدينا عمود الوزن بالكيلوغرام (<code dir="ltr">Weight_kg</code>) وعمود الطول بالمتر (<code dir="ltr">Height_m</code>)، يمكننا بناء سمة جديدة هي مؤشر كتلة الجسم (<span dir="ltr">Body Mass Index - BMI</span>) بالقانون التالي:</li>
+            </ul>
+          </li>
+        </ul>
+        <div class="math-box">
+          BMI = Weight (kg) / [ Height (m) ]<sup>2</sup>
+        </div>
+        <div class="step-box">
+          <b>مثال حسابي يدوي:</b> إذا كان وزن شخص هو $80\text{ kg}$ وطوله هو $2\text{ m}$ (متران)، فكم يبلغ مؤشر كتلة الجسم ($\text{BMI}$) له؟<br>
+          • $\text{BMI} = 80 \div (2)^2 = 80 \div 4 = \mathbf{20}$.
+        </div>
+        <div class="code-box">
+<span class="cmt"># إنشاء سمة جديدة BMI من عمودي الوزن والطول</span><br>
+df[<span class="str">'BMI'</span>] = df[<span class="str">'Weight_kg'</span>] / (df[<span class="str">'Height_m'</span>] ** <span class="num">2</span>)
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- التبويب الثاني: ملخص القوانين والمقارنات -->
+  <section id="tables" class="panel">
+    <div class="card">
+      <h2>1. جدول المقارنة الشامل لتقنيات الترميز الثلاث (Feature Encoding)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>تقنية الترميز</th>
+            <th>الدالة / الفئة البرمجية</th>
+            <th>نوع البيانات المناسب لها وآلية عملها</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1. <span dir="ltr">One-Hot Encoding</span></b></td>
+            <td dir="ltr"><code>pd.get_dummies(df['col'])</code></td>
+            <td>للبيانات <b>الاسمية غير المرتبة (<span dir="ltr">Nominal</span>)</b>؛ تنشئ أعمدة ثنائية جديدة ($0$ و $1$) بعدد الفئات الفريدة.</td>
+          </tr>
+          <tr>
+            <td><b>2. <span dir="ltr">Label Encoding</span></b></td>
+            <td dir="ltr"><code>LabelEncoder()</code><br><small>(<code>fit_transform</code> / <code>inverse_transform</code>)</small></td>
+            <td>تحول الفئات إلى أرقام صحيحة متتابعة ($0, 1, 2\dots$) في نفس العمود حسب الترتيب الأبجدي.</td>
+          </tr>
+          <tr>
+            <td><b>3. <span dir="ltr">Ordinal Encoding</span></b></td>
+            <td dir="ltr"><code>OrdinalEncoder(categories=[...])</code></td>
+            <td>للبيانات <b>الترتيبية (<span dir="ltr">Ordinal</span>)</b>؛ تحول الفئات لأرقام صحيحة مع احترام الترتيب المنطقي المحدد في <code dir="ltr">categories</code>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>2. جدول المقارنة الشامل لطرق تحجيم السمات الثلاث (Feature Scaling)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>طريقة التحجيم</th>
+            <th>المعادلة الرياضية</th>
+            <th>الفئة في Scikit-learn</th>
+            <th>الميزة الأساسية ومتى نستخدمها</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1. <span dir="ltr">Standard Scaling</span></b></td>
+            <td dir="ltr">$Z_i = \frac{X_i - \mu}{\sigma}$</td>
+            <td dir="ltr"><code>StandardScaler()</code></td>
+            <td>تجعل المتوسط $= 0$ والانحراف المعياري $= 1$ (تتأثر بالقيم المتطرفة).</td>
+          </tr>
+          <tr>
+            <td><b>2. <span dir="ltr">Min-Max Scaling</span></b></td>
+            <td dir="ltr">$x_i' = \frac{x_i - \text{Min}_x}{\text{Max}_x - \text{Min}_x}$ <small>(للنطاق $[0,1]$)</small></td>
+            <td dir="ltr"><code>MinMaxScaler()</code></td>
+            <td>تضغط كافة القيم داخل نطاق محدد مثل $[0, 1]$ (تتأثر بالقيم المتطرفة).</td>
+          </tr>
+          <tr>
+            <td><b>3. <span dir="ltr">Robust Scaling</span></b></td>
+            <td dir="ltr">$x_i' = \frac{x_i - \text{Median}_x}{Q_{3x} - Q_{1x}}$</td>
+            <td dir="ltr"><code>RobustScaler()</code></td>
+            <td><b>الأفضل عند وجود قيم متطرفة (<span dir="ltr">Outliers</span>)؛</b> لأنها تعتمد على الوسيط والمدى الربعي $\text{IQR}$.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- التبويب الثالث: قاموس المصطلحات والدوال -->
+  <section id="terms" class="panel">
+    <div class="card">
+      <h2>قاموس المصطلحات والدوال الشامل للفصل الثامن</h2>
+      <p class="muted">جميع المفاهيم والمعادلات والفئات البرمجية لترميز وتحجيم وتحويل السمات:</p>
+      <div id="termsGrid" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- التبويب الرابع: البطاقات التعليمية -->
+  <section id="cards" class="panel">
+    <div class="card">
+      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
+      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
+      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
+        <div class="term" id="flashTerm"></div>
+        <div class="answer" id="flashAnswer" hidden></div>
+        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="prevCard">السابق</button>
+        <span id="cardCount" class="muted"></span>
+        <button class="btn primary" id="nextCard">التالي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- التبويب الخامس: الاختبار الذاتي العشوائي -->
+  <section id="quiz" class="panel">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2>الاختبار الشامل المتغير للفصل الثامن (25 سؤالاً) <span class="badge-new">ترتيب عشوائي ذكي 🎲</span></h2>
+          <p class="muted">يختبر فهمك لتقنيات Encoding، ومسائل ومعادلات Scaling، وطرق Transformation مع تصحيح وتعليل فوري!</p>
+        </div>
+        <div class="score" id="score">النتيجة: 0 / 25</div>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="quizArea"></div>
+      <div class="row">
+        <button class="btn" id="resetQuiz">إعادة الاختبار بترتيب عشوائي جديد 🔀</button>
+        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+      </div>
+      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
+    </div>
+  </section>
+</main>
+
+<footer>مبني بالكامل (100%) على محتوى الفصل الثامن (تهيئة السمات وتحويلها) من مقرر تحليل وتمثيل البيانات</footer>
+
+<script>
+const terms = [
+  ["Feature Encoding (ترميز السمات)", "عملية تحويل السمات النوعية (النصية/الفئوية) إلى أرقام حتى تتمكن خوارزميات التعلم الآلي من معالجتها رياضياً."],
+  ["One-Hot Encoding & pd.get_dummies()", "تقنية ترميز تحول كل فئة في العمود الاسمي إلى عمود ثنائي مستقل يأخذ القيم (0 أو 1)، وتُنفذ بدالة pd.get_dummies()."],
+  ["LabelEncoder", "فئة من sklearn.preprocessing لترميز الفئات النصية بأرقام صحيحة متتابعة (0, 1, 2...) في نفس العمود."],
+  ["fit_transform() & inverse_transform()", "دالتان في LabelEncoder؛ الأولى لتحويل النصوص إلى أرقام، والثانية للتحويل العكسي (استرجاع الأسماء النصية الأصلية من الأرقام)."],
+  ["OrdinalEncoder", "فئة من sklearn.preprocessing لترميز البيانات الفئوية الترتيبية وفق الترتيب المنطقي المحدد في المعامل categories."],
+  ["Feature Scaling (تحجيم السمات)", "توحيد النطاق الرقمي للسمات الكمية المختلفة لمنع هيمنة السمات ذات القيم الكبيرة على خوارزميات التعلم الآلي."],
+  ["StandardScaler (Z-Score Normalization)", "طريقة تحجيم تجعل المتوسط الحسابي للسمة يساوي 0 والانحراف المعياري يساوي 1 وفق المعادلة: (X - mean) / std."],
+  ["MinMaxScaler", "طريقة تحجيم تضغط قيم السمة لتقع داخل نطاق محدد (افتراضياً من 0 إلى 1) وفق المعادلة: (x - min) / (max - min)."],
+  ["RobustScaler", "طريقة تحجيم مقاومة للقيم المتطرفة (Outliers) تعتمد على الوسيط والمدى الربعي: (x - Median) / (Q3 - Q1)."],
+  ["Discretization (التقطيع / التحويل لفئات)", "تحويل السمات الرقمية المتصلة إلى فئات أو فترات منفصلة (Bins)، ويشمل: Equal width و Equal frequency و Ad-hoc."],
+  ["pd.cut() vs pd.qcut()", "دالتا التقطيع في Pandas: دالة cut() تقسم البيانات لفترات متساوية العرض (Equal width)، و qcut() تقسمها لفترات متساوية التكرار (Equal frequency)."],
+  ["Log Transformation (np.log)", "التحويل اللوغاريتمي لمعالجة البيانات ذات النمو أو الانخفاض الهائل (الأسي مثل GDP) وتقليل التوائها وتباينها."],
+  ["Attribute Construction (إنشاء السمات)", "بناء سمة جديدة مفيدة من سمات موجودة، مثل حساب مؤشر كتلة الجسم BMI = Weight / (Height^2)."]
+];
+
+const cards = [
+  ["ما المقصود بترميز السمات (Feature Encoding)؟ وما هي فوائده الأربع؟", "هو تحويل السمات النوعية (النصية) إلى أرقام.\nوفوائده الأربع:\n1) تقليل الحجم والتعقيد.\n2) تحسين الأداء.\n3) تجنب المشاكل البرمجية.\n4) تحسين التفاعلية والتوافق مع خوارزميات التعلم الآلي."],
+  ["ما هي التقنيات الثلاث الرئيسية لترميز السمات الفئوية؟", "1) الترميز الثنائي الساخن (One-Hot Encoding).\n2) ترميز التسميات / الأعداد الصحيحة (Label / Integer Encoding).\n3) الترميز الترتيبي (Ordinal Encoding)."],
+  ["كيف يعمل (One-Hot Encoding)؟ وما الدالة المستخدمة لتنفيذه في Pandas؟", "يستبدل العمود الفئوي بعدد من الأعمدة الثنائية الجديدة (تأخذ 0 أو 1) يساوي عدد الفئات الفريدة في العمود.\nودالته في Pandas هي: pd.get_dummies() ثم ندمجها بـ .join()."],
+  ["إذا كان لدينا عمود 'Color' يحتوي على 4 ألوان مختلفة، وطبقنا عليه One-Hot Encoding، فكم عموداً ثنائياً جديداً سينتج؟", "سينتج 4 أعمدة ثنائية جديدة (عمود لكل لون يأخذ 1 عند وجود اللون و 0 عند غيابه)."],
+  ["كيف يعمل (Label Encoding)؟ وما اسم الفئة البرمجية الخاصة به في Scikit-learn؟", "يحول الفئات النصية إلى أرقام صحيحة متتابعة (0, 1, 2...) داخل نفس العمود.\nوالفئة البرمجية هي: LabelEncoder من sklearn.preprocessing."],
+  ["في فئة LabelEncoder، ما الفرق بين الدالة fit_transform() والدالة inverse_transform()؟", "• fit_transform(): تتعلم الفئات وتحول النصوص إلى أرقام صحيحة.\n• inverse_transform(): تقوم بالتحويل العكسي (تعيد الأرقام المشفرة إلى نصوصها الأصلية)."],
+  ["متى نستخدم (OrdinalEncoder) بدلاً من (LabelEncoder)؟ وكيف نحدد الترتيب المنطقي للفئات؟", "نستخدمه عندما تكون الفئات ترتيبية (Ordinal) بينها تدرج منطقي (مثل Low, Medium, High)؛ ونحدد الترتيب عبر تمرير قائمة للمعامل categories:\nOrdinalEncoder(categories=[['Low', 'Medium', 'High']])"],
+  ["ما المقصود بتحجيم السمات (Feature Scaling)؟ ولماذا نحتاج إليه؟", "هو توحيد النطاق الرقمي للسمات الكمية المختلفة حتى لا تهيمن سمة ذات أرقام ضخمة (كالراتب) على سمة ذات أرقام صغيرة (كالعمر) أثناء تدريب خوارزميات التعلم الآلي."],
+  ["ما هي الطرق الثلاث لتحجيم السمات الرقمية (Feature Scaling)؟", "1) التحجيم القياسي (Standard Scaling / Z-Score).\n2) تحجيم الحد الأدنى والأقصى (Min-Max Scaling).\n3) التحجيم المتين المقاوم للقيم المتطرفة (Robust Scaling)."],
+  ["ما هي المعادلة الرياضية لـ (Standard Scaling)؟ وما اسم فئتها في Scikit-learn؟", "• المعادلة: Z = (X - mean) / std\n(تجعل المتوسط = 0 والانحراف المعياري = 1).\n• الفئة البرمجية: StandardScaler()"],
+  ["[مسألة حسابية] إذا كان متوسط العمود 50 والانحراف المعياري 5، فما هي القيمة المحجمة بطريقة Standard Scaling للعنصر X = 60؟", "Z = (60 - 50) / 5 = 10 / 5 = +2.0"],
+  ["ما هي المعادلة الرياضية لـ (Min-Max Scaling) في النطاق [0, 1]؟ وما اسم فئتها في Scikit-learn؟", "• المعادلة للنطاق [0, 1]: x' = (x - Min) / (Max - Min)\n• الفئة البرمجية: MinMaxScaler(feature_range=(0, 1))"],
+  ["[مسألة حسابية] إذا كانت أصغر قيمة في عمود هي 20 وأكبر قيمة هي 100، فما هي قيمة العنصر x = 40 بعد تحجيمه بطريقة Min-Max في النطاق [0, 1]؟", "x' = (40 - 20) / (100 - 20) = 20 / 80 = 0.25"],
+  ["ما هي المعادلة العامة لـ (Min-Max Scaling) لتحجيم القيمة إلى أي نطاق مخصص [new_min, new_max]؟", "x' = ((x - Min) / (Max - Min)) * (new_max - new_min) + new_min"],
+  ["لماذا نفضل استخدام (Robust Scaling) عندما تحتوي البيانات على قيم متطرفة (Outliers)؟ وما هي معادلته؟", "لأنه لا يستخدم المتوسط أو القيم القصوى التي تتأثر بالمتطرفات، بل يعتمد على الوسيط (Median) والمدى الربعي (IQR):\nx' = (x - Median) / (Q3 - Q1)"],
+  ["[مسألة حسابية] إذا كان الوسيط لعمود هو 30، والربع الأول Q1 = 20، والربع الثالث Q3 = 45، فكم تبلغ القيمة المحجمة بطريقة Robust Scaling للعنصر x = 80؟", "x' = (80 - 30) / (45 - 20) = 50 / 25 = 2.0"],
+  ["من أي وحدة في مكتبة Scikit-learn نستورد فئات الترميز والتحجيم (LabelEncoder, StandardScaler, MinMaxScaler, RobustScaler)؟", "من الوحدة: sklearn.preprocessing"],
+  ["ما المقصود بالتقطيع (Discretization) في تحويل السمات؟ وما هي أنواعه الثلاثة؟", "هو تحويل السمات الرقمية المتصلة إلى فئات أو فترات منفصلة (Bins).\nوأنواعه الثلاثة هي:\n1) Equal width (عرض متساوٍ).\n2) Equal frequency (تكرار متساوٍ).\n3) Ad-hoc (تقسيم مخصص بخبرة المحلل)."],
+  ["ما الفرق بين التقطيع بـ (Equal width) والتقطيع بـ (Equal frequency)؟ وما دالة كل منهما في Pandas؟", "• Equal width: يقسم مدى البيانات إلى فترات متساوية الطول الرياضي (دالة pd.cut).\n• Equal frequency: يقسم البيانات بحيث تضم كل فترة نفس العدد من العينات تقريباً (دالة pd.qcut)."],
+  ["متى نستخدم التحويل اللوغاريتمي (Log Transformation)؟ وما دالته البرمجية؟", "نستخدمه عندما تشهد البيانات نمواً أو انخفاضاً هائلاً (أسياً، مثل بيانات الناتج المحلي GDP) أو التواءً شديداً؛ لتقليل التباين وجعل التوزيع أكثر تماثلاً.\nودالته هي: np.log()"],
+  ["ما المقصود بإنشاء السمات (Attribute Construction)؟ مع ذكر المثال الرياضي الوارد في الفصل.", "هو بناء سمة جديدة من سمات موجودة في الجدول لتحسين التحليل.\nوالمثال هو حساب مؤشر كتلة الجسم (BMI) من الوزن والطول:\nBMI = Weight (kg) / (Height (m))^2"],
+  ["[مسألة حسابية] احسبي قيمة السمة الجديدة (BMI) لشخص وزنه 90 كيلوغراماً وطوله 1.5 متر.", "BMI = 90 / (1.5)^2 = 90 / 2.25 = 40."],
+  ["في Min-Max Scaling على النطاق [0, 1]، ماذا تصبح قيمة أصغر عنصر (Min) وقيمة أكبر عنصر (Max) دائماً بعد التحجيم؟", "تصبح قيمة أصغر عنصر (Min) مساوية لـ (0)، وتصبح قيمة أكبر عنصر (Max) مساوية لـ (1)."],
+  ["في Standard Scaling، ماذا تصبح قيمة العنصر الذي يساوي المتوسط الحسابي تماماً (X = μ) بعد التحجيم؟", "تصبح قيمته المحجمة مساوية للصفر (0)؛ لأن (μ - μ) / σ = 0."]
+];
+
+const masterQuestions = [
+  {q:"عملية تحويل السمات النوعية (الفئوية/النصية) إلى تمثيل رقمي لتقليل الحجم والتعقيد وتمكين خوارزميات التعلم الآلي من معالجتها تُعرف بـ:",o:["ترميز السمات (Feature Encoding)","تحجيم السمات (Feature Scaling)","التحويل اللوغاريتمي (Log Transformation)","حذف القيم المفقودة"],a:0,e:"ترميز السمات (Feature Encoding) يختص بتحويل الفئات النصية إلى أرقام."},
+  {q:"أي تقنية من تقنيات ترميز السمات تقوم بتحويل كل فئة في العمود إلى (عمود ثنائي مستقل يأخذ القيم 0 أو 1)، وتُنفذ في Pandas باستخدام الدالة pd.get_dummies()؟",o:["One-Hot Encoding","Label Encoding","Robust Scaling","Log Transformation"],a:0,e:"تقنية One-Hot Encoding تنشئ أعمدة ثنائية (0 و 1) بعدد الفئات الفريدة باستخدام دالة pd.get_dummies()."},
+  {q:"إذا استخدمنا الفئة LabelEncoder() لتحويل أسماء المدن إلى أرقام صحيحة بالدالة fit_transform()، فأي دالة نستخدمها للقيام بالتحويل العكسي (استرجاع أسماء المدن النصية من الأرقام)؟",o:["inverse_transform()","reindex()","get_dummies()","dropna()"],a:0,e:"الدالة inverse_transform() في LabelEncoder تقوم بعكس عملية الترميز وإرجاع القيم النصية الأصلية."},
+  {q:"عندما يحتوي العمود الفئوي على بيانات ذات ترتيب وتدرج منطقي (مثل الجودة: Low, Medium, High) ونريد ترميزها بأرقام تحترم هذا الترتيب المحدد، نستخدم الفئة:",o:["OrdinalEncoder(categories=[['Low', 'Medium', 'High']])","StandardScaler()","MinMaxScaler()","np.log()"],a:0,e:"الفئة OrdinalEncoder تسمح بتمرير الترتيب المنطقي للفئات في المعامل categories لترميز البيانات الترتيبية بدقة."},
+  {q:"من أي وحدة فرعية في مكتبة Scikit-learn يتم استيراد فئات الترميز والتحجيم مثل (LabelEncoder, OrdinalEncoder, StandardScaler, MinMaxScaler, RobustScaler)؟",o:["sklearn.preprocessing","sklearn.cluster","scipy.stats","bokeh.models"],a:0,e:"توجد جميع أدوات تهيئة وترميز وتحجيم البيانات المسبقة داخل الوحدة sklearn.preprocessing."},
+  {q:"ما الهدف الأساسي من عملية تحجيم السمات الرقمية (Feature Scaling) قبل تدريب نماذج التعلم الآلي؟",o:["توحيد النطاق الرقمي للسمات المختلفة لمنع هيمنة السمات ذات القيم الرقمية الكبيرة على الحسابات","تحويل الأرقام إلى نصوص","زيادة عدد القيم المتطرفة في الجدول","حذف نصف الصفوف عشوائياً"],a:0,e:"يقوم تحجيم السمات بوضع جميع المتغيرات الكمية على مقياس متقارب فلا يطغى متغير كالراتب بالآلاف على متغير كالعمر."},
+  {q:"أي طريقة من طرق تحجيم السمات تستخدم المعادلة: Z = (X - μ) / σ ، وتجعل المتوسط الحسابي للسمة يساوي (0) والانحراف المعياري يساوي (1)؟",o:["Standard Scaling (Z-Score Normalization)","Min-Max Scaling","Robust Scaling","One-Hot Encoding"],a:0,e:"التحجيم القياسي (StandardScaler) يطرح المتوسط ويقسم على الانحراف المعياري ليصبح المتوسط 0 والانحراف 1."},
+  {q:"[مسألة حسابية] إذا كان المتوسط الحسابي لعمود هو (40) والانحراف المعياري هو (8)، فكم تبلغ القيمة المحجمة بطريقة (Standard Scaling) للعنصر X = 56؟",o:["2.0 (لأن (56 - 40) / 8 = 16 / 8 = 2.0)","0.5","16.0","-2.0"],a:0,e:"بتطبيق معادلة Standard Scaling مباشرة: Z = (56 - 40) / 8 = 16 / 8 = 2.0."},
+  {q:"أي طريقة من طرق تحجيم السمات تقوم بضغط القيم الرقمية لتقع داخل نطاق محدد (افتراضياً بين 0 و 1) باستخدام أصغر قيمة (Min) وأكبر قيمة (Max)؟",o:["Min-Max Scaling (MinMaxScaler)","Standard Scaling (StandardScaler)","Robust Scaling (RobustScaler)","Ordinal Encoding"],a:0,e:"طريقة Min-Max Scaling تحول أصغر قيمة إلى 0 وأكبر قيمة إلى 1 وبقية القيم بينهما بالنسبة والتناسب."},
+  {q:"[مسألة حسابية] إذا كانت أقل قيمة في عمود هي (Min = 10) وأعلى قيمة هي (Max = 60)، فما هي القيمة المحجمة للعنصر (x = 35) باستخدام طريقة Min-Max Scaling في النطاق [0, 1]؟",o:["0.5 (لأن (35 - 10) / (60 - 10) = 25 / 50 = 0.5)","0.25","0.75","1.0"],a:0,e:"بتطبيق معادلة Min-Max للنطاق [0, 1]: x' = (35 - 10) / (60 - 10) = 25 / 50 = 0.5."},
+  {q:"[مسألة حسابية] إذا أردنا تحجيم نفس العنصر السابق (حيث Min=10, Max=60, والعنصر x=35) بطريقة Min-Max Scaling ولكن إلى النطاق الجديد [10, 20]، فكم ستكون قيمته الجديدة؟",o:["15.0 (لأن 0.5 × (20 - 10) + 10 = 5 + 10 = 15)","0.5","10.0","20.0"],a:0,e:"بتطبيق المعادلة العامة: x' = ((35-10)/(60-10)) * (20 - 10) + 10 = 0.5 * 10 + 10 = 15."},
+  {q:"أي طريقة من طرق تحجيم السمات يُفضل استخدامها عند وجود (قيم متطرفة - Outliers) في البيانات لأنها تعتمد على الوسيط (Median) والمدى الربعي (IQR)؟",o:["Robust Scaling (RobustScaler)","Min-Max Scaling (MinMaxScaler)","Standard Scaling (StandardScaler)","Label Encoding"],a:0,e:"يتفوق RobustScaler عند وجود قيم متطرفة لأنه يستخدم الوسيط والـ IQR اللذين لا يتأثران بالقيم الشاذة."},
+  {q:"ما هي المعادلة الرياضية المستخدمة في طريقة التحجيم المتين (Robust Scaling)؟",o:["x' = (x - Median) / (Q3 - Q1)","x' = (x - Mean) / Std","x' = (x - Min) / (Max - Min)","x' = log(x)"],a:0,e:"يطرح Robust Scaling الوسيط (Median) من القيمة ويقسم الناتج على المدى الربعي (Q3 - Q1)."},
+  {q:"[مسألة حسابية] إذا كان وسيط العمود (Median = 50)، والربع الأول (Q1 = 30)، والربع الثالث (Q3 = 70)، فكم تبلغ القيمة المحجمة بطريقة (Robust Scaling) للعنصر x = 90؟",o:["1.0 (لأن (90 - 50) / (70 - 30) = 40 / 40 = 1.0)","2.0","0.5","40.0"],a:0,e:"نحسب: البسط = 90 - 50 = 40، والمقام (IQR) = 70 - 30 = 40. إذن القيمة المحجمة = 40 / 40 = 1.0."},
+  {q:"تُعرف عملية تحويل السمات الرقمية المتصلة إلى فئات أو فترات منفصلة (Bins) في تحويل السمات باسم:",o:["التقطيع / التحويل لفئات (Discretization)","التحويل اللوغاريتمي (Log Transformation)","بناء السمات (Attribute Construction)","حذف الصفوف (Deletion)"],a:0,e:"التقطيع (Discretization) هو تقسيم المتغير الرقمي المتصل إلى فترات فئوية منفصلة."},
+  {q:"ما هي الأنواع الثلاثة لطرق التقطيع (Discretization) المذكورة في الفصل الثامن؟",o:["1) عرض متساوٍ (Equal width)، 2) تكرار متساوٍ (Equal frequency)، 3) مخصص حسب المجال (Ad-hoc)","1) MCAR، 2) MAR، 3) MNAR","1) طردي، 2) عكسي، 3) صفري","1) رأسي، 2) أفقي، 3) شبكي"],a:0,e:"يقسم التقطيع البيانات إما بفترات متساوية العرض، أو متساوية التكرار (عدد العينات)، أو بتقسيم مخصص Ad-hoc يضعه المحلل."},
+  {q:"في مكتبة Pandas، ما الفرق بين الدالة pd.cut() والدالة pd.qcut() عند تقطيع البيانات؟",o:["دالة pd.cut() تُستخدم للتقطيع بعرض متساوٍ (Equal width) أو بحدود مخصصة، بينما pd.qcut() تُستخدم للتقطيع بتكرار متساوٍ (Equal frequency) بناءً على المئينات","كلاهما يستخدمان لحذف القيم المفقودة فقط","pd.cut() ترسم مخططاً دائرياً، و pd.qcut() ترسم خريطة حرارة","لا توجد دالة اسمها qcut في Pandas"],a:0,e:"تقسم cut المدى إلى فترات متساوية الطول، بينما تقسم qcut (Quantile cut) البيانات إلى مجموعات متساوية الحجم (التكرار)."},
+  {q:"متى نلجأ لاستخدام (التحويل اللوغاريتمي - Log Transformation) باستخدام الدالة np.log() على سمة رقمية؟",o:["عندما تشهد البيانات نمواً أو انخفاضاً هائلاً (أُسياً، مثل الناتج المحلي GDP) أو التواءً شديداً؛ لضغط القيم الكبيرة وتقليل التباين","عندما تكون البيانات نصية مثل أسماء الدول","عندما تكون جميع القيم في العمود سالبة أو أصفاراً","عندما نريد تحويل الأرقام إلى أعمدة ثنائية 0 و 1"],a:0,e:"يعالج التحويل اللوغاريتمي np.log() البيانات ذات التوزيع المائل بشدة أو النمو الأسي الهائل كبيانات الـ GDP."},
+  {q:"قيام المحلل بحساب عمود جديد يمثل مؤشر كتلة الجسم (BMI) من خلال دمج عمودي الوزن والطول الموجودين في الجدول يُعد مثالاً على:",o:["إنشاء السمات (Attribute Construction)","التحجيم القياسي (Standard Scaling)","ترميز التسميات (Label Encoding)","الحذف المشروط (dropna)"],a:0,e:"بناء سمة جديدة مفيدة من سمات موجودة عبر معادلة رياضية يُسمى إنشاء أو بناء السمات (Attribute Construction)."},
+  {q:"[مسألة حسابية] وفق معادلة حساب مؤشر كتلة الجسم: BMI = Weight (kg) / Height (m)^2 ، إذا كان وزن شخص 72 كجم وطوله 2 متر، فكم تبلغ قيمة BMI له؟",o:["18.0 (لأن 72 / (2^2) = 72 / 4 = 18)","36.0","144.0","288.0"],a:0,e:"نربع الطول بالمتر أولاً: 2^2 = 4، ثم نقسم الوزن على مربع الطول: 72 / 4 = 18.0."},
+  {q:"بعد إنشاء الأعمدة الثنائية الجديدة باستخدام dummies = pd.get_dummies(df['col'])، ما هي الدالة المستخدمة لدمج هذه الأعمدة مع الجدول الأصلي df؟",o:["df.join(dummies)","df.dropna(dummies)","df.corr(dummies)","df.describe(dummies)"],a:0,e:"تُستخدم الدالة df.join(dummies) لإلحاق الأعمدة الثنائية الناتجة من One-hot encoding بالجدول الأصلي."},
+  {q:"إذا كان لدينا عمود رقمي طبقنا عليه MinMaxScaler(feature_range=(0, 1))، فماذا ستصبح قيمة أصغر رقم في العمود وقيمة أكبر رقم في العمود بعد التحجيم؟",o:["أصغر رقم سيصبح (0.0)، وأكبر رقم سيصبح (1.0)","أصغر رقم سيصبح (-1.0)، وأكبر رقم سيصبح (+1.0)","كلاهما سيصبحان (0.5)","لن تتغير قيمتهما"],a:0,e:"في Min-Max Scaling على النطاق [0, 1]، يتحول الحد الأدنى دائماً إلى 0 والحد الأقصى دائماً إلى 1."},
+  {q:"إذا طبقنا StandardScaler() على عمود رقمي، فماذا تصبح القيمة المحجمة لعنصر كانت قيمته الأصلية تساوي المتوسط الحسابي للعمود تماماً (X = μ)؟",o:["تصبح قيمته المحجمة صفراً (0.0)","تصبح قيمته المحجمة (1.0)","تصبح قيمته المحجمة (100.0)","تتحول إلى قيمة مفقودة NaN"],a:0,e:"لأن البسط في معادلة Standard Scaling هو (X - μ)، فعندما X = μ يكون البسط صفراً وبالتالي النتيجة 0.0."},
+  {q:"أي نوع من طرق التقطيع (Discretization) يتم عندما يقرر الطبيب أو المحلل تقسيم ضغط الدم يدوياً إلى فئات طبية محددة (منخفض، طبيعي، مرتفع) بناءً على خبرته؟",o:["التقطيع المخصص (Ad-hoc Discretization)","التحجيم القياسي (Standard Scaling)","الترميز الثنائي (One-hot)","التحويل العكسي (Inverse transform)"],a:0,e:"التقسيم المعتمد على معرفة المحلل وخصائص المجال التطبيقي يُسمى Ad-hoc discretization."},
+  {q:"لماذا لا تستطيع معظم خوارزميات التعلم الآلي التعامل مع الأعمدة النصية مباشرةً بدون تطبيق (Feature Encoding)؟",o:["لأن الخوارزميات تعتمد في جوهرها على معادلات رياضية وحساب مساحات أو مسافات تتطلب مدخلات رقمية","لأن لغة البايثون لا تدعم المتغيرات النصية","لأن الأعمدة النصية تحذف نفسها تلقائياً","لأن النصوص تزيد من سرعة التدريب أكثر من اللازم"],a:0,e:"تعتمد نماذج التعلم الآلي على الجبر الخطي وحساب المسافات والانحدار، مما يستلزم تحويل الفئات النصية إلى تمثيل رقمي."}
+];
+
+const termsGrid = document.getElementById("termsGrid");
+terms.forEach(([en, ar]) => {
+  const d = document.createElement("div");
+  d.className = "card";
+  d.style.margin = "0";
+  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
+  termsGrid.appendChild(d);
+});
+
+let ci = 0, showAnswer = false;
+function renderCard() {
+  document.getElementById("flashTerm").textContent = cards[ci][0];
+  document.getElementById("flashAnswer").textContent = cards[ci][1];
+  document.getElementById("flashAnswer").hidden = !showAnswer;
+  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
+  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+}
+document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
+document.getElementById("flashcard").addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
+});
+document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
+document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
+renderCard();
+
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+let currentQuestions = [];
+let answers = {};
+
+function prepareShuffledQuiz() {
+  currentQuestions = shuffleArray(masterQuestions).map(item => {
+    const optsWithFlag = item.o.map((text, idx) => ({ text, isCorrect: idx === item.a }));
+    const shuffledOpts = shuffleArray(optsWithFlag);
+    return {
+      q: item.q,
+      o: shuffledOpts.map(x => x.text),
+      a: shuffledOpts.findIndex(x => x.isCorrect),
+      e: item.e
+    };
+  });
+}
+
+function renderQuiz() {
+  prepareShuffledQuiz();
+  const area = document.getElementById("quizArea");
+  area.innerHTML = "";
+  const letters = ["أ", "ب", "ج", "د"];
+  currentQuestions.forEach((item, i) => {
+    const box = document.createElement("div");
+    box.className = "qbox";
+    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
+    const opts = box.querySelector(".options");
+    item.o.forEach((opt, j) => {
+      const btn = document.createElement("button");
+      btn.className = "option";
+      btn.textContent = `${letters[j]}) ${opt}`;
+      btn.onclick = () => {
+        answers[i] = j;
+        [...opts.children].forEach((x, k) => {
+          x.classList.remove("correct", "wrong");
+          x.disabled = true;
+          if (k === item.a) x.classList.add("correct");
+          if (k === j && j !== item.a) x.classList.add("wrong");
+        });
+        const fb = document.getElementById("fb" + i);
+        fb.hidden = false;
+        fb.className = "feedback " + (j === item.a ? "good" : "bad");
+        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
+        updateScore();
+      };
+      opts.appendChild(btn);
+    });
+    area.appendChild(box);
+  });
+  updateScore();
+}
+
+function updateScore() {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
+  document.getElementById("score").textContent = `النتيجة: ${correct} / ${currentQuestions.length}`;
+  document.getElementById("progressBar").style.width = (Object.keys(answers).length / currentQuestions.length * 100) + "%";
+}
+
+document.getElementById("resetQuiz").onclick = () => {
+  answers = {};
+  document.getElementById("finalResult").textContent = "";
+  renderQuiz();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+document.getElementById("finishQuiz").onclick = () => {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
+  const pct = Math.round(correct / currentQuestions.length * 100);
+  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${currentQuestions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! أنتِ مستعدة تماماً للاختبار في هذا الفصل." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
+};
+
+renderQuiz();
+</script>
+</body>
+</html>

@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الفصل الرابع عشر الشامل (100%) | تحليل وتمثيل البيانات</title>
+<style>
+:root{
+  --bg:#f0f5ff;
+  --card:#ffffff;
+  --ink:#0f172a;
+  --muted:#475569;
+  --accent:#1d4ed8;
+  --accent-dark:#1e3a8a;
+  --accent2:#dbeafe;
+  --line:#cbd5e1;
+  --good:#059669;
+  --good-bg:#ecfdf5;
+  --bad:#dc2626;
+  --bad-bg:#fef2f2;
+  --warn:#d97706;
+  --warn-bg:#fffbeb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
+header{background:linear-gradient(135deg,#0f172a,#1d4ed8);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(15,23,42,0.2)}
+.wrap{max-width:1040px;margin:auto;padding:0 16px}
+.eyebrow{opacity:.92;font-size:.9rem;background:rgba(255,255,255,0.16);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
+h1{margin:5px 0;font-size:clamp(1.5rem,4vw,2.25rem)}
+header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
+nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:var(--accent2);color:var(--accent-dark);font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
+nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
+nav button.active,.btn.primary{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+main .btn.primary{background:var(--accent);color:white}
+main{padding:22px 0 48px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(15,23,42,0.04)}
+h2{font-size:1.35rem;margin:0 0 12px;color:#0f172a}
+h3{font-size:1.08rem;margin:0 0 8px;color:var(--accent-dark)}
+small,.muted{color:var(--muted)}
+ul,ol{padding-right:22px;margin:8px 0}
+li{margin:6px 0}
+details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
+summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f8fafc;color:#0f172a;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
+details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
+.details-body{padding:16px 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
+.badge-new{display:inline-block;background:var(--warn-bg);color:var(--warn);border:1px solid #fcd34d;font-size:.78rem;padding:1px 8px;border-radius:6px;margin-right:6px;font-weight:bold}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#eff6ff;color:#1e3a8a;font-weight:bold}
+tr:last-child td{border-bottom:0}
+.note{border-right:4px solid var(--accent);padding:10px 14px;background:#eff6ff;border-radius:8px;margin:10px 0}
+.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
+.math-box{background:#f8fafc;border:2px solid #93c5fd;border-radius:12px;padding:12px 16px;margin:10px 0;text-align:center;font-size:1.03rem;font-weight:bold;color:#1e3a8a;direction:ltr}
+.step-box{background:#f0fdf4;border:1px solid #86efac;border-right:4px solid var(--good);border-radius:10px;padding:12px 16px;margin:10px 0;font-size:.95rem}
+.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
+.options{display:grid;gap:8px;margin-top:12px}
+.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
+.option:hover:not(:disabled){border-color:var(--accent);background:#eff6ff}
+.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
+.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
+.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
+.feedback.good{color:var(--good);background:var(--good-bg)}
+.feedback.bad{color:var(--bad);background:var(--bad-bg)}
+.progress{height:10px;background:#cbd5e1;border-radius:9px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
+.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#dbeafe);border:2px solid #93c5fd;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
+.flashcard:hover{transform:scale(1.005)}
+.flashcard .term{font-size:1.32rem;font-weight:bold;color:#1e3a8a}
+.flashcard .answer{margin-top:16px;font-size:1.04rem;color:#0f172a;background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04);white-space:pre-line}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
+@media(max-width:600px){
+  .card{padding:14px}
+  nav button{flex:1 1 calc(50% - 8px);text-align:center}
+  .flashcard{min-height:200px;padding:18px}
+  th,td{padding:8px 10px;font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">نسخة شاملة ومحدثة 100% • مقرر تحليل وتمثيل البيانات</div>
+    <h1>الفصل الرابع عشر: إعداد تقارير البيانات (Data Reporting)</h1>
+    <p>يغطي أنواع التقارير (الثابتة والديناميكية، المخصصة والبحثية، الخدمة الذاتية والمتكررة)، الأدوات التحليلية الأربعة، خطوات إنشاء التقرير، متطلبات العمل (ومثال شركة الروبوتات) ولوحة المعلومات، والعناصر الستة للتقرير وتسليمه وقواعد تصميمه الفني</p>
+    <nav>
+      <button class="active" data-tab="summary">الشرح الشامل والمقارنات (100%)</button>
+      <button data-tab="tables">جداول المقارنات والقواعد الذهبية</button>
+      <button data-tab="terms">قاموس المصطلحات والأدوات</button>
+      <button data-tab="cards">البطاقات (28)</button>
+      <button data-tab="quiz">الاختبار العشوائي (25)</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="summary" class="panel active">
+    <div class="card">
+      <h2>خريطة الفصل الرابع عشر (الوحدات الثلاث الكاملة)</h2>
+      <div class="grid">
+        <div>
+          <span class="tag">الوحدة الأولى</span>
+          <h3>أنواع تقارير البيانات والأدوات التحليلية</h3>
+          <p>المقارنة الشاملة بين التقارير الثابتة والديناميكية، والفرق بين التقارير المخصصة والبحثية، وتقارير الخدمة الذاتية (<span dir="ltr">Dashboard</span>) والمتكررة، والأدوات التحليلية الأربعة (<span dir="ltr">SQL, Excel, Python, Tableau/Power BI</span>).</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثانية</span>
+          <h3>خطوات إنشاء التقرير ومتطلبات العمل</h3>
+          <p>الخطوات الأربع لإنشاء التقرير (ومكونات الخطة الأربعة)، نقاط فهم متطلبات العمل الست (ومثال شركة الروبوتات وحساب السرعة)، ومتطلبات لوحة المعلومات (<span dir="ltr">Live vs Extract</span>).</p>
+        </div>
+        <div>
+          <span class="tag">الوحدة الثالثة</span>
+          <h3>عناصر التقرير، تسليمه، وقواعد تصميمه</h3>
+          <p>العناصر الستة للتقرير (الغلاف، الإصدار، المصادر، التواريخ، <span dir="ltr">FAQs</span>، والملحق)، اعتبارات التسليم (متى وكيف)، وقواعد التصميم الفني (حجم الخط $\ge 11$، المخطط، وعناصر الرسم البياني الثلاثة).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== الوحدة الأولى ==================== -->
+    <details open>
+      <summary>الوحدة الأولى: أنواع تقارير البيانات (الثابتة، الديناميكية، المخصصة، البحثية، الخدمة الذاتية، والمتكررة) والأدوات التحليلية</summary>
+      <div class="details-body">
+        <h3>1) أولاً: التقارير الثابتة (<span dir="ltr">Static Reports</span>) مقابل التقارير الديناميكية (<span dir="ltr">Dynamic Reports</span>)</h3>
+        <div class="exam-alert">
+          <b>🔥🔥 مقارنة امتحانية مؤكدة 100%: احفظي الفروق، الأمثلة، الإيجابيات، والسلبيات بين التقارير الثابتة والديناميكية:</b>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>وجه المقارنة</th>
+              <th>التقارير الثابتة (<span dir="ltr">Static Reports</span>)</th>
+              <th>التقارير الديناميكية (<span dir="ltr">Dynamic / Interactive Reports</span>)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>المفهوم الأساسي</b></td>
+              <td>تقارير تعرض <b>لقطة ثابتة للبيانات في نقطة زمنية محددة</b>، ولا تتغير بياناتها تلقائياً ولا تسمح للمستخدم بالتفاعل معها أو تصفيتها.</td>
+              <td>تقارير <b>تفاعلية ومتصلة بمصادر البيانات</b>؛ تتحدث بياناتها تلقائياً وتسمح للمستخدم بالتفاعل والفلترة والتعمق في التفاصيل (<span dir="ltr">Drill-down</span>).</td>
+            </tr>
+            <tr>
+              <td><b>الأمثلة</b></td>
+              <td>ملفات <b><span dir="ltr">PDF</span></b>، المستندات الورقية المطبوعة، عروض <span dir="ltr">PowerPoint</span>، أو لقطات الشاشة الثابتة.</td>
+              <td>لوحات المعلومات التفاعلية (<b><span dir="ltr">Dashboards</span></b>) على الويب المصممة بأدوات مثل <span dir="ltr">Tableau</span> أو <span dir="ltr">Power BI</span> أو مكتبة <span dir="ltr">Bokeh</span>.</td>
+            </tr>
+            <tr>
+              <td><b>الإيجابيات (المزايا)</b></td>
+              <td>1) سهلة الإنشاء والمشاركة والطباعة.<br>2) تضمن أن جميع المستفيدين يرون <b>نفس الأرقام التاريخية بالضبط</b> دون تغيير.<br>3) آمنة ولا تتطلب اتصالاً مباشراً بقاعدة البيانات.</td>
+              <td>1) توفر <b>بيانات محدثة في الوقت الفعلي</b> (أو شبه الفعلي).<br>2) تمكّن المستخدم من التفاعل والفلترة وتخصيص العرض.<br>3) تختصر الوقت وتغني عن إنشاء عشرات التقارير المنفصلة.</td>
+            </tr>
+            <tr>
+              <td><b>السلبيات (العيوب)</b></td>
+              <td>1) تصبح قديمة بسرعة ولا تعكس التغييرات اللحظية.<br>2) لا تسمح للمستخدم بالاستكشاف أو التصفية.<br>3) تتطلب جهداً يدوياً لإعادة إنشائها عند تغير البيانات.</td>
+              <td>1) أكثر تعقيداً وتكلفة في التصميم والإنشاء.<br>2) تتطلب بنية تحتية واتصالاً بمصادر البيانات وإدارة صلاحيات أمنية.<br>3) قد يربك كثرة الخيارات المستخدم غير المتمرس.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) ثانياً: التقارير المخصصة والبحثية وتقارير الخدمة الذاتية والمتكررة</h3>
+        <ul>
+          <li><b>1. التقارير المخصصة / لمرة واحدة (<span dir="ltr">Ad-hoc / Custom Reports</span>) مقابل التقارير البحثية (<span dir="ltr">Research Reports</span>):</b>
+            <ul>
+              <li><b>التقارير المخصصة (<span dir="ltr">Ad-hoc Reports</span>):</b> تُنشأ <b>لمرة واحدة فقط عند الطلب</b> للإجابة عن سؤال عمل محدد وطارئ (مثل: طلب المدير تقريراً عاجلاً عن سبب انخفاض المبيعات في فرع معين خلال الأسبوع الماضي).</li>
+              <li><b>التقارير البحثية (<span dir="ltr">Research Reports</span>):</b> تقارير معمقة وشاملة تتطلب <b>دراسة تحليلية وإحصائية طويلة</b> لاكتشاف العلاقات والأسباب الجذرية وتقديم استنتاجات وتوصيات استراتيجية (مثل دراسة جدوى دخول سوق جديد).</li>
+            </ul>
+          </li>
+          <li><b>2. تقارير الخدمة الذاتية (<span dir="ltr">Self-Service Reports</span>) مقابل التقارير المتكررة (<span dir="ltr">Recurring Reports</span>):</b>
+            <ul>
+              <li><b>تقارير الخدمة الذاتية (<span dir="ltr">Self-Service Reports</span> — مثل لوحة المعلومات <span dir="ltr">Dashboard</span>):</b> تتيح للمستخدم النهائي (المستفيد) الدخول بنفسه في أي وقت وتصفية البيانات وتخصيص المؤشرات التي يريد رؤيتها دون الرجوع لمحلل البيانات في كل مرة.</li>
+              <li><b>التقارير المتكررة / الدورية (<span dir="ltr">Recurring / Scheduled Reports</span>):</b> تقارير قياسية يتم إنتاجها وإرسالها <b>بشكل دوري منتظم ومجدول</b> (يومياً، أسبوعياً، شهرياً، أو سنوياً) لمتابعة الأداء التشغيلي المستمر (مثل تقرير المبيعات الشهري).</li>
+            </ul>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) الأدوات التحليلية الأربعة لبناء وإنشاء التقارير (<span dir="ltr">4 Analytical Tools</span>)</h3>
+        <div class="exam-alert">
+          <b>🌟 احفظي الأدوات التحليلية الأربع والأمثلة التابعة لكل فئة كما وردت في الملزمة:</b>
+        </div>
+        <ol>
+          <li><b>1. أدوات الاستعلام وقواعد البيانات (<span dir="ltr">Query Tools</span>):</b> مثل لغة الاستعلام الهيكلية <b><span dir="ltr">SQL</span></b> وأنظمة إدارة قواعد البيانات العلائقية (<b><span dir="ltr">RDBMS</span></b> مثل <span dir="ltr">Oracle, MySQL, SQL Server</span>) لاستخراج وتجميع البيانات من المصدر.</li>
+          <li><b>2. أدوات جداول البيانات (<span dir="ltr">Spreadsheet Tools</span>):</b> مثل برنامج <b><span dir="ltr">Microsoft Excel</span></b> و <span dir="ltr">Google Sheets</span> (ممتازة للتحليلات السريعة والجداول المحورية والمخططات البسيطة).</li>
+          <li><b>3. أدوات لغات البرمجة الإحصائية (<span dir="ltr">Programming Languages</span>):</b> مثل لغة <b><span dir="ltr">Python</span></b> (ومكتباتها <span dir="ltr">Pandas, Matplotlib, Seaborn, Bokeh</span>) ولغة <b><span dir="ltr">R</span></b> لإجراء التحليلات المتقدمة وتعلم الآلة.</li>
+          <li><b>4. أدوات التمثيل المرئي وذكاء الأعمال (<span dir="ltr">BI &amp; Visualization Tools</span>):</b> مثل منصتي <b><span dir="ltr">Tableau</span></b> و <b><span dir="ltr">Microsoft Power BI</span></b> (المتخصصتين في بناء لوحات المعلومات التفاعلية <span dir="ltr">Dashboards</span> والتقارير المؤسسية).</li>
+        </ol>
+      </div>
+    </details>
+
+    <!-- ==================== الوحدة الثانية ==================== -->
+    <details>
+      <summary>الوحدة الثانية: خطوات إنشاء التقرير الأربع، نقاط فهم متطلبات العمل الست (مثال الروبوتات)، ومتطلبات الـ Dashboard</summary>
+      <div class="details-body">
+        <h3>1) الخطوات الأربع لإنشاء التقرير (<span dir="ltr">4 Steps to Create a Report</span>)</h3>
+        <div class="exam-alert">
+          <b>🔥 ترتيب الخطوات الأربع لإنشاء التقرير، والمكونات الأربعة للخطوة الأولى (إنشاء الخطة) موضع سؤال مؤكد!</b>
+        </div>
+        <ol>
+          <li><b>الخطوة (1): إنشاء الخطة (<span dir="ltr">Create the Plan</span>):</b>
+            <p style="margin:4px 0">قبل البدء ببرمجة أو تصميم التقرير الفعلي، نضع خطة تصميمية تشمل <b>4 عناصر أساسية</b>:</p>
+            <ul>
+              <li><b>أ) النماذج الأولية / الإطارات السلكية (<span dir="ltr">Mockups / Wireframes</span>):</b> رسم تخطيطي أولي (مسودة مرئية) يوضح شكل التقرير وتوزيع المخططات والجداول قبل التنفيذ الفعلي.</li>
+              <li><b>ب) التخطيط والعرض (<span dir="ltr">Layout / Presentation</span>):</b> تحديد كيفية ترتيب العناصر وأحجامها وألوانها لسهولة القراءة.</li>
+              <li><b>ج) التدفق (<span dir="ltr">Flow</span>):</b> التسلسل المنطقي لعرض المعلومات والانتقال البصري من الملخص العام إلى التفاصيل.</li>
+              <li><b>د) التنقل (<span dir="ltr">Navigation - Nav</span>):</b> آلية تنقل المستخدم بين صفحات أو تبويبات التقرير وعناصر التحكم والفلاتر.</li>
+            </ul>
+          </li>
+          <li><b>الخطوة (2): الحصول على الموافقة على الخطة (<span dir="ltr">Get Approval on the Plan</span>):</b> عرض الخطة والـ <span dir="ltr">Mockup</span> على أصحاب المصلحة (المستفيدين) واعتمادها قبل استهلاك الوقت في البناء لتجنب إعادة العمل.</li>
+          <li><b>الخطوة (3): القيام بإنشاء وبناء التقرير (<span dir="ltr">Build / Create the Report</span>):</b> ربط مصادر البيانات وتطبيق الفلاتر وبناء المخططات واختبار صحة الأرقام.</li>
+          <li><b>الخطوة (4): تسليم التقرير (<span dir="ltr">Deliver the Report</span>):</b> نشر التقرير وإتاحته للمستفيدين في الوقت وبالطريقة المتفق عليها.</li>
+        </ol>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) النقاط الست لفهم متطلبات العمل (<span dir="ltr">6 Points of Understanding Business Requirements</span>)</h3>
+        <ol>
+          <li><b>1. محتوى البيانات (<span dir="ltr">Data Content</span>) — [مثال شركة الروبوتات الهام جداً!]:</b>
+            <div class="step-box">
+              <b>🤖 مثال شركة الروبوتات في الملزمة (كيف نختار المتغيرات الضرورية فقط؟):</b><br>
+              تريد شركة تصنيع روبوتات إنشاء تقرير يقيس <b>"تطور سرعة الروبوت بمرور الوقت (عبر الأيام)"</b>.<br>
+              • نحن نعلم رياضياً أن قانون السرعة هو:
+              <div class="math-box" style="margin:6px 0">Speed (السرعة) = Distance (المسافة) / Time (الزمن)</div>
+              • إذا كانت قاعدة البيانات تحتوي على عشرات الحقول (لون الروبوت، وزنه، المصنع، التكلفة، المسافة، الزمن، التاريخ...)، فما هي <b>المتغيرات الثلاثة فقط</b> التي نحتاج لاستخراجها في محتوى بيانات هذا التقرير؟<br>
+              ✅ نحتاج فقط إلى: <b>(1) المسافة (<span dir="ltr">Distance</span>)، و (2) الوقت/الزمن (<span dir="ltr">Time</span>)</b> [لحساب السرعة]، و <b>(3) التاريخ (<span dir="ltr">Date</span>)</b> [لتتبع تطورها عبر الأيام]! ونستبعد أي حقول أخرى غير لازمة.
+            </div>
+          </li>
+          <li><b>2. الفلترة / التصفية (<span dir="ltr">Filtering</span>):</b> تحديد المعايير التي تُصفى بها البيانات (مثلاً: عرض بيانات منطقة جغرافية معينة أو سنة محددة فقط).</li>
+          <li><b>3. طرق العرض في قواعد البيانات (<span dir="ltr">Database Views</span>):</b>
+            <ul>
+              <li><b>لماذا نستخدم طرق العرض (<span dir="ltr">Views</span>) عند ربط التقرير بقاعدة البيانات؟</b> (1) <b>لحماية البيانات الأصلية</b> وإخفاء الأعمدة الحساسة، (2) ولجعل البيانات <b>للقراءة فقط (<span dir="ltr">Read-Only</span>)</b> بحيث لا يتمكن منشئ أو مستخدم التقرير من تعديل أو حذف البيانات الأصلية بالخطأ، (3) ولتبسيط الاستعلامات المعقدة!</li>
+            </ul>
+          </li>
+          <li><b>4. نطاق البيانات (<span dir="ltr">Data Scope</span>) وعلاقته العكسية بتحديد السؤال:</b>
+            <ul>
+              <li>توجد <b>علاقة عكسية</b> بين مدى تحديد سؤال العمل وبين نطاق البيانات المطلوب:</li>
+              <li><b>كلما كان السؤال أكثر تحديداً ووضوحاً</b> &larr; كان نطاق البيانات المطلوب <b>أصغر وأضيق</b> (أكثر تركيزاً).</li>
+              <li><b>وكلما كان السؤال عاماً وواسعاً</b> &larr; كان نطاق البيانات المطلوب <b>أكبر وأوسع</b>!</li>
+            </ul>
+          </li>
+          <li><b>5. التكرار / الدورية (<span dir="ltr">Frequency</span>):</b> تحديد عدد مرات تحديث أو إصدار التقرير (لحظي، يومي، أسبوعي، شهري).</li>
+          <li><b>6. المستفيدون / الجمهور المستهدف (<span dir="ltr">Stakeholders / Audience</span>):</b> معرفة مَن سيقرأ التقرير (إدارة عليا تحتاج لملخص تنفيذي سريع، أم فريق فني يحتاج لتفاصيل دقيقة).</li>
+        </ol>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) متطلبات خاصة بلوحة المعلومات (<span dir="ltr">Dashboard Requirements</span>)</h3>
+        <ul>
+          <li>عند تصميم لوحة معلومات تفاعلية (<span dir="ltr">Dashboard</span>)، يجب مراعاة أمرين أساسيين بخصوص البيانات:
+            <ol>
+              <li><b>طبيعة الاتصال بمصادر البيانات (<span dir="ltr">Data Sources Connection</span>):</b>
+                <ul>
+                  <li><b>أ) الاتصال المباشر الحي (<span dir="ltr">Live / Direct Connection</span>):</b> يتصل الـ <span dir="ltr">Dashboard</span> بقاعدة البيانات مباشرة ويعرض التغييرات لحظياً في الوقت الفعلي، ولكنه قد يسبب بطئاً وحملاً عالياً على قاعدة البيانات.</li>
+                  <li><b>ب) المستخرج الأخير (<span dir="ltr">Data Extract / Cached Snapshot</span>):</b> يأخذ نسخة مستخرجة من البيانات يتم تحديثها دورياً (مثلاً كل ساعة أو كل ليلة)؛ وهو <b>أسرع بكثير في الأداء</b> ويخفف العبء عن قاعدة البيانات الأصلية.</li>
+                </ul>
+              </li>
+              <li><b>نوعية وجودة البيانات (<span dir="ltr">Data Quality</span>):</b> التأكد من نظافة البيانات واتساقها قبل عرضها في لوحة المعلومات.</li>
+            </ol>
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- ==================== الوحدة الثالثة ==================== -->
+    <details>
+      <summary>الوحدة الثالثة: العناصر الستة للتقرير، اعتبارات التسليم (متى وكيف)، وقواعد التصميم الفني (الخطوط والمخططات)</summary>
+      <div class="details-body">
+        <h3>1) العناصر الستة الأساسية للتقرير الاحترافي (<span dir="ltr">6 Elements of a Report</span>)</h3>
+        <div class="exam-alert">
+          <b>🔥🔥 تنبيه امتحاني هام جداً: انتبهي للشروط الخاصة بعنصري (رقم الإصدار) و (الأسئلة المتداولة FAQs) متى يظهران في التقرير!</b>
+        </div>
+        <ol>
+          <li><b>1. صفحة الغلاف (<span dir="ltr">Cover Page</span>):</b> تتضمن عنوان التقرير، اسم المؤسسة، اسم المعد، والملخص التنفيذي.</li>
+          <li><b>2. رقم الإصدار (<span dir="ltr">Version Number</span>):</b> يوضع <b>في التقارير المحدثة / المتغيرة فقط (<span dir="ltr">Updated Reports Only</span>)</b> لتتبع التعديلات ومعرفة النسخة الأحدث من التقرير.</li>
+          <li><b>3. مصادر البيانات المرجعية (<span dir="ltr">Reference Data Sources</span>):</b> توثيق الأنظمة وقواعد البيانات التي أُخذت منها الأرقام لزيادة الموثوقية.</li>
+          <li><b>4. التواريخ المرجعية (<span dir="ltr">Reference Dates</span>) — وتشمل تاريخين مختلفين:</b>
+            <ul>
+              <li><b>أ) تاريخ إنشاء التقرير (<span dir="ltr">Report Creation Date</span>):</b> متى تم بناء أو تصميم هذا التقرير.</li>
+              <li><b>ب) تاريخ تحديث البيانات (<span dir="ltr">Data Refresh / Update Date</span>):</b> متى تم آخر سحب أو تحديث للبيانات المعروضة داخل التقرير.</li>
+            </ul>
+          </li>
+          <li><b>5. الأسئلة المتداولة (<span dir="ltr">FAQs - Frequently Asked Questions</span>):</b> تُدرج <b>في تقارير الخدمة الذاتية (<span dir="ltr">Self-Service</span>) والتقارير المتكررة (<span dir="ltr">Recurring Reports</span>) فقط</b>؛ للإجابة المسبقة عن استفسارات المستخدمين المتكررة حول كيفية قراءة المؤشرات أو طريقة حسابها دون الحاجة للاتصال بمعد التقرير.</li>
+          <li><b>6. الملحق (<span dir="ltr">Appendix</span>):</b> يوضع في نهاية التقرير ويضم الجداول التفصيلية المطولة، المعادلات، أو الشروحات الإضافية لمن يرغب في التعمق دون إرباك جسم التقرير الرئيسي.</li>
+        </ol>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>2) اعتبارات تسليم التقرير (<span dir="ltr">Report Delivery Considerations: When &amp; How</span>)</h3>
+        <ul>
+          <li><b>أولاً: متى يُسلّم التقرير؟ (<span dir="ltr">When to Deliver</span>):</b>
+            <ul>
+              <li>يعتمد على وتيرة العمل، ويتم تنظيمه آلياً عبر ميزتين: <b>الاشتراك (<span dir="ltr">Subscription</span>)</b> و<b>الجدولة التلقائية (<span dir="ltr">Automated Scheduling</span>)</b> لإرسال التقرير للمستفيدين في أوقات محددة (مثلاً صباح كل يوم أحد).</li>
+            </ul>
+          </li>
+          <li><b>ثانياً: كيف يُسلّم التقرير؟ (<span dir="ltr">How to Deliver</span>):</b>
+            <ul>
+              <li>يُسلم إما عبر البريد الإلكتروني (للملفات الثابتة)، أو عبر <b>واجهة الويب / البوابة الإلكترونية (<span dir="ltr">Web Interface / Portal</span>)</b> للتقارير التفاعلية.</li>
+              <li><b>شرط أمني حاسم عند التسليم:</b> يجب ضبط <b>أذونات وصلاحيات الوصول الأمنية (<span dir="ltr">Security Access Permissions</span>)</b> لضمان أن كل مستخدم لا يرى إلا البيانات المصرح له بالاطلاع عليها فقط!</li>
+            </ul>
+          </li>
+        </ul>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+
+        <h3>3) القواعد الفنية لتصميم التقرير (<span dir="ltr">Report Design Rules: Fonts, Layout, &amp; Charts</span>)</h3>
+        <div class="exam-alert">
+          <b>🌟 رقم وقواعد ذهبية في الاختبار حول تصميم التقرير:</b><br>
+          • <b>حجم الخط (<span dir="ltr">Font Size</span>):</b> يجب <b>ألا يقل حجم الخط عن 11 نقطة (<span dir="ltr">At least 11 pt</span>)</b> لضمان سهولة القراءة!<br>
+          • <b>عناصر الرسم البياني الثلاثة الواجب توفرها دائماً:</b> (1) <b>العنوان (<span dir="ltr">Title</span>)</b>، (2) <b>التسميات (<span dir="ltr">Labels</span>)</b>، (3) <b>وسائل الإيضاح / مفتاح الرسم (<span dir="ltr">Legend</span>)</b>.
+        </div>
+
+        <ul>
+          <li><b>1. قواعد الخطوط (<span dir="ltr">Fonts</span>) — 4 قواعد:</b>
+            <ol>
+              <li><b>حجم الخط:</b> ألا يقل عن <b>11</b> للنصوص الأساسية (مع تكبير العناوين).</li>
+              <li><b>تباعد الأسطر (<span dir="ltr">Line Spacing</span>):</b> ترك مسافة مريحة بين الأسطر لمنع تداخل الكلمات.</li>
+              <li><b>تباين الألوان (<span dir="ltr">Color Contrast</span>):</b> استخدام لون خط داكن وواضح جداً على خلفية فاتحة (أو العكس) لتجنب إجهاد العين.</li>
+              <li><b>نوع الخط (<span dir="ltr">Font Type</span>):</b> اختيار خط رسمي واحترافي واضح (مثل <span dir="ltr">Arial, Tahoma, Calibri</span>) وتجنب الخطوط الزخرفية المعقدة.</li>
+            </ol>
+          </li>
+          <li><b>2. قواعد المخطط العام (<span dir="ltr">Layout</span>):</b>
+            <ul>
+              <li><b>عدم الازدحام (<span dir="ltr">Avoid Clutter</span>):</b> ترك مساحات بيضاء كافية (<span dir="ltr">White space</span>) وعدم حشر عدد كبير من الرسوم والجداول في صفحة واحدة.</li>
+            </ul>
+          </li>
+          <li><b>3. العناصر الثلاثة الأساسية لأي رسم بياني (<span dir="ltr">3 Chart Elements</span>):</b>
+            <ol>
+              <li><b>العنوان (<span dir="ltr">Title</span>):</b> يوضح موضوع الرسم البياني بدقة.</li>
+              <li><b>التسميات (<span dir="ltr">Axis Labels</span>):</b> توضح أسماء المحاور ($X$ و $Y$) ووحدات القياس.</li>
+              <li><b>وسائل الإيضاح (<span dir="ltr">Legend</span>):</b> توضح دلالة كل لون أو رمز مستخدم في الرسم.</li>
+            </ol>
+          </li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- التبويب الثاني: جداول المقارنات والقواعد الذهبية -->
+  <section id="tables" class="panel">
+    <div class="card">
+      <h2>1. ملخص مقارنة أنواع التقارير الستة في الفصل الرابع عشر</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>نوع التقرير</th>
+            <th>السمة المميزة والغرض منه</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1. التقارير الثابتة (<span dir="ltr">Static</span>)</b></td>
+            <td>لقطة جامدة في وقت محدد (مثل <span dir="ltr">PDF</span> أو مطبوعات)؛ لا تقبل التفاعل ولا تتحدث تلقائياً.</td>
+          </tr>
+          <tr>
+            <td><b>2. التقارير الديناميكية (<span dir="ltr">Dynamic</span>)</b></td>
+            <td>تقارير تفاعلية متصلة بالبيانات؛ تتحدث تلقائياً وتسمح بالفلترة والتعمق في التفاصيل.</td>
+          </tr>
+          <tr>
+            <td><b>3. التقارير المخصصة (<span dir="ltr">Ad-hoc / Custom</span>)</b></td>
+            <td>تُنشأ <b>لمرة واحدة فقط عند الطلب</b> للإجابة عن سؤال عمل محدد وطارئ.</td>
+          </tr>
+          <tr>
+            <td><b>4. التقارير البحثية (<span dir="ltr">Research</span>)</b></td>
+            <td>دراسات تحليلية وإحصائية معمقة وطويلة لاكتشاف الأسباب الجذرية وتقديم توصيات استراتيجية.</td>
+          </tr>
+          <tr>
+            <td><b>5. تقارير الخدمة الذاتية (<span dir="ltr">Self-Service</span>)</b></td>
+            <td>مثل لوحة المعلومات (<span dir="ltr">Dashboard</span>)؛ تمكّن المستفيد من تصفية واستكشاف البيانات بنفسه.</td>
+          </tr>
+          <tr>
+            <td><b>6. التقارير المتكررة (<span dir="ltr">Recurring</span>)</b></td>
+            <td>تُنتج وتُرسل بشكل دوري مجدول ومنتظم (يومياً، أسبوعياً، شهرياً).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>2. ملخص القواعد الذهبية في إعداد وتصميم التقارير (مواضع أسئلة الاختبار)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>البند في المنهج</th>
+            <th>القاعدة الذهبية للحفظ الفوري</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>مكونات خطة التقرير (الخطوة 1)</b></td>
+            <td>تشمل 4 عناصر: <b dir="ltr">Mockups/Wireframes</b> (النماذج الأولية)، <b dir="ltr">Layout</b> (التخطيط)، <b dir="ltr">Flow</b> (التدفق)، و <b dir="ltr">Nav</b> (التنقل).</td>
+          </tr>
+          <tr>
+            <td><b>فائدة طرق العرض (<span dir="ltr">Views</span>)</b></td>
+            <td>حماية البيانات الأصلية وجعلها <b>للقراءة فقط (<span dir="ltr">Read-Only</span>)</b> لمنع التعديل أو الحذف غير المصرح به.</td>
+          </tr>
+          <tr>
+            <td><b>العلاقة بين تحديد السؤال ونطاق البيانات</b></td>
+            <td><b>علاقة عكسية:</b> كلما كان سؤال العمل أكثر تحديداً، كان نطاق البيانات المطلوب <b>أصغر (أضيق)</b>.</td>
+          </tr>
+          <tr>
+            <td><b>متى يوضع رقم الإصدار (<span dir="ltr">Version Number</span>)؟</b></td>
+            <td>في <b>التقارير المحدثة فقط (<span dir="ltr">Updated Reports Only</span>)</b>.</td>
+          </tr>
+          <tr>
+            <td><b>متى توضع الأسئلة المتداولة (<span dir="ltr">FAQs</span>)؟</b></td>
+            <td>في <b>تقارير الخدمة الذاتية (<span dir="ltr">Self-Service</span>) والتقارير المتكررة (<span dir="ltr">Recurring</span>) فقط</b>.</td>
+          </tr>
+          <tr>
+            <td><b>الحد الأدنى لحجم الخط في التقرير</b></td>
+            <td>يجب ألا يقل حجم الخط عن <b>11 نقطة (<span dir="ltr">11 pt</span>)</b>.</td>
+          </tr>
+          <tr>
+            <td><b>عناصر الرسم البياني الثلاثة</b></td>
+            <td>1) <b>العنوان (<span dir="ltr">Title</span>)</b> • 2) <b>التسميات (<span dir="ltr">Labels</span>)</b> • 3) <b>وسائل الإيضاح (<span dir="ltr">Legend</span>)</b>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- التبويب الثالث: قاموس المصطلحات والأدوات -->
+  <section id="terms" class="panel">
+    <div class="card">
+      <h2>قاموس المصطلحات والأدوات الشامل للفصل الرابع عشر</h2>
+      <p class="muted">جميع المفاهيم والأدوات التحليلية وعناصر تصميم التقارير الواردة في الوحدات الثلاث:</p>
+      <div id="termsGrid" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- التبويب الرابع: البطاقات التعليمية -->
+  <section id="cards" class="panel">
+    <div class="card">
+      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
+      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
+      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
+        <div class="term" id="flashTerm"></div>
+        <div class="answer" id="flashAnswer" hidden></div>
+        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="prevCard">السابق</button>
+        <span id="cardCount" class="muted"></span>
+        <button class="btn primary" id="nextCard">التالي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- التبويب الخامس: الاختبار الذاتي العشوائي -->
+  <section id="quiz" class="panel">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h2>الاختبار الشامل المتغير للفصل الرابع عشر (25 سؤالاً) <span class="badge-new">ترتيب عشوائي ذكي 🎲</span></h2>
+          <p class="muted">يختبر فهمك لأنواع التقارير، الأدوات التحليلية، خطوات ومتطلبات العمل، وعناصر وتصميم التقرير مع تعليل فوري!</p>
+        </div>
+        <div class="score" id="score">النتيجة: 0 / 25</div>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="quizArea"></div>
+      <div class="row">
+        <button class="btn" id="resetQuiz">إعادة الاختبار بترتيب عشوائي جديد 🔀</button>
+        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+      </div>
+      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
+    </div>
+  </section>
+</main>
+
+<footer>مبني بالكامل (100%) على محتوى الفصل الرابع عشر والأخير (إعداد تقارير البيانات) من مقرر تحليل وتمثيل البيانات</footer>
+
+<script>
+const terms = [
+  ["Static Reports (التقارير الثابتة)", "تقارير تعرض لقطة ثابتة للبيانات في وقت محدد (مثل ملفات PDF والمطبوعات) ولا تسمح للمستخدم بالتفاعل أو الفلترة."],
+  ["Dynamic Reports (التقارير الديناميكية)", "تقارير تفاعلية متصلة بمصادر البيانات تتحدث تلقائياً وتسمح للمستخدم بالتصفية والتعمق في التفاصيل."],
+  ["Ad-hoc / Custom Reports", "التقارير المخصصة: تُنشأ لمرة واحدة فقط عند الطلب للإجابة عن سؤال عمل محدد وعاجل."],
+  ["Research Reports (التقارير البحثية)", "تقارير تحليلية وإحصائية معمقة تدرس الأسباب الجذرية لمشكلة ما وتقدم توصيات استراتيجية."],
+  ["Self-Service Reports (Dashboard)", "تقارير الخدمة الذاتية (مثل لوحة المعلومات): تتيح للمستفيد استكشاف وتصفية البيانات بنفسه دون الرجوع للمحلل."],
+  ["Recurring Reports (التقارير المتكررة)", "تقارير قياسية تُصدر وتُرسل بشكل دوري منتظم (يومياً، أسبوعياً، شهرياً)."],
+  ["SQL & RDBMS", "أدوات الاستعلام وقواعد البيانات العلائقية المستخدمة لاستخراج وتجميع البيانات من المصدر."],
+  ["Tableau & Power BI", "أشهر أدوات التمثيل المرئي وذكاء الأعمال (BI) المتخصصة في بناء لوحات المعلومات التفاعلية والتقارير المؤسسية."],
+  ["Mockups / Wireframes", "النماذج الأولية أو الإطارات السلكية: مسودة تخطيطية مرئية توضح شكل التقرير وتوزيع عناصره ضمن خطوة (إنشاء الخطة)."],
+  ["Layout, Flow, & Nav", "عناصر خطة التقرير: التخطيط والعرض (Layout)، التدفق المنطقي للمعلومات (Flow)، وآلية التنقل بين الصفحات والفلاتر (Nav)."],
+  ["Database Views (طرق العرض)", "جداول افتراضية في قاعدة البيانات تُستخدم لحماية البيانات الأصلية وجعلها للقراءة فقط (Read-Only) عند ربطها بالتقارير."],
+  ["Live Connection vs Data Extract", "في لوحة المعلومات: الاتصال المباشر (Live) يعرض البيانات لحظياً، بينما المستخرج الأخير (Extract) يأخذ نسخة دورية سريعة الأداء."],
+  ["FAQs (الأسئلة المتداولة)", "قسم يُدرج في تقارير الخدمة الذاتية والتقارير المتكررة فقط للإجابة عن استفسارات المستخدمين الشائعة حول التقرير."],
+  ["Appendix (الملحق)", "قسم في نهاية التقرير يضم الجداول التفصيلية المطولة أو المعادلات الإضافية لعدم إرباك جسم التقرير الرئيسي."]
+];
+
+const cards = [
+  ["ما الفرق الجوهري بين التقارير الثابتة (Static Reports) والتقارير الديناميكية (Dynamic Reports)؟ مع ذكر مثال لكل منهما.", "• التقارير الثابتة: تعرض لقطة ثابتة للبيانات في وقت محدد ولا تقبل التفاعل أو التحديث التلقائي (مثل ملفات PDF والمطبوعات).\n• التقارير الديناميكية: تقارير تفاعلية متصلة بالبيانات تتحدث تلقائياً وتسمح بالفلترة (مثل لوحات المعلومات التفاعلية Dashboards)."],
+  ["ما هي أبرز إيجابيات وسلبيات التقارير الثابتة (Static Reports)؟", "• الإيجابيات: سهلة الإنشاء والمشاركة والطباعة، وتضمن رؤية الجميع لنفس الأرقام التاريخية الثابتة، وآمنة.\n• السلبيات: تصبح قديمة بسرعة، ولا تسمح للمستخدم بالفلترة أو التفاعل."],
+  ["ما الفرق بين التقارير المخصصة (Ad-hoc Reports) والتقارير البحثية (Research Reports)؟", "• التقارير المخصصة (Ad-hoc): تُنشأ لمرة واحدة فقط عند الطلب للإجابة عن سؤال عمل محدد وطارئ.\n• التقارير البحثية (Research): دراسات تحليلية وإحصائية معمقة وطويلة لاكتشاف الأسباب الجذرية وتقديم توصيات."],
+  ["ما الفرق بين تقارير الخدمة الذاتية (Self-Service Reports) والتقارير المتكررة (Recurring Reports)؟", "• تقارير الخدمة الذاتية (مثل Dashboard): تتيح للمستفيد الدخول وتصفية البيانات بنفسه في أي وقت.\n• التقارير المتكررة: تقارير قياسية تُنتج وتُرسل بشكل دوري مجدول (يومياً، أسبوعياً، شهرياً)."],
+  ["ما هي الفئات الأربع للأدوات التحليلية المستخدمة في بناء التقارير؟ مع ذكر مثال لكل فئة.", "1) أدوات الاستعلام وقواعد البيانات: مثل SQL و RDBMS.\n2) أدوات جداول البيانات: مثل Microsoft Excel.\n3) أدوات لغات البرمجة: مثل Python و R.\n4) أدوات التمثيل المرئي وذكاء الأعمال: مثل Tableau و Power BI."],
+  ["ما هي الخطوات الأربع الأساسية لإنشاء التقرير بالترتيب؟", "1) إنشاء الخطة (Create the plan).\n2) الحصول على الموافقة على الخطة (Get approval).\n3) القيام بإنشاء وبناء التقرير (Build the report).\n4) تسليم التقرير (Deliver the report)."],
+  ["ماذا تشمل الخطوة الأولى (إنشاء الخطة) من عناصر تصميمية أربعة؟", "1) النماذج الأولية / الإطارات السلكية (Mockups / Wireframes).\n2) التخطيط والعرض (Layout / Presentation).\n3) التدفق المنطقي للمعلومات (Flow).\n4) آلية التنقل (Navigation - Nav)."],
+  ["لماذا تُعد الخطوة الثانية (الحصول على الموافقة على الخطة من المستفيدين) خطوة حاسمة قبل بناء التقرير؟", "للتأكد من أن تصميم ومحتوى التقرير يلبي متطلبات المستفيدين منذ البداية، وتجنب إهدار الوقت والجهد في بناء تقرير كامل ثم إعادة تصميمه من الصفر."],
+  ["ما هي النقاط الست لفهم متطلبات العمل عند إعداد التقرير؟", "1) محتوى البيانات.\n2) الفلترة / التصفية.\n3) طرق العرض (Views).\n4) نطاق البيانات.\n5) التكرار / الدورية.\n6) المستفيدون."],
+  ["في مثال شركة الروبوتات بالملزمة، إذا أردنا تقريراً يقيس (تطور سرعة الروبوت عبر الأيام)، فما هي المتغيرات الثلاثة فقط التي نختارها لمحتوى البيانات؟ ولماذا؟", "نختار 3 متغيرات فقط:\n1) المسافة (Distance)\n2) الوقت/الزمن (Time) -> لأن السرعة = المسافة ÷ الزمن.\n3) التاريخ (Date) -> لتتبع التطور عبر الأيام."],
+  ["لماذا نستخدم طرق العرض (Views) في قواعد البيانات عند ربطها بالتقارير؟", "لحماية البيانات الأصلية وإخفاء الأعمدة الحساسة، ولجعل البيانات (للقراءة فقط - Read-Only) حتى لا يتم تعديلها أو حذفها بالخطأ، ولتبسيط الاستعلامات."],
+  ["ما طبيعة العلاقة بين (مدى تحديد سؤال العمل) وبين (نطاق البيانات المطلوب للتقرير)؟", "علاقة عكسية:\n• كلما كان سؤال العمل أكثر تحديداً ووضوحاً، كان نطاق البيانات المطلوب أصغر وأضيق.\n• وكلما كان السؤال عاماً، كان نطاق البيانات أكبر وأوسع."],
+  ["في متطلبات لوحة المعلومات (Dashboard)، ما الفرق بين (الاتصال المباشر Live Connection) و(المستخرج الأخير Data Extract)؟", "• الاتصال المباشر: يعرض البيانات لحظياً في الوقت الفعلي ولكنه قد يبطئ الأداء ويزيد الحمل على قاعدة البيانات.\n• المستخرج الأخير: يأخذ نسخة دورية محفوظة من البيانات، وهو أسرع بكثير في الأداء ويخفف العبء عن قاعدة البيانات."],
+  ["ما هي العناصر الستة الأساسية التي يتكون منها التقرير الاحترافي؟", "1) صفحة الغلاف (Cover page).\n2) رقم الإصدار (Version number).\n3) مصادر البيانات المرجعية.\n4) التواريخ المرجعية.\n5) الأسئلة المتداولة (FAQs).\n6) الملحق (Appendix)."],
+  ["متى يتم وضع عنصر (رقم الإصدار - Version Number) في التقرير؟", "يوضع في (التقارير المحدثة فقط - Updated Reports Only) لتتبع النسخ والتعديلات المتعاقبة."],
+  ["ما هما التاريخان اللذان يشملهما عنصر (التواريخ المرجعية) في التقرير؟", "1) تاريخ إنشاء التقرير (متى صُمم أو أُنشئ التقرير).\n2) تاريخ تحديث البيانات (متى تم آخر سحب أو تحديث للبيانات المعروضة في التقرير)."],
+  ["في أي نوع من التقارير يتم إدراج قسم (الأسئلة المتداولة - FAQs) فقط؟ ولماذا؟", "يُدرج في (تقارير الخدمة الذاتية Self-Service) و(التقارير المتكررة Recurring Reports) فقط؛ للإجابة المسبقة عن الأسئلة الشائعة للمستخدمين حول المؤشرات."],
+  ["ما هي وظيفة قسم (الملحق - Appendix) في نهاية التقرير؟", "يوضع فيه الجداول التفصيلية الكبيرة أو المعادلات والشروحات الإضافية لمن يرغب في التعمق، حتى يظل جسم التقرير الرئيسي مختصراً وواضحاً."],
+  ["ما هي الاعتبارات المتعلقة بـ (متى يُسلم التقرير) و(كيف يُسلم التقرير)؟", "• متى يُسلم: عبر تفعيل ميزة الاشتراك (Subscription) والجدولة التلقائية (Automated scheduling).\n• كيف يُسلم: عبر البريد أو واجهة الويب (Web interface) مع ضبط أذونات الوصول الأمنية (Security permissions)."],
+  ["ما هي القواعد الأربع الخاصة بتصميم (الخطوط - Fonts) في التقرير؟ وكم يبلغ الحد الأدنى لحجم الخط؟", "1) ألا يقل حجم الخط عن (11 نقطة - 11 pt).\n2) تباعد الأسطر المناسب.\n3) تباين الألوان الواضح بين النص والخلفية.\n4) اختيار نوع خط احترافي ورسمي."],
+  ["ما هي القاعدة الأساسية لتصميم المخطط العام لصفحة التقرير (Layout)؟", "عدم الازدحام (Avoid clutter) وترك مساحات فارغة مريحة للعين حتى يسهل استيعاب المعلومات."],
+  ["ما هي العناصر الثلاثة الأساسية الواجب توفرها في أي رسم بياني داخل التقرير؟", "1) العنوان (Title).\n2) التسميات للمحاور (Labels).\n3) وسائل الإيضاح / مفتاح الرسم (Legend)."],
+  ["أي أداة تحليلية تُعد الأنسب لبناء لوحات معلومات تفاعلية للمؤسسات، وأي أداة تُعد الأنسب لاستعلام قواعد البيانات الضخمة؟", "• للوحات المعلومات التفاعلية: Tableau و Power BI.\n• لاستعلام قواعد البيانات العلائقية: لغة SQL."],
+  ["ما خطورة تسليم تقرير عبر واجهة الويب دون ضبط (أذونات الوصول الأمنية - Access Permissions)؟", "قد يتمكن مستخدمون غير مخولين من الاطلاع على بيانات سرية أو حساسة تخص أقساماً أخرى لا صلاحية لهم لرؤيتها."],
+  ["إذا طلب منك مدير التسويق تقريراً شهرياً يُرسل تلقائياً في اليوم الأول من كل شهر، فما نوع هذا التقرير؟", "تقرير متكرر / دوري (Recurring Report)."],
+  ["إذا أردتِ تصميم مسودة أولية بالقلم والورق أو ببرنامج تصميم لتوضيح أماكن وضع الرسوم البيانية قبل بناء الـ Dashboard، فماذا تُسمى هذه المسودة؟", "تُسمى النموذج الأولي أو الإطار السلكي (Mockup / Wireframe)."],
+  ["لماذا يُعد ذكر (مصادر البيانات المرجعية) داخل التقرير أمراً مهماً؟", "لأنه يعزز موثوقية التقرير ومصداقيته أمام صناع القرار، ويمكّن المراجعين من معرفة من أين جاءت الأرقام والتحقق منها عند الحاجة."],
+  ["هل يكفي وضع تاريخ إنشاء التقرير فقط دون ذكر تاريخ تحديث البيانات؟ ولماذا؟", "لا يكفي؛ لأن التقرير قد يكون منشأً اليوم ولكن البيانات المسحوبة بداخله تعود للشهر الماضي، لذا يجب ذكر التاريخين معاً لعدم تضليل القارئ."]
+];
+
+const masterQuestions = [
+  {q:"التقارير التي تعرض لقطة جامدة للبيانات في نقطة زمنية محددة (مثل ملفات PDF والمستندات الورقية المطبوعة) ولا تسمح للمستخدم بالتفاعل معها أو تصفيتها تُسمى:",o:["التقارير الثابتة (Static Reports)","التقارير الديناميكية التفاعلية (Dynamic Reports)","تقارير الخدمة الذاتية (Self-Service Dashboards)","قواعد البيانات العلائقية"],a:0,e:"التقارير الثابتة (Static Reports) تعرض البيانات بشكل ثابت غير قابل للتفاعل أو التحديث التلقائي."},
+  {q:"أي مما يلي يُعد من أبرز الإيجابيات (المزايا) للتقارير الثابتة (Static Reports) مقارنة بالتقارير الديناميكية؟",o:["سهلة الإنشاء والمشاركة والطباعة، وتضمن أن جميع المستفيدين يرون نفس الأرقام التاريخية بالضبط في تلك النقطة الزمنية","تتحدث بياناتها تلقائياً في كل ثانية وتسمح بالفلترة الفورية","تغني عن إنشاء أي تقارير أخرى في المستقبل","تتطلب اتصالاً حياً ومستمراً بقاعدة البيانات"],a:0,e:"تتميز التقارير الثابتة بسهولة مشاركتها وثبات أرقامها التاريخية لجميع القراء دون حاجة لاتصال بقاعدة البيانات."},
+  {q:"التقارير التي يتم إنشاؤها (لمرة واحدة فقط عند الطلب) للإجابة عن سؤال عمل محدد وطارئ تُعرف بـ:",o:["التقارير المخصصة (Ad-hoc / Custom Reports)","التقارير المتكررة الدورية (Recurring Reports)","تقارير الخدمة الذاتية المستمرة","الجداول المحورية فقط"],a:0,e:"التقارير المخصصة (Ad-hoc Reports) تُبنى خصيصاً لمرة واحدة استجابة لطلب أو موقف عمل طارئ ومحدد."},
+  {q:"ما الفرق بين (تقارير الخدمة الذاتية - Self-Service Reports) و (التقارير المتكررة - Recurring Reports)؟",o:["تقارير الخدمة الذاتية (مثل Dashboard) تتيح للمستفيد استكشاف وتصفية البيانات بنفسه في أي وقت، بينما التقارير المتكررة تُنتج وتُرسل بشكل دوري مجدول (يومياً أو أسبوعياً أو شهرياً)","التقارير المتكررة تُنشأ لمرة واحدة فقط في عمر الشركة","تقارير الخدمة الذاتية هي أوراق مطبوعة لا تقبل الفلترة","لا يوجد أي فرق بينهما"],a:0,e:"الخدمة الذاتية تمكّن المستخدم من التفاعل والفلترة بنفسه عبر Dashboard، بينما المتكررة تصدر بجدول زمني منتظم."},
+  {q:"تُصنف منصتا (Tableau) و (Power BI) ضمن الأدوات التحليلية الأربعة لبناء التقارير تحت فئة:",o:["أدوات التمثيل المرئي وذكاء الأعمال (BI & Visualization Tools)","أدوات الاستعلام وقواعد البيانات (Query Tools مثل SQL)","أدوات جداول البيانات البسيطة (Spreadsheets)","بروتوكولات التشفير اللاسلكي"],a:0,e:"الأدوات الأربع هي: أدوات الاستعلام (SQL)، جداول البيانات (Excel)، لغات البرمجة (Python)، وأدوات التمثيل المرئي (Tableau و Power BI)."},
+  {q:"ما هو الترتيب الصحيح للخطوات الأربع الأساسية لإنشاء التقرير كما وردت في الوحدة الثانية؟",o:["1) إنشاء الخطة -> 2) الحصول على الموافقة على الخطة -> 3) القيام بإنشاء التقرير -> 4) تسليم التقرير","1) تسليم التقرير -> 2) إنشاء التقرير -> 3) إنشاء الخطة -> 4) الحصول على الموافقة","1) إنشاء التقرير -> 2) تسليم التقرير -> 3) الحصول على الموافقة -> 4) إنشاء الخطة","لا يحتاج إنشاء التقرير إلى خطة أو موافقة مسبقة"],a:0,e:"تبدأ العملية بإنشاء الخطة، ثم اعتمادها بالموافقة عليها، ثم بناء التقرير، وأخيراً تسليمه."},
+  {q:"تشمل الخطوة الأولى (إنشاء الخطة) أربعة مكونات تصميمية لتوضيح شكل التقرير وتدفقه هي:",o:["النماذج الأولية (Mockups/Wireframes)، التخطيط والعرض (Layout/Presentation)، التدفق (Flow)، والتنقل (Nav)","الحذف، الاستبدال، التحجيم، والترميز","المتوسط، الوسيط، المنوال، والتباين","الغلاف، الملحق، الخطوط، والجدولة"],a:0,e:"تتضمن خطة التقرير إعداد الـ Mockups/Wireframes، وتحديد الـ Layout، والـ Flow، وآلية الـ Nav."},
+  {q:"[مسألة ومثال تطبيقي] في مثال شركة الروبوتات بالملزمة، إذا أرادت الشركة تقريراً يوضح (تطور سرعة الروبوت بمرور الأيام)، فما هي المتغيرات الثلاثة فقط التي يجب اختيارها ضمن محتوى بيانات التقرير؟",o:["المسافة، والوقت (الزمن)، والتاريخ — (لأن السرعة = المسافة / الزمن، والتاريخ لتتبع الأيام)","لون الروبوت، ووزنه، واسم المصنع فقط","التكلفة المالية، وعدد العجلات، واسم المهندس","جميع الـ 50 عموداً الموجودة في قاعدة البيانات دون استثناء"],a:0,e:"بما أن السرعة = المسافة ÷ الزمن، فنحن نحتاج لمتغيري المسافة والوقت لحسابها، ومتغير التاريخ لمعرفة تطورها عبر الزمن."},
+  {q:"ضمن نقاط فهم متطلبات العمل، لماذا يُنصح باستخدام (طرق العرض - Database Views) عند ربط التقرير بقاعدة البيانات؟",o:["لحماية البيانات الأصلية وإخفاء الحقول الحساسة، ولجعل البيانات (للقراءة فقط - Read-Only) لمنع تعديلها أو حذفها بالخطأ","لتمكين المستخدمين من حذف جداول قاعدة البيانات الأصلية بسهولة","لإبطاء سرعة التقرير وزيادة حجمه","لتغيير ألوان الخطوط في التقرير"],a:0,e:"توفر الـ Views طبقة أمان وحماية للبيانات الأصلية وتجعلها للقراءة فقط (Read-Only) بالنسبة للتقرير."},
+  {q:"ما هي العلاقة الصحيحة بين (مدى تحديد سؤال العمل) وبين (نطاق البيانات - Data Scope) المطلوب في التقرير؟",o:["علاقة عكسية: كلما كان سؤال العمل أكثر تحديداً، كان نطاق البيانات المطلوب أصغر (أضيق)، وكلما كان السؤال عاماً كان النطاق أكبر","علاقة طردية: كلما كان السؤال محدداً جداً احتجنا لقاعدة البيانات كلها","لا توجد أي علاقة بين سؤال العمل ونطاق البيانات","نطاق البيانات ثابت دائماً لكل الأسئلة"],a:0,e:"السؤال المحدد بدقة يتطلب نطاق بيانات ضيقاً ومركزاً، بينما السؤال العام الواسع يتطلب نطاق بيانات كبيراً."},
+  {q:"عند تصميم لوحة معلومات (Dashboard)، ما الفرق بين الاتصال المباشر (Live Connection) والمستخرج الأخير (Data Extract)؟",o:["الاتصال المباشر يعرض البيانات لحظياً في الوقت الفعلي، بينما المستخرج الأخير يعتمد على نسخة دورية محفوظة مما يجعله أسرع أداءً وأخف عبئاً على قاعدة البيانات","المستخرج الأخير يحذف جميع البيانات، والاتصال المباشر يعمل بدون قاعدة بيانات","كلاهما يعرضان بيانات ورقية مطبوعة فقط","لا يمكن ربط لوحة المعلومات بمصادر البيانات"],a:0,e:"تُوازن متطلبات الـ Dashboard بين حداثة البيانات اللحظية في (الاتصال المباشر) وسرعة الأداء العالية في (المستخرج الأخير)."},
+  {q:"جميع ما يلي يُعد من العناصر الستة الأساسية للتقرير الاحترافي في الوحدة الثالثة ما عدا:",o:["خوارزمية انحدار الميل (Gradient Descent)","صفحة الغلاف (Cover Page) ورقم الإصدار (Version Number)","مصادر البيانات المرجعية والتواريخ المرجعية","الأسئلة المتداولة (FAQs) والملحق (Appendix)"],a:0,e:"العناصر الستة للتقرير هي: الغلاف، رقم الإصدار، مصادر البيانات، التواريخ المرجعية، الأسئلة المتداولة FAQs، والملحق."},
+  {q:"في أي نوع من التقارير يتم وضع عنصر (رقم الإصدار - Version Number) فقط كما نصت عليه الملزمة؟",o:["في التقارير المحدثة / المتغيرة فقط (Updated Reports Only) لتتبع النسخ والتعديلات","في التقارير التي تُنشأ لمرة واحدة ولا تتغير أبداً","في المخطط الدائري فقط","في قاعدة البيانات قبل إنشاء التقرير"],a:0,e:"رقم الإصدار ضروري في التقارير المحدثة فقط لتمييز النسخة الحالية عن النسخ السابقة."},
+  {q:"في أي نوعين من التقارير يتم إدراج عنصر (الأسئلة المتداولة - FAQs) فقط؟",o:["في تقارير الخدمة الذاتية (Self-Service) والتقارير المتكررة (Recurring Reports) فقط","في التقارير المخصصة لمرة واحدة فقط","في ملفات الكود البرمجي فقط","لا توضع الأسئلة المتداولة في أي تقرير"],a:0,e:"تُوضع الـ FAQs في تقارير الخدمة الذاتية والتقارير المتكررة فقط للإجابة المسبقة عن استفسارات المستخدمين المتكررة."},
+  {q:"ماذا يشمل عنصر (التواريخ المرجعية - Reference Dates) الواجب توضيحه في التقرير؟",o:["يشمل تاريخين: تاريخ إنشاء التقرير، وتاريخ تحديث البيانات المعروضة في التقرير","يشمل تاريخ ميلاد محلل البيانات فقط","يشمل تاريخ تأسيس الشركة فقط","لا حاجة لذكر أي تواريخ في التقرير"],a:0,e:"يجب التفريق في التواريخ المرجعية بين تاريخ إنشاء التقرير نفسه وتاريخ آخر تحديث للبيانات التي بُني عليها."},
+  {q:"أين يوضع قسم (الملحق - Appendix) في التقرير؟ وما الغرض منه؟",o:["يوضع في نهاية التقرير، ويضم الجداول التفصيلية المطولة أو المعادلات والشروحات الإضافية لمن يرغب في التعمق دون إرباك التقرير الرئيسي","يوضع في الصفحة الأولى قبل الغلاف","يُستخدم لحذف الرسوم البيانية من التقرير","يُستخدم لتشفير التقرير بكلمة مرور"],a:0,e:"الملحق (Appendix) يُحفظ في نهاية التقرير ليحتوي على التفاصيل الإضافية والمطولة بعيداً عن المتن الرئيسي."},
+  {q:"عند النظر في اعتبارات (متى يُسلم التقرير) و(كيف يُسلم التقرير)، ما هي الآليات والأمور الأمنية الواجب مراعاتها؟",o:["الاشتراك والجدولة التلقائية (لمتى يُسلم)، وواجهة الويب مع ضبط أذونات الوصول الأمنية (لكيف يُسلم)","ترك التقرير متاحاً لجميع الغرباء بدون أذونات وصول أمنية","تسليم التقرير شفهياً فقط دون توثيق","منع المستفيدين من رؤية التقرير"],a:0,e:"يُنظم وقت التسليم عبر الاشتراك والجدولة التلقائية، وتُنظم طريقة التسليم عبر واجهة الويب مع تقييد أذونات الوصول الأمنية."},
+  {q:"وفقاً لقواعد تصميم الخطوط (Fonts) في التقرير، ما هو الحد الأدنى لحجم الخط الذي يجب ألا يقل عنه النص لضمان وضوح القراءة؟",o:["ألا يقل حجم الخط عن 11 نقطة (11 pt)","ألا يزيد حجم الخط عن 4 نقاط","أن يكون حجم الخط 2 نقطة فقط","لا توجد أي قاعدة لحجم الخط"],a:0,e:"تنص قواعد التصميم الفني للتقرير في الملزمة على ألا يقل حجم الخط عن 11، مع مراعاة تباعد الأسطر وتباين الألوان ونوع الخط الاحترافي."},
+  {q:"جميع ما يلي يُعد من القواعد الأربع لتصميم الخطوط (Fonts) في التقرير ما عدا:",o:["استخدام لون خط مطابق تماماً للون الخلفية بحيث يختفي النص (انعدام التباين) واستخدام حجم خط 5","ألا يقل حجم الخط عن 11","مراعاة تباعد الأسطر المناسب","وضوح تباين الألوان بين النص والخلفية واختيار نوع خط احترافي"],a:0,e:"قواعد الخطوط الأربع هي: حجم خط لا يقل عن 11، تباعد الأسطر، تباين الألوان الجيد، ونوع الخط الاحترافي."},
+  {q:"ما هي القاعدة الأساسية التي يجب مراعاتها في (المخطط العام لصفحة التقرير - Layout) عند توزيع الرسوم والجداول؟",o:["عدم الازدحام (Avoid Clutter) وتجنب تكديس العناصر","حشر 50 رسماً بيانياً في صفحة واحدة صغيرة","إلغاء جميع المساحات الفارغة","وضع الجداول فوق الرسوم البيانية بحيث تغطيها"],a:0,e:"تجنب الازدحام (Avoid Clutter) وترتيب المخطط بشكل مريح بصرياً هو القاعدة الأساسية لتصميم المخطط."},
+  {q:"ما هي العناصر الثلاثة الأساسية الواجب توفرها دائماً في أي (رسم بياني - Chart) داخل التقرير؟",o:["1) العنوان (Title)، 2) التسميات (Labels)، 3) وسائل الإيضاح / مفتاح الرسم (Legend)","1) صفحة الغلاف، 2) الملحق، 3) الأسئلة المتداولة","1) الكود البرمجي، 2) قاعدة البيانات، 3) السيرفر","1) الصوت، 2) الفيديو، 3) الحركة"],a:0,e:"لكي يكون أي رسم بياني مفهوماً بذاته داخل التقرير، يجب أن يتضمن 3 عناصر: العنوان، التسميات على المحاور، ووسائل الإيضاح (Legend)."},
+  {q:"ما المقصود بـ (النماذج الأولية / الإطارات السلكية - Mockups / Wireframes) التي تُعد في خطوة إنشاء خطة التقرير؟",o:["رسم تخطيطي أولي (مسودة مرئية) يوضح هيكل التقرير وأماكن توزيع المخططات والجداول قبل البدء ببنائه فعلياً","النسخة النهائية المطبوعة بعد تسليم التقرير بسنة","كود لغة SQL لاستخراج البيانات","أذونات الحماية الأمنية للخادم"],a:0,e:"الـ Mockup أو Wireframe هو التصميم التخطيطي المبدئي للتقرير الذي يُعرض على المستفيدين للموافقة عليه قبل التنفيذ."},
+  {q:"إذا طُلب منك إجراء دراسة تحليلية وإحصائية معمقة وطويلة المدى لاكتشاف الأسباب الجذرية لعزوف العملاء وتقديم توصيات استراتيجية لمجلس الإدارة، فما نوع هذا التقرير؟",o:["تقرير بحثي (Research Report)","تقرير متكرر يومي (Daily Recurring Report)","نموذج سلكي فارغ (Wireframe)","جدول بيانات غير منظم"],a:0,e:"التقارير البحثية (Research Reports) تختص بالدراسات التحليلية والإحصائية المعمقة لاستخلاص الاستنتاجات والتوصيات."},
+  {q:"أي فئة من الأدوات التحليلية تشمل كلاً من لغة (SQL) وأنظمة إدارة قواعد البيانات العلائقية (RDBMS)؟",o:["أدوات الاستعلام (Query Tools)","أدوات جداول البيانات (Spreadsheet Tools)","أدوات التمثيل المرئي (Visualization Tools)","أدوات تحرير الصور"],a:0,e:"تُصنف SQL و RDBMS ضمن أدوات الاستعلام (Query Tools) المخصصة لاسترجاع البيانات من قواعد البيانات."},
+  {q:"لماذا نحدد (المستفيدين - Stakeholders / Audience) كإحدى النقاط الست لفهم متطلبات العمل قبل إنشاء التقرير؟",o:["لتكييف مستوى التفاصيل وطريقة العرض ولغة التقرير بما يناسب طبيعة القارئ (إدارة تنفيذية عليا أم فريق فني مختص) وضمان منحه صلاحيات الوصول المناسبة","لحذف أسمائهم من قاعدة البيانات","لإجبارهم على كتابة كود البايثون بأنفسهم","لا أهمية لمعرفة من سيقرأ التقرير"],a:0,e:"معرفة المستفيدين تحدد مستوى التجريد أو التفصيل في التقرير، وتحدد متى وكيف يُسلم التقرير وأذونات الوصول الخاصة به."}
+];
+
+const termsGrid = document.getElementById("termsGrid");
+terms.forEach(([en, ar]) => {
+  const d = document.createElement("div");
+  d.className = "card";
+  d.style.margin = "0";
+  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
+  termsGrid.appendChild(d);
+});
+
+let ci = 0, showAnswer = false;
+function renderCard() {
+  document.getElementById("flashTerm").textContent = cards[ci][0];
+  document.getElementById("flashAnswer").textContent = cards[ci][1];
+  document.getElementById("flashAnswer").hidden = !showAnswer;
+  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
+  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+}
+document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
+document.getElementById("flashcard").addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
+});
+document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
+document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
+renderCard();
+
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+let currentQuestions = [];
+let answers = {};
+
+function prepareShuffledQuiz() {
+  currentQuestions = shuffleArray(masterQuestions).map(item => {
+    const optsWithFlag = item.o.map((text, idx) => ({ text, isCorrect: idx === item.a }));
+    const shuffledOpts = shuffleArray(optsWithFlag);
+    return {
+      q: item.q,
+      o: shuffledOpts.map(x => x.text),
+      a: shuffledOpts.findIndex(x => x.isCorrect),
+      e: item.e
+    };
+  });
+}
+
+function renderQuiz() {
+  prepareShuffledQuiz();
+  const area = document.getElementById("quizArea");
+  area.innerHTML = "";
+  const letters = ["أ", "ب", "ج", "د"];
+  currentQuestions.forEach((item, i) => {
+    const box = document.createElement("div");
+    box.className = "qbox";
+    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
+    const opts = box.querySelector(".options");
+    item.o.forEach((opt, j) => {
+      const btn = document.createElement("button");
+      btn.className = "option";
+      btn.textContent = `${letters[j]}) ${opt}`;
+      btn.onclick = () => {
+        answers[i] = j;
+        [...opts.children].forEach((x, k) => {
+          x.classList.remove("correct", "wrong");
+          x.disabled = true;
+          if (k === item.a) x.classList.add("correct");
+          if (k === j && j !== item.a) x.classList.add("wrong");
+        });
+        const fb = document.getElementById("fb" + i);
+        fb.hidden = false;
+        fb.className = "feedback " + (j === item.a ? "good" : "bad");
+        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
+        updateScore();
+      };
+      opts.appendChild(btn);
+    });
+    area.appendChild(box);
+  });
+  updateScore();
+}
+
+function updateScore() {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
+  document.getElementById("score").textContent = `النتيجة: ${correct} / ${currentQuestions.length}`;
+  document.getElementById("progressBar").style.width = (Object.keys(answers).length / currentQuestions.length * 100) + "%";
+}
+
+document.getElementById("resetQuiz").onclick = () => {
+  answers = {};
+  document.getElementById("finalResult").textContent = "";
+  renderQuiz();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+document.getElementById("finishQuiz").onclick = () => {
+  let correct = 0;
+  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
+  const pct = Math.round(correct / currentQuestions.length * 100);
+  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${currentQuestions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! أنتِ مستعدة تماماً للاختبار في هذا الفصل." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
+};
+
+renderQuiz();
+</script>
+</body>
+</html>
