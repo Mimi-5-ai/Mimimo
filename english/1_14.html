@@ -1,0 +1,2624 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>الاختبار التفاعلي الشامل (الفصول 1 إلى 14) | اللغة الإنجليزية</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --card-border: #334155;
+  --text: #f8fafc;
+  --muted: #94a3b8;
+  --primary: #6366f1;
+  --primary-dark: #4f46e5;
+  --accent: #eab308;
+  --good: #10b981;
+  --good-bg: rgba(16, 185, 129, 0.14);
+  --bad: #ef4444;
+  --bad-bg: rgba(239, 68, 68, 0.14);
+  --warn: #f59e0b;
+}
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+body {
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.65;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+header {
+  background: linear-gradient(135deg, #1e1b4b 0%, #311042 100%);
+  border-bottom: 1px solid var(--card-border);
+  padding: 14px 16px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+.container {
+  max-width: 820px;
+  margin: 0 auto;
+  width: 100%;
+}
+.top-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.brand-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+}
+.stats-badges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.badge {
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.badge.good { color: #6ee7b7; border-color: rgba(16, 185, 129, 0.4); }
+.badge.bad { color: #fca5a5; border-color: rgba(239, 68, 68, 0.4); }
+.badge.prog { color: #fde047; border-color: rgba(234, 179, 8, 0.4); }
+
+.controls-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+select, .ctrl-btn {
+  background: #0f172a;
+  color: #f8fafc;
+  border: 1px solid #475569;
+  padding: 8px 11px;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+select {
+  flex: 1;
+  min-width: 150px;
+}
+.ctrl-btn.mistakes-btn {
+  background: #991b1b;
+  border-color: #ef4444;
+  color: #fff;
+}
+.ctrl-btn.mistakes-btn.active-mode {
+  background: #eab308;
+  border-color: #fef08a;
+  color: #0f172a;
+}
+.ctrl-btn.reset-btn {
+  background: #334155;
+  color: #cbd5e1;
+}
+
+.progress-track {
+  width: 100%;
+  height: 6px;
+  background: #0f172a;
+  border-radius: 99px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #ec4899);
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+main {
+  flex: 1;
+  padding: 18px 14px 40px;
+}
+.quiz-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: 20px 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+.q-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #334155;
+}
+.q-tag {
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 8px;
+  background: rgba(99, 102, 241, 0.2);
+  color: #a5b4fc;
+  border: 1px solid rgba(99, 102, 241, 0.35);
+}
+.q-number {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+/* Strictly LTR English Question & Options */
+.q-text {
+  direction: ltr;
+  text-align: left;
+  font-size: clamp(1.08rem, 3.5vw, 1.32rem);
+  font-weight: 800;
+  color: #ffffff;
+  background: #0f172a;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid #334155;
+  margin-bottom: 16px;
+  line-height: 1.55;
+}
+.options-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  direction: ltr;
+}
+.opt-btn {
+  direction: ltr;
+  text-align: left;
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 13px;
+  border: 2px solid #334155;
+  background: #0f172a;
+  color: #f1f5f9;
+  font-size: 0.98rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.opt-btn:hover:not(:disabled) {
+  border-color: var(--primary);
+  background: rgba(99, 102, 241, 0.12);
+}
+.opt-btn:disabled {
+  cursor: default;
+}
+.opt-btn.correct {
+  background: var(--good-bg);
+  border-color: var(--good);
+  color: #6ee7b7;
+}
+.opt-btn.wrong {
+  background: var(--bad-bg);
+  border-color: var(--bad);
+  color: #fca5a5;
+}
+.opt-btn.dimmed {
+  opacity: 0.55;
+}
+.opt-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: #1e293b;
+  color: #cbd5e1;
+  font-weight: 800;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+.opt-btn.correct .opt-letter {
+  background: var(--good);
+  color: #064e3b;
+}
+.opt-btn.wrong .opt-letter {
+  background: var(--bad);
+  color: #fff;
+}
+
+/* Arabic Feedback Box */
+.feedback-box {
+  display: none;
+  margin-top: 18px;
+  padding: 16px;
+  border-radius: 14px;
+  font-size: 0.94rem;
+  line-height: 1.75;
+  animation: fadeIn 0.25s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.feedback-box.good-fb {
+  display: block;
+  background: rgba(6, 78, 59, 0.45);
+  border: 2px solid var(--good);
+  color: #ecfdf5;
+}
+.feedback-box.bad-fb {
+  display: block;
+  background: rgba(127, 29, 29, 0.45);
+  border: 2px solid var(--bad);
+  color: #fef2f2;
+}
+.fb-title {
+  font-weight: 900;
+  font-size: 1.05rem;
+  margin-bottom: 8px;
+  display: block;
+}
+.fb-section {
+  background: rgba(15, 23, 42, 0.65);
+  padding: 10px 12px;
+  border-radius: 10px;
+  margin-top: 8px;
+  border-right: 4px solid var(--accent);
+}
+
+.nav-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid #334155;
+}
+.nav-btn {
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: 0;
+  font-family: inherit;
+  font-weight: 800;
+  font-size: 0.92rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.nav-btn.prev {
+  background: #334155;
+  color: #e2e8f0;
+}
+.nav-btn.next {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  flex: 1;
+  max-width: 240px;
+}
+.nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 36px 16px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="top-bar">
+      <h1 class="brand-title">🎯 محاكي اختبار الدكتور الشامل (Ch 1 – 14)</h1>
+      <div class="stats-badges">
+        <span class="badge prog" id="statProgress">1 / 120</span>
+        <span class="badge good" id="statCorrect">✅ صح: 0</span>
+        <span class="badge bad" id="statWrong">❌ خطأ: 0</span>
+      </div>
+    </div>
+
+    <div class="controls-bar">
+      <select id="filterSelect">
+        <option value="all">📚 جميع الأسئلة الشاملة (120 سؤالاً)</option>
+        <option value="func">🗣️ وظائف الجمل فقط (Sentence Functions)</option>
+        <option value="syn">🔄 الكلمات ومعانيها وأضدادها (Synonyms & Antonyms)</option>
+        <option value="gram">⚙️ القواعد والتصريفات وفخاخ الإملاء (Grammar)</option>
+        <option value="read">📖 تفاصيل القطع والاستماع والأرقام (Reading & Audio)</option>
+        <option value="ch1_5">🔹 الفصول (1 إلى 5)</option>
+        <option value="ch6_10">🔸 الفصول (6 إلى 10)</option>
+        <option value="ch11">🏆 الفصل 11 (The Best Things)</option>
+        <option value="ch12">🏷️ الفصل 12 (Brand New)</option>
+        <option value="ch13">👥 الفصل 13 (The Right Person)</option>
+        <option value="ch14">💰 الفصل 14 (Money)</option>
+      </select>
+
+      <button class="ctrl-btn mistakes-btn" id="mistakesModeBtn" onclick="toggleMistakesMode()">
+        🔁 اختبرني في أخطائي (<span id="mistakesCountBtn">0</span>)
+      </button>
+
+      <button class="ctrl-btn reset-btn" onclick="resetAllProgress()">
+        🗑️ تصفير التقدم
+      </button>
+    </div>
+
+    <div class="progress-track">
+      <div class="progress-fill" id="progressBar"></div>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <div class="quiz-card" id="quizContainer">
+    <div class="q-meta">
+      <span class="q-tag" id="qCategoryTag">Chapter 1 • Grammar</span>
+      <span class="q-number" id="qIndexLabel">Question 1 of 120</span>
+    </div>
+
+    <div class="q-text" id="questionText"></div>
+
+    <div class="options-grid" id="optionsContainer"></div>
+
+    <div class="feedback-box" id="feedbackContainer"></div>
+
+    <div class="nav-actions">
+      <button class="nav-btn prev" id="prevBtn" onclick="navigateQuestion(-1)">➡️ السابق</button>
+      <select id="jumpSelect" onchange="jumpToQuestion(this.value)" style="max-width:135px;text-align:center"></select>
+      <button class="nav-btn next" id="nextBtn" onclick="navigateQuestion(1)">التالي ⬅️</button>
+    </div>
+  </div>
+</main>
+
+<script>
+// ============================================================================
+// BANK OF 120 COMPREHENSIVE QUESTIONS (100% ENGLISH QUESTIONS & OPTIONS)
+// Every question includes:
+// - id: unique identifier
+// - ch: chapter group ('ch1_5', 'ch6_10', 'ch11', 'ch12', 'ch13', 'ch14')
+// - cat: 'gram' | 'syn' | 'func' | 'read'
+// - tag: English label
+// - q: Strictly English question
+// - opts: 4 closely similar, tricky English options
+// - ans: index of correct option (0, 1, 2, or 3 - varied across questions)
+// - whyRight: Arabic explanation of why the correct answer is right
+// - whyWrong: Array of 4 Arabic explanations explaining why each specific wrong option is wrong
+// ============================================================================
+const QUESTION_BANK = [
+  // ==================== CHAPTER 1 (Questions 1 - 10) ====================
+  {
+    id: 1, ch: "ch1_5", cat: "gram", tag: "Chapter 1 • Present Simple Trap",
+    q: "He ............... the homework.",
+    opts: ["write", "writes", "read", "she"],
+    ans: 1,
+    whyRight: "الفاعل مفرد غائب (He)، والجملة لا تحتوي على أي كلمة تدل على الماضي (مثل yesterday)، لذا فالأصل عند الدكتور هو المضارع البسيط مع إضافة حرف (-s) للفعل ليصبح (writes).",
+    whyWrong: [
+      "كلمة (write) فعل مجرد بدون (s)، ولا يأتي في المضارع البسيط إلا مع (I / You / We / They).",
+      "",
+      "كلمة (read) بدون (s) لا تصلح للمضارع مع (He)، وبما أنه لا توجد قرينة زمنية للماضي في الجملة فيُمنع اعتبارها ماضياً عند الدكتور.",
+      "كلمة (she) ضمير فاعل بمعنى (هي) وليست فعلاً، والجملة تحتاج إلى فعل بعد (He)."
+    ]
+  },
+  {
+    id: 2, ch: "ch1_5", cat: "gram", tag: "Chapter 1 • Question Formation",
+    q: "............ Abdullah and Khaled like eggs?",
+    opts: ["Does", "Did", "Do", "Done"],
+    ans: 2,
+    whyRight: "الفاعل هنا شخصان مثنى/جمع (Abdullah and Khaled = They)، والسؤال عن حقيقة عامة (حب البيض) بدون أي كلمة ماضي، فنختار الفعل المساعد للمضارع مع الجمع (Do).",
+    whyWrong: [
+      "اخترتِ (Does) بسبب التسرع لرؤية اسم مفرد في البداية (Abdullah)، لكن الفاعل الكامل هو (Abdullah and Khaled) أي جمع!",
+      "كلمة (Did) تُستخدم للماضي البسيط، والجملة تسأل عن تفضيل عام في المضارع ولا تحتوي على أي دلالة للماضي.",
+      "",
+      "كلمة (Done) تصريف ثالث (V3) ولا يُبدأ بها السؤال أبداً بدون فعل مساعد."
+    ]
+  },
+  {
+    id: 3, ch: "ch1_5", cat: "gram", tag: "Chapter 1 • Wh-Questions (With Trap)",
+    q: "............ do you live with?",
+    opts: ["Where", "Who", "When", "Which"],
+    ans: 1,
+    whyRight: "انتبهي لحرف الجر (with = مع) في نهاية السؤال! السؤال هنا معناه (مع مَن تعيش؟) ويسأل عن شخص عاقل (A person) فنختار (Who).",
+    whyWrong: [
+      "فخ خطير! نختار (Where) لو كان السؤال (Where do you live?) بدون كلمة (with)، أما وجود (with) فيحول السؤال عن الشخص العاقل (Who).",
+      "",
+      "كلمة (When) تسأل عن الوقت (A time) وليس عن الأشخاص.",
+      "كلمة (Which) تُستخدم للاختيار بين شيئين محددين (choose between two)."
+    ]
+  },
+  {
+    id: 4, ch: "ch1_5", cat: "syn", tag: "Chapter 1 • Question Words Definitions",
+    q: "Which question word is used to ask about 'the reason for doing something'?",
+    opts: ["How", "Why", "What", "How long"],
+    ans: 1,
+    whyRight: "كلمة المفتاح في التعريف هي (reason = السبب)، ونسأل عن السبب دائماً باستخدام أداة الاستفهام (Why = لماذا).",
+    whyWrong: [
+      "أداة الاستفهام (How) تسأل عن الطريقة أو الكيفية (The way you do something) وليس السبب (reason).",
+      "",
+      "أداة الاستفهام (What) تسأل عن الشيء غير العاقل (A thing).",
+      "أداة الاستفهام (How long) تسأل عن طول الفترة الزمنية (Period of time)."
+    ]
+  },
+  {
+    id: 5, ch: "ch1_5", cat: "syn", tag: "Chapter 1 • Question Words Definitions",
+    q: "Which question word is used to ask about 'the way you do something'?",
+    opts: ["Why", "Who", "How", "Where"],
+    ans: 2,
+    whyRight: "كلمة المفتاح في التعريف هي (the way = الطريقة أو الكيفية)، ونسأل عنها باستخدام (How = كيف).",
+    whyWrong: [
+      "أداة الاستفهام (Why) تسأل عن السبب (reason) وليس الطريقة (way).",
+      "أداة الاستفهام (Who) تسأل عن الشخص العاقل (A person).",
+      "",
+      "أداة الاستفهام (Where) تسأل عن المكان (A place)."
+    ]
+  },
+  {
+    id: 6, ch: "ch1_5", cat: "syn", tag: "Chapter 1 • Question Words Traps",
+    q: "We use '............' to ask about a period of time, and '............' to ask about the number of times.",
+    opts: ["How many / How long", "How long / How many", "How far / How much", "When / Which"],
+    ans: 1,
+    whyRight: "عبارة (Period of time = فترة من الوقت) نسأل عنها بـ (How long)، وعبارة (number of times = عدد المرات) نسأل عنها بـ (How many).",
+    whyWrong: [
+      "عكستِ الترتيب! (How many) للعدد، بينما (How long) للفترة الزمنية (Period of time).",
+      "",
+      "أداة (How far) تسأل عن المسافة، و(How much) لغير المعدود أو السعر.",
+      "أداة (When) للوقت المحدد وليست لطول المدة، و(Which) للاختيار بين شيئين."
+    ]
+  },
+  {
+    id: 7, ch: "ch1_5", cat: "gram", tag: "Chapter 1 • Verb Collocations",
+    q: "I usually ............ to the gym in the morning, and ............ a football match in the evening.",
+    opts: ["watch / go", "play / watch", "go / watch", "do / go"],
+    ans: 2,
+    whyRight: "عند وجود حرف الجر (to + مكان مثل to the gym / school / museum) نختار الفعل (go)، ومع (TV / football match) نختار الفعل (watch = يشاهد).",
+    whyWrong: [
+      "عكستِ الأفعال! لا يصح قول (watch to the gym).",
+      "الفعل (play) لا يأخذ حرف الجر (to) مع الأماكن.",
+      "",
+      "الفعل (do) لا يأتي مع (to the gym)، ولا نستخدم (go) مع (a football match) بدون حرف جر."
+    ]
+  },
+  {
+    id: 8, ch: "ch1_5", cat: "read", tag: "Chapter 1 • Reading Comprehension Trap",
+    q: "In Disc Golf, players don't hit a ball; instead, they throw a plastic disc towards a ............",
+    opts: ["wooden goal", "metal basket", "games console", "tennis net"],
+    ans: 1,
+    whyRight: "في رياضة (Disc golf)، لا يضرب اللاعبون الكرة (don't hit a ball) بل يرمون قرصاً بلاستيكياً باتجاه سلة معدنية (metal basket) تمثل الحفرة (hole).",
+    whyWrong: [
+      "الممر أو المرمى الخشبي (wooden goal) ليس في جولف القرص.",
+      "",
+      "جهاز الألعاب (games console) خاص بلعبة Nintendo's Wii Sports.",
+      "شبكة التنس (tennis net) لا علاقة لها بـ Disc golf."
+    ]
+  },
+  {
+    id: 9, ch: "ch1_5", cat: "read", tag: "Chapter 1 • Reading True/False Trap",
+    q: "Which statement is TRUE according to the Chapter 1 reading text?",
+    opts: [
+      "The game of Golf is less than 200 years old.",
+      "In Freestyle football, there are two big teams and players score goals.",
+      "Nintendo's Wii Sports is the best-selling computer game, and Freestyle football is a mixture of juggling and football.",
+      "Judges in Disc golf give points for style and tricks."
+    ],
+    ans: 2,
+    whyRight: "لعبة (Wii Sports) هي الأكثر مبيعاً (best-selling)، وكرة القدم الحرة (Freestyle football) لا توجد فيها فرق (no teams) بل هي خليط من ألعاب الخفة وكرة القدم (mixture of juggling) ويحكم فيها الحكام (Judges).",
+    whyWrong: [
+      "فخ كلمة (less)! عمر لعبة الجولف أكثر من 250 سنة (more than 250 years old) وليس أقل من 200 سنة (less than 200).",
+      "في (Freestyle football) لا توجد فرق (no teams) ولا يسجلون أهدافاً (don't score goals).",
+      "",
+      "الحكام (Judges) يعطون نقاطاً في (Freestyle football) وليس في (Disc golf)."
+    ]
+  },
+  {
+    id: 10, ch: "ch1_5", cat: "syn", tag: "Chapter 1 • Vocabulary & Antonyms",
+    q: "The word 'downside' means a negative aspect, and the opposite of 'late' is '............'.",
+    opts: ["large", "more", "early", "small"],
+    ans: 2,
+    whyRight: "كلمة (downside) تعني الجانب السلبي أو العيب، وعكس كلمة (late = متأخر) هو (early = مبكر).",
+    whyWrong: [
+      "كلمة (large = كبير) عكسها (small = صغير).",
+      "كلمة (more = أكثر) عكسها (less = أقل).",
+      "",
+      "كلمة (small = صغير) هي عكس (large) وليست عكس (late)."
+    ]
+  },
+
+  // ==================== CHAPTER 2 (Questions 11 - 20) ====================
+  {
+    id: 11, ch: "ch1_5", cat: "read", tag: "Chapter 2 • Reading Inventors Trap",
+    q: "In the early 1920s, ............ made a basic television that transmitted pictures, while ............ invented the electronic television in 1929.",
+    opts: [
+      "Vladimir Zworykin / John Logie Baird",
+      "John Logie Baird / Vladimir Zworykin",
+      "Marcel Boulestin / Bridget Driscoll",
+      "John Logie Baird / Marcel Boulestin"
+    ],
+    ans: 1,
+    whyRight: "الاسكتلندي (John Logie Baird) هو من صنع التلفاز البدائي (basic television) الذي نقل الصور في أوائل العشرينات، أما المخترع الروسي (Vladimir Zworykin) فهو من اخترع التلفاز الإلكتروني عام 1929 (أبو التلفاز الحديث).",
+    whyWrong: [
+      "عكستِ الأسماء! زوريكين اخترع التلفاز الإلكتروني عام 1929، بينما بيرد صنع التلفاز البدائي في أوائل العشرينات.",
+      "",
+      "مارسيل بولستين (Marcel Boulestin) هو أول شيف تلفزيوني عام 1937، وبريدجيت دريسكول (Bridget Driscoll) هي أول ضحية حادث سيارة عام 1896.",
+      "مارسيل بولستين طاهٍ (TV chef) وليس مخترع التلفاز الإلكتروني."
+    ]
+  },
+  {
+    id: 12, ch: "ch1_5", cat: "read", tag: "Chapter 2 • Reading Dates Trap",
+    q: "Marcel Boulestin became the first TV chef in ............, and the first TV advert (for a Bulova clock) was shown in ............ and lasted 20 seconds.",
+    opts: ["1938 / 1941", "1937 / 1941", "1937 / 1996", "1929 / 1937"],
+    ans: 1,
+    whyRight: "أول طاهٍ تلفزيوني (Marcel Boulestin) ظهر عام (1937) — وانتبهي أن جملة 1938 في الصح والخطأ كانت False! وأول إعلان تلفزيوني لساعة Bulova عُرض عام (1941) بتكلفة 9 دولارات واستمر 20 ثانية.",
+    whyWrong: [
+      "فخ التاريخ! عام 1938 خاطئ (وضع الدكتور 1938 في سؤال صح وخطأ لكي تكون الإجابة False لأن الصواب 1937).",
+      "",
+      "عام 1996 هو العام الذي ظهرت فيه مشغلات الـ DVD في اليابان (didn't appear until 1996).",
+      "عام 1929 هو تاريخ اختراع التلفاز الإلكتروني."
+    ]
+  },
+  {
+    id: 13, ch: "ch1_5", cat: "gram", tag: "Chapter 2 • Grammar Error Identification",
+    q: "Evaluate the grammatical correctness of this sentence from the slides: 'His friend don't sets the alarm.'",
+    opts: [
+      "True (It is grammatically correct)",
+      "False (It should be: His friend doesn't set the alarm)",
+      "False (It should be: His friend don't set the alarm)",
+      "False (It should be: His friend doesn't sets the alarm)"
+    ],
+    ans: 1,
+    whyRight: "الجملة خاطئة (False) لوجود خطأين: أولاً الفاعل مفرد (His friend = He) فيأخذ في النفي (doesn't) وليس (don't)، وثانياً بعد (doesn't) يجب إرجاع الفعل إلى أصله المجرد بدون حرف s ليصبح (set).",
+    whyWrong: [
+      "الجملة خاطئة تماماً ولا يجوز قول (don't sets).",
+      "",
+      "لا يصح استخدام (don't) مع الفاعل المفرد (His friend).",
+      "بعد (doesn't) يُحذف حرف الـ (s) من الفعل الأساسي فلا يصح قول (doesn't sets)."
+    ]
+  },
+  {
+    id: 14, ch: "ch1_5", cat: "gram", tag: "Chapter 2 • Past Simple vs Present Trap",
+    q: "He ............ to the class yesterday.",
+    opts: ["bought", "went", "go", "goes"],
+    ans: 1,
+    whyRight: "وجود كلمة (yesterday = أمس) يحسم أن الجملة في الماضي البسيط، وبوجود حرف الجر والمكان (to the class = إلى الفصل) نختار ماضي الفعل (go) وهو (went = ذهب).",
+    whyWrong: [
+      "الفعل (bought = اشترى) ماضي صحيح من (buy)، لكنه لا يركب بالمعنى مع حرف الجر (to the class)!",
+      "",
+      "الفعل (go) مضارع مجرد، والجملة فيها كلمة (yesterday) الدالة على الماضي.",
+      "الفعل (goes) مضارع بسيط للمفرد، ولا يجوز استخدامه مع (yesterday)."
+    ]
+  },
+  {
+    id: 15, ch: "ch1_5", cat: "gram", tag: "Chapter 2 • Prepositions of Time",
+    q: "The snow falls ............ the winter, and the meeting starts ............ noon (or midnight).",
+    opts: ["at / in", "on / at", "in / at", "in / on"],
+    ans: 2,
+    whyRight: "فصول السنة الأربعة (spring, summer, autumn, winter) والشهور تأخذ دائماً حرف الجر (in)، بينما الساعات وكلمات (noon / midnight / night) تأخذ دائماً حرف الجر (at).",
+    whyWrong: [
+      "عكستِ حروف الجر! الفصول تأخذ (in) وليس (at).",
+      "حرف الجر (on) يُستخدم مع أيام الأسبوع (on Sunday) والتواريخ الكاملة وليس مع فصول السنة.",
+      "",
+      "كلمة (noon = الظهر) تأخذ (at noon) وليس (on noon)."
+    ]
+  },
+  {
+    id: 16, ch: "ch1_5", cat: "gram", tag: "Chapter 2 • Past Simple Time Marker",
+    q: "We arrived at the school a few minutes ............ , and Did he ............ a car?",
+    opts: ["ago / had", "before / have", "ago / have", "since / has"],
+    ans: 2,
+    whyRight: "في نهاية جملة الماضي البسيط بعد المدة الزمنية (a few minutes / four years) نختار دائماً كلمة (ago)، وفي السؤال بعد (Did) يرجع الفعل لأصله المجرد (have) وليس (had)!",
+    whyWrong: [
+      "فخ شائع! صح أن الأول (ago)، لكن بعد (Did) في السؤال يُمنع وضع الماضي (had) بل يجب إرجاعه للمجرد (have).",
+      "المفتاح بعد المدة الزمنية في الماضي البسيط هو (ago).",
+      "",
+      "كلمة (since) تأتي قبل نقطة البداية مع المضارع التام، و(has) لا تأتي بعد (Did)."
+    ]
+  },
+  {
+    id: 17, ch: "ch1_5", cat: "gram", tag: "Chapter 2 • Irregular Past Verbs",
+    q: "Which of the following irregular past tense pairs is completely CORRECT?",
+    opts: [
+      "Buy -> Buyed | Catch -> Catched | Teach -> Teached",
+      "Buy -> Bought | Catch -> Caught | Teach -> Taught",
+      "Begin -> Begun | Write -> Written | Eat -> Eaten",
+      "Stop -> Stoped | Travel -> Traveld | Die -> Dead"
+    ],
+    ans: 1,
+    whyRight: "الأفعال الثلاثة (Buy / Catch / Teach) أفعال شاذة في الماضي البسيط تتحول على نغمة (-ought / -aught): (Bought / Caught / Taught).",
+    whyWrong: [
+      "هذه الأفعال شاذة (Irregular) ولا تقبل إضافة (-ed).",
+      "",
+      "الكلمات (Begun / Written / Eaten) هي التصريف الثالث (V3) وليست الماضي البسيط (Began / Wrote / Ate).",
+      "الفعل (Stop) نضاعف فيه حرف الـ p ليصبح (Stopped)، وماضي (Die) هو (Died) وليس الصفة (Dead)."
+    ]
+  },
+
+  // ==================== CHAPTER 3 (Questions 18 - 27) ====================
+  {
+    id: 18, ch: "ch1_5", cat: "func", tag: "Chapter 3 • Short Answers Function & Form",
+    q: "Can you help?",
+    opts: ["No", "Yes", "Yes, I can", "No, I can"],
+    ans: 2,
+    whyRight: "في اختبارات القواعد عند الدكتور، الإجابة القصيرة (Short Answer) يجب أن تكون كاملة قواعدياً: (Yes, + الضمير I + نفس الفعل المساعد can). السؤال بـ (Can you...?) هنا وظيفته تقديم طلب (Making a request).",
+    whyWrong: [
+      "كلمة (No) وحدها ناقصة في اختبار القواعد الرسمي.",
+      "كلمة (Yes) وحدها ناقصة؛ الدكتور يطلب الإجابة القصيرة الكاملة (Yes, I can).",
+      "",
+      "فخ متناقض! لا يجوز البدء بالنفي (No) بدون وضع أداة النفي (n't / not) في آخر الجملة (الصواب للنفي: No, I can't)."
+    ]
+  },
+  {
+    id: 19, ch: "ch1_5", cat: "gram", tag: "Chapter 3 • Modal Verbs Trap (To)",
+    q: "I ............ to sleep early tonight, and my brother doesn't ............ to go to school on Friday.",
+    opts: ["should / can", "must / should", "have / have", "can / have"],
+    ans: 2,
+    whyRight: "الشفرة الفورية هنا هي وجود حرف الجر (to) بعد الفراغ مباشرة! الأفعال (should / can / must) لا يأتي بعدها (to) أبداً، والوحيد الذي يأتي بعده (to) هو (have to / doesn't have to).",
+    whyWrong: [
+      "الأفعال الناقصة (should) و(can) يأتي بعدها الفعل مجرداً مباشرة بدون (to).",
+      "لا يصح قول (must to) أو (doesn't should to) في اللغة الإنجليزية.",
+      "",
+      "لا يصح قول (I can to sleep) لأن (can) لا تأخذ (to)."
+    ]
+  },
+  {
+    id: 20, ch: "ch1_5", cat: "func", tag: "Chapter 3 • Sentence Function (Modals)",
+    q: "What is the grammatical function of the sentence: 'You should revise in different places and give yourself a reward'?",
+    opts: [
+      "Expressing past ability",
+      "Giving advice",
+      "Asking for permission",
+      "Describing physical appearance"
+    ],
+    ans: 1,
+    whyRight: "استخدام (should / shouldn't) في الوحدة الثانية من الفصل الثالث وظيفته دائماً تقديم النصيحة (Giving advice / Advise).",
+    whyWrong: [
+      "القدرة في الماضي يُعبر عنها بـ (could) وليس (should).",
+      "",
+      "طلب الإذن يُستخدم فيه (May I / Can I / Could I).",
+      "وصف المظهر الجسدي يكون بالسؤال (What does he look like?)."
+    ]
+  },
+  {
+    id: 21, ch: "ch1_5", cat: "syn", tag: "Chapter 3 • Sleep Collocations",
+    q: "Complete the three self-evaluation collocations: 'I fall ............', 'I relax at ............', and 'I drink a cup of ............'.",
+    opts: [
+      "sleep / house / coffee",
+      "asleep / home / tea",
+      "sleeping / work / water",
+      "bed / home / tea"
+    ],
+    ans: 1,
+    whyRight: "هذه هي المتلازمات اللفظية الثلاث في التقييم الذاتي للوحدة الأولى من الفصل الثالث: (fall asleep = يستغرق في النوم)، (relax at home = يسترخي في المنزل)، و(cup of tea = كوب من الشاي).",
+    whyWrong: [
+      "الفعل (fall) يأخذ الصفة (asleep) بحرف الـ a في بدايتها وليس (sleep).",
+      "",
+      "التعبير القياسي مع الفعل (fall) هو (fall asleep) وليس (fall sleeping).",
+      "نقول (go to bed) ولا نقول (fall bed)."
+    ]
+  },
+  {
+    id: 22, ch: "ch1_5", cat: "read", tag: "Chapter 3 • Reading Details (Short Sleepers)",
+    q: "Dr Uchenna Okoye is a ............ who wakes up at 4:30 a.m., and the latest research shows there are ............ between short sleepers (3%) and normal sleepers.",
+    opts: [
+      "tour guide / huge differences in personality",
+      "dentist / no important differences in health or personality",
+      "plumber / big differences in health",
+      "novelist / many differences in intelligence"
+    ],
+    ans: 1,
+    whyRight: "الدكتورة أوشينا أوكوي هي طبيبة أسنان (Dentist) تفتح عيادتها (Dental surgery)، وأثبت أحدث بحث علمي (latest research) أنه لا توجد فروق مهمة في الصحة أو الشخصية (no important differences in health or personality) بين أصحاب النوم القصير (3%) وغيرهم.",
+    whyWrong: [
+      "وظيفة المرشدة السياحية (tour guide) هي وظيفة Kirsty في إدنبرة، ولا توجد فروق ضخمة في الشخصية.",
+      "",
+      "السباك (plumber) هو مثال الوظيفة العملية اليدوية (practical job).",
+      "الروائية (novelist) هي Anna Loveday في الفصل 11."
+    ]
+  },
+  {
+    id: 23, ch: "ch1_5", cat: "syn", tag: "Chapter 3 • Jobs Definitions",
+    q: "Which job is described in the slides as a 'practical job', and which job 'saves people's lives'?",
+    opts: [
+      "Teacher / Dentist",
+      "Plumber / The doctor",
+      "Tour guide / Plumber",
+      "Accountant / Teacher"
+    ],
+    ans: 1,
+    whyRight: "في التقييم الذاتي للفصل الثالث: الوظيفة العملية اليدوية (practical job) هي السباك (plumber — حرف الـ b صامت)، والذي ينقذ حياة الناس (save people's life) هو الطبيب (The doctor)، أما المعلم (teacher) فيعطي دروساً في المدرسة (give lessons at school).",
+    whyWrong: [
+      "المعلم يعطي دروساً في المدرسة ولا يُصنف في سؤال السلايد كـ practical job.",
+      "",
+      "المرشد السياحي (tour guide) هي وظيفة Kirsty وليست الوظيفة الموصوفة بإنقاذ حياة الناس.",
+      "المحاسب (accountant) ورد في الفصل 13 وليس هنا."
+    ]
+  },
+
+  // ==================== CHAPTER 4 (Questions 24 - 31) ====================
+  {
+    id: 24, ch: "ch1_5", cat: "read", tag: "Chapter 4 • Months & Special Days",
+    q: "The first month of the year is ............, the fourth month is ............, World Book Day is on ............, and World Teachers' Day is on ............",
+    opts: [
+      "January / March / 5th October / 23rd April",
+      "January / April / 23rd April / 5th October",
+      "February / April / 23rd April / 5th October",
+      "January / May / 1st January / 5th October"
+    ],
+    ans: 1,
+    whyRight: "الشهر الأول (1st) هو يناير (January)، والشهر الرابع (4th) هو أبريل (April)، ويوم الكتاب العالمي (World Book Day) في 23 أبريل (23rd April)، ويوم المعلم العالمي (World Teachers' Day) في 5 أكتوبر (5th October).",
+    whyWrong: [
+      "شهر مارس (March) هو الشهر الثالث، كما أن تاريخ يوم الكتاب ويوم المعلم معكوسان هنا.",
+      "",
+      "فبراير (February) هو الشهر الثاني (second month) وليس الأول.",
+      "مايو (May) هو الشهر الخامس (fifth month)."
+    ]
+  },
+  {
+    id: 25, ch: "ch1_5", cat: "syn", tag: "Chapter 4 • Celebration Collocations",
+    q: "On special occasions, people ............ a cake, dress ............ in nice clothes, exchange ............, and visit ............",
+    opts: [
+      "do / on / flowers / strangers",
+      "make / up / presents / relatives",
+      "cook / out / tokens / enemies",
+      "have / off / poems / presidents"
+    ],
+    ans: 1,
+    whyRight: "متلازمات الاحتفالات الأساسية في الفصل الرابع هي: (make a cake = يصنع كعكة)، (dress up = يتأنق ويرتدي ملابس احتفالية)، (exchange presents = يتبادل الهدايا)، و(visit relatives = يزور الأقارب).",
+    whyWrong: [
+      "لا نقول (do a cake) ولا (dress on)، بل (make a cake) و(dress up).",
+      "",
+      "تعبير (eat out) يعني يأكل في مطعم، ولا نقول (dress out).",
+      "تعبير (have a day off) يعني يأخذ يوم إجازة."
+    ]
+  },
+  {
+    id: 26, ch: "ch1_5", cat: "syn", tag: "Chapter 4 • Adjectives Context Trap",
+    q: "The celebration is too ............ , while the food at the festival is very ............",
+    opts: [
+      "tasty / noisy",
+      "noisy / tasty (or delicious)",
+      "delicious / boiling",
+      "hungry / peaceful"
+    ],
+    ans: 1,
+    whyRight: "وصف الاحتفال مع كلمة (too) في التقييم الذاتي هو أنه صاخب/مزعج جداً (too noisy)، بينما وصف الطعام (food) هو أنه شهي/لذيذ (tasty / delicious).",
+    whyWrong: [
+      "عكستِ الصفات! الاحتفال لا يُوصف بأنه لذيذ المذاق (tasty)، والطعام لا يُوصف بأنه صاخب (noisy).",
+      "",
+      "لا يجوز وصف الاحتفال بأنه (delicious = لذيذ)!",
+      "الاحتفال لا يُوصف بأنه جائع (hungry)."
+    ]
+  },
+  {
+    id: 27, ch: "ch1_5", cat: "gram", tag: "Chapter 4 • Present Continuous Context",
+    q: "Right now, I am ............ a poem for the competition, and we are ............ our friends at 2 o'clock.",
+    opts: [
+      "eating / writing",
+      "writing / meeting",
+      "write / meet",
+      "wrote / met"
+    ],
+    ans: 1,
+    whyRight: "بوجود الفعل المساعد (am / are) في المضارع المستمر نختار الفعل المضاف له (-ing)، وبما أن المفعول به الأول قصيدة شعرية (a poem) فهي تُكتب (writing)، والأصدقاء نقابلهم (meeting).",
+    whyWrong: [
+      "القصيدة الشعرية (poem) تُكتب ولا تؤكل (eating)!",
+      "",
+      "بعد (am / are) في المضارع المستمر يجب إضافة (-ing) للفعل ولا يصح الفعل المجرد.",
+      "الأفعال (wrote / met) في الماضي البسيط ولا تأتي بعد (am / are)."
+    ]
+  },
+
+  // ==================== CHAPTER 5 (Questions 28 - 38) ====================
+  {
+    id: 28, ch: "ch1_5", cat: "gram", tag: "Chapter 5 • Superlative Typo Trap",
+    q: "You are the ............ player in tennis.",
+    opts: ["good better", "the better", "the best", "better"],
+    ans: 2,
+    whyRight: "هذا من أشهر أسئلة الدكتور في التسريبات! الجملة تفضيل مطلق في رياضة التنس عموماً (in tennis) ولا توجد فيها كلمة (than)، فنختار صيغة التفضيل القصوى من (good) وهي (the best) حتى لو كرر الدكتور كلمة (the) بالخطأ قبل الفراغ وفي الخيار!",
+    whyWrong: [
+      "لا يوجد في الإنجليزية تركيب يجمع (good better) معاً.",
+      "كلمة (better) للمقارنة بين اثنين مع (than)، ولا تأخذ (the) للتفضيل المطلق.",
+      "",
+      "صيغة (better) تُستخدم عند المقارنة بين طرفين مع وجود كلمة (than)."
+    ]
+  },
+  {
+    id: 29, ch: "ch1_5", cat: "gram", tag: "Chapter 5 • Comparative Spelling Trap",
+    q: "Saleh (is) ............ than Mohammed.",
+    opts: ["fater", "fatter", "The fattest", "Not"],
+    ans: 1,
+    whyRight: "فخ مزدوج من تسريبات الدكتور! أولاً وجود كلمة (than) يوجب اختيار صيغة المقارنة المنتهية بـ (-er)، وثانياً الصفة (fat) تنتهي بحرف ساكن يسبقه حرف علة واحد، فيجب تضعيف (تدبيل) حرف الـ (t) ليصبح (fatter) بتاءين وليس تاء واحدة!",
+    whyWrong: [
+      "فخ إملائي خبيث وقع فيه نصف الطلاب! كلمة (fater) بتاء واحدة إملاء خاطئ لأن الصفة الثلاثية (fat) يجب تدبيل حرفها الأخير عند إضافة (-er) لتصبح (fatter).",
+      "",
+      "صيغة التفضيل (The fattest) لا تُستخدم أبداً عند وجود كلمة المقارنة (than) بين شخصين.",
+      "كلمة (Not) أداة نفي ولا تصلح صفة مقارنة."
+    ]
+  },
+  {
+    id: 30, ch: "ch1_5", cat: "gram", tag: "Chapter 5 • Comparative with 'than'",
+    q: "Ali is ............ than Mohammed.",
+    opts: ["Young", "younger", "the youngest", "none"],
+    ans: 1,
+    whyRight: "بمجرد رؤية كلمة (than = من) بعد الفراغ للمقارنة بين شخصين (Ali & Mohammed)، نختار فوراً الصفة المنتهية بـ (-er) وهي (younger).",
+    whyWrong: [
+      "الصفة المجردة (Young) لا تُستخدم مع كلمة المقارنة (than).",
+      "",
+      "صيغة التفضيل (the youngest) تُستخدم لتفضيل واحد على مجموعة كاملة وليس مع (than).",
+      "الخيار (none) خاطئ لأن الإجابة الصحيحة (younger) موجودة."
+    ]
+  },
+  {
+    id: 31, ch: "ch1_5", cat: "gram", tag: "Chapter 5 • Appearance Question Form",
+    q: "What ............ he look like?",
+    opts: ["do", "did", "go", "does"],
+    ans: 3,
+    whyRight: "قالب السؤال عن المظهر الخارجي في الفصل الخامس ثابت في المضارع البسيط: مع الفاعل المفرد الغائب (he / she) نختار دائماً الفعل المساعد (does).",
+    whyWrong: [
+      "الفعل المساعد (do) يأتي مع (I / you / we / they) وليس مع المفرد (he).",
+      "السؤال عن المظهر الحالي قالب ثابت بالمضارع البسيط ولا توجد أي قرينة للماضي لنختار (did).",
+      "الفعل (go) فعل أساسي بمعنى يذهب وليس فعلاً مساعداً للسؤال.",
+      ""
+    ]
+  },
+  {
+    id: 32, ch: "ch1_5", cat: "func", tag: "Chapter 5 • Sentence Function (Look like vs Be like)",
+    q: "What is the difference in function between 'What does he look like?' and 'What is he like?'?",
+    opts: [
+      "Both ask only about a person's clothes.",
+      "'What does he look like?' asks about physical appearance (e.g., he is short), while 'What is he like?' asks about personality or state (e.g., he is hungry/kind).",
+      "'What does he look like?' asks about hobbies, while 'What is he like?' asks about height.",
+      "There is no difference between the two questions."
+    ],
+    ans: 1,
+    whyRight: "وجود كلمة (look = يبدو شكله) يسأل عن المظهر الجسدي الخارجي (مثل: he is short / tall)، بينما السؤال بدون كلمة look (What is he like?) يسأل عن الصفة الداخلية أو الحالة (وفي تمرين السلايد: he is hungry).",
+    whyWrong: [
+      "السؤالان لا يسألان عن الملابس فقط.",
+      "",
+      "عكستِ المعنى! الذي يسأل عن الطول والقصر هو الذي يحتوي على كلمة (look like).",
+      "يوجد فرق جوهري بين السؤالين في المنهج وأسئلة التقييم الذاتي."
+    ]
+  },
+  {
+    id: 33, ch: "ch1_5", cat: "gram", tag: "Chapter 5 • Irregular Superlative (Bad)",
+    q: "COVID-19 is the ............ disease ever, and lazy becomes ............ in the comparative form.",
+    opts: [
+      "baddest / lazyer",
+      "worse / the laziest",
+      "worst / lazier",
+      "most bad / more lazy"
+    ],
+    ans: 2,
+    whyRight: "الصفة (bad = سيئ) شاذة: في المقارنة مع than تصبح (worse)، وفي التفضيل مع (the ... ever) تصبح (the worst). والصفة المنتهية بحرف y مثل (lazy) نقلب فيها الـ y إلى i قبل إضافة er لتصبح (lazier).",
+    whyWrong: [
+      "لا توجد كلمة (baddest) في الإنجليزية، ولا نُبقي حرف الـ y في (lazyer).",
+      "كلمة (worse) للمقارنة بين اثنين وليست للتفضيل مع (the ... ever).",
+      "",
+      "الصفة (bad) شاذة لا تأخذ (most bad)."
+    ]
+  },
+  {
+    id: 34, ch: "ch1_5", cat: "read", tag: "Chapter 5 • Reading & Body Facts",
+    q: "The book 'Leo Africanus' was written by ............, the upper and lower lips are on the ............, and touching your mouth with your elbow is ............",
+    opts: [
+      "Lionel Messi / face / possible (True)",
+      "Amin Maalouf / mouth / impossible (False)",
+      "John Baird / chin / possible (True)",
+      "Amin Maalouf / nose / impossible (False)"
+    ],
+    ans: 1,
+    whyRight: "مؤلف رواية ليون الإفريقي هو (Amin Maalouf)، والشفاه العليا والسفلى (upper and lower lips) موجودة في الفم (mouth) بينما الأنف (nose) على الوجه (face)، ولمس الفم بالمرفق/الكوع (elbow) مستحيل (Impossible / False).",
+    whyWrong: [
+      "ليونيل ميسي لاعب كرة قدم (footballer) وليس مؤلف الكتاب، ولمس الفم بالكوع مستحيل.",
+      "",
+      "جون بيرد مخترع التلفاز في الفصل الثاني.",
+      "الشفاه موجودة في الفم (mouth) وليست على الأنف (nose)."
+    ]
+  },
+  {
+    id: 35, ch: "ch1_5", cat: "read", tag: "Chapter 5 • Body Facts Numbers",
+    q: "According to the body facts in Chapter 5, your ............ continue growing throughout your life, your nose can identify ............ different smells, and the ............ fingernail grows the fastest.",
+    opts: [
+      "eyes / 250 / thumb",
+      "ears / 50,000 / middle",
+      "eyebrows / 9 / little",
+      "wrists / 50,000 / index"
+    ],
+    ans: 1,
+    whyRight: "الأذنان (ears) تستمران في النمو طوال الحياة (بينما العينان تظلان بنفس الحجم منذ الولادة)، والأنف يميز 50,000 رائحة مختلفة، وظفر الإصبع الأوسط (middle fingernail) هو الأسرع نمواً، والحاجب فيه 250 شعرة، والإبهام يتحرك بـ 9 عضلات منفصلة.",
+    whyWrong: [
+      "العينان (eyes) لا تنموان بعد الولادة، ورقم 250 هو عدد شعرات الحاجب (eyebrow).",
+      "",
+      "رقم 9 هو عدد العضلات المنفصلة التي تتحكم في الإبهام (9 separate muscles).",
+      "طول المسافة من الرسغ (wrist) للكوع يساوي طول القدم (foot)."
+    ]
+  },
+
+  // ==================== CHAPTERS 6 - 10 (Questions 36 - 55) ====================
+  {
+    id: 36, ch: "ch6_10", cat: "syn", tag: "Chapter 6 • Notebook Synonyms",
+    q: "Select the exact synonyms from your Chapter 6 vocabulary list for: 'Peaceful', 'Beautiful', 'Perfect', and 'Long'.",
+    opts: [
+      "Noisy / Ugly / Incomplete / Short",
+      "Quiet / Pretty / Complete / Tall",
+      "Crowded / Luxury / Spacious / Shady",
+      "Calm / Handsome / Delayed / Stuck"
+    ],
+    ans: 1,
+    whyRight: "هذه هي المرادفات الأربعة المهمة المسجلة في دفترك للفصل السادس: (Peaceful = quiet هادئ)، (Beautiful = pretty جميل)، (Perfect = complete مثالي/كامل)، و(Long = tall طويل).",
+    whyWrong: [
+      "هذه الكلمات هي الأضداد (Antonyms) وليست المرادفات.",
+      "",
+      "هذه صفات مختلفة من فصول أخرى لا تطابق المرادفات الأربعة بالتحديد.",
+      "كلمتا (Delayed / Stuck) تعنيان متأخر وعالق."
+    ]
+  },
+  {
+    id: 37, ch: "ch6_10", cat: "gram", tag: "Chapter 6 • Future Intentions Trap (To)",
+    q: "I ............ to take my son to school.",
+    opts: ["will", "intend", "go", "would rather"],
+    ans: 1,
+    whyRight: "بما أن بعد الفراغ جاء حرف الجر والمصدر (to take)، فنختار فعل النية والتخطيط من قاعدة الفصل السادس وهو (intend -> I intend to take = أنوي أن آخذ).",
+    whyWrong: [
+      "الفعل المساعد (will) يأتي بعده فعل مجرد مباشرة بدون (to)، فلا يصح قول (I will to take).",
+      "",
+      "الفعل (go) وحده لا يعطي معنى المستقبل (سوف) إلا إذا كان بصيغة (am going to take)، كما أن (go to) يتبعها اسم مكان وليس فعلاً.",
+      "تعبير (would rather) يتبعه فعل مجرد بدون (to) مثل (I'd rather take)."
+    ]
+  },
+  {
+    id: 38, ch: "ch6_10", cat: "func", tag: "Chapter 6 • Sentence Function (Permission vs Request)",
+    q: "Identify the exact function of the sentence: 'May I borrow your car?' (or 'Can I / Could I have some coffee?').",
+    opts: [
+      "Making a request",
+      "Asking for permission",
+      "Expressing obligation",
+      "Talking about past habits"
+    ],
+    ans: 1,
+    whyRight: "الشفرة الحاسمة: عندما يبدأ السؤال بـ (May I / Can I / Could I) بوجود الضمير (I = أنا)، فوظيفة الجملة دائماً هي طلب الإذن أو الاستئذان (Asking for permission).",
+    whyWrong: [
+      "تقديم الطلب (Making a request) يكون عندما نخاطب الطرف الآخر بالضمير (you) مثل: (Could you / Can you / Would you).",
+      "",
+      "التعبير عن الإلزام يكون باستخدام (have to).",
+      "العادات الماضية يُعبر عنها باستخدام (used to)."
+    ]
+  },
+  {
+    id: 39, ch: "ch6_10", cat: "func", tag: "Chapter 6 • Sentence Function (Request vs Permission)",
+    q: "Identify the exact function of the question: 'Could you give your phone?' (or 'Would you please turn on TV?').",
+    opts: [
+      "Asking for permission",
+      "Making a request",
+      "Giving a warning",
+      "Expressing future certainty"
+    ],
+    ans: 1,
+    whyRight: "الشفرة الحاسمة: عندما يبدأ السؤال بـ (Could you / Would you / Can you) بوجود الضمير (you = أنت)، فوظيفة السؤال دائماً هي تقديم طلب مؤدب (Making a request).",
+    whyWrong: [
+      "طلب الإذن (permission) يكون مع الضمير (I) مثل (May I borrow your car?).",
+      "",
+      "هذه الصيغة طلب مؤدب وليست تحذيراً.",
+      "المستقبل المؤكد يُعبر عنه بـ (will)."
+    ]
+  },
+  {
+    id: 40, ch: "ch6_10", cat: "gram", tag: "Chapter 6 • Preference Structure Trap",
+    q: "I'd rather ............ a taxi than ............ by bus (which means: I prefer to take a taxi).",
+    opts: [
+      "to take / to go",
+      "taking / going",
+      "take / go",
+      "took / went"
+    ],
+    ans: 2,
+    whyRight: "قاعدة التفضيل (I'd rather ... than) يأتي بعدها الفعل في صورته المجردة تماماً بدون (to) وبدون (-ing): (I'd rather take a taxi than go by bus)، بينما (I prefer) هي التي تأخذ (to take).",
+    whyWrong: [
+      "وجود (to) يأتي مع (I prefer to take) ولا يأتي بعد (I'd rather).",
+      "لا نضع (-ing) بعد (I'd rather).",
+      "",
+      "لا نستخدم الماضي البسيط بعد (I'd rather) عند التفضيل في الحاضر."
+    ]
+  },
+  {
+    id: 41, ch: "ch6_10", cat: "syn", tag: "Chapter 6 • Travel & Airport Vocabulary",
+    q: "When our ............ was ............ for six hours, we were ............ in a crowded ............ at the airport immigration.",
+    opts: [
+      "towel / borrowed / spacious / forest",
+      "flight / delayed / stuck / queue",
+      "suitcase / packed / peaceful / coast",
+      "passport / organised / luxurious / lake"
+    ],
+    ans: 1,
+    whyRight: "سياق المطار في كلمات الفصل السادس: عندما تأخرت (delayed) رحلة الطيران (flight)، أصبحنا عالقين (stuck) في طابور انتظار (queue) مزدحم عند الجوازات (immigration).",
+    whyWrong: [
+      "كلمة (towel) تعني منشفة و(forest) غابة، ولا علاقة لهما بتأخر الطائرة.",
+      "",
+      "كلمة (coast) تعني ساحل البحر و(peaceful) هادئ.",
+      "كلمة (lake) تعني بحيرة مثل (Lake Baikal)."
+    ]
+  },
+  {
+    id: 42, ch: "ch6_10", cat: "syn", tag: "Chapter 6 • Antonyms in Travel",
+    q: "In Chapter 6, the opposite of 'Neat and tidy' is '............', the opposite of 'Majority (75%)' is '............', and the opposite of 'Foreign' is '............'.",
+    opts: [
+      "Organised / Most / Strange",
+      "Messy (Untidy) / Minority / Local (Native)",
+      "Crowded / Half / International",
+      "Luxury / Few / Western"
+    ],
+    ans: 1,
+    whyRight: "عكس مرتب وأنيق (Neat and tidy) هو فوضوي (Messy / Untidy)، وعكس الأغلبية (Majority) هو الأقلية (Minority)، وعكس أجنبي (Foreign مثل Foreign currency) هو محلي/أصلي (Local / Native).",
+    whyWrong: [
+      "كلمة (Organised) مرادفة لمرتب وليست عكسها.",
+      "",
+      "كلمة (International) قريبة من معنى (Foreign) وليست عكسها.",
+      "كلمة (Luxury) تعني الفخامة."
+    ]
+  },
+  {
+    id: 43, ch: "ch6_10", cat: "read", tag: "Chapter 7 • Success Reading & Vocabulary",
+    q: "Michael Jordan was cut from his high school basketball team for 'lack of skill', but he ............ to his coach. Also, a scientist who studies the environment is an ............",
+    opts: [
+      "listened / accountant",
+      "didn't listen / ecologist",
+      "listened / interviewer",
+      "doesn't listen / novelist"
+    ],
+    ans: 1,
+    whyRight: "في قطعة أسرار النجاح (الفصل السابع): مايكل جوردان لم يستمع لمدربه (didn't listen to his basketball coach — وجواب السؤال Did he listen? هو No, he didn't)، وعالِم البيئة في كلمات دفترك للفصل السابع هو (Ecologist).",
+    whyWrong: [
+      "مايكل جوردان لم يستسلم ولم يستمع لمدربه، والمحاسب (accountant) يدرس المال لا البيئة.",
+      "",
+      "هو لم يستمع لمدربه (No, he didn't).",
+      "الحدث في الماضي (didn't listen)، و(novelist) تعني كاتبة روايات."
+    ]
+  },
+  {
+    id: 44, ch: "ch6_10", cat: "syn", tag: "Chapter 7 • Antonyms of Success",
+    q: "In Chapter 7, the opposite of 'Success / Succeed' is '............', the opposite of 'Bottom' is '............', and the opposite of 'Amateur' is '............'.",
+    opts: [
+      "Win / Minimum / Confident",
+      "Failure (Fail) / Top / Professional",
+      "Lose / Maximum / Ecologist",
+      "Earn / Low / Finalist"
+    ],
+    ans: 1,
+    whyRight: "عكس النجاح (Success) هو الفشل (Failure / Fail)، وعكس القاع (Bottom) هو القمة (Top)، وعكس الهاوي غير المحترف (Amateur) هو المحترف (Professional)، وعكس الحد الأدنى (Minimum) هو الحد الأقصى (Maximum).",
+    whyWrong: [
+      "كلمة (Win) عكسها (Lose)، و(Minimum) عكسها (Maximum).",
+      "",
+      "كلمة (Ecologist) تعني عالم بيئة وليست عكس هاوٍ.",
+      "كلمة (Earn) تعني يكسب."
+    ]
+  },
+  {
+    id: 45, ch: "ch6_10", cat: "gram", tag: "Chapter 8 • Articles Trap (Assignment 3)",
+    q: "I have ............ apple.",
+    opts: ["a", "am", "are", "an"],
+    ans: 3,
+    whyRight: "سؤال الواجب الثالث النصي! كلمة (apple = تفاحة) اسم مفرد معدود يبدأ بحرف وصوت علة متحرك (a, e, i, o, u)، فيجب أن نختار قبله أداة النكرة (an).",
+    whyWrong: [
+      "الأداة (a) تأتي قبل الاسم المفرد المبدوء بصوت ساكن (مثل a book / a tent) وليس أمام صوت العلة في (apple).",
+      "كلمة (am) فعل كينونة يأتي بعد (I) مباشرة ولا يوضع بين الفعل (have) والمفعول به (apple).",
+      "كلمة (are) فعل كينونة للجمع ولا موقع لها هنا.",
+      ""
+    ]
+  },
+  {
+    id: 46, ch: "ch6_10", cat: "syn", tag: "Chapter 8 • City & Nature Vocabulary",
+    q: "In Chapter 8, a road path for bicycles is a '............', containers for waste reuse are '............', and natural scenery that has not been damaged by humans is '............'.",
+    opts: [
+      "one way street / traffic lights / inhabited",
+      "cycle lane / recycling bins / unspoilt",
+      "green space / active volcanoes / coastal",
+      "countryside / desert / permanently"
+    ],
+    ans: 1,
+    whyRight: "مسار الدراجات الهوائية هو (cycle lane)، وحاويات إعادة التدوير هي (recycling bins)، والطبيعة البكر التي لم يفسدها الإنسان هي (unspoilt).",
+    whyWrong: [
+      "تعبير (one way street) يعني شارع باتجاه واحد، و(traffic lights) إشارات المرور، و(inhabited) مأهولة بالسكان.",
+      "",
+      "تعبير (active volcanoes) يعني براكين نشطة، و(coastal) ساحلي.",
+      "كلمة (countryside) تعني الريف، و(desert) صحراء."
+    ]
+  },
+  {
+    id: 47, ch: "ch6_10", cat: "gram", tag: "Chapter 8 • Quantifiers Grammar",
+    q: "How ............ traffic is there in the city, and how ............ parks are there? There are only ............ parks.",
+    opts: [
+      "many / much / a little",
+      "much / many / a few",
+      "much / much / a few",
+      "many / many / much"
+    ],
+    ans: 1,
+    whyRight: "كلمة (traffic = حركة المرور) اسم غير معدود فيأخذ (much)، بينما كلمة (parks = حدائق) اسم جمع معدود ينتهي بـ s فيأخذ (many) وفي القلة يأخذ (a few).",
+    whyWrong: [
+      "عكستِ الأدوات! (traffic) غير معدود لا يأخذ (many)، و(parks) معدود لا يأخذ (a little).",
+      "",
+      "كلمة (parks) جمع معدود فلا نستخدم معها (much).",
+      "لا يجوز استخدام (many) أو (much) بهذا الترتيب."
+    ]
+  },
+  {
+    id: 48, ch: "ch6_10", cat: "syn", tag: "Chapter 9 • Household Appliances & Adjectives",
+    q: "In the ............ , we use a ............ to wash plates, a ............ to keep food cold, and a ............ to clean the carpets in a ............ (large) room with a ............ ceiling.",
+    opts: [
+      "kitchen / vacuum cleaner / dishwasher / fridge / shady / rock",
+      "kitchen / dishwasher / refrigerator (fridge) / vacuum cleaner / spacious / high",
+      "tub / refrigerator / vacuum cleaner / dishwasher / pleasant / Broke",
+      "lounge / fridge / tub / dishwasher / priority / faint"
+    ],
+    ans: 1,
+    whyRight: "في المطبخ (kitchen): نستخدم غسالة الصحون (dishwasher) لغسل الأطباق، والثلاجة (refrigerator / fridge) لحفظ الطعام بارداً، والمكنسة الكهربائية (vacuum cleaner) لتنظيف السجاد، وكلمة (spacious) تعني واسع/فسيح، و(ceiling) تعني السقف.",
+    whyWrong: [
+      "المكنسة الكهربائية (vacuum cleaner) لتنظيف السجاد وليست لغسل الأطباق!",
+      "",
+      "كلمة (tub) تعني حوض الاستحمام وليست المطبخ.",
+      "هذه الكلمات في أماكن غير صحيحة سياقياً."
+    ]
+  },
+  {
+    id: 49, ch: "ch6_10", cat: "gram", tag: "Chapter 9 • Future Probability (Will vs Might)",
+    q: "I am 100% sure that people ............ use more technology in the future, but I am not sure where I will live next year; I ............ move to another city.",
+    opts: [
+      "might / will",
+      "will / might (or may)",
+      "won't / will",
+      "may / won't"
+    ],
+    ans: 1,
+    whyRight: "في قاعدة التنبؤ بالمستقبل (الفصل التاسع): عند التأكد (sure / certainly) نستخدم (will / won't)، وعند عدم التأكد والاحتمال (not sure / maybe / perhaps) نستخدم (may / might).",
+    whyWrong: [
+      "عكستِ القاعدة! (might) لغير المؤكد و(will) للمؤكد.",
+      "",
+      "وجود (not sure) في الشق الثاني يمنع استخدام الجزم المؤكد بـ (will).",
+      "وجود (100% sure) في الشق الأول يوجب استخدام (will) وليس (may)."
+    ]
+  },
+  {
+    id: 50, ch: "ch6_10", cat: "gram", tag: "Chapter 10 • Past Continuous & Sound-Alike Trap",
+    q: "I was walking away when I ............ the sound.",
+    opts: ["here", "heard", "hear", "hearing"],
+    ans: 1,
+    whyRight: "سؤال الواجب الثالث الشهير! الجملة بدأت بماضي مستمر (was walking away)، والحدث القاطع بعد (when) يجب أن يكون في الماضي البسيط، وماضي الفعل (hear = يسمع) هو (heard = سمعتُ).",
+    whyWrong: [
+      "فخ صوتي خبيث من الدكتور! كلمة (here) ظرف مكان بمعنى (هنا) وليست فعلاً أصلاً!",
+      "",
+      "كلمة (hear) فعل مضارع مجرد، والجملة في الماضي (was walking) فيجب اختيار الماضي (heard).",
+      "كلمة (hearing) مضاف لها (-ing) ولا تصلح بدون فعل مساعد، كما أن الحدث القاطع بعد (when) يكون ماضياً بسيطاً."
+    ]
+  },
+  {
+    id: 51, ch: "ch6_10", cat: "syn", tag: "Chapter 10 • Health & Injuries Vocabulary",
+    q: "If you touch a hot pan, you ............ ; if an insect attacks you, you ............ ; if you have red spots on your skin, you ............ ; and if you lose consciousness, you ............",
+    opts: [
+      "faint / get a rash / burn yourself / get a bee sting",
+      "burn yourself / get a bee sting / get a rash / faint",
+      "broke / faint / get a bee sting / burn yourself",
+      "get a rash / burn yourself / faint / diagnose"
+    ],
+    ans: 1,
+    whyRight: "من مفردات الإصابات في الفصل العاشر (ودفترك): لمس شيء ساخن = تحرق نفسك (burn yourself)، ولدغة الحشرة/النحلة = (get a bee sting)، والحساسية والبقع الحمراء على الجلد = طفح جلدي (get a rash)، وفقدان الوعي = يُغمى عليه (faint).",
+    whyWrong: [
+      "الترتيب معكوس؛ ففقدان الوعي هو (faint) والحرق هو (burn yourself).",
+      "",
+      "كلمة (broke) تعني كسر عظمة، وترتيب الإصابات هنا غير مطابق.",
+      "الطفح الجلدي (get a rash) ليس ناتجاً عن لمس المقلاة الساخنة."
+    ]
+  },
+  {
+    id: 52, ch: "ch6_10", cat: "gram", tag: "Chapter 10 • Used to vs Use to Rule",
+    q: "When I was a child, I ............ ride a bike every day, but I didn't ............ like vegetables.",
+    opts: [
+      "use to / used to",
+      "used to / use to",
+      "used to / used to",
+      "using to / use to"
+    ],
+    ans: 1,
+    whyRight: "قاعدة العادات الماضية في الفصل العاشر (Unit 3): في جملة الإثبات نكتبها بحرف الـ d (used to)، أما في النفي بعد (didn't) أو السؤال بعد (Did) فنحذف حرف الـ d لتصبح (use to)!",
+    whyWrong: [
+      "عكستِ القاعدة! في الإثبات يجب وجود حرف الـ d (used to).",
+      "",
+      "فخ شائع! بعد (didn't) لا يجوز إبقاء حرف الـ d في (used to)، بل يجب إرجاعها للمجرد (didn't use to).",
+      "لا نستخدم (using to) للتعبير عن العادات الماضية."
+    ]
+  },
+
+  // ==================== CHAPTER 11 (Questions 53 - 70) ====================
+  {
+    id: 53, ch: "ch11", cat: "syn", tag: "Chapter 11 • Unit 1 Self-Evaluation Trap",
+    q: "The opposite of the word 'useful' is ............",
+    opts: ["use", "used", "useless", "using"],
+    ans: 2,
+    whyRight: "سؤال التقييم الذاتي النصي (صفحة 9)! كلمة (useful = مفيد) تنتهي بالمقطع (-ful)، وعكسها دائماً بإبداله بالمقطع (-less) لتصبح (useless = عديم الفائدة) أو في القطعة (a nuisance = مصدر إزعاج).",
+    whyWrong: [
+      "فخ الدكتور النصي في السلايد! كلمة (use) هي الفعل/الاسم (يستخدم/استخدام) وليست عكس الصفة (useful).",
+      "كلمة (used) تعني مستعمل أو اعتاد على، وليست عكس مفيد.",
+      "",
+      "كلمة (using) هي صيغة الـ ing من الفعل يستخدم."
+    ]
+  },
+  {
+    id: 54, ch: "ch11", cat: "syn", tag: "Chapter 11 • Unit 1 Official Definitions",
+    q: "'............' means the interests which you love, while '............' is your place of work.",
+    opts: [
+      "Job / Hobbies",
+      "Hobbies (or Hobby) / Job",
+      "Sport / Pets",
+      "Fruits / Sport"
+    ],
+    ans: 1,
+    whyRight: "حسب تعريفات صفحة 4 والتقييم الذاتي صفحة 9: الاهتمامات التي تحبها (the interests which you love) هي الهوايات (Hobbies / Hobby)، ومكان عملك (your place of work) هو الوظيفة (Job).",
+    whyWrong: [
+      "عكستِ التعريفين! الوظيفة (Job) هي مكان العمل، والهوايات (Hobbies) هي الاهتمامات التي تحبها.",
+      "",
+      "الرياضة (Sport) تعريفها في السلايد هو (physical movements you do).",
+      "الفواكه (Fruits) تعريفها هو (food you eat and it has sweet taste)."
+    ]
+  },
+  {
+    id: 55, ch: "ch11", cat: "syn", tag: "Chapter 11 • Unit 1 Spelling Trap (Pets vs Pests)",
+    q: "'............' are animals which are not aggressive like cats, whereas in the reading text cats are compared as 'pets or ............'.",
+    opts: [
+      "Pests / pets",
+      "Pets / pests",
+      "Sports / fruits",
+      "Pets / pasts"
+    ],
+    ans: 1,
+    whyRight: "الحيوانات الأليفة غير العدوانية (not aggressive) هي (Pets — بدون حرف s بالوسط)، وفي قطعة صفحة 5 تساءل الكاتب: (Cats - pets or pests?) حيث تعني (pests) آفات أو كائنات ضارة ومزعجة!",
+    whyWrong: [
+      "عكستِ الكلمتين! (Pests) التي فيها حرف s بالوسط تعني آفات مزعجة وليست الحيوانات الأليفة.",
+      "",
+      "الرياضة والفواكه لا علاقة لها بتعريف الحيوانات غير العدوانية.",
+      "الكلمة المضادة في قطعة القطط هي (pests) وليست (pasts)."
+    ]
+  },
+  {
+    id: 56, ch: "ch11", cat: "syn", tag: "Chapter 11 • Unit 1 Definitions & Self-Evaluation",
+    q: "'............' means physical movements you do, '............' is food with a sweet taste, and a hairdresser is the person who fixes the ............",
+    opts: [
+      "Hobby / Pets / face",
+      "Sport / Fruits / hair",
+      "Job / Blue cheese / clothes",
+      "Sport / Fish and chips / face"
+    ],
+    ans: 1,
+    whyRight: "الحركات البدنية (physical movements you do) = (Sport)، والطعام ذو الطعم الحلو (sweet taste) = (Fruits)، ومصفف الشعر (Hairdresser) في التقييم الذاتي صفحة 9 يصلح الشعر (hair) وليس الوجه (face)!",
+    whyWrong: [
+      "الكوافير (Hairdresser) يصلح الشعر (hair) وليس الوجه (face).",
+      "",
+      "الجبن الأزرق (Blue cheese) ليس هو المُعرّف بـ (sweet taste) في قائمة مفردات صفحة 4.",
+      "في التقييم الذاتي صفحة 9 الجواب هو (hair) وليس (face)."
+    ]
+  },
+  {
+    id: 57, ch: "ch11", cat: "syn", tag: "Chapter 11 • Unit 1 Adjectives & Antonyms",
+    q: "In the 'Love it or hate it?' text, art exhibitions are 'interesting or ............', fish and chips are 'delicious or ............', and flying is '............ or fun'.",
+    opts: [
+      "disgusting / terrifying / boring",
+      "boring / disgusting / terrifying",
+      "uncomfortable / useless / boring",
+      "nuisance / dirty / relaxing"
+    ],
+    ans: 1,
+    whyRight: "حسب نص القطعة (صفحة 5 و6): المعارض الفنية إما ممتعة أو مملة (interesting or boring)، والسمك والبطاطس إما لذيذة أو مقرفة (delicious or disgusting)، والطيران إما مرعب أو ممتع (terrifying or fun).",
+    whyWrong: [
+      "كلمة (disgusting = مقرف) تصف الطعام ولا تصف المعارض الفنية.",
+      "",
+      "كلمة (uncomfortable = غير مريح) وردت مع التخييم (Camping).",
+      "كلمة (a nuisance = مصدر إزعاج) وردت مع الهواتف المحمولة (Mobile phones)."
+    ]
+  },
+  {
+    id: 58, ch: "ch11", cat: "read", tag: "Chapter 11 • Unit 1 Listening Sound-Alike Trap",
+    q: "In the Chapter 11 listening exercise (pages 7-8), the three topics the speakers talked about were: going to ............, ............, and ............",
+    opts: [
+      "haircut / playing / some writing",
+      "hairdressers / flying / sunbathing",
+      "hairdressers / playing / sunbathing",
+      "haircut / flying / some writing"
+    ],
+    ans: 1,
+    whyRight: "في تمرين الاستماع (صفحة 7 و8): الموضوع الأول هو الذهاب إلى الكوافير (going to hairdressers)، والثاني هو الطيران (flying)، والثالث هو التشمس (sunbathing).",
+    whyWrong: [
+      "هذه الثلاثة كلها هي الخيارات الصوتية الخادعة! فكلمة (haircut) قصّة شعر لا تأتي بعد going to، و(playing) فخ صوتي لـ (flying)، و(some writing) فخ صوتي لـ (sunbathing)!",
+      "",
+      "الموضوع الثاني في القطعة والاستماع هو الطيران (flying) وليس اللعب (playing).",
+      "عبارة (some writing) فخ صوتي خادع لكلمة (sunbathing)."
+    ]
+  },
+  {
+    id: 59, ch: "ch11", cat: "func", tag: "Chapter 11 • Unit 2 Sentence Function (Like vs Would like)",
+    q: "What is the exact difference in meaning and function between 'I like coffee' and 'I would like coffee (I'd like coffee)' according to slides 335-336?",
+    opts: [
+      "'I like coffee' means 'I want coffee now', while 'I would like coffee' means 'I love coffee in general'.",
+      "'I like coffee' means 'I love coffee', while 'I would like coffee' means 'I want coffee' and is more polite (formal).",
+      "Both sentences have the exact same meaning and grammatical rules.",
+      "'I would like coffee' is informal and must be followed by verb + ing."
+    ],
+    ans: 1,
+    whyRight: "نص السلايد في صفحة 14 و15 يقول حرفياً: (I like means I love) أي أحب القهوة عموماً، بينما (I would like means I want, and is more polite / formal) أي أريد قهوة بأدب ورسمية، واختصارها (I'd like).",
+    whyWrong: [
+      "عكستِ المعنى! الذي يعني (I love) هو (I like)، والذي يعني (I want) هو (I would like).",
+      "",
+      "السلايد صفحة 13 سأل (Are these examples same?) وأجاب في صفحة 14 و15 بأنهما مختلفتان في المعنى والتركيب.",
+      "صيغة (I would like) رسمية ومؤدبة (polite/formal)، ويُمنع أن يأتي بعدها فعل مضاف له ing!"
+    ]
+  },
+  {
+    id: 60, ch: "ch11", cat: "gram", tag: "Chapter 11 • Unit 2 Self-Evaluation Q1",
+    q: "............ you ............ some water?",
+    opts: ["Will - like", "Would - like", "Do - liked", "Are - like"],
+    ans: 1,
+    whyRight: "سؤال التقييم الذاتي الأول في صفحة 21! عند العرض المؤدب (خصوصاً مع وجود كلمة some water / some coffee) نستخدم دائماً القالب الثابت: (Would you like...?).",
+    whyWrong: [
+      "فخ السلايد المباشر! لا نستخدم (Will you like) عند عرض الماء أو القهوة، بل (Would you like).",
+      "",
+      "بعد الفعل المساعد (Do) لا يجوز وضع فعل ماضٍ (liked)، كما أن وجود (some) يدل على العرض بـ (Would).",
+      "الفعل المساعد (Are) لا يُستخدم مع الفعل (like)."
+    ]
+  },
+  {
+    id: 61, ch: "ch11", cat: "gram", tag: "Chapter 11 • Unit 2 Self-Evaluation Q2",
+    q: "I ............ going to the swimming pool.",
+    opts: ["will", "would", "I'd like", "love"],
+    ans: 3,
+    whyRight: "سؤال التقييم الذاتي الثاني في صفحة 21! الكلمة التي بعد الفراغ مباشرة هي (going) المنتهية بـ (-ing). وبما أن (will / would / I'd like) يستحيل أن يأتي بعدها فعل فيه (-ing)، فالخيار الوحيد الصحيح هو (love).",
+    whyWrong: [
+      "الفعل المساعد (will) يأتي بعده فعل مجرد بدون (-ing)، فلا يصح قول (I will going).",
+      "الفعل المساعد (would) لا يأتي بعده (-ing) أبداً.",
+      "نبه السلايد في صفحة 17 نصاً: (I'd like doesn't come with verb + ing: we can't say I'd like cooking).",
+      ""
+    ]
+  },
+  {
+    id: 62, ch: "ch11", cat: "gram", tag: "Chapter 11 • Unit 2 Self-Evaluation Q3 Trap",
+    q: "............ to watch TV.",
+    opts: ["I'd like", "I like", "I am like", "I would"],
+    ans: 0,
+    whyRight: "سؤال التقييم الذاتي الثالث في صفحة 21! حط الدكتور بالخيارات (I like) ضد (I'd like) قبل المصدر (to watch TV). في تمارين السلايد (صفحة 20 و21)، وجود (to + فعل مجرد مثل to watch / to visit / to live) يرتبط دائماً باختيار صيغة (I'd like / I'd love)!",
+    whyWrong: [
+      "",
+      "رغم أن (I like) قد تقبل to نظرياً، إلا أن الدكتور في تمارين صفحة 20 و21 خصص (I like / I love / I hate) للفعل المضاف له (-ing)، وخصص (I'd like / I'd love) لـ (to + infinitive)!",
+      "تركيب (I am like) لا يعني أريد مشاهدة التلفاز.",
+      "كلمة (I would) وحدها ناقصة لأنها تحتاج إلى الفعل (like) قبل (to watch)."
+    ]
+  },
+  {
+    id: 63, ch: "ch11", cat: "gram", tag: "Chapter 11 • Unit 2 Slide Exercise (p.20)",
+    q: "Complete the sentences according to the solved exercise on page 20: 'I love ............ to hairdressers', 'I'd love ............ her one day', and 'I'd like ............ somewhere hot and sunny'.",
+    opts: [
+      "to go / visiting / living",
+      "going / to visit / to live",
+      "going / visiting / to live",
+      "to go / to visit / living"
+    ],
+    ans: 1,
+    whyRight: "حسب حل الدكتور الرسمي في صفحة 20 (سلايد 341): بدون ('d) مع (I love / I like / I hate) نختار الفعل المضاف له ing (going / setting)، أما عند وجود ('d = would) في (I'd love / I'd like) فيجب اختيار (to visit / to live)!",
+    whyWrong: [
+      "عكستِ القاعدة تماماً! فوجود ('d) في الجملتين الثانية والثالثة يمنع اختيار (visiting / living).",
+      "",
+      "الجملة الثانية فيها (I'd love) أي (I would love)، فلا يجوز اختيار (visiting) معها.",
+      "الجملة الثالثة فيها (I'd like) فلا يجوز اختيار (living) معها."
+    ]
+  },
+  {
+    id: 64, ch: "ch11", cat: "func", tag: "Chapter 11 • Unit 2 Question & Response Function",
+    q: "Choose the appropriate response to the polite offer: 'Would you like some coffee?' versus the general question: 'Do you like tea?'",
+    opts: [
+      "Yes, I do. / Yes, please.",
+      "Yes, please. (or No, thank you.) / Yes, I do. (or No, I don't.)",
+      "Yes, I would like. / Yes, I like.",
+      "No, I don't. / No, thank you."
+    ],
+    ans: 1,
+    whyRight: "في صفحة 18 (سلايد 339): عند السؤال عن العرض بـ (Would you like some coffee?) نرد بـ (Yes, please / No, thank you)، وعند السؤال بـ (Do you like tea?) نرد بـ (Yes, I do / No, I don't).",
+    whyWrong: [
+      "عكستِ الردود! لا نرد على (Would you like...?) بـ (Yes, I do).",
+      "",
+      "في الإجابات القصيرة الإنجليزية لا نقول (Yes, I like).",
+      "عكستِ الردود بين (Would you like) و(Do you like)."
+    ]
+  },
+  {
+    id: 65, ch: "ch11", cat: "gram", tag: "Chapter 11 • Unit 3 The Famous Tent Question",
+    q: "If you didn't (or don't) have a tent, you ............ sleep properly.",
+    opts: ["can't", "will not", "can", "wouldn't"],
+    ans: 3,
+    whyRight: "هذه هي الجملة الشهيرة من صفحة 25 (سلايد 346: If you didn't have a tent, you wouldn't sleep properly) التي نسخها الدكتور في الواجب الثالث! احفظي بصمتها: بمجرد رؤية (tent + sleep properly) الجواب المعتمد في نموذج الدكتور هو (wouldn't)!",
+    whyWrong: [
+      "رغم أن (can't) تبدو منطقية بالمعنى، إلا أن هذه الجملة منسوخة حرفياً من درس (Conditional sentence with would) في صفحة 25 وجوابها الرسمي (wouldn't).",
+      "خيار (will not) مشتت قوي لأن الدكتور أخطأ مطبعياً في ورقة الواجب وكتب (don't)، لكنه اعتمد إجابة السلايد الأصلية (wouldn't).",
+      "كلمة (can) مثبتة وتجعل المعنى فاسداً (بدون خيمة تستطيع النوم جيداً!).",
+      ""
+    ]
+  },
+  {
+    id: 66, ch: "ch11", cat: "gram", tag: "Chapter 11 • Unit 3 Self-Evaluation Q1 Trap (p.32)",
+    q: "I ............ go to the moon, if I ............ the chance.",
+    opts: [
+      "Would - would have",
+      "Went - had",
+      "Go - had",
+      "Will - had"
+    ],
+    ans: 0,
+    whyRight: "سؤال التقييم الذاتي الأول في صفحة 32 (سلايد 353)! رغم أن القاعدة القياسية هي (would - had)، إلا أن الدكتور وضع في خيارات السلايد (a. Would - would have) ضد (b. Went - had). وبما أن بعد الفراغ الأول يوجد الفعل المجرد (go)، فيستحيل قول (I went go)، ويجب اختيار الخيار الذي يبدأ بـ (Would)!",
+    whyWrong: [
+      "",
+      "فخ السلايد! لو اخترتِ (Went - had) ستصبح الجملة في الشق الأول (I went go to the moon) وهو خطأ قواعدي فادح لأن الفعل المجرد (go) مكتوب بعد الفراغ ويحتاج إلى (Would) قبله!",
+      "الفعل المضارع (Go) لا يركب مع الفعل المجرد (go) المكتوب بعد الفراغ.",
+      "مع الشرط الخيالي (السفر للقمر) وفي درس (Conditional with would) نستخدم (Would) وليس (Will)."
+    ]
+  },
+  {
+    id: 67, ch: "ch11", cat: "gram", tag: "Chapter 11 • Unit 3 Self-Evaluation Q2 & Q3 (p.32)",
+    q: "............ he went to England, he ............ learn English. (And: ............ you got the chance to go to the island, what ............ you take with you?)",
+    opts: [
+      "when - give",
+      "if - would",
+      "if - will",
+      "when - would"
+    ],
+    ans: 1,
+    whyRight: "السؤالان الثاني والثالث في التقييم الذاتي صفحة 32! بوجود الفعل الماضي بعد الفراغ الأول (went / got)، نطبق قاعدة (if + Past, ... would + infinitive) فنختار (if - would).",
+    whyWrong: [
+      "الخيار (when - give) هو الخيار الخاطئ الذي وضعه الدكتور في صفحة 32.",
+      "",
+      "لا نختار (will) لأن فعل الشرط هنا في الماضي البسيط (went / got) وليس في المضارع.",
+      "الرابط في الجمل الشرطية الخيالية مع (would) هو (if)."
+    ]
+  },
+  {
+    id: 68, ch: "ch11", cat: "gram", tag: "Chapter 11 • Unit 3 First vs Second Conditional (p.28)",
+    q: "If he comes, we ............ together; but if you were at school, you ............ to find your teacher.",
+    opts: [
+      "would work / will have",
+      "will work / would have",
+      "worked / had",
+      "will work / will have"
+    ],
+    ans: 1,
+    whyRight: "من تمرين صفحة 28: في الجملة الأولى جاء بعد If فعل مضارع بسيط فيه حرف s (comes) فنختار (will work)، أما في الجملة الثانية فجاء فعل ماضٍ (were) فنختار (would have)!",
+    whyWrong: [
+      "عكستِ القاعدتين! المضارع (comes) يأخذ (will)، والماضي (were) يأخذ (would).",
+      "",
+      "جواب الشرط يحتاج إلى فعل مساعد (will / would) مع المصدر.",
+      "الشق الثاني فيه ماضٍ (were) فلا يأخذ (will have)."
+    ]
+  },
+  {
+    id: 69, ch: "ch11", cat: "read", tag: "Chapter 11 • Unit 3 Reading (Imagine an Island)",
+    q: "In the text 'Imagine an Island' (pages 29-31), when is the radio show broadcast, who is the interviewer, and what is the profession of the first guest Anna Loveday?",
+    opts: [
+      "Sunday 10:30 p.m. / Anna Loveday / Interviewer",
+      "Saturday 10:30 a.m. / Jamie Plummer / Novelist",
+      "Saturday 10:30 a.m. / Jamie Plummer / Hairdresser",
+      "Friday 9:00 a.m. / Steve Jobs / Novelist"
+    ],
+    ans: 1,
+    whyRight: "حسب نص القطعة وحلول صفحة 31: يُذاع البرنامج يوم السبت الساعة 10:30 صباحاً (Saturday, 10:30 AM) على Radio 6 FM، والمذيع المحاور (Interviewer) هو (Jamie Plummer)، والضيفة الأولى (Anna Loveday) مهنتها روائية (novelist).",
+    whyWrong: [
+      "البرنامج يوم السبت صباحاً (10:30 a.m.) وليس الأحد مساءً، وآنا لوفداي هي الضيفة وليست المذيع.",
+      "",
+      "مهنة آنا لوفداي هي روائية (novelist) وليست مصففة شعر (hairdresser).",
+      "ستيف جوبز في قطعة الفصل 12 وليس في قطعة الجزيرة."
+    ]
+  },
+  {
+    id: 70, ch: "ch11", cat: "read", tag: "Chapter 11 • Unit 3 Reading Details & Short Answer",
+    q: "On the deserted tropical island, there is nothing and nobody apart from ............, and the correct short answer to 'Will you take this adventure?' is '............'.",
+    opts: [
+      "hotels and cars / Yes, I do (or No, I don't)",
+      "plants and animals / Yes, I will (or No, I won't)",
+      "plants and animals / Yes, I would (or No, I wouldn't)",
+      "books and tents / Yes, I can"
+    ],
+    ans: 1,
+    whyRight: "لا يوجد على الجزيرة المهجورة سوى النباتات والحيوانات (apart from plants and animals)، وبما أن السؤال الثالث في صفحة 31 بدأ بـ (Will you take this adventure?) فالإجابة القصيرة في السلايد هي: (Yes, I will. / No, I won't.).",
+    whyWrong: [
+      "الجزيرة مهجورة لا توجد فيها فنادق، والسؤال بدأ بـ (Will) فلا نجيب بـ (do).",
+      "",
+      "انتبهي! السؤال الثالث في صفحة 31 بدأ بـ (Will you...) وليس (Would you...)، لذا فالجواب في السلايد هو (Yes, I will / No, I won't).",
+      "الإجابة بـ (Yes, I can) تكون عندما يبدأ السؤال بـ (Can you)."
+    ]
+  },
+
+  // ==================== CHAPTER 12 (Questions 71 - 88) ====================
+  {
+    id: 71, ch: "ch12", cat: "syn", tag: "Chapter 12 • Unit 1 Product Matching (p.38)",
+    q: "Match the brands to their exact categories from page 38: Google is an ............, Milka is a ............, SAMSUNG is ............, Puma is ............, and KFC is a ............",
+    opts: [
+      "electronic mail / soft drink / sportswear / clothes / chocolate bar",
+      "internet search engine / chocolate bar / electronic goods / sportswear / famous restaurant (fast food)",
+      "internet search engine / pastries / accessories /电子 goods / sportswear",
+      "website / coffee and pastries / internet search engine / clothes / fast food"
+    ],
+    ans: 1,
+    whyRight: "حل تمرين التوصيل الرسمي في صفحة 38 (سلايد 359): (1. Internet search engine = Google)، (2. Chocolate bar = Milka)، (3. Electronic goods = SAMSUNG)، (4. Sportswear = Puma)، و(5. Famous restaurant / Fast food = KFC).",
+    whyWrong: [
+      "تصنيفات خاطئة تماماً؛ فجوجل محرك بحث وميلكا شوكولاتة.",
+      "",
+      "سامسونج بضائع إلكترونية (Electronic goods) وليست إكسسوارات.",
+      "ميلكا لوح شوكولاتة (Chocolate bar) وليست قهوة ومعجنات."
+    ]
+  },
+  {
+    id: 72, ch: "ch12", cat: "func", tag: "Chapter 12 • Unit 1 Passive Voice Functions (p.40-41)",
+    q: "According to slides 361-362, what are the exact uses of the passive voice in: (1) 'Shoes are made in Indonesia', (2) 'The window is broken', and (3) 'He is arrested'?",
+    opts: [
+      "(1) We don't know the doer, (2) It is obvious from context, (3) The doer is important.",
+      "(1) The doer is not important, (2) We don't know the doer, (3) It is obvious from the context (by the police).",
+      "(1) To focus on the subject, (2) To talk about future plans, (3) To give advice.",
+      "(1) It is obvious from context, (2) The doer is not important, (3) We don't know the doer."
+    ],
+    ans: 1,
+    whyRight: "هذه هي الاستخدامات الثلاثة للمبني للمجهول بنص السلايد (ص40 و41): (1) عندما يكون الفاعل غير مهم (doer is not important: Shoes are made in Indonesia)، (2) عندما لا نعرف الفاعل (don't know the doer: The window is broken)، و(3) عندما يكون الفاعل معروفاً بداهة من السياق (obvious from context: he is arrested by the police).",
+    whyWrong: [
+      "عكستِ الأسباب؛ ففي كسر الشباك نحن لا نعرف الفاعل، وفي الاعتقال الفاعل واضح من السياق (الشرطة).",
+      "",
+      "المبني للمجهول يركز على المفعول به (focus on the object) وليس الفاعل.",
+      "الترتيب هنا معكوس عن أمثلة السلايد."
+    ]
+  },
+  {
+    id: 73, ch: "ch12", cat: "gram", tag: "Chapter 12 • Unit 1 Self-Evaluation Q1 Trap (p.45)",
+    q: "KFC fast food restaurant ............ (find) in more than 100 countries worldwide.",
+    opts: ["found", "finds", "finding", "find"],
+    ans: 0,
+    whyRight: "سؤال التقييم الذاتي الأول في صفحة 45 (سلايد 366)! الجملة في المبني للمجهول (أصلها: is found)، والدكتور نسي كتابة (is) قبل الفراغ! وبما أن مطعم كنتاكي 'يُوجد' ولا يجد نفسه، نختار فوراً التصريف الثالث (found).",
+    whyWrong: [
+      "",
+      "فخ خطير! الفعل (finds) مضارع مبني للمعلوم، ومطعم كنتاكي غير عاقل لا يقوم بفعل البحث بنفسه، بل 'يُوجد' (مبني للمجهول: found).",
+      "كلمة (finding) ليست تصريفاً ثالثاً للمبني للمجهول.",
+      "كلمة (find) مصدر مجرد، وفي المبني للمجهول نحتاج إلى التصريف الثالث (Past Participle: found)."
+    ]
+  },
+  {
+    id: 74, ch: "ch12", cat: "gram", tag: "Chapter 12 • Unit 1 Self-Evaluation Q2 (p.45)",
+    q: "The sportswear company Puma is ............ (name) 1998.",
+    opts: ["name", "names", "named", "naming"],
+    ans: 2,
+    whyRight: "سؤال التقييم الذاتي الثاني في صفحة 45! هنا كتب الدكتور الفعل المساعد (is) قبل الفراغ، وبعد (is / are) في المبني للمجهول نختار دائماً التصريف الثالث المنتهي بـ ed وهو (named).",
+    whyWrong: [
+      "كلمة (name) فعل مجرد، ولا يأتي الفعل المجرد بعد (is) في المبني للمجهول.",
+      "لا يجوز وضع فعل مضارع بـ s (names) بعد الفعل المساعد (is).",
+      "",
+      "الجملة مبني للمجهول (سُمّيت) فتأخذ التصريف الثالث (named)."
+    ]
+  },
+  {
+    id: 75, ch: "ch12", cat: "gram", tag: "Chapter 12 • Unit 1 Self-Evaluation Q3 Trap (p.45)",
+    q: "Hershey's ............ (describe) as the greatest American chocolate bar.",
+    opts: ["describes", "described", "describe", "describing"],
+    ans: 1,
+    whyRight: "سؤال التقييم الذاتي الثالث في صفحة 45! شوكولاتة هيرشيز غير عاقل 'تُوصف' بأنها أعظم شوكولاتة أمريكية (مبني للمجهول أصلها: is described)، فنختار التصريف الثالث (described).",
+    whyWrong: [
+      "فخ السلايد! الفعل (describes) مبني للمعلوم، والشوكولاتة لا تصف نفسها بل 'تُوصف' (described)!",
+      "",
+      "كلمة (describe) مضارع مجرد وليست التصريف الثالث.",
+      "كلمة (describing) فيها ing ولا تُستخدم لبناء الفعل للمجهول."
+    ]
+  },
+  {
+    id: 76, ch: "ch12", cat: "gram", tag: "Chapter 12 • Unit 1 Self-Evaluation Q4 Trap (p.45)",
+    q: "Millions of iPods ............ (sell) every year around the world.",
+    opts: ["sold", "sell", "sells", "selling"],
+    ans: 0,
+    whyRight: "سؤال التقييم الذاتي الرابع في صفحة 45! ملايين أجهزة الآيبود 'تُباع' كل عام حول العالم (مبني للمجهول أصلها: are sold)، فنختار التصريف الثالث من (sell) وهو (sold) فوراً.",
+    whyWrong: [
+      "",
+      "فخ السلايد! الفعل (sell) مبني للمعلوم، وأجهزة الآيبود لا تبيع نفسها بل 'تُباع' (sold)!",
+      "كلمة (sells) مضارع للمفرد المبني للمعلوم، بينما الجملة جمع مبني للمجهول.",
+      "كلمة (selling) ليست التصريف الثالث."
+    ]
+  },
+  {
+    id: 77, ch: "ch12", cat: "gram", tag: "Chapter 12 • Unit 1 Active to Passive Exercise (p.44)",
+    q: "Transform into Present Simple Passive (page 44): 'Khaled watches the film' -> 'The film ............', 'People speak English' -> 'English ............', and 'Authors write books' -> 'Books ............'.",
+    opts: [
+      "is watch / is spoke / is written",
+      "is watched / is spoken / are written",
+      "are watched / are spoken / is written",
+      "was watched / was spoken / were written"
+    ],
+    ans: 1,
+    whyRight: "حسب حل السلايد في صفحة 44: الفيلم مفرد يأخذ (is watched)، واللغة الإنجليزية مفرد يأخذ (is spoken)، والكتب جمع ينتهي بـ s فيأخذ (are written).",
+    whyWrong: [
+      "يجب استخدام التصريف الثالث (watched / spoken) وليس المضارع أو الماضي، كما أن (Books) جمع تأخذ (are).",
+      "",
+      "الفيلم والإنجليزية مفرد يأخذان (is) وليس (are)، والكتب جمع تأخذ (are) وليس (is).",
+      "التمرين يطلب المضارع البسيط للمجهول (is / are) وليس الماضي (was / were)."
+    ]
+  },
+  {
+    id: 78, ch: "ch12", cat: "read", tag: "Chapter 12 • Unit 2 Reading (Brand Origins p.49-51)",
+    q: "Steve Jobs got the idea for the name 'Apple' because he once ............ ; Google was originally spelled '............' (a number 1 followed by 100 zeros); Starbucks was named after a character in '............'; and Yahoo! came from '............'.",
+    opts: [
+      "ate an apple / Matrix / Gulliver's Travels / Moby Dick",
+      "worked on an apple farm in California / Googol / Moby Dick / Gulliver's Travels",
+      "owned an apple shop / Google / 1984 / Moby Dick",
+      "worked at Matrix Electronics / Googol / Gulliver's Travels / 1984"
+    ],
+    ans: 1,
+    whyRight: "جميع إجابات قطعة الماركات (صفحة 49 و51): ستيف جوبز عمل سابقاً في مزرعة تفاح في كاليفورنيا (worked on an apple farm in California)، واسم جوجل الأصلي كان (Googol)، وستاربكس من رواية (Moby Dick)، وياهو من كتاب (Gulliver's Travels).",
+    whyWrong: [
+      "اسم (Matrix Electronics) هو الاسم الذي فكر فيه جوبز وفوزنياك قبل اختيار أبل، وعكستِ بين موبي ديك ورحلات جاليفر.",
+      "",
+      "رواية (1984) لجورج أورويل وردت في إعلان أبل ماكنتوش عام 1983 (صفحة 65).",
+      "ستيف جوبز لم يعمل في شركة اسمها ماتريكس بل فكر في الاسم فقط."
+    ]
+  },
+  {
+    id: 79, ch: "ch12", cat: "read", tag: "Chapter 12 • Unit 2 Professor's Nike Trap (p.54)",
+    q: "According to the slide exercise answers on page 54 (slide 375), what is the name of the person who created the Nike logo and how much did he receive?",
+    opts: [
+      "Steve Jobs, and he received £400,000",
+      "Swoosh, and he received $35",
+      "Barack Obama, and he received £150 million",
+      "Roots, and he received $20"
+    ],
+    ans: 1,
+    whyRight: "انتبهي لـ 'فخ الدكتور' في حل تمرين صفحة 54 (سلايد 375)! في القطعة مكتوب (the person who created the Nike 'swoosh' received just $35)، والدكتور في نموذج الحل اعتبر أن اسم الشخص هو (Swoosh) وكتب حرفياً: (1. His name is Swoosh, and he received 35$.)!",
+    whyWrong: [
+      "مبلغ £400,000 هو تكلفة شعار أولمبياد لندن 2012 الذي لم يعجب الناس.",
+      "",
+      "باراك أوباما شرب مياه Buxton، ومبلغ £150 million هو قيمة عقد شركة Puma مع فريق Arsenal.",
+      "روتس (Roots) هو مخترع صلصة Reggae في برنامج Dragons' Den وكان معه 20 دولاراً."
+    ]
+  },
+  {
+    id: 80, ch: "ch12", cat: "read", tag: "Chapter 12 • Unit 2 Colours Meaning (p.52 & 54)",
+    q: "In brand psychology (page 52), Red represents ............, White represents ............ (though in some countries it is the colour of death), Blue is the ............ colour, Yellow is good for ............ messages, and Green signifies ............",
+    opts: [
+      "purity and simplicity / passion and excitement / female / calm / excitement",
+      "passion and excitement / purity and simplicity / 'male' / eye-catching / nature, quietness and calm",
+      "nature and calm / death / eye-catching / 'male' / passion",
+      "eye-catching / nature / 'male' / purity / passion and excitement"
+    ],
+    ans: 1,
+    whyRight: "دلالات الألوان الخمسة في القطعة (وحل سؤال صفحة 54): الأحمر يمثل الشغف والحماس (passion and excitement)، والأبيض يمثل النقاء والبساطة (purity and simplicity)، والأزرق هو اللون الذكوري ('male' colour)، والأصفر للرسائل الخاطفة للأنظار (eye-catching)، والأخضر يرمز للطبيعة والهدوء والسكينة (nature, quietness and calm).",
+    whyWrong: [
+      "عكستِ بين دلالة اللون الأحمر والأبيض!",
+      "",
+      "الأخضر للطبيعة والهدوء وليس الأحمر.",
+      "الأصفر هو الخاطف للأنظار (eye-catching) والأحمر للشغف والحماس."
+    ]
+  },
+  {
+    id: 81, ch: "ch12", cat: "read", tag: "Chapter 12 • Unit 2 Slogans & Celebrities (p.52)",
+    q: "Brand slogans have to be simple and easy to remember, but ............ (for example, McDonald's 'I'm lovin' it'). Also, Puma signed a clothing contract with Arsenal worth almost ............",
+    opts: [
+      "must be 100% grammatical / £400,000",
+      "not necessarily grammatical / £150 million",
+      "must have 100 words / $30 million",
+      "not necessarily grammatical / $35"
+    ],
+    ans: 1,
+    whyRight: "تقول القطعة في صفحة 52: العبارات الإعلانية (Slogans) يجب أن تكون بسيطة وسهلة التذكر ولكن ليس بالضرورة صحيحة قواعدياً (not necessarily grammatical)، وعقد شركة Puma مع فريق Arsenal قيمته قرابة 150 مليون جنيه إسترليني (almost £150 million — سؤال السلايد ص54!).",
+    whyWrong: [
+      "الشعارات الإعلانية لا يُشترط أن تكون صحيحة قواعدياً، ومبلغ £400,000 خاص بشعار أولمبياد لندن.",
+      "",
+      "مبلغ 30 مليون دولار هو قيمة شركة Roots بعد الاستثمار في صفحة 56.",
+      "مبلغ 35 دولاراً هو ما تقاضاه مصمم شعار نايكي."
+    ]
+  },
+  {
+    id: 82, ch: "ch12", cat: "syn", tag: "Chapter 12 • Unit 2 Personal Items Vocabulary (p.55)",
+    q: "Rings, necklaces, and bracelets are '............', while shampoo, soap, and toothpaste are '............'. (Note: on page 55, 'Women's clothes' was misspelled on the slide as '............').",
+    opts: [
+      "Toiletries / Jewelry / Women's dress",
+      "Jewelry / Toiletries / Women's clause",
+      "Accessories / Sportswear / Women's cloth",
+      "Pastries / Electronic goods / Women's clause"
+    ],
+    ans: 1,
+    whyRight: "في صفحة 55 (سلايد 376): المجوهرات والحُلي هي (Jewelry)، ومستحضرات النظافة والعناية الشخصية هي (Toiletries)، وكتب الدكتور تحت صورة الفستان (Women's clause) بالخطأ بدلاً من (Women's clothes)!",
+    whyWrong: [
+      "عكستِ بين المجوهرات (Jewelry) وأدوات النظافة الشخصية (Toiletries).",
+      "",
+      "الكلمة المكتوبة في سلايد 376 هي (Jewelry) و(Toiletries).",
+      "كلمة (Pastries) تعني معجنات."
+    ]
+  },
+  {
+    id: 83, ch: "ch12", cat: "read", tag: "Chapter 12 • Unit 2 Self-Evaluation (Dragons' Den p.56)",
+    q: "In the 'Dragons' Den' paragraph (page 56): (1) The name of the TV series is ............, (2) before the investment Roots only had ............ left, (3) the nationality of the sauce's inventor is ............, and (4) the nationality of the TV series is ............",
+    opts: [
+      "Reggae / £30 million / British / Jamaican",
+      "Dragon's / £20 (or $20) / Jamaican / British",
+      "Dragon's / £30 million / Jamaican / British",
+      "Reggae / £20 / Jamaican / Jamaican"
+    ],
+    ans: 1,
+    whyRight: "إجابات الأسئلة الأربعة في التقييم الذاتي صفحة 56 بالترتيب: (1) اسم المسلسل هو (Dragon's)، (2) المبلغ الذي كان مع Roots قبل الاستثمار هو (£20 / $20 left) فقط بينما 30 مليون هي قيمة شركته الآن، (3) جنسية مخترع الصلصة (Jamaican)، و(4) جنسية المسلسل التلفزيوني (British لأنه في UK)!",
+    whyWrong: [
+      "اسم المسلسل هو (Dragon's) بينما (Reggae) هو اسم الصلصة، وعكستِ بين المبلغ وجنسية المسلسل والمخترع!",
+      "",
+      "فخ السؤال الثاني! المبلغ الذي كان يملكه Roots (how much roots had left) هو (£20) فقط، أما (£30 million) فهي قيمة شركته الآن بعد نجاحها.",
+      "المسلسل يعرض في بريطانيا (in the UK) لذا فجنسيته (British) وليست (Jamaican)."
+    ]
+  },
+  {
+    id: 84, ch: "ch12", cat: "gram", tag: "Chapter 12 • Unit 3 Self-Evaluation Q1 (p.67)",
+    q: "The disposable razor ............ 100 years ago.",
+    opts: ["invented", "was invented", "is invented", "were invented"],
+    ans: 1,
+    whyRight: "سؤال التقييم الذاتي الأول في صفحة 67! شفرة الحلاقة (The disposable razor) مفعول به مفرد + زمن ماضٍ (100 years ago) + مبني للمجهول (أُخترعت ولم تخترع نفسها) = (was invented).",
+    whyWrong: [
+      "فخ السلايد! الفعل (invented) وحده بدون (was) مبني للمعلوم، وشفرة الحلاقة جماد لا يخترع نفسه!",
+      "",
+      "صيغة (is invented) مضارع، والجملة فيها علامة الماضي الصريحة (100 years ago).",
+      "شفرة الحلاقة (razor) مفرد بلا حرف s فتأخذ (was) وليس (were)."
+    ]
+  },
+  {
+    id: 85, ch: "ch12", cat: "gram", tag: "Chapter 12 • Unit 3 Self-Evaluation Q2 (p.67)",
+    q: "The window ............ by Fatima yesterday.",
+    opts: ["is broken", "was broken", "were broken", "broke"],
+    ans: 1,
+    whyRight: "سؤال التقييم الذاتي الثاني في صفحة 67! وجود كلمة (yesterday = أمس) يحسم الاختيار لصالح المبني للمجهول في الماضي البسيط للمفرد (was broken) ويستبعد المضارع (is broken).",
+    whyWrong: [
+      "فخ السلايد! (is broken) مضارع بسيط، ولكن وجود كلمة (yesterday) في آخر الجملة يوجب اختيار الماضي (was broken).",
+      "",
+      "كلمة (The window) مفرد فتأخذ (was) وليس (were).",
+      "وجود (by Fatima) يدل على أن الجملة مبني للمجهول فتحتاج إلى (was broken)."
+    ]
+  },
+  {
+    id: 86, ch: "ch12", cat: "gram", tag: "Chapter 12 • Unit 3 Self-Evaluation Q3 & Slide Exercise (p.64 & 67)",
+    q: "The TVs ............ invented years ago, and sportsmen Messi and Cristiano ............ well-known before 2002.",
+    opts: [
+      "was / was not",
+      "were / were not",
+      "were / was not",
+      "are / were not"
+    ],
+    ans: 1,
+    whyRight: "في التقييم الذاتي صفحة 67: كلمة (The TVs) جمع ينتهي بحرف s + في الماضي (years ago) فتأخذ (were). وفي تمرين صفحة 64: (Messi and Cristiano) شخصان مثنى/جمع فيأخذان (were not well-known).",
+    whyWrong: [
+      "انتبهي لحرف الـ s في (TVs) ولوجود شخصين في (Messi and Cristiano)؛ كلاهما جمع يأخذ (were) وليس (was)!",
+      "",
+      "ميسي وكريستيانو اثنان (جمع) فلا يأخذان (was not).",
+      "وجود (years ago) يدل على الماضي فنختار (were) وليس المضارع (are)."
+    ]
+  },
+  {
+    id: 87, ch: "ch12", cat: "read", tag: "Chapter 12 • Unit 3 Advertising Audio Facts (p.65)",
+    q: "According to 'Advertising: Facts and Figures' (page 65): the first TV advert in 1941 was for ............, Apple spent ............ on its 1983 Macintosh advert (based on George Orwell's novel 1984), and Isaiah Mustafa became famous in 2010 in the ............ campaign.",
+    opts: [
+      "Gibbs toothpaste / US$9,000 / Gillette razors",
+      "Bulova watches / US$900,000 / Old Spice aftershave",
+      "Bulova watches / US$9,000 / Gillette razors",
+      "Gibbs toothpaste / US$900,000 / Old Spice aftershave"
+    ],
+    ans: 1,
+    whyRight: "حسب نص الاستماع في صفحة 65: أول إعلان تلفزيوني عام 1941 في أمريكا كان لساعات بولوفا (Bulova watches)، وأنفقوا في إعلان أبل ماكنتوش 900 ألف دولار (US$900,000)، واشتهر الرياضي Isaiah Mustafa في حملة عطر ما بعد الحلاقة (Old Spice aftershave).",
+    whyWrong: [
+      "جميع هذه الخيارات هي البدائل الخاطئة في التمرين الصوتي!",
+      "",
+      "أبل أنفقت 900,000 دولار وليس 9,000 دولار، وحملة مصطفى كانت لـ Old Spice.",
+      "أول إعلان عام 1941 في أمريكا كان لساعات Bulova watches."
+    ]
+  },
+  {
+    id: 88, ch: "ch12", cat: "read", tag: "Chapter 12 • Unit 3 Advertising Audio Facts 4-6 (p.65)",
+    q: "In ............ , Avis attacked Hertz with the claim 'when you're Number Two you try harder'; in ............ , McDonald's first global campaign ('I'm lovin' it') was launched in over 100 countries; and in 2011 Superbowl, $3 million was spent on each ............ advertising spot.",
+    opts: [
+      "1982 / 2007 / two-minute",
+      "1962 / 2003 / 30-second",
+      "1962 / 2007 / two-minute",
+      "1982 / 2003 / 30-second"
+    ],
+    ans: 1,
+    whyRight: "الأرقام الصحيحة في فقرات الإعلانات (4 و5 و6 صفحة 65): حملة Avis ضد Hertz كانت عام (1962)، وأول حملة عالمية لماكدونالدز بشعار 'I'm lovin' it' أُطلقت عام (2003) (بينما في تمرين القواعد صفحة 64 كُتبت 2007)، وكل إعلان بـ 3 ملايين دولار في السوبر بول كانت مدته 30 ثانية (30-second).",
+    whyWrong: [
+      "هذه هي البدائل الخاطئة في تمرين الاختيار الصوتي.",
+      "",
+      "مدة الإعلان في السوبر بول 30 ثانية (30-second) وليست دقيقتين.",
+      "حملة Avis الشهيرة كانت في عام 1962."
+    ]
+  },
+
+  // ==================== CHAPTER 13 (Questions 89 - 104) ====================
+  {
+    id: 89, ch: "ch13", cat: "read", tag: "Chapter 13 • Unit 1 Reading Figures (p.72-73)",
+    q: "In the US survey of over 2000 people (pages 72-73): over ............ used the internet regularly, ............ of internet users used social networking sites (92% Facebook, 13% Twitter), and internet users had an average of ............ close friends (and 664 less-close friends) compared to 1.75 (and 506) for non-users.",
+    opts: [
+      "1000 / 50% (half) / 1.75",
+      "1700 / 47% / 2.16",
+      "1700 / 92% / 1.93",
+      "2000 / 29% / 2.16"
+    ],
+    ans: 1,
+    whyRight: "الأرقام الدقيقة في قطعة (Finding New Friends - Online ص72-73): أكثر من 1700 شخص يستخدمون الإنترنت بانتظام، و47% منهم يستخدمون مواقع التواصل الاجتماعي، ومتوسط الأصدقاء المقربين لمستخدمي الإنترنت ارتفع من 1.93 في 2008 إلى (2.16) الآن مقابل 1.75 لغير المستخدمين.",
+    whyWrong: [
+      "نسبة 50% (Half) خاطئة في أسئلة الصح والخطأ بصفحة 76 لأن النسبة الدقيقة هي 47%.",
+      "",
+      "نسبة 92% هي لمن يستخدمون فيسبوك داخل مجموعة الـ 47%، ورقم 1.93 كان في عام 2008.",
+      "نسبة 29% هي لمستخدمي موقع MySpace."
+    ]
+  },
+  {
+    id: 90, ch: "ch13", cat: "read", tag: "Chapter 13 • Unit 1 True/False Slide Answers (p.76)",
+    q: "According to the official True/False answers on page 76 (slide 397), which of the following statements is marked FALSE?",
+    opts: [
+      "Almost twice as many people use social networking sites now compared to in 2008.",
+      "Experts believe that internet communities are an excellent way to make friends.",
+      "Half of all people surveyed use social networking sites (and: using the internet stops you from making new friends).",
+      "The internet is mostly used by people who are shy in social situations."
+    ],
+    ans: 2,
+    whyRight: "في سلايد 397 (صفحة 76)، الجمل الثلاث الخاطئة (F) هي: الجملة 1 (stops you from making friends -> F لأنها helps)، والجملة 2 (Half of all people surveyed -> F لأنها 47% من الـ 1700)، والجملة 4 (People who don't use the internet have more friends -> F). أما الجمل 3 و5 و6 فمحلولة في السلايد (T)!",
+    whyWrong: [
+      "هذه الجملة (رقم 3 في السلايد) صحيحة (True).",
+      "هذه الجملة (رقم 5 في السلايد) صحيحة (True).",
+      "",
+      "انتبهي! الجملة رقم 6 (shy in social situations) محلولة في سلايد الدكتور صفحة 76 بأنها صحيحة (True)!"
+    ]
+  },
+  {
+    id: 91, ch: "ch13", cat: "read", tag: "Chapter 13 • Unit 1 Comments (Ali, Khaled, Saif p.78-79)",
+    q: "In the reading comments (pages 77-79): ............ said that online friends aren't 'real' friends (you must meet face to face), ............ said online is faster (you know immediately), and ............ said 'I think it's healthy to have both'.",
+    opts: [
+      "Ali / Khaled / Saif",
+      "Khaled / Ali / Saif",
+      "Saif / Ali / Khaled",
+      "Khaled / Saif / Ali"
+    ],
+    ans: 1,
+    whyRight: "حسب حلول صفحة 78 و79: خالد (Khaled) هو الذي قال إن أصدقاء الإنترنت ليسوا أصدقاء حقيقيين ويجب مقابلتهم وجهاً لوجه، وعلي (Ali) قال إن الإنترنت أسرع لمعرفة الاهتمامات المشتركة فوراً (immediately)، وسيف (Saif) لديه النوعان وقال إنه من الصحي امتلاك الاثنين معاً (healthy to have both).",
+    whyWrong: [
+      "عكستِ بين رأي علي ورأي خالد!",
+      "",
+      "سيف لم يقل إن أصدقاء الإنترنت غير حقيقيين، بل قال إنه يمتلك الاثنين معاً.",
+      "علي هو من تحدث عن سرعة الإنترنت (faster / immediately)."
+    ]
+  },
+  {
+    id: 92, ch: "ch13", cat: "syn", tag: "Chapter 13 • Unit 2 Personality Adjectives (p.85)",
+    q: "1. She's always ............ — she always tells the truth.",
+    opts: ["organised", "sociable", "honest", "ambitious"],
+    ans: 2,
+    whyRight: "الجملة الأولى في تمرين صفحة 85! قرينة الجملة هي (she always tells the truth = تقول الحقيقة دائماً)، والصفة المطابقة لها هي (honest = صادقة / أمينة).",
+    whyWrong: [
+      "صفة (organised = منظم) قرينتها هي (arranges things well and plans things properly).",
+      "صفة (sociable = اجتماعي) قرينتها هي (friendly and enjoys being with others).",
+      "",
+      "صفة (ambitious = طموح) تعني الشخص الساعي للنجاح والترقي."
+    ]
+  },
+  {
+    id: 93, ch: "ch13", cat: "syn", tag: "Chapter 13 • Unit 2 Personality Adjectives (p.85)",
+    q: "2. He is a very ............ person — he arranges things well and plans things properly.",
+    opts: ["sensitive", "affectionate", "organised", "honest"],
+    ans: 2,
+    whyRight: "الجملة الثانية في تمرين صفحة 85! قرينة الجملة هي (arranges thing well and plan things properly = يرتب الأشياء جيداً ويخطط لها بشكل سليم)، والصفة هي (organised = منظم).",
+    whyWrong: [
+      "صفة (sensitive) تعني حساس المشاعر.",
+      "صفة (affectionate) تعني حنون ومحب.",
+      "",
+      "صفة (honest) تعني صادق (tells the truth)."
+    ]
+  },
+  {
+    id: 94, ch: "ch13", cat: "syn", tag: "Chapter 13 • Unit 2 Personality Adjectives (p.85)",
+    q: "3. She is very ............ — she is friendly and enjoys being with others.",
+    opts: ["sociable", "shy", "organised", "sensitive"],
+    ans: 0,
+    whyRight: "الجملة الثالثة في تمرين صفحة 85! قرينة الجملة هي (friendly and enjoys being with others = ودودة وتستمتع بالبقاء مع الآخرين)، والصفة هي (sociable = اجتماعية) وعكسها (shy / unsociable).",
+    whyWrong: [
+      "",
+      "صفة (shy = خجول) هي عكس (sociable) تماماً!",
+      "صفة (organised) تعني منظم ومرتب.",
+      "صفة (sensitive) تعني حساس."
+    ]
+  },
+  {
+    id: 95, ch: "ch13", cat: "gram", tag: "Chapter 13 • Unit 2 Self-Evaluation Q1 & Exercise Q3 (p.88-89)",
+    q: "............ has Faisal been working with us (or living with his aunt)?",
+    opts: ["How far", "Since", "How long", "For"],
+    ans: 2,
+    whyRight: "في تمرين صفحة 88 والسؤال الأول بالتقييم الذاتي صفحة 89: للسؤال عن طول المدة الزمنية مع المضارع التام المستمر (has ... been working / living) نبدأ السؤال دائماً بـ (How long = كم المدة).",
+    whyWrong: [
+      "فخ السلايد في صفحة 88! أداة (How far) تسأل عن المسافة بالميل أو الكيلومتر ولا تسأل عن المدة الزمنية.",
+      "كلمة (Since) تعني (منذ) وتأتي في وسط الجملة قبل نقطة البداية وليست أداة استفهام في بداية هذا السؤال.",
+      "",
+      "كلمة (For) تعني (لمدة) وتأتي قبل المدة المعدودة وليس في بداية السؤال."
+    ]
+  },
+  {
+    id: 96, ch: "ch13", cat: "gram", tag: "Chapter 13 • Unit 2 Self-Evaluation Q2 & Exercise Q1 (p.88-89)",
+    q: "He has been living with Ahmed ............ he came to Abha (and: I have been living with my aunt ............ I come to Jeddah).",
+    opts: ["for", "since", "how long", "ago"],
+    ans: 1,
+    whyRight: "في تمرين صفحة 88 والتقييم الذاتي صفحة 89: عندما يأتي بعد الفراغ جملة فعلية تحدد نقطة بداية الحدث (he came to Abha / I come to Jeddah)، نختار فوراً (since = منذ).",
+    whyWrong: [
+      "حرف الجر (for = لمدة) يأتي بعده عدد/مدة زمنية مجموعة بـ s (مثل two years / three weeks) ولا يأتي بعده فاعل وفعل (he came)!",
+      "",
+      "أداة (how long) للسؤال في بداية الجملة.",
+      "كلمة (ago) تأتي في نهاية جملة الماضي البسيط ولا تُستخدم مع (have/has been + ing)."
+    ]
+  },
+  {
+    id: 97, ch: "ch13", cat: "gram", tag: "Chapter 13 • Unit 2 Self-Evaluation Q3 & Exercise Q2 (p.88-89)",
+    q: "I have been living here ............ about three weeks (and: I have been working as an accountant ............ two years now).",
+    opts: ["since", "for", "how long", "during"],
+    ans: 1,
+    whyRight: "في تمرين صفحة 88 والتقييم الذاتي صفحة 89: عندما يأتي بعد الفراغ مدة زمنية معدودة تنتهي بحرف s للجمع (about three weeks / two years now)، نختار فوراً (for = لمدة).",
+    whyWrong: [
+      "كلمة (since) تأتي قبل نقطة بداية محددة أو جملة (he came)، ولا تأتي قبل مدة مجموعه مثل (three weeks / two years).",
+      "",
+      "أداة (how long) للسؤال في بداية الجملة.",
+      "كلمة (during) لا تُستخدم هنا بل القاعدة محصورة بين (for) و(since)."
+    ]
+  },
+  {
+    id: 98, ch: "ch13", cat: "func", tag: "Chapter 13 • Unit 3 Function (Present Perfect Simple vs Continuous p.95-96)",
+    q: "According to slides 416-417 (pages 95-96), what is the exact difference in function between (1) 'I have painted the living room blue' (or 'I have read that book') and (2) 'I have been decorating the house this summer' (or 'I have been reading that book')?",
+    opts: [
+      "(1) The action is unfinished, while (2) the activity is finished and focuses on the result.",
+      "(1) Focuses on the result and the activity is finished (completion), while (2) focuses on the action itself and the activity is unfinished.",
+      "Both tenses mean the exact same thing and only refer to the distant past.",
+      "(1) Is used for future arrangements, while (2) is used for passive voice."
+    ],
+    ans: 1,
+    whyRight: "نص السلايد في صفحة 95 و96: المضارع التام البسيط (have painted / have read) يركز على النتيجة والاكتمال (focus is on the result, the activity is finished / gives the idea of completion)، بينما المضارع التام المستمر (have been decorating / have been reading) يركز على الحدث نفسه ويوحي بأن النشاط غير منتهٍ (focus on the action, and the action is unfinished)!",
+    whyWrong: [
+      "عكستِ الوظيفتين تماماً! البسيط هو المنتهي (finished) والمستمر هو غير المنتهي (unfinished).",
+      "",
+      "الزمنان يرتبطان بالحاضر ويختلفان في الاكتمال والاستمرار.",
+      "كلاهما ليس للمبني للمجهول أو الترتيبات المستقبلية."
+    ]
+  },
+  {
+    id: 99, ch: "ch13", cat: "gram", tag: "Chapter 13 • Unit 3 Self-Evaluation Q1 (p.100)",
+    q: "We ............ for more than two hours.",
+    opts: [
+      "have been waiting",
+      "have waited",
+      "has been waiting",
+      "are waited"
+    ],
+    ans: 0,
+    whyRight: "سؤال التقييم الذاتي الأول في صفحة 100! مع فعل الانتظار الحركي المستغرق للوقت (wait) ووجود مدة زمنية مستمرة (for more than two hours) بدون ذكر عدد مرات، نختار المضارع التام المستمر (have been waiting).",
+    whyWrong: [
+      "",
+      "فخ السلايد! مع الأفعال الحركية المستمرة لمدة زمنية مثل (wait / walk / write for two hours) يفضل منهج الكتاب دائماً صيغة الاستمرار (have been waiting).",
+      "الضمير (We) جمع يأخذ (have) وليس (has).",
+      "صيغة (are waited) مبني للمجهول خاطئ."
+    ]
+  },
+  {
+    id: 100, ch: "ch13", cat: "gram", tag: "Chapter 13 • Unit 3 Self-Evaluation Q2 Trap (p.100)",
+    q: "I ............ for hundreds of jobs.",
+    opts: [
+      "have been applied",
+      "have applied",
+      "has applied",
+      "applying"
+    ],
+    ans: 1,
+    whyRight: "سؤال التقييم الذاتي الثاني في صفحة 100! هنا سببان حاسمان لاختيار (have applied): أولاً وجود كمية/عدد ضخم مكتمل (hundreds of jobs = مئات الوظائف)، وثانياً أن الخيار الآخر (have been applied) مكتوب بالتصريف الثالث (applied) وليس بالـ ing، فهو مبني للمجهول خاطئ تماماً!",
+    whyWrong: [
+      "فخ خبيث جداً في السلايد! تظنين لأول وهلة أنها مضارع تام مستمر لوجود (have been)، لكن لاحظي أن بعدها (applied) بالـ ed وليس (applying)! فهي مبني للمجهول خاطئ، كما أن وجود العدد (hundreds of jobs) يوجب البسيط (have applied).",
+      "",
+      "الضمير (I) يأخذ (have) وليس (has).",
+      "كلمة (applying) وحدها بدون فعل مساعد لا تكون جملة صحيحة."
+    ]
+  },
+  {
+    id: 101, ch: "ch13", cat: "gram", tag: "Chapter 13 • Unit 3 Self-Evaluation Q3 Trap (p.100)",
+    q: "I ............ to work in a restaurant all my life.",
+    opts: [
+      "have wanted",
+      "have been wanting",
+      "has wanted",
+      "am wanting"
+    ],
+    ans: 0,
+    whyRight: "سؤال التقييم الذاتي الثالث في صفحة 100! الفعل (want = يريد) من الأفعال الجامدة (Stative Verbs) التي لا تقبل إضافة (-ing) في الأزمنة المستمرة، لذلك يجب اختيار المضارع التام البسيط (have wanted)!",
+    whyWrong: [
+      "",
+      "فخ السلايد! رغم وجود مدة (all my life)، إلا أن الفعل (want) فعل رغبة جامد لا يأخذ (-ing)، فلا نقول (have been wanting).",
+      "الضمير (I) يأخذ (have) وليس (has).",
+      "الفعل (want) لا يُوضع في المضارع المستمر (am wanting)."
+    ]
+  },
+  {
+    id: 102, ch: "ch13", cat: "gram", tag: "Chapter 13 • Unit 3 Slide Exercise (p.98)",
+    q: "Complete the four exercise sentences from page 98: (1) 'She ............ e-mails for three hours', (2) 'She ............ 10 messages', (3) 'They ............ for two hours', and (4) 'They ............ a warn'.",
+    opts: [
+      "has written / has been writing / have walked / have been giving",
+      "has been writing / has written / have been walking / have given",
+      "have been writing / have written / has been walking / has given",
+      "has been write / has write / have been walk / have given"
+    ],
+    ans: 1,
+    whyRight: "حل تمرين صفحة 98 (سلايد 419): في (1) و(3) توجد مدة زمنية (for three hours / for two hours) بدون تحديد عدد الرسائل، فنختار المستمر (has been writing / have been walking). وفي (2) و(4) يوجد عدد محدد (10 messages) أو حدث مكتمل (a warn) فنختار البسيط (has written / have given).",
+    whyWrong: [
+      "عكستِ بين الجمل التي تحتوي على عدد محدد (10 messages -> has written) والجمل التي تحتوي على مدة استمرار (for three hours -> has been writing).",
+      "",
+      "الضمير المفرد (She) يأخذ (has) والضمير الجمع (They) يأخذ (have) وليس العكس.",
+      "بعد (been) يجب إضافة (-ing) للفعل، وبعد (has) في التام البسيط نضع التصريف الثالث (written)."
+    ]
+  },
+  {
+    id: 103, ch: "ch13", cat: "syn", tag: "Chapter 13 • Unit 3 Job Application Vocabulary (p.99)",
+    q: "In 'Getting a job' (page 99): a person who has no job is '............', a summer job for a few hours a day is a '............', you can apply online or '............', you include your details in a '............', and you '............' an application form.",
+    opts: [
+      "employed / full-time job / face to face / poem / write",
+      "unemployed / part-time job / in person / CV / fill in",
+      "sociable / part-time job / in real life / receipt / dress",
+      "unemployed / permanent job / online / bill / interview"
+    ],
+    ans: 1,
+    whyRight: "مصطلحات التوظيف الخمسة من صفحة 99: عاطل عن العمل = (unemployed)، وظيفة بدوام جزئي في الصيف = (part-time job)، التقديم عبر الإنترنت أو حضورياً/شخصياً = (apply online or in person)، تكتب معلوماتك في السيرة الذاتية = (write a CV)، وتقوم بتعبئة استمارة التقديم = (fill in an application form).",
+    whyWrong: [
+      "كلمة (employed) تعني موظف، بينما الشخص الذي ترك المدرسة ويبحث عن عمل هو (unemployed).",
+      "",
+      "كلمة (receipt) تعني إيصال دفع وليست السيرة الذاتية (CV).",
+      "كلمة (bill) تعني فاتورة حساب."
+    ]
+  },
+
+  // ==================== CHAPTER 14 (Questions 104 - 120) ====================
+  {
+    id: 104, ch: "ch14", cat: "syn", tag: "Chapter 14 • Unit 1 Money Vocabulary Distinctions (p.104)",
+    q: "Distinguish between the money terms (page 104): metal money is '............', paper money is '............', the money returned to you after paying is '............', the paper asking for payment before you pay is a '............', and the printed proof after you pay is a '............'.",
+    opts: [
+      "bank notes / coins / exchange rate / receipt / bill",
+      "coins / bank notes / change / bill / receipt",
+      "cash point / credit card / purse / wallet / change",
+      "coins / foreign currency / bill / receipt / change"
+    ],
+    ans: 1,
+    whyRight: "مفردات المال الدقيقة في صفحة 104: النقود المعدنية = (coins)، والأوراق النقدية = (bank notes)، وباقي الحساب/الفكة المستردة = (change)، وفاتورة الحساب المطلوبة قبل الدفع = (bill)، وإيصال الاستلام بعد الدفع = (receipt — حرف الـ p صامت).",
+    whyWrong: [
+      "عكستِ بين العملات المعدنية (coins) والورقية (bank notes)، وبين الفاتورة (bill) والإيصال (receipt)!",
+      "",
+      "كلمة (cash point) تعني جهاز الصراف الآلي، و(purse / wallet) تعني المحفظة.",
+      "الترتيب هنا غير مطابق للتعريفات."
+    ]
+  },
+  {
+    id: 105, ch: "ch14", cat: "func", tag: "Chapter 14 • Unit 1 Past Perfect Function (p.105-107)",
+    q: "According to slides 426-428 (pages 105-107), what is the exact grammatical function of the Past Perfect tense (had + past participle)?",
+    opts: [
+      "To talk about an action that is happening right now at the moment of speaking.",
+      "To talk about something that occurred before another action in the past (or continued up until another action in the past).",
+      "To talk about an unfinished action that started in the past and continues into the future.",
+      "To focus on the object of a sentence in the present time."
+    ],
+    ans: 1,
+    whyRight: "نص السلايد في صفحة 105-107: يُستخدم الماضي التام (Past Perfect: had + V3) للتعبير عن حدث وقع في الماضي قبل حدث آخر في الماضي (something that happened/occurred before another action in the past) أو استمر حتى وقوع حدث آخر بالماضي.",
+    whyWrong: [
+      "الحدث الجاري الآن في لحظة الكلام هو المضارع المستمر (Present Continuous).",
+      "",
+      "الحدث الذي بدأ بالماضي ومستمر للحاضر والمستقبل هو المضارع التام أو التام المستمر.",
+      "التركيز على المفعول به في المضارع هو المبني للمجهول (Present Simple Passive)."
+    ]
+  },
+  {
+    id: 106, ch: "ch14", cat: "gram", tag: "Chapter 14 • Unit 1 Slide Exercise (p.110)",
+    q: "Complete the two exercise sentences on page 110: (1) 'I ............ (save) before the computer crashed', and (2) 'When they arrived we ............ (start) the meeting'.",
+    opts: [
+      "have saved / have already started",
+      "had saved / had already started",
+      "saved / are starting",
+      "was saving / has started"
+    ],
+    ans: 1,
+    whyRight: "حل تمرين السلايد في صفحة 110 (سلايد 431): في الجملتين يوجد حدث ماضٍ ثانٍ (before the computer crashed / When they arrived)، فالحدث الأقدم الذي تم قبلهما يوضع في الماضي التام: (had saved) و(had already started).",
+    whyWrong: [
+      "لا يجوز استخدام المضارع التام (have saved / have started) مع أحداث ماضية منتهية مثل (crashed / arrived).",
+      "",
+      "الزمن المطلوب في التمرين لترتيب الحدث الأقدم هو الماضي التام (had + V3).",
+      "لا يصح الجمع بين الماضي (arrived) والمضارع (has started)."
+    ]
+  },
+  {
+    id: 107, ch: "ch14", cat: "gram", tag: "Chapter 14 • Unit 1 Self-Evaluation Q1 (p.111)",
+    q: "He only answered the exam because he ............ the book.",
+    opts: ["had read", "read", "have read", "has read"],
+    ans: 0,
+    whyRight: "سؤال التقييم الذاتي الأول في صفحة 111! الطالب قرأ الكتاب أولاً، ثم بناءً على ذلك أجاب في الاختبار (answered)؛ فحدث القراءة وقع قبل حدث الإجابة في الماضي = ماضي تام (had read).",
+    whyWrong: [
+      "",
+      "فخ السلايد! وضع الدكتور (had read) ضد (read)؛ ولأن القراءة سبقت الإجابة في الماضي (because) نختار الماضي التام الأقدم (had read).",
+      "كلمة (have read) مضارع تام ولا تأتي مع الفعل الماضي (answered) ولا مع المفرد (he).",
+      "كلمة (has read) مضارع، والجملة كلها في الماضي (answered)."
+    ]
+  },
+  {
+    id: 108, ch: "ch14", cat: "gram", tag: "Chapter 14 • Unit 1 Self-Evaluation Q2 (p.111)",
+    q: "I ............ my phone 3 years before it finally died.",
+    opts: ["had owned", "have owned", "has owned", "own"],
+    ans: 0,
+    whyRight: "سؤال التقييم الذاتي الثاني في صفحة 111! امتلاك الهاتف استمر لمدة 3 سنوات في الماضي قبل أن يتعطل نهائياً (before it finally died)، فوجود الفعل الماضي (died) يستبعد المضارع (have owned) ويوجب الماضي التام (had owned).",
+    whyWrong: [
+      "",
+      "فخ السلايد! (have owned) مضارع تام يقتضي أن الهاتف ما زال معك الآن، لكن الجملة تقول (before it finally died = قبل أن يموت/يتعطل في الماضي) فنختار (had owned)!",
+      "الضمير (I) لا يأخذ (has)، والجملة في الماضي.",
+      "الفعل (own) مضارع بسيط لا يركب مع (before it finally died)."
+    ]
+  },
+  {
+    id: 109, ch: "ch14", cat: "gram", tag: "Chapter 14 • Unit 1 Self-Evaluation Q3 Professor Trap (p.111)",
+    q: "He ............ the book in 2019 before he moved to the UK in 2022.",
+    opts: [
+      "had write. (or had written)",
+      "have written",
+      "has written",
+      "writes"
+    ],
+    ans: 0,
+    whyRight: "سؤال التقييم الذاتي الثالث في صفحة 111 (أخطر فخ في الفصل 14)! الجملة فيها حدث في 2019 وقع قبل حدث آخر في 2022 (before he moved)، أي ماضي تام بـ (had). في السلايد نسي الدكتور كتابة التصريف الثالث فكتب الخيار الأول (a. had write.) ضد الخيار الثاني (b. have written). نختار الخيار الأول فوراً لأنه الوحيد الذي يحتوي على أداة الماضي التام (had)!",
+    whyWrong: [
+      "",
+      "فخ خبيث جداً! قد تختارين (have written) لأن كلمة (written) مكتوبة صح، لكن انتبهي: أولاً الفاعل (He) مستحيل يأخذ (have) بل يأخذ (has)، وثانياً الجملة في الماضي (in 2019 before he moved in 2022) فيستحيل استخدام المضارع التام أصلاً! الجواب المقصود عند الدكتور هو الخيار الأول (a. had write).",
+      "وجود التاريخ المحدد في الماضي (in 2019 before he moved in 2022) يمنع استخدام المضارع التام (has written).",
+      "الفعل المضارع (writes) لا يُستخدم مع عام 2019 في الماضي."
+    ]
+  },
+  {
+    id: 110, ch: "ch14", cat: "read", tag: "Chapter 14 • Unit 2 Reading (Beginnings of Money p.116 & 120)",
+    q: "According to the text exercises on pages 116 and 120: How did people buy things in the past before notes and coins? Which type of money was found in the sea? And which type was found on birds?",
+    opts: [
+      "By credit cards / Stones / Shells",
+      "By exchanging goods / Shells / Feathers",
+      "By bank notes / Feathers / Shells",
+      "By coins / Kina / Electrum"
+    ],
+    ans: 1,
+    whyRight: "إجابات السلايد الرسمية في صفحة 116 و120: اشترى الناس قديماً عن طريق تبادل البضائع (By exchanging goods)، ونوع المال الموجود في البحر (in the sea) هو الأصداف (Shells)، والموجود على الطيور (on birds) هو الريش (Feathers).",
+    whyWrong: [
+      "الأحجار (Stones) ليست هي المقصودة بالسؤال الأول، وترتيب الإجابات غير صحيح.",
+      "",
+      "عكستِ بين البحر والطيور! الأصداف (Shells) في البحر، والريش (Feathers) على الطيور.",
+      "السؤال الأول يسأل كيف اشتروا قبل العملات المعدنية والورقية (By exchanging goods)."
+    ]
+  },
+  {
+    id: 111, ch: "ch14", cat: "read", tag: "Chapter 14 • Unit 2 Self-Evaluation Q1 Trap (p.123)",
+    q: "For thousands of years, people from China to ............ and Africa were using cowrie shells as a form of money.",
+    opts: ["Saudi Arabia", "Arabia", "America", "Turkey"],
+    ans: 1,
+    whyRight: "سؤال التقييم الذاتي الأول في صفحة 123 (سلايد 444)! حط الدكتور بالخيارات (a. Saudi Arabia) ضد (b. Arabia)! في نص القطعة صفحة 117 مكتوب حرفياً: (from China to Arabia and Africa) بدون كلمة Saudi لأن الكلام عن تاريخ قديم قبل آلاف السنين!",
+    whyWrong: [
+      "فخ الدكتور الخبيث في صفحة 123! لا تختاري (Saudi Arabia) لأن النص التاريخي في القطعة ذكر شبه الجزيرة العربية باسم (Arabia) فقط!",
+      "",
+      "لم تُذكر أمريكا في جملة أصداف الكاوري.",
+      "تركيا (Turkey) ذُكرت مع مملكة ليديا وأول العملات المعدنية (Early coins)."
+    ]
+  },
+  {
+    id: 112, ch: "ch14", cat: "read", tag: "Chapter 14 • Unit 2 Self-Evaluation Q2 (p.120 & 123)",
+    q: "Which type of money was made from a mixture of gold and silver (electrum) in the ancient Lydian kingdom (in what is now Turkey)?",
+    opts: ["cash", "coins", "bank notes", "kina shells"],
+    ans: 1,
+    whyRight: "سؤال صفحة 120 والسؤال الثاني في التقييم الذاتي صفحة 123 (حيث كتبها الدكتور مطبعياً: made of silver and fold [gold])! النقود المصنوعة من خليط الذهب والفضة (الإلكتروم) في مملكة ليديا بتركيا هي العملات المعدنية (coins) ضد الفخ (cash).",
+    whyWrong: [
+      "فخ التقييم الذاتي صفحة 123! وضع الدكتور (a. coins) ضد (b. cash)، والجواب الصحيح هو (coins) لأنها العملات المعدنية المصنوعة من الذهب والفضة.",
+      "",
+      "الأوراق النقدية (bank notes) مصنوعة من الورق (paper) في الصين.",
+      "أصداف الكينا (kina shells) استُخدمت في بابوا غينيا الجديدة (Papua New Guinea)."
+    ]
+  },
+  {
+    id: 113, ch: "ch14", cat: "read", tag: "Chapter 14 • Unit 2 Self-Evaluation Q3 (p.118 & 123)",
+    q: "The idea of bank notes (pieces of paper with values printed on them) came from ............ in the 14th century because there was not enough ............ available to make coins.",
+    opts: [
+      "America / paper",
+      "China / metal",
+      "Turkey / gold",
+      "Papua New Guinea / shells"
+    ],
+    ans: 1,
+    whyRight: "سؤال التقييم الذاتي الثالث في صفحة 123 (ونص القطعة صفحة 118): فكرة الأوراق النقدية (bank notes) جاءت من الصين (China) في القرن 14، والسبب أنه لم يكن هناك معدن كافٍ (not enough metal) لصنع العملات المعدنية، وكان الناس متشككين (suspicious) من الورق في البداية.",
+    whyWrong: [
+      "فخ التقييم الذاتي صفحة 123! لم تأتِ فكرة الأوراق النقدية من أمريكا بل من الصين (China).",
+      "",
+      "تركيا (مملكة ليديا) هي مكان صناعة أول عملات معدنية (Early coins) وليس الأوراق النقدية.",
+      "بابوا غينيا الجديدة هي الدولة التي استخدمت صدفة الكينا (Kina shell) وسمت عملتها الورقية باسم (the kina)."
+    ]
+  },
+  {
+    id: 114, ch: "ch14", cat: "read", tag: "Chapter 14 • Unit 2 Listening Money Facts (p.121-122)",
+    q: "According to the solved 'Money Facts' audio on page 122: Over ............ countries use the dollar, over ............ people use the Euro (first used in 2002), the 2012 euro-dollar exchange rate was €1 = $............, and the first cashpoint was used in 1967 in the UK (providing ............% of our money).",
+    opts: [
+      "20 / 8 million / 0.88 / 14",
+      "30 / 332 million / 1.33 / 90",
+      "30 / 1200 / 1.33 / 28",
+      "90 / 332 million / 28 / 30"
+    ],
+    ans: 1,
+    whyRight: "الأرقام المحلولة في سلايد 443 (صفحة 122) بالترتيب: (1) أكثر من 30 دولة تستخدم الدولار، (2) أكثر من 332 مليون (332 M) شخص يستخدمون اليورو، (3) سعر الصرف في بداية 2012 كان (1.33)، و(4) نحصل على 90% من نقودنا من الصرافات الآلية، و(5) متوسط الكاش في محفظة النساء ببريطانيا 28 جنيهاً (£28)، و(6) عدد البطاقات محلول بالسلايد (8 M).",
+    whyWrong: [
+      "رقم 0.88 كان سعر الصرف في بداية 2002 وليس 2012، و14% هي نسبة الأمريكيين الذين يملكون أكثر من 10 بطاقات.",
+      "",
+      "رقم 28 هو متوسط الكاش بالجنيه الإسترليني الذي حملته النساء في بريطانيا عام 2010.",
+      "ترتيب الأرقام هنا معكوس."
+    ]
+  },
+  {
+    id: 115, ch: "ch14", cat: "func", tag: "Chapter 14 • Unit 3 Narrative Tenses Functions (p.128-129)",
+    q: "In Narrative Tenses (pages 128-129), what is the function of the Past Simple in 'I woke up very early when I was a kid', and the Past Continuous in 'I was washing the dishes when I cut my finger'?",
+    opts: [
+      "Both express future plans.",
+      "The first expresses 'past habits', while the second expresses 'a past action in progress when another action interrupted it'.",
+      "The first expresses an unfinished action, while the second expresses a second earlier past.",
+      "Both express passive actions where the doer is unknown."
+    ],
+    ans: 1,
+    whyRight: "حسب شرح السلايد في صفحة 128 و129: جملة (I woke up very early when I was kid) وظيفتها التعبير عن عادات ماضية (To express past habits)، بينما جملة (I was washing the dishes when I cut my finger) وظيفتها التعبير عن حدث ماضٍ كان مستمراً عندما قطعه حدث آخر (past action in progress when another action interrupted it).",
+    whyWrong: [
+      "أزمنة السرد القصصي (Narrative tenses) كلها في الماضي ولا يُخلط فيها المضارع أو المستقبل.",
+      "",
+      "الرجوع إلى ماضٍ ثانٍ أقدم (go back to a second past) هو وظيفة الماضي التام (Past Perfect).",
+      "الجملتان مبنيتان للمعلوم وليستا للمجهول."
+    ]
+  },
+  {
+    id: 116, ch: "ch14", cat: "func", tag: "Chapter 14 • Unit 3 Past Perfect vs Past Perfect Continuous Functions (p.130-131)",
+    q: "In Narrative Tenses (pages 130-131), what tense is used in 'When I arrived there, everybody had already left' (to go back to a second past), versus 'When the teacher entered the classroom, the students had been fighting' (for longer actions continuing up to the past moment)?",
+    opts: [
+      "Past Continuous / Past Simple",
+      "Past Perfect Simple / Past Perfect Continuous",
+      "Present Perfect Simple / Present Perfect Continuous",
+      "Past Simple / Past Perfect Simple"
+    ],
+    ans: 1,
+    whyRight: "في صفحة 130 و131: جملة (everybody had already left) هي ماضي تام بسيط (Past Perfect Simple) للرجوع إلى ماضٍ أقدم (second past)، بينما جملة (the students had been fighting) هي ماضي تام مستمر (Past Perfect Continuous) للأحداث الأطول التي استمرت حتى لحظة دخول المعلم في الماضي.",
+    whyWrong: [
+      "وجود (had left) و(had been fighting) يدل على الماضي التام وليس البسيط أو المستمر العادي.",
+      "",
+      "وجود (had) يعني ماضي تام (Past Perfect) وليس مضارعاً تاماً (Present Perfect).",
+      "الشق الثاني يحتوي على (had been + ing) أي ماضي تام مستمر."
+    ]
+  },
+  {
+    id: 117, ch: "ch14", cat: "gram", tag: "Chapter 14 • Unit 3 Self-Evaluation Q1 (Thomas Story p.134)",
+    q: "1- A man in Germany ............ a horrible surprise when....",
+    opts: ["had", "was having", "has", "having"],
+    ans: 0,
+    whyRight: "سؤال التقييم الذاتي الأول في صفحة 134! حصول المفاجأة المروعة (a horrible surprise) هو حدث مكتمل ولحظي في الماضي، كما أن فعل التملك/الحصول هنا لا يأخذ صيغة الاستمرار (was having)، فنختار الماضي البسيط (had).",
+    whyWrong: [
+      "",
+      "فخ السلايد! لا نقول (was having a surprise) لأن المفاجأة تقع في لحظة ولا تستمر لفترة.",
+      "كلمة (has) مضارع، وفي السرد القصصي (Narrative tenses) نبه السلايد: لا تخلط الماضي بالمضارع!",
+      "كلمة (having) وحدها لا تصلح فعلاً للجملة."
+    ]
+  },
+  {
+    id: 118, ch: "ch14", cat: "gram", tag: "Chapter 14 • Unit 3 Self-Evaluation Q2 (Thomas Story p.134)",
+    q: "2- When he ............ his email one morning……",
+    opts: ["had checked", "was checking", "checks", "is checking"],
+    ans: 1,
+    whyRight: "سؤال التقييم الذاتي الثاني في صفحة 134! تصفح وفحص الإيميل في ذلك الصباح (checking his email) كان هو الحدث المستمر في الخلفية (in progress) الذي وقعت أثناؤه المفاجأة، فنختار الماضي المستمر (was checking).",
+    whyWrong: [
+      "فخ السلايد! لو قلنا (had checked) لكان معناها أنه أنهى فحص الإيميل وأغلقه قبل أن يتفاجأ، بينما هو تفاجأ أثناء تصفحه للإيميل (was checking)!",
+      "",
+      "الفعل (checks) مضارع بسيط والقصة في الماضي.",
+      "صيغة (is checking) مضارع مستمر والقصة في الماضي."
+    ]
+  },
+  {
+    id: 119, ch: "ch14", cat: "gram", tag: "Chapter 14 • Unit 3 Self-Evaluation Q3 (Thomas Story p.134)",
+    q: "3- Thomas, aged 22, found he ............ items worth nearly $1 million in his bank account.",
+    opts: ["had bought", "was buying", "buys", "has bought"],
+    ans: 0,
+    whyRight: "سؤال التقييم الذاتي الثالث في صفحة 134! توماس 'وجد/اكتشف' في الماضي (found) أنه 'قد اشترى مسبقاً قبل لحظة فحص الإيميل' بضائع بقيمة مليون دولار؛ فحدث الشراء تم واكتمل في ماضٍ أقدم قبل حدث الاكتشاف (second past) = ماضي تام (had bought)!",
+    whyWrong: [
+      "",
+      "فخ السلايد! توماس لم يكن يشتري في نفس لحظة فتح الإيميل (was buying)، بل اكتشف أن عملية الشراء قد تمت مسبقاً في الماضي التام (had bought).",
+      "الفعل (buys) مضارع بسيط لا يركب مع (found).",
+      "صيغة (has bought) مضارع تام، ولا تخلط المضارع بسرد الماضي بعد الفعل الماضي (found)."
+    ]
+  },
+  {
+    id: 120, ch: "ch14", cat: "syn", tag: "Chapters 11–14 • Master Antonyms Review",
+    q: "Select the row where EVERY pair of words is a correct pair of opposites (antonyms) from Chapters 11 to 14:",
+    opts: [
+      "Useful ≠ Use | Pets ≠ Animals | Popular ≠ Famous | Honest ≠ Organised",
+      "Useful ≠ Useless | Interesting ≠ Boring | Delicious ≠ Disgusting | Sociable ≠ Shy | Employed ≠ Unemployed",
+      "Love ≠ Like | Terrifying ≠ Scary | Finished ≠ Completed | Online ≠ Internet",
+      "Honest ≠ Truthful | Organised ≠ Tidy | Ambitious ≠ Successful | Coins ≠ Metal"
+    ],
+    ans: 1,
+    whyRight: "جميع الأزواج في هذا الخيار أضداد صحيحة 100% من الفصول الأربعة الأخيرة: (Useful ≠ Useless)، (Interesting ≠ Boring)، (Delicious ≠ Disgusting)، (Sociable ≠ Shy)، و(Employed ≠ Unemployed).",
+    whyWrong: [
+      "كلمة (Use) ليست عكس (Useful)، و(Popular) مرادفة لـ (Famous) وليست عكسها.",
+      "",
+      "كلمة (Finished) مرادفة لـ (Completed) وعكسها الصحيح هو (Unfinished).",
+      "كلمة (Organised) مرادفة لـ (Tidy) وعكسها (Disorganised / Messy)."
+    ]
+  }
+];
+
+// ============================================================================
+// STATE MANAGEMENT & LOCALSTORAGE PERSISTENCE
+// ============================================================================
+const STORAGE_KEY = "kfu_eng3_comprehensive_exam_v1";
+
+let appState = {
+  filter: "all",
+  mistakesOnly: false,
+  currentIndex: 0,
+  answers: {},      // { [questionId]: selectedOptionIndex }
+  mistakes: []      // array of questionIds that the user got wrong
+};
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      appState = { ...appState, ...parsed };
+    }
+  } catch (e) {
+    console.warn("Could not load state from localStorage", e);
+  }
+}
+
+function saveState() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+  } catch (e) {
+    console.warn("Could not save state to localStorage", e);
+  }
+}
+
+function getFilteredList() {
+  if (appState.mistakesOnly) {
+    return QUESTION_BANK.filter(q => appState.mistakes.includes(q.id));
+  }
+  const f = appState.filter;
+  if (f === "all") return QUESTION_BANK;
+  if (["func", "syn", "gram", "read"].includes(f)) {
+    return QUESTION_BANK.filter(q => q.cat === f);
+  }
+  return QUESTION_BANK.filter(q => q.ch === f);
+}
+
+function updateTopStats() {
+  let correctCount = 0;
+  let wrongCount = 0;
+  Object.keys(appState.answers).forEach(qId => {
+    const qObj = QUESTION_BANK.find(x => x.id === Number(qId));
+    if (qObj) {
+      if (appState.answers[qId] === qObj.ans) correctCount++;
+      else wrongCount++;
+    }
+  });
+
+  const activeList = getFilteredList();
+  const currentPos = activeList.length > 0 ? Math.min(appState.currentIndex + 1, activeList.length) : 0;
+
+  document.getElementById("statProgress").textContent = `${currentPos} / ${activeList.length}`;
+  document.getElementById("statCorrect").textContent = `✅ صح: ${correctCount}`;
+  document.getElementById("statWrong").textContent = `❌ خطأ: ${wrongCount}`;
+  document.getElementById("mistakesCountBtn").textContent = appState.mistakes.length;
+
+  const mBtn = document.getElementById("mistakesModeBtn");
+  if (appState.mistakesOnly) {
+    mBtn.classList.add("active-mode");
+    mBtn.innerHTML = `🔙 العودة لكل الأسئلة (الأخطاء: <span id="mistakesCountBtn">${appState.mistakes.length}</span>)`;
+  } else {
+    mBtn.classList.remove("active-mode");
+    mBtn.innerHTML = `🔁 اختبرني في أخطائي (<span id="mistakesCountBtn">${appState.mistakes.length}</span>)`;
+  }
+
+  const pct = activeList.length > 0 ? Math.round((currentPos / activeList.length) * 100) : 0;
+  document.getElementById("progressBar").style.width = `${pct}%`;
+}
+
+function renderCurrentQuestion() {
+  updateTopStats();
+  const list = getFilteredList();
+  const container = document.getElementById("quizContainer");
+
+  if (list.length === 0) {
+    document.getElementById("qCategoryTag").textContent = "Zero Mistakes!";
+    document.getElementById("qIndexLabel").textContent = "0 / 0";
+    document.getElementById("questionText").innerHTML = `
+      <div class="empty-state" style="direction:rtl;text-align:center">
+        🎉 ممتاز جداً! لا توجد لديكِ أي أخطاء مسجلة حالياً في هذا القسم.<br>
+        <button class="nav-btn next" style="margin-top:14px" onclick="toggleMistakesMode()">العودة إلى بنك الأسئلة الشامل</button>
+      </div>
+    `;
+    document.getElementById("optionsContainer").innerHTML = "";
+    document.getElementById("feedbackContainer").className = "feedback-box";
+    document.getElementById("prevBtn").disabled = true;
+    document.getElementById("nextBtn").disabled = true;
+    document.getElementById("jumpSelect").innerHTML = "";
+    return;
+  }
+
+  if (appState.currentIndex >= list.length) appState.currentIndex = list.length - 1;
+  if (appState.currentIndex < 0) appState.currentIndex = 0;
+
+  const qItem = list[appState.currentIndex];
+  const userAns = appState.answers[qItem.id];
+  const isAnswered = userAns !== undefined;
+
+  document.getElementById("qCategoryTag").textContent = qItem.tag;
+  document.getElementById("qIndexLabel").textContent = `Question ${appState.currentIndex + 1} of ${list.length}`;
+  document.getElementById("questionText").textContent = qItem.q;
+
+  // Populate Jump Select
+  const jumpSel = document.getElementById("jumpSelect");
+  jumpSel.innerHTML = list.map((item, idx) => {
+    const a = appState.answers[item.id];
+    const mark = a === undefined ? "•" : (a === item.ans ? "✓" : "✗");
+    return `<option value="${idx}" ${idx === appState.currentIndex ? "selected" : ""}>سؤال ${idx + 1} ${mark}</option>`;
+  }).join("");
+
+  // Render Options (Strictly English LTR)
+  const optsBox = document.getElementById("optionsContainer");
+  optsBox.innerHTML = "";
+  const letters = ["A", "B", "C", "D"];
+
+  qItem.opts.forEach((optText, oIdx) => {
+    const btn = document.createElement("button");
+    btn.className = "opt-btn";
+    if (isAnswered) {
+      btn.disabled = true;
+      if (oIdx === qItem.ans) {
+        btn.classList.add("correct");
+      } else if (oIdx === userAns && userAns !== qItem.ans) {
+        btn.classList.add("wrong");
+      } else {
+        btn.classList.add("dimmed");
+      }
+    }
+
+    btn.innerHTML = `
+      <div style="display:flex;align-items:center;gap:12px">
+        <span class="opt-letter">${letters[oIdx]}</span>
+        <span>${optText}</span>
+      </div>
+      <span>${isAnswered ? (oIdx === qItem.ans ? "✅" : (oIdx === userAns ? "❌" : "")) : ""}</span>
+    `;
+
+    btn.onclick = () => handleSelectOption(qItem, oIdx);
+    optsBox.appendChild(btn);
+  });
+
+  // Render Arabic Feedback if answered
+  const fbBox = document.getElementById("feedbackContainer");
+  if (!isAnswered) {
+    fbBox.className = "feedback-box";
+    fbBox.innerHTML = "";
+  } else {
+    const isCorrect = userAns === qItem.ans;
+    if (isCorrect) {
+      fbBox.className = "feedback-box good-fb";
+      fbBox.innerHTML = `
+        <span class="fb-title">✅ إجابة صحيحة! أحسنتِ!</span>
+        <div class="fb-section">
+          <b>💡 لماذا الإجابة (<span dir="ltr">${qItem.opts[qItem.ans]}</span>) صحيحة؟</b><br>
+          ${qItem.whyRight}
+        </div>
+      `;
+    } else {
+      const specificWrongReason = (qItem.whyWrong && qItem.whyWrong[userAns])
+        ? qItem.whyWrong[userAns]
+        : "هذا الخيار مشتت خادع لا يتوافق مع الكلمة المفتاحية أو القاعدة في الجملة.";
+
+      fbBox.className = "feedback-box bad-fb";
+      fbBox.innerHTML = `
+        <span class="fb-title">❌ إجابة خاطئة! تم حفظ السؤال في سجل أخطائكِ للمراجعة.</span>
+        <div class="fb-section" style="border-right-color:#ef4444">
+          <b>⚠️ لماذا اختياركِ (<span dir="ltr">${qItem.opts[userAns]}</span>) خاطئ؟</b><br>
+          ${specificWrongReason}
+        </div>
+        <div class="fb-section" style="border-right-color:#10b981">
+          <b>✅ لماذا الإجابة الصحيحة هي (<span dir="ltr">${qItem.opts[qItem.ans]}</span>)؟</b><br>
+          ${qItem.whyRight}
+        </div>
+      `;
+    }
+  }
+
+  document.getElementById("prevBtn").disabled = appState.currentIndex === 0;
+  document.getElementById("nextBtn").disabled = appState.currentIndex >= list.length - 1;
+}
+
+function handleSelectOption(qItem, selectedIdx) {
+  appState.answers[qItem.id] = selectedIdx;
+  const isCorrect = selectedIdx === qItem.ans;
+
+  if (!isCorrect) {
+    if (!appState.mistakes.includes(qItem.id)) {
+      appState.mistakes.push(qItem.id);
+    }
+  } else {
+    // If answered correctly inside "Mistakes Retest Mode", remove it from mistakes after showing feedback
+    if (appState.mistakesOnly) {
+      appState.mistakes = appState.mistakes.filter(id => id !== qItem.id);
+    }
+  }
+
+  saveState();
+  renderCurrentQuestion();
+}
+
+function navigateQuestion(step) {
+  const list = getFilteredList();
+  const nextIdx = appState.currentIndex + step;
+  if (nextIdx >= 0 && nextIdx < list.length) {
+    appState.currentIndex = nextIdx;
+    saveState();
+    renderCurrentQuestion();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+}
+
+function jumpToQuestion(idxStr) {
+  appState.currentIndex = Number(idxStr);
+  saveState();
+  renderCurrentQuestion();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function toggleMistakesMode() {
+  appState.mistakesOnly = !appState.mistakesOnly;
+  appState.currentIndex = 0;
+
+  // When entering Mistakes Retest Mode, clear previous answers for those mistake questions so user can answer them fresh!
+  if (appState.mistakesOnly) {
+    appState.mistakes.forEach(mId => {
+      delete appState.answers[mId];
+    });
+  }
+
+  saveState();
+  renderCurrentQuestion();
+}
+
+function resetAllProgress() {
+  if (confirm("هل أنتِ متأكدة من تصفير جميع إجاباتكِ وسجل الأخطاء والبدء من جديد؟")) {
+    appState.answers = {};
+    appState.mistakes = [];
+    appState.currentIndex = 0;
+    appState.mistakesOnly = false;
+    saveState();
+    renderCurrentQuestion();
+  }
+}
+
+document.getElementById("filterSelect").onchange = (e) => {
+  appState.filter = e.target.value;
+  appState.mistakesOnly = false;
+  appState.currentIndex = 0;
+  saveState();
+  renderCurrentQuestion();
+};
+
+// Initialize
+loadState();
+document.getElementById("filterSelect").value = appState.filter || "all";
+renderCurrentQuestion();
+</script>
+</body>
+</html>
