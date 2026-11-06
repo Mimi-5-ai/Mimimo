@@ -1,0 +1,2171 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="dashboard">
+  <meta name="design-style" content="handbook">
+  <title>الملخص التفاعلي الشامل — المحاضرة الافتراضية المباشرة الثانية (اللغة الإنجليزية 3)</title>
+
+  <!-- Google Fonts: Noto Sans Arabic & Public Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600;700;800&family=Public+Sans:ital,wght@0,400..800;1,400..800&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces */
+      --background: #ffffff;
+      --surface-container-low: #f3f2f1;
+      --surface-container: #e8e7e5;
+      --surface-container-high: #dbdad9;
+
+      /* Ink */
+      --on-surface: #0b0c0c;
+      --on-surface-variant: #505a5f;
+
+      /* Rules */
+      --outline: #0b0c0c;
+      --outline-variant: #b1b4b6;
+
+      /* Accents */
+      --primary: #162e51;
+      --on-primary: #ffffff;
+      --primary-container: #d2e2f1;
+      --on-primary-container: #0c2d4a;
+      --secondary: #4c2c92;
+      --tertiary: #1a569e;
+      --error: #d4351c;
+      --on-error: #ffffff;
+
+      /* Data series */
+      --data-1: #1a569e;
+      --data-2: #c75a0a;
+      --data-3: #28a197;
+      --data-4: #4c2c92;
+      --data-context: #b1b4b6;
+
+      /* Semantics */
+      --positive: #00703c;
+      --warning: #f47738;
+
+      /* Focus states */
+      --focus-yellow: #ffdd00;
+      --focus-ring: 3px solid var(--focus-yellow);
+      --focus-bar: inset 0 0 0 2px var(--on-surface);
+      --focus-underline: 0 -2px var(--focus-yellow), 0 4px var(--on-surface);
+
+      /* Typography */
+      --font-headline: 'Noto Sans Arabic', 'Public Sans', sans-serif;
+      --font-body: 'Noto Sans Arabic', 'Public Sans', sans-serif;
+      --font-label: 'Noto Sans Arabic', 'Public Sans', sans-serif;
+
+      /* Shape & Effects */
+      --rounded: 0;
+      --rounded-lg: 0;
+      --rounded-full: 0;
+      --top-index-rule: 6px solid var(--primary);
+      --inset-rule: 5px solid var(--tertiary);
+      --inset-rule-accent: 5px solid var(--data-2);
+      --inset-rule-success: 5px solid var(--positive);
+      --inset-rule-warning: 5px solid var(--warning);
+      --inset-rule-error: 5px solid var(--error);
+      --button-ground: 0 2px 0 #091526;
+      --button-ground-secondary: 0 2px 0 #858686;
+
+      /* Spacing Scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+
+      /* Type Scale (Dashboard) */
+      --display-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+      --headline-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+      --subhead-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+      --body-size: clamp(0.9375rem, 0.9rem + 0.15vw, 1rem);
+      --label-size: 0.75rem;
+    }
+
+    /* Base Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.6;
+      text-align: right;
+    }
+    header {
+      position: static !important;
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
+      font-size: inherit;
+    }
+
+    /* RTL typography specifics */
+    bdi, span[dir="ltr"], code {
+      direction: ltr;
+      unicode-bidi: isolate;
+      font-family: 'Public Sans', monospace, sans-serif;
+    }
+
+    .page-grid {
+      display: grid;
+      gap: var(--space-lg);
+      padding: var(--space-md) var(--space-lg) var(--space-3xl);
+      max-width: 1240px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * {
+      min-width: 0;
+    }
+
+    /* Handbook Header & Service Bar */
+    .top-index-bar {
+      border-top: var(--top-index-rule);
+      border-bottom: 1px solid var(--outline-variant);
+      padding: var(--space-sm) 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      color: var(--on-surface-variant);
+    }
+    .top-index-bar .badge-label {
+      background: var(--primary);
+      color: var(--on-primary);
+      padding: 2px var(--space-sm);
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .main-header {
+      padding: var(--space-md) 0 var(--space-sm);
+      border-bottom: 2px solid var(--on-surface);
+    }
+    .main-title {
+      font-family: var(--font-headline);
+      font-size: var(--display-size);
+      font-weight: 800;
+      line-height: 1.2;
+      margin: 0 0 var(--space-xs) 0;
+      color: var(--on-surface);
+      letter-spacing: 0;
+    }
+    .main-subtitle {
+      font-size: var(--subhead-size);
+      color: var(--on-surface-variant);
+      margin: 0 0 var(--space-sm) 0;
+      line-height: 1.4;
+    }
+    .instructor-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      font-size: 0.875rem;
+      color: var(--on-surface-variant);
+      padding-top: var(--space-xs);
+    }
+    .meta-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    /* Key Metrics Panels */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: var(--space-md);
+      margin-top: var(--space-xs);
+    }
+    .metric-card {
+      background: var(--surface-container-low);
+      border-inline-start: var(--inset-rule);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .metric-card--accent {
+      border-inline-start: var(--inset-rule-accent);
+    }
+    .metric-card--success {
+      border-inline-start: var(--inset-rule-success);
+    }
+    .metric-card--warning {
+      border-inline-start: var(--inset-rule-warning);
+    }
+    .metric-label {
+      font-size: var(--label-size);
+      font-weight: 700;
+      color: var(--on-surface-variant);
+    }
+    .metric-value {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1.1;
+      color: var(--on-surface);
+      font-variant-numeric: tabular-nums;
+    }
+    .metric-desc {
+      font-size: 0.8125rem;
+      color: var(--on-surface-variant);
+      margin: 0;
+    }
+
+    /* Navigation Bar / Tabs */
+    .nav-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2px;
+      background: var(--surface-container-high);
+      border-bottom: 2px solid var(--primary);
+      padding: 0;
+      margin-top: var(--space-sm);
+    }
+    .nav-tab-btn {
+      background: var(--surface-container-low);
+      border: 0;
+      color: var(--on-surface);
+      font-family: var(--font-label);
+      font-size: 0.875rem;
+      font-weight: 700;
+      padding: var(--space-sm) var(--space-md);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      border-top: 3px solid transparent;
+      min-height: 44px;
+    }
+    .nav-tab-btn:hover {
+      background: var(--background);
+      color: var(--tertiary);
+    }
+    .nav-tab-btn.active {
+      background: var(--background);
+      color: var(--primary);
+      border-top: 3px solid var(--primary);
+      border-inline-start: 1px solid var(--outline-variant);
+      border-inline-end: 1px solid var(--outline-variant);
+    }
+    .nav-tab-btn:focus-visible {
+      outline: var(--focus-ring);
+      box-shadow: var(--focus-bar);
+    }
+
+    /* Content Sections */
+    .tab-content {
+      display: none;
+      flex-direction: column;
+      gap: var(--space-xl);
+    }
+    .tab-content.active {
+      display: flex;
+    }
+
+    /* Section Headers */
+    .section-title-wrap {
+      border-bottom: 1px solid var(--outline);
+      padding-bottom: var(--space-xs);
+      margin-bottom: var(--space-md);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    .section-title {
+      font-size: var(--headline-size);
+      font-weight: 800;
+      margin: 0;
+      color: var(--on-surface);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      background: var(--primary);
+      color: var(--on-primary);
+      font-weight: 800;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+    }
+
+    /* Inset Notices & Callouts */
+    .inset-panel {
+      border-inline-start: var(--inset-rule);
+      background: var(--surface-container-low);
+      padding: var(--space-md) var(--space-lg);
+      margin: var(--space-md) 0;
+    }
+    .inset-panel--accent {
+      border-inline-start: var(--inset-rule-accent);
+    }
+    .inset-panel--warning {
+      border-inline-start: var(--inset-rule-warning);
+    }
+    .inset-panel--error {
+      border-inline-start: var(--inset-rule-error);
+    }
+    .inset-panel h4 {
+      margin: 0 0 var(--space-xs) 0;
+      font-size: 1.05rem;
+      font-weight: 800;
+    }
+    .inset-panel p {
+      margin: 0;
+      font-size: 0.9375rem;
+      color: var(--on-surface);
+    }
+
+    /* Notice Tag */
+    .status-tag {
+      display: inline-block;
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-size: var(--label-size);
+      font-weight: 700;
+      padding: 2px var(--space-sm);
+      letter-spacing: 0;
+      vertical-align: middle;
+    }
+    .status-tag--warn {
+      background: #fedcba;
+      color: #7a2b00;
+    }
+    .status-tag--success {
+      background: #ccebd7;
+      color: #0b4f26;
+    }
+
+    /* Buttons */
+    .button {
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: 0.9375rem;
+      background: var(--primary);
+      color: var(--on-primary);
+      border: 0;
+      padding: var(--space-sm) var(--space-lg);
+      box-shadow: var(--button-ground);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      min-height: 44px;
+    }
+    .button--secondary {
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      box-shadow: var(--button-ground-secondary);
+      border: 1px solid var(--outline-variant);
+    }
+    .button:hover {
+      filter: brightness(1.1);
+    }
+    .button:active {
+      transform: translateY(2px);
+      box-shadow: none;
+    }
+    .button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: var(--focus-ring);
+      outline-offset: 0;
+      box-shadow: var(--focus-bar);
+    }
+
+    /* Tables */
+    .handbook-table-container {
+      width: 100%;
+      overflow-x: auto;
+      margin: var(--space-md) 0;
+    }
+    .handbook-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: right;
+      font-size: 0.9375rem;
+    }
+    .handbook-table th {
+      background: var(--surface-container-low);
+      border-bottom: 2px solid var(--on-surface);
+      padding: var(--space-sm) var(--space-md);
+      font-weight: 800;
+      color: var(--on-surface);
+    }
+    .handbook-table td {
+      border-bottom: 1px solid var(--outline-variant);
+      padding: var(--space-sm) var(--space-md);
+      vertical-align: top;
+    }
+    .handbook-table tr:hover td {
+      background: var(--surface-container-low);
+    }
+
+    /* Cards Grid */
+    .grid-2col {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .grid-3col {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .rule-card {
+      border: 1px solid var(--outline-variant);
+      background: var(--background);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .rule-card__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--outline-variant);
+      padding-bottom: var(--space-xs);
+    }
+    .rule-card__title {
+      font-weight: 800;
+      font-size: 1.05rem;
+      margin: 0;
+      color: var(--primary);
+    }
+
+    /* Reading Passage Viewer */
+    .passage-container {
+      border: 2px solid var(--on-surface);
+      padding: var(--space-lg);
+      background: var(--background);
+      line-height: 1.8;
+      font-size: 1.05rem;
+    }
+    .passage-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      margin-top: 0;
+      margin-bottom: var(--space-sm);
+      padding-bottom: var(--space-xs);
+      border-bottom: 2px solid var(--tertiary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .reading-highlight {
+      background-color: var(--focus-yellow);
+      padding: 0 4px;
+      font-weight: 700;
+    }
+    .reading-highlight-digital {
+      background-color: #d2e2f1;
+      padding: 0 4px;
+      font-weight: 700;
+    }
+    .reading-highlight-books {
+      background-color: #e2f2d5;
+      padding: 0 4px;
+      font-weight: 700;
+    }
+    .reading-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+      margin-bottom: var(--space-md);
+      align-items: center;
+    }
+
+    /* Interactive Quiz Module */
+    .quiz-box {
+      border: 2px solid var(--on-surface);
+      padding: var(--space-lg);
+      background: var(--background);
+    }
+    .quiz-question-card {
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline-variant);
+      padding: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+    .quiz-q-title {
+      font-weight: 800;
+      font-size: 1rem;
+      margin: 0 0 var(--space-sm) 0;
+      color: var(--on-surface);
+      display: flex;
+      gap: var(--space-xs);
+    }
+    .quiz-options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: var(--space-xs);
+      margin-bottom: var(--space-sm);
+    }
+    .quiz-option-btn {
+      background: var(--background);
+      border: 2px solid var(--outline-variant);
+      color: var(--on-surface);
+      padding: var(--space-sm);
+      text-align: right;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      min-height: 44px;
+    }
+    .quiz-option-btn:hover {
+      border-color: var(--tertiary);
+      background: var(--surface-container);
+    }
+    .quiz-option-btn.selected-correct {
+      background: #ccebd7;
+      border-color: var(--positive);
+      color: #0b4f26;
+      font-weight: 800;
+    }
+    .quiz-option-btn.selected-wrong {
+      background: #fbd6d2;
+      border-color: var(--error);
+      color: #7a1205;
+      font-weight: 800;
+    }
+    .quiz-explanation {
+      display: none;
+      padding: var(--space-sm);
+      background: var(--background);
+      border-inline-start: 4px solid var(--tertiary);
+      font-size: 0.875rem;
+      margin-top: var(--space-xs);
+    }
+
+    /* Chart Containers */
+    .chart-card {
+      border: 1px solid var(--outline-variant);
+      padding: var(--space-md);
+      background: var(--background);
+    }
+    .chart-wrapper {
+      position: relative;
+      min-height: 250px;
+      width: 100%;
+    }
+
+    /* Interactive Filter Bar */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+      margin-bottom: var(--space-md);
+      align-items: center;
+    }
+    .filter-chip {
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline-variant);
+      color: var(--on-surface);
+      padding: var(--space-xs) var(--space-md);
+      font-size: 0.8125rem;
+      font-weight: 700;
+      cursor: pointer;
+      min-height: 36px;
+    }
+    .filter-chip.active {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+
+    /* Print & Responsiveness */
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-sm);
+      }
+      .metrics-row {
+        grid-template-columns: 1fr;
+      }
+      .nav-tabs {
+        overflow-x: auto;
+      }
+      .quiz-options-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media prefers-reduced-motion: reduce {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-grid">
+
+    <!-- Top Index Service Bar -->
+    <div class="top-index-bar">
+      <div style="display: flex; align-items: center; gap: var(--space-sm);">
+        <span class="badge-label">جامعة الملك فيصل</span>
+        <span>كلية إدارة الأعمال — قسم القانون التجاري</span>
+      </div>
+      <div>
+        <span>المقرر: اللغة الإنجليزية (مستوى 3) • CRN 81162</span>
+      </div>
+    </div>
+
+    <!-- Main Header -->
+    <header class="main-header">
+      <h1 class="main-title">الملخص التفاعلي للمحاضرة الافتراضية المباشرة الثانية</h1>
+      <p class="main-subtitle">دليل مراجعة شامل وتفاعلي يغطي استراتيجيات القراءة وقطعة الاختبار النهائي المعتمدة، موسوعة قواعد الجرامر، المفردات، وتوجيهات الاختبار النهائي.</p>
+      <div class="instructor-meta">
+        <span class="meta-tag"><strong>المحاضر:</strong> أ. سارة آل بن شيخ / د. سارة</span>
+        <span class="meta-tag"><strong>تاريخ الانعقاد:</strong> الفصل الدراسي الأول 1448هـ / أكتوبر 2026</span>
+        <span class="meta-tag"><strong>المرجع:</strong> التسجيل المباشر الأول والثاني للمحاضرة</span>
+      </div>
+    </header>
+
+    <!-- Key Metrics Cards -->
+    <div class="metrics-row">
+      <div class="metric-card metric-card--accent">
+        <span class="metric-label">الاختبار النهائي</span>
+        <span class="metric-value">70 درجة</span>
+        <p class="metric-desc">50 سؤال اختيار من متعدد (A, B, C, D) • وزن السؤال الواحد 1.4 درجة.</p>
+      </div>
+
+      <div class="metric-card metric-card--success">
+        <span class="metric-label">الأعمال الفصلية (مضمونة)</span>
+        <span class="metric-value">30 درجة</span>
+        <p class="metric-desc">حل الواجبات + المناقشات + حضور 14 محاضرة مسجلة واللقاءات المباشرة.</p>
+      </div>
+
+      <div class="metric-card">
+        <span class="metric-label">قطعة الاختبار النهائي المعتمدة</span>
+        <span class="metric-value">ذا لايبراري</span>
+        <p class="metric-desc">قطعة "The Library" فقط هي المقررة للاختبار النهائي (10 أسئلة = 14 درجة).</p>
+      </div>
+
+      <div class="metric-card metric-card--warning">
+        <span class="metric-label">النصاب الأكبر في الأسئلة</span>
+        <span class="metric-value">الجرامر</span>
+        <p class="metric-desc">أغلب أسئلة الاختبار ستركز على القواعد والأزمنة وأسئلة الاستفهام وحروف الجر.</p>
+      </div>
+    </div>
+
+    <!-- Primary Navigation Tabs -->
+    <nav class="nav-tabs" aria-label="أقسام الملخص">
+      <button class="nav-tab-btn active" onclick="switchTab('tab-exam-specs')" id="btn-tab-exam-specs">
+        <i data-lucide="award" style="width: 18px; height: 18px;"></i>
+        نظام الدرجات ومواصفات الاختبار
+      </button>
+      <button class="nav-tab-btn" onclick="switchTab('tab-reading')" id="btn-tab-reading">
+        <i data-lucide="book-open" style="width: 18px; height: 18px;"></i>
+        استراتيجيات الريدينغ وقطعة الاختبار
+      </button>
+      <button class="nav-tab-btn" onclick="switchTab('tab-grammar')" id="btn-tab-grammar">
+        <i data-lucide="layers" style="width: 18px; height: 18px;"></i>
+        موسوعة قواعد الجرامر المشروحة
+      </button>
+      <button class="nav-tab-btn" onclick="switchTab('tab-tools')" id="btn-tab-tools">
+        <i data-lucide="sliders" style="width: 18px; height: 18px;"></i>
+        مختبر التراكيب وأدوات التدريب
+      </button>
+      <button class="nav-tab-btn" onclick="switchTab('tab-vocab')" id="btn-tab-vocab">
+        <i data-lucide="file-text" style="width: 18px; height: 18px;"></i>
+        معجم المفردات والوظائف والأرقام
+      </button>
+      <button class="nav-tab-btn" onclick="switchTab('tab-quiz')" id="btn-tab-quiz">
+        <i data-lucide="check-circle-2" style="width: 18px; height: 18px;"></i>
+        بنك الأسئلة والتدريب التفاعلي
+      </button>
+      <button class="nav-tab-btn" onclick="switchTab('tab-tips')" id="btn-tab-tips">
+        <i data-lucide="alert-triangle" style="width: 18px; height: 18px;"></i>
+        نصائح وتحذيرات الاختبار النهائي
+      </button>
+    </nav>
+
+    <!-- ==================== TAB 1: EXAM SPECS & GRADES ==================== -->
+    <section id="tab-exam-specs" class="tab-content active">
+      <div class="section-title-wrap">
+        <h2 class="section-title">
+          <span class="step-badge">1</span>
+          توزيع درجات المقرر وهيكل الاختبار النهائي
+        </h2>
+        <span class="status-tag">بيانات معتمدة من المحاضرة</span>
+      </div>
+
+      <div class="inset-panel inset-panel--accent">
+        <h4>توجيه الأستاذة الحاسم بشأن درجات الأعمال الفصلية (30 درجة):</h4>
+        <p>«الكل المفروض ياخذ درجة الأعمال الفصلية كاملة لأنها شيء في متناول اليد تماماً. لا تدعوا هذه الدرجات تفوتكم!»</p>
+      </div>
+
+      <div class="grid-2col">
+        <!-- Coursework Breakdown -->
+        <div class="rule-card">
+          <div class="rule-card__header">
+            <h3 class="rule-card__title">الأعمال الفصلية (30 درجة) — خطة الإنجاز</h3>
+            <span class="status-tag status-tag--success">مضمونة 100%</span>
+          </div>
+          <p>للحصول على الـ 30 درجة كاملة دون أي نقصان، يجب إنجاز المهام الأربع التالية عبر منصة البلاك بورد:</p>
+          <ul style="padding-right: var(--space-lg); margin: 0; line-height: 1.8;">
+            <li><strong>الواجبات الإلكترونية:</strong> حل كافة الواجبات المقررة وتسليمها أولاً بأول.</li>
+            <li><strong>المناقشات الأسبوعية:</strong> المشاركة المنتظمة في منتديات النقاش المطروحة.</li>
+            <li><strong>المحاضرات المسجلة:</strong> حضور والاستماع إلى الـ <strong>14 محاضرة مسجلة</strong> عبر البلاك بورد.</li>
+            <li><strong>اللقاءات المباشرة:</strong> حضور المحاضرات الافتراضية المباشرة (Live Sessions).</li>
+          </ul>
+        </div>
+
+        <!-- Final Exam Specs -->
+        <div class="rule-card">
+          <div class="rule-card__header">
+            <h3 class="rule-card__title">مواصفات الاختبار النهائي (70 درجة)</h3>
+            <span class="status-tag status-tag--warn">النصاب الأكبر</span>
+          </div>
+          <p>أوضحت الدكتورة تفاصيل ورقة الاختبار ونظام الأسئلة كالآتي:</p>
+          <ul style="padding-right: var(--space-lg); margin: 0; line-height: 1.8;">
+            <li><strong>عدد الأسئلة:</strong> 50 سؤالاً موضوعياً (اختيار من متعدد).</li>
+            <li><strong>خيارات الإجابة:</strong> 4 خيارات لكل سؤال (<bdi dir="ltr">A, B, C, D</bdi>).</li>
+            <li><strong>وزن السؤال:</strong> <strong>1.4 درجة</strong> لكل سؤال (50 × 1.4 = 70 درجة).</li>
+            <li><strong>طريقة الحل:</strong> تظليل ورقة الإجابة (Optical Mark Reader).</li>
+            <li><strong>توزيع المحتوى:</strong> قواعد الجرامر (النصاب الأكبر)، المفردات والأضداد، شهور السنة والوظائف، وقطعة فهم المقروء.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Charts View -->
+      <div class="grid-2col" style="margin-top: var(--space-md);">
+        <div class="chart-card">
+          <h3 style="margin: 0 0 var(--space-sm) 0; font-size: 1rem; font-weight: 800;">توزيع درجات المقرر الكلية (100 درجة)</h3>
+          <div class="chart-wrapper">
+            <canvas id="chartGradesDistribution"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <h3 style="margin: 0 0 var(--space-sm) 0; font-size: 1rem; font-weight: 800;">الوزن النسبي لأقسام الاختبار النهائي</h3>
+          <div class="chart-wrapper">
+            <canvas id="chartExamTopics"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 2: READING & THE LIBRARY ==================== -->
+    <section id="tab-reading" class="tab-content">
+      <div class="section-title-wrap">
+        <h2 class="section-title">
+          <span class="step-badge">2</span>
+          استراتيجيات القراءة والقطعة الرسمية المقررة للاختبار (The Library)
+        </h2>
+        <span class="status-tag">10 أسئلة مضمونة</span>
+      </div>
+
+      <div class="inset-panel">
+        <h4>قرار المحاضر الرسمي:</h4>
+        <p>تم تحديد قطعة <strong>"The Library" (المكتبة)</strong> لتكون هي القطعة الوحيدة المعتمدة والداخلة في الاختبار النهائي، مع استبعاد القطع الطويلة الأخرى في الكتاب. سيأتي عليها حوالي 10 أسئلة تزن 14 درجة كاملة.</p>
+      </div>
+
+      <!-- The 6 Reading Steps -->
+      <div class="rule-card">
+        <h3 class="rule-card__title" style="margin-bottom: var(--space-sm);">الخطوات الست للقراءة المتقنة واستخراج الإجابات (كما شرحتها الأستاذة)</h3>
+        <div class="grid-3col">
+          <div style="border-inline-start: 3px solid var(--primary); padding-inline-start: var(--space-sm);">
+            <strong>1. فهم العنوان (Title):</strong>
+            <p style="margin: var(--space-xs) 0 0 0; font-size: 0.875rem;">وضع خط تحت العنوان ومحاولة استنتاج فكرة النص العامة منه فوراً.</p>
+          </div>
+          <div style="border-inline-start: 3px solid var(--primary); padding-inline-start: var(--space-sm);">
+            <strong>2. معاينة الصور (Visuals):</strong>
+            <p style="margin: var(--space-xs) 0 0 0; font-size: 0.875rem;">إذا احتوى النص على صور، استعن بها لفهم السياق والموضوع المطروح.</p>
+          </div>
+          <div style="border-inline-start: 3px solid var(--primary); padding-inline-start: var(--space-sm);">
+            <strong>3. تفكيك الفقرات (Paragraphs):</strong>
+            <p style="margin: var(--space-xs) 0 0 0; font-size: 0.875rem;">كل فقرة تناقش فكرة رئيسية واحدة محددة. عد الفقرات لمعرفة عدد الأفكار.</p>
+          </div>
+          <div style="border-inline-start: 3px solid var(--primary); padding-inline-start: var(--space-sm);">
+            <strong>4. اختيار الأسلوب الأنسب:</strong>
+            <p style="margin: var(--space-xs) 0 0 0; font-size: 0.875rem;">إما قراءة النص سريعاً أولاً ثم الأسئلة، أو البدء بالأسئلة والمسح الضوئي (<bdi dir="ltr">Scanning</bdi>).</p>
+          </div>
+          <div style="border-inline-start: 3px solid var(--primary); padding-inline-start: var(--space-sm);">
+            <strong>5. رصد الكلمات المفتاحية (Keywords):</strong>
+            <p style="margin: var(--space-xs) 0 0 0; font-size: 0.875rem;">البحث في السؤال عن الأسماء، الأفعال المحددة، والأرقام (<bdi dir="ltr">Numbers</bdi>) وتحديدها في النص.</p>
+          </div>
+          <div style="border-inline-start: 3px solid var(--primary); padding-inline-start: var(--space-sm);">
+            <strong>6. عدم ترك أي فراغ (Elimination):</strong>
+            <p style="margin: var(--space-xs) 0 0 0; font-size: 0.875rem;">استبعاد الخيارات المستحيلة، وتظليل خيار في كل سؤال حتى لو بالحدس في نهاية الوقت.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exam Passage Interactive Reader -->
+      <div>
+        <div class="reading-controls">
+          <span style="font-weight: 700; margin-inline-end: var(--space-sm);">تظليل الكلمات المفتاحية تفاعلياً:</span>
+          <button class="filter-chip active" onclick="setPassageHighlight('all')" id="hl-btn-all">عرض النص العادي</button>
+          <button class="filter-chip" onclick="setPassageHighlight('digital')" id="hl-btn-digital">مصطلحات التقنية والمكتبة الرقمية</button>
+          <button class="filter-chip" onclick="setPassageHighlight('services')" id="hl-btn-services">الخدمات والأنشطة والكتب</button>
+          <button class="filter-chip" onclick="setPassageHighlight('people')" id="hl-btn-people">الأشخاص والرواد</button>
+          <button class="button button--secondary" onclick="togglePassageTranslation()" style="margin-inline-start: auto;" id="btn-toggle-trans">
+            <i data-lucide="languages" style="width: 16px; height: 16px;"></i>
+            <span id="trans-btn-label">عرض الترجمة والشرح العربي للفقرات</span>
+          </button>
+        </div>
+
+        <div class="passage-container" id="passage-box">
+          <div class="passage-title">
+            <span>Reading Passage: The Library (قطعة الاختبار النهائي المعتمدة)</span>
+            <span class="status-tag status-tag--success">المقررة رسمياً</span>
+          </div>
+
+          <div id="passage-english">
+            <p style="margin-bottom: var(--space-md);">
+              <strong>Paragraph 1:</strong>
+              A library is a <span class="pass-word pass-desc">quiet place</span> where people go to read and study. It is widely visited by <span class="pass-word pass-people">students</span>, researchers, and book lovers. In a traditional library, people can <span class="pass-word pass-serv">borrow books</span>, use study tables, and access <span class="pass-word pass-digital">computers</span> for research. Libraries contain a wide variety of books, such as <span class="pass-word pass-books">science books</span>, history books, and <span class="pass-word pass-books">novels</span>.
+            </p>
+            <p style="margin-bottom: 0;">
+              <strong>Paragraph 2:</strong>
+              Today, libraries have evolved significantly. Many institutions now provide a <span class="pass-word pass-digital">digital library</span> that users can access from anywhere using their electronic devices like <span class="pass-word pass-digital">smartphones, laptops, and tablets</span>. Users can borrow <span class="pass-word pass-digital">e-books</span>, read academic <span class="pass-word pass-books">journals</span>, and search online databases. The <span class="pass-word pass-people">librarian</span> is always available to assist visitors with information and guide them through digital resources. The library remains an essential center for gaining and expanding <span class="pass-word pass-desc">knowledge</span>.
+            </p>
+          </div>
+
+          <div id="passage-arabic" style="display: none; margin-top: var(--space-md); border-top: 1px dashed var(--outline-variant); padding-top: var(--space-md); background: var(--surface-container-low); padding: var(--space-md);">
+            <h4 style="margin: 0 0 var(--space-xs) 0; color: var(--primary);">الترجمة التحليلية وأفكار الفقرتين (وفق شرح الأستاذة في المحاضرة):</h4>
+            <p style="margin-bottom: var(--space-sm);">
+              <strong>الفقرة الأولى (المكتبة التقليدية):</strong> المكتبة مكان هادئ يرتاده الناس للقراءة والمذاكرة، وأكثر من يرتادها هم الطلاب والباحثون. يستطيع الزوار استعارة الكتب المطبوعة واستخدام أجهزة الحاسوب، وتحتوي المكتبة على تشكيلة واسعة من الكتب العلمية، وكتب التاريخ، والروايات الأدبية.
+            </p>
+            <p style="margin: 0;">
+              <strong>الفقرة الثانية (المكتبة الحديثة والرقمية):</strong> في الوقت الحاضر، تطورت المكتبات لتشمل "المكتبة الرقمية" التي يمكن الدخول إليها عن بُعد بواسطة الأجهزة الذكية والأجهزة اللوحية والحواسيب. تتيح للمستخدمين استعارة الكتب الإلكترونية وتصفح المقالات العلمية وقواعد البيانات. ويقوم "أمين المكتبة" بتقديم العون والإرشاد للزوار في البحث عن المعلومات والخدمات الإلكترونية، وتظل المكتبة الصرح الأساسي لاكتساب المعرفة.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comparison between Rice and Library Passages -->
+      <div class="rule-card" style="margin-top: var(--space-md);">
+        <div class="rule-card__header">
+          <h3 class="rule-card__title">مقارنة سريعة: النص التدريبي (Rice) مقابل نص الاختبار (The Library)</h3>
+        </div>
+        <div class="handbook-table-container">
+          <table class="handbook-table">
+            <thead>
+              <tr>
+                <th>وجه المقارنة</th>
+                <th>قطعة الأرز (<bdi dir="ltr">Rice</bdi>) — تدريب المحاضرة فقط</th>
+                <th>قطعة المكتبة (<bdi dir="ltr">The Library</bdi>) — المقررة للاختبار</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>حالة الدخول في الاختبار</strong></td>
+                <td><span class="status-tag status-tag--warn">غير داخلة</span> (تم التدريب عليها بالمحاضرة فقط)</td>
+                <td><span class="status-tag status-tag--success">داخلة ومقررة رسمياً</span> (10 أسئلة)</td>
+              </tr>
+              <tr>
+                <td><strong>الفكرة الرئيسية</strong></td>
+                <td>أنواع الأرز (7000 نوع)، أصله، طرق زراعته واستخداماته المتعددة.</td>
+                <td>أهمية المكتبة ومحتوياتها، والتحول إلى المكتبات الرقمية الحديثة.</td>
+              </tr>
+              <tr>
+                <td><strong>أهم الكلمات والأرقام</strong></td>
+                <td><bdi dir="ltr">grass, 7000 kinds, dry soil, wet soil, insects, brooms, fuel</bdi></td>
+                <td><bdi dir="ltr">quiet place, students, borrow books, digital library, e-books, librarian, knowledge</bdi></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 3: GRAMMAR HUB ==================== -->
+    <section id="tab-grammar" class="tab-content">
+      <div class="section-title-wrap">
+        <h2 class="section-title">
+          <span class="step-badge">3</span>
+          موسوعة قواعد الجرامر المشروحة بالتفصيل
+        </h2>
+        <span class="status-tag">النصاب الأكبر في الاختبار</span>
+      </div>
+
+      <div class="inset-panel inset-panel--accent">
+        <h4>القاعدة الذهبية التي كررتها الدكتورة في المحاضرة:</h4>
+        <p>«ركزوا دائماً على مؤشرات الزمن (<bdi dir="ltr">Time clues</bdi>) في الجملة! هي المفتاح لاختيار الزمن الصحيح: هل الجملة تتحدث عن روتين يومي (<bdi dir="ltr">every day</bdi>) فنختار مضارع بسيط، أم حدث وانتهى (<bdi dir="ltr">yesterday, last night, ago</bdi>) فنختار ماضي بسيط، أم يحدث الآن (<bdi dir="ltr">right now</bdi>) فنختار مضارع مستمر؟»</p>
+      </div>
+
+      <!-- Grammar Rules Grid -->
+      <div class="grid-2col">
+
+        <!-- Rule 1: WH-Questions -->
+        <div class="rule-card">
+          <div class="rule-card__header">
+            <h3 class="rule-card__title">1. أسئلة الاستفهام (<bdi dir="ltr">WH-Questions</bdi>)</h3>
+            <span class="status-tag">سؤال مؤكد</span>
+          </div>
+          <p>تُستخدم أدوات الاستفهام بحسب الشيء المراد السؤال عنه بدقة:</p>
+          <ul style="padding-right: var(--space-md); margin: 0; line-height: 1.8;">
+            <li><strong><bdi dir="ltr">Who</bdi> (مَن):</strong> للسؤال عن الأشخاص (<bdi dir="ltr">Persons</bdi>).<br>
+              مثال: <bdi dir="ltr">Who is your teacher?</bdi></li>
+            <li><strong><bdi dir="ltr">What</bdi> (ماذا / ما):</strong> للسؤال عن الأشياء والجمادات (<bdi dir="ltr">Things</bdi>).<br>
+              مثال: <bdi dir="ltr">What is your name?</bdi></li>
+            <li><strong><bdi dir="ltr">When</bdi> (متى):</strong> للسؤال عن الوقت والمناسبات (<bdi dir="ltr">Time / Events</bdi>).<br>
+              مثال: <bdi dir="ltr">When is your graduation?</bdi> / <bdi dir="ltr">When is your birthday?</bdi></li>
+            <li><strong><bdi dir="ltr">Why</bdi> (لماذا):</strong> للسؤال عن السبب (<bdi dir="ltr">Reason</bdi>).<br>
+              مثال: <bdi dir="ltr">Why are you late?</bdi> / <bdi dir="ltr">Why are you happy?</bdi></li>
+            <li><strong><bdi dir="ltr">Where</bdi> (أين):</strong> للسؤال عن الأماكن (<bdi dir="ltr">Places</bdi>).<br>
+              مثال: <bdi dir="ltr">Where is the cafe?</bdi> / <bdi dir="ltr">Where are you from?</bdi></li>
+          </ul>
+        </div>
+
+        <!-- Rule 2: Sentence Structure -->
+        <div class="rule-card">
+          <div class="rule-card__header">
+            <h3 class="rule-card__title">2. بنية الجملة الإنجليزية (<bdi dir="ltr">Sentence Structure</bdi>)</h3>
+          </div>
+          <p>الجملة الخبرية الصحيحة في الإنجليزية تبدأ دوماً بالفاعل (<bdi dir="ltr">Subject</bdi>) يليه الفعل، ثم تكملة الجملة أو شبه الجملة المجرورة (<bdi dir="ltr">Objective / Prepositional Phrase</bdi>):</p>
+          <div style="background: var(--surface-container-low); padding: var(--space-sm); border-inline-start: 4px solid var(--tertiary); margin: var(--space-xs) 0;">
+            <bdi dir="ltr"><strong>The bird</strong> (Subject) + <strong>is</strong> (Verb) + <strong>on the tree</strong> (Objective phrase).</bdi>
+          </div>
+          <p style="font-size: 0.875rem; color: var(--on-surface-variant); margin: 0;">
+            <strong>تنبيه المحاضرة:</strong> لا يصح تقديم شبه الجملة أو الفعل على الفاعل في الجملة التقريرية العادية.
+          </p>
+        </div>
+
+        <!-- Rule 3: Present Simple -->
+        <div class="rule-card">
+          <div class="rule-card__header">
+            <h3 class="rule-card__title">3. المضارع البسيط (<bdi dir="ltr">Present Simple</bdi>)</h3>
+          </div>
+          <p><strong>الاستخدام:</strong> الروتين والعادات اليومية المتكررة (<bdi dir="ltr">every day, every morning</bdi>) والحقائق العلمية الثابتة (<bdi dir="ltr">The sun rises from the east</bdi>).</p>
+          <ul style="padding-right: var(--space-md); margin: 0; line-height: 1.8;">
+            <li><strong>مع ضمائر الجمع و <bdi dir="ltr">I</bdi>:</strong> (<bdi dir="ltr">I, You, We, They</bdi>) الفعل يكون <strong>مجرداً في المصدر</strong> (<bdi dir="ltr">Infinitive</bdi>) دون أي إضافات.<br>
+              مثال: <bdi dir="ltr">I drive to work every day.</bdi> / <bdi dir="ltr">We drive every day.</bdi></li>
+            <li><strong>مع ضمائر المفرد الغائب والاسم المفرد:</strong> (<bdi dir="ltr">He, She, It, Sarah, The meeting</bdi>) نضيف للفعل حرف <strong>(<bdi dir="ltr">s</bdi>)</strong> أو <strong>(<bdi dir="ltr">es</bdi>)</strong>.<br>
+              مثال: <bdi dir="ltr">He drives to work every day.</bdi> / <bdi dir="ltr">The meeting begins at 10 PM.</bdi></li>
+            <li><strong>في حالة النفي:</strong> نستخدم <bdi dir="ltr">doesn't</bdi> للمفرد و <bdi dir="ltr">don't</bdi> للجمع، مع إعادة الفعل إلى <strong>المصدر المجرد تماماً</strong>!<br>
+              مثال: <bdi dir="ltr">He doesn't drive.</bdi> (وليس drives).</li>
+          </ul>
+        </div>
+
+        <!-- Rule 4: Past Simple -->
+        <div class="rule-card">
+          <div class="rule-card__header">
+            <h3 class="rule-card__title">4. الماضي البسيط (<bdi dir="ltr">Past Simple</bdi>)</h3>
+          </div>
+          <p><strong>الاستخدام:</strong> حدث تم وانتهى في الماضي في وقت محدد ومعلوم (<bdi dir="ltr">yesterday, last night, 3 hours ago</bdi>).</p>
+          <ul style="padding-right: var(--space-md); margin: 0; line-height: 1.8;">
+            <li>الفاعل (مفرد أو جمع) <strong>لا يغير</strong> شكل الفعل في الماضي (لا توجد <bdi dir="ltr">s</bdi> في الماضي إطلاقاً!).</li>
+            <li><strong>الأفعال المنتظمة (<bdi dir="ltr">Regular</bdi>):</strong> نضيف <bdi dir="ltr">-ed</bdi> فقط مثل: <bdi dir="ltr">start → started, play → played</bdi>.</li>
+            <li><strong>الأفعال الشاذة (<bdi dir="ltr">Irregular</bdi>):</strong> يتغير شكلها ويجب حفظها:
+              <br>• <bdi dir="ltr">make → made</bdi>
+              <br>• <bdi dir="ltr">buy → bought</bdi> (حذرت الدكتورة: كلمة <bdi dir="ltr">buyed</bdi> خطأ تماماً!)
+              <br>• <bdi dir="ltr">go → went</bdi>
+              <br>• <bdi dir="ltr">drive → drove</bdi>
+            </li>
+            <li><strong>أفعال الكينونة في الماضي:</strong>
+              <br>• المفرد (<bdi dir="ltr">I, He, She, It, Khalid</bdi>) يأخذ <strong><bdi dir="ltr">was</bdi></strong>.
+              <br>• الجمع (<bdi dir="ltr">We, They, You, Sarah and Khalid</bdi>) يأخذ <strong><bdi dir="ltr">were</bdi></strong>.
+              <br>مثال الاختبار: <bdi dir="ltr">Sarah and Khalid were playing PlayStation yesterday.</bdi>
+            </li>
+            <li><strong>النفي في الماضي:</strong> نستخدم دائماً <strong><bdi dir="ltr">didn't</bdi> + المصدر المجرد</strong>.<br>
+              مثال الاختبار: <bdi dir="ltr">We didn't watch TV last night.</bdi> (وليس watched ولا doesn't).
+            </li>
+          </ul>
+        </div>
+
+        <!-- Rule 5: Prepositions of Time (IN, ON, AT) -->
+        <div class="rule-card" style="grid-column: 1 / -1;">
+          <div class="rule-card__header">
+            <h3 class="rule-card__title">5. حروف الجر الزمنية (<bdi dir="ltr">Prepositions of Time: In, On, At</bdi>) — جدول الحفظ الشامل</h3>
+            <span class="status-tag status-tag--warn">تركيز مكثف في الاختبار</span>
+          </div>
+          <div class="handbook-table-container">
+            <table class="handbook-table">
+              <thead>
+                <tr>
+                  <th style="width: 15%;">حرف الجر</th>
+                  <th style="width: 45%;">حالات الاستخدام الإلزامية</th>
+                  <th style="width: 40%;">أمثلة من المحاضرة</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong><bdi dir="ltr">in</bdi></strong></td>
+                  <td>
+                    1. <strong>فصول السنة (<bdi dir="ltr">Seasons</bdi>):</strong> <bdi dir="ltr">winter, summer, spring, autumn/fall</bdi><br>
+                    2. <strong>شهور السنة المذكورة وحدها (<bdi dir="ltr">Months</bdi>):</strong> <bdi dir="ltr">April, October, May</bdi><br>
+                    3. <strong>أجزاء اليوم (<bdi dir="ltr">Parts of day</bdi>):</strong> <bdi dir="ltr">in the morning, in the afternoon, in the evening</bdi>
+                  </td>
+                  <td>
+                    • <bdi dir="ltr">Winter begins <strong>in</strong> May.</bdi><br>
+                    • <bdi dir="ltr">Leaves fall <strong>in</strong> autumn.</bdi><br>
+                    • <bdi dir="ltr">I study <strong>in</strong> the morning.</bdi>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong><bdi dir="ltr">on</bdi></strong></td>
+                  <td>
+                    1. <strong>أيام الأسبوع (<bdi dir="ltr">Days</bdi>):</strong> <bdi dir="ltr">Tuesday, Friday, on every day</bdi><br>
+                    2. <strong>التواريخ المحددة (<bdi dir="ltr">Specific Dates</bdi>):</strong> يوم + شهر معاً
+                  </td>
+                  <td>
+                    • <bdi dir="ltr">The test will be <strong>on</strong> Monday.</bdi><br>
+                    • <bdi dir="ltr">The exam is <strong>on</strong> Tuesday.</bdi><br>
+                    • <bdi dir="ltr">My birthday is <strong>on</strong> 2nd May.</bdi> (وجود اليوم يوجب استخدام <bdi dir="ltr">on</bdi> حتى مع وجود الشهر).
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong><bdi dir="ltr">at</bdi></strong></td>
+                  <td>
+                    1. <strong>ساعات وأوقات التوقيت المحددة (<bdi dir="ltr">Hours / Clock time</bdi>)</strong><br>
+                    2. <strong>العبارة الثابتة لليل (<bdi dir="ltr">Fixed expression</bdi>):</strong> <bdi dir="ltr">at night</bdi>
+                  </td>
+                  <td>
+                    • <bdi dir="ltr">The meeting starts <strong>at</strong> 10:00 PM.</bdi><br>
+                    • <bdi dir="ltr">I wake up <strong>at</strong> 7 o'clock.</bdi><br>
+                    • <bdi dir="ltr">We sleep <strong>at</strong> night.</bdi>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Rule 6: Can & Short Answers -->
+        <div class="rule-card">
+          <div class="rule-card__header">
+            <h3 class="rule-card__title">6. صيغة السؤال والإجابة المختصرة مع (<bdi dir="ltr">Can / Can't</bdi>)</h3>
+          </div>
+          <p>أكدت المحاضرة على ضرورة اختيار الإجابة الكاملة المتناسقة لغوياً في الاختبار:</p>
+          <div style="background: var(--surface-container-low); padding: var(--space-sm); margin: var(--space-xs) 0;">
+            <p style="margin: 0 0 var(--space-xs) 0;"><strong>السؤال:</strong> <bdi dir="ltr">Can you speak Japanese?</bdi></p>
+            <p style="margin: 0 0 var(--space-xs) 0;"><span class="status-tag status-tag--success">الإجابة الصحيحة في الإثبات:</span> <bdi dir="ltr"><strong>Yes, I can.</strong></bdi></p>
+            <p style="margin: 0;"><span class="status-tag status-tag--warn">الإجابة الصحيحة في النفي:</span> <bdi dir="ltr"><strong>No, I can't.</strong></bdi></p>
+          </div>
+          <p style="font-size: 0.875rem; color: var(--error); margin: 0;">
+            <strong>خيارات خاطئة في الاختبار:</strong> تجنب اختيار "Yes" فقط (ناقصة)، وتجنب التناقض مثل "Yes, I can't" أو "No, I can".
+          </p>
+        </div>
+
+        <!-- Rule 7: Present Continuous -->
+        <div class="rule-card">
+          <div class="rule-card__header">
+            <h3 class="rule-card__title">7. المضارع المستمر (<bdi dir="ltr">Present Continuous</bdi>)</h3>
+          </div>
+          <p><strong>الاستخدام:</strong> التعبير عما يحدث الآن في هذه اللحظة بالضبط (<bdi dir="ltr">right now, at the moment</bdi>).</p>
+          <div style="background: var(--surface-container-low); padding: var(--space-sm); border-inline-start: 4px solid var(--tertiary); margin: var(--space-xs) 0;">
+            <bdi dir="ltr"><strong>Subject + (am / is / are) + Verb-ing</strong></bdi>
+          </div>
+          <p style="margin: 0; font-size: 0.875rem;">
+            مثال المحاضرة: <bdi dir="ltr">He <strong>is writing</strong> right now.</bdi><br>
+            <strong>تنبيه:</strong> وجود <bdi dir="ltr">right now</bdi> يمنع استخدام الماضي أو المضارع البسيط.
+          </p>
+        </div>
+
+        <!-- Rule 8: Will & Prediction -->
+        <div class="rule-card">
+          <div class="rule-card__header">
+            <h3 class="rule-card__title">8. المستقبل والتوقع مع (<bdi dir="ltr">Will for Prediction</bdi>)</h3>
+          </div>
+          <p>التنبؤ بوقوع حدث بناءً على مشاهدة حاضرة أو شواهد وقرائن حسية أمامك:</p>
+          <div style="background: var(--surface-container-low); padding: var(--space-sm); margin: var(--space-xs) 0;">
+            <bdi dir="ltr">"There are too many people in the elevator; <strong>it will fall</strong>."</bdi>
+          </div>
+          <p style="font-size: 0.875rem; color: var(--on-surface-variant); margin: 0;">
+            استخدمنا <bdi dir="ltr">will</bdi> هنا لأننا نتوقع حدوث النتيجة استناداً إلى الزحام الشديد في المصعد.
+          </p>
+        </div>
+
+        <!-- Rule 9: Adjectives -->
+        <div class="rule-card">
+          <div class="rule-card__header">
+            <h3 class="rule-card__title">9. درس الصفات (<bdi dir="ltr">Adjectives</bdi>)</h3>
+          </div>
+          <p>التفريق بين صفات هيئة الأشخاص وصفات جودة وحالة الطعام:</p>
+          <ul style="padding-right: var(--space-md); margin: 0; line-height: 1.8;">
+            <li><strong>صفات الأشخاص (<bdi dir="ltr">People</bdi>):</strong> <bdi dir="ltr">tall, short, smart, intelligent</bdi>.<br>
+              سؤال الاختبار: يطلب وصف هيئة الشخص، فتختار صفة مثل <bdi dir="ltr">short</bdi> وليس فعلاً مثل <bdi dir="ltr">working</bdi>.</li>
+            <li><strong>صفات الطعام (<bdi dir="ltr">Food</bdi>):</strong> <bdi dir="ltr">delicious, tasty, boiled, fresh</bdi>.<br>
+              سؤال المحاضرة: <bdi dir="ltr">The food is <strong>delicious</strong>.</bdi> (نختار صفة تصف المذاق وليس تكرار كلمة food أو dinner).</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== TAB 4: INTERACTIVE TOOLS LAB ==================== -->
+    <section id="tab-tools" class="tab-content">
+      <div class="section-title-wrap">
+        <h2 class="section-title">
+          <span class="step-badge">4</span>
+          مختبر التراكيب التفاعلي وأدوات التدريب الذاتي
+        </h2>
+        <span class="status-tag">أدوات فحص وتدريب عملي</span>
+      </div>
+
+      <div class="inset-panel">
+        <h4>جرب وطبق القواعد بنفسك:</h4>
+        <p>استخدم الأدوات التفاعلية أدناه لاختبار فهمك السريع لحروف الجر، وأدوات الاستفهام، وبناء الجملة الإنجليزية قبل الانتقال للأسئلة الشاملة.</p>
+      </div>
+
+      <div class="grid-2col">
+        <!-- Interactive Preposition Finder -->
+        <div class="rule-card">
+          <div class="rule-card__header">
+            <h3 class="rule-card__title">1. مدرب حروف الجر الزمنية (<bdi dir="ltr">In, On, At</bdi>)</h3>
+            <span class="status-tag">تدريب تفاعلي</span>
+          </div>
+          <p>اختر العبارة الزمنية وسيقوم النظام بتحديد حرف الجر الصحيح وشرح القاعدة المعمول بها:</p>
+          <div style="display: flex; flex-direction: column; gap: var(--space-xs);">
+            <label for="prep-select" style="font-weight: 700;">حدد التعبير الزمني المراد اختباره:</label>
+            <select id="prep-select" onchange="runPrepChecker()" style="padding: var(--space-sm); border: 2px solid var(--outline); background: var(--background);">
+              <option value="none">-- اختر من القائمة --</option>
+              <option value="summer">summer (الصيف - فصل من فصول السنة)</option>
+              <option value="april">April (أبريل - شهر منفرد دون تاريخ)</option>
+              <option value="tuesday">Tuesday (الثلاثاء - يوم من أيام الأسبوع)</option>
+              <option value="may2">2nd May (الثاني من مايو - تاريخ محدد باليوم والشهر)</option>
+              <option value="morning">the morning (فترة الصباح - جزء من أجزاء اليوم)</option>
+              <option value="clock7">7:00 o'clock (السابعة تماماً - ساعة وتوقيت محدد)</option>
+              <option value="night">night (الليل - تعبير زمني ثابت)</option>
+              <option value="winter">winter (الشتاء - فصل من فصول السنة)</option>
+            </select>
+          </div>
+
+          <div id="prep-result-box" style="margin-top: var(--space-sm); padding: var(--space-md); background: var(--surface-container-low); display: none;">
+            <div style="display: flex; align-items: baseline; gap: var(--space-sm); margin-bottom: var(--space-xs);">
+              <span style="font-size: 0.8125rem; font-weight: 700;">حرف الجر الصحيح:</span>
+              <span id="prep-res-badge" style="background: var(--primary); color: var(--on-primary); font-size: 1.25rem; font-weight: 800; padding: 2px var(--space-md);">IN</span>
+            </div>
+            <div id="prep-res-text" style="font-size: 0.9375rem; color: var(--on-surface);"></div>
+          </div>
+        </div>
+
+        <!-- WH Question Explorer Tool -->
+        <div class="rule-card">
+          <div class="rule-card__header">
+            <h3 class="rule-card__title">2. مستكشف أسئلة الاستفهام (<bdi dir="ltr">WH-Questions</bdi>)</h3>
+            <span class="status-tag">تطبيق فوري</span>
+          </div>
+          <p>عن ماذا ترغب في السؤال؟ انقر على الغرض لتتعرف على الأداة الصحيحة وسؤالها التدريبي:</p>
+          <div style="display: flex; flex-wrap: wrap; gap: var(--space-xs); margin-bottom: var(--space-sm);">
+            <button class="filter-chip" onclick="showWhInfo('who')">شخص عاقل (<bdi dir="ltr">Person</bdi>)</button>
+            <button class="filter-chip" onclick="showWhInfo('what')">شيء أو جماد (<bdi dir="ltr">Thing</bdi>)</button>
+            <button class="filter-chip" onclick="showWhInfo('when')">وقت أو مناسبة (<bdi dir="ltr">Time</bdi>)</button>
+            <button class="filter-chip" onclick="showWhInfo('why')">سبب أو علّة (<bdi dir="ltr">Reason</bdi>)</button>
+            <button class="filter-chip" onclick="showWhInfo('where')">مكان أو موقع (<bdi dir="ltr">Place</bdi>)</button>
+          </div>
+
+          <div id="wh-result-box" style="padding: var(--space-md); background: var(--surface-container-low); border-inline-start: 4px solid var(--tertiary);">
+            <h4 id="wh-res-title" style="margin: 0 0 var(--space-xs) 0; color: var(--primary);">اختر أحد التصنيفات أعلاه</h4>
+            <p id="wh-res-desc" style="margin: 0; font-size: 0.9375rem;">ستظهر لك الأداة المطابقة وصيغة السؤال المطروحة في المحاضرة المباشرة فوراً.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Common Traps & Doctor Warnings Accordion -->
+      <div class="rule-card" style="margin-top: var(--space-md);">
+        <div class="rule-card__header">
+          <h3 class="rule-card__title">3. كاشف أفخاخ الاختبار النهائي — أخطاء شائعة حذرت منها الدكتورة</h3>
+          <span class="status-tag status-tag--warn">تجنب هذه الأخطاء</span>
+        </div>
+        <div class="grid-2col" style="margin-top: var(--space-xs);">
+          <div style="background: #fbd6d2; padding: var(--space-sm); border-inline-start: 4px solid var(--error);">
+            <strong style="color: #7a1205;">فخ (1): وضع حرف S في زمن الماضي!</strong>
+            <p style="margin: var(--space-xs) 0 0 0; font-size: 0.875rem; color: #7a1205;">
+              صيغة الماضي لا تأخذ S أبداً، حتى لو كان الفاعل مفرداً (He, She, It). حرف S مخصص فقط لزمن المضارع البسيط في الجملة المثبتة المفردة!
+            </p>
+          </div>
+          <div style="background: #fbd6d2; padding: var(--space-sm); border-inline-start: 4px solid var(--error);">
+            <strong style="color: #7a1205;">فخ (2): كتابة "buyed" كفعل ماضٍ!</strong>
+            <p style="margin: var(--space-xs) 0 0 0; font-size: 0.875rem; color: #7a1205;">
+              الفعل <bdi dir="ltr">buy</bdi> فعل شاذ وغير قياسي (<bdi dir="ltr">irregular</bdi>). ماضيه الصحيح هو <bdi dir="ltr"><strong>bought</strong></bdi>، وكلمة <bdi dir="ltr">buyed</bdi> غير موجودة وتعتبر خياراً مضللاً.
+            </p>
+          </div>
+          <div style="background: #fbd6d2; padding: var(--space-sm); border-inline-start: 4px solid var(--error);">
+            <strong style="color: #7a1205;">فخ (3): إبقاء الفعل في الماضي بعد didn't!</strong>
+            <p style="margin: var(--space-xs) 0 0 0; font-size: 0.875rem; color: #7a1205;">
+              بمجرد دخول <bdi dir="ltr">didn't</bdi> في الجملة، يجب تجريد الفعل فوراً للمصدر. قل: <bdi dir="ltr">We didn't watch</bdi> ولا تقل <bdi dir="ltr">didn't watched</bdi>.
+            </p>
+          </div>
+          <div style="background: #fbd6d2; padding: var(--space-sm); border-inline-start: 4px solid var(--error);">
+            <strong style="color: #7a1205;">فخ (4): استخدام in مع تاريخ محدد باليوم!</strong>
+            <p style="margin: var(--space-xs) 0 0 0; font-size: 0.875rem; color: #7a1205;">
+              إذا رأيت التاريخ كاملاً مثل <bdi dir="ltr">2nd May</bdi> أو <bdi dir="ltr">14th June</bdi>، فالقاعدة تتبع اليوم وليس الشهر! نستخدم <bdi dir="ltr"><strong>on</strong></bdi> وليس <bdi dir="ltr">in</bdi>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 5: VOCABULARY & MONTHS ==================== -->
+    <section id="tab-vocab" class="tab-content">
+      <div class="section-title-wrap">
+        <h2 class="section-title">
+          <span class="step-badge">5</span>
+          معجم المفردات، الوظائف، الأرقام وشهور السنة
+        </h2>
+        <span class="status-tag">حصيلة المحاضرة المباشرة</span>
+      </div>
+
+      <div class="inset-panel">
+        <h4>توجيه الأستاذة حول أسئلة الكلمات:</h4>
+        <p>«انتبهوا جيداً للمطلوب في السؤال: هل أطلب منكم المعنى والمرادف (<bdi dir="ltr">Meaning / Synonym</bdi>) أم أطلب العكس والضد (<bdi dir="ltr">Opposite / Antonym</bdi>)؟ كما يجب حفظ شهور السنة بترتيبها التسلسلي الدقيق.»</p>
+      </div>
+
+      <!-- Filter Controls for Vocab -->
+      <div class="filter-bar">
+        <span style="font-weight: 700; margin-inline-end: var(--space-xs);">تصفية الجداول:</span>
+        <button class="filter-chip active" onclick="filterVocabTable('all')" id="vchip-all">كافة الكلمات</button>
+        <button class="filter-chip" onclick="filterVocabTable('synonyms')" id="vchip-synonyms">المرادفات والأضداد</button>
+        <button class="filter-chip" onclick="filterVocabTable('numbers')" id="vchip-numbers">الأرقام (Ordinal vs Cardinal)</button>
+        <button class="filter-chip" onclick="filterVocabTable('jobs')" id="vchip-jobs">الوظائف والمهن</button>
+        <button class="filter-chip" onclick="filterVocabTable('months')" id="vchip-months">شهور السنة بالترتيب</button>
+      </div>
+
+      <!-- Section: Synonyms & Antonyms -->
+      <div class="rule-card vocab-section" id="vocab-sec-synonyms">
+        <div class="rule-card__header">
+          <h3 class="rule-card__title">1. المرادفات والأضداد المشروحة في المحاضرة</h3>
+          <span class="status-tag">مقررة</span>
+        </div>
+        <div class="handbook-table-container">
+          <table class="handbook-table">
+            <thead>
+              <tr>
+                <th>الكلمة (<bdi dir="ltr">Word</bdi>)</th>
+                <th>المعنى / المرادف (<bdi dir="ltr">Synonym / Meaning</bdi>)</th>
+                <th>العكس / الضد (<bdi dir="ltr">Antonym / Opposite</bdi>)</th>
+                <th>المعنى بالعربية</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong><bdi dir="ltr">enormous</bdi></strong></td>
+                <td><bdi dir="ltr"><strong>large</strong> / huge</bdi></td>
+                <td><bdi dir="ltr"><strong>small</strong> / tiny</bdi></td>
+                <td>ضخم جداً / هائل</td>
+              </tr>
+              <tr>
+                <td><strong><bdi dir="ltr">difficult</bdi></strong></td>
+                <td><bdi dir="ltr"><strong>hard</strong></bdi></td>
+                <td><bdi dir="ltr"><strong>easy</strong></bdi></td>
+                <td>صعب / شاق</td>
+              </tr>
+              <tr>
+                <td><strong><bdi dir="ltr">expensive</bdi></strong></td>
+                <td><bdi dir="ltr"><strong>worthy</strong> / costly</bdi></td>
+                <td><bdi dir="ltr"><strong>cheap</strong></bdi></td>
+                <td>غالي الثمن / ذو قيمة عالية</td>
+              </tr>
+              <tr>
+                <td><strong><bdi dir="ltr">begin</bdi></strong></td>
+                <td><bdi dir="ltr"><strong>start</strong></bdi></td>
+                <td><bdi dir="ltr"><strong>finish</strong> / end</bdi></td>
+                <td>يبدأ / يشرع في</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Section: Cardinal vs Ordinal Numbers -->
+      <div class="rule-card vocab-section" id="vocab-sec-numbers">
+        <div class="rule-card__header">
+          <h3 class="rule-card__title">2. الأرقام الأصلية مقابل الأرقام الترتيبية (<bdi dir="ltr">Cardinal vs. Ordinal Numbers</bdi>)</h3>
+          <span class="status-tag status-tag--warn">سؤال مؤكد بالاختبار</span>
+        </div>
+        <div class="inset-panel inset-panel--accent" style="margin: var(--space-xs) 0 var(--space-sm) 0;">
+          <p><strong>تفرقة جوهرية:</strong>
+            <br>• الأعداد الأصلية (<bdi dir="ltr">Cardinal</bdi>): تمثل الكمية المحضة (الرقم المكتوب مثل: <bdi dir="ltr">1, 2, 3, 4, 5</bdi>).
+            <br>• الأعداد الترتيبية (<bdi dir="ltr">Ordinal</bdi>): تدل على الترتيب والموضع (<bdi dir="ltr">Order</bdi>) وتكتب بصيغة: الأول، الثاني، الثالث، الرابع، الخامس (<bdi dir="ltr">1st, 2nd, 3rd, 4th, 5th</bdi>).
+          </p>
+        </div>
+        <div class="handbook-table-container">
+          <table class="handbook-table">
+            <thead>
+              <tr>
+                <th>الرقم</th>
+                <th>العدد الأصلي (<bdi dir="ltr">Cardinal Number</bdi>)</th>
+                <th>العدد الترتيبي (<bdi dir="ltr">Ordinal Number</bdi>)</th>
+                <th>طريقة السؤال بالاختبار</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td><bdi dir="ltr">1 / one</bdi></td>
+                <td><bdi dir="ltr">1st / first</bdi></td>
+                <td>إذا طلب <bdi dir="ltr">Cardinal</bdi> تختار <bdi dir="ltr">one</bdi>، وإذا طلب <bdi dir="ltr">Ordinal</bdi> تختار <bdi dir="ltr">first</bdi>.</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td><bdi dir="ltr">2 / two</bdi></td>
+                <td><bdi dir="ltr">2nd / second</bdi></td>
+                <td>الشهر الثاني = <bdi dir="ltr">the second month</bdi></td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td><bdi dir="ltr">3 / three</bdi></td>
+                <td><bdi dir="ltr">3rd / third</bdi></td>
+                <td>اليوم الثالث = <bdi dir="ltr">the 3rd day</bdi></td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td><bdi dir="ltr">4 / four</bdi></td>
+                <td><bdi dir="ltr">4th / fourth</bdi></td>
+                <td>الشهر الرابع = <bdi dir="ltr">the fourth month (April)</bdi></td>
+              </tr>
+              <tr>
+                <td><strong>5</strong></td>
+                <td><strong><bdi dir="ltr">5 / five</bdi></strong></td>
+                <td><strong><bdi dir="ltr">5th / fifth</bdi></strong></td>
+                <td>سؤال المحاضرة الحرفي: <bdi dir="ltr">The cardinal number for 5 is: five</bdi></td>
+              </tr>
+              <tr>
+                <td>6</td>
+                <td><bdi dir="ltr">6 / six</bdi></td>
+                <td><bdi dir="ltr">6th / sixth</bdi></td>
+                <td>الترتيب السادس = <bdi dir="ltr">sixth</bdi></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Section: Months of the Year -->
+      <div class="rule-card vocab-section" id="vocab-sec-months">
+        <div class="rule-card__header">
+          <h3 class="rule-card__title">3. شهور السنة الميلادية بالترتيب (<bdi dir="ltr">Months of the Year</bdi>)</h3>
+          <span class="status-tag">حفظ إلزامي بالترتيب</span>
+        </div>
+        <p>شددت الأستاذة على ضرورة حفظ الشهور بالترتيب التسلسلي الدقيق لأن صيغة السؤال تأتي: «ما هو الشهر الأول؟ ما هو الشهر الرابع؟»</p>
+        <div class="grid-3col">
+          <div style="background: var(--surface-container-low); padding: var(--space-sm); border-bottom: 2px solid var(--tertiary);">
+            <strong>1. January</strong> (<bdi dir="ltr">1st month</bdi>) — يناير
+          </div>
+          <div style="background: var(--surface-container-low); padding: var(--space-sm); border-bottom: 2px solid var(--tertiary);">
+            <strong>2. February</strong> (<bdi dir="ltr">2nd month</bdi>) — فبراير
+          </div>
+          <div style="background: var(--surface-container-low); padding: var(--space-sm); border-bottom: 2px solid var(--tertiary);">
+            <strong>3. March</strong> (<bdi dir="ltr">3rd month</bdi>) — مارس
+          </div>
+          <div style="background: var(--surface-container-low); padding: var(--space-sm); border-bottom: 2px solid var(--positive);">
+            <strong>4. April</strong> (<bdi dir="ltr">4th month</bdi>) — أبريل (سؤال المحاضرة)
+          </div>
+          <div style="background: var(--surface-container-low); padding: var(--space-sm); border-bottom: 2px solid var(--tertiary);">
+            <strong>5. May</strong> (<bdi dir="ltr">5th month</bdi>) — مايو
+          </div>
+          <div style="background: var(--surface-container-low); padding: var(--space-sm); border-bottom: 2px solid var(--tertiary);">
+            <strong>6. June</strong> (<bdi dir="ltr">6th month</bdi>) — يونيو
+          </div>
+          <div style="background: var(--surface-container-low); padding: var(--space-sm); border-bottom: 2px solid var(--tertiary);">
+            <strong>7. July</strong> (<bdi dir="ltr">7th month</bdi>) — يوليو
+          </div>
+          <div style="background: var(--surface-container-low); padding: var(--space-sm); border-bottom: 2px solid var(--tertiary);">
+            <strong>8. August</strong> (<bdi dir="ltr">8th month</bdi>) — أغسطس
+          </div>
+          <div style="background: var(--surface-container-low); padding: var(--space-sm); border-bottom: 2px solid var(--tertiary);">
+            <strong>9. September</strong> (<bdi dir="ltr">9th month</bdi>) — سبتمبر
+          </div>
+          <div style="background: var(--surface-container-low); padding: var(--space-sm); border-bottom: 2px solid var(--tertiary);">
+            <strong>10. October</strong> (<bdi dir="ltr">10th month</bdi>) — أكتوبر
+          </div>
+          <div style="background: var(--surface-container-low); padding: var(--space-sm); border-bottom: 2px solid var(--tertiary);">
+            <strong>11. November</strong> (<bdi dir="ltr">11th month</bdi>) — نوفمبر
+          </div>
+          <div style="background: var(--surface-container-low); padding: var(--space-sm); border-bottom: 2px solid var(--tertiary);">
+            <strong>12. December</strong> (<bdi dir="ltr">12th month</bdi>) — ديسمبر
+          </div>
+        </div>
+      </div>
+
+      <!-- Section: Jobs & Occupations -->
+      <div class="rule-card vocab-section" id="vocab-sec-jobs">
+        <div class="rule-card__header">
+          <h3 class="rule-card__title">4. قائمة الوظائف والمهن المقررة (<bdi dir="ltr">Jobs & Occupations</bdi>)</h3>
+          <span class="status-tag">نمطا الأسئلة بالاختبار</span>
+        </div>
+        <p>بينت الدكتورة أن أسئلة الوظائف تأتي على نمطين: إما يذكر اسم الوظيفية ويسأل عن تعريفها، أو يذكر التعريف ويسأل عمن يقوم به:</p>
+        <div class="handbook-table-container">
+          <table class="handbook-table">
+            <thead>
+              <tr>
+                <th>الوظيفة (<bdi dir="ltr">Job</bdi>)</th>
+                <th>المهمة والتعريف في الاختبار (<bdi dir="ltr">Job Description / Duty</bdi>)</th>
+                <th>مثال السؤال في الاختبار</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong><bdi dir="ltr">Doctor</bdi></strong> (طبيب)</td>
+                <td><bdi dir="ltr">cares for sick people in hospitals</bdi></td>
+                <td><bdi dir="ltr">Who cares for sick people? → <strong>Doctor</strong></bdi></td>
+              </tr>
+              <tr>
+                <td><strong><bdi dir="ltr">Accountant</bdi></strong> (محاسب)</td>
+                <td><bdi dir="ltr">keeps and inspects financial accounts, budgets and money</bdi></td>
+                <td><bdi dir="ltr">What does an accountant do? → <strong>manages accounts</strong></bdi></td>
+              </tr>
+              <tr>
+                <td><strong><bdi dir="ltr">Engineer</bdi></strong> (مهندس)</td>
+                <td><bdi dir="ltr">designs and builds machines, roads, bridges, or buildings</bdi></td>
+                <td>سؤال عن الشخص الذي يصمم المنشآت والأنظمة.</td>
+              </tr>
+              <tr>
+                <td><strong><bdi dir="ltr">Office worker</bdi></strong> (موظف مكتبي)</td>
+                <td><bdi dir="ltr">does clerical and administrative work in an office</bdi></td>
+                <td>المهام الإدارية والمكتبية اليومية.</td>
+              </tr>
+              <tr>
+                <td><strong><bdi dir="ltr">Programmer</bdi></strong> (مبرمج)</td>
+                <td><bdi dir="ltr">writes and tests computer programs and software</bdi></td>
+                <td>كتابة وتطوير الشيفرات البرمجية.</td>
+              </tr>
+              <tr>
+                <td><strong><bdi dir="ltr">Teacher</bdi></strong> (معلم / مدرس)</td>
+                <td><bdi dir="ltr">instructs and teaches students in school or university</bdi></td>
+                <td>تعليم الطلاب وإدارة الفصول.</td>
+              </tr>
+              <tr>
+                <td><strong><bdi dir="ltr">Mechanic</bdi></strong> (ميكانيكي)</td>
+                <td><bdi dir="ltr">repairs and maintains vehicle engines and machines</bdi></td>
+                <td>إصلاح وصيانة محركات السيارات.</td>
+              </tr>
+              <tr>
+                <td><strong><bdi dir="ltr">Housewife</bdi></strong> (ربة منزل)</td>
+                <td><bdi dir="ltr">manages household affairs, family and domestic duties</bdi></td>
+                <td>إدارة شؤون المنزل والأسرة.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 6: PRACTICE QUIZ ==================== -->
+    <section id="tab-quiz" class="tab-content">
+      <div class="section-title-wrap">
+        <h2 class="section-title">
+          <span class="step-badge">6</span>
+          بنك الأسئلة والتدريب التفاعلي للاختبار النهائي (10 أسئلة تحاكي المحاضرة)
+        </h2>
+        <span class="status-tag status-tag--success">تصحيح فوري وشرح تفصيلي</span>
+      </div>
+
+      <div class="inset-panel inset-panel--accent">
+        <h4>تعليمات التدريب:</h4>
+        <p>هذه الأسئلة مأخوذة نصاً من التمارين والأمثلة التي طرحتها الدكتورة والأستاذة أثناء المحاضرة المباشرة. اختر الإجابة وسيظهر لك التقييم الفوري وشرح القاعدة كما ورد في المحاضرة.</p>
+      </div>
+
+      <!-- Live Quiz Score Bar -->
+      <div style="background: var(--surface-container-low); border: 2px solid var(--on-surface); padding: var(--space-md); margin-bottom: var(--space-md); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-sm);">
+        <div>
+          <span style="font-weight: 800; font-size: 1.1rem;">نتيجتك الحالية: </span>
+          <span id="quiz-score-val" style="font-size: 1.5rem; font-weight: 800; color: var(--tertiary);">0 / 10</span>
+          <span id="quiz-percentage" style="font-size: 0.9375rem; color: var(--on-surface-variant); margin-inline-start: var(--space-xs);">(0%)</span>
+        </div>
+        <button class="button button--secondary" onclick="resetQuiz()">
+          <i data-lucide="rotate-ccw" style="width: 16px; height: 16px;"></i>
+          إعادة تعيين الاختبار
+        </button>
+      </div>
+
+      <!-- Quiz Questions Box -->
+      <div class="quiz-box" id="quiz-container">
+
+        <!-- Question 1: WH Questions -->
+        <div class="quiz-question-card" id="qcard-0">
+          <p class="quiz-q-title">
+            <span class="step-badge" style="width: 22px; height: 22px; font-size: 0.75rem;">1</span>
+            <span>________ is your graduation ceremony? — It is next month.</span>
+          </p>
+          <div class="quiz-options-grid">
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(0, 'A')">A) What</button>
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(0, 'B')">B) When</button>
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(0, 'C')">C) Why</button>
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(0, 'D')">D) Who</button>
+          </div>
+          <div class="quiz-explanation" id="qexp-0"></div>
+        </div>
+
+        <!-- Question 2: Sentence Structure -->
+        <div class="quiz-question-card" id="qcard-1">
+          <p class="quiz-q-title">
+            <span class="step-badge" style="width: 22px; height: 22px; font-size: 0.75rem;">2</span>
+            <span>Which of the following has the CORRECT English sentence structure?</span>
+          </p>
+          <div class="quiz-options-grid">
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(1, 'A')">A) The bird is on the tree.</button>
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(1, 'B')">B) On the tree is the bird.</button>
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(1, 'C')">C) Is the bird on the tree.</button>
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(1, 'D')">D) The bird on the tree is.</button>
+          </div>
+          <div class="quiz-explanation" id="qexp-1"></div>
+        </div>
+
+        <!-- Question 3: Present Simple Routine -->
+        <div class="quiz-question-card" id="qcard-2">
+          <p class="quiz-q-title">
+            <span class="step-badge" style="width: 22px; height: 22px; font-size: 0.75rem;">3</span>
+            <span>The meeting ________ at 10:00 PM every night.</span>
+          </p>
+          <div class="quiz-options-grid">
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(2, 'A')">A) begin</button>
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(2, 'B')">B) begins</button>
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(2, 'C')">C) began</button>
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(2, 'D')">D) beginning</button>
+          </div>
+          <div class="quiz-explanation" id="qexp-2"></div>
+        </div>
+
+        <!-- Question 4: Past Simple Be Verb -->
+        <div class="quiz-question-card" id="qcard-3">
+          <p class="quiz-q-title">
+            <span class="step-badge" style="width: 22px; height: 22px; font-size: 0.75rem;">4</span>
+            <span>Sarah and Khalid ________ playing PlayStation yesterday.</span>
+          </p>
+          <div class="quiz-options-grid">
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(3, 'A')">A) was</button>
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(3, 'B')">B) were</button>
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(3, 'C')">C) are</button>
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(3, 'D')">D) is</button>
+          </div>
+          <div class="quiz-explanation" id="qexp-3"></div>
+        </div>
+
+        <!-- Question 5: Past Simple Negative -->
+        <div class="quiz-question-card" id="qcard-4">
+          <p class="quiz-q-title">
+            <span class="step-badge" style="width: 22px; height: 22px; font-size: 0.75rem;">5</span>
+            <span>We ________ watch TV last night.</span>
+          </p>
+          <div class="quiz-options-grid">
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(4, 'A')">A) doesn't</button>
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(4, 'B')">B) didn't</button>
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(4, 'C')">C) don't</button>
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(4, 'D')">D) not</button>
+          </div>
+          <div class="quiz-explanation" id="qexp-4"></div>
+        </div>
+
+        <!-- Question 6: Prepositions of Time -->
+        <div class="quiz-question-card" id="qcard-5">
+          <p class="quiz-q-title">
+            <span class="step-badge" style="width: 22px; height: 22px; font-size: 0.75rem;">6</span>
+            <span>The test will be ________ Monday morning.</span>
+          </p>
+          <div class="quiz-options-grid">
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(5, 'A')">A) on</button>
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(5, 'B')">B) in</button>
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(5, 'C')">C) at</button>
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(5, 'D')">D) of</button>
+          </div>
+          <div class="quiz-explanation" id="qexp-5"></div>
+        </div>
+
+        <!-- Question 7: Can Short Answer -->
+        <div class="quiz-question-card" id="qcard-6">
+          <p class="quiz-q-title">
+            <span class="step-badge" style="width: 22px; height: 22px; font-size: 0.75rem;">7</span>
+            <span>"Can you speak Japanese?" — What is the best affirmative short answer?</span>
+          </p>
+          <div class="quiz-options-grid">
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(6, 'A')">A) Yes, I can.</button>
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(6, 'B')">B) Yes.</button>
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(6, 'C')">C) Yes, I can't.</button>
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(6, 'D')">D) No, I can.</button>
+          </div>
+          <div class="quiz-explanation" id="qexp-6"></div>
+        </div>
+
+        <!-- Question 8: Cardinal Numbers -->
+        <div class="quiz-question-card" id="qcard-7">
+          <p class="quiz-q-title">
+            <span class="step-badge" style="width: 22px; height: 22px; font-size: 0.75rem;">8</span>
+            <span>The CARDINAL number for the number 5 is:</span>
+          </p>
+          <div class="quiz-options-grid">
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(7, 'A')">A) fifth</button>
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(7, 'B')">B) five</button>
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(7, 'C')">C) 5th</button>
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(7, 'D')">D) fifteen</button>
+          </div>
+          <div class="quiz-explanation" id="qexp-7"></div>
+        </div>
+
+        <!-- Question 9: Jobs -->
+        <div class="quiz-question-card" id="qcard-8">
+          <p class="quiz-q-title">
+            <span class="step-badge" style="width: 22px; height: 22px; font-size: 0.75rem;">9</span>
+            <span>Who takes care of and cures sick people in the hospital?</span>
+          </p>
+          <div class="quiz-options-grid">
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(8, 'A')">A) Engineer</button>
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(8, 'B')">B) Accountant</button>
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(8, 'C')">C) Doctor</button>
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(8, 'D')">D) Programmer</button>
+          </div>
+          <div class="quiz-explanation" id="qexp-8"></div>
+        </div>
+
+        <!-- Question 10: Reading Passage -->
+        <div class="quiz-question-card" id="qcard-9">
+          <p class="quiz-q-title">
+            <span class="step-badge" style="width: 22px; height: 22px; font-size: 0.75rem;">10</span>
+            <span>According to "The Library" passage, what makes a modern digital library special?</span>
+          </p>
+          <div class="quiz-options-grid">
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(9, 'A')">A) It is only open on weekends.</button>
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(9, 'B')">B) Users can access it anywhere using electronic devices.</button>
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(9, 'C')">C) It only contains paper history books.</button>
+            <button class="quiz-option-btn" onclick="selectQuizAnswer(9, 'D')">D) It has no librarians to assist readers.</button>
+          </div>
+          <div class="quiz-explanation" id="qexp-9"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== TAB 7: FINAL EXAM TIPS & ADVICE ==================== -->
+    <section id="tab-tips" class="tab-content">
+      <div class="section-title-wrap">
+        <h2 class="section-title">
+          <span class="step-badge">7</span>
+          نصائح واستراتيجيات الاختبار النهائي الذهبية
+        </h2>
+        <span class="status-tag status-tag--warn">توصيات المحاضر الختامية</span>
+      </div>
+
+      <div class="inset-panel inset-panel--accent">
+        <h4>الوصية رقم 1 من الدكتورة سارة:</h4>
+        <p>«إياكِ وترك أي سؤال فارغاً دون تظليل في ورقة الإجابة! الاختبار كله خيارات (A, B, C, D). إذا داهمك الوقت في نهاية الاختبار، استبعدي ما هو مستحيل وظللي الإجابة الأقرب، ولا تتركي أي دائرة بيضاء أبداً.»</p>
+      </div>
+
+      <div class="grid-2col">
+        <!-- Golden Rules -->
+        <div class="rule-card">
+          <div class="rule-card__header">
+            <h3 class="rule-card__title">قائمة الوصايا العشر للاختبار النهائي</h3>
+          </div>
+          <ol style="padding-right: var(--space-lg); margin: 0; line-height: 1.8;">
+            <li><strong>التركيز على دلالات الزمن:</strong> ابحث أولاً عن كلمات (<bdi dir="ltr">yesterday, every day, right now, last night</bdi>) لتحديد زمن الفعل المطلوب بدقة.</li>
+            <li><strong>تجريد الفعل بعد أدوات النفي:</strong> تذكر أن (<bdi dir="ltr">doesn't, don't, didn't</bdi>) يتبعها دائماً فعل مجرد في المصدر.</li>
+            <li><strong>الأفعال الشاذة:</strong> لا توجد إضافة (<bdi dir="ltr">-ed</bdi>) مع الأفعال الشاذة مثل <bdi dir="ltr">buy → bought</bdi>.</li>
+            <li><strong>أفعال الكينونة في الماضي:</strong> المفرد يأخذ <bdi dir="ltr">was</bdi>، والجمع والأسماء المعطوفة (<bdi dir="ltr">Sarah and Khalid</bdi>) تأخذ <bdi dir="ltr">were</bdi>.</li>
+            <li><strong>حروف الجر:</strong> احفظ فصول السنة مع <bdi dir="ltr">in</bdi>، والأيام والتواريخ المحددة بيوم مع <bdi dir="ltr">on</bdi>، والساعات مع <bdi dir="ltr">at</bdi>.</li>
+            <li><strong>التفرقة بين المعنى والعكس:</strong> اقرأ رأس السؤال جيداً: <bdi dir="ltr">Synonym / Meaning</bdi> يعني المرادف، و <bdi dir="ltr">Antonym / Opposite</bdi> يعني العكس.</li>
+            <li><strong>الترتيب التسلسلي للشهور:</strong> راجع أرقام الشهور: <bdi dir="ltr">January = 1st</bdi>، <bdi dir="ltr">April = 4th</bdi>، <bdi dir="ltr">December = 12th</bdi>.</li>
+            <li><strong>العدد الأصلي والترتيبي:</strong> <bdi dir="ltr">Cardinal</bdi> يعني الرقم نفسه (5)، و <bdi dir="ltr">Ordinal</bdi> يعني الترتيب (<bdi dir="ltr">5th / fifth</bdi>).</li>
+            <li><strong>قطعة الريدينغ المعتمدة:</strong> لا تشتت نفسك بقطع أخرى؛ قطعة "The Library" هي المقررة وستوفر لك 10 إجابات سهلة.</li>
+            <li><strong>الهدوء وإدارة الوقت:</strong> 50 سؤالاً تتطلب قراءة هادئة وتظليلاً منظماً دون توتر.</li>
+          </ol>
+        </div>
+
+        <!-- Strategy for Reading Section -->
+        <div class="rule-card">
+          <div class="rule-card__header">
+            <h3 class="rule-card__title">استراتيجية التعامل مع أسئلة قطعة القراءة (10 أسئلة)</h3>
+          </div>
+          <div class="handbook-table-container">
+            <table class="handbook-table">
+              <thead>
+                <tr>
+                  <th>نوع السؤال المحتمل</th>
+                  <th>كيفية استخراج الإجابة من نص المكتبة</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>مكان المكتبة ووصفها</strong></td>
+                  <td>ابحث عن كلمة <bdi dir="ltr">place</bdi> في السطر الأول، الإجابة: <bdi dir="ltr">quiet place</bdi>.</td>
+                </tr>
+                <tr>
+                  <td><strong>من يرتاد المكتبة؟</strong></td>
+                  <td>ابحث عن الرواد، الإجابة: <bdi dir="ltr">students, researchers, book lovers</bdi>.</td>
+                </tr>
+                <tr>
+                  <td><strong>أنواع الكتب المتوفرة</strong></td>
+                  <td>ابحث عن كلمة <bdi dir="ltr">variety</bdi>، الإجابة: <bdi dir="ltr">science books, history books, novels</bdi>.</td>
+                </tr>
+                <tr>
+                  <td><strong>مميزات المكتبة الرقمية</strong></td>
+                  <td>ابحث عن <bdi dir="ltr">digital library</bdi> في الفقرة 2، الإجابة: الدخول من أي مكان عبر الأجهزة الإلكترونية واستعارة <bdi dir="ltr">e-books</bdi>.</td>
+                </tr>
+                <tr>
+                  <td><strong>من يقدم المساعدة للزوار؟</strong></td>
+                  <td>ابحث عن كلمة <bdi dir="ltr">assist</bdi>، الإجابة المباشرة: <bdi dir="ltr">The librarian</bdi> (أمين المكتبة).</td>
+                </tr>
+                <tr>
+                  <td><strong>الهدف الأسمى للمكتبة</strong></td>
+                  <td>السطر الأخير من النص: مركز لنشر وتوسيع المعرفة (<bdi dir="ltr">Knowledge</bdi>).</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="margin-top: var(--space-2xl); padding-top: var(--space-md); border-top: 1px solid var(--outline-variant); font-size: 0.8125rem; color: var(--on-surface-variant); display: flex; justify-content: space-between; flex-wrap: wrap; gap: var(--space-sm);">
+      <div>
+        <span>المقرر: اللغة الإنجليزية (المستوى الثالث) — جامعة الملك فيصل</span> • <span>مراجعة المحاضرة الافتراضية المباشرة الثانية</span>
+      </div>
+      <div>
+        <span>تصميم مرجعي مطابق لمواصفات Handbook الأكاديمية</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <api-shim></api-shim>
+  <script>
+    // Quiz state & data
+    var quizQuestions = [
+      {
+        id: 0,
+        correct: 'B',
+        explanation: 'الإجابة الصحيحة هي (When): لأن السؤال يستفسر عن موعد وتوقيت حفل التخرج (next month)، وWhen هي أداة الاستفهام المخصصة للوقت والمناسبات.'
+      },
+      {
+        id: 1,
+        correct: 'A',
+        explanation: 'الإجابة الصحيحة هي (The bird is on the tree): لأن تركيب الجملة الإنجليزية الصحيحة يبدأ بالفاعل (Subject = The bird) ثم الفعل (is) ثم شبه الجملة المجرورة (on the tree).'
+      },
+      {
+        id: 2,
+        correct: 'B',
+        explanation: 'الإجابة الصحيحة هي (begins): لوجود دلالة الروتين اليومي (every night) مع فاعل مفرد (The meeting = It)، فنضيف حرف s للفعل في المضارع البسيط.'
+      },
+      {
+        id: 3,
+        correct: 'B',
+        explanation: 'الإجابة الصحيحة هي (were): لأن الفاعل شخصان معطوفان (Sarah and Khalid) فهما جمع، والجملة في الماضي لوجود (yesterday)، وفعل الكينونة للماضي مع الجمع هو were.'
+      },
+      {
+        id: 4,
+        correct: 'B',
+        explanation: 'الإجابة الصحيحة هي (didn\'t): لوجود دلالة الماضي المنتهي (last night)، والنفي في الماضي البسيط يكون دوماً بـ didn\'t متبوعة بفعل مجرد.'
+      },
+      {
+        id: 5,
+        correct: 'A',
+        explanation: 'الإجابة الصحيحة هي (on): لأن قاعدة حروف الجر تنص على أن أيام الأسبوع (Monday) والتواريخ المحددة تأخذ حرف الجر on حصراً.'
+      },
+      {
+        id: 6,
+        correct: 'A',
+        explanation: 'الإجابة الصحيحة هي (Yes, I can): وهي الإجابة المختصرة المهذبة الكاملة والمتوافقة في الإثبات، بينما خيار Yes ناقص وخيار Yes, I can\'t متناقض.'
+      },
+      {
+        id: 7,
+        correct: 'B',
+        explanation: 'الإجابة الصحيحة هي (five): لأن Cardinal Number يعني العدد الأصلي المكتوب كرقم وكمية محضة، بينما fifth هي العدد الترتيبي Ordinal.'
+      },
+      {
+        id: 8,
+        correct: 'C',
+        explanation: 'الإجابة الصحيحة هي (Doctor): لأنه هو المسؤول عن رعاية وعلاج المرضى في المستشفى، وفق نص السؤال والتعريف في المحاضرة.'
+      },
+      {
+        id: 9,
+        correct: 'B',
+        explanation: 'الإجابة الصحيحة هي (Users can access it anywhere using electronic devices): وهي الفكرة المركزية للفقرة الثانية من قطعة المكتبة المقررة.'
+      }
+    ];
+
+    var userQuizAnswers = {};
+
+    function switchTab(tabId) {
+      var tabs = document.querySelectorAll('.tab-content');
+      var btns = document.querySelectorAll('.nav-tab-btn');
+      tabs.forEach(function(t) {
+        t.classList.remove('active');
+      });
+      btns.forEach(function(b) {
+        b.classList.remove('active');
+      });
+
+      var targetTab = document.getElementById(tabId);
+      var targetBtn = document.getElementById('btn-' + tabId);
+      if (targetTab) {
+        targetTab.classList.add('active');
+      }
+      if (targetBtn) {
+        targetBtn.classList.add('active');
+      }
+
+      // Re-trigger icon rendering if needed
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    }
+
+    // Reading Passage Highlighter
+    function setPassageHighlight(mode) {
+      var btns = [
+        document.getElementById('hl-btn-all'),
+        document.getElementById('hl-btn-digital'),
+        document.getElementById('hl-btn-services'),
+        document.getElementById('hl-btn-people')
+      ];
+      btns.forEach(function(b) {
+        if (b) b.classList.remove('active');
+      });
+
+      var activeBtn = document.getElementById('hl-btn-' + mode);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      var allSpans = document.querySelectorAll('.pass-word');
+      allSpans.forEach(function(sp) {
+        sp.classList.remove('reading-highlight', 'reading-highlight-digital', 'reading-highlight-books');
+      });
+
+      if (mode === 'digital') {
+        document.querySelectorAll('.pass-digital').forEach(function(el) {
+          el.classList.add('reading-highlight-digital');
+        });
+      } else if (mode === 'services') {
+        document.querySelectorAll('.pass-books, .pass-serv').forEach(function(el) {
+          el.classList.add('reading-highlight-books');
+        });
+      } else if (mode === 'people') {
+        document.querySelectorAll('.pass-people').forEach(function(el) {
+          el.classList.add('reading-highlight');
+        });
+      }
+    }
+
+    function togglePassageTranslation() {
+      var arDiv = document.getElementById('passage-arabic');
+      var label = document.getElementById('trans-btn-label');
+      if (!arDiv || !label) return;
+
+      if (arDiv.style.display === 'none' || arDiv.style.display === '') {
+        arDiv.style.display = 'block';
+        label.textContent = 'إخفاء الترجمة والشرح العربي';
+      } else {
+        arDiv.style.display = 'none';
+        label.textContent = 'عرض الترجمة والشرح العربي للفقرات';
+      }
+    }
+
+    // Preposition Checker Tool
+    function runPrepChecker() {
+      var sel = document.getElementById('prep-select');
+      var box = document.getElementById('prep-result-box');
+      var badge = document.getElementById('prep-res-badge');
+      var text = document.getElementById('prep-res-text');
+      if (!sel || !box || !badge || !text) return;
+
+      var val = sel.value;
+      if (val === 'none') {
+        box.style.display = 'none';
+        return;
+      }
+
+      box.style.display = 'block';
+      if (val === 'summer' || val === 'winter') {
+        badge.textContent = 'IN';
+        badge.style.background = 'var(--primary)';
+        text.innerHTML = '<strong>القاعدة:</strong> فصول السنة الأربعة (<bdi dir="ltr">Seasons: summer, winter, spring, autumn</bdi>) تأخذ دوماً حرف الجر <strong>in</strong>.<br>مثال: <bdi dir="ltr">Winter begins <strong>in</strong> May.</bdi>';
+      } else if (val === 'april') {
+        badge.textContent = 'IN';
+        badge.style.background = 'var(--primary)';
+        text.innerHTML = '<strong>القاعدة:</strong> شهور السنة عندما تذكر بمفردها دون تحديد يوم تأخذ <strong>in</strong>.<br>مثال: <bdi dir="ltr">The course ends <strong>in</strong> April.</bdi>';
+      } else if (val === 'tuesday') {
+        badge.textContent = 'ON';
+        badge.style.background = 'var(--tertiary)';
+        text.innerHTML = '<strong>القاعدة:</strong> أيام الأسبوع تأخذ دوماً حرف الجر <strong>on</strong>.<br>مثال: <bdi dir="ltr">The test will be <strong>on</strong> Tuesday.</bdi>';
+      } else if (val === 'may2') {
+        badge.textContent = 'ON';
+        badge.style.background = 'var(--tertiary)';
+        text.innerHTML = '<strong>القاعدة (فخ مهم):</strong> بالرغم من وجود الشهر (May)، إلا أن تحديد رقم اليوم (2nd) يُلزمنا باستخدام <strong>on</strong> لأن القاعدة تتبع اليوم.<br>مثال: <bdi dir="ltr">My birthday is <strong>on</strong> 2nd May.</bdi>';
+      } else if (val === 'morning') {
+        badge.textContent = 'IN';
+        badge.style.background = 'var(--primary)';
+        text.innerHTML = '<strong>القاعدة:</strong> أجزاء اليوم الرئيسية تأخذ <strong>in</strong> (<bdi dir="ltr">in the morning, in the afternoon, in the evening</bdi>).<br>مثال: <bdi dir="ltr">I study <strong>in</strong> the morning.</bdi>';
+      } else if (val === 'clock7') {
+        badge.textContent = 'AT';
+        badge.style.background = 'var(--secondary)';
+        text.innerHTML = '<strong>القاعدة:</strong> الساعات وأوقات التوقيت المحددة بدقة تأخذ <strong>at</strong>.<br>مثال: <bdi dir="ltr">The class starts <strong>at</strong> 7:00 o\'clock.</bdi>';
+      } else if (val === 'night') {
+        badge.textContent = 'AT';
+        badge.style.background = 'var(--secondary)';
+        text.innerHTML = '<strong>القاعدة:</strong> كلمة الليل تأتي في تعبير ثابت ومحفوظ مع <strong>at</strong> (<bdi dir="ltr">at night</bdi>) بخلاف باقي أجزاء اليوم.<br>مثال: <bdi dir="ltr">We usually sleep <strong>at</strong> night.</bdi>';
+      }
+    }
+
+    // WH Question Explorer
+    function showWhInfo(whKey) {
+      var box = document.getElementById('wh-result-box');
+      var title = document.getElementById('wh-res-title');
+      var desc = document.getElementById('wh-res-desc');
+      if (!box || !title || !desc) return;
+
+      var data = {
+        who: {
+          word: 'Who (مَن)',
+          desc: 'تستخدم للسؤال عن الأشخاص والأفراد (<bdi dir="ltr">Persons</bdi>).<br>مثال المحاضرة: <bdi dir="ltr"><strong>Who</strong> is your teacher?</bdi> (من هو معلمك؟) / <bdi dir="ltr"><strong>Who</strong> cares for sick people?</bdi> (من يعتني بالمرضى؟).'
+        },
+        what: {
+          word: 'What (ماذا / ما)',
+          desc: 'تستخدم للسؤال عن الجمادات والأشياء والمعلومات غير العاقلة (<bdi dir="ltr">Things</bdi>).<br>مثال المحاضرة: <bdi dir="ltr"><strong>What</strong> is your name?</bdi> (ما هو اسمك؟) / <bdi dir="ltr"><strong>What</strong> is rice?</bdi> (ما هو الأرز؟).'
+        },
+        when: {
+          word: 'When (متى)',
+          desc: 'تستخدم للسؤال عن الأوقات والمناسبات والتواريخ (<bdi dir="ltr">Time & Events</bdi>).<br>مثال المحاضرة: <bdi dir="ltr"><strong>When</strong> is your graduation?</bdi> (متى موعد تخرجك؟) / <bdi dir="ltr"><strong>When</strong> is your birthday?</bdi> (متى يوم ميلادك؟).'
+        },
+        why: {
+          word: 'Why (لماذا)',
+          desc: 'تستخدم للسؤال عن الأسباب والعلل (<bdi dir="ltr">Reasons & Causes</bdi>).<br>مثال المحاضرة: <bdi dir="ltr"><strong>Why</strong> are you late?</bdi> (لماذا تأخرت؟) / <bdi dir="ltr"><strong>Why</strong> are you happy?</bdi> (لماذا أنت سعيد؟).'
+        },
+        where: {
+          word: 'Where (أين)',
+          desc: 'تستخدم للسؤال عن الأماكن والمواقع الجغرافية (<bdi dir="ltr">Places & Locations</bdi>).<br>مثال المحاضرة: <bdi dir="ltr"><strong>Where</strong> is the cafe?</bdi> (أين المقهى؟) / <bdi dir="ltr"><strong>Where</strong> are you from?</bdi> (من أين أنت؟).'
+        }
+      };
+
+      if (data[whKey]) {
+        title.innerHTML = 'الأداة المناسبة: ' + data[whKey].word;
+        desc.innerHTML = data[whKey].desc;
+      }
+    }
+
+    // Vocabulary Section Filter
+    function filterVocabTable(category) {
+      var chips = ['all', 'synonyms', 'numbers', 'months', 'jobs'];
+      chips.forEach(function(c) {
+        var el = document.getElementById('vchip-' + c);
+        if (el) el.classList.remove('active');
+      });
+      var activeEl = document.getElementById('vchip-' + category);
+      if (activeEl) activeEl.classList.add('active');
+
+      var secs = document.querySelectorAll('.vocab-section');
+      secs.forEach(function(s) {
+        if (category === 'all') {
+          s.style.display = 'flex';
+        } else {
+          if (s.id === 'vocab-sec-' + category) {
+            s.style.display = 'flex';
+          } else {
+            s.style.display = 'none';
+          }
+        }
+      });
+    }
+
+    // Interactive Quiz Engine
+    function selectQuizAnswer(qIndex, chosenLetter) {
+      var question = quizQuestions[qIndex];
+      if (!question) return;
+
+      userQuizAnswers[qIndex] = chosenLetter;
+
+      var card = document.getElementById('qcard-' + qIndex);
+      if (!card) return;
+
+      var buttons = card.querySelectorAll('.quiz-option-btn');
+      buttons.forEach(function(btn) {
+        btn.classList.remove('selected-correct', 'selected-wrong');
+        var text = btn.textContent.trim();
+        var optLetter = text.charAt(0);
+        if (optLetter === chosenLetter) {
+          if (chosenLetter === question.correct) {
+            btn.classList.add('selected-correct');
+          } else {
+            btn.classList.add('selected-wrong');
+          }
+        }
+        if (optLetter === question.correct && chosenLetter !== question.correct) {
+          btn.classList.add('selected-correct');
+        }
+      });
+
+      var exp = document.getElementById('qexp-' + qIndex);
+      if (exp) {
+        exp.style.display = 'block';
+        if (chosenLetter === question.correct) {
+          exp.innerHTML = '<strong style="color: var(--positive);">✓ إجابة ممتازة وصحيحة!</strong> ' + question.explanation;
+        } else {
+          exp.innerHTML = '<strong style="color: var(--error);">✗ إجابة غير صحيحة.</strong> ' + question.explanation;
+        }
+      }
+
+      updateQuizScore();
+    }
+
+    function updateQuizScore() {
+      var correctCount = 0;
+      var answeredCount = 0;
+
+      quizQuestions.forEach(function(q, idx) {
+        if (userQuizAnswers[idx]) {
+          answeredCount++;
+          if (userQuizAnswers[idx] === q.correct) {
+            correctCount++;
+          }
+        }
+      });
+
+      var scoreEl = document.getElementById('quiz-score-val');
+      var percEl = document.getElementById('quiz-percentage');
+      if (scoreEl) {
+        scoreEl.textContent = correctCount + ' / ' + quizQuestions.length;
+      }
+      if (percEl) {
+        var pct = Math.round((correctCount / quizQuestions.length) * 100);
+        percEl.textContent = '(' + pct + '%)';
+      }
+    }
+
+    function resetQuiz() {
+      userQuizAnswers = {};
+      quizQuestions.forEach(function(q, idx) {
+        var card = document.getElementById('qcard-' + idx);
+        if (card) {
+          var btns = card.querySelectorAll('.quiz-option-btn');
+          btns.forEach(function(b) {
+            b.classList.remove('selected-correct', 'selected-wrong');
+          });
+          var exp = document.getElementById('qexp-' + idx);
+          if (exp) exp.style.display = 'none';
+        }
+      });
+      updateQuizScore();
+    }
+
+    // Chart.js initialization
+    function initCharts() {
+      var canvasGrades = document.getElementById('chartGradesDistribution');
+      if (canvasGrades) {
+        var ctxGrades = canvasGrades.getContext('2d');
+        new Chart(ctxGrades, {
+          type: 'doughnut',
+          data: {
+            labels: ['الاختبار النهائي (70 درجة)', 'الأعمال الفصلية (30 درجة)'],
+            datasets: [{
+              data: [70, 30],
+              backgroundColor: ['#1a569e', '#28a197'],
+              borderWidth: 2,
+              borderColor: '#ffffff'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'bottom',
+                rtl: true,
+                labels: {
+                  font: {
+                    family: "'Noto Sans Arabic', sans-serif",
+                    size: 13
+                  },
+                  color: '#0b0c0c'
+                }
+              }
+            }
+          }
+        });
+      }
+
+      var canvasTopics = document.getElementById('chartExamTopics');
+      if (canvasTopics) {
+        var ctxTopics = canvasTopics.getContext('2d');
+        new Chart(ctxTopics, {
+          type: 'bar',
+          data: {
+            labels: ['الجرامر (النصاب الأكبر)', 'قطعة الريدينغ (10 أسئلة)', 'المفردات والأضداد', 'شهور السنة والوظائف'],
+            datasets: [{
+              label: 'الوزن التقريبي في أسئلة النهائي (%)',
+              data: [50, 20, 15, 15],
+              backgroundColor: ['#162e51', '#1a569e', '#c75a0a', '#4c2c92'],
+              borderRadius: 0
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            scales: {
+              x: {
+                beginAtZero: true,
+                max: 60,
+                grid: {
+                  color: '#e8e7e5'
+                },
+                ticks: {
+                  callback: function(v) { return v + '%'; },
+                  font: { family: "'Noto Sans Arabic', sans-serif" }
+                }
+              },
+              y: {
+                grid: { display: false },
+                ticks: {
+                  font: { family: "'Noto Sans Arabic', sans-serif", weight: 'bold' },
+                  color: '#0b0c0c'
+                }
+              }
+            },
+            plugins: {
+              legend: { display: false }
+            }
+          }
+        });
+      }
+    }
+
+    // On Load
+    window.addEventListener('DOMContentLoaded', function() {
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+      initCharts();
+    });
+  </script>
+</body>
+</html>
