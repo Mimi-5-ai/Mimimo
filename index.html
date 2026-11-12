@@ -563,6 +563,7 @@
     };
 
     const state = { subjectKey: null, chapterIndex: null };
+    let chaptersScrollY = 0;
     let progress = readStorage(STORAGE_KEYS.progress, {});
     const $ = (selector) => document.querySelector(selector);
     const allChapters = () => Object.entries(subjects).flatMap(([key, subject]) => subject.chapters.map((chapter, index) => ({ key, subject, chapter, index })));
@@ -678,10 +679,10 @@
       chapterDocument.head.append(mobileStyles);
     }
 
-    function showPanel(panelName) {
+    function showPanel(panelName, scrollY = 0) {
       ["homePanel", "chaptersPanel", "viewerPanel"].forEach(id => { $(`#${id}`).hidden = id !== panelName; });
       document.body.classList.toggle("reading-mode", panelName === "viewerPanel");
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo({ top: scrollY, behavior: scrollY ? "instant" : "smooth" });
     }
     function writeHash() {
       const hash = state.chapterIndex !== null ? `#${state.subjectKey}/${state.chapterIndex}` : state.subjectKey ? `#${state.subjectKey}` : "";
@@ -694,17 +695,18 @@
       showPanel("homePanel");
       if (updateUrl) writeHash();
     }
-    function showSubject(key, updateUrl = true) {
+    function showSubject(key, updateUrl = true, scrollY = 0) {
       if (!subjects[key]) return;
       state.subjectKey = key;
       state.chapterIndex = null;
       renderChapters();
-      showPanel("chaptersPanel");
+      showPanel("chaptersPanel", scrollY);
       if (updateUrl) writeHash();
     }
     function openChapter(index, updateUrl = true) {
       const subject = subjects[state.subjectKey];
       if (!subject || !subject.chapters[index]) return;
+      chaptersScrollY = window.scrollY;
       state.chapterIndex = index;
       renderViewer();
       showPanel("viewerPanel");
@@ -750,7 +752,7 @@
       if (modal) openModal(modal);
       if (event.target.closest("[data-close-modal]")) event.target.closest("dialog").close();
     });
-    $("#backToChapters").addEventListener("click", () => showSubject(state.subjectKey));
+    $("#backToChapters").addEventListener("click", () => showSubject(state.subjectKey, true, chaptersScrollY));
     $("#chapterFrame").addEventListener("load", adaptChapterForMobile);
     $("#completeChapter").addEventListener("click", toggleCompletion);
     ["#themeToggle", "#chapterThemeToggle"].forEach(selector => {
