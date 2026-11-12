@@ -1267,7 +1267,7 @@ footer {
         </ul>
       </div>
     </div>
-  </div>
+    </section>
 
   <!-- التبويب الثاني: جداول المقارنات والملخصات (4) -->
   <div id="tab-tables" class="tab-content" style="display:none">
@@ -1512,10 +1512,14 @@ footer {
 <script>
 // التبديل بين التبويبات والوضع الليلي والأكورديون
 function switchTab(tabId, btn) {
-  document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
-  const target = document.getElementById(tabId);
+  document.querySelectorAll('.tab-section, .tab-content').forEach(el => {
+    el.style.display = 'none';
+    el.classList.remove('active');
+  });
+  const target = document.getElementById(tabId.startsWith('tab-') ? tabId : `tab-${tabId}`);
   if (target) target.style.display = 'block';
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  if (target) target.classList.add('active');
+  document.querySelectorAll('.nav-pill').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
 }
 function showTab(tabId, btn) { switchTab(tabId, btn); }
@@ -2184,6 +2188,6 @@ window.addEventListener('DOMContentLoaded', () => {
   renderQuiz();
 });
 </script>
-</div>
+</main>
 </body>
 </html>
