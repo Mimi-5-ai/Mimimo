@@ -2,974 +2,1687 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>الفصل الثالث عشر الشامل | خوارزميات التعلم الآلي والتعلم العميق والذكاء التوليدي</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الفصل الثالث عشر: مقدمة إلى خوارزميات التعلم الآلي (Machine Learning)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#f4f6fb;
-  --card:#ffffff;
-  --ink:#0f172a;
-  --muted:#64748b;
-  --accent:#4f46e5;
-  --accent-dark:#3730a3;
-  --accent2:#eef2ff;
-  --teal:#0d9488;
-  --teal-light:#ccfbf1;
-  --line:#e2e8f0;
-  --good:#059669;
-  --good-bg:#ecfdf5;
-  --bad:#dc2626;
-  --bad-bg:#fef2f2;
-  --warn:#d97706;
-  --warn-bg:#fffbeb;
+:root {
+  --bg-page: #f4f6fb;
+  --card-bg: #ffffff;
+  --indigo-dark: #1e1b4b;
+  --indigo-main: #312e81;
+  --indigo-accent: #4338ca;
+  --indigo-soft: #eef2ff;
+  --teal-accent: #0d9488;
+  --teal-dark: #0f766e;
+  --text-dark: #0f172a;
+  --text-body: #334155;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  --good-bg: #f0fdf4;
+  --good-border: #86efac;
+  --good-text: #166534;
+  --bad-bg: #fef2f2;
+  --bad-border: #fca5a5;
+  --bad-text: #991b1b;
+  --warn-bg: #fffbeb;
+  --warn-border: #fde68a;
+  --warn-text: #92400e;
 }
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
-header{background:linear-gradient(135deg,#1e1b4b,#3730a3,#0d9488);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(30,27,75,0.2)}
-.wrap{max-width:1060px;margin:auto;padding:0 16px}
-.eyebrow{opacity:.95;font-size:.9rem;background:rgba(255,255,255,0.16);display:inline-block;padding:4px 14px;border-radius:99px;margin-bottom:6px;font-weight:bold}
-h1{margin:5px 0;font-size:clamp(1.45rem,3.6vw,2.15rem)}
-header p{margin:6px 0 0;opacity:.92;font-size:.96rem}
-nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
-nav button,.btn{border:0;border-radius:12px;padding:10px 15px;background:rgba(255,255,255,0.18);color:#ffffff;font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.92rem}
-nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
-nav button.active{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
-main .btn{background:var(--accent2);color:var(--accent-dark)}
-main .btn.primary{background:var(--accent);color:white}
-main{padding:22px 0 48px}
-.panel{display:none}
-.panel.active{display:block;animation:fadeIn .25s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(15,23,42,0.04)}
-h2{font-size:1.32rem;margin:0 0 12px;color:#1e1b4b}
-h3{font-size:1.06rem;margin:10px 0 6px;color:var(--accent-dark)}
-h4{font-size:.98rem;margin:8px 0 4px;color:#0f172a}
-small,.muted{color:var(--muted)}
-ul,ol{padding-right:22px;margin:8px 0}
-li{margin:6px 0}
-details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
-summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f8faff;color:#1e1b4b;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
-details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
-.details-body{padding:16px 18px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:12px}
-.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.82rem;font-weight:bold}
-.tag.teal{background:var(--teal-light);color:var(--teal)}
-.tag.self-eval{background:var(--warn-bg);color:var(--warn);border:1px solid #fcd34d}
-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.93rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
-th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
-th{background:#f1f5f9;color:#1e1b4b;font-weight:bold}
-tr:last-child td{border-bottom:0}
-.note{border-right:4px solid var(--accent);padding:10px 14px;background:#f5f7ff;border-radius:8px;margin:10px 0}
-.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
-.step-card{border:1px solid var(--line);border-radius:12px;padding:14px;background:#f8fafc}
-.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
-.options{display:grid;gap:8px;margin-top:12px}
-.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
-.option:hover:not(:disabled){border-color:var(--accent);background:#f8faff}
-.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
-.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
-.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
-.feedback.good{color:var(--good);background:var(--good-bg)}
-.feedback.bad{color:var(--bad);background:var(--bad-bg)}
-.progress{height:10px;background:#e2e8f0;border-radius:9px;overflow:hidden;margin:12px 0}
-.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
-.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#eef2ff);border:2px solid #c7d2fe;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
-.flashcard:hover{transform:scale(1.005)}
-.flashcard .term{font-size:1.32rem;font-weight:bold;color:#1e1b4b;margin-top:6px}
-.flashcard .answer{margin-top:16px;font-size:1.06rem;color:var(--accent-dark);background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04)}
-.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
-.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
-footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
-@media(max-width:600px){
-  .card{padding:14px}
-  nav button{flex:1 1 calc(50% - 8px);text-align:center}
-  .flashcard{min-height:200px;padding:18px}
-  th,td{padding:8px 10px;font-size:.88rem}
+
+body.dark-mode {
+  --bg-page: #0f172a;
+  --card-bg: #1e293b;
+  --indigo-dark: #e0e7ff;
+  --indigo-main: #a5b4fc;
+  --indigo-accent: #818cf8;
+  --indigo-soft: #312e81;
+  --teal-accent: #2dd4bf;
+  --teal-dark: #14b8a6;
+  --text-dark: #f8fafc;
+  --text-body: #cbd5e1;
+  --text-muted: #94a3b8;
+  --border-color: #334155;
+  --good-bg: #064e3b;
+  --good-border: #059669;
+  --good-text: #a7f3d0;
+  --bad-bg: #7f1d1d;
+  --bad-border: #dc2626;
+  --bad-text: #fecaca;
+  --warn-bg: #78350f;
+  --warn-border: #d97706;
+  --warn-text: #fde68a;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+  margin: 0;
+  background-color: var(--bg-page);
+  color: var(--text-dark);
+  font-family: 'Tajawal', -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.75;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Top Utility Bar */
+.top-utility-bar {
+  background: var(--card-bg);
+  height: 56px;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  border-bottom: 4px solid var(--teal-accent);
+}
+
+.btn-back {
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 6px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-dark);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-complete {
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 6px 20px;
+  border-radius: 8px;
+  border: none;
+  background: #15803d;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.btn-complete.done { background: var(--teal-dark); }
+
+.btn-theme {
+  font-family: inherit;
+  font-size: 0.95rem;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-body);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hero Banner */
+.hero-banner {
+  background: linear-gradient(135deg, #1e1b4b 0%, #1d4ed8 55%, #0d9488 100%);
+  color: #ffffff;
+  padding: 36px 20px 30px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(30, 27, 75, 0.12);
+}
+
+.hero-inner { max-width: 980px; margin: 0 auto; }
+
+.course-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #f8fafc;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 5px 16px;
+  border-radius: 99px;
+  margin-bottom: 14px;
+}
+
+.hero-title {
+  font-size: 1.95rem;
+  font-weight: 800;
+  margin: 0 0 12px;
+}
+
+.hero-subtitle {
+  font-size: 0.96rem;
+  color: rgba(255, 255, 255, 0.88);
+  max-width: 860px;
+  margin: 0 auto 24px;
+  line-height: 1.7;
+}
+
+.nav-pills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.nav-pill {
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 700;
+  padding: 9px 20px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.nav-pill:hover { background: rgba(255, 255, 255, 0.22); }
+
+.nav-pill.active {
+  background: #ffffff;
+  color: #1e1b4b;
+  border-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.main-container {
+  max-width: 1040px;
+  width: 100%;
+  margin: 26px auto 50px;
+  padding: 0 16px;
+  flex: 1;
+}
+
+.tab-section { display: none; }
+.tab-section.active { display: block; }
+
+/* Map Card */
+.map-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 26px;
+  margin-bottom: 22px;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+}
+
+.map-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--indigo-dark);
+  margin: 0 0 18px;
+}
+
+.map-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 820px) {
+  .map-grid { grid-template-columns: 1fr; }
+  .hero-title { font-size: 1.5rem; }
+}
+
+.unit-pill {
+  display: inline-block;
+  background: var(--indigo-soft);
+  color: var(--indigo-accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.map-col-title {
+  font-size: 1.03rem;
+  font-weight: 800;
+  color: var(--indigo-accent);
+  margin: 0 0 6px;
+}
+
+.map-col-desc {
+  font-size: 0.89rem;
+  color: var(--text-body);
+  margin: 0;
+  line-height: 1.65;
+}
+
+/* Accordion */
+.accordion-item {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  margin-bottom: 14px;
+  overflow: hidden;
+}
+
+.accordion-header {
+  width: 100%;
+  background: var(--card-bg);
+  border: none;
+  padding: 18px 22px;
+  text-align: right;
+  font-family: inherit;
+  font-size: 1.03rem;
+  font-weight: 800;
+  color: var(--indigo-dark);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.accordion-header:hover { background: rgba(67, 56, 202, 0.04); }
+
+.acc-arrow {
+  display: inline-block;
+  font-size: 0.85rem;
+  color: var(--indigo-dark);
+  transition: transform 0.2s ease;
+}
+
+.accordion-item.open .acc-arrow { transform: rotate(-90deg); }
+
+.accordion-body {
+  display: none;
+  padding: 6px 24px 26px;
+  border-top: 1px solid var(--border-color);
+}
+
+.accordion-item.open .accordion-body { display: block; }
+
+.sec-heading {
+  font-size: 1.03rem;
+  font-weight: 800;
+  color: var(--indigo-main);
+  margin: 20px 0 10px;
+  padding-right: 12px;
+  border-right: 4px solid var(--indigo-accent);
+}
+
+.study-list {
+  margin: 8px 0 14px;
+  padding-right: 20px;
+  color: var(--text-body);
+  font-size: 0.94rem;
+}
+
+.study-list li { margin-bottom: 8px; }
+
+.hl-term { font-weight: 800; color: var(--indigo-dark); }
+
+.exam-tag {
+  display: inline-block;
+  background: var(--warn-bg);
+  border: 1px solid var(--warn-border);
+  color: var(--warn-text);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 1px 8px;
+  border-radius: 6px;
+  margin-right: 6px;
+}
+
+.info-box {
+  background: rgba(15, 118, 110, 0.06);
+  border: 1px solid var(--border-color);
+  border-right: 4px solid var(--teal-accent);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: 0.93rem;
+  color: var(--text-body);
+}
+
+.code-badge {
+  direction: ltr;
+  display: inline-block;
+  font-family: 'Courier New', monospace;
+  font-weight: 800;
+  background: var(--indigo-soft);
+  color: var(--indigo-accent);
+  padding: 1px 8px;
+  border-radius: 6px;
+  margin: 0 3px;
+  font-size: 0.86rem;
+}
+
+.cards-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
+  margin: 14px 0;
+}
+
+.mini-card {
+  background: rgba(67, 56, 202, 0.03);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.mini-card-title {
+  font-weight: 800;
+  color: var(--indigo-main);
+  margin: 0 0 6px;
+  font-size: 0.96rem;
+}
+
+.mini-card-body {
+  font-size: 0.88rem;
+  color: var(--text-body);
+  margin: 0;
+}
+
+.sim-box {
+  background: rgba(148, 163, 184, 0.06);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 18px;
+  margin: 16px 0;
+}
+
+.pipeline-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.pipe-btn {
+  padding: 10px 8px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-dark);
+  font-family: inherit;
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+
+.pipe-btn.active {
+  background: var(--indigo-main);
+  color: #ffffff;
+  border-color: var(--indigo-main);
+}
+
+/* Tables */
+.table-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 22px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+}
+
+.table-card h3 {
+  margin: 0 0 14px;
+  color: var(--indigo-dark);
+  font-size: 1.08rem;
+}
+
+table.comp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+table.comp-table th,
+table.comp-table td {
+  border: 1px solid var(--border-color);
+  padding: 10px 13px;
+  text-align: right;
+  vertical-align: top;
+}
+
+table.comp-table th {
+  background: var(--indigo-soft);
+  color: var(--indigo-dark);
+  font-weight: 800;
+}
+
+.ltr-cell {
+  direction: ltr;
+  text-align: left;
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+}
+
+/* Terms & Flashcards & Quiz */
+.terms-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 240px;
+  padding: 10px 15px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-dark);
+  font-family: inherit;
+  font-size: 0.92rem;
+}
+
+.filter-btn {
+  padding: 8px 15px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-body);
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.filter-btn.active {
+  background: var(--indigo-main);
+  color: #ffffff;
+  border-color: var(--indigo-main);
+}
+
+.terms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 14px;
+}
+
+.term-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.term-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.term-ar { font-weight: 800; color: var(--indigo-dark); font-size: 0.98rem; }
+
+.term-en {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--teal-accent);
+  background: rgba(15, 118, 110, 0.1);
+  padding: 2px 8px;
+  border-radius: 6px;
+  direction: ltr;
+}
+
+.term-def { font-size: 0.88rem; color: var(--text-body); margin: 0; }
+
+.flashcard-wrap { max-width: 620px; margin: 0 auto; text-align: center; }
+
+.fc-box {
+  background: var(--card-bg);
+  border: 2px solid var(--border-color);
+  border-radius: 16px;
+  min-height: 230px;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+
+.fc-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--indigo-accent);
+  background: var(--indigo-soft);
+  padding: 4px 12px;
+  border-radius: 99px;
+  margin-bottom: 12px;
+}
+
+.fc-text { font-size: 1.15rem; font-weight: 800; color: var(--indigo-dark); }
+
+.q-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.q-opt {
+  width: 100%;
+  text-align: right;
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-dark);
+  font-family: inherit;
+  font-size: 0.93rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.q-opt.correct { background: var(--good-bg); border-color: var(--good-border); color: var(--good-text); }
+.q-opt.wrong { background: var(--bad-bg); border-color: var(--bad-border); color: var(--bad-text); }
+
+footer {
+  text-align: center;
+  padding: 18px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--border-color);
+  background: var(--card-bg);
 }
 </style>
 </head>
 <body>
-<header>
-  <div class="wrap">
-    <div class="eyebrow">مقرر الذكاء الاصطناعي • الفصل الثالث عشر كاملاً</div>
-    <h1>الفصل الثالث عشر: مقدمة إلى خوارزميات التعلم الآلي والتعلم العميق والذكاء التوليدي</h1>
-    <p>يغطي مفهوم ومراحل ومكونات التعلم الآلي، خوارزميات التعلم الخاضع وغير الخاضع للإشراف والمعزز، التعلم العميق والشبكات العصبية (DNN, CNN, RNN, Transformers)، والذكاء التوليدي ونماذج اللغة الكبيرة (LLMs)</p>
-    <nav>
-      <button class="active" data-tab="summary">الشرح الشامل</button>
-      <button data-tab="tables">جداول المقارنات (4)</button>
-      <button data-tab="terms">المصطلحات (28)</button>
-      <button data-tab="cards">البطاقات التعليمية (28)</button>
-      <button data-tab="quiz">الاختبار الشامل + التقييم الذاتي (25)</button>
-    </nav>
+
+<div class="top-utility-bar">
+  <button class="btn-theme" onclick="toggleTheme()" title="تبديل الوضع الليلي">☾</button>
+</div>
+
+<header class="hero-banner">
+  <div class="hero-inner">
+    <div class="course-badge">مقرر الذكاء الاصطناعي • تغطية شاملة 100%</div>
+    <h1 class="hero-title">الفصل الثالث عشر: مقدمة إلى خوارزميات التعلم الآلي (Machine Learning)</h1>
+    <p class="hero-subtitle">
+      يغطي مراحل بناء نماذج التعلم الآلي وأنواعه الثلاثة، التعلم العميق وبنى الشبكات العصبية (DNN, CNN, RNN, Transformers)، ونماذج الذكاء الاصطناعي التوليدي وتقنيات توجيهه
+    </p>
+    <div class="nav-pills">
+      <button class="nav-pill active" onclick="switchTab('study', this)">الشرح الشامل</button>
+      <button class="nav-pill" onclick="switchTab('tables', this)">جداول المقارنات والملخصات (4)</button>
+      <button class="nav-pill" onclick="switchTab('terms', this)">المصطلحات والمفاهيم (22)</button>
+      <button class="nav-pill" onclick="switchTab('cards', this)">البطاقات التعليمية (22)</button>
+      <button class="nav-pill" onclick="switchTab('quiz', this)">الاختبار الشامل (20)</button>
+    </div>
   </div>
 </header>
 
-<main class="wrap">
-  <!-- ================= التبويب الأول: الشرح الشامل ================= -->
-  <section id="summary" class="panel active">
-    <div class="card">
-      <h2>خريطة الفصل الثالث عشر: مقدمة إلى خوارزميات التعلم الآلي</h2>
-      <div class="grid">
+<main class="main-container">
+
+  <!-- ==================== التبويب 1: الشرح الشامل ==================== -->
+  <section id="tab-study" class="tab-section active">
+    <div class="map-card">
+      <h2 class="map-title">خريطة الفصل الثالث عشر: مقدمة إلى خوارزميات التعلم الآلي</h2>
+      <div class="map-grid">
         <div>
-          <span class="tag">الوحدة التعليمية الأولى</span>
-          <h3>أساسيات وخوارزميات التعلم الآلي</h3>
-          <p>مفهوم التعلم الآلي، مكوناته الثلاثة، مراحله الست بالترتيب، أنواع خوارزمياته (تحت الإشراف، غير خاضع للإشراف، معزز)، التطبيقات والتحديات.</p>
+          <span class="unit-pill">الوحدة الأولى</span>
+          <h3 class="map-col-title">مراحل وأنواع خوارزميات التعلم الآلي</h3>
+          <p class="map-col-desc">
+            مفهوم التعلم الآلي، المراحل الست لبناء النموذج (جمع البيانات، تنظيف البيانات، اختيار النموذج، التدريب، تقييم النموذج، التحسين والتنبؤ)، وأنواع التعلم الثلاثة (تحت الإشراف، غير الخاضع للإشراف، المعزز).
+          </p>
         </div>
         <div>
-          <span class="tag">الوحدة التعليمية الثانية</span>
-          <h3>التعلم العميق والشبكات العصبية</h3>
-          <p>مفهوم التعلم العميق والفرق بينه وبين التعلم الآلي، مكونات الشبكات العصبية (الطبقات، الأوزان والتحيزات، دالة التنشيط)، وأنواع الشبكات (DNN, CNN, RNN, Transformers).</p>
+          <span class="unit-pill">الوحدة الثانية</span>
+          <h3 class="map-col-title">التعلم العميق وأنواع الشبكات العصبية</h3>
+          <p class="map-col-desc">
+            مفهوم التعلم العميق (<span class="code-badge">Deep Learning</span>)، والشبكات العصبية الأربعة: العميقة (<span class="code-badge">DNNs</span>)، التلافيفية (<span class="code-badge">CNNs</span>)، المتكررة (<span class="code-badge">RNNs</span>)، والمتحولة (<span class="code-badge">Transformers</span>).
+          </p>
         </div>
         <div>
-          <span class="tag teal">الوحدة التعليمية الثالثة</span>
-          <h3>الذكاء التوليدي ونماذج اللغة (LLMs)</h3>
-          <p>مفهوم الذكاء الاصطناعي التوليدي، النماذج التوليدية الأربعة (GANs, VAEs, Transformers, Diffusion)، تقنيات RLHF والتوجيه الذكي، وتطبيقات وميزات LLMs.</p>
+          <span class="unit-pill">الوحدة الثالثة</span>
+          <h3 class="map-col-title">الذكاء الاصطناعي التوليدي ونماذجه وتوجيهه</h3>
+          <p class="map-col-desc">
+            نماذج التوليد الأربعة (النماذج التحويلية، نماذج الانتشار <span class="code-badge">Diffusion</span>، الشبكات التوليدية <span class="code-badge">GANs</span>، المشفرات التلقائية <span class="code-badge">VAEs</span>)، وتقنية التعديل والتوجيه الذكي (<span class="code-badge">Prompt Engineering</span>) و(<span class="code-badge">RLHF</span>).
+          </p>
         </div>
       </div>
     </div>
 
     <!-- الوحدة الأولى -->
-    <details open>
-      <summary>1) الوحدة التعليمية الأولى: مفهوم التعلم الآلي، مكوناته، مراحله الست، وأنواع خوارزمياته</summary>
-      <div class="details-body">
-        <h3>أولاً: مفهوم التعلم الآلي (<span dir="ltr">Machine Learning</span>) ومكوناته الثلاثة</h3>
-        <ul>
-          <li><b>تعريف التعلم الآلي:</b> هو أحد الفروع الرئيسية للذكاء الاصطناعي (<span dir="ltr">AI</span>) الذي يركز على تطوير الأنظمة والخوارزميات التي يمكنها <b>التعلم من البيانات وتحسين أدائها بمرور الوقت من خلال التجربة دون أن تتم برمجتها بشكل صريح</b> لكل مهمة؛ حيث تحلل البيانات الضخمة وتستخلص الأنماط منها لاستخدامها في التنبؤات أو اتخاذ القرارات.</li>
-          <li><b>المكونات الثلاثة الأساسية لنظام التعلم الآلي:</b>
-            <ol>
-              <li><b>البيانات (<span dir="ltr">Data</span>):</b> الأساس الذي يعتمد عليه التعلم الآلي، وتشمل البيانات المنظمة (مثل الجداول وقواعد البيانات) أو غير المنظمة (مثل النصوص، الصور، والفيديو)، وتُستخدم لتدريب النماذج على اكتشاف الأنماط والخصائص.</li>
-              <li><b>النماذج (<span dir="ltr">Models</span>):</b> التمثيل الرياضي أو النظام الناتج بعد تدريب الخوارزمية على بيانات التدريب، ويُستخدم لاحقاً لتحليل البيانات الجديدة أو اتخاذ القرارات (قد يكون بسيطاً كمعادلة خط مستقيم أو معقداً كشبكة عصبية عميقة).</li>
-              <li><b>الخوارزميات (<span dir="ltr">Algorithms</span> - التعلم):</b> الخطوات الرياضية والإحصائية التي تستخدمها النماذج لتعلم الأنماط وتعديل المعاملات من البيانات.</li>
-            </ol>
-          </li>
+    <div class="accordion-item open">
+      <button class="accordion-header" onclick="toggleAccordion(this)">
+        <span class="acc-arrow">◄</span>
+        <span>1) الوحدة الأولى: أساسيات التعلم الآلي (Machine Learning)، مراحله الست، وأنواعه الثلاثة</span>
+      </button>
+      <div class="accordion-body">
+        <h4 class="sec-heading">أولاً: مفهوم التعلم الآلي (Machine Learning)</h4>
+        <div class="info-box">
+          <strong>مفهوم التعلم الآلي (Machine Learning):</strong> هو فرع رئيسي من فروع الذكاء الاصطناعي يمكّن الأنظمة الحاسوبية من التعلم تلقائياً من البيانات والخبرات السابقة، واكتشاف الأنماط واتخاذ القرارات أو التنبؤات لتحسين الأداء بمرور الوقت دون الحاجة إلى برمجة صريحة لكل حالة.
+        </div>
+
+        <h4 class="sec-heading">ثانياً: المراحل الست لبناء وتدريب نموذج التعلم الآلي بالترتيب (موضع سؤالين في بنك الأسئلة ص 41)</h4>
+        <ul class="study-list">
+          <li><span class="hl-term">1. مرحلة جمع البيانات (Data Collection):</span> تجميع البيانات الخام المرتبطة بالمشكلة من مصادرها المتعددة (قواعد بيانات، مستشعرات، ملفات)؛ وتعتمد جودة النموذج بشكل مباشر على كمية وتمثيل هذه البيانات.</li>
+          <li><span class="hl-term">2. مرحلة تنظيف البيانات (Data Cleaning / Preprocessing):</span> <strong>يتم في مرحلة تنظيف البيانات توحيد التنسيقات ومعالجة القيم المفقودة، وإزالة الضوضاء والأخطاء، وضمان أن تكون البيانات جاهزة للاستخدام الفعال في التدريب</strong> <span class="exam-tag">سؤال 1 في بنك الأسئلة ص 41</span></li>
+          <li><span class="hl-term">3. مرحلة اختيار النموذج (Model Selection):</span> اختيار خوارزمية التعلم الآلي الأنسب لطبيعة المشكلة ونوع البيانات (مثل الانحدار، أشجار القرار، أو الشبكات العصبية).</li>
+          <li><span class="hl-term">4. مرحلة تدريب النموذج (Model Training):</span> تغذية النموذج المختار ببيانات التدريب ليقوم بضبط المعلمات والأوزان الداخلية وتعلم العلاقات والأنماط الكامنة في البيانات.</li>
+          <li><span class="hl-term">5. مرحلة تقييم النموذج (Model Evaluation):</span> <strong>يتم في مرحلة تقييم النموذج قياس الأداء باستخدام مقاييس مثل الدقة (Accuracy)، الدقة التنبؤية (Precision)، ومستوى الخطأ</strong> على بيانات اختبار للتحقق من كفاءة النموذج <span class="exam-tag">سؤال 2 في بنك الأسئلة ص 41</span></li>
+          <li><span class="hl-term">6. مرحلة التحسين والتنبؤ (Optimization & Prediction):</span> ضبط المعاملات الفائقة (<span class="code-badge">Hyperparameters</span>) لتحسين أداء النموذج وتقليل الخطأ، ثم نشره لإجراء تنبؤات دقيقة على بيانات جديدة في الواقع الفعلي.</li>
         </ul>
 
-        <div class="exam-alert">
-          <h3>ثانياً: المراحل الست لعملية التعلم الآلي بالترتيب (موضع أسئلة في التقييم الذاتي):</h3>
-          <div class="grid">
-            <div class="step-card">
-              <span class="tag">1. جمع البيانات (Data Collection)</span>
-              <p>جمع البيانات المتعلقة بالمشكلة أو المجال المراد معالجته؛ وتُعد <b>جودة البيانات وحجمها</b> عاملين حاسمين في نجاح النموذج.</p>
-            </div>
-            <div class="step-card">
-              <span class="tag">2. تنظيف ومعالجة البيانات (Preprocessing)</span>
-              <p>تنظيف البيانات من الأخطاء والضوضاء، و<b>توحيد التنسيقات، ومعالجة القيم المفقودة</b>، واستخراج الميزات لتكون جاهزة للتدريب الفعال.</p>
-            </div>
-            <div class="step-card">
-              <span class="tag">3. اختيار النموذج (Model Selection)</span>
-              <p>اختيار الخوارزمية أو بنية النموذج الأنسب لطبيعة المشكلة ونوع البيانات (تصنيف، انحدار، تجميع...).</p>
-            </div>
-            <div class="step-card">
-              <span class="tag">4. تدريب النموذج (Model Training)</span>
-              <p>تغذية النموذج ببيانات التدريب لضبط معاملاته وأوزانه داخلياً وتعلم الأنماط والعلاقات الكامنة في البيانات.</p>
-            </div>
-            <div class="step-card">
-              <span class="tag">5. تقييم النموذج (Model Evaluation)</span>
-              <p>اختبار أداء النموذج باستخدام <b>بيانات الاختبار (التي لم يرها أثناء التدريب)</b> لقياس دقته وقدرته على التعميم.</p>
-            </div>
-            <div class="step-card">
-              <span class="tag">6. تحسين النموذج ونشره (Optimization)</span>
-              <p>ضبط المعلمات الفائقة (<span dir="ltr">Hyperparameters</span>) لتحسين الأداء وتقليل الأخطاء قبل نشره وتطبيقه في بيئة العمل.</p>
-            </div>
+        <h4 class="sec-heading">ثالثاً: الأنواع الرئيسية الثلاثة لخوارزميات التعلم الآلي</h4>
+        <div class="cards-grid-2">
+          <div class="mini-card" style="border-right:4px solid #2563eb">
+            <div class="mini-card-title">1. التعلم تحت الإشراف (Supervised Learning)</div>
+            <p class="mini-card-body">
+              • <strong>طبيعة البيانات:</strong> يُدرب النموذج على <strong>بيانات مصنفة أو مسماة (<span class="code-badge">Labeled Data</span>)</strong> تحتوي على المدخلات والمخرجات الصحيحة المقابلة لها مسبقاً.<br>
+              • <strong>المهام والأمثلة:</strong><br>
+              1) <strong>التصنيف (<span class="code-badge">Classification</span>):</strong> التنبؤ بفئات منفصلة (مثل كشف البريد المزعج أو تشخيص مرض).<br>
+              2) <strong>الانحدار (<span class="code-badge">Regression</span>):</strong> التنبؤ بقيم رقمية مستمرة (مثل توقع أسعار العقارات أو الأسهم).
+            </p>
+          </div>
+          <div class="mini-card" style="border-right:4px solid #16a34a;background:var(--good-bg)">
+            <div class="mini-card-title">2. التعلم غير الخاضع للإشراف (Unsupervised Learning) <span class="exam-tag">سؤال 3 بالبنك</span></div>
+            <p class="mini-card-body">
+              • <strong>طبيعة البيانات والهدف:</strong> <strong>يُستخدم عندما لا تكون هناك مخرجات محددة في البيانات (<span class="code-badge">Unlabeled Data</span>)، ويهدف إلى اكتشاف الأنماط أو الهيكليات الخفية داخل البيانات</strong>.<br>
+              • <strong>المهام والأمثلة:</strong> التجميع (<span class="code-badge">Clustering</span> مثل خوارزمية <span class="code-badge">K-Means</span> لتقسيم العملاء إلى شرائح متشابهة) وتقليل الأبعاد (<span class="code-badge">PCA</span>).
+            </p>
+          </div>
+          <div class="mini-card" style="border-right:4px solid #d97706">
+            <div class="mini-card-title">3. التعلم المعزز (Reinforcement Learning)</div>
+            <p class="mini-card-body">
+              • <strong>آلية العمل:</strong> يتعلم فيه الوكيل الذكي (<span class="code-badge">Agent</span>) عن طريق التفاعل المباشر مع البيئة عبر التجربة والخطأ، حيث يتلقى <strong>مكافآت (<span class="code-badge">Rewards</span>) أو عقوبات (<span class="code-badge">Penalties</span>)</strong> بهدف تعظيم المكافأة التراكمية.<br>
+              • <strong>الأمثلة:</strong> تدريب الروبوتات على المشي، الألعاب الاستراتيجية، والقيادة الذاتية (مثل خوارزمية <span class="code-badge">Q-Learning</span>).
+            </p>
           </div>
         </div>
 
-        <div class="exam-alert">
-          <h3>ثالثاً: الأنواع الثلاثة الرئيسية لخوارزميات التعلم الآلي وأمثلتها:</h3>
-          
-          <h4>1. التعلم الخاضع للإشراف / تحت الإشراف (<span dir="ltr">Supervised Learning</span>):</h4>
-          <ul>
-            <li>يتدرب النموذج على <b>بيانات مصنفة وموسومة مسبقاً (<span dir="ltr">Labeled Data</span>)</b> تحتوي على المدخلات والمخرجات الصحيحة (الأهداف)، وينقسم إلى مهمتين(التنبؤ بقيم مستمرة <b>الانحدار <span dir="ltr">Regression</span></b>، وتوقع فئات منفصلة <b>التصنيف <span dir="ltr">Classification</span></b>)، ومن أشهر خوارزمياته:
-              <br>• <b>الانحدار الخطي (<span dir="ltr">Linear Regression</span>):</b> يُستخدم للتنبؤ بـ <b>قيم رقمية مستمرة</b> بناءً على علاقة خطية بين المتغيرات (مثل: التنبؤ بأسعار العقارات أو المبيعات).
-              <br>• <b>الانحدار اللوجستي (<span dir="ltr">Logistic Regression</span>):</b> يُستخدم لمهام <b>التصنيف الثنائي</b> (مثل: تحديد البريد الإلكتروني هل هو مزعج <span dir="ltr">Spam</span> أم سليم، أو هل المريض مصاب أم لا).
-              <br>• <b>أشجار القرار (<span dir="ltr">Decision Trees</span>):</b> تقسم البيانات بشكل متسلسل عبر عقد شروط وقرارات تشبه الشجرة، وتمتاز بسهولة الفهم والتفسير (تُستخدم في التصنيف والانحدار).
-              <br>• <b>الغابات العشوائية (<span dir="ltr">Random Forests</span>):</b> تجمع بين <b>عدة أشجار قرار</b> وتدمج توقعاتها لزيادة الدقة وتقليل مشكلة الإفراط في التخصيص (<span dir="ltr">Overfitting</span>).
-              <br>• <b>آلات المتجهات الداعمة (<span dir="ltr">SVM - Support Vector Machines</span>):</b> تجد أفضل مستوى فائق (<span dir="ltr">Hyperplane</span>) يفصل بين الفئات بأكبر هامش ممكن.</li>
-          </ul>
-
-          <hr style="border:0;border-top:1px solid #fcd34d;margin:12px 0">
-
-          <h4>2. التعلم غير الخاضع للإشراف (<span dir="ltr">Unsupervised Learning</span>):</h4>
-          <ul>
-            <li>يتعامل مع <b>بيانات غير مصنفة (<span dir="ltr">Unlabeled Data</span>)</b> لا تحتوي على مخرجات مسبقة، فيكتشف النموذج الهياكل والأنماط الخفية ذاتياً، ومن أشهر خوارزمياته:
-              <br>• <b>خوارزمية التجميع <span dir="ltr">K-Means</span>:</b> تقسم البيانات غير المصنفة إلى <b dir="ltr">K</b> من المجموعات (العناقيد <span dir="ltr">Clusters</span>) المتشابهة بناءً على المسافة من مراكز المجموعات (مثل: تقسيم العملاء إلى شرائح تسويقية).
-              <br>• <b>التجميع الهرمي (<span dir="ltr">Hierarchical Clustering</span>):</b> يبني تسلسلاً هرمياً من المجموعات المتداخلة على شكل شجرة عناقيد.
-              <br>• <b>تحليل المكونات الرئيسية (<span dir="ltr">PCA - Principal Component Analysis</span>):</b> خوارزمية تُستخدم لـ <b>تقليل الأبعاد (<span dir="ltr">Dimensionality Reduction</span>)</b> وضغط الميزات الكثيرة مع الحفاظ على أهم المعلومات والتباين في البيانات.</li>
-          </ul>
-
-          <hr style="border:0;border-top:1px solid #fcd34d;margin:12px 0">
-
-          <h4>3. التعلم المعزز (<span dir="ltr">Reinforcement Learning</span>):</h4>
-          <ul>
-            <li>يتعلم فيه <b>الوكيل (<span dir="ltr">Agent</span>)</b> كيفية التصرف في <b>بيئة (<span dir="ltr">Environment</span>)</b> من خلال <b>التجربة والخطأ (<span dir="ltr">Trial and Error</span>)</b>، حيث يتلقى <b>مكافآت (<span dir="ltr">Rewards</span>)</b> عند الأفعال الصحيحة و<b>عقوبات (<span dir="ltr">Penalties</span>)</b> عند الأفعال الخاطئة لتعظيم المكافأة التراكمية.</li>
-            <li><b>أشهر خوارزمياته وتطبيقاته:</b> خوارزمية <b dir="ltr">Q-Learning</b> وشبكات <b dir="ltr">DQN</b>؛ ويُطبق في <b>الروبوتات، السيارات ذاتية القيادة، والألعاب الذكية</b> (مثل الشطرنج ولعبة Go).</li>
-          </ul>
+        <h4 class="sec-heading">رابعاً: محاكي تفاعلي لمراحل بناء نموذج التعلم الآلي الست (اضغطي على أي مرحلة)</h4>
+        <div class="sim-box">
+          <div class="pipeline-steps">
+            <button class="pipe-btn active" onclick="showPipeStage(0, this)">1. جمع البيانات</button>
+            <button class="pipe-btn" onclick="showPipeStage(1, this)">2. تنظيف البيانات ★</button>
+            <button class="pipe-btn" onclick="showPipeStage(2, this)">3. اختيار النموذج</button>
+            <button class="pipe-btn" onclick="showPipeStage(3, this)">4. تدريب النموذج</button>
+            <button class="pipe-btn" onclick="showPipeStage(4, this)">5. تقييم النموذج ★</button>
+            <button class="pipe-btn" onclick="showPipeStage(5, this)">6. التحسين والتنبؤ</button>
+          </div>
+          <div id="pipeStageDisplay" style="background:var(--card-bg);padding:14px 16px;border-radius:10px;border:1px solid var(--border-color)"></div>
         </div>
-
-        <h3>رابعاً: تحديات التعلم الآلي</h3>
-        <ul>
-          <li><b>1. الإفراط في التخصيص / التجهيز الزائد (<span dir="ltr">Overfitting</span>):</b> عندما يحفظ النموذج تفاصيل وضوضاء بيانات التدريب بدقة مفرطة، فيكون أداؤه ممتازاً في التدريب ولكنه <b>يفشل في التعميم على البيانات الجديدة</b>.</li>
-          <li><b>2. نقص التخصيص / القصور في التجهيز (<span dir="ltr">Underfitting</span>):</b> عندما يكون النموذج بسيطاً جداً فلا يستطيع تعلم الأنماط الأساسية حتى في بيانات التدريب.</li>
-          <li><b>3. جودة البيانات والتحيز وصعوبة التفسير:</b> نقص البيانات النظيفة أو احتواؤها على تحيز يؤدي لنتائج خاطئة، كما يصعب تفسير قرارات النماذج المعقدة.</li>
-        </ul>
       </div>
-    </details>
+    </div>
 
     <!-- الوحدة الثانية -->
-    <details open>
-      <summary>2) الوحدة التعليمية الثانية: التعلم العميق (Deep Learning) والشبكات العصبية الاصطناعية وأنواعها</summary>
-      <div class="details-body">
-        <h3>أولاً: مفهوم التعلم العميق والفرق الجوهري بينه وبين التعلم الآلي التقليدي</h3>
-        <ul>
-          <li><b>تعريف التعلم العميق (<span dir="ltr">Deep Learning</span>):</b> هو فرع متخصص ومتقدم من التعلم الآلي يعتمد على <b>الشبكات العصبية الاصطناعية العميقة (<span dir="ltr">Deep Neural Networks</span>)</b> المستوحاة من بنية وطريقة عمل الدماغ البشري، وتضم طبقات متعددة لمعالجة البيانات المعقدة.</li>
-          <li><b>أبرز الفروق بين التعلم الآلي التقليدي والتعلم العميق:</b>
-            <ol>
-              <li><b>استخراج الميزات (<span dir="ltr">Feature Extraction</span>):</b> في التعلم الآلي التقليدي يتم استخراج الميزات واختيارها <b>يدوياً بواسطة الخبراء البشر</b>، بينما في التعلم العميق تقوم الشبكة بـ <b>استخراج وتعلم الميزات تلقائياً وهرمياً</b> من البيانات الخام!</li>
-              <li><b>حجم البيانات والأداء:</b> يتفوق التعلم العميق بشكل هائل عندما تكون البيانات <b>ضخمة جداً وغير منظمة</b> (كالصور والصوت والنصوص)، بينما يناسب التعلم التقليدي البيانات الجدولية الصغيرة والمتوسطة.</li>
-              <li><b>الموارد الحاسوبية:</b> يحتاج التعلم العميق إلى قدرات حاسوبية عالية ووحدات معالجة رسومية (<b dir="ltr">GPUs / TPUs</b>) للتدريب المتوازي.</li>
-            </ol>
-          </li>
-        </ul>
+    <div class="accordion-item open">
+      <button class="accordion-header" onclick="toggleAccordion(this)">
+        <span class="acc-arrow">◄</span>
+        <span>2) الوحدة الثانية: التعلم العميق (Deep Learning) وأنواع الشبكات العصبية الأربعة (ص 42 بالبنك)</span>
+      </button>
+      <div class="accordion-body">
+        <h4 class="sec-heading">أولاً: مفهوم التعلم العميق (Deep Learning) — موضع السؤال الأول في الوحدة 2</h4>
+        <div class="info-box">
+          <strong>التعلم العميق (Deep Learning):</strong> هو فرع متقدم من التعلم الآلي، <strong>يعتمد على الشبكات العصبية العميقة، وهي شبكات متعددة الطبقات تحاكي طريقة عمل العقل البشري</strong> في معالجة البيانات واستخلاص الميزات تلقائياً <span class="exam-tag">سؤال 1 في بنك الأسئلة ص 42</span>
+        </div>
 
-        <div class="exam-alert">
-          <h3>ثانياً: المكونات الأساسية للشبكات العصبية الاصطناعية (<span dir="ltr">ANNs</span>) وآلية عملها:</h3>
-          <div class="grid">
-            <div class="step-card">
-              <span class="tag">1. الطبقات الثلاث (Layers)</span>
-              <ul>
-                <li><b>طبقة الإدخال (<span dir="ltr">Input Layer</span>):</b> تستقبل البيانات الخام (مثل بكسلات الصورة أو الكلمات).</li>
-                <li><b>الطبقات الخفية (<span dir="ltr">Hidden Layers</span>):</b> طبقة واحدة أو عدة طبقات تجري العمليات الحسابية وتستخرج الميزات؛ وتُسمى الشبكة "عميقة" لوجود <b>عدة طبقات خفية متتالية</b>.</li>
-                <li><b>طبقة الإخراج (<span dir="ltr">Output Layer</span>):</b> تُصدر النتيجة النهائية (التصنيف أو التنبؤ).</li>
-              </ul>
-            </div>
-            <div class="step-card">
-              <span class="tag">2. الأوزان والتحيزات (Weights & Biases)</span>
-              <ul>
-                <li><b>الأوزان (<span dir="ltr">Weights</span> $w$):</b> قيم رقمية تحدد قوة وأهمية الاتصال بين خليتين عصبيتين (تحدد مدى تأثير المدخل في المخرج).</li>
-                <li><b>التحيزات (<span dir="ltr">Biases</span> $b$):</b> قيم إضافية تساعد في إزاحة دالة التنشيط لضبط ملاءمة النموذج.</li>
-                <li>يتعلم النموذج عن طريق <b>تحديث الأوزان والتحيزات تكرارياً</b> عبر خوارزمية <b>الانتشار العكسي (<span dir="ltr">Backpropagation</span>)</b> لتقليل دالة الخسارة.</li>
-              </ul>
-            </div>
-            <div class="step-card">
-              <span class="tag teal">3. دالة التنشيط (Activation Function)</span>
-              <ul>
-                <li>دالة رياضية تطبق على مخرج الخلية العصبية لتحديد ما إذا كان يجب تنشيط الخلية أم لا، وتكمن أهميتها في <b>إدخال اللاخطية (<span dir="ltr">Non-linearity</span>)</b> للشبكة لتتمكن من تعلم الأنماط المعقدة.</li>
-                <li><b>أشهر دوال التنشيط:</b> دالة <b dir="ltr">ReLU</b> (الأكثر شيوعاً في الطبقات الخفية)، ودالة <b dir="ltr">Sigmoid</b> (للتصنيف الثنائي)، ودالة <b dir="ltr">Softmax</b> (للتصنيف متعدد الفئات).</li>
-              </ul>
-            </div>
+        <h4 class="sec-heading">ثانياً: البنى والأنواع الأربعة للشبكات العصبية في الفصل الثالث عشر (مواضع أسئلة البنك ص 42)</h4>
+        <div class="cards-grid-2">
+          <div class="mini-card" style="border-color:var(--good-border);background:var(--good-bg)">
+            <div class="mini-card-title">1. الشبكات العصبية العميقة (DNNs) <span class="exam-tag">سؤال 2 بالبنك</span></div>
+            <p class="mini-card-body">
+              <span class="code-badge">Deep Neural Networks</span><br>
+              <strong>تتكون من عدة طبقات خفية (Hidden Layers) بين طبقتي الإدخال والإخراج، قادرة على تعلم الأنماط المعقدة والمتعددة الأبعاد وتستخدم في تطبيقات مثل التعرف على الصور وتحليل النصوص</strong>.
+            </p>
+          </div>
+          <div class="mini-card">
+            <div class="mini-card-title">2. الشبكات العصبية التلافيفية (CNNs)</div>
+            <p class="mini-card-body">
+              <span class="code-badge">Convolutional Neural Networks</span><br>
+              شبكات متخصصة في معالجة البيانات الشبكية والمرئية مثل <strong>الصور والفيديوهات</strong>؛ تعتمد على طبقات الالتفاف (<span class="code-badge">Convolution</span>) والمرشحات لاستخلاص الميزات المكانية (كالحواف والأشكال) وتصنيف الصور والرؤية الحاسوبية.
+            </p>
+          </div>
+          <div class="mini-card">
+            <div class="mini-card-title">3. الشبكات العصبية المتكررة (RNNs)</div>
+            <p class="mini-card-body">
+              <span class="code-badge">Recurrent Neural Networks</span><br>
+              شبكات مصممة لمعالجة <strong>البيانات التسلسلية أو الزمنية</strong> (مثل الكلام الصوتي، السلاسل الزمنية، والنصوص)؛ حيث تمتلك حلقات تغذية راجعة وذاكرة داخلية تحتفظ بالمعلومات من الخطوات السابقة، لكنها تواجه صعوبة في السلاسل الطويلة جداً.
+            </p>
+          </div>
+          <div class="mini-card" style="border-color:var(--good-border);background:var(--good-bg)">
+            <div class="mini-card-title">4. الشبكات العصبية المتحولة (Transformers) <span class="exam-tag">سؤال 3 بالبنك</span></div>
+            <p class="mini-card-body">
+              <span class="code-badge">Transformer Neural Networks</span><br>
+              <strong>تعتمد على آلية الانتباه الذاتي (Self-Attention)، ويمكن للنموذج التركيز على أجزاء معينة من البيانات بناءً على أهميتها، مما يسهل تحليل العلاقات الطويلة الأمد بين الكلمات</strong> ومعالجة البيانات بالتوازي بكفاءة فائقة.
+            </p>
           </div>
         </div>
-
-        <div class="exam-alert">
-          <h3>ثالثاً: الأنواع الأربعة الرئيسية للشبكات العصبية في التعلم العميق (موضع أسئلة مؤكدة):</h3>
-          <ol>
-            <li><b>الشبكات العصبية العميقة القياسية (<span dir="ltr">DNN - Deep Neural Networks / MLP</span>):</b>
-              <br>شبكات أمامية متصلة بالكامل تحتوي على عدة طبقات خفية، وتُستخدم في مشاكل التصنيف والانحدار للبيانات المهيكلة والمركبة.</li>
-            <li><b>الشبكات العصبية التلافيفية / الالتفافية (<span dir="ltr">CNN - Convolutional Neural Networks</span>):</b>
-              <br>صُممت خصيصاً لمعالجة <b>البيانات البصرية والصور ومقاطع الفيديو (<span dir="ltr">Computer Vision</span>)</b>؛ وتستخدم طبقات الالتفاف (المرشحات/الفلاتر) وطبقات التجميع (<span dir="ltr">Pooling</span>) لاستخراج الميزات المكانية كالحواف والأشكال والتعرف على الوجوه والأجسام والصور الطبية.</li>
-            <li><b>الشبكات العصبية المتكررة (<span dir="ltr">RNN - Recurrent Neural Networks</span>) ومعمارية <span dir="ltr">LSTM</span>:</b>
-              <br>صُممت لمعالجة <b>البيانات المتسلسلة والزمنية (<span dir="ltr">Sequential & Time-Series Data</span>)</b> مثل النصوص، الكلام الصوتي، وتوقعات الأسهم؛ لأنها تمتلك <b>ذاكرة داخلية (حلقات تغذية راجعة)</b> تحفظ سياق الخطوات السابقة. وطُوّرت منها شبكات الذاكرة الطويلة قصيرة المدى (<b dir="ltr">LSTM</b>) لحل مشكلة تلاشي التدرج وحفظ السياق طويل المدى.</li>
-            <li><b>شبكات المحولات (<span dir="ltr">Transformers</span>):</b>
-              <br>معمارية حديثة أحدثت ثورة في معالجة اللغات الطبيعية (<span dir="ltr">NLP</span>) والذكاء التوليدي؛ تعتمد على <b>آلية الانتباه الذاتي (<span dir="ltr">Self-Attention Mechanism</span>)</b> لمعالجة جميع كلمات الجملة <b>بالتوازي</b> (وليس بالتسلسل البطيء كما في RNN) وفهم العلاقات البعيدة في السياق بكفاءة فائقة.</li>
-          </ol>
-        </div>
       </div>
-    </details>
+    </div>
 
     <!-- الوحدة الثالثة -->
-    <details open>
-      <summary>3) الوحدة التعليمية الثالثة: الذكاء الاصطناعي التوليدي (Generative AI) ونماذج اللغة الكبيرة (LLMs)</summary>
-      <div class="details-body">
-        <h3>أولاً: مفهوم الذكاء الاصطناعي التوليدي (<span dir="ltr">Generative AI</span>)</h3>
-        <ul>
-          <li><b>تعريفه:</b> هو نوع متقدم من الذكاء الاصطناعي والتعلم العميق يتميز بقدرته على <b>إنشاء وتوليد محتوى جديد وأصلي</b> (مثل النصوص، الصور، الصوتيات، الفيديو، والأكواد البرمجية) يحاكي الإبداع البشري، بدلاً من الاكتفاء بتحليل أو تصنيف البيانات الموجودة كما في الذكاء الاصطناعي التقليدي.</li>
-        </ul>
-
-        <div class="exam-alert">
-          <h3>ثانياً: الأنواع الأربعة للنماذج التوليدية العميقة (موضع أسئلة مؤكدة):</h3>
-          <div class="grid">
-            <div class="step-card">
-              <span class="tag">1. شبكات الخصومة التوليدية (GANs)</span>
-              <h4>Generative Adversarial Networks</h4>
-              <p>تتكون من شبكتين عصبيتين تتنافسان في لعبة خصومة:<br>
-              • <b>المولد (<span dir="ltr">Generator</span>):</b> ينشئ بيانات وصوراً جديدة مزيفة تحاكي الحقيقية.<br>
-              • <b>المميز (<span dir="ltr">Discriminator</span>):</b> يحاول كشف ما إذا كانت العينة حقيقية أم مولدة؛ ويستمر التنافس حتى ينتج المولد صوراً وفيديوهات واقعية جداً.</p>
-            </div>
-            <div class="step-card">
-              <span class="tag">2. المشفرات التلقائية المتغيرة (VAEs)</span>
-              <h4>Variational Autoencoders</h4>
-              <p>تتكون من <b>مشفر (<span dir="ltr">Encoder</span>)</b> يضغط البيانات المدخلة في فضاء كامن احتمالي (<span dir="ltr">Latent Space</span>)، و<b>مفكك ترميز (<span dir="ltr">Decoder</span>)</b> يعيد بناء وتوليد بيانات جديدة متشابهة من هذا الفضاء الكامن.</p>
-            </div>
-            <div class="step-card">
-              <span class="tag">3. نماذج المحولات (Transformers)</span>
-              <h4>Transformer Models</h4>
-              <p>العمود الفقري لتوليد النصوص واللغات والترجمة والأكواد البرمجية (مثل عائلة نماذج <b dir="ltr">GPT</b> و <b dir="ltr">Gemini</b> و <b dir="ltr">BERT</b>) بفضل آلية الانتباه الذاتي.</p>
-            </div>
-            <div class="step-card">
-              <span class="tag teal">4. نماذج الانتشار (Diffusion Models)</span>
-              <h4>Diffusion Models</h4>
-              <p>تعمل عن طريق إضافة ضوضاء (تشويش غاوسي) تدريجياً إلى الصور حتى تصبح تشويشاً كاملاً، ثم تتعلم عكس العملية و<b>إزالة الضوضاء تدريجياً</b> لتوليد صور فائقة الدقة من النصوص (مثل <b dir="ltr">Midjourney</b> و <b dir="ltr">DALL-E</b> و <b dir="ltr">Stable Diffusion</b>).</p>
-            </div>
+    <div class="accordion-item open">
+      <button class="accordion-header" onclick="toggleAccordion(this)">
+        <span class="acc-arrow">◄</span>
+        <span>3) الوحدة الثالثة: الذكاء الاصطناعي التوليدي (Generative AI) ونماذجه الأربعة وتقنيات توجيهه (ص 43 بالبنك)</span>
+      </button>
+      <div class="accordion-body">
+        <h4 class="sec-heading">أولاً: النماذج الأربعة للذكاء الاصطناعي التوليدي في الفصل الثالث عشر (مواضع أسئلة البنك ص 43)</h4>
+        <div class="cards-grid-2">
+          <div class="mini-card" style="border-color:var(--good-border);background:var(--good-bg)">
+            <div class="mini-card-title">1. النماذج التحويلية (Transformers) <span class="exam-tag">سؤال 1 بالبنك</span></div>
+            <p class="mini-card-body">
+              <strong>تعتمد النماذج التحويلية على "آلية الانتباه" (Attention Mechanism) التي تحدد وتحافظ على العلاقات في تسلسل البيانات، مما يجعلها فعالة للغاية في توليد النصوص المتسقة</strong> (وهي الأساس للنماذج اللغوية الكبيرة مثل <span class="code-badge">GPT</span>).
+            </p>
+          </div>
+          <div class="mini-card" style="border-color:var(--good-border);background:var(--good-bg)">
+            <div class="mini-card-title">2. نماذج الانتشار (Diffusion Models) <span class="exam-tag">سؤال 2 بالبنك</span></div>
+            <p class="mini-card-body">
+              <strong>تقوم نماذج الانتشار تدريجياً بتحويل الضوضاء إلى إخراج منظم، عكس عملية الضوضاء لتوضيح التفاصيل خطوة بخطوة، وتنتج صوراً مفصلة وعالية الجودة لكنها تتطلب طاقة حسابية عالية</strong>.
+            </p>
+          </div>
+          <div class="mini-card">
+            <div class="mini-card-title">3. الشبكات التوليدية التنافسية (GANs)</div>
+            <p class="mini-card-body">
+              <span class="code-badge">Generative Adversarial Networks</span><br>
+              تتكون من شبكتين عصبيتين تتنافسان مع بعضهما: <strong>المولد (<span class="code-badge">Generator</span>)</strong> الذي ينشئ بيانات وصوراً جديدة، و<strong>المميز (<span class="code-badge">Discriminator</span>)</strong> الذي يحاول التمييز بين البيانات الحقيقية والمولّدة، مما يدفع المولد لإنتاج مخرجات عالية الواقعية.
+            </p>
+          </div>
+          <div class="mini-card">
+            <div class="mini-card-title">4. المشفرات التلقائية المتغيرة (VAEs)</div>
+            <p class="mini-card-body">
+              <span class="code-badge">Variational Autoencoders</span><br>
+              تتكون من <strong>مشفر (<span class="code-badge">Encoder</span>)</strong> يضغط البيانات المدخلة إلى تمثيل احتمالي في فضاء كامن مضغوط، و<strong>مفكك تشفير (<span class="code-badge">Decoder</span>)</strong> يعيد بناء البيانات ويولد عينات جديدة مشابهة للأصل.
+            </p>
           </div>
         </div>
 
-        <div class="exam-alert">
-          <h3>ثالثاً: نماذج اللغة الكبيرة (<span dir="ltr">LLMs - Large Language Models</span>) وتقنيات تحسينها وتوجيهها:</h3>
-          <ul>
-            <li><b>مفهوم <span dir="ltr">LLMs</span>:</b> هي نماذج تعلم عميق ضخمة مبنية على معمارية <b>المحولات (<span dir="ltr">Transformers</span>)</b>، تضم مليارات المعلمات، وتُدرب مسبقاً على كميات هائلة من النصوص لتتمكن من فهم وتلخيص وترجمة وتوليد النصوص البشرية عبر <b>التنبؤ بالكلمة/الرمز التالي (<span dir="ltr">Next-Token Prediction</span>)</b>.</li>
-            <li><b>أبرز التقنيات المستخدمة لتطوير وتحسين وتوجيه نماذج <span dir="ltr">LLMs</span>:</b>
-              <ol>
-                <li><b>التدريب المسبق والضبط الدقيق (<span dir="ltr">Pre-training & Fine-Tuning</span>):</b> يُدرب النموذج أولاً على نصوص عامة ضخمة، ثم يتم <b>ضبطه الدقيق (<span dir="ltr">Fine-Tuning</span>)</b> على بيانات تخصصية (مثل بيانات طبية أو قانونية) لإتقان مهام محددة.</li>
-                <li><b>التعلم المعزز من التغذية الراجعة البشرية (<span dir="ltr">RLHF - Reinforcement Learning from Human Feedback</span>):</b> تقنية حاسمة يتم فيها استخدام تقييمات وتفضيلات المراجعين البشريين لتوجيه النموذج ومواءمته (<span dir="ltr">Alignment</span>) مع القيم البشرية، بحيث تكون إجاباته مفيدة، صادقة، وآمنة وغير ضارة.</li>
-                <li><b>التوجيه الذكي / هندسة الأوامر (<span dir="ltr">Prompt Engineering</span>):</b> صياغة وتصميم التعليمات والأوامر النصية المدخلة للنموذج بدقة ووضوح (مثل إعطاء أمثلة <span dir="ltr">Few-shot</span> أو طلب التفكير خطوة بخطوة) للحصول على أفضل المخرجات دون تعديل أوزان النموذج.</li>
-              </ol>
-            </li>
-            <li><b>تطبيقات ومميزات وتحديات <span dir="ltr">LLMs</span>:</b>
-              <br>• <b>التطبيقات:</b> المساعدات الذكية والدردشة التفاعلية (<span dir="ltr">ChatGPT, Gemini, علّام</span>)، كتابة المحتوى وتلخيص المستندات، الترجمة الفورية، وكتابة وتصحيح الأكواد البرمجية.
-              <br>• <b>التحديات:</b> ظاهرة <b>الهلوسة (<span dir="ltr">Hallucination</span>)</b> (توليد معلومات خاطئة أو مختلقة تبدو منطقية)، التحيز الموروث من بيانات التدريب، انتهاك الخصوصية وحقوق الملكية الفكرية، والتكلفة العالية للحوسبة والطاقة.</li>
-          </ul>
+        <h4 class="sec-heading">ثانياً: تقنيات توجيه وتحسين مخرجات الذكاء الاصطناعي التوليدي (موضع السؤال الثالث ص 43)</h4>
+        <ul class="study-list">
+          <li><span class="hl-term">1. التعديل والتوجيه الذكي (Prompt Engineering):</span> <strong>يسمح التعديل والتوجيه الذكي للذكاء الاصطناعي بتعديل مخرجاته بناءً على التفضيلات أو المتطلبات ويساعد على إنتاج ردود تتماشى بشكل أفضل مع الحالات الخاصة</strong> عبر صياغة وتخصيص الأوامر والمدخلات النصية الموجهة للنموذج <span class="exam-tag">الإجابة المعتمدة في بنك الأسئلة ص 43 س3</span></li>
+          <li><span class="hl-term">2. التعلم التعزيزي مع تغذية راجعة من البشر (RLHF):</span> <span class="code-badge">Reinforcement Learning from Human Feedback</span> تقنية تدريب وتوجيه متقدمة يقيّم فيها البشر ردود النموذج لمحاذاته مع القيم والتفضيلات البشرية وتحسين جودة وأمان إجاباته.</li>
+          <li><span class="hl-term">3. الانتباه الذاتي (Self-Attention):</span> الآلية الرياضية داخل الشبكات المتحولة التي تحسب قوة الارتباط بين الكلمات في الجملة للتركيز على الأجزاء الأكثر أهمية في السياق.</li>
+        </ul>
+
+        <h4 class="sec-heading">ثالثاً: مستكشف تفاعلي للشبكات العصبية والنماذج التوليدية (اضغطي للمقارنة السريعة)</h4>
+        <div class="sim-box">
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+            <button class="filter-btn active" onclick="showModelInfo(0, this)">الشبكات العميقة (DNN)</button>
+            <button class="filter-btn" onclick="showModelInfo(1, this)">الشبكات المتحولة / التحويلية (Transformers)</button>
+            <button class="filter-btn" onclick="showModelInfo(2, this)">نماذج الانتشار (Diffusion)</button>
+            <button class="filter-btn" onclick="showModelInfo(3, this)">الشبكات التوليدية (GANs) و (VAEs)</button>
+            <button class="filter-btn" onclick="showModelInfo(4, this)">التعديل والتوجيه الذكي (Prompt Engineering)</button>
+          </div>
+          <div id="modelInfoDisplay" style="background:var(--card-bg);padding:14px 16px;border-radius:10px;border:1px solid var(--border-color)"></div>
         </div>
       </div>
-    </details>
+    </div>
   </section>
 
-  <!-- ================= التبويب الثاني: جداول المقارنات ================= -->
-  <section id="tables" class="panel">
-    <div class="card">
-      <h2>1. جدول مقارنة أنواع التعلم الآلي الثلاثة وخوارزمياتها وتطبيقاتها</h2>
-      <table>
+  <!-- ==================== التبويب 2: جداول المقارنات والملخصات (4) ==================== -->
+  <section id="tab-tables" class="tab-section">
+    <div class="table-card">
+      <h3>1) جدول المراحل الست لبناء وتدريب نموذج التعلم الآلي (الوحدة الأولى — ص 41 بالبنك)</h3>
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>المرحلة</th>
+            <th>المصطلح الإنجليزي</th>
+            <th>الوظيفة الدقيقة والكلمات المفتاحية في الاختبار</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>1. جمع البيانات</strong></td>
+            <td class="ltr-cell">Data Collection</td>
+            <td>تجميع البيانات الخام المتعلقة بالمشكلة من المصادر المختلفة لتكوين قاعدة بيانات التدريب.</td>
+          </tr>
+          <tr>
+            <td><strong>2. تنظيف البيانات ★</strong></td>
+            <td class="ltr-cell">Data Cleaning / Preprocessing</td>
+            <td><strong>توحيد التنسيقات ومعالجة القيم المفقودة، وإزالة الضوضاء والأخطاء، وضمان أن تكون البيانات جاهزة للاستخدام الفعال في التدريب</strong> (سؤال البنك ص 41 س1).</td>
+          </tr>
+          <tr>
+            <td><strong>3. اختيار النموذج</strong></td>
+            <td class="ltr-cell">Model Selection</td>
+            <td>اختيار الخوارزمية أو البنية الرياضية الملائمة لطبيعة البيانات والمشكلة المراد حلها.</td>
+          </tr>
+          <tr>
+            <td><strong>4. تدريب النموذج</strong></td>
+            <td class="ltr-cell">Model Training</td>
+            <td>تغذية الخوارزمية ببيانات التدريب المنظفة لتعلم الأنماط وضبط الأوزان والمعلمات الداخلية.</td>
+          </tr>
+          <tr>
+            <td><strong>5. تقييم النموذج ★</strong></td>
+            <td class="ltr-cell">Model Evaluation</td>
+            <td><strong>قياس الأداء باستخدام مقاييس مثل الدقة (Accuracy)، الدقة التنبؤية (Precision)، ومستوى الخطأ</strong> (سؤال البنك ص 41 س2).</td>
+          </tr>
+          <tr>
+            <td><strong>6. التحسين والتنبؤ</strong></td>
+            <td class="ltr-cell">Optimization & Prediction</td>
+            <td>ضبط المعاملات لتحسين الكفاءة وتقليل الخطأ، ثم استخدام النموذج للتنبؤ على بيانات جديدة.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-card">
+      <h3>2) جدول المقارنة بين الأنواع الثلاثة للتعلم الآلي (Supervised vs Unsupervised vs Reinforcement)</h3>
+      <table class="comp-table">
         <thead>
           <tr>
             <th>نوع التعلم الآلي</th>
-            <th>طبيعة البيانات وآلية التعلم</th>
-            <th>أشهر الخوارزميات</th>
-            <th>أبرز التطبيقات العملية</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><b>1. التعلم الخاضع للإشراف<br>(Supervised Learning)</b></td>
-            <td>يتعلم من <b>بيانات مصنفة وموسومة مسبقاً (<span dir="ltr">Labeled Data</span>)</b> لها مخرجات معروفة (تصنيف أو انحدار).</td>
-            <td>• الانحدار الخطي (<span dir="ltr">Linear Regression</span>)<br>• الانحدار اللوجستي (<span dir="ltr">Logistic Regression</span>)<br>• أشجار القرار (<span dir="ltr">Decision Trees</span>)<br>• الغابات العشوائية (<span dir="ltr">Random Forests</span>)<br>• آلة المتجهات الداعمة (<span dir="ltr">SVM</span>)</td>
-            <td>التنبؤ بأسعار العقارات، كشف البريد المزعج (<span dir="ltr">Spam</span>)، التشخيص الطبي، وتقييم الائتمان وكشف الاحتيال.</td>
-          </tr>
-          <tr>
-            <td><b>2. التعلم غير الخاضع للإشراف<br>(Unsupervised Learning)</b></td>
-            <td>يتعامل مع <b>بيانات غير مصنفة (<span dir="ltr">Unlabeled Data</span>)</b> ويكتشف الأنماط والعناقيد الخفية ذاتياً.</td>
-            <td>• خوارزمية التجميع (<span dir="ltr">K-Means</span>)<br>• التجميع الهرمي (<span dir="ltr">Hierarchical</span>)<br>• تحليل المكونات الرئيسية (<span dir="ltr">PCA</span> لتقليل الأبعاد)</td>
-            <td>تقسيم العملاء إلى شرائح تسويقية، أنظمة التوصية، ضغط البيانات، واكتشاف الشذوذ.</td>
-          </tr>
-          <tr>
-            <td><b>3. التعلم المعزز<br>(Reinforcement Learning)</b></td>
-            <td>يتفاعل <b>الوكيل (<span dir="ltr">Agent</span>)</b> مع <b>البيئة</b> بالتجربة والخطأ ويتلقى <b>مكافآت وعقوبات</b>.</td>
-            <td>• خوارزمية <span dir="ltr">Q-Learning</span><br>• شبكات التعلم المعزز العميق (<span dir="ltr">DQN</span>)</td>
-            <td>السيارات ذاتية القيادة، التحكم في الروبوتات، والألعاب الاستراتيجية (الشطرنج و Go).</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="card">
-      <h2>2. جدول المقارنة بين التعلم الآلي التقليدي (ML) والتعلم العميق (Deep Learning)</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>وجه المقارنة</th>
-            <th>التعلم الآلي التقليدي (Traditional ML)</th>
-            <th>التعلم العميق (Deep Learning - DL)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><b>استخراج الميزات (Features)</b></td>
-            <td>يتم استخراج واختيار الميزات <b>يدوياً بواسطة الخبراء البشر</b> (<span dir="ltr">Manual Feature Engineering</span>).</td>
-            <td>يتم استخراج وتعلم الميزات <b>تلقائياً وهرمياً</b> عبر طبقات الشبكة العصبية من البيانات الخام.</td>
-          </tr>
-          <tr>
-            <td><b>حجم ونوع البيانات المفضل</b></td>
-            <td>يعمل بكفاءة مع مجموعات البيانات الصغيرة والمتوسطة والبيانات المهيكلة (الجداول).</td>
-            <td>يتطلب <b>كميات ضخمة جداً من البيانات</b>، ويتفوق في البيانات غير المهيكلة (الصور، الصوت، النصوص).</td>
-          </tr>
-          <tr>
-            <td><b>البنية والخوارزميات</b></td>
-            <td>خوارزميات إحصائية وهندسية (مثل <span dir="ltr">SVM, KNN, Decision Trees, Linear Regression</span>).</td>
-            <td>شبكات عصبية اصطناعية عميقة متعددة الطبقات (<span dir="ltr">DNN, CNN, RNN, Transformers</span>).</td>
-          </tr>
-          <tr>
-            <td><b>الموارد الحاسوبية وزمن التدريب</b></td>
-            <td>يحتاج موارد حاسوبية متوسطة (معالجات <span dir="ltr">CPU</span> عادية) وزمن تدريبه قصير نسبياً.</td>
-            <td>يحتاج قدرات حاسوبية فائقة ومعالجات متوازية (<b dir="ltr">GPUs / TPUs</b>) وزمن تدريبه طويل.</td>
-          </tr>
-          <tr>
-            <td><b>قابلية التفسير (Interpretability)</b></td>
-            <td>أسهل في الفهم وتفسير أسباب اتخاذ القرار (خاصة أشجار القرار).</td>
-            <td>يعمل غالباً كـ <b>"صندوق أسود" (<span dir="ltr">Black Box</span>)</b> يصعب تفسير أوزانه الداخلية المعقدة.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="card">
-      <h2>3. جدول مقارنة أنواع الشبكات العصبية الأربعة في التعلم العميق</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>نوع الشبكة العصبية</th>
-            <th>الاختصار</th>
-            <th>السمة المعمارية المميزة</th>
-            <th>المجال الرئيسي والتطبيقات</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><b>1. الشبكات العصبية العميقة</b></td>
-            <td dir="ltr"><b>DNN / MLP</b></td>
-            <td>طبقات متعددة متصلة بالكامل تعالج البيانات في اتجاه أمامي.</td>
-            <td>التصنيف والتنبؤ العام للبيانات الرقمية والمهيكلة.</td>
-          </tr>
-          <tr>
-            <td><b>2. الشبكات العصبية التلافيفية</b></td>
-            <td dir="ltr"><b>CNN</b></td>
-            <td>تستخدم <b>مرشحات الالتفاف (<span dir="ltr">Filters</span>) وطبقات التجميع (<span dir="ltr">Pooling</span>)</b> لالتقاط الميزات المكانية.</td>
-            <td><b>معالجة الصور والفيديو (الرؤية الحاسوبية):</b> التعرف على الوجوه، الصور الطبية، والقيادة الذاتية.</td>
-          </tr>
-          <tr>
-            <td><b>3. الشبكات العصبية المتكررة</b></td>
-            <td dir="ltr"><b>RNN / LSTM</b></td>
-            <td>تمتلك <b>حلقات تغذية راجعة وذاكرة داخلية</b> لحفظ المعلومات السابقة عبر الزمن.</td>
-            <td><b>البيانات المتسلسلة والزمنية:</b> التعرف على الكلام، السلاسل الزمنية، والنصوص.</td>
-          </tr>
-          <tr>
-            <td><b>4. شبكات المحولات</b></td>
-            <td dir="ltr"><b>Transformers</b></td>
-            <td>تعتمد على <b>آلية الانتباه الذاتي (<span dir="ltr">Self-Attention</span>)</b> والمعالجة المتوازية الفائقة.</td>
-            <td><b>نماذج اللغة الكبيرة (LLMs) والذكاء التوليدي:</b> <span dir="ltr">ChatGPT, Gemini</span>، والترجمة الفورية.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="card">
-      <h2>4. جدول مقارنة النماذج التوليدية الأربعة في الذكاء الاصطناعي التوليدي</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>النموذج التوليدي</th>
             <th>المصطلح الإنجليزي</th>
-            <th>آلية العمل الأساسية في توليد البيانات الجديدة</th>
+            <th>طبيعة البيانات والمخرجات</th>
+            <th>الهدف الرئيسي والأمثلة</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><b>1. شبكات الخصومة التوليدية</b></td>
-            <td dir="ltr"><b>GANs</b></td>
-            <td>تنافس بين شبكتين: <b>المولد (<span dir="ltr">Generator</span>)</b> الذي ينشئ عينات مزيفة، و<b>المميز (<span dir="ltr">Discriminator</span>)</b> الذي يحاول كشفها، حتى ينتج المولد صوراً وفيديوهات عالية الواقعية.</td>
+            <td><strong>1. التعلم تحت الإشراف</strong></td>
+            <td class="ltr-cell">Supervised Learning</td>
+            <td>بيانات مصنفة ومُعَنونة (<span class="code-badge">Labeled Data</span>) تحتوي على مدخلات ومخرجات محددة مسبقاً.</td>
+            <td>تعلم العلاقة بين المدخلات والمخرجات للتصنيف (<span class="code-badge">Classification</span>) أو الانحدار (<span class="code-badge">Regression</span>).</td>
           </tr>
           <tr>
-            <td><b>2. المشفرات التلقائية المتغيرة</b></td>
-            <td dir="ltr"><b>VAEs</b></td>
-            <td>تستخدم <b>مشفراً (<span dir="ltr">Encoder</span>)</b> لضغط البيانات في فضاء كامن احتمالي، و<b>مفكك ترميز (<span dir="ltr">Decoder</span>)</b> لتوليد بيانات جديدة من هذا الفضاء الكامن.</td>
+            <td><strong>2. التعلم غير الخاضع للإشراف ★</strong></td>
+            <td class="ltr-cell">Unsupervised Learning</td>
+            <td><strong>لا تكون هناك مخرجات محددة في البيانات</strong> (<span class="code-badge">Unlabeled Data</span>).</td>
+            <td><strong>يهدف إلى اكتشاف الأنماط أو الهيكليات داخل البيانات</strong> مثل التجميع (<span class="code-badge">Clustering</span>) وتقليل الأبعاد (سؤال البنك ص 41 س3).</td>
           </tr>
           <tr>
-            <td><b>3. المحولات التوليدية</b></td>
-            <td dir="ltr"><b>Transformers</b></td>
-            <td>تستخدم الانتباه الذاتي لفهم السياق الطويل وتوليد النصوص والأكواد البرمجية عبر التنبؤ بالرمز التالي (مثل <span dir="ltr">GPT-4</span> و <span dir="ltr">Claude</span>).</td>
+            <td><strong>3. التعلم المعزز</strong></td>
+            <td class="ltr-cell">Reinforcement Learning</td>
+            <td>تفاعل مستمر بين الوكيل (<span class="code-badge">Agent</span>) والبيئة بدون بيانات مصنفة مسبقاً.</td>
+            <td>التعلم عبر التجربة والخطأ ونظام <strong>المكافآت والعقوبات</strong> لتعظيم المكافأة التراكمية (الألعاب والروبوتات).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-card">
+      <h3>3) جدول المقارنة بين الشبكات العصبية والنماذج التوليدية (الوحدة 2 والوحدة 3)</h3>
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>النموذج / الشبكة</th>
+            <th>المصطلح الإنجليزي</th>
+            <th>الميزة الجوهرية ومفتاح الحل في بنك الأسئلة</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>الشبكات العصبية العميقة ★</strong></td>
+            <td class="ltr-cell">Deep Neural Networks (DNNs)</td>
+            <td><strong>تتكون من عدة طبقات خفية، قادرة على تعلم الأنماط المعقدة والمتعددة الأبعاد وتستخدم في تطبيقات مثل التعرف على الصور وتحليل النصوص</strong>.</td>
           </tr>
           <tr>
-            <td><b>4. نماذج الانتشار</b></td>
-            <td dir="ltr"><b>Diffusion Models</b></td>
-            <td>تضيف تشويشاً تدريجياً للصور ثم تتعلم <b>إزالة الضوضاء تدريجياً</b> لتوليد صور فنية وواقعية فائقة الدقة من النصوص (مثل <span dir="ltr">Midjourney</span> و <span dir="ltr">DALL-E</span>).</td>
+            <td><strong>الشبكات التلافيفية</strong></td>
+            <td class="ltr-cell">Convolutional (CNNs)</td>
+            <td>متخصصة في معالجة الصور والفيديو واستخلاص الميزات المكانية عبر طبقات الالتفاف والمرشحات.</td>
+          </tr>
+          <tr>
+            <td><strong>الشبكات المتكررة</strong></td>
+            <td class="ltr-cell">Recurrent (RNNs)</td>
+            <td>متخصصة في البيانات التسلسلية والزمنية بفضل حلقات التغذية الراجعة والذاكرة الداخلية قصيرة المدى.</td>
+          </tr>
+          <tr>
+            <td><strong>الشبكات المتحولة / النماذج التحويلية ★</strong></td>
+            <td class="ltr-cell">Transformers</td>
+            <td><strong>تعتمد على آلية الانتباه الذاتي (Self-Attention)، والتركيز على أجزاء معينة حسب أهميتها، وتحليل العلاقات طويلة الأمد بين الكلمات، وتوليد النصوص المتسقة</strong>.</td>
+          </tr>
+          <tr>
+            <td><strong>نماذج الانتشار ★</strong></td>
+            <td class="ltr-cell">Diffusion Models</td>
+            <td><strong>تقوم تدريجياً بتحويل الضوضاء إلى إخراج منظم (عكس عملية الضوضاء خطوة بخطوة) وتنتج صوراً مفصلة وعالية الجودة لكنها تتطلب طاقة حسابية عالية</strong>.</td>
+          </tr>
+          <tr>
+            <td><strong>الشبكات التوليدية التنافسية</strong></td>
+            <td class="ltr-cell">GANs</td>
+            <td>تتكون من شبكتي المولد (<span class="code-badge">Generator</span>) والمميز (<span class="code-badge">Discriminator</span>) في منافسة مستمرة لتوليد صور واقعية.</td>
+          </tr>
+          <tr>
+            <td><strong>المشفرات التلقائية المتغيرة</strong></td>
+            <td class="ltr-cell">VAEs</td>
+            <td>تتكون من مشفر (<span class="code-badge">Encoder</span>) لضغط البيانات في فضاء كامن ومفكك تشفير (<span class="code-badge">Decoder</span>) لإعادة بنائها وتوليدها.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-card">
+      <h3>4) ملخص أسئلة بنك الأسئلة الرسمية الـ 9 للفصل الثالث عشر (صفحات 41 إلى 43)</h3>
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>الوحدة</th>
+            <th>السؤال في بنك الأسئلة</th>
+            <th>الإجابة المعتمدة</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>الوحدة 1 (س1)</strong></td>
+            <td>يتم في مرحلة ............ توحيد التنسيقات ومعالجة القيم المفقودة، وضمان أن تكون البيانات جاهزة للاستخدام الفعال في التدريب:</td>
+            <td><strong>تنظيف البيانات</strong></td>
+          </tr>
+          <tr>
+            <td><strong>الوحدة 1 (س2)</strong></td>
+            <td>يتم في مرحلة ............ قياس الأداء باستخدام مقاييس مثل الدقة، الدقة التنبؤية، ومستوى الخطأ:</td>
+            <td><strong>تقييم النموذج</strong></td>
+          </tr>
+          <tr>
+            <td><strong>الوحدة 1 (س3)</strong></td>
+            <td>يستخدم ............ عندما لا تكون هناك مخرجات محددة في البيانات، ويهدف إلى اكتشاف الأنماط أو الهيكليات داخل البيانات:</td>
+            <td><strong>التعلم غير الخاضع للإشراف</strong></td>
+          </tr>
+          <tr>
+            <td><strong>الوحدة 2 (س1)</strong></td>
+            <td>يعتمد ............ على الشبكات العصبية العميقة، وهي شبكات متعددة الطبقات تحاكي طريقة عمل العقل البشري:</td>
+            <td><strong>التعلم العميق</strong></td>
+          </tr>
+          <tr>
+            <td><strong>الوحدة 2 (س2)</strong></td>
+            <td>تتكون ............ من عدة طبقات خفية، قادرة على تعلم الأنماط المعقدة والمتعددة الأبعاد وتستخدم في تطبيقات مثل التعرف على الصور وتحليل النصوص:</td>
+            <td><strong>الشبكات العصبية العميقة</strong></td>
+          </tr>
+          <tr>
+            <td><strong>الوحدة 2 (س3)</strong></td>
+            <td>تعتمد ............ على آلية الانتباه الذاتي، ويمكن للنموذج التركيز على أجزاء معينة من البيانات بناءً على أهميتها، مما يسهل تحليل العلاقات الطويلة الأمد بين الكلمات:</td>
+            <td><strong>الشبكات العصبية المتحولة</strong></td>
+          </tr>
+          <tr>
+            <td><strong>الوحدة 3 (س1)</strong></td>
+            <td>تعتمد ............ على "آلية الانتباه" التي تحدد وتحافظ على العلاقات في تسلسل البيانات، مما يجعلها فعالة للغاية في توليد النصوص المتسقة:</td>
+            <td><strong>النماذج التحويلية</strong></td>
+          </tr>
+          <tr>
+            <td><strong>الوحدة 3 (س2)</strong></td>
+            <td>تقوم ............ تدريجياً بتحويل الضوضاء إلى إخراج منظم، عكس عملية الضوضاء لتوضيح التفاصيل خطوة بخطوة، وتنتج صوراً مفصلة وعالية الجودة لكنها تتطلب طاقة حسابية عالية:</td>
+            <td><strong>نماذج الانتشار</strong></td>
+          </tr>
+          <tr>
+            <td><strong>الوحدة 3 (س3)</strong></td>
+            <td>يسمح ............ للذكاء الاصطناعي بتعديل مخرجاته بناءً على التفضيلات أو المتطلبات ويساعد على إنتاج ردود تتماشى بشكل أفضل مع الحالات الخاصة:</td>
+            <td><strong>التعديل والتوجيه الذكي (Prompt Engineering)</strong></td>
           </tr>
         </tbody>
       </table>
     </div>
   </section>
 
-  <!-- ================= التبويب الثالث: المصطلحات ================= -->
-  <section id="terms" class="panel">
-    <div class="card">
-      <h2>قاموس المصطلحات والمفاهيم الشامل للفصل الثالث عشر (28 مصطلحاً)</h2>
-      <p class="muted">جميع مصطلحات التعلم الآلي والتعلم العميق والشبكات العصبية والذكاء التوليدي الواردة في الفصل الثالث عشر:</p>
-      <div id="termsGrid" class="grid"></div>
+  <!-- ==================== التبويب 3: المصطلحات والمفاهيم (22) ==================== -->
+  <section id="tab-terms" class="tab-section">
+    <div class="terms-controls">
+      <input type="text" id="termSearch" class="search-input" placeholder="ابحثي عن مصطلح أو خوارزمية في الفصل الثالث عشر..." oninput="filterTerms()">
     </div>
+    <div class="terms-grid" id="termsGrid"></div>
   </section>
 
-  <!-- ================= التبويب الرابع: البطاقات التعليمية ================= -->
-  <section id="cards" class="panel">
-    <div class="card">
-      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
-      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
-      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
-        <div class="term" id="flashTerm"></div>
-        <div class="answer" id="flashAnswer" hidden></div>
-        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+  <!-- ==================== التبويب 4: البطاقات التعليمية (22) ==================== -->
+  <section id="tab-cards" class="tab-section">
+    <div class="flashcard-wrap">
+      <div class="fc-box" onclick="flipCard()">
+        <span class="fc-label" id="fcSideLabel">المصطلح / النموذج (اضغطي للقلب)</span>
+        <div class="fc-text" id="fcMainText">...</div>
       </div>
-      <div class="row" style="margin-top:14px">
-        <button class="btn" id="prevCard">السابق</button>
-        <span id="cardCount" class="muted"></span>
-        <button class="btn primary" id="nextCard">التالي</button>
+      <div style="margin-bottom:14px;font-weight:700;color:var(--text-muted)" id="fcCounter">1 / 22</div>
+      <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap">
+        <button class="filter-btn" onclick="prevCard()">السابق</button>
+        <button class="filter-btn active" onclick="flipCard()">اقلب البطاقة</button>
+        <button class="filter-btn" onclick="nextCard()">التالي</button>
       </div>
     </div>
   </section>
 
-  <!-- ================= التبويب الخامس: الاختبار الشامل ================= -->
-  <section id="quiz" class="panel">
-    <div class="card">
-      <div class="row">
-        <div>
-          <h2>الاختبار الشامل للفصل الثالث عشر + أسئلة التقييم الذاتي (25 سؤالاً)</h2>
-          <p class="muted">يغطي كافة وحدات الفصل الثالث عشر مع أسئلة التقييم الذاتي وتوزيع متوازن للإجابات بين (أ، ب، ج، د).</p>
-        </div>
-        <div class="score" id="score">النتيجة: 0 / 25</div>
+  <!-- ==================== التبويب 5: الاختبار الشامل (20) ==================== -->
+  <section id="tab-quiz" class="tab-section">
+    <div class="table-card" style="padding:16px 20px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="filter-btn active" id="qFilter-all" onclick="setQuizFilter('all')">جميع الأسئلة (20)</button>
+        <button class="filter-btn" id="qFilter-bank" onclick="setQuizFilter('bank')">أسئلة البنك الرسمية (9)</button>
+        <button class="filter-btn" id="qFilter-wrong" onclick="setQuizFilter('wrong')">أخطائي للمراجعة</button>
       </div>
-      <div class="progress"><div id="progressBar"></div></div>
-      <div id="quizArea"></div>
-      <div class="row">
-        <button class="btn" id="resetQuiz">إعادة الاختبار</button>
-        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+      <div style="display:flex;gap:8px;align-items:center">
+        <span class="unit-pill" id="quizScoreBadge" style="margin:0;background:var(--good-bg);color:var(--good-text)">النتيجة: 0 / 20</span>
+        <button class="filter-btn" onclick="resetQuiz()">إعادة الاختبار</button>
       </div>
-      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
     </div>
+    <div id="quizContainer"></div>
   </section>
+
 </main>
 
-<footer>الفصل الثالث عشر: مقدمة إلى خوارزميات التعلم الآلي والتعلم العميق والذكاء التوليدي • مراجعة تفاعلية شاملة</footer>
+<footer>
+  الفصل الثالث عشر: مقدمة إلى خوارزميات التعلم الآلي (Machine Learning) • مطابق 100% للمنهج وبنك الأسئلة
+</footer>
 
 <script>
-const terms = [
-  ["Machine Learning (التعلم الآلي)", "فرع من الذكاء الاصطناعي يركز على تطوير أنظمة تتعلم من البيانات وتحسن أدائها بالتجربة دون برمجة صريحة."],
-  ["Data Preprocessing (تنظيف ومعالجة البيانات)", "المرحلة الثانية في التعلم الآلي؛ تشمل إزالة الأخطاء، توحيد التنسيقات، ومعالجة القيم المفقودة قبل التدريب."],
-  ["Supervised Learning (التعلم تحت الإشراف)", "تعلم يتم فيه تدريب النموذج على بيانات مصنفة وموسومة مسبقاً (Labeled Data) لها مخرجات معروفة."],
-  ["Unsupervised Learning (التعلم غير الخاضع للإشراف)", "تعلم يكتشف فيه النموذج الأنماط والهياكل الخفية ذاتياً من بيانات غير مصنفة (Unlabeled Data)."],
-  ["Reinforcement Learning (التعلم المعزز)", "تعلم يتفاعل فيه الوكيل (Agent) مع البيئة عبر التجربة والخطأ ويتلقى مكافآت وعقوبات لتعظيم المكافأة."],
-  ["Linear Regression (الانحدار الخطي)", "خوارزمية تعلم خاضع للإشراف تُستخدم للتنبؤ بقيم رقمية مستمرة بناءً على علاقة خطية (مثل أسعار المنازل)."],
-  ["Logistic Regression (الانحدار اللوجستي)", "خوارزمية تعلم خاضع للإشراف تُستخدم في مسائل التصنيف الثنائي (مثل كشف البريد المزعج Spam)."],
-  ["Decision Trees & Random Forests", "أشجار القرار تقسم البيانات بشروط شجرية، والغابات العشوائية تدمج عدة أشجار قرار لرفع الدقة وتقليل Overfitting."],
-  ["SVM (آلات المتجهات الداعمة)", "Support Vector Machines: خوارزمية تصنيف تجد أفضل مستوى فائق (Hyperplane) يفصل بين الفئات بأكبر هامش."],
-  ["K-Means Clustering (تجميع K-Means)", "خوارزمية تعلم غير خاضع للإشراف تقسم البيانات غير المصنفة إلى K من المجموعات المتشابهة (العناقيد)."],
-  ["PCA (تحليل المكونات الرئيسية)", "Principal Component Analysis: خوارزمية غير خاضعة للإشراف تُستخدم لتقليل الأبعاد وضغط الميزات مع حفظ التباين."],
-  ["Overfitting (الإفراط في التخصيص)", "حفظ النموذج لتفاصيل وضوضاء بيانات التدريب بدقة مفرطة وفشله في التعميم على البيانات الجديدة."],
-  ["Underfitting (نقص التخصيص)", "عجز النموذج البسيط جداً عن تعلم الأنماط الأساسية حتى في بيانات التدريب."],
-  ["Deep Learning (التعلم العميق)", "فرع متقدم من التعلم الآلي يستخدم شبكات عصبية عميقة متعددة الطبقات لاستخراج الميزات تلقائياً من البيانات الضخمة."],
-  ["Hidden Layers (الطبقات الخفية)", "الطبقات الواقعة بين طبقة الإدخال وطبقة الإخراج في الشبكة العصبية، وتجري العمليات الحسابية لاستخراج الميزات."],
-  ["Weights & Biases (الأوزان والتحيزات)", "المعاملات القابلة للتعلم داخل الشبكة العصبية؛ تحدد الأوزان قوة الاتصال بين الخلايا وتضبط التحيزات إزاحة التنشيط."],
-  ["Activation Function (دالة التنشيط)", "دالة رياضية (مثل ReLU و Sigmoid و Softmax) تُدخل اللاخطية للشبكة العصبية لتعلم الأنماط المعقدة."],
-  ["Backpropagation (الانتشار العكسي)", "الآلية الرياضية لتدريب الشبكات العصبية عبر إرجاع الخطأ من الإخراج للإدخال وتحديث الأوزان لتقليل الخسارة."],
-  ["CNN (الشبكات العصبية التلافيفية)", "Convolutional Neural Networks: شبكات عميقة متخصصة في معالجة الصور والفيديو والرؤية الحاسوبية."],
-  ["RNN & LSTM (الشبكات العصبية المتكررة)", "Recurrent Neural Networks: شبكات تمتلك ذاكرة داخلية لمعالجة البيانات المتسلسلة والزمنية كالنصوص والصوت."],
-  ["Transformers (شبكات المحولات)", "معمارية عصبية تعتمد على آلية الانتباه الذاتي (Self-Attention) لمعالجة البيانات بالتوازي، وهي أساس نماذج LLMs."],
-  ["Generative AI (الذكاء الاصطناعي التوليدي)", "ذكاء اصطناعي قادر على إنشاء وتوليد محتوى جديد وأصلي (نصوص، صور، صوت، فيديو، أكواد) يحاكي الإبداع البشري."],
-  ["GANs (شبكات الخصومة التوليدية)", "Generative Adversarial Networks: تتكون من شبكتي المولد (Generator) والمميز (Discriminator) المتنافستين لتوليد صور واقعية."],
-  ["VAEs (المشفرات التلقائية المتغيرة)", "Variational Autoencoders: نماذج توليدية تضغط البيانات بمشفر (Encoder) وتولد عينات جديدة بمفكك ترميز (Decoder)."],
-  ["Diffusion Models (نماذج الانتشار)", "نماذج توليدية تضيف تشويشاً للصور ثم تتعلم إزالته تدريجياً لإنتاج صور عالية الدقة (مثل Midjourney و DALL-E)."],
-  ["LLMs (نماذج اللغة الكبيرة)", "Large Language Models: نماذج عميقة ضخمة مبنية على المحولات مدربة على نصوص هائلة لفهم وتوليد اللغة البشرية."],
-  ["RLHF (التعلم المعزز من التغذية البشرية)", "Reinforcement Learning from Human Feedback: تقنية لمحاذاة وتوجيه نماذج LLMs باستخدام تقييمات البشر لتكون آمنة ودقيقة."],
-  ["Prompt Engineering & Hallucination", "هندسة الأوامر هي فن صياغة التعليمات لتوجيه النموذج التوليدي، والهلوسة هي توليد النموذج لمعلومات مختلقة غير صحيحة."]
-];
+function switchTab(tabId, btn) {
+  document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-pill').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tabId).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
 
-const cards = [
-  ["ما هو تعريف التعلم الآلي (Machine Learning)؟", "هو أحد فروع الذكاء الاصطناعي الذي يركز على تطوير أنظمة يمكنها التعلم من البيانات وتحسين أدائها بمرور الوقت من خلال التجربة دون أن تتم برمجتها بشكل صريح."],
-  ["ما هي المكونات الثلاثة الأساسية لنظام التعلم الآلي؟", "1) البيانات (Data): الأساس المنظم أو غير المنظم للتدريب.\n2) النماذج (Models): النظام الرياضي الذي يتعلم من البيانات.\n3) الخوارزميات (Algorithms): الخطوات الرياضية لاستخلاص الأنماط."],
-  ["ما هي المراحل الست لعملية التعلم الآلي بالترتيب؟", "1) جمع البيانات، 2) تنظيف ومعالجة البيانات، 3) اختيار النموذج، 4) تدريب النموذج، 5) تقييم النموذج، 6) تحسين النموذج ونشره."],
-  ["ما الذي يتم في مرحلة (تنظيف ومعالجة البيانات - Data Preprocessing)؟", "تنظيف البيانات من الأخطاء والضوضاء، توحيد التنسيقات، ومعالجة القيم المفقودة لضمان جاهزية البيانات للتدريب الفعال."],
-  ["ما هي الأنواع الثلاثة الرئيسية لخوارزميات التعلم الآلي؟", "1) التعلم الخاضع للإشراف / تحت الإشراف (Supervised Learning).\n2) التعلم غير الخاضع للإشراف (Unsupervised Learning).\n3) التعلم المعزز (Reinforcement Learning)."],
-  ["ما الفرق بين الانحدار الخطي (Linear Regression) والانحدار اللوجستي (Logistic Regression)؟", "• الانحدار الخطي: يتنبأ بقيم رقمية مستمرة (مثل أسعار العقارات).\n• الانحدار اللوجستي: يُستخدم في مهام التصنيف الثنائي (مثل تصنيف البريد إلى مزعج أو سليم)."],
-  ["ما ميزة خوارزمية الغابات العشوائية (Random Forests) مقارنة بشجرة القرار الواحدة؟", "تجمع الغابات العشوائية بين عدة أشجار قرار وتدمج توقعاتها، مما يزيد من دقة التنبؤ ويقلل من مشكلة الإفراط في التخصيص (Overfitting)."],
-  ["اذكري أشهر خوارزميتين في التعلم غير الخاضع للإشراف ووظيفة كل منهما.", "1) خوارزمية K-Means: لتجميع البيانات غير المصنفة في K عناقيد متشابهة.\n2) تحليل المكونات الرئيسية (PCA): لتقليل الأبعاد وضغط الميزات مع الحفاظ على المعلومات الهامة."],
-  ["كيف يعمل التعلم المعزز (Reinforcement Learning)؟ وأين يُطبق؟", "يتعلم فيه الوكيل (Agent) من خلال التفاعل مع البيئة بالتجربة والخطأ وتلقي المكافآت والعقوبات؛ ويُطبق في السيارات ذاتية القيادة والروبوتات والألعاب الذكية."],
-  ["ما الفرق بين مشكلة الإفراط في التخصيص (Overfitting) ونقص التخصيص (Underfitting)؟", "• الإفراط في التخصيص (Overfitting): حفظ بيانات التدريب وضوضائها والفشل في التعميم على البيانات الجديدة.\n• نقص التخصيص (Underfitting): عجز النموذج البسيط عن تعلم الأنماط الأساسية حتى في بيانات التدريب."],
-  ["ما الفرق الجوهري بين التعلم الآلي التقليدي والتعلم العميق (Deep Learning) في استخراج الميزات؟", "في التعلم الآلي التقليدي يتم استخراج الميزات يدوياً بواسطة الخبراء، بينما في التعلم العميق تقوم الشبكة العصبية باستخراج وتعلم الميزات تلقائياً وهرمياً من البيانات الخام."],
-  ["ما هي الطبقات الثلاث التي تتكون منها الشبكة العصبية الاصطناعية؟", "1) طبقة الإدخال (Input Layer).\n2) الطبقات الخفية (Hidden Layers).\n3) طبقة الإخراج (Output Layer)."],
-  ["ما وظيفة الأوزان (Weights)، والتحيزات (Biases)، ودالة التنشيط (Activation Function) في الشبكة العصبية؟", "• الأوزان: تحدد قوة وأهمية الاتصال بين الخلايا.\n• التحيزات: تضبط إزاحة المخرجات لتحسين الملاءمة.\n• دالة التنشيط (مثل ReLU): تُدخل اللاخطية للشبكة لتتمكن من تعلم الأنماط المعقدة."],
-  ["في أي مهام تتخصص الشبكات العصبية التلافيفية (CNN)؟", "تتخصص في معالجة الصور ومقاطع الفيديو والرؤية الحاسوبية (مثل التعرف على الوجوه، وتحليل الصور الطبية، والسيارات ذاتية القيادة)."],
-  ["في أي مهام تتخصص الشبكات العصبية المتكررة (RNN / LSTM)؟ ولماذا؟", "تتخصص في معالجة البيانات المتسلسلة والزمنية (مثل النصوص، الصوتيات، وتوقعات الأسهم) لأنها تمتلك ذاكرة داخلية تحفظ سياق المعلومات السابقة."],
-  ["بماذا تتميز شبكات المحولات (Transformers) عن الشبكات المتكررة (RNN)؟", "تعتمد المحولات على آلية الانتباه الذاتي (Self-Attention) وتعالج جميع كلمات الجملة بالتوازي (وليس بالتسلسل البطيء)، مما مكنها من فهم السياق الطويل وبناء نماذج اللغة الكبيرة (LLMs)."],
-  ["ما هو الذكاء الاصطناعي التوليدي (Generative AI)؟", "فرع متقدم من الذكاء الاصطناعي يركز على إنشاء وتوليد محتوى جديد وأصلي (نصوص، صور، صوتيات، فيديو، وأكواد برمجية) يحاكي الإبداع البشري."],
-  ["ما هي الأنواع الأربعة الرئيسية للنماذج التوليدية؟", "1) شبكات الخصومة التوليدية (GANs).\n2) المشفرات التلقائية المتغيرة (VAEs).\n3) نماذج المحولات (Transformers).\n4) نماذج الانتشار (Diffusion Models)."],
-  ["كيف تعمل شبكات الخصومة التوليدية (GANs)؟", "تتكون من شبكتين متنافستين: المولد (Generator) الذي ينشئ بيانات مزيفة، والمميز (Discriminator) الذي يحاول كشف ما إذا كانت حقيقية أم مزيفة، مما يدفع المولد لإنتاج صور واقعية جداً."],
-  ["كيف تعمل نماذج الانتشار (Diffusion Models)؟ وما أشهر أمثلتها؟", "تعمل بإضافة ضوضاء تدريجية للصور ثم تتعلم عكس العملية وإزالة الضوضاء تدريجياً لتوليد صور فائقة الدقة من النصوص (مثل Midjourney و DALL-E)."],
-  ["ما هي نماذج اللغة الكبيرة (LLMs)؟ وما مبدأ عملها الأساسي؟", "هي نماذج تعلم عميق ضخمة مبنية على معمارية المحولات (Transformers) مدربة على نصوص هائلة، وتعمل بمبدأ التنبؤ بالكلمة أو الرمز التالي (Next-Token Prediction) في السياق."],
-  ["ما هو دور تقنية التعلم المعزز من التغذية الراجعة البشرية (RLHF) في نماذج اللغة الكبيرة؟", "تُستخدم لتوجيه ومحاذاة النموذج اللغوي (Alignment) مع القيم والتفضيلات البشرية بالاعتماد على تقييمات البشر، لجعل إجاباته أكثر دقة وأماناً وأقل تحيزاً."],
-  ["ما المقصود بهندسة الأوامر / التوجيه الذكي (Prompt Engineering)؟", "هي مهارة صياغة وتصميم التعليمات والأوامر النصية الموجهة لنماذج الذكاء الاصطناعي التوليدي بوضوح ودقة للحصول على أفضل وأدق المخرجات."],
-  ["ما المقصود بظاهرة الهلوسة (Hallucination) في نماذج اللغة الكبيرة؟", "هي قيام النموذج اللغوي بتوليد معلومات غير صحيحة أو مختلقة لا أساس لها في الواقع، وصياغتها بطريقة تبدو منطقية وواثقة."],
-  ["ما الفرق بين وظيفة المشفر (Encoder) ومفكك الترميز (Decoder) في نماذج VAEs؟", "المشفر يضغط البيانات المدخلة إلى تمثيل مختصر في الفضاء الكامن (Latent Space)، ومفكك الترميز يولد بيانات جديدة من هذا التمثيل الكامن."],
-  ["متى نستخدم خوارزمية PCA في التعلم الآلي؟", "نستخدمها عندما يكون لدينا عدد كبير جداً من الميزات (الأبعاد) ونرغب في تقليل الأبعاد وضغط البيانات مع الحفاظ على أهم المعلومات والتباين."],
-  ["ما هي المرحلة التي تلي تدريب النموذج مباشرة للتأكد من دقته على بيانات جديدة؟", "مرحلة تقييم النموذج (Model Evaluation) باستخدام بيانات الاختبار."],
-  ["اذكري 4 تطبيقات عملية لنماذج اللغة الكبيرة (LLMs).", "1) المساعدات الذكية والمحادثة (ChatGPT, Gemini, علّام)، 2) تلخيص المستندات وكتابة المحتوى، 3) الترجمة الآلية الفورية، 4) توليد وتصحيح الأكواد البرمجية."]
-];
+function toggleAccordion(header) {
+  header.parentElement.classList.toggle('open');
+}
 
-const questions = [
+function toggleTheme() {
+  document.body.classList.toggle('dark-mode');
+}
+
+function toggleComplete(btn) {
+  btn.classList.toggle('done');
+  btn.textContent = btn.classList.contains('done') ? 'مكتمل ✓' : 'اكتمل';
+}
+
+// 1) محاكي مراحل بناء نموذج التعلم الآلي الست (الوحدة الأولى)
+const pipeStages = [
   {
-    q: "[سؤال تقييم ذاتي]: في مراحل التعلم الآلي الست، ما هي المرحلة التي يتم فيها 'تنظيف البيانات من الأخطاء، وتوحيد التنسيقات، ومعالجة القيم المفقودة'؟",
-    o: [
-      "اختيار النموذج (Model Selection)",
-      "تنظيف ومعالجة البيانات (Data Preprocessing)",
-      "تقييم النموذج (Model Evaluation)",
-      "نشر النموذج"
-    ],
-    a: 1,
-    e: "مرحلة تنظيف ومعالجة البيانات (Data Preprocessing) هي المرحلة الثانية التي تهيئ البيانات وتزيل الأخطاء والقيم المفقودة قبل التدريب."
+    title: 'المرحلة 1: جمع البيانات (Data Collection)',
+    task: 'تجميع البيانات الخام المتعلقة بالمشكلة من مصادرها المختلفة (قواعد البيانات، الحساسات، السجلات).',
+    key: 'توفير المادة الأولية الخام التي سيتعلم منها النموذج.'
   },
   {
-    q: "[سؤال تقييم ذاتي]: أي نوع من أنواع التعلم الآلي يعتمد على تدريب النموذج باستخدام 'بيانات مصنفة وموسومة مسبقاً (Labeled Data)' تحتوي على المدخلات والمخرجات الصحيحة؟",
-    o: [
-      "التعلم غير الخاضع للإشراف (Unsupervised Learning)",
-      "التعلم المعزز (Reinforcement Learning)",
-      "التعلم الخاضع للإشراف / تحت الإشراف (Supervised Learning)",
-      "التجميع العشوائي"
-    ],
-    a: 2,
-    e: "التعلم تحت الإشراف (Supervised Learning) يعتمد على وجود بيانات مصنفة مسبقاً (مدخلات ومخرجات معروفة) ويشمل التصنيف والانحدار."
+    title: 'المرحلة 2: تنظيف البيانات (Data Cleaning) — [سؤال رسمي في بنك الأسئلة ص 41]',
+    task: 'توحيد التنسيقات ومعالجة القيم المفقودة، وإزالة الأخطاء والقيم الشاذة، وضمان أن تكون البيانات جاهزة للاستخدام الفعال في التدريب.',
+    key: 'توحيد التنسيقات + معالجة القيم المفقودة + جاهزية البيانات للتدريب = تنظيف البيانات.'
   },
   {
-    q: "[سؤال تقييم ذاتي]: أي من الخوارزميات التالية تنتمي إلى (التعلم غير الخاضع للإشراف - Unsupervised Learning) وتُستخدم لتقسيم البيانات غير المصنفة إلى مجموعات متشابهة؟",
-    o: [
-      "الانحدار الخطي (Linear Regression)",
-      "الانحدار اللوجستي (Logistic Regression)",
-      "آلات المتجهات الداعمة (SVM)",
-      "خوارزمية التجميع (K-Means Clustering)"
-    ],
-    a: 3,
-    e: "خوارزمية التجميع K-Means وتحليل المكونات الرئيسية PCA ينتميان إلى التعلم غير الخاضع للإشراف، بينما الانحدار و SVM من التعلم الخاضع للإشراف."
+    title: 'المرحلة 3: اختيار النموذج (Model Selection)',
+    task: 'المفاضلة بين خوارزميات التعلم الآلي واختيار البنية الرياضية الأنسب لطبيعة المشكلة والبيانات.',
+    key: 'تحديد الخوارزمية الملائمة قبل بدء عملية التدريب.'
   },
   {
-    q: "[سؤال تقييم ذاتي]: ما هو نوع التعلم الآلي الذي يتعلم فيه الوكيل (Agent) من خلال التفاعل مع البيئة عبر (التجربة والخطأ) وتلقي المكافآت والعقوبات؟",
-    o: [
-      "التعلم المعزز (Reinforcement Learning)",
-      "التعلم تحت الإشراف (Supervised Learning)",
-      "تقليل الأبعاد (PCA)",
-      "الانحدار الخطي البسيط"
-    ],
-    a: 0,
-    e: "التعلم المعزز (Reinforcement Learning) يقوم على تفاعل الوكيل مع البيئة بالتجربة والخطأ وتلقي المكافآت والعقوبات."
+    title: 'المرحلة 4: تدريب النموذج (Model Training)',
+    task: 'تغذية النموذج ببيانات التدريب المنظفة لضبط الأوزان والمعلمات الداخلية واكتساب القدرة على التعميم.',
+    key: 'تعلم الأنماط والعلاقات من بيانات التدريب.'
   },
   {
-    q: "[سؤال تقييم ذاتي]: في الشبكات العصبية الاصطناعية، ما هو المكون الرياضي الذي يُطبق على مخرج الخلية لتحديد تنشيطها وإدخال اللاخطية (Non-linearity) للشبكة لتعلم الأنماط المعقدة؟",
-    o: [
-      "طبقة الإدخال الخام",
-      "دالة التنشيط (Activation Function مثل ReLU و Sigmoid)",
-      "حجم القرص الصلب",
-      "تنظيف البيانات"
-    ],
-    a: 1,
-    e: "دالة التنشيط (Activation Function) هي المسؤولة عن تحديد تفعيل الخلية العصبية وإدخال اللاخطية للشبكة."
+    title: 'المرحلة 5: تقييم النموذج (Model Evaluation) — [سؤال رسمي في بنك الأسئلة ص 41]',
+    task: 'قياس الأداء باستخدام مقاييس مثل الدقة (Accuracy)، الدقة التنبؤية (Precision)، ومستوى الخطأ على بيانات الاختبار.',
+    key: 'قياس الأداء + الدقة + الدقة التنبؤية + مستوى الخطأ = تقييم النموذج.'
   },
   {
-    q: "[سؤال تقييم ذاتي]: أي نوع من الشبكات العصبية العميقة يُعد الأفضل والأكثر تخصصاً في معالجة الصور ومقاطع الفيديو وتطبيقات الرؤية الحاسوبية؟",
-    o: [
-      "الانحدار الخطي",
-      "خوارزمية K-Means",
-      "الشبكات العصبية التلافيفية / الالتفافية (CNN - Convolutional Neural Networks)",
-      "أشجار القرار البسيطة"
-    ],
-    a: 2,
-    e: "الشبكات العصبية التلافيفية (CNN) مصممة خصيصاً لمعالجة الصور والفيديو واستخراج الميزات المكانية كالحواف والأشكال."
-  },
-  {
-    q: "[سؤال تقييم ذاتي]: أي نوع من النماذج التوليدية يتكون من شبكتين عصبيتين متنافستين هما (المولد Generator) و(المميز Discriminator)؟",
-    o: [
-      "تحليل المكونات الرئيسية (PCA)",
-      "الغابات العشوائية (Random Forests)",
-      "الانحدار اللوجستي",
-      "شبكات الخصومة التوليدية (GANs - Generative Adversarial Networks)"
-    ],
-    a: 3,
-    e: "تتكون شبكات الخصومة التوليدية (GANs) من المولد (Generator) الذي ينشئ بيانات مزيفة والمميز (Discriminator) الذي يحاول كشفها."
-  },
-  {
-    q: "ما هو الترتيب الصحيح للمراحل الست لعملية التعلم الآلي؟",
-    o: [
-      "1) جمع البيانات ← 2) تنظيف البيانات ← 3) اختيار النموذج ← 4) تدريب النموذج ← 5) تقييم النموذج ← 6) تحسين النموذج",
-      "1) تقييم النموذج ← 2) جمع البيانات ← 3) تنظيف البيانات",
-      "1) تدريب النموذج قبل جمع البيانات ← 2) اختيار النموذج",
-      "1) تحسين النموذج ← 2) اختيار النموذج ← 3) جمع البيانات"
-    ],
-    a: 0,
-    e: "تبدأ مراحل التعلم الآلي بجمع البيانات، ثم تنظيفها، ثم اختيار النموذج، ثم تدريبه، ثم تقييمه على بيانات الاختبار، وأخيراً تحسينه ونشره."
-  },
-  {
-    q: "ما الفرق في الاستخدام بين خوارزمية (الانحدار الخطي Linear Regression) وخوارزمية (الانحدار اللوجستي Logistic Regression)؟",
-    o: [
-      "كلاهما يستخدمان لتجميع البيانات غير المصنفة فقط",
-      "الانحدار الخطي يُستخدم للتنبؤ بقيم رقمية مستمرة (كأسعار المنازل)، بينما الانحدار اللوجستي يُستخدم في مهام التصنيف الثنائي (كالبريد المزعج أو تشخيص المرض)",
-      "الانحدار الخطي للتصنيف الثنائي، والانحدار اللوجستي لتوقع الأسعار المستمرة",
-      "كلاهما ينتميان إلى التعلم المعزز"
-    ],
-    a: 1,
-    e: "الانحدار الخطي يتوقع أرقاماً متصلة مستمرة، أما الانحدار اللوجستي فيستخدم دالة سيجمويد للتصنيف الثنائي."
-  },
-  {
-    q: "في التعلم غير الخاضع للإشراف، ما هي الوظيفة الأساسية لخوارزمية تحليل المكونات الرئيسية (PCA)؟",
-    o: [
-      "تحريك الروبوتات عبر المكافأة والعقوبة",
-      "توليد نصوص ومقالات جديدة",
-      "تقليل الأبعاد (Dimensionality Reduction) وضغط عدد الميزات الكبيرة مع الحفاظ على أهم المعلومات والتباين في البيانات",
-      "تصنيف البريد الإلكتروني بوجود معلم"
-    ],
-    a: 2,
-    e: "تُستخدم خوارزمية PCA في التعلم غير الخاضع للإشراف لتقليل أبعاد البيانات المعقدة وتبسيط تمثيلها."
-  },
-  {
-    q: "ماذا نُطلق على المشكلة التي تحدث عندما يحفظ نموذج التعلم الآلي تفاصيل وضوضاء بيانات التدريب بدقة عالية ولكنه يفشل في التعميم وإعطاء نتائج صحيحة على البيانات الجديدة؟",
-    o: [
-      "نقص التخصيص (Underfitting)",
-      "التعميم المثالي (Generalization)",
-      "التوجيه الذكي (Prompting)",
-      "الإفراط في التخصيص / التجهيز الزائد (Overfitting)"
-    ],
-    a: 3,
-    e: "الإفراط في التخصيص (Overfitting) هو حفظ بيانات التدريب وفقدان القدرة على التعميم على بيانات الاختبار الجديدة."
-  },
-  {
-    q: "ما هو الفرق الجوهري بين التعلم الآلي التقليدي والتعلم العميق (Deep Learning) من حيث عملية (استخراج الميزات - Feature Extraction)؟",
-    o: [
-      "في التعلم التقليدي يتم استخراج الميزات يدوياً بواسطة الخبراء، بينما في التعلم العميق تقوم الشبكة العصبية باستخراج وتعلم الميزات تلقائياً وهرمياً من البيانات الخام",
-      "في التعلم العميق يجب تحديد جميع الميزات يدوياً بواسطة المبرمج",
-      "التعلم العميق يعمل فقط على البيانات الصغيرة ولا يحتاج لمعالجات GPU",
-      "لا يوجد أي فرق بينهما في استخراج الميزات"
-    ],
-    a: 0,
-    e: "أهم ميزة للتعلم العميق هي قدرته على تعلم واستخلاص الميزات تلقائياً عبر طبقاته المتعددة دون الحاجة لهندسة ميزات يدوية."
-  },
-  {
-    q: "في بنية الشبكة العصبية الاصطناعية، ما هي الطبقات التي تقع بين طبقة الإدخال وطبقة الإخراج وتكون مسؤولة عن إجراء العمليات الحسابية واستخلاص الأنماط المعقدة؟",
-    o: [
-      "قوائم الانتظار الخارجية",
-      "الطبقات الخفية (Hidden Layers)",
-      "جداول الصواب",
-      "مصفوفات التجاور"
-    ],
-    a: 1,
-    e: "الطبقات الخفية (Hidden Layers) هي قلب الشبكة العصبية العميقة وتقع بين طبقتي الإدخال والإخراج."
-  },
-  {
-    q: "أي نوع من الشبكات العصبية يمتلك 'ذاكرة داخلية وحلقات تغذية راجعة' مما يجعله مناسباً لمعالجة البيانات المتسلسلة والزمنية مثل النصوص والكلام الصوتي؟",
-    o: [
-      "الشبكات التلافيفية (CNN) فقط",
-      "خوارزمية التجميع K-Means",
-      "الشبكات العصبية المتكررة (RNN) وشبكات الذاكرة الطويلة قصيرة المدى (LSTM)",
-      "الانحدار الخطي البسيط"
-    ],
-    a: 2,
-    e: "تمتاز الشبكات العصبية المتكررة (RNN و LSTM) بوجود ذاكرة داخلية تحفظ السياق الزمني للبيانات المتسلسلة."
-  },
-  {
-    q: "ما هي المعمارية العصبية التي تعتمد على 'آلية الانتباه الذاتي (Self-Attention)' لمعالجة الكلمات بالتوازي وتُعد الأساس الذي بُنيت عليه نماذج اللغة الكبيرة (LLMs) مثل GPT و Gemini؟",
-    o: [
-      "شجرة القرار الكلاسيكية",
-      "خوارزمية الجار الأقرب KNN",
-      "الشبكة التلافيفية البسيطة",
-      "معمارية المحولات (Transformers)"
-    ],
-    a: 3,
-    e: "معمارية المحولات (Transformers) المعتمدة على الانتباه الذاتي هي الأساس لجميع نماذج اللغة الكبيرة الحديثة (LLMs)."
-  },
-  {
-    q: "أي من النماذج التوليدية التالية يعمل عن طريق إضافة ضوضاء (تشويش) تدريجياً إلى الصور ثم تعلم عكس العملية وإزالة الضوضاء تدريجياً لتوليد صور عالية الدقة (مثل Midjourney و DALL-E)؟",
-    o: [
-      "نماذج الانتشار (Diffusion Models)",
-      "الانحدار اللوجستي",
-      "أشجار القرار",
-      "تحليل المكونات الرئيسية PCA"
-    ],
-    a: 0,
-    e: "نماذج الانتشار (Diffusion Models) تولد الصور عن طريق تعلم إزالة الضوضاء تدريجياً."
-  },
-  {
-    q: "في النماذج التوليدية، كيف تعمل أجهزة الترميز التلقائي المتغيرة (VAEs - Variational Autoencoders)؟",
-    o: [
-      "تعتمد على التنافس بين مولد ومميز بدون مشفر",
-      "تتكون من مشفر (Encoder) يضغط البيانات في فضاء كامن احتمالي، ومفكك ترميز (Decoder) يعيد بناء وتوليد بيانات جديدة من هذا الفضاء الكامن",
-      "تستخدم أشجار القرار لتقسيم الجداول",
-      "تقتصر على تصنيف البريد المزعج فقط"
-    ],
-    a: 1,
-    e: "تعتمد VAEs على ثنائية المشفر (Encoder) ومفكك الترميز (Decoder) عبر الفضاء الكامن لتوليد عينات جديدة."
-  },
-  {
-    q: "[سؤال تقييم ذاتي]: ما هي التقنية المستخدمة في تدريب وتوجيه نماذج اللغة الكبيرة (LLMs) لتعديل سلوكها ومواءمتها مع القيم البشرية بالاعتماد على تقييمات ومراجعات البشر؟",
-    o: [
-      "تقليل الأبعاد (PCA)",
-      "التجميع الهرمي",
-      "التعلم المعزز من التغذية الراجعة البشرية (RLHF - Reinforcement Learning from Human Feedback)",
-      "حذف الطبقات الخفية"
-    ],
-    a: 2,
-    e: "تقنية RLHF تستخدم تقييمات البشر كمكافأة لتوجيه النموذج اللغوي نحو إجابات أكثر دقة وأماناً وملاءمة."
-  },
-  {
-    q: "ما المقصود بـ (التوجيه الذكي / هندسة الأوامر - Prompt Engineering) عند التعامل مع نماذج الذكاء الاصطناعي التوليدي؟",
-    o: [
-      "إعادة برمجة نظام التشغيل من الصفر",
-      "شراء بطاقات رسومية جديدة للحاسوب",
-      "حذف قاعدة بيانات النموذج",
-      "صياغة وتصميم التعليمات والمدخلات النصية (Prompts) بطريقة دقيقة وواضحة لتوجيه النموذج نحو إنتاج أفضل وأدق المخرجات المطلوبة"
-    ],
-    a: 3,
-    e: "هندسة الأوامر (Prompt Engineering) هي فن صياغة المدخلات النصية لتحقيق أقصى استفادة ودقة من مخرجات النموذج التوليدي."
-  },
-  {
-    q: "ما هو التحدي الشهير في نماذج اللغة الكبيرة (LLMs) الذي يُعرّف بأنه 'توليد النموذج لمعلومات غير صحيحة أو مختلقة لا أساس لها في الواقع وصياغتها بأسلوب يبدو منطقياً وواثقاً'؟",
-    o: [
-      "الهلوسة (Hallucination)",
-      "الضبط الدقيق (Fine-Tuning)",
-      "التجميع (Clustering)",
-      "الانحدار الخطي"
-    ],
-    a: 0,
-    e: "الهلوسة (Hallucination) هي اختلاق النموذج التوليدي لمعلومات أو حقائق غير صحيحة وعرضها بثقة."
-  },
-  {
-    q: "ما هي الآلية الرياضية التي تُستخدم أثناء تدريب الشبكات العصبية لحساب تدرج الخطأ وإرجاعه من طبقة الإخراج إلى الطبقات السابقة لتحديث الأوزان (Weights)؟",
-    o: [
-      "التجميع العشوائي K-Means",
-      "الانتشار العكسي (Backpropagation)",
-      "التصفية التعاونية",
-      "مصفوفة التجاور"
-    ],
-    a: 1,
-    e: "خوارزمية الانتشار العكسي (Backpropagation) هي الآلية المسؤولة عن تمرير الخطأ عكسياً وتحديث أوزان الشبكة العصبية."
-  },
-  {
-    q: "أي خوارزمية من خوارزميات التعلم الخاضع للإشراف تعمل عن طريق إيجاد أفضل مستوى فائق (Hyperplane) يفصل بين نقاط بيانات الفئات المختلفة بأكبر هامش ممكن؟",
-    o: [
-      "خوارزمية التجميع K-Means",
-      "المشفرات التلقائية المتغيرة VAEs",
-      "آلات المتجهات الداعمة (SVM - Support Vector Machines)",
-      "نماذج الانتشار"
-    ],
-    a: 2,
-    e: "آلات المتجهات الداعمة (SVM) تصنف البيانات بإيجاد الحد الفاصل (المستوى الفائق) ذي الهامش الأقصى بين الفئات."
-  },
-  {
-    q: "عندما نأخذ نموذج لغة كبيراً مدرباً مسبقاً على نصوص عامة، ثم نقوم بتدريبه إضافياً على مجموعة بيانات متخصصة (مثل البيانات الطبية أو القانونية) ليتقن هذا المجال، فإن هذه العملية تُسمى:",
-    o: [
-      "التجميع غير الموجه",
-      "الهلوسة النصية",
-      "تقليل الأبعاد PCA",
-      "الضبط الدقيق (Fine-Tuning)"
-    ],
-    a: 3,
-    e: "الضبط الدقيق (Fine-Tuning) هو تكييف وتدريب نموذج مدرب مسبقاً على بيانات مجال متخصص لتحسين أدائه فيه."
-  },
-  {
-    q: "ما الفرق الرئيسي بين (الذكاء الاصطناعي التقليدي/التمييزي) و(الذكاء الاصطناعي التوليدي Generative AI)؟",
-    o: [
-      "التقليدي يحلل البيانات الموجودة ويصنفها أو يتنبأ بقيم، بينما التوليدي ينشئ ويبتكر محتوى جديداً وأصلياً (نصوص، صور، صوت، فيديو، أكواد)",
-      "التقليدي يولد صوراً وفيديوهات جديدة، والتوليدي يقتصر على تصنيف الجداول فقط",
-      "كلاهما لا يعتمدان على التعلم العميق",
-      "الذكاء التوليدي لا يتعامل مع النصوص أو الصور"
-    ],
-    a: 0,
-    e: "الذكاء التقليدي يميز ويصنف المعطيات الحالية، بينما الذكاء التوليدي ينشئ محتوى جديداً لم يكن موجوداً."
-  },
-  {
-    q: "في المرحلة الخامسة من مراحل التعلم الآلي (تقييم النموذج - Model Evaluation)، لماذا نستخدم بيانات اختبار لم يرها النموذج أثناء مرحلة التدريب؟",
-    o: [
-      "لحذف الأوزان التي تعلمها النموذج",
-      "لقياس الدقة الحقيقية للنموذج والتأكد من قدرته على التعميم (Generalization) على البيانات الجديدة واكتشاف ما إذا كان يعاني من الإفراط في التخصيص (Overfitting)",
-      "لتنظيف البيانات من القيم المفقودة",
-      "لإيقاف عمل الخوارزمية نهائياً"
-    ],
-    a: 1,
-    e: "تقييم النموذج ببيانات اختبار جديدة لم يتدرب عليها ضروري لاختبار قدرته الفعلية على التعميم في الواقع."
+    title: 'المرحلة 6: التحسين والتنبؤ (Optimization & Prediction)',
+    task: 'ضبط المعاملات الفائقة لتحسين كفاءة النموذج، ثم استخدامه لإجراء تنبؤات على بيانات جديدة.',
+    key: 'رفع الكفاءة وتطبيق النموذج في بيئة العمل.'
   }
 ];
 
-// بناء شبكة المصطلحات
-const termsGrid = document.getElementById("termsGrid");
-terms.forEach(([en, ar]) => {
-  const d = document.createElement("div");
-  d.className = "card";
-  d.style.margin = "0";
-  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
-  termsGrid.appendChild(d);
-});
+function showPipeStage(idx, btn) {
+  if (btn) {
+    btn.parentElement.querySelectorAll('.pipe-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  const st = pipeStages[idx];
+  document.getElementById('pipeStageDisplay').innerHTML = `
+    <div style="font-weight:800;font-size:1rem;color:var(--indigo-main);margin-bottom:6px">${st.title}</div>
+    <div style="font-size:0.9rem;color:var(--text-body);margin-bottom:6px">• <strong>العمليات الأساسية:</strong> ${st.task}</div>
+    <div style="font-size:0.88rem;color:var(--teal-dark);font-weight:700">• <strong>مفتاح الحل في الاختبار:</strong> ${st.key}</div>
+  `;
+}
 
-// إدارة البطاقات التعليمية
-let ci = 0, showAnswer = false;
+// 2) مستكشف الشبكات العصبية والنماذج التوليدية (الوحدة 2 و 3)
+const modelsInfoList = [
+  {
+    name: 'الشبكات العصبية العميقة (Deep Neural Networks - DNNs) — [سؤال رسمي ص 42]',
+    desc: 'تتكون من عدة طبقات خفية، قادرة على تعلم الأنماط المعقدة والمتعددة الأبعاد وتستخدم في تطبيقات مثل التعرف على الصور وتحليل النصوص.',
+    tip: 'عندما يذكر السؤال: "تتكون من عدة طبقات خفية لتعلم الأنماط المعقدة والمتعددة الأبعاد" فالإجابة هي الشبكات العصبية العميقة.'
+  },
+  {
+    name: 'الشبكات العصبية المتحولة / النماذج التحويلية (Transformers) — [سؤالان رسميان ص 42 و 43]',
+    desc: 'تعتمد على "آلية الانتباه الذاتي" (Self-Attention)، ويمكن للنموذج التركيز على أجزاء معينة من البيانات بناءً على أهميتها، مما يسهل تحليل العلاقات الطويلة الأمد بين الكلمات وتوليد النصوص المتسقة.',
+    tip: 'في الوحدة 2 تسمى (الشبكات العصبية المتحولة) وفي الوحدة 3 تسمى (النماذج التحويلية)، ومفتاحها دائماً: آلية الانتباه + العلاقات بين الكلمات + توليد النصوص المتسقة.'
+  },
+  {
+    name: 'نماذج الانتشار (Diffusion Models) — [سؤال رسمي ص 43]',
+    desc: 'تقوم تدريجياً بتحويل الضوضاء إلى إخراج منظم، عكس عملية الضوضاء لتوضيح التفاصيل خطوة بخطوة، وتنتج صوراً مفصلة وعالية الجودة لكنها تتطلب طاقة حسابية عالية.',
+    tip: 'مفتاحها في الاختبار: تحويل الضوضاء تدريجياً إلى إخراج منظم وعكس عملية الضوضاء خطوة بخطوة لإنتاج صور مفصلة.'
+  },
+  {
+    name: 'الشبكات التوليدية التنافسية (GANs) والمشفرات التلقائية المتغيرة (VAEs)',
+    desc: '• GANs: شبكتان متنافستان (المولد Generator والمميز Discriminator).\n• VAEs: مشفر (Encoder) لضغط البيانات في فضاء كامن ومفكك تشفير (Decoder) لإعادة بنائها وتوليد عينات جديدة.',
+    tip: 'كلاهما من نماذج الذكاء الاصطناعي التوليدي للصور والبيانات إلى جانب نماذج الانتشار والنماذج التحويلية.'
+  },
+  {
+    name: 'التعديل والتوجيه الذكي (Prompt Engineering) و (RLHF) — [سؤال رسمي ص 43]',
+    desc: 'يسمح التعديل والتوجيه الذكي (Prompt Engineering) للذكاء الاصطناعي بتعديل مخرجاته بناءً على التفضيلات أو المتطلبات ويساعد على إنتاج ردود تتماشى بشكل أفضل مع الحالات الخاصة.',
+    tip: 'الإجابة المعتمدة في بنك الأسئلة (ص 43 س3) هي: التعديل والتوجيه الذكي (Prompt Engineering).'
+  }
+];
+
+function showModelInfo(idx, btn) {
+  if (btn) {
+    btn.parentElement.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  const m = modelsInfoList[idx];
+  document.getElementById('modelInfoDisplay').innerHTML = `
+    <div style="font-weight:800;font-size:1rem;color:var(--indigo-main);margin-bottom:6px">${m.name}</div>
+    <div style="font-size:0.9rem;color:var(--text-body);white-space:pre-line;margin-bottom:6px">${m.desc}</div>
+    <div style="font-size:0.88rem;color:var(--teal-dark);font-weight:700">• <strong>مفتاح الاختبار:</strong> ${m.tip}</div>
+  `;
+}
+
+// 22 مصطلحاً ومفهوماً للفصل الثالث عشر
+const termsData = [
+  { ar: 'التعلم الآلي', en: 'Machine Learning (ML)', def: 'فرع من الذكاء الاصطناعي يمكّن الأنظمة من التعلم من البيانات واكتشاف الأنماط لتحسين الأداء بمرور الوقت دون برمجة صريحة.' },
+  { ar: 'مرحلة جمع البيانات', en: 'Data Collection', def: 'المرحلة الأولى في بناء نموذج التعلم الآلي؛ يتم فيها تجميع البيانات الخام المرتبطة بالمشكلة من مصادرها المتعددة.' },
+  { ar: 'مرحلة تنظيف البيانات', en: 'Data Cleaning', def: 'يتم فيها توحيد التنسيقات ومعالجة القيم المفقودة، وضمان أن تكون البيانات جاهزة للاستخدام الفعال في التدريب (سؤال البنك ص 41).' },
+  { ar: 'مرحلة اختيار النموذج', en: 'Model Selection', def: 'المرحلة التي يتم فيها اختيار خوارزمية التعلم الآلي الملائمة لطبيعة البيانات والمشكلة المراد حلها.' },
+  { ar: 'مرحلة تقييم النموذج', en: 'Model Evaluation', def: 'يتم فيها قياس الأداء باستخدام مقاييس مثل الدقة (Accuracy)، الدقة التنبؤية (Precision)، ومستوى الخطأ (سؤال البنك ص 41).' },
+  { ar: 'مرحلة التحسين والتنبؤ', en: 'Optimization & Prediction', def: 'ضبط معاملات النموذج لتقليل الخطأ ورفع الكفاءة ثم استخدامه للتنبؤ على بيانات جديدة.' },
+  { ar: 'التعلم تحت الإشراف', en: 'Supervised Learning', def: 'نوع من التعلم الآلي يعتمد على بيانات مصنفة تحتوي على المدخلات والمخرجات المحددة مسبقاً (يشمل التصنيف والانحدار).' },
+  { ar: 'التعلم غير الخاضع للإشراف', en: 'Unsupervised Learning', def: 'يستخدم عندما لا تكون هناك مخرجات محددة في البيانات، ويهدف إلى اكتشاف الأنماط أو الهيكليات داخل البيانات مثل التجميع (سؤال البنك ص 41).' },
+  { ar: 'التعلم المعزز', en: 'Reinforcement Learning', def: 'يتعلم فيه الوكيل الذكي من خلال التفاعل مع البيئة عبر التجربة والخطأ ونظام المكافآت والعقوبات.' },
+  { ar: 'التصنيف والانحدار', en: 'Classification & Regression', def: 'مهمتان في التعلم تحت الإشراف؛ التصنيف يتنبأ بفئات منفصلة، والانحدار يتنبأ بقيم رقمية مستمرة.' },
+  { ar: 'التجميع', en: 'Clustering (e.g., K-Means)', def: 'أبرز مهام التعلم غير الخاضع للإشراف؛ يقوم بتقسيم البيانات غير المصنفة إلى مجموعات متشابهة في الخصائص.' },
+  { ar: 'التعلم العميق', en: 'Deep Learning (DL)', def: 'يعتمد على الشبكات العصبية العميقة، وهي شبكات متعددة الطبقات تحاكي طريقة عمل العقل البشري (سؤال البنك ص 42).' },
+  { ar: 'الشبكات العصبية العميقة', en: 'Deep Neural Networks (DNNs)', def: 'تتكون من عدة طبقات خفية، قادرة على تعلم الأنماط المعقدة والمتعددة الأبعاد وتستخدم في التعرف على الصور وتحليل النصوص (سؤال البنك ص 42).' },
+  { ar: 'الشبكات العصبية التلافيفية', en: 'Convolutional Neural Networks (CNNs)', def: 'شبكات عصبية متخصصة في معالجة الصور والفيديو واستخلاص الميزات المرئية والمكانية عبر طبقات الالتفاف.' },
+  { ar: 'الشبكات العصبية المتكررة', en: 'Recurrent Neural Networks (RNNs)', def: 'شبكات عصبية متخصصة في البيانات التسلسلية والزمنية (كالصوت والنصوص) بفضل امتلاكها ذاكرة داخلية وحلقات تكرار.' },
+  { ar: 'الشبكات العصبية المتحولة', en: 'Transformer Neural Networks', def: 'تعتمد على آلية الانتباه الذاتي، ويمكن للنموذج التركيز على أجزاء معينة من البيانات بناءً على أهميتها لتسهيل تحليل العلاقات الطويلة الأمد بين الكلمات (سؤال البنك ص 42).' },
+  { ar: 'النماذج التحويلية في التوليد', en: 'Generative Transformers', def: 'تعتمد على "آلية الانتباه" التي تحدد وتحافظ على العلاقات في تسلسل البيانات، مما يجعلها فعالة للغاية في توليد النصوص المتسقة (سؤال البنك ص 43).' },
+  { ar: 'نماذج الانتشار', en: 'Diffusion Models', def: 'تقوم تدريجياً بتحويل الضوضاء إلى إخراج منظم، عكس عملية الضوضاء لتوضيح التفاصيل خطوة بخطوة، وتنتج صوراً مفصلة وعالية الجودة لكنها تتطلب طاقة حسابية عالية (سؤال البنك ص 43).' },
+  { ar: 'الشبكات التوليدية التنافسية', en: 'Generative Adversarial Networks (GANs)', def: 'نماذج توليدية تتكون من شبكتين متنافستين: المولد (Generator) الذي ينشئ البيانات، والمميز (Discriminator) الذي يختبر واقعيتها.' },
+  { ar: 'المشفرات التلقائية المتغيرة', en: 'Variational Autoencoders (VAEs)', def: 'نماذج توليدية تضغط البيانات عبر المشفر (Encoder) إلى فضاء كامن ثم تعيد بناءها وتوليد عينات جديدة عبر مفكك التشفير (Decoder).' },
+  { ar: 'التعديل والتوجيه الذكي', en: 'Prompt Engineering', def: 'يسمح للذكاء الاصطناعي بتعديل مخرجاته بناءً على التفضيلات أو المتطلبات ويساعد على إنتاج ردود تتماشى بشكل أفضل مع الحالات الخاصة (سؤال البنك ص 43).' },
+  { ar: 'التعلم التعزيزي مع تغذية راجعة من البشر', en: 'RLHF', def: 'تقنية تستخدم تقييمات وتفضيلات المراجعين البشريين لتوجيه النماذج اللغوية الكبيرة ومحاذاة مخرجاتها.' }
+];
+
+function renderTerms(list) {
+  const grid = document.getElementById('termsGrid');
+  grid.innerHTML = list.map(t => `
+    <div class="term-card">
+      <div class="term-top">
+        <span class="term-ar">${t.ar}</span>
+        <span class="term-en">${t.en}</span>
+      </div>
+      <p class="term-def">${t.def}</p>
+    </div>
+  `).join('');
+}
+
+function filterTerms() {
+  const q = (document.getElementById('termSearch').value || '').trim().toLowerCase();
+  renderTerms(termsData.filter(t => t.ar.includes(q) || t.en.toLowerCase().includes(q) || t.def.includes(q)));
+}
+
+// البطاقات التعليمية
+let fcIdx = 0, fcFlipped = false;
 function renderCard() {
-  document.getElementById("flashTerm").textContent = cards[ci][0];
-  const ansEl = document.getElementById("flashAnswer");
-  ansEl.innerHTML = cards[ci][1].replace(/\n/g, "<br>");
-  ansEl.hidden = !showAnswer;
-  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
-  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+  const item = termsData[fcIdx];
+  document.getElementById('fcCounter').textContent = `بطاقة ${fcIdx + 1} من ${termsData.length}`;
+  document.getElementById('fcSideLabel').textContent = fcFlipped ? 'التعريف والشرح في المنهج' : 'المصطلح / النموذج (اضغطي للقلب)';
+  document.getElementById('fcMainText').innerHTML = fcFlipped ? item.def : `${item.ar}<br><span style="font-size:0.9rem;color:var(--teal-accent)">${item.en}</span>`;
 }
-document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
-document.getElementById("flashcard").addEventListener("keydown", e => {
-  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
-});
-document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
-document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
-renderCard();
+function flipCard() { fcFlipped = !fcFlipped; renderCard(); }
+function nextCard() { fcIdx = (fcIdx + 1) % termsData.length; fcFlipped = false; renderCard(); }
+function prevCard() { fcIdx = (fcIdx - 1 + termsData.length) % termsData.length; fcFlipped = false; renderCard(); }
 
-// التنقل بين التبويبات
-document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
-  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
-  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
-  window.scrollTo({ top: 0, behavior: "smooth" });
-});
+// 20 سؤالاً شاملاً للفصل الثالث عشر (9 أسئلة البنك الرسمية + 11 سؤالاً تدريبياً شاملاً)
+const quizData = [
+  {
+    id: 1, isBank: true, unit: 'الوحدة 1 (بنك الأسئلة ص 41 - س1)',
+    q: 'يتم في مرحلة ............ توحيد التنسيقات ومعالجة القيم المفقودة، وضمان أن تكون البيانات جاهزة للاستخدام الفعال في التدريب:',
+    options: [
+      'تنظيف البيانات.',
+      'جمع البيانات.',
+      'اختيار النموذج.',
+      'التحسين والتنبؤ.'
+    ],
+    correct: 0,
+    exp: 'في مرحلة تنظيف البيانات (Data Cleaning) يتم توحيد التنسيقات ومعالجة القيم المفقودة وإزالة الأخطاء لضمان جاهزية البيانات للاستخدام الفعال في التدريب.',
+    optExps: [
+      'صحيح: تنظيف البيانات هي المرحلة المختصة بتوحيد التنسيقات ومعالجة القيم المفقودة.',
+      'خطأ: جمع البيانات يختص بتجميع البيانات الخام من مصادرها الأولية.',
+      'خطأ: اختيار النموذج يختص بتحديد الخوارزمية المناسبة.',
+      'خطأ: التحسين والتنبؤ هي المرحلة الأخيرة بعد التدريب والتقييم.'
+    ]
+  },
+  {
+    id: 2, isBank: true, unit: 'الوحدة 1 (بنك الأسئلة ص 41 - س2)',
+    q: 'يتم في مرحلة ............ قياس الأداء باستخدام مقاييس مثل الدقة، الدقة التنبؤية، ومستوى الخطأ:',
+    options: [
+      'تنظيف البيانات.',
+      'تقييم النموذج.',
+      'اختيار النموذج.',
+      'التحسين والتنبؤ.'
+    ],
+    correct: 1,
+    exp: 'في مرحلة تقييم النموذج (Model Evaluation) يتم اختبار النموذج وقياس أدائه باستخدام مقاييس مثل الدقة (Accuracy)، الدقة التنبؤية (Precision)، ومستوى الخطأ.',
+    optExps: [
+      'خطأ: تنظيف البيانات يسبق التدريب ويعالج القيم المفقودة.',
+      'صحيح: تقييم النموذج هي المرحلة المسؤولة عن قياس الأداء بمقاييس الدقة ومستوى الخطأ.',
+      'خطأ: اختيار النموذج يتم قبل التدريب لتحديد نوع الخوارزمية.',
+      'خطأ: التحسين والتنبؤ يأتي لتعديل المعاملات واستخدام النموذج عملياً.'
+    ]
+  },
+  {
+    id: 3, isBank: true, unit: 'الوحدة 1 (بنك الأسئلة ص 41 - س3)',
+    q: 'يستخدم ............ عندما لا تكون هناك مخرجات محددة في البيانات، ويهدف إلى اكتشاف الأنماط أو الهيكليات داخل البيانات:',
+    options: [
+      'التعلم تحت الإشراف.',
+      'التعلم غير الخاضع للإشراف.',
+      'التعلم العميق العشوائي.',
+      'التعلم المعزز.'
+    ],
+    correct: 1,
+    exp: 'التعلم غير الخاضع للإشراف (Unsupervised Learning) يُستخدم مع البيانات غير المصنفة (التي لا تحتوي على مخرجات محددة مسبقاً) بهدف اكتشاف الأنماط أو الهيكليات الخفية وتجميع البيانات.',
+    optExps: [
+      'خطأ: التعلم تحت الإشراف يشترط وجود مخرجات محددة ومصنفة مسبقاً (Labeled Data).',
+      'صحيح: التعلم غير الخاضع للإشراف يعمل بدون مخرجات محددة لاكتشاف الأنماط داخل البيانات.',
+      'خطأ: التعلم العميق العشوائي يختص بدمج الاحتمالات في الشبكات العصبية.',
+      'خطأ: التعلم المعزز يعتمد على تفاعل الوكيل مع البيئة عبر المكافآت والعقوبات.'
+    ]
+  },
+  {
+    id: 4, isBank: true, unit: 'الوحدة 2 (بنك الأسئلة ص 42 - س1)',
+    q: 'يعتمد ............ على الشبكات العصبية العميقة، وهي شبكات متعددة الطبقات تحاكي طريقة عمل العقل البشري:',
+    options: [
+      'التعلم العميق.',
+      'التعلم الآلي.',
+      'الشبكات العصبية العميقة.',
+      'الشبكات العصبية المتكررة.'
+    ],
+    correct: 0,
+    exp: 'يعتمد التعلم العميق (Deep Learning) على الشبكات العصبية العميقة متعددة الطبقات التي تحاكي طريقة عمل الدماغ البشري.',
+    optExps: [
+      'صحيح: التعلم العميق هو المجال الذي يعتمد على الشبكات العصبية العميقة.',
+      'خطأ: التعلم الآلي التقليدي أعم ويشمل خوارزميات بسيطة غير عصبية كالانحدار وشجرة القرار.',
+      'خطأ: لا يصح القول "تعتمد الشبكات العصبية العميقة على الشبكات العصبية العميقة".',
+      'خطأ: الشبكات المتكررة نوع فرعي للبيانات التسلسلية.'
+    ]
+  },
+  {
+    id: 5, isBank: true, unit: 'الوحدة 2 (بنك الأسئلة ص 42 - س2)',
+    q: 'تتكون ............ من عدة طبقات خفية، قادرة على تعلم الأنماط المعقدة والمتعددة الأبعاد وتستخدم في تطبيقات مثل التعرف على الصور وتحليل النصوص:',
+    options: [
+      'الشبكات العصبية المتحولة.',
+      'الشبكات العصبية التلافيفية.',
+      'الشبكات العصبية العميقة.',
+      'الشبكات العصبية المتكررة.'
+    ],
+    correct: 2,
+    exp: 'تتكون الشبكات العصبية العميقة (DNNs) من عدة طبقات خفية (Hidden Layers) تمكنها من تعلم الأنماط المعقدة والمتعددة الأبعاد في الصور والنصوص.',
+    optExps: [
+      'خطأ: الشبكات المتحولة تتميز بآلية الانتباه الذاتي (Self-Attention).',
+      'خطأ: الشبكات التلافيفية تتميز بطبقات الالتفاف لمعالجة الصور.',
+      'صحيح: الشبكات العصبية العميقة تتكون من عدة طبقات خفية لتعلم الأنماط المعقدة والمتعددة الأبعاد.',
+      'خطأ: الشبكات المتكررة تتميز بحلقات التكرار للبيانات الزمنية.'
+    ]
+  },
+  {
+    id: 6, isBank: true, unit: 'الوحدة 2 (بنك الأسئلة ص 42 - س3)',
+    q: 'تعتمد ............ على آلية الانتباه الذاتي، ويمكن للنموذج التركيز على أجزاء معينة من البيانات بناءً على أهميتها، مما يسهل تحليل العلاقات الطويلة الأمد بين الكلمات:',
+    options: [
+      'الشبكات العصبية المتحولة.',
+      'الشبكات العصبية التلافيفية.',
+      'الشبكات العصبية العميقة.',
+      'الشبكات العصبية المتكررة.'
+    ],
+    correct: 0,
+    exp: 'الشبكات العصبية المتحولة (Transformers) تعتمد على آلية الانتباه الذاتي (Self-Attention) للتركيز على الأجزاء المهمة من البيانات وتحليل العلاقات طويلة الأمد بين الكلمات.',
+    optExps: [
+      'صحيح: الشبكات العصبية المتحولة (Transformers) هي التي تعتمد على آلية الانتباه الذاتي.',
+      'خطأ: التلافيفية (CNNs) تعتمد على المرشحات المكانية للصور.',
+      'خطأ: العميقة (DNNs) مفهوم عام للشبكات متعددة الطبقات الخفية.',
+      'خطأ: المتكررة (RNNs) تعالج البيانات بالتسلسل وتعاني في العلاقات طويلة الأمد مقارنة بالمتحولة.'
+    ]
+  },
+  {
+    id: 7, isBank: true, unit: 'الوحدة 3 (بنك الأسئلة ص 43 - س1)',
+    q: 'تعتمد ............ على "آلية الانتباه" التي تحدد وتحافظ على العلاقات في تسلسل البيانات، مما يجعلها فعالة للغاية في توليد النصوص المتسقة:',
+    options: [
+      'نماذج الانتشار.',
+      'المشفرات التلقائية المتغيرة.',
+      'الشبكات التوليدية.',
+      'النماذج التحويلية.'
+    ],
+    correct: 3,
+    exp: 'تعتمد النماذج التحويلية (Transformers) على "آلية الانتباه" لتحديد وحفظ العلاقات في تسلسل البيانات، مما يجعلها الأساس الأهم في توليد النصوص المتسقة.',
+    optExps: [
+      'خطأ: نماذج الانتشار تحول الضوضاء تدريجياً لإنتاج صور عالية الجودة.',
+      'خطأ: المشفرات التلقائية المتغيرة تضغط البيانات وتفك ضغطها.',
+      'خطأ: الشبكات التوليدية (GANs) تعتمد على التنافس بين المولد والمميز.',
+      'صحيح: النماذج التحويلية (Transformers) تعتمد على آلية الانتباه لتوليد النصوص المتسقة.'
+    ]
+  },
+  {
+    id: 8, isBank: true, unit: 'الوحدة 3 (بنك الأسئلة ص 43 - س2)',
+    q: 'تقوم ............ تدريجياً بتحويل الضوضاء إلى إخراج منظم، عكس عملية الضوضاء لتوضيح التفاصيل خطوة بخطوة، وتنتج صوراً مفصلة وعالية الجودة لكنها تتطلب طاقة حسابية عالية:',
+    options: [
+      'نماذج الانتشار.',
+      'المشفرات التلقائية المتغيرة.',
+      'الشبكات التوليدية.',
+      'النماذج التحويلية.'
+    ],
+    correct: 0,
+    exp: 'نماذج الانتشار (Diffusion Models) تعمل عن طريق تحويل الضوضاء تدريجياً إلى إخراج منظم (عكس عملية الضوضاء خطوة بخطوة) لإنتاج صور مفصلة وعالية الجودة.',
+    optExps: [
+      'صحيح: نماذج الانتشار (Diffusion Models).',
+      'خطأ: المشفرات التلقائية المتغيرة تعتمد على المشفر ومفكك التشفير.',
+      'خطأ: الشبكات التوليدية تعتمد على شبكتي المولد والمميز.',
+      'خطأ: النماذج التحويلية تعتمد على آلية الانتباه لتوليد النصوص.'
+    ]
+  },
+  {
+    id: 9, isBank: true, unit: 'الوحدة 3 (بنك الأسئلة ص 43 - س3)',
+    q: 'يسمح ............ للذكاء الاصطناعي بتعديل مخرجاته بناءً على التفضيلات أو المتطلبات ويساعد على إنتاج ردود تتماشى بشكل أفضل مع الحالات الخاصة:',
+    options: [
+      'الانتباه الذاتي.',
+      'التعلم التعزيزي مع تغذية راجعة من البشر (RLHF).',
+      'التعديل والتوجيه الذكي (Prompt Engineering).',
+      'النماذج التحويلية.'
+    ],
+    correct: 2,
+    exp: 'وفقاً لبنك الأسئلة المعتمد (ص 43 س3)، يسمح التعديل والتوجيه الذكي (Prompt Engineering) للذكاء الاصطناعي بتعديل مخرجاته بناءً على التفضيلات أو المتطلبات لإنتاج ردود تتماشى بشكل أفضل مع الحالات الخاصة.',
+    optExps: [
+      'خطأ: الانتباه الذاتي آلية داخلية لحساب ارتباط الكلمات داخل الشبكة المتحولة.',
+      'خطأ: RLHF هي مرحلة تدريب ومحاذاة للنموذج باستخدام تقييمات بشرية، بينما الإجابة المحددة في ملزمة الأسئلة لهذا النص هي (ج) التعديل والتوجيه الذكي.',
+      'صحيح: التعديل والتوجيه الذكي (Prompt Engineering) هو الخيار المعتمد في بنك الأسئلة ص 43.',
+      'خطأ: النماذج التحويلية هي معمارية الشبكة نفسها.'
+    ]
+  },
+  {
+    id: 10, isBank: false, unit: 'الوحدة 1 (مراحل التعلم الآلي)',
+    q: 'في أي مرحلة من مراحل بناء نموذج التعلم الآلي يتم تجميع البيانات الخام المرتبطة بالمشكلة من مصادرها المتعددة قبل تنظيفها؟',
+    options: [
+      'جمع البيانات (Data Collection).',
+      'تنظيف البيانات (Data Cleaning).',
+      'تقييم النموذج (Model Evaluation).',
+      'التحسين والتنبؤ (Optimization & Prediction).'
+    ],
+    correct: 0,
+    exp: 'مرحلة جمع البيانات (Data Collection) هي المرحلة الأولى التي يتم فيها تجميع البيانات الخام من مصادرها قبل البدء بتنظيفها وتوحيد تنسيقاتها.',
+    optExps: [
+      'صحيح: جمع البيانات هي المرحلة الأولى لتجميع البيانات الخام.',
+      'خطأ: تنظيف البيانات هي المرحلة الثانية لمعالجة القيم المفقودة وتوحيد التنسيقات.',
+      'خطأ: تقييم النموذج يقيس الدقة ومستوى الخطأ بعد التدريب.',
+      'خطأ: التحسين والتنبؤ هي المرحلة السادسة والأخيرة.'
+    ]
+  },
+  {
+    id: 11, isBank: false, unit: 'الوحدة 1 (مراحل التعلم الآلي)',
+    q: 'ما هي المرحلة التي يتم فيها تحديد واختيار خوارزمية التعلم الآلي الملائمة لطبيعة البيانات والمشكلة المراد حلها؟',
+    options: [
+      'تنظيف البيانات.',
+      'اختيار النموذج (Model Selection).',
+      'جمع البيانات.',
+      'تقييم النموذج.'
+    ],
+    correct: 1,
+    exp: 'في مرحلة اختيار النموذج (Model Selection) يتم اختيار الخوارزمية الرياضية الأنسب لطبيعة البيانات والمشكلة قبل تدريبها.',
+    optExps: [
+      'خطأ: تنظيف البيانات يجهز البيانات ويعالج القيم المفقودة.',
+      'صحيح: اختيار النموذج (Model Selection).',
+      'خطأ: جمع البيانات يختص بتوفير البيانات الخام.',
+      'خطأ: تقييم النموذج يتم بعد انتهاء التدريب لقياس الأداء.'
+    ]
+  },
+  {
+    id: 12, isBank: false, unit: 'الوحدة 1 (التعلم تحت الإشراف)',
+    q: 'أي نوع من التعلم الآلي يعتمد على تدريب النموذج باستخدام بيانات مصنفة (Labeled Data) لها مدخلات ومخرجات صحيحة معروفة مسبقاً (مثل التصنيف والانحدار)؟',
+    options: [
+      'التعلم تحت الإشراف (Supervised Learning).',
+      'التعلم غير الخاضع للإشراف (Unsupervised Learning).',
+      'التعلم المعزز (Reinforcement Learning).',
+      'التعلم بدون بيانات.'
+    ],
+    correct: 0,
+    exp: 'التعلم تحت الإشراف (Supervised Learning) يتعلم من بيانات مصنفة تحتوي على أزواج من المدخلات والمخرجات المحددة مسبقاً.',
+    optExps: [
+      'صحيح: التعلم تحت الإشراف يعتمد على بيانات ذات مخرجات محددة مسبقاً.',
+      'خطأ: غير الخاضع للإشراف يعمل عندما لا تكون هناك مخرجات محددة في البيانات.',
+      'خطأ: التعلم المعزز يعتمد على نظام المكافآت والعقوبات.',
+      'خطأ: التعلم الآلي يعتمد أساساً على البيانات.'
+    ]
+  },
+  {
+    id: 13, isBank: false, unit: 'الوحدة 1 (التعلم المعزز)',
+    q: 'أي نوع من التعلم الآلي يتعلم فيه الوكيل الذكي من خلال التفاعل مع البيئة عبر التجربة والخطأ وتلقي مكافآت أو عقوبات لتعظيم المكافأة التراكمية؟',
+    options: [
+      'التعلم تحت الإشراف.',
+      'التعلم غير الخاضع للإشراف.',
+      'التعلم المعزز (Reinforcement Learning).',
+      'تنظيف البيانات.'
+    ],
+    correct: 2,
+    exp: 'التعلم المعزز (Reinforcement Learning) يقوم على تفاعل الوكيل مع البيئة وتوجيه سلوكه عبر نظام المكافآت والعقوبات.',
+    optExps: [
+      'خطأ: يعتمد على بيانات مصنفة جاهزة.',
+      'خطأ: يكتشف الأنماط والتجمعات في البيانات غير المصنفة.',
+      'صحيح: التعلم المعزز (Reinforcement Learning).',
+      'خطأ: تنظيف البيانات مرحلة لإعداد البيانات.'
+    ]
+  },
+  {
+    id: 14, isBank: false, unit: 'الوحدة 1 (التصنيف مقابل التجميع)',
+    q: 'إلى أي نوع من التعلم الآلي تنتمي خوارزميات التجميع (Clustering مثل K-Means) التي تقسم البيانات إلى مجموعات متشابهة دون وجود تسميات مسبقة؟',
+    options: [
+      'التعلم غير الخاضع للإشراف (Unsupervised Learning).',
+      'التعلم تحت الإشراف (Supervised Learning).',
+      'التعلم المعزز (Reinforcement Learning).',
+      'الشبكات التوليدية التنافسية.'
+    ],
+    correct: 0,
+    exp: 'التجميع (Clustering) هو المثال الأبرز للتعلم غير الخاضع للإشراف لأنه يكتشف الهيكليات والمجموعات المتشابهة في بيانات بدون مخرجات محددة.',
+    optExps: [
+      'صحيح: التجميع ينتمي إلى التعلم غير الخاضع للإشراف.',
+      'خطأ: التعلم تحت الإشراف يشمل التصنيف (Classification) والانحدار (Regression).',
+      'خطأ: التعلم المعزز يختص باتخاذ القرارات المتسلسلة بالمكافآت.',
+      'خطأ: الشبكات التوليدية تختص بتوليد بيانات جديدة.'
+    ]
+  },
+  {
+    id: 15, isBank: false, unit: 'الوحدة 2 (الشبكات التلافيفية CNNs)',
+    q: 'أي نوع من الشبكات العصبية صُمم خصيصاً لمعالجة البيانات المرئية كالصور والفيديو واستخلاص الميزات المكانية (مثل الحواف والأشكال) عبر طبقات الالتفاف؟',
+    options: [
+      'الشبكات العصبية التلافيفية (CNNs).',
+      'الشبكات العصبية المتكررة (RNNs).',
+      'الانحدار الخطي البسيط.',
+      'أشجار القرار.'
+    ],
+    correct: 0,
+    exp: 'الشبكات العصبية التلافيفية (Convolutional Neural Networks - CNNs) هي المعمارية المتخصصة في معالجة الصور والرؤية الحاسوبية.',
+    optExps: [
+      'صحيح: الشبكات العصبية التلافيفية (CNNs).',
+      'خطأ: الشبكات المتكررة (RNNs) متخصصة في البيانات التسلسلية والزمنية.',
+      'خطأ: الانحدار الخطي خوارزمية تقليدية وليست شبكة عصبية.',
+      'خطأ: أشجار القرار خوارزمية تعلم آلي تقليدية.'
+    ]
+  },
+  {
+    id: 16, isBank: false, unit: 'الوحدة 2 (الشبكات المتكررة RNNs)',
+    q: 'ما الذي يميز الشبكات العصبية المتكررة (RNNs) ويجعلها مناسبة لمعالجة البيانات التسلسلية والزمنية مثل الصوت والنصوص؟',
+    options: [
+      'احتواؤها على حلقات تغذية راجعة وذاكرة داخلية تحتفظ بالمعلومات من الخطوات السابقة في التسلسل.',
+      'عدم احتوائها على أي طبقات أو أوزان.',
+      'اعتمادها على تحويل الضوضاء العشوائية إلى صور.',
+      'عملها على البيانات الثابتة غير المتسلسلة فقط.'
+    ],
+    correct: 0,
+    exp: 'تمتلك الشبكات العصبية المتكررة (RNNs) حلقات تكرارية وذاكرة داخلية تمكنها من ربط المدخلات الحالية بما سبقها في التسلسل الزمني.',
+    optExps: [
+      'صحيح: تمتلك حلقات تغذية راجعة وذاكرة داخلية للبيانات التسلسلية.',
+      'خطأ: هي شبكات عصبية تحتوي على طبقات وأوزان.',
+      'خطأ: تحويل الضوضاء إلى صور يخص نماذج الانتشار (Diffusion Models).',
+      'خطأ: هي مصممة خصيصاً للبيانات التسلسلية.'
+    ]
+  },
+  {
+    id: 17, isBank: false, unit: 'الوحدة 3 (الشبكات التوليدية GANs)',
+    q: 'في نماذج الذكاء الاصطناعي التوليدي، أي نموذج يتكون من شبكتين عصبيتين متنافستين هما "المولد" (Generator) و"المميز" (Discriminator)؟',
+    options: [
+      'الشبكات التوليدية التنافسية (GANs).',
+      'نماذج الانتشار (Diffusion Models).',
+      'المشفرات التلقائية المتغيرة (VAEs).',
+      'النماذج التحويلية (Transformers).'
+    ],
+    correct: 0,
+    exp: 'الشبكات التوليدية التنافسية (GANs) تقوم على التنافس بين شبكة المولد التي تنشئ بيانات مزيفة وشبكة المميز التي تحاول كشفها.',
+    optExps: [
+      'صحيح: الشبكات التوليدية التنافسية (GANs).',
+      'خطأ: نماذج الانتشار تعتمد على إزالة الضوضاء تدريجياً خطوة بخطوة.',
+      'خطأ: المشفرات التلقائية المتغيرة تعتمد على المشفر (Encoder) ومفكك التشفير (Decoder).',
+      'خطأ: النماذج التحويلية تعتمد على آلية الانتباه.'
+    ]
+  },
+  {
+    id: 18, isBank: false, unit: 'الوحدة 3 (المشفرات التلقائية المتغيرة VAEs)',
+    q: 'أي من النماذج التوليدية التالية يعتمد على ضغط البيانات المدخلة عبر "مشفر" (Encoder) إلى فضاء كامن احتمالي ثم إعادة بنائها وتوليد عينات جديدة عبر "مفكك تشفير" (Decoder)؟',
+    options: [
+      'المشفرات التلقائية المتغيرة (Variational Autoencoders - VAEs).',
+      'نماذج الانتشار (Diffusion Models).',
+      'شجرة القرار (Decision Tree).',
+      'خوارزمية K-Means.'
+    ],
+    correct: 0,
+    exp: 'المشفرات التلقائية المتغيرة (VAEs) تتكون من مشفر (Encoder) يضغط البيانات ومفكك تشفير (Decoder) يولد عينات جديدة من الفضاء الكامن.',
+    optExps: [
+      'صحيح: المشفرات التلقائية المتغيرة (VAEs).',
+      'خطأ: نماذج الانتشار تعمل بعكس عملية الضوضاء تدريجياً.',
+      'خطأ: شجرة القرار ليست نموذجاً توليدياً عميقاً.',
+      'خطأ: K-Means خوارزمية تجميع غير خاضعة للإشراف.'
+    ]
+  },
+  {
+    id: 19, isBank: false, unit: 'الوحدة 3 (RLHF)',
+    q: 'ماذا يُقصد بتقنية (RLHF) المستخدمة في تطوير وتحسين النماذج اللغوية التوليدية الحديثة؟',
+    options: [
+      'التعلم التعزيزي مع تغذية راجعة من البشر لتوجيه النموذج ومحاذاة مخرجاته مع التفضيلات والقيم البشرية.',
+      'حذف البيانات المفقودة أثناء مرحلة تنظيف البيانات.',
+      'تجميع البيانات غير المصنفة بدون تدخل بشري.',
+      'ضغط الصور باستخدام المشفرات التلقائية.'
+    ],
+    correct: 0,
+    exp: 'يرمز اختصار RLHF إلى (Reinforcement Learning from Human Feedback) أي التعلم التعزيزي مع تغذية راجعة من البشر لتحسين جودة وأمان إجابات النماذج التوليدية.',
+    optExps: [
+      'صحيح: التعلم التعزيزي مع تغذية راجعة من البشر.',
+      'خطأ: هذا يخص مرحلة تنظيف البيانات.',
+      'خطأ: هذا يخص التعلم غير الخاضع للإشراف.',
+      'خطأ: هذا يخص نماذج VAEs.'
+    ]
+  },
+  {
+    id: 20, isBank: false, unit: 'الوحدة 1 (مرحلة التحسين والتنبؤ)',
+    q: 'بعد الانتهاء من تدريب النموذج وتقييم أدائه، في أي مرحلة يتم ضبط المعاملات الفائقة لرفع الكفاءة واستخدام النموذج للتنبؤ على بيانات جديدة؟',
+    options: [
+      'مرحلة التحسين والتنبؤ (Optimization & Prediction).',
+      'مرحلة جمع البيانات (Data Collection).',
+      'مرحلة تنظيف البيانات (Data Cleaning).',
+      'مرحلة اختيار النموذج (Model Selection).'
+    ],
+    correct: 0,
+    exp: 'مرحلة التحسين والتنبؤ هي المرحلة السادسة والأخيرة التي تلي تقييم النموذج، ويتم فيها تحسين أداء النموذج واستخدامه لإجراء التنبؤات.',
+    optExps: [
+      'صحيح: مرحلة التحسين والتنبؤ.',
+      'خطأ: جمع البيانات هي المرحلة الأولى.',
+      'خطأ: تنظيف البيانات هي المرحلة الثانية.',
+      'خطأ: اختيار النموذج هي المرحلة الثالثة.'
+    ]
+  }
+];
 
-// إدارة الاختبار
-let answers = {};
+let userAnswers = {};
+let quizFilter = 'all';
+
 function renderQuiz() {
-  const area = document.getElementById("quizArea");
-  area.innerHTML = "";
-  const letters = ["أ", "ب", "ج", "د"];
-  questions.forEach((item, i) => {
-    const box = document.createElement("div");
-    box.className = "qbox";
-    const isSelfEval = item.q.includes("[سؤال تقييم ذاتي]");
-    const badgeHtml = isSelfEval ? `<div style="margin-bottom:6px"><span class="tag self-eval">★ سؤال تقييم ذاتي في المقرر</span></div>` : "";
-    box.innerHTML = `${badgeHtml}<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
-    const opts = box.querySelector(".options");
-    item.o.forEach((opt, j) => {
-      const btn = document.createElement("button");
-      btn.className = "option";
-      btn.textContent = `${letters[j]}) ${opt}`;
-      btn.onclick = () => {
-        answers[i] = j;
-        [...opts.children].forEach((x, k) => {
-          x.classList.remove("correct", "wrong");
-          x.disabled = true;
-          if (k === item.a) x.classList.add("correct");
-          if (k === j && j !== item.a) x.classList.add("wrong");
-        });
-        const fb = document.getElementById("fb" + i);
-        fb.hidden = false;
-        fb.className = "feedback " + (j === item.a ? "good" : "bad");
-        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
-        updateScore();
-      };
-      opts.appendChild(btn);
-    });
-    area.appendChild(box);
-  });
-  updateScore();
+  const container = document.getElementById('quizContainer');
+  let list = quizData;
+  if (quizFilter === 'bank') list = quizData.filter(q => q.isBank);
+  if (quizFilter === 'wrong') list = quizData.filter(q => userAnswers[q.id] !== undefined && userAnswers[q.id] !== q.correct);
+
+  if (list.length === 0) {
+    container.innerHTML = `<div class="q-card" style="text-align:center;color:var(--text-muted);font-weight:700">لا توجد أسئلة في هذا التصنيف حالياً.</div>`;
+    return;
+  }
+
+  const letters = ['أ', 'ب', 'ج', 'د'];
+  container.innerHTML = list.map((q, idx) => {
+    const ans = userAnswers[q.id];
+    const answered = ans !== undefined;
+    return `
+      <div class="q-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:6px">
+          <span class="unit-pill" style="margin:0">${q.unit}</span>
+          ${q.isBank ? '<span class="exam-tag">سؤال رسمي في بنك الأسئلة</span>' : '<span style="font-size:0.78rem;color:var(--text-muted)">سؤال تدريبي شامل</span>'}
+        </div>
+        <div style="font-weight:800;font-size:1.02rem;margin-bottom:12px;color:var(--indigo-dark)">${idx + 1}. <span dir="auto">${q.q}</span></div>
+        <div>
+          ${q.options.map((opt, oIdx) => {
+            let cls = 'q-opt';
+            if (answered) {
+              if (oIdx === q.correct) cls += ' correct';
+              else if (oIdx === ans && ans !== q.correct) cls += ' wrong';
+            }
+            return `
+              <button class="${cls}" ${answered ? 'disabled' : ''} onclick="selectQuizAns(${q.id}, ${oIdx})">
+                <span><strong>${letters[oIdx]}.</strong> <span dir="auto">${opt}</span></span>
+                <span>${answered ? (oIdx === q.correct ? '✓' : (oIdx === ans ? '✗' : '')) : ''}</span>
+              </button>
+            `;
+          }).join('')}
+        </div>
+        ${answered ? `
+          <div style="margin-top:12px;padding:14px;border-radius:10px;background:rgba(148,163,184,0.08);border-right:4px solid ${ans === q.correct ? '#16a34a' : '#dc2626'}">
+            <div style="font-weight:800;color:${ans === q.correct ? 'var(--good-text)' : 'var(--bad-text)'};margin-bottom:6px">
+              ${ans === q.correct ? 'إجابة صحيحة!' : 'إجابة غير صحيحة — الإجابة الصحيحة هي (' + letters[q.correct] + ')'}
+            </div>
+            <div style="font-size:0.9rem;color:var(--text-body);margin-bottom:8px"><strong>القاعدة من الملزمة:</strong> ${q.exp}</div>
+            <div style="font-size:0.85rem;color:var(--text-body);border-top:1px dashed var(--border-color);padding-top:8px">
+              <strong>تفسير جميع الخيارات:</strong>
+              <ul style="margin:4px 0 0;padding-right:18px">
+                ${q.optExps.map((oe, i) => `<li><strong>(${letters[i]}):</strong> ${oe}</li>`).join('')}
+              </ul>
+            </div>
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }).join('');
+
+  const rightCount = Object.keys(userAnswers).filter(k => {
+    const qObj = quizData.find(x => x.id === Number(k));
+    return qObj && userAnswers[k] === qObj.correct;
+  }).length;
+  document.getElementById('quizScoreBadge').textContent = `النتيجة: ${rightCount} / ${quizData.length}`;
 }
 
-function updateScore() {
-  let correct = 0;
-  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
-  document.getElementById("score").textContent = `النتيجة: ${correct} / ${questions.length}`;
-  document.getElementById("progressBar").style.width = (Object.keys(answers).length / questions.length * 100) + "%";
-}
-
-document.getElementById("resetQuiz").onclick = () => {
-  answers = {};
-  document.getElementById("finalResult").textContent = "";
+function selectQuizAns(qId, oIdx) {
+  userAnswers[qId] = oIdx;
   renderQuiz();
-};
+}
 
-document.getElementById("finishQuiz").onclick = () => {
-  let correct = 0;
-  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
-  const pct = Math.round(correct / questions.length * 100);
-  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${questions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! إتقان كامل للفصل الثالث عشر." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
-};
+function setQuizFilter(f) {
+  quizFilter = f;
+  ['all','bank','wrong'].forEach(k => {
+    const b = document.getElementById('qFilter-' + k);
+    if (b) b.classList.toggle('active', k === f);
+  });
+  renderQuiz();
+}
 
-renderQuiz();
+function resetQuiz() {
+  userAnswers = {};
+  setQuizFilter('all');
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  showPipeStage(0);
+  showModelInfo(0);
+  renderTerms(termsData);
+  renderCard();
+  renderQuiz();
+});
 </script>
 </body>
 </html>
