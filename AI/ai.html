@@ -1,0 +1,3298 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>بنك أسئلة الذكاء الاصطناعي الشامل (147 سؤالاً)</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --surface-subtle: #f1f5f9;
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+  --text-main: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --accent: #3b82f6;
+  --accent-dark: #1d4ed8;
+  --accent-soft: #eff6ff;
+  --correct: #059669;
+  --correct-bg: #ecfdf5;
+  --correct-border: #6ee7b7;
+  --wrong: #e11d48;
+  --wrong-bg: #fff1f2;
+  --wrong-border: #fda4af;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--text-main);
+  font-family: 'Tajawal', -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.7;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  background-color: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+}
+
+.container {
+  max-width: 860px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.header-top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.app-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin: 0;
+  letter-spacing: -0.2px;
+}
+
+.app-subtitle {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.stats-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.stat-pill {
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 6px;
+  background: var(--surface-subtle);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+.stat-pill.correct {
+  background: var(--correct-bg);
+  color: var(--correct);
+  border-color: var(--correct-border);
+}
+
+.stat-pill.wrong {
+  background: var(--wrong-bg);
+  color: var(--wrong);
+  border-color: var(--wrong-border);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+select, .btn-tool {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-strong);
+  background-color: var(--surface);
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+select {
+  flex: 1;
+  min-width: 180px;
+}
+
+select:focus, .btn-tool:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.btn-tool:hover {
+  background-color: var(--surface-subtle);
+}
+
+.btn-tool.active {
+  background-color: var(--text-main);
+  color: #ffffff;
+  border-color: var(--text-main);
+}
+
+.btn-tool.mistakes-btn {
+  color: var(--wrong);
+  border-color: var(--wrong-border);
+  background-color: var(--wrong-bg);
+}
+
+.btn-tool.mistakes-btn.active {
+  background-color: var(--wrong);
+  color: #ffffff;
+  border-color: var(--wrong);
+}
+
+.progress-track {
+  width: 100%;
+  height: 4px;
+  background: var(--surface-subtle);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-top: 14px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  width: 0%;
+  transition: width 0.25s ease;
+}
+
+main {
+  flex: 1;
+  padding: 24px 16px 48px;
+}
+
+.question-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--surface-subtle);
+}
+
+.section-badge {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--accent-dark);
+  background: var(--accent-soft);
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.question-counter {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.question-title {
+  font-size: 1.08rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 16px;
+  line-height: 1.65;
+}
+
+/* Visual Diagrams for 8-Puzzle and Graphs */
+.visual-box {
+  background: var(--surface-subtle);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 18px;
+  text-align: center;
+  direction: ltr;
+}
+
+.puzzle-row-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.puzzle-board-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.puzzle-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  direction: rtl;
+}
+
+.puzzle-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 36px);
+  grid-template-rows: repeat(3, 36px);
+  gap: 3px;
+  background: #334155;
+  padding: 4px;
+  border-radius: 6px;
+}
+
+.puzzle-cell {
+  background: #ffffff;
+  color: #0f172a;
+  font-weight: 800;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+}
+
+.puzzle-cell.empty {
+  background: #cbd5e1;
+}
+
+.options-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.option-btn {
+  width: 100%;
+  text-align: right;
+  padding: 13px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  transition: all 0.15s ease;
+}
+
+.option-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.option-btn:disabled {
+  cursor: default;
+}
+
+.option-btn.correct {
+  background: var(--correct-bg);
+  border-color: var(--correct);
+  color: #065f46;
+}
+
+.option-btn.wrong {
+  background: var(--wrong-bg);
+  border-color: var(--wrong);
+  color: #9f1239;
+}
+
+.option-btn.dimmed {
+  opacity: 0.65;
+}
+
+.opt-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.opt-char {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: var(--surface-subtle);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.option-btn.correct .opt-char {
+  background: var(--correct);
+  color: #ffffff;
+}
+
+.option-btn.wrong .opt-char {
+  background: var(--wrong);
+  color: #ffffff;
+}
+
+.opt-status {
+  font-size: 0.82rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+/* Explanation Panel */
+.explanation-panel {
+  margin-top: 18px;
+  border-radius: 10px;
+  padding: 18px;
+  background: var(--surface-subtle);
+  border: 1px solid var(--border);
+  font-size: 0.92rem;
+}
+
+.exp-header {
+  font-weight: 800;
+  font-size: 0.98rem;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.exp-header.is-correct {
+  color: var(--correct);
+}
+
+.exp-header.is-wrong {
+  color: var(--wrong);
+}
+
+.exp-main-reason {
+  color: var(--text-main);
+  margin-bottom: 14px;
+  line-height: 1.75;
+}
+
+.exp-options-title {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.exp-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.exp-opt-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 0.88rem;
+  line-height: 1.65;
+}
+
+.exp-opt-item.correct-item {
+  border-right: 3px solid var(--correct);
+}
+
+.exp-opt-item.wrong-item {
+  border-right: 3px solid var(--border-strong);
+}
+
+.exp-opt-name {
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.nav-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 1px solid var(--surface-subtle);
+}
+
+.btn-nav {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text-main);
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-nav.primary {
+  background: var(--accent);
+  color: #ffffff;
+  border-color: var(--accent);
+  flex: 1;
+  max-width: 200px;
+}
+
+.btn-nav.primary:hover:not(:disabled) {
+  background: var(--accent-dark);
+}
+
+.btn-nav:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ltr-inline {
+  direction: ltr;
+  display: inline-block;
+  font-family: monospace, sans-serif;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="header-top">
+      <div>
+        <h1 class="app-title">بنك أسئلة الذكاء الاصطناعي الشامل</h1>
+        <div class="app-subtitle">147 سؤالاً من الواجبات والفصول 1–14؛ يشمل أسئلة النسختين وأسئلة الفصل الثامن التي كانت في الملف السابق.</div>
+      </div>
+      <div class="stats-group">
+        <span class="stat-pill" id="statProgress">1 / 147</span>
+        <span class="stat-pill correct" id="statCorrect">صحيحة: 0</span>
+        <span class="stat-pill wrong" id="statWrong">خاطئة: 0</span>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <select id="sectionSelect" onchange="setSection(this.value)">
+        <option value="all">جميع الأسئلة (147 سؤالاً)</option>
+        <option value="hw">أسئلة الواجبات الثلاثة (10 أسئلة)</option>
+        <option value="ch1">الفصل 1: مقدمة في الذكاء الاصطناعي (9 أسئلة)</option>
+        <option value="ch2">الفصل 2: المستحدثات التقنية في الذكاء الاصطناعي (9 أسئلة)</option>
+        <option value="ch3">الفصل 3: وكلاء الذكاء الاصطناعي (9 أسئلة)</option>
+        <option value="ch4">الفصل 4: حل المشكلات عن طريق البحث (9 أسئلة)</option>
+        <option value="ch5">الفصل 5: هياكل البيانات والبحث بأولوية الاتساع (9 أسئلة)</option>
+        <option value="ch6">الفصل 6: البحث بالعمق والأفضل وتسلق التل (9 أسئلة)</option>
+        <option value="ch7">الفصل 7: خوارزمية البحث A* ولغز 8-Puzzle (9 أسئلة)</option>
+        <option value="ch8">الفصل 8: جميع الوحدات المتاحة (10 أسئلة)</option>
+      </select>
+
+      <button class="btn-tool" id="modeToggleBtn" onclick="toggleDisplayMode()">عرض كقائمة</button>
+      <button class="btn-tool mistakes-btn" id="mistakesToggleBtn" onclick="toggleMistakesMode()">مراجعة الأخطاء (<span id="mistakesCounter">0</span>)</button>
+      <button class="btn-tool" onclick="resetAll()">إعادة الضبط</button>
+    </div>
+
+    <div class="progress-track">
+      <div class="progress-fill" id="progressBar"></div>
+    </div>
+  </div>
+</header>
+
+<main class="container" id="mainContainer"></main>
+
+<script>
+// Helper to build 3x3 8-puzzle HTML grid
+function makePuzzleGrid(cells, label) {
+  const gridCells = cells.map(c => `<div class="puzzle-cell ${c === '' ? 'empty' : ''}">${c}</div>`).join('');
+  return `
+    <div class="puzzle-board-group">
+      ${label ? `<div class="puzzle-label">${label}</div>` : ''}
+      <div class="puzzle-grid">${gridCells}</div>
+    </div>
+  `;
+}
+
+const SVG_STATE_GRAPH = `
+<div class="visual-box">
+  <svg viewBox="0 0 420 170" style="max-width:380px;width:100%;height:auto;font-family:sans-serif;font-weight:bold;font-size:13px">
+    <defs>
+      <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1 L 10 5 L 0 9 z" fill="#475569"/>
+      </marker>
+    </defs>
+    <!-- Edges -->
+    <line x1="42" y1="105" x2="122" y2="90" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <line x1="42" y1="108" x2="250" y2="75" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <line x1="38" y1="118" x2="82" y2="142" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <line x1="128" y1="75" x2="72" y2="45" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <line x1="145" y1="76" x2="205" y2="45" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <line x1="152" y1="85" x2="250" y2="72" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <line x1="72" y1="32" x2="115" y2="20" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <line x1="205" y1="32" x2="145" y2="20" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <line x1="262" y1="82" x2="238" y2="105" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <line x1="274" y1="82" x2="310" y2="132" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <line x1="220" y1="115" x2="108" y2="142" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <line x1="225" y1="122" x2="185" y2="145" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <line x1="108" y1="148" x2="160" y2="150" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <line x1="325" y1="132" x2="345" y2="98" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <line x1="342" y1="72" x2="232" y2="38" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <line x1="355" y1="70" x2="375" y2="32" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <!-- Nodes -->
+    <circle cx="28" cy="108" r="15" fill="#fff" stroke="#dc2626" stroke-width="2"/><text x="24" y="113" fill="#dc2626">S</text>
+    <circle cx="60" cy="36" r="14" fill="#fff" stroke="#334155" stroke-width="1.5"/><text x="56" y="41">b</text>
+    <circle cx="130" cy="18" r="14" fill="#fff" stroke="#334155" stroke-width="1.5"/><text x="126" y="23">a</text>
+    <circle cx="218" cy="36" r="14" fill="#fff" stroke="#334155" stroke-width="1.5"/><text x="214" y="41">c</text>
+    <circle cx="138" cy="85" r="14" fill="#fff" stroke="#334155" stroke-width="1.5"/><text x="134" y="90">d</text>
+    <circle cx="266" cy="70" r="14" fill="#fff" stroke="#334155" stroke-width="1.5"/><text x="262" y="75">e</text>
+    <circle cx="232" cy="115" r="14" fill="#fff" stroke="#334155" stroke-width="1.5"/><text x="228" y="120">h</text>
+    <circle cx="94" cy="146" r="14" fill="#fff" stroke="#334155" stroke-width="1.5"/><text x="90" y="150">p</text>
+    <circle cx="174" cy="150" r="14" fill="#fff" stroke="#334155" stroke-width="1.5"/><text x="170" y="154">q</text>
+    <circle cx="320" cy="144" r="14" fill="#fff" stroke="#334155" stroke-width="1.5"/><text x="317" y="148">r</text>
+    <circle cx="350" cy="84" r="14" fill="#fff" stroke="#334155" stroke-width="1.5"/><text x="347" y="89">f</text>
+    <circle cx="380" cy="18" r="15" fill="#fff" stroke="#2563eb" stroke-width="2"/><text x="374" y="23" fill="#2563eb">G</text>
+  </svg>
+</div>
+`;
+
+const PUZZLE_CH7_VISUAL = `
+<div class="visual-box">
+  <div class="puzzle-row-wrap" style="margin-bottom:14px">
+    ${makePuzzleGrid(['1','2','3','4','5','6','7','8',''], 'الحالة الهدف (Goal)')}
+    ${makePuzzleGrid(['1','2','3','','4','6','7','5','8'], 'الحالة الابتدائية: H(n)=3')}
+  </div>
+  <div style="font-size:0.8rem;color:#475569;margin-bottom:10px;direction:rtl;font-weight:700">الحالات الثلاث المتفرعة من الحالة الابتدائية (احسب عدد الأرقام التي ليست في مكانها الصحيح مقارنة بالهدف):</div>
+  <div class="puzzle-row-wrap">
+    ${makePuzzleGrid(['','2','3','1','4','6','7','5','8'], 'الحالة (1)')}
+    ${makePuzzleGrid(['1','2','3','4','','6','7','5','8'], 'الحالة (2)')}
+    ${makePuzzleGrid(['1','2','3','7','4','6','','5','8'], 'الحالة (3)')}
+  </div>
+</div>
+`;
+
+// All 73 questions of Part 1 with varied answer positions and complete option-by-option explanations
+const QUESTIONS_PART1 = [
+  // ==================== الواجبات (1 - 10) ====================
+  {
+    id: 1, sec: "hw", tag: "الواجب الأول • سؤال 1",
+    q: "1. ما هي أهم التحديات الرئيسية التي تواجه تقنيات التعلم العميق عند استخدامها في معالجة البيانات؟",
+    opts: [
+      "القدرة على التعامل مع البيانات البسيطة فقط.",
+      "جودة البيانات المنخفضة، مثل البيانات التي تحتوي على أخطاء وقيم متطرفة، والتي تؤثر على دقة النتائج.",
+      "عدم القدرة على تمييز الصور بشكل صحيح في جميع الحالات.",
+      "عدم وجود تطبيقات عملية لهذه التقنيات في الحياة اليومية."
+    ],
+    ans: 1,
+    mainExp: "تتطلب تقنيات التعلم العميق (Deep Learning) بيانات عالية الجودة لاستخراج نتائج دقيقة؛ فإذا كانت البيانات رديئة وتحتوي على أخطاء وقيم متطرفة (Outliers) وبيانات فوضوية، فلن تعمل الخوارزميات بصورة صحيحة.",
+    optExps: [
+      "خاطئ: التعلم العميق يتميز بقدرته العالية على معالجة البيانات المعقدة وغير المنظمة وليس البسيطة فقط.",
+      "صحيح: الجودة الضعيفة للبيانات (الأخطاء والقيم المتطرفة) هي التحدي الرئيسي المذكور في الفصل الثاني (الوحدة 3) ويجعل علماء البيانات يقضون أغلب وقتهم في تنظيفها.",
+      "خاطئ: التعلم العميق (مثل شبكات CNN وفيسبوك) أثبت كفاءة عالية جداً في تمييز الصور والوجوه.",
+      "خاطئ: للتعلم العميق تطبيقات يومية واسعة مثل التعرف على الوجوه، الترجمة، والقيادة الذاتية."
+    ]
+  },
+  {
+    id: 2, sec: "hw", tag: "الواجب الأول • سؤال 2",
+    q: "2. ما هي أبرز عيوب الوكلاء البسيطة القائمين على القواعد (Simple Reflex Agents) في التعامل مع البيئات؟",
+    opts: [
+      "يمكنهم التعامل مع المستجدات الجديدة بكفاءة.",
+      "يتطلبون بيئة عمل بديلة لأداء وظائفهم بشكل صحيح.",
+      "يعتمد قرارهم على الإدراك الحالي فقط دون الاعتماد على الذاكرة.",
+      "يمكنهم تحديث متطلباتهم بناءً على الروابط والتجارب السابقة."
+    ],
+    ans: 2,
+    mainExp: "الوكيل البسيط القائم على القواعد (Simple Reflex Agent) يعمل بمبدأ (حالة - ردة فعل Condition-Action) ويعتمد على الإدراك الحالي فقط وليس له ذاكرة لتخزين الخبرات السابقة.",
+    optExps: [
+      "خاطئ: الوكيل البسيط قدراته محدودة جداً ولا يتعامل مع المستجدات غير المعرفة في قواعده الثابتة.",
+      "خاطئ: هو يتطلب بيئة عمل معروفة بالكامل (Fully Observable) وليس بيئة بديلة.",
+      "صحيح: أبرز عيوبه أن قراره يعتمد كلياً على حدث الإدراك الحالي فقط ولا يمتلك ذاكرة لتاريخ الأحداث.",
+      "خاطئ: الذي يحدث نموذجه بناءً على المعلومات السابقة هو الوكيل القائم على النموذج (Model-Based Agent) أو الوكيل التكيفي."
+    ]
+  },
+  {
+    id: 3, sec: "hw", tag: "الواجب الأول • سؤال 3",
+    q: "3. أي من المجالات التالية تتركز على تمكين الآلات من فهم وتحليل الصور والفيديوهات؟",
+    opts: [
+      "رؤية الحاسوب (Computer Vision)",
+      "التعلم الآلي (Machine Learning)",
+      "معالجة اللغة الطبيعية (NLP)",
+      "الذكاء الاصطناعي في الألعاب (AI in Gaming)"
+    ],
+    ans: 0,
+    mainExp: "رؤية الحاسوب (Computer Vision) هي المجال المخصص لتمكين الآلات من فهم وتحليل الصور ومقاطع الفيديو مثل التعرف على الوجوه والقيادة الذاتية والفحص الطبي.",
+    optExps: [
+      "صحيح: رؤية الحاسوب (Computer Vision) هي المسؤولة عن معالجة وفهم الصور والفيديوهات.",
+      "خاطئ: التعلم الآلي (Machine Learning) يركز على تعلم الأنماط من البيانات لتحسين الأداء والتنبؤ دون برمجة صريحة.",
+      "خاطئ: معالجة اللغة الطبيعية (NLP) تركز على فهم اللغة البشرية النصية والصوتية (مثل الترجمة وChatGPT).",
+      "خاطئ: الذكاء الاصطناعي في الألعاب يركز على تطوير أنظمة وشخصيات ذكية تتفاعل مع اللاعبين."
+    ]
+  },
+  {
+    id: 4, sec: "hw", tag: "الواجب الثاني • سؤال 1",
+    q: "1. خوارزمية البحث بأولوية العمق (Depth First Search - DFS Algorithm):",
+    opts: [
+      "من خوارزميات البحث المستنير",
+      "من خوارزميات البحث الأعمى",
+      "من خوارزميات القائمة المترابطة",
+      "تعتمد على مخطط ثابت"
+    ],
+    ans: 1,
+    mainExp: "خوارزمية البحث بأولوية العمق (DFS) وخوارزمية البحث بأولوية الاتساع (BFS) تنتميان إلى استراتيجيات البحث الأعمى (Uninformed Search) لأنها تعتمد على تعريف المشكلة فقط ولا تستخدم دالة استدلالية (Heuristic).",
+    optExps: [
+      "خاطئ: البحث المستنير (Informed Search) يشمل خوارزميات (Best-First, A*, Hill Climbing) التي تستخدم دالة استدلال.",
+      "صحيح: خوارزمية DFS هي من خوارزميات البحث الأعمى (غير المستنير Uninformed Search).",
+      "خاطئ: DFS هي خوارزمية بحث في الشجرة/المخطط وتستخدم هيكل المكدس (Stack) وليست قائمة مترابطة.",
+      "خاطئ: لا تصنف بأنها تعتمد على مخطط ثابت."
+    ]
+  },
+  {
+    id: 5, sec: "hw", tag: "الواجب الثاني • سؤال 2",
+    q: "2. إحدى الخصائص الأساسية للوكيل المنطقي (Logical Agent):",
+    opts: [
+      "الذاكرة الطويلة الأمد",
+      "القدرة على تغيير البيئة بشكل دائم",
+      "القدرة على التعلم العميق",
+      "القدرة على الاستشعار من البيئة المحيطة"
+    ],
+    ans: 3,
+    mainExp: "الخصائص الخمس الأساسية للوكيل المنطقي في الفصل الثامن (الوحدة 1) هي: (1) الاستشعار Perception، (2) تمثيل المعرفة Knowledge Representation، (3) الاستدلال Reasoning، (4) اتخاذ القرار Decision Making، و(5) التنفيذ Execution.",
+    optExps: [
+      "خاطئ: الوكيل المنطقي يمتلك قاعدة معرفية (Knowledge Base) وليس ذاكرة طويلة الأمد بهذا المسمى.",
+      "خاطئ: هو يتفاعل مع البيئة وينفذ إجراءات لكن لا يشترط تغييرها بشكل دائم.",
+      "خاطئ: الوكيل المنطقي يعتمد على المنطق والاستدلال الرمزي وليس الشبكات العصبية للتعلم العميق.",
+      "صحيح: الاستشعار (Perception) وتلقي المدخلات من البيئة عبر المستشعرات هي أولى الخصائص الأساسية للوكيل المنطقي."
+    ]
+  },
+  {
+    id: 6, sec: "hw", tag: "الواجب الثاني • سؤال 3",
+    q: "3. تعتبر خوارزمية البحث (A*) من:",
+    opts: [
+      "خوارزميات البحث المستنير",
+      "خوارزميات البحث الأعمى",
+      "خوارزميات القائمة البحثية المترابطة",
+      "الخوارزميات التي تعتمد على مخطط ثابت"
+    ],
+    ans: 0,
+    mainExp: "خوارزمية البحث (A*) هي حالة خاصة من خوارزمية البحث بأولوية الأفضل (Best-First Search) وتعد من أشهر خوارزميات البحث المستنير (Informed Search) لاعتمادها على الدالة الاستدلالية F(n) = G(n) + H(n).",
+    optExps: [
+      "صحيح: خوارزمية A* من خوارزميات البحث المستنير لأنها تستخدم معلومات استدلالية (Heuristic) لتقدير المسافة للهدف.",
+      "خاطئ: البحث الأعمى (مثل BFS و DFS) لا يستخدم دالة استدلالية.",
+      "خاطئ: A* تستخدم هيكل الطابور ذي الأولوية (Priority Queue) وليس القائمة المترابطة.",
+      "خاطئ: A* تتفاعل ديناميكياً مع تكاليف المسارات وقيم الدالة الاستدلالية."
+    ]
+  },
+  {
+    id: 7, sec: "hw", tag: "الواجب الثالث • سؤال 1",
+    q: "1. الاستدلال الخلفي يبدأ من الحقائق المعروفة (الحقائق الحالية) ويستخدم القواعد لاستخلاص استنتاجات جديدة.",
+    opts: [
+      "صح",
+      "خطأ"
+    ],
+    ans: 1,
+    mainExp: "العبارة خاطئة؛ لأن الذي يبدأ من الحقائق المعروفة (الحالية) للوصول إلى استنتاجات جديدة هو الاستدلال الأمامي (Forward Chaining)، بينما الاستدلال الخلفي (Backward Chaining) يبدأ من النتيجة المطلوبة (الهدف) ويعمل بالعكس للوصول إلى الحقائق.",
+    optExps: [
+      "خاطئ: هذا التعريف يخص الاستدلال الأمامي (Forward Chaining) وليس الخلفي.",
+      "صحيح: العبارة خاطئة لأن الاستدلال الخلفي يبدأ من الهدف (النتيجة) رجوعاً إلى الحقائق."
+    ]
+  },
+  {
+    id: 8, sec: "hw", tag: "الواجب الثالث • سؤال 2",
+    q: "2. من أسباب عدم اليقين في الذكاء الاصطناعي التي تجعل البيانات أو النماذج السابقة غير دقيقة أو غير كافية لاتخاذ قرارات جديدة:",
+    opts: [
+      "عدم اكتمال المعلومات",
+      "الغموض",
+      "تغير البيئة",
+      "التعقيد والتفاعل"
+    ],
+    ans: 2,
+    mainExp: "في الفصل الثاني عشر (الوحدة 1)، يُعرّف 'تغير البيئة' بأنه: البيئات الديناميكية قد تتغير بشكل مستمر، مما يجعل البيانات أو النماذج السابقة غير دقيقة أو غير كافية لاتخاذ قرارات جديدة.",
+    optExps: [
+      "خاطئ: عدم اكتمال المعلومات يعني عدم توفر كل المعلومات الضرورية حول الحالة عند اتخاذ القرار.",
+      "خاطئ: الغموض يعني أن البيانات غير واضحة أو مشوشة أو مصاغة لغوياً باحتمالات.",
+      "صحيح: تغير البيئة المستمر هو الذي يجعل البيانات أو النماذج السابقة غير دقيقة أو غير كافية لاتخاذ قرارات جديدة.",
+      "خاطئ: التعقيد والتفاعل يعني تداخل العديد من العوامل في الأنظمة المعقدة مما يصعّب التنبؤ بالنتائج."
+    ]
+  },
+  {
+    id: 9, sec: "hw", tag: "الواجب الثالث • سؤال 3",
+    q: "3. توزيع وتبسيط العبارة ¬(P ∧ Q):",
+    opts: [
+      "¬P ∧ ¬Q",
+      "¬P ∨ ¬Q"
+    ],
+    ans: 1,
+    mainExp: "وفقاً لقانون دي مورغان (De Morgan's Law) في الشكل الشرطي (الفصل 11): عند إدخال علامة النفي (¬) على قوس يحتوي على رابط الاقتران 'و' (∧)، يتوزع النفي على المتغيرين وتنقلب العلامة من (∧) إلى (∨) لتصبح: ¬P ∨ ¬Q.",
+    optExps: [
+      "خاطئ: نسيان قلب علامة (∧) إلى (∨) عند توزيع النفي يعد خطأً شائعاً.",
+      "صحيح: يتوزع النفي على P و Q وتتحول (∧) إلى (∨) فتصبح ¬P ∨ ¬Q."
+    ]
+  },
+  {
+    id: 10, sec: "hw", tag: "الواجب الثالث • سؤال 4",
+    q: "4. تربط بين قضيتين بحيث تكون النتيجة صحيحة فقط إذا كانت كلتاهما صحيحتين:",
+    opts: [
+      "Conjunction, ∧",
+      "Negation, ¬",
+      "Implication, →",
+      "Disjunction, ∨"
+    ],
+    ans: 0,
+    mainExp: "رابط الاقتران (Conjunction ∧ - 'و') هو العامل المنطقي الذي يربط بين قضيتين (P ∧ Q) وتكون نتيجته صحيحة (True) في حالة واحدة فقط وهي أن تكون كلتا القضيتين صحيحتين معاً.",
+    optExps: [
+      "صحيح: الاقتران (Conjunction ∧) يشترط صحة القضيتين معاً لتكون النتيجة صحيحة.",
+      "خاطئ: النفي (Negation ¬) يدخل على قضية واحدة فيعكس قيمتها من صح إلى خطأ والعكس.",
+      "خاطئ: الشرط (Implication →) يعبر عن (إذا كان P فإن Q) ويكون خاطئاً فقط إذا كانت الأولى صحيحة والثانية خاطئة.",
+      "خاطئ: الفصل (Disjunction ∨ - 'أو') يكون صحيحاً إذا كانت إحدى القضيتين على الأقل صحيحة."
+    ]
+  },
+
+  // ==================== الفصل الأول (11 - 19) ====================
+  {
+    id: 11, sec: "ch1", tag: "الفصل 1 • الوحدة 1",
+    q: "(1) ما هي إحدى الخصائص الرئيسية للذكاء الاصطناعي؟",
+    opts: [
+      "القدرة على تكرار المعلومات دون تطبيقها.",
+      "القدرة على التكيف العقلي مع المواقف والمشاكل الحياتية الجديدة.",
+      "القدرة على تجنب التفكير في المشكلات المستقبلية.",
+      "القدرة على الاعتماد فقط على الخبرات السابقة دون التعلم من التجارب الجديدة."
+    ],
+    ans: 1,
+    mainExp: "من المهارات والخصائص الأساسية لمفهوم الذكاء (صفحة 2): القدرة على التفكير، التعلم، التكيف العقلي مع المواقف والمشاكل الحياتية الجديدة، توظيف الخبرات السابقة، وتوقع المشكلات المستقبلية.",
+    optExps: [
+      "خاطئ: الذكاء يعتمد على فهم وتوظيف المعارف لحل المشكلات وليس مجرد التكرار الآلي.",
+      "صحيح: التكيف العقلي مع المواقف والمشاكل الجديدة هو ركيزة أساسية من خصائص الذكاء.",
+      "خاطئ: الذكاء يتميز بالقدرة على التنبؤ وتوقع المشكلات المستقبلية وليس تجنبها.",
+      "خاطئ: الذكاء يجمع بين الاستفادة من الخبرات السابقة واكتساب المعارف الجديدة بالتعلم."
+    ]
+  },
+  {
+    id: 12, sec: "ch1", tag: "الفصل 1 • الوحدة 1",
+    q: "(2) اختر التعريف الصحيح للذكاء الاصطناعي:",
+    opts: [
+      "مجال يركز فقط على تطوير أنظمة حاسوبية لا تعتمد على محاكاة السلوك البشري.",
+      "تطوير برامج حاسوبية لا يمكنها التعلم من البيانات أو تحليلها.",
+      "القدرة على التصرف مثل البشر باستخدام تقنيات قادرة على جمع البيانات وتحليلها للتصرف واتخاذ القرارات بكفاءة وسرعة.",
+      "إنشاء أنظمة غير قادرة على التنبؤ بالمشاكل أو اختيار الحلول المناسبة."
+    ],
+    ans: 2,
+    mainExp: "يُعرّف الذكاء الاصطناعي في الملزمة (صفحة 3) بأنه قدرة الآلة على التصرف مثل البشر أو القيام بأفعال تتطلب ذكاءً بناءً على أنظمة برمجية تجمع البيانات وتحللها للتصرف والتنبؤ واتخاذ القرار بكفاءة وسرعة عالية.",
+    optExps: [
+      "خاطئ: الذكاء الاصطناعي يُعنى أساساً بمحاكاة السلوك البشري وقدراته المعرفية والعقلية.",
+      "خاطئ: جوهر الذكاء الاصطناعي هو التعلم من البيانات وتحليلها.",
+      "صحيح: هذا هو التعريف الشامل والدقيق للذكاء الاصطناعي كما ورد في الفصل الأول.",
+      "خاطئ: أنظمة الذكاء الاصطناعي صُممت خصيصاً للتنبؤ واختيار أفضل الحلول للمشاكل."
+    ]
+  },
+  {
+    id: 13, sec: "ch1", tag: "الفصل 1 • الوحدة 1",
+    q: "(3) ما هو الفرق الرئيسي بين الذكاء الاصطناعي الضيق والذكاء الاصطناعي القوي؟",
+    opts: [
+      "الذكاء الاصطناعي الضيق يمكنه فهم وتحليل جميع المهام التي يقوم بها العقل البشري، بينما الذكاء الاصطناعي القوي مصمم لمهام محددة فقط.",
+      "الذكاء الاصطناعي القوي يمتلك القدرة على فهم وتعلم أي مهمة يمكن للعقل البشري القيام بها، بينما الذكاء الاصطناعي الضيق مخصص لأداء مهام محددة في بيئة معينة.",
+      "الذكاء الاصطناعي الضيق يتجاوز ذكاء البشر في جميع المجالات، بينما الذكاء الاصطناعي القوي يمكنه فقط محاكاة الذكاء البشري.",
+      "الذكاء الاصطناعي القوي لا يزال قيد التجارب والتطوير، بينما الذكاء الاصطناعي الضيق يستخدم في الروبوتات ذات الذكاء المتفوق."
+    ],
+    ans: 1,
+    mainExp: "ينقسم الذكاء الاصطناعي إلى 3 أنواع (صفحة 5-6): (1) الضيق/الضعيف (Narrow/Weak AI): مخصص لأداء وظائف ومهام محددة داخل بيئة محددة، (2) القوي/العام (General/Strong AI): يمتلك القدرة على فهم وتعلم أي مهمة يمكن للعقل البشري القيام بها واتخاذ قرارات مستقلة، و(3) الخارق (Super AI): يتجاوز ذكاء البشر وهو قيد التجارب.",
+    optExps: [
+      "خاطئ: هذا الخيار عكس تعريف الضيق والقوي تماماً.",
+      "صحيح: القوي (العام) يتعلم أي مهمة بشرية ويراكم الخبرات، بينما الضيق مبرمج لمهمة محددة في بيئة محددة.",
+      "خاطئ: الذي يتجاوز ذكاء البشر في جميع المجالات هو الذكاء الاصطناعي الخارق (Super AI) وليس الضيق.",
+      "خاطئ: الذي لا يزال قيد التجارب والتطوير لتجاوز البشر هو الذكاء الخارق (Super AI)."
+    ]
+  },
+  {
+    id: 14, sec: "ch1", tag: "الفصل 1 • الوحدة 2",
+    q: "(1) أي مما يلي من خصائص الذكاء الاصطناعي:",
+    opts: [
+      "القدرة على الإبداع وفهم الأمور المرئية وإدراكها.",
+      "التفاعل مع البشر من خلال فهم لغة الجسد فقط.",
+      "تقديم الدعم والمساعدة بناءً على تعليمات محددة مسبقاً فقط.",
+      "أداء المهام التكرارية بدون الحاجة لأي بيانات أو معطيات."
+    ],
+    ans: 0,
+    mainExp: "في الفصل الأول (الوحدة 2 - صفحة 8)، تشمل خصائص الذكاء الاصطناعي: التفكير والإدراك، اكتساب المعرفة، التعلم، استخدام الخبرات السابقة، التعامل مع المواقف الغامضة، التنبؤ، والإبداع وفهم الأمور المرئية وإدراكها.",
+    optExps: [
+      "صحيح: الإبداع وفهم الأمور المرئية وإدراكها من الخصائص السبع الصريحة للذكاء الاصطناعي في الملزمة.",
+      "خاطئ: الذكاء الاصطناعي يتفاعل عبر النصوص والأصوات والصور والبيانات وليس لغة الجسد فقط.",
+      "خاطئ: الأنظمة الذكية تتعلم وتستنتج وتتكيف ولا تقتصر على تعليمات جامدة مسبقة فقط.",
+      "خاطئ: الذكاء الاصطناعي يعتمد كلياً على البيانات والمعطيات."
+    ]
+  },
+  {
+    id: 15, sec: "ch1", tag: "الفصل 1 • الوحدة 2",
+    q: "(2) أي مما يلي من المميزات الأساسية لبرامج الذكاء الاصطناعي التي تمكنها من التعامل مع المعلومات غير الكاملة أو غير الدقيقة؟",
+    opts: [
+      "قابلية التمثيل التكراري.",
+      "قابلية الاستدلال بالمنطق الرياضي.",
+      "قابلية التعامل مع المعلومات الناقصة.",
+      "قابلية التحقق من البيانات."
+    ],
+    ans: 2,
+    mainExp: "من المميزات الخمس للذكاء الاصطناعي (صفحة 9): 'قابلية التعامل مع المعلومات الناقصة (Uncertainty)' حيث تستطيع برامج الذكاء الاصطناعي إيجاد حلول حتى لو كانت المعلومات غير متوافرة بأكملها.",
+    optExps: [
+      "خاطئ: الميزة الأولى اسمها 'إمكانية تمثيل المعرفة (Knowledge Representation)' وليس التمثيل التكراري.",
+      "خاطئ: قابلية الاستدلال (Inferencing) تعني استنباط الحلول من المعطيات وقوانين المنطق وليست هي المسمى المخصص للمعلومات الناقصة.",
+      "صحيح: قابلية التعامل مع المعلومات الناقصة (Uncertainty) هي الميزة المخصصة لإيجاد حلول في ظل غياب أو نقص البيانات.",
+      "خاطئ: ليست من المميزات الخمس المذكورة في الوحدة."
+    ]
+  },
+  {
+    id: 16, sec: "ch1", tag: "الفصل 1 • الوحدة 2",
+    q: "(3) أي من الخصائص التالية تستخدم لتمثيل المعلومات والمعرفة في برامج الذكاء الاصطناعي؟",
+    opts: [
+      "التصحيح التلقائي أو الذاتي.",
+      "نظام معالجة البيانات.",
+      "الخوارزميات.",
+      "لغة البرمجة."
+    ],
+    ans: 1,
+    mainExp: "في جدول 'خصائص برامج الذكاء الاصطناعي' (صفحة 10-11)، تتوزع الوظائف كالتالي: (نظام معالجة بيانات: يستخدم لتمثيل المعلومات والمعرفة)، (خوارزميات: لرسم طريقة استخدام هذه المعلومات)، (لغة برمجة: لتمثيل كل من المعلومات والخوارزميات في برامج).",
+    optExps: [
+      "خاطئ: التصحيح التلقائي أو الذاتي هو عملية تحسين الأداء وتصحيح الأخطاء ذاتياً.",
+      "صحيح: 'نظام معالجة بيانات' هو العنصر المعرّف نصاً في الملزمة بأنه: 'يستخدم لتمثيل المعلومات والمعرفة'.",
+      "خاطئ: الخوارزميات وظيفتها في الجدول: 'لرسم طريقة استخدام هذه المعلومات'.",
+      "خاطئ: لغة البرمجة وظيفتها في الجدول: 'لتمثيل كل من المعلومات والخوارزميات في برامج'."
+    ]
+  },
+  {
+    id: 17, sec: "ch1", tag: "الفصل 1 • الوحدة 3",
+    q: "(1) أي من المجالات التالية تركز على تمكين الآلات من فهم وتحليل الصور والفيديوهات؟",
+    opts: [
+      "التعلم الآلي (Machine Learning)",
+      "معالجة اللغة الطبيعية (NLP)",
+      "رؤية الحاسوب (Computer Vision)",
+      "الذكاء الاصطناعي في الألعاب (AI in Gaming)"
+    ],
+    ans: 2,
+    mainExp: "رؤية الحاسوب (Computer Vision) تهدف إلى تمكين الآلات من فهم وتحليل الصور والفيديوهات، ومن تطبيقاتها: التعرف على الوجوه، القيادة الذاتية، والفحص الطبي.",
+    optExps: [
+      "خاطئ: التعلم الآلي يركز على خوارزميات التعلم من البيانات والتنبؤ (مثل توصيات المنتجات وكشف الاحتيال).",
+      "خاطئ: معالجة اللغة الطبيعية تركز على فهم اللغة البشرية والتفاعل معها (كالترجمة الآلية والمساعدات الذكية).",
+      "صحيح: رؤية الحاسوب (Computer Vision) هي المجال المسؤول عن فهم وتحليل الصور والفيديوهات.",
+      "خاطئ: الذكاء الاصطناعي في الألعاب يختص بتطوير أنظمة ذكية تتفاعل مع اللاعبين في ألعاب الفيديو والمحاكاة."
+    ]
+  },
+  {
+    id: 18, sec: "ch1", tag: "الفصل 1 • الوحدة 3",
+    q: "(2) أي من التطبيقات التالية يرتبط باستخدام الذكاء الاصطناعي لتحليل كميات هائلة من البيانات واستخلاص الأنماط منها؟",
+    opts: [
+      "التوصيات الشخصية في التجارة الإلكترونية.",
+      "التشخيص الطبي.",
+      "الترجمة الآلية.",
+      "تحليل البيانات الضخمة."
+    ],
+    ans: 3,
+    mainExp: "في صفحة 14 من الملزمة، يُعرّف مجال 'تحليل البيانات الضخمة (Big Data Analytics)' نصاً بأنه: 'استخدام الذكاء الاصطناعي لتحليل كميات هائلة من البيانات واستخلاص الأنماط والرؤى منها' (مثل التسويق الرقمي وتحليل السوق).",
+    optExps: [
+      "خاطئ: التوصيات الشخصية تندرج تحت تطبيقات التعلم الآلي (Machine Learning).",
+      "خاطئ: التشخيص الطبي يندرج تحت تطبيقات الأنظمة الخبيرة والذكاء الاصطناعي في الصحة.",
+      "خاطئ: الترجمة الآلية تندرج تحت تطبيقات معالجة اللغة الطبيعية (NLP).",
+      "صحيح: تحليل البيانات الضخمة (Big Data Analytics) هو المجال المختص بتحليل كميات هائلة من البيانات واستخلاص الأنماط منها."
+    ]
+  },
+  {
+    id: 19, sec: "ch1", tag: "الفصل 1 • الوحدة 3",
+    q: "(3) ما هو المجال الذي أظهرت تقنيات تعلم الآلة قدرات عالية فيه وفقاً للتطورات الأخيرة في الذكاء الاصطناعي؟",
+    opts: [
+      "إدارة الأعمال.",
+      "تحليل البيانات وفهم الأنماط.",
+      "معالجة النصوص.",
+      "التصميم الجرافيكي."
+    ],
+    ans: 1,
+    mainExp: "في فقرة 'تطبيقات الذكاء الاصطناعي' (صفحة 15): تُعد تقنيات تعلم الآلة (وخاصة التعلم العميق) الأكثر استخداماً نظراً لما أظهرته من قدرات عالية في معالجة البيانات، وفهم الأنماط والعلاقات، وإحداث نقلة نوعية في قدرات تحليل البيانات.",
+    optExps: [
+      "خاطئ: إدارة الأعمال مجال تطبيقي عام وليس الوصف التقني لقدرات تعلم الآلة.",
+      "صحيح: تحليل البيانات وفهم الأنماط والعلاقات هو المجال الذي أحدثت فيه تقنيات تعلم الآلة نقلة نوعية.",
+      "خاطئ: معالجة النصوص تختص بها معالجة اللغات الطبيعية (NLP).",
+      "خاطئ: التصميم الجرافيكي لم يُذكر كسبب رئيسي لتفوق خوارزميات تعلم الآلة في هذه الفقرة."
+    ]
+  },
+
+  // ==================== الفصل الثاني (20 - 28) ====================
+  {
+    id: 20, sec: "ch2", tag: "الفصل 2 • الوحدة 1",
+    q: "(1) أي من التقنيات التالية تُعتبر من أبرز المستحدثات التي تؤثر في تطور الذكاء الاصطناعي؟",
+    opts: [
+      "التعلم الآلي التقليدي.",
+      "النماذج القديمة للذكاء الاصطناعي.",
+      "الأتمتة الذكية.",
+      "تقنيات الحوسبة الهرمية."
+    ],
+    ans: 2,
+    mainExp: "من أبرز المستحدثات التقنية السبعة في تطور الذكاء الاصطناعي (صفحة 17): الذكاء التوليدي، التعلم العميق والتعزيزي، الذكاء المفسر، النماذج اللغوية الكبيرة، الذكاء متعدد الوسائط، الأتمتة الذكية (Smart Automation)، والروبوتات الذكية.",
+    optExps: [
+      "خاطئ: المستحدثات تشمل التعلم العميق والتعزيزي المتطور وليس التقليدي.",
+      "خاطئ: النماذج القديمة لا تعد من المستحدثات التقنية (State of the art).",
+      "صحيح: الأتمتة الذكية (Smart Automation) في التصنيع واللوجستيات وسلاسل التوريد من أبرز المستحدثات السبعة.",
+      "خاطئ: الحوسبة الهرمية ليست من المستحدثات المذكورة."
+    ]
+  },
+  {
+    id: 21, sec: "ch2", tag: "الفصل 2 • الوحدة 1",
+    q: "(2) ما هي الخصائص الرئيسية لوكيل الذكاء الاصطناعي المساعد (AI Agent)؟",
+    opts: [
+      "قدرة محدودة على فهم الأوامر والتفاعل فقط عبر النصوص.",
+      "استخدام تقنيات معالجة اللغات الطبيعية لفهم الأوامر الصوتية والنصية والاستجابة لها، وتنفيذ مهام مشابهة لتلك التي يقوم بها البشر.",
+      "عدم التفاعل مع المستخدمين عبر الصوت، بل فقط من خلال واجهات رسومية.",
+      "القدرة على العمل فقط ضمن نطاق محدد من المهام دون القدرة على التوسع."
+    ],
+    ans: 1,
+    mainExp: "يُعرّف الوكيل الذكي المساعد (AI Agent - صفحة 19) بأنه برنامج يعتمد على تقنيات مثل معالجة اللغات الطبيعية (NLP) لفهم الأوامر الصوتية والنصية والاستجابة لها، وتنفيذ العديد من المهام نفسها التي يقوم بها البشر.",
+    optExps: [
+      "خاطئ: هو يفهم الأوامر الصوتية والنصية معاً وقدراته غير محدودة بالنص فقط.",
+      "صحيح: يعتمد على NLP لفهم الأوامر الصوتية والنصية وتنفيذ مهام تحاكي البشر.",
+      "خاطئ: التفاعل الصوتي من أهم ركائز المساعد الذكي.",
+      "خاطئ: سوق وقدرات مساعدي الذكاء الاصطناعي ينمو ويتوسع بسرعة كبيرة."
+    ]
+  },
+  {
+    id: 22, sec: "ch2", tag: "الفصل 2 • الوحدة 1",
+    q: "(3) أي مما يلي من الفوائد الرئيسية لروبوتات الدردشة المعتمدة على الذكاء الاصطناعي (Chatbot)؟",
+    opts: [
+      "تقليل التفاعل مع العملاء وتحجيم الدعم المقدم.",
+      "تقديم تجربة تفاعل غير مخصصة وبدرجة منخفضة من الدقة.",
+      "استخدام تقنيات بسيطة لا تتضمن معالجة اللغات الطبيعية.",
+      "تحسين التفاعل مع العملاء من خلال تقديم دعم دقيق ومخصص وتحليل البيانات."
+    ],
+    ans: 3,
+    mainExp: "روبوتات الدردشة (Chatbots - صفحة 19-20) المدعومة بـ GPT-4 و NLP تقدم خدمة مميزة ودعماً ومساندة وإرشاداً وتحليلاً للبيانات بدرجة عالية من الدقة والطلاقة التي تحاكي التفاعل البشري.",
+    optExps: [
+      "خاطئ: هي تعزز وتوسع التفاعل مع الجماهير ولا تقلله.",
+      "خاطئ: هي تتفاعل بدرجة عالية من الدقة والتخصيص.",
+      "خاطئ: هي مبنية أساساً على تقنيات معالجة اللغات الطبيعية المتقدمة (NLP).",
+      "صحيح: تعمل على تحسين التفاعل مع العملاء وتقديم دعم دقيق ومخصص وتحليل البيانات."
+    ]
+  },
+  {
+    id: 23, sec: "ch2", tag: "الفصل 2 • الوحدة 2",
+    q: "(1) ما هي إحدى الفوائد الرئيسية لمولدات الصوت المدعمة بالذكاء الاصطناعي (Speech Generation)؟",
+    opts: [
+      "تحسين التفاعل مع المحتوى الرقمي من خلال تحويل النص إلى كلام يحاكي البشر.",
+      "تقليل جودة الصوت وتحجيم التخصيص.",
+      "تقليل القدرة على دعم لغات متعددة.",
+      "تقليص إمكانيات تخصيص الأصوات لتناسب احتياجات متنوعة."
+    ],
+    ans: 0,
+    mainExp: "مولدات الصوت (Speech Generation - صفحة 21) تعتمد على NLP وتعمل على تغيير وتحسين الطريقة التي نتفاعل بها مع المحتوى الرقمي عبر إنتاج أصوات نابضة بالحياة وتحويل النص إلى كلام يحاكي النغمات البشرية بدقة مع دعم متعدد اللغات.",
+    optExps: [
+      "صحيح: تحول النص إلى كلام يحاكي النغمات البشرية بدقة وتحسن التفاعل مع المحتوى الرقمي.",
+      "خاطئ: هي تزيد جودة الصوت وتوفر تخصيصاً واسعاً.",
+      "خاطئ: هي تدعم لغات متعددة للوصول إلى جمهور عالمي.",
+      "خاطئ: تقدم مجموعة واسعة من الأصوات القابلة للتخصيص."
+    ]
+  },
+  {
+    id: 24, sec: "ch2", tag: "الفصل 2 • الوحدة 2",
+    q: "(2) ما هي إحدى الفوائد الرئيسية لأدوات الذكاء الاصطناعي في إدارة وسائل التواصل الاجتماعي وتوليد المحتوى الرقمي؟",
+    opts: [
+      "تقليل جودة المحتوى وتحديات التحليل.",
+      "تعزيز القدرة على أتمتة إنشاء المحتوى وتحليل البيانات وتقديم توصيات محتوى مستهدف.",
+      "تقليص استخدام الخوارزميات المتقدمة وتحليل البيانات.",
+      "الحد من قدرة الأدوات على إنتاج محتوى احترافي."
+    ],
+    ans: 1,
+    mainExp: "أدوات توليد المحتوى الرقمي (AI Content Gen - صفحة 22) تستخدم خوارزميات متقدمة لأتمتة العمليات مثل إنشاء المحتوى، مشاركة الجمهور، تحليل البيانات، التحليلات التنبؤية، وتوصيات المحتوى المستهدف دون الحاجة لخبرة مسبقة.",
+    optExps: [
+      "خاطئ: هي ترفع جودة المحتوى وتسهل التحليل.",
+      "صحيح: تقوم بأتمتة إنشاء المحتوى وتحليل البيانات وتقديم توصيات مستهدفة.",
+      "خاطئ: هي تعتمد بشكل أساسي على الخوارزميات المتقدمة.",
+      "خاطئ: هي تساعد على إنتاج محتوى احترافي بسهولة وسرعة."
+    ]
+  },
+  {
+    id: 25, sec: "ch2", tag: "الفصل 2 • الوحدة 2",
+    q: "(3) ما هي أبرز التطبيقات الرئيسية للذكاء الاصطناعي في الطب والرعاية الصحية (AI for Healthcare)؟",
+    opts: [
+      "تحسين جودة الرعاية الصحية من خلال تشخيص الأمراض بشكل متأخر.",
+      "تقليل القدرة على التنبؤ بالأمراض وتحليل البيانات الطبية.",
+      "تطوير الأدوية الجديدة من خلال تحليل البيانات البيولوجية والكيميائية.",
+      "تقليص استخدام الذكاء الاصطناعي في إدارة السجلات الطبية."
+    ],
+    ans: 2,
+    mainExp: "في صفحة 23-24، تشمل تطبيقات الذكاء الاصطناعي في الطب السبعة: (1) التشخيص المبكر والدقيق، (2) تطوير الأدوية عبر تحليل كميات هائلة من البيانات البيولوجية والكيميائية، (3) الطب الشخصي، (4) إدارة السجلات الطبية، (5) مساعدة الأطباء، (6) التنبؤ بالأمراض، و(7) الرعاية الصحية عن بعد.",
+    optExps: [
+      "خاطئ: يهدف إلى التشخيص المبكر والدقيق (كاكتشاف السرطان في مراحله المبكرة) وليس المتأخر.",
+      "خاطئ: هو يعزز القدرة على التنبؤ بالأمراض قبل ظهورها.",
+      "صحيح: تطوير الأدوية الجديدة من خلال تحليل البيانات البيولوجية والكيميائية لاكتشاف مركبات جديدة هو التطبيق الثاني النصي في الملزمة.",
+      "خاطئ: هو يحسّن إدارة السجلات الطبية باستخراج المعلومات وتحليلها."
+    ]
+  },
+  {
+    id: 26, sec: "ch2", tag: "الفصل 2 • الوحدة 3",
+    q: "(1) ما هي أهم التوجهات المستقبلية الرئيسية في الذكاء الاصطناعي التي من المتوقع أن تشهد تطوراً كبيراً في السنوات القادمة؟",
+    opts: [
+      "التركيز على تقليل التعقيد في الشبكات العصبية.",
+      "تطوير تقنيات الذكاء الاصطناعي المخصص لتقديم توصيات مخصصة بناءً على بيانات المستخدم.",
+      "تقليص التكامل بين الذكاء الاصطناعي وإنترنت الأشياء (IoT).",
+      "تقليل الشفافية في النماذج التفسيرية للذكاء الاصطناعي."
+    ],
+    ans: 1,
+    mainExp: "من التوجهات المستقبلية التسعة في صفحة 25-26: تطوير نماذج أعمق وأكثر تعقيداً من الشبكات العصبية، زيادة الشفافية في الذكاء التفسيري، تطوير الذكاء الاصطناعي المخصص للتكيف مع المستخدم الفردي، وزيادة التكامل مع إنترنت الأشياء.",
+    optExps: [
+      "خاطئ: التوجه المستقبلي هو تطوير نماذج أعمق وأكثر تعقيداً وليس تقليلها.",
+      "صحيح: الذكاء الاصطناعي المخصص (الذي يتكيف مع المستخدم الفردي ويتعلم من بياناته لتقديم توصيات مخصصة) هو أحد التوجهات المستقبلية الرئيسية.",
+      "خاطئ: من المتوقع زيادة اندماج وتكامل الذكاء الاصطناعي مع إنترنت الأشياء (IoT).",
+      "خاطئ: التوجه المستقبلي هو زيادة التركيز على الشفافية في الذكاء التفسيري (Explainable AI)."
+    ]
+  },
+  {
+    id: 27, sec: "ch2", tag: "الفصل 2 • الوحدة 3",
+    q: "(2) ما هو التعلم العميق وكيف يميز نفسه عن تقنيات الذكاء الاصطناعي الأخرى؟",
+    opts: [
+      "هو تقنية تعتمد على خوارزميات تقليدية لا تستخدم الشبكات العصبية لمعالجة البيانات.",
+      "هو تقنية تركز على تحليل البيانات البسيطة بدون استخدام الشبكات العصبية.",
+      "هو فرع من تعلم الآلة يعتمد على الشبكات العصبية الاصطناعية لمحاكاة قدرات الدماغ البشري ومعالجة البيانات المعقدة.",
+      "هو نوع من الذكاء الاصطناعي لا يتضمن التعلم من البيانات بل يعتمد فقط على القواعد الثابتة."
+    ],
+    ans: 2,
+    mainExp: "التعلم العميق (Deep Learning - صفحة 27) هو فئة فرعية من تعلم الآلة يعتمد على الشبكات العصبية الاصطناعية العميقة (المستوحاة من بنية القشرة الدماغية وخلايا الدماغ) لمعالجة البيانات المعقدة وغير المنظمة.",
+    optExps: [
+      "خاطئ: التعلم العميق يعتمد كلياً على الشبكات العصبية العميقة.",
+      "خاطئ: تعلم الآلة العادي يعالج البيانات المنظمة البسيطة، بينما التعلم العميق يعالج البيانات المعقدة وغير المنظمة.",
+      "صحيح: هو فرع من تعلم الآلة يستخدم الشبكات العصبية الاصطناعية لمحاكاة الدماغ البشري ومعالجة البيانات المعقدة.",
+      "خاطئ: التعلم العميق يتعلم ذاتياً من كميات ضخمة من البيانات ولا يعتمد على القواعد الثابتة."
+    ]
+  },
+  {
+    id: 28, sec: "ch2", tag: "الفصل 2 • الوحدة 3",
+    q: "(3) ما هي أهم التحديات الرئيسية التي تواجه تقنيات التعلم العميق عند استخدامها في معالجة البيانات؟",
+    opts: [
+      "جودة البيانات المنخفضة، مثل البيانات التي تحتوي على أخطاء وقيم متطرفة، والتي تؤثر على دقة النتائج.",
+      "القدرة على التعامل مع البيانات البسيطة فقط.",
+      "عدم القدرة على تمييز الصور بشكل صحيح في جميع الحالات.",
+      "عدم وجود تطبيقات عملية لهذه التقنيات في الحياة اليومية."
+    ],
+    ans: 0,
+    mainExp: "تتطلب تقنيات التعلم العميق بيانات عالية الجودة (صفحة 29)؛ أما البيانات ذات الجودة الضعيفة التي تحتوي على أخطاء وقيم متطرفة وبيانات فوضوية فإنها تمنع خوارزميات التعلم العميق من العمل بصورة صحيحة.",
+    optExps: [
+      "صحيح: الجودة الضعيفة للبيانات (الأخطاء والقيم المتطرفة) هي التحدي الرئيسي المذكور في نهاية الفصل الثاني.",
+      "خاطئ: التعلم العميق يتعامل مع البيانات الضخمة والمعقدة.",
+      "خاطئ: التعلم العميق متميز جداً في التعرف على الصور والوجوه.",
+      "خاطئ: تطبيقاته منتشرة على نطاق واسع في حياتنا الراهنة."
+    ]
+  },
+
+  // ==================== الفصل الثالث (29 - 37) ====================
+  {
+    id: 29, sec: "ch3", tag: "الفصل 3 • الوحدة 1",
+    q: "(1) يستطيع الوكيل إدراك البيئة التي يكون موجوداً فيها من خلال:",
+    opts: [
+      "المعالجة.",
+      "آليات التنفيذ.",
+      "المستشعرات.",
+      "الخوارزميات."
+    ],
+    ans: 2,
+    mainExp: "في صفحة 30 من الملزمة: الوكيل (Agent) يستطيع إدراك (Percept) البيئة (Environment) التي يكون موجوداً فيها من خلال المستشعرات (Sensors) التي يمتلكها، ثم يتفاعل ويتجاوب بواسطة آليات التنفيذ (Actuators).",
+    optExps: [
+      "خاطئ: المعالجة (Processing) هي العملية الداخلية التي تحدد سلوك الوكيل الذكي.",
+      "خاطئ: آليات التنفيذ (Actuators) هي التي ينفذ بها الوكيل ردة الفعل (Action / Output) في البيئة.",
+      "صحيح: المستشعرات (Sensors) هي الأدوات التي يتلقى بها الوكيل المدخلات ويدرك بها البيئة المحيطة.",
+      "خاطئ: الخوارزميات جزء من برنامج المعالجة الداخلي للوكيل."
+    ]
+  },
+  {
+    id: 30, sec: "ch3", tag: "الفصل 3 • الوحدة 1",
+    q: "(2) أي من النقاط التالية تعبر عن أحد الخصائص الأساسية للوكيل العقلاني (Rational Agent)؟",
+    opts: [
+      "القدرة على تنفيذ مهام محددة مسبقاً دون تغيير.",
+      "القدرة على التعلم من الخبرات السابقة وتحديث السلوك بناءً على معلومات جديدة.",
+      "القدرة على العمل بدون تدخل بشري أو استجابة للبيئة.",
+      "القدرة على اتخاذ القرارات بناءً على العواطف والتفضيلات الشخصية."
+    ],
+    ans: 1,
+    mainExp: "من خصائص الوكيل العقلاني (Rational Agent - صفحة 32): القدرة على التفكير المنطقي، التعلم من الخبرات السابقة والتكيف، تحديث معارفه وسلوكه بناءً على معلومات أو تجارب جديدة، واختيار الإجراء الأمثل الذي يعظم معيار الأداء.",
+    optExps: [
+      "خاطئ: الوكيل العقلاني يتكيف ويحدث سلوكه ولا يقتصر على مهام جامدة دون تغيير.",
+      "صحيح: التعلم من الخبرات السابقة وتحديث المعارف والسلوك بناءً على المعلومات الجديدة من أبرز خصائص الوكيل العقلاني.",
+      "خاطئ: الوكيل العقلاني يدرك بيئته ويستجيب لتغيراتها باستمرار.",
+      "خاطئ: هو يعتمد على التفكير المنطقي والاستدلال الخوارزمي ومعيار الأداء وليس العواطف."
+    ]
+  },
+  {
+    id: 31, sec: "ch3", tag: "الفصل 3 • الوحدة 1",
+    q: "(3) أي من العناصر التالية تحدد سلوك الوكيل الذكي؟",
+    opts: [
+      "الإدراك.",
+      "ردة الفعل.",
+      "المعالجة.",
+      "قواعد المعرفة."
+    ],
+    ans: 2,
+    mainExp: "في صفحة 30 من الملزمة، وُضحت التعريفات الثلاثة نصاً: (الإدراك Percept: البيانات التي يتلقاها الوكيل عن طريق المستشعرات input)، (ردة الفعل Action: الأحداث الصادرة عن الوكيل output)، و(المعالجة Processing: يحدد سلوك الوكيل الذكي).",
+    optExps: [
+      "خاطئ: الإدراك (Percept) هو البيانات المدخلة (Input) التي يتلقاها الوكيل عبر المستشعرات.",
+      "خاطئ: ردة الفعل (Action) هي الأحداث المخرجة (Output) الصادرة عن الوكيل.",
+      "صحيح: المعالجة (Processing) هي التي تحدد سلوك الوكيل الذكي (وتتكون من برامج + خوارزميات + قواعد معرفة).",
+      "خاطئ: قواعد المعرفة هي أحد المكونات الفرعية داخل نظام المعالجة."
+    ]
+  },
+  {
+    id: 32, sec: "ch3", tag: "الفصل 3 • الوحدة 2",
+    q: "(1) أي من الخيارات التالية يمثل الفرق بين البيئة المحددة (Deterministic) والبيئة العشوائية (Stochastic) للوكيل العقلاني؟",
+    opts: [
+      "البيئة المحددة تتطلب تفاعلات تسلسلية، بينما البيئة العشوائية تعتمد على المعلومات العرضية.",
+      "البيئة المحددة تعتمد على الاستجابات العاطفية، بينما البيئة العشوائية تعتمد على الاستجابات المنطقية.",
+      "في البيئة المحددة، يمكن التنبؤ بالحالة التالية بناءً على الحالة الحالية، بينما في البيئة العشوائية تكون الحالة التالية غير معروفة.",
+      "البيئة المحددة تعتمد على معلومات كاملة بينما البيئة العشوائية تعتمد على معلومات جزئية."
+    ],
+    ans: 2,
+    mainExp: "في خواص البيئة المحيطة (صفحة 35): البيئة المحددة (Deterministic) هي التي تكون فيها الحالة التالية معروفة ومحددة بالكامل بناءً على الحالة الحالية وتنفيذ إجراء معين، بينما العشوائية (Stochastic) تكون فيها الحالة التالية غير معروفة.",
+    optExps: [
+      "خاطئ: التفاعلات التسلسلية والعرضية تخص تصنيف (Sequential vs Episodic).",
+      "خاطئ: لا علاقة للاستجابات العاطفية بتصنيف بيئات الوكلاء.",
+      "صحيح: في المحددة تكون الحالة التالية معروفة بناءً على الحالة الحالية والإجراء، وفي العشوائية تكون غير معروفة.",
+      "خاطئ: المعلومات الكاملة والجزئية تخص تصنيف (Fully Observable vs Partially Observable)."
+    ]
+  },
+  {
+    id: 33, sec: "ch3", tag: "الفصل 3 • الوحدة 2",
+    q: "(2) ما العنصر من مكونات PEAS الذي يشير إلى الأدوات التي يستخدمها الوكيل العقلاني لجمع المعلومات من بيئته؟",
+    opts: [
+      "مقياس الأداء (Performance Measure).",
+      "آليات التنفيذ (Actuators).",
+      "البيئة المحيطة (Environment).",
+      "أدوات الاستشعار (Sensors)."
+    ],
+    ans: 3,
+    mainExp: "اختصار (PEAS) يتكون من 4 عناصر (صفحة 34): P = Performance measure (مقياس الأداء)، E = Environment (البيئة المحيطة)، A = Actuators (آليات التنفيذ)، و S = Sensors (أدوات الاستشعار مثل الكاميرات والرادار لجمع المعلومات من البيئة).",
+    optExps: [
+      "خاطئ: مقياس الأداء (P) يحدد معيار نجاح الوكيل (مثل رحلة آمنة وسريعة للتاكسي).",
+      "خاطئ: آليات التنفيذ (A) هي الأدوات التي ينفذ بها الوكيل أفعاله (مثل المقود والفرامل والذراع).",
+      "خاطئ: البيئة المحيطة (E) هي المكان والظروف التي يعمل فيها الوكيل (مثل الطرق والمشاة).",
+      "صحيح: أدوات الاستشعار (Sensors) هي التي يجمع بها الوكيل البيانات والمعلومات من بيئته."
+    ]
+  },
+  {
+    id: 34, sec: "ch3", tag: "الفصل 3 • الوحدة 2",
+    q: "(3) ما الذي يميز البيئة المتغيرة (Dynamic) عن البيئة الثابتة (Static) في سياق الوكلاء العقلانيين؟",
+    opts: [
+      "البيئة المتغيرة تتغير أثناء اتخاذ القرار.",
+      "البيئة الثابتة تتضمن أكثر من وكيل واحد.",
+      "البيئة الثابتة تتغير في وقت متصل.",
+      "البيئة المتغيرة تتيح التفاعلات المتقطعة بين الوكلاء."
+    ],
+    ans: 0,
+    mainExp: "في صفحة 36 من الملزمة: البيئة الثابتة (Static) لا تتغير أثناء قيام الوكيل باتخاذ القرار (مثل لغز الكلمات المتقاطعة أو 8-Puzzle)، بينما البيئة المتغيرة (Dynamic) تتغير أثناء اتخاذ القرار (مثل قيادة التاكسي).",
+    optExps: [
+      "صحيح: البيئة المتغيرة (Dynamic) هي التي تتغير أثناء قيام الوكيل بالتفكير واتخاذ القرار.",
+      "خاطئ: عدد الوكلاء يخص تصنيف (Single Agent vs Multi-Agent).",
+      "خاطئ: البيئة الثابتة لا تتغير أثناء اتخاذ القرار، والوقت المتصل يخص (Continuous).",
+      "خاطئ: التفاعلات المتقطعة تخص تصنيف (Discrete)."
+    ]
+  },
+  {
+    id: 35, sec: "ch3", tag: "الفصل 3 • الوحدة 3",
+    q: "(1) ما هي أبرز عيوب الوكلاء البسيطة القائمين على القواعد (Simple Reflex Agents) في التعامل مع البيئات؟",
+    opts: [
+      "يمكنهم التعامل مع تغييرات البيئة بكفاءة عالية.",
+      "يعتمد قرارهم على الإدراك الحالي فقط دون الاعتماد على الذاكرة.",
+      "يتطلبون بيئة عمل متغيرة لأداء وظائفهم بشكل صحيح.",
+      "يستطيعون تحديث قواعدهم بناءً على التجارب السابقة."
+    ],
+    ans: 1,
+    mainExp: "في صفحة 37-38: الوكيل البسيط القائم على القواعد (Simple Reflex Agent) هو أبسط الأنواع لأنه لا يلجأ إلى تاريخ حوادث الإدراك كاملة وإنما يعتمد على حدث الإدراك الحالي فقط (ليس له ذاكرة)، ويتطلب بيئة معروفة بالكامل.",
+    optExps: [
+      "خاطئ: قدراته محدودة جداً ولا يتعامل مع البيئات غير المرئية بالكامل بكفاءة.",
+      "صحيح: يعتمد قراره بشكل كامل على حدث الإدراك الحالي فقط ولا يمتلك ذاكرة.",
+      "خاطئ: هو يتطلب بيئة معروفة بشكل كامل (Fully Observable).",
+      "خاطئ: قواعده ثابتة (Condition-Action rules) ولا يحدثها بالتجارب."
+    ]
+  },
+  {
+    id: 36, sec: "ch3", tag: "الفصل 3 • الوحدة 3",
+    q: "(2) كيف تعمل الوكلاء القائمة على النموذج (Model-Based Agents) في التعامل مع التغيرات في البيئة المحيطة بها؟",
+    opts: [
+      "تتجاهل الوكلاء القائمة على النموذج التغيرات في البيئة وتعمل وفقاً لبرمجة مسبقة.",
+      "تستخدم الوكلاء القائمة على النموذج الإدراك الحالي فقط لاتخاذ القرارات دون النظر إلى التحديثات.",
+      "تبني الوكلاء القائمة على النموذج نموذجاً داخلياً للبيئة وتحدثه باستمرار بناءً على المستجدات.",
+      "تعتمد الوكلاء القائمة على النموذج على البيانات الماضية فقط دون الحاجة لأي تحديثات جديدة."
+    ],
+    ans: 2,
+    mainExp: "في صفحة 38: الوكلاء القائمة على النموذج (Model-Based Agents) تقوم ببناء نموذج داخلي للبيئة (State)، ومع كل تحديث من المستشعرات يتفاعل مع المعلومات السابقة ليبني تصوراً جديداً عن البيئة يحدد بموجبه ردة الفعل المناسبة.",
+    optExps: [
+      "خاطئ: هي لا تتجاهل تغيرات البيئة بل تتبع كيف يتطور العالم (How the world evolves).",
+      "خاطئ: الذي يعتمد على الإدراك الحالي فقط هو الوكيل البسيط (Simple Reflex).",
+      "صحيح: تبني نموذجاً داخلياً للبيئة وتحدثه باستمرار من خلال دمج المستجدات مع المعلومات السابقة.",
+      "خاطئ: هي تجمع بين المعلومات السابقة والتحديثات الحالية القادمة من المستشعرات."
+    ]
+  },
+  {
+    id: 37, sec: "ch3", tag: "الفصل 3 • الوحدة 3",
+    q: "(3) ما هو الهدف الرئيسي من استخدام الأنظمة متعددة الوكلاء (Multi-Agent Systems)؟",
+    opts: [
+      "تقليل تكلفة الإنتاج من خلال تقليل عدد الوكلاء المشاركين في النظام.",
+      "زيادة تعقيد النظام عن طريق إضافة المزيد من الوكلاء بهدف تحقيق التنسيق بين الوكلاء.",
+      "تطوير نظم تعمل بشكل مستقل دون الحاجة للتواصل بين الوكلاء.",
+      "تحسين التفاعل بين الوكلاء لتحقيق أهداف مشتركة أو متعارضة من خلال التعاون أو التنافس."
+    ],
+    ans: 3,
+    mainExp: "في صفحة 40: الأنظمة متعددة الوكلاء (Multi-Agent Systems) تتكون من عدة وكلاء يتفاعلون ويتعاونون أو يتنافسون داخل بيئة معينة لتحقيق أهداف مشتركة أو متعارضة، مما يتطلب التنسيق والتواصل بينهم.",
+    optExps: [
+      "خاطئ: هي تعتمد على وجود عدة وكلاء وليس تقليل عددهم.",
+      "خاطئ: زيادة التعقيد هي تحدٍ ناتج عن تعدد الوكلاء وليست هي الهدف من استخدامها.",
+      "خاطئ: الأنظمة متعددة الوكلاء تحتاج بشدة إلى التنسيق والتواصل وأخذ أفعال الآخرين في الاعتبار.",
+      "صحيح: تهدف إلى تفاعل عدة وكلاء بالتعاون أو التنافس لتحقيق أهداف مشتركة أو متعارضة."
+    ]
+  },
+
+  // ==================== الفصل الرابع (38 - 46) ====================
+  {
+    id: 38, sec: "ch4", tag: "الفصل 4 • الوحدة 1",
+    q: "(1) الوكلاء القائمون على الهدف (Goal-Based Agents):",
+    opts: [
+      "يعتمدون على تعريف المشكلة فقط.",
+      "يعتمدون على تعريف المشكلة والهدف والإجراءات فقط.",
+      "يعتمدون على دالة استدلالية.",
+      "يعتمدون على تعريف الإجراء فقط."
+    ],
+    ans: 1,
+    mainExp: "في صفحة 41 من الملزمة، يُعرّف الوكلاء القائمون على الهدف (Goal-Based Agents) بأنهم يبحثون عن سلسلة من الإجراءات التي توصل إلى الهدف، ويعتمدون على: 'تعريف المشكلة والهدف والإجراءات فقط'، ولا توجد لديهم معادلات استدلال (خوارزميات بحث أعمى Uninformed Search).",
+    optExps: [
+      "خاطئ: لا يكفي تعريف المشكلة وحده بل لا بد من تحديد الهدف والإجراءات.",
+      "صحيح: يعتمدون على تعريف المشكلة والهدف والإجراءات فقط بدون دالة استدلالية.",
+      "خاطئ: الذي يعتمد على دالة استدلالية (Heuristic) هو الوكيل القائم على المنفعة (Utility-Based Agent).",
+      "خاطئ: تعريف الإجراء وحده غير كافٍ لصياغة المشكلة."
+    ]
+  },
+  {
+    id: 39, sec: "ch4", tag: "الفصل 4 • الوحدة 1",
+    q: "(2) الوكلاء القائمة على المنفعة (Utility-Based Agents):",
+    opts: [
+      "تستخدم خوارزميات بحث أعمى (Uninformed search).",
+      "تعتمد على تعريف المشكلة والهدف والإجراءات فقط.",
+      "يوجد لديها معادلات استدلال (heuristic).",
+      "تعتمد على تعريف الإجراء فقط."
+    ],
+    ans: 2,
+    mainExp: "في صفحة 41: الوكلاء القائمة على المنفعة (Utility-Based Agents) تبحث عن أفضل سلسلة من الإجراءات للوصول إلى الهدف بأعلى كفاءة، ولذلك 'يوجد لديها معادلات استدلال (heuristic)' وتستخدم خوارزميات بحث مستنير (Informed search).",
+    optExps: [
+      "خاطئ: البحث الأعمى يُستخدم مع الوكلاء القائمين على الهدف فقط.",
+      "خاطئ: هي تضيف معادلات الاستدلال (Heuristic) وتقييم المنفعة إلى تعريف المشكلة والهدف.",
+      "صحيح: تتميز بوجود معادلات استدلال (Heuristic) وخوارزميات بحث مستنير لاختيار المسار الأكثر كفاءة.",
+      "خاطئ: لا تقتصر على تعريف الإجراء فقط."
+    ]
+  },
+  {
+    id: 40, sec: "ch4", tag: "الفصل 4 • الوحدة 1",
+    q: "(3) حساب فضاء الحالة (State Space) الخاص بالمكنسة الكهربائية (Vacuum Cleaner) عند تنظيف 4 مواقع:",
+    opts: [
+      "4 × 2⁴",
+      "2 × 4⁴",
+      "4 × 4",
+      "4 × 4⁴"
+    ],
+    ans: 0,
+    mainExp: "وفقاً للقانون الرياضي في صفحة 43 من الملزمة: إذا كان لدينا (n) موقع، وكل موقع له حالتان (نظيف أو غير نظيف = 2)، فإن حجم فضاء الحالة يساوي: n × 2ⁿ. وعند وجود n = 4 مواقع، يكون الحجم: 4 × 2⁴ = 4 × 16 = 64 حالة (وعند موقعين A,B يكون 2 × 2² = 8 حالات).",
+    optExps: [
+      "صحيح: بتطبيق القانون (n × 2ⁿ) على 4 مواقع نحصل على (4 × 2⁴).",
+      "خاطئ: عكس الأساس والأس؛ فعدد الحالات لكل موقع هو 2 مرفوعاً لعدد المواقع 4.",
+      "خاطئ: لا يحسب احتمالات النظافة والاتساخ لكل موقع.",
+      "خاطئ: الأساس هو 2 (نظيف/متسخ) وليس 4."
+    ]
+  },
+  {
+    id: 41, sec: "ch4", tag: "الفصل 4 • الوحدة 2",
+    q: "(1) من خلال فهمك لفضاء الحالة للعبة (8-Puzzle)، حدد مسار الوصول إلى الحالة التالية لما يلي:",
+    visual: `
+      <div class="visual-box">
+        <div class="puzzle-row-wrap">
+          ${makePuzzleGrid(['1','2','3','8','','4','7','6','5'], 'من الحالة الابتدائية')}
+          <div style="font-size:1.4rem;font-weight:bold;color:#3b82f6">⬅️</div>
+          ${makePuzzleGrid(['1','','2','8','4','3','7','6','5'], 'إلى الحالة المطلوبة')}
+        </div>
+      </div>
+    `,
+    opts: [
+      "يمين.",
+      "أعلى - يسار.",
+      "يسار - أعلى - يمين.",
+      "يمين - أعلى."
+    ],
+    ans: 1,
+    mainExp: "بمقارنة اللوحتين (من شجرة البحث صفحة 45 في الملزمة): للوصول إلى اللوحة التي يكون فيها الفراغ في أعلى المنتصف (بين 1 و 2) والرقم 3 تحت الرقم 2 والرقم 4 في الوسط، فإن المسار المعتمد في نموذج البنك هو (أعلى - يسار).",
+    optExps: [
+      "خاطئ: خطوة واحدة يمين لا تنقل الأرقام 2 و 3 و 4 إلى هذه المواقع.",
+      "صحيح: الإجابة المعتمدة في بنك الأسئلة لهذه الحالة هي (أعلى - يسار).",
+      "خاطئ: تحريك الفراغ يساراً أولاً يغير موضع الرقم 8 و 1.",
+      "خاطئ: يمين ثم أعلى يجعل الفراغ في الزاوية العليا اليمنى وليس في المنتصف."
+    ]
+  },
+  {
+    id: 42, sec: "ch4", tag: "الفصل 4 • الوحدة 2",
+    q: "(2) من خلال فهمك لفضاء الحالة للعبة (8-Puzzle)، حدد مسار الوصول إلى الحالة التالية لما يلي:",
+    visual: `
+      <div class="visual-box">
+        <div class="puzzle-row-wrap">
+          ${makePuzzleGrid(['1','2','3','8','','4','7','6','5'], 'من الحالة الابتدائية')}
+          <div style="font-size:1.4rem;font-weight:bold;color:#3b82f6">⬅️</div>
+          ${makePuzzleGrid(['1','2','3','8','6','4','7','5',''], 'إلى الحالة المطلوبة')}
+        </div>
+      </div>
+    `,
+    opts: [
+      "أسفل - يمين - أعلى.",
+      "يسار - أعلى - يمين.",
+      "يمين - أسفل - أعلى.",
+      "أعلى - يمين - أسفل."
+    ],
+    ans: 0,
+    mainExp: "في اللوحة الابتدائية الفراغ في المنتصف وتحته الرقم 6؛ فعند التحرك للأسفل يصعد الرقم 6 للمنتصف، ثم بالتحرك لليمين ينتقل الرقم 5 لليسار ويصبح الفراغ في الزاوية السفلى اليمنى؛ والخيار المعتمد في البنك الذي يبدأ بـ (أسفل - يمين) هو الخيار الأول.",
+    optExps: [
+      "صحيح: يبدأ المسار بالتحرك (أسفل ثم يمين) لتحريك الرقمين 6 و 5 إلى أماكنهما في اللوحة الهدف.",
+      "خاطئ: التحرك يساراً وأعلى يغير الصف العلوي والعمود الأيسر بينما اللوحة المطلوبة لم يتغير فيها الصف العلوي.",
+      "خاطئ: التحرك يميناً أولاً يحرك الرقم 4 من مكانه بينما الرقم 4 بقي ثابتاً في مكانه.",
+      "خاطئ: التحرك أعلى أولاً يحرك الرقم 2 من مكانه بينما الصف الأول (1 2 3) ثابت لم يتغير."
+    ]
+  },
+  {
+    id: 43, sec: "ch4", tag: "الفصل 4 • الوحدة 2",
+    q: "(3) الشكل التالي يمثل (في سياق تمثيل مشكلة البحث في الفصل الرابع):",
+    visual: SVG_STATE_GRAPH,
+    opts: [
+      "Search tree",
+      "State space",
+      "Stack",
+      "Array"
+    ],
+    ans: 1,
+    mainExp: "في صفحة 44 من الملزمة (بعنوان State Space vs Search Tree)، يُسمى هذا المخطط الدائري الذي يربط الحالات من S إلى G بالأسهم بـ 'فضاء الحالة (State Space)'، بينما الشكل الهرمي المتفرع منه بدون حلقات يُسمى 'شجرة البحث (Search Tree)'.",
+    optExps: [
+      "خاطئ: شجرة البحث (Search Tree) تكون مرتبة هرمياً من الجذر S للأسفل بدون أسهم راجعة.",
+      "صحيح: هذا الرسم في الفصل الرابع يمثل فضاء الحالة (State Space) الذي يوضح جميع الحالات والانتقالات بينها.",
+      "خاطئ: المكدس (Stack) هيكل بيانات خطي يعمل بمبدأ LIFO.",
+      "خاطئ: المصفوفة (Array) هيكل بيانات خطي ثابت على شكل جدول."
+    ]
+  },
+  {
+    id: 44, sec: "ch4", tag: "الفصل 4 • الوحدة 3",
+    q: "(1) الفضاء العام / الكلي (State Space):",
+    opts: [
+      "يحتفظ فقط بالتفاصيل اللازمة للتخطيط للحالة التالية.",
+      "يشمل كل التفاصيل الدقيقة للبيئة ويحصر كل الاحتمالات.",
+      "يمثل مستوى متوسطاً من الأحداث.",
+      "يمثل فضاء بعض العينات والاحتمالات."
+    ],
+    ans: 1,
+    mainExp: "في صفحة 48 من الملزمة (مقارنة World Space vs Search State): الفضاء العام / الكلي (State Space) 'يشمل كل التفاصيل الدقيقة للبيئة ويحصر كل الاحتمالات' (مثل 10¹²⁰ في لعبة الشطرنج).",
+    optExps: [
+      "خاطئ: التي تحتفظ فقط بالتفاصيل اللازمة للتخطيط للحالة التالية هي 'حالة البحث (Search State)'.",
+      "صحيح: الفضاء العام/الكلي يشمل كل التفاصيل الدقيقة للبيئة ويحصر جميع الاحتمالات الممكنة.",
+      "خاطئ: هو يحصر كل الاحتمالات بالكامل وليس مستوى متوسطاً.",
+      "خاطئ: هو يشمل الفضاء الكلي وليس بعض العينات فقط."
+    ]
+  },
+  {
+    id: 45, sec: "ch4", tag: "الفصل 4 • الوحدة 3",
+    q: "(2) حالة البحث (Search State):",
+    opts: [
+      "تمثل فضاء بعض العينات والاحتمالات.",
+      "تشمل كل التفاصيل الدقيقة للبيئة وتحصر كل الاحتمالات.",
+      "تحتفظ حالة البحث فقط بالتفاصيل اللازمة للتخطيط للحالة التالية.",
+      "تمثل حالة البحث للفضاء العام."
+    ],
+    ans: 2,
+    mainExp: "في صفحة 48 من الملزمة: 'حالة البحث (Search State) تحتفظ فقط بالتفاصيل اللازمة للتخطيط للحالة التالية' لتبسيط وتسريع عملية البحث.",
+    optExps: [
+      "خاطئ: ليست مجرد عينات عشوائية بل التفاصيل اللازمة للتخطيط.",
+      "خاطئ: هذا تعريف الفضاء العام/الكلي (State Space).",
+      "صحيح: تحتفظ حالة البحث فقط بالتفاصيل اللازمة للتخطيط للحالة التالية.",
+      "خاطئ: هي اختصار للتفاصيل اللازمة وليست الفضاء العام كله."
+    ]
+  },
+  {
+    id: 46, sec: "ch4", tag: "الفصل 4 • الوحدة 3",
+    q: "(3) استراتيجيات البحث المستنيرة (Informed Search):",
+    opts: [
+      "تحدث كل العمليات الحسابية داخل الخوارزمية دون معرفة إضافية.",
+      "تستخدم تعريف المشكلة فقط.",
+      "تتطلب الطرق الاستدلالية تكاليف حسابية / معرفة إضافية تقدر تكلفة المسار الأمثل إلى حالة الهدف.",
+      "تتطلب تعريف المشكلة فقط وتكون أبطأ دائماً."
+    ],
+    ans: 2,
+    mainExp: "في جدول المقارنة بصفحة 49 من الملزمة: استراتيجيات البحث المستنيرة (Informed) تستخدم طريقة استدلالية كمصدر للمعرفة الإضافية، وتتطلب تكاليف حسابية/معرفة إضافية تقدر تكلفة المسار الأمثل إلى حالة الهدف.",
+    optExps: [
+      "خاطئ: هذا ينطبق على استراتيجيات البحث الأعمى (Uninformed).",
+      "خاطئ: التي تستخدم تعريف المشكلة فقط هي استراتيجيات البحث الأعمى.",
+      "صحيح: تعتمد على طرق استدلالية (Heuristics) ومعرفة إضافية لتقدير تكلفة المسار الأمثل نحو الهدف.",
+      "خاطئ: البحث المستنير يكون سريعاً إذا كانت الطريقة الاستدلالية فعالة."
+    ]
+  },
+
+  // ==================== الفصل الخامس (47 - 55) ====================
+  {
+    id: 47, sec: "ch5", tag: "الفصل 5 • الوحدة 1",
+    q: "(1) من هياكل البيانات الثابتة (Static Data Structures):",
+    opts: [
+      "القوائم المترابطة (Linked List).",
+      "المصفوفات (Array).",
+      "المكدس (Stack).",
+      "الملف (File)."
+    ],
+    ans: 1,
+    mainExp: "في صفحة 51 من الملزمة: المصفوفات (Arrays - سواء أحادية البعد أو ثنائية البعد) هي هياكل بيانات ثابتة الحجم (Static)، بينما المكدس (Stack) والطابور (Queue) والقوائم المترابطة هي هياكل بيانات ديناميكية غير ثابتة (Dynamic).",
+    optExps: [
+      "خاطئ: القوائم المترابطة (Linked Lists) ديناميكية تعتمد على المؤشرات (Pointers).",
+      "صحيح: المصفوفات (Arrays) هي هياكل البيانات الثابتة (Static) في الملزمة.",
+      "خاطئ: المكدس (Stack) هيكل بيانات غير ثابت (Dynamic).",
+      "خاطئ: الملف ليس من هياكل البيانات الخطية المصنفة هنا."
+    ]
+  },
+  {
+    id: 48, sec: "ch5", tag: "الفصل 5 • الوحدة 1",
+    q: "(2) يستخدم الأمر (Push) لإضافة عنصر إلى القائمة في:",
+    opts: [
+      "الطابور (Queue).",
+      "المصفوفات (Array).",
+      "المكدس (Stack).",
+      "الملف (File)."
+    ],
+    ans: 2,
+    mainExp: "في صفحة 51 من الملزمة: في هيكل المكدس (Stack)، يُستخدم الأمر (Push) لإضافة عنصر جديد في قمة المكدس، ويُستخدم الأمر (Pop) لحذف عنصر من قمة المكدس.",
+    optExps: [
+      "خاطئ: الطابور يضيف العناصر من الخلف ويخرجها من الأمام بمبدأ FIFO.",
+      "خاطئ: المصفوفة يتم الوصول لعناصرها عبر رقم الفهرس (Index).",
+      "صحيح: المكدس (Stack) هو الذي يستخدم عمليتي Push (إضافة في القمة) و Pop (حذف من القمة).",
+      "خاطئ: الملف لا يستخدم أوامر Push و Pop."
+    ]
+  },
+  {
+    id: 49, sec: "ch5", tag: "الفصل 5 • الوحدة 1",
+    q: "(3) First In First Out (FIFO):",
+    opts: [
+      "مبدأ خروج البيانات من الطابور (Queue).",
+      "مبدأ خروج البيانات من المكدس (Stack).",
+      "مبدأ خروج البيانات من المصفوفة (Array).",
+      "مبدأ خروج البيانات من الملف (File)."
+    ],
+    ans: 0,
+    mainExp: "في صفحة 52 من الملزمة: يعمل الطابور (Queue) بمبدأ (First In First Out - FIFO) أي 'أول عنصر يُضاف هو أول عنصر يخرج'، بينما يعمل المكدس (Stack) بمبدأ (Last In First Out - LIFO).",
+    optExps: [
+      "صحيح: FIFO (أول داخل أول خارج) هو مبدأ عمل الطابور (Queue).",
+      "خاطئ: المكدس (Stack) يعمل بمبدأ LIFO (آخر عنصر يضاف هو أول عنصر يخرج).",
+      "خاطئ: المصفوفة هيكل ثابت لا يعمل بطابور خروج.",
+      "خاطئ: الملف لا يخضع لمبدأ FIFO كأداة بحث."
+    ]
+  },
+  {
+    id: 50, sec: "ch5", tag: "الفصل 5 • الوحدة 2",
+    q: "(1) المخطط (Graph) نوع من هياكل البيانات الخطية يتكون من مجموعة من العقد ترتبط وتتصل بخطوط.",
+    opts: [
+      "صح",
+      "خطأ"
+    ],
+    ans: 1,
+    mainExp: "انتبهي للفخ في كلمة (الخطية)! في صفحة 50 و 53 من الملزمة، المخطط (Graph) والشجرة (Tree) هما من هياكل البيانات 'غير الخطية (Non-Linear Data Structures)' وليست الخطية!",
+    optExps: [
+      "خاطئ: لأن الجملة وصفت المخطط بأنه من هياكل البيانات 'الخطية'، بينما هو 'غير خطي (Non-Linear)'.",
+      "صحيح: العبارة خاطئة؛ لأن المخطط (Graph) نوع من هياكل البيانات غير الخطية (Non-Linear)."
+    ]
+  },
+  {
+    id: 51, sec: "ch5", tag: "الفصل 5 • الوحدة 2",
+    q: "(2) الشجرة (Tree) نوع من هياكل البيانات يتكون من مجموعة من العقد تكون مرتبة هرمياً.",
+    opts: [
+      "صح",
+      "خطأ"
+    ],
+    ans: 0,
+    mainExp: "في صفحة 53 من الملزمة: 'الشجرة (Tree) نوع من هياكل البيانات غير الخطية ويتكون من مجموعة من العقد تكون مرتبة هرمياً (من المستوى 0 الجذر ثم المستوى 1 ثم 2 وهكذا)'.",
+    optExps: [
+      "صحيح: العبارة مطابقة تماماً لتعريف الشجرة في الملزمة بأن عقدها مرتبة بشكل هرمي.",
+      "خاطئ: العبارة صحيحة تماماً."
+    ]
+  },
+  {
+    id: 52, sec: "ch5", tag: "الفصل 5 • الوحدة 2",
+    q: "(3) الشكل التالي يمثل (في تصنيف هياكل البيانات غير الخطية بالفصل الخامس):",
+    visual: SVG_STATE_GRAPH,
+    opts: [
+      "Tree",
+      "Graph",
+      "Stack",
+      "Array"
+    ],
+    ans: 1,
+    mainExp: "في صفحة 53 و 54 من الملزمة، يُصنف هذا الشكل ضمن هياكل البيانات غير الخطية على أنه مخطط موجه (Directed Graph) يتكون من عقد متصلة بأسهم.",
+    optExps: [
+      "خاطئ: الشجرة (Tree) تكون مرتبة في مستويات هرمية بدون مسارات متداخلة أو حلقات.",
+      "صحيح: يمثل هذا الشكل هيكل البيانات المخطط (Graph).",
+      "خاطئ: المكدس (Stack) هيكل بيانات خطي.",
+      "خاطئ: المصفوفة (Array) هيكل بيانات خطي."
+    ]
+  },
+  {
+    id: 53, sec: "ch5", tag: "الفصل 5 • الوحدة 3",
+    q: "(1) خوارزمية البحث بأولوية الاتساع (Breadth First Search - BFS Algorithm):",
+    opts: [
+      "من خوارزميات البحث المستنير.",
+      "من خوارزميات البحث الأعمى.",
+      "من خوارزميات القائمة المترابطة.",
+      "تعتمد على مخطط ثابت."
+    ],
+    ans: 1,
+    mainExp: "في صفحة 50 و 55: خوارزمية البحث بأولوية الاتساع (Breadth First Search - BFS) هي من استراتيجيات البحث الأعمى (Uninformed Search) التي تفحص الشجرة مستوىً تلو الآخر دون استخدام دالة استدلالية.",
+    optExps: [
+      "خاطئ: البحث المستنير يستخدم دالة استدلالية (مثل Best-First و A*).",
+      "صحيح: خوارزمية البحث بأولوية الاتساع (BFS) من خوارزميات البحث الأعمى.",
+      "خاطئ: هي تستخدم هيكل الطابور (Queue) وليس القائمة المترابطة.",
+      "خاطئ: لا تصنف بأنها تعتمد على مخطط ثابت."
+    ]
+  },
+  {
+    id: 54, sec: "ch5", tag: "الفصل 5 • الوحدة 3",
+    q: "(2) خوارزمية البحث بأولوية الاتساع (Breadth First Search - BFS Algorithm):",
+    opts: [
+      "تعتمد على هيكلة البيانات المصفوفة الأحادية.",
+      "تعتمد على هيكلة البيانات القائمة.",
+      "تستخدم هيكل البيانات الطابور (Queue).",
+      "لا تستخدم هيكلة بيانات."
+    ],
+    ans: 2,
+    mainExp: "في صفحة 55 و 65 من الملزمة: تستخدم خوارزمية البحث بأولوية الاتساع (BFS) هيكلة البيانات 'الطابور (Queue - FIFO)' لتتبع مسار إيجاد الهدف وفحص جميع عقد المستوى الحالي قبل الانتقال للمستوى التالي.",
+    optExps: [
+      "خاطئ: لا تستخدم المصفوفة الأحادية الثابتة.",
+      "خاطئ: الهيكل المحدد لها في الملزمة هو الطابور (Queue).",
+      "صحيح: تستخدم BFS هيكل البيانات الطابور (Queue) العادي، بينما DFS تستخدم المكدس (Stack)، و Best-First/A* تستخدم طابور الأولوية (Priority Queue).",
+      "خاطئ: لا بد لها من هيكل الطابور لحفظ العقد المنتظرة للفحص."
+    ]
+  },
+  {
+    id: 55, sec: "ch5", tag: "الفصل 5 • الوحدة 3",
+    q: "(3) خوارزمية البحث بأولوية الاتساع (Breadth First Search - BFS Algorithm):",
+    opts: [
+      "لإيجاد الحل تتطلب استخدام تعريف المشكلة فقط.",
+      "تتطلب معلومات إضافية على الحواف للتحرك.",
+      "الأولوية بالتحرك بالعمق إلى الأبناء أولاً.",
+      "يتم التحرك في البحث عن الهدف بطريقة عشوائية."
+    ],
+    ans: 0,
+    mainExp: "بما أن خوارزمية (Breadth First Search) من خوارزميات البحث الأعمى (صفحة 49)، فإنها 'تتطلب تعريف المشكلة فقط' ولا تحتاج إلى معلومات إضافية أو دوال استدلالية، وتتحرك أفقياً باتجاه الأشقاء (المستوى) أولاً.",
+    optExps: [
+      "صحيح: لأنها بحث أعمى، فإنها تتطلب استخدام تعريف المشكلة فقط لإيجاد الحل.",
+      "خاطئ: المعلومات الإضافية والأوزان تُستخدم في خوارزميات البحث المستنير.",
+      "خاطئ: التحرك بالعمق إلى الأبناء أولاً هو مبدأ خوارزمية (DFS) وليس (BFS).",
+      "خاطئ: تحركها منظم جداً (مستوى بمستوى من اليسار لليمين) وليس عشوائياً."
+    ]
+  },
+
+  // ==================== الفصل السادس (56 - 64) ====================
+  {
+    id: 56, sec: "ch6", tag: "الفصل 6 • الوحدة 1",
+    q: "(1) خوارزمية البحث بأولوية العمق (Depth First Search - DFS Algorithm):",
+    opts: [
+      "من خوارزميات البحث المستنير.",
+      "من خوارزميات البحث الأعمى.",
+      "من خوارزميات القائمة المترابطة.",
+      "تعتمد على مخطط ثابت."
+    ],
+    ans: 1,
+    mainExp: "خوارزمية البحث بأولوية العمق (DFS) من استراتيجيات البحث الأعمى (Uninformed Search) لأنها تتعمق في فروع الشجرة دون أي معلومات استدلالية عن مكان الهدف.",
+    optExps: [
+      "خاطئ: لا تستخدم دالة استدلالية (Heuristic).",
+      "صحيح: DFS من خوارزميات البحث الأعمى.",
+      "خاطئ: تستخدم المكدس (Stack).",
+      "خاطئ: وصف غير صحيح."
+    ]
+  },
+  {
+    id: 57, sec: "ch6", tag: "الفصل 6 • الوحدة 1",
+    q: "(2) خوارزمية البحث بأولوية العمق (Depth First Search - DFS Algorithm):",
+    opts: [
+      "تعتمد على هيكلة البيانات المصفوفة الأحادية.",
+      "تعتمد على هيكلة البيانات المكدس (Stack).",
+      "تستخدم هيكل البيانات الطابور (Queue).",
+      "لا تستخدم هيكلة بيانات."
+    ],
+    ans: 1,
+    mainExp: "في صفحة 59 و 65 من الملزمة: تستخدم خوارزمية البحث بأولوية العمق (DFS) هيكلة البيانات 'المكدس (Stack - LIFO)'، فعند الوصول لعقدة ورقية ليس لها أبناء تُحذف من المكدس (Pop) للرجوع للعقدة السابقة.",
+    optExps: [
+      "خاطئ: لا تعتمد على المصفوفة الأحادية.",
+      "صحيح: تستخدم DFS هيكل البيانات المكدس (Stack).",
+      "خاطئ: الطابور (Queue) يُستخدم في خوارزمية الاتساع (BFS).",
+      "خاطئ: تحتاج للمكدس لتتبع المسار والرجوع عند النهايات المسدودة."
+    ]
+  },
+  {
+    id: 58, sec: "ch6", tag: "الفصل 6 • الوحدة 1",
+    q: "(3) خوارزمية البحث بأولوية العمق (Depth First Search - DFS Algorithm):",
+    opts: [
+      "لإيجاد الحل لا تتطلب استخدام تعريف المشكلة فقط.",
+      "تتطلب معلومات إضافية على الحواف للتحرك.",
+      "الأولوية بالتحرك بالعمق إلى الأبناء أولاً.",
+      "يتم التحرك في البحث عن الهدف بطريقة عشوائية."
+    ],
+    ans: 2,
+    mainExp: "في صفحة 59 و 65 من الملزمة: في خوارزمية (DFS) نبدأ من الجذر ويتم التوسع والفحص من خلال عقد الأبناء (عمقاً) أولاً حتى نصل إلى العقدة الأعمق قبل الانتقال إلى الأشقاء في المستوى.",
+    optExps: [
+      "خاطئ: هي تتطلب تعريف المشكلة فقط لأنها بحث أعمى.",
+      "خاطئ: لا تستخدم أوزاناً أو معلومات استدلالية على الحواف.",
+      "صحيح: الأولوية في DFS هي التحرك بالعمق نحو الأبناء أولاً قبل الانتقال للأشقاء.",
+      "خاطئ: تتحرك بشكل منهجي تكراري بالعمق وليس عشوائياً."
+    ]
+  },
+  {
+    id: 59, sec: "ch6", tag: "الفصل 6 • الوحدة 2",
+    q: "(1) خوارزمية البحث تسلق التل (Hill Climbing Algorithm):",
+    opts: [
+      "من خوارزميات البحث المستنير.",
+      "من خوارزميات البحث الأعمى.",
+      "من خوارزميات القائمة المترابطة.",
+      "تعتمد على مخطط ثابت."
+    ],
+    ans: 0,
+    mainExp: "في صفحة 49 و 66 من الملزمة: خوارزمية تسلق التل (Hill Climbing) وخوارزمية بأولوية الأفضل (Best-First) وخوارزمية (A*) كلها من خوارزميات البحث المستنير (Informed Search Algorithms) التي تستخدم دالة استدلالية.",
+    optExps: [
+      "صحيح: خوارزمية تسلق التل (Hill Climbing) من خوارزميات البحث المستنير.",
+      "خاطئ: البحث الأعمى يشمل BFS و DFS فقط في المنهج.",
+      "خاطئ: لا تصنف كقائمة مترابطة.",
+      "خاطئ: تعتمد على تقييم دالة الهدف/الاستدلال للحالات المجاورة."
+    ]
+  },
+  {
+    id: 60, sec: "ch6", tag: "الفصل 6 • الوحدة 2",
+    q: "(2) خوارزمية البحث بأولوية الأفضل (Best First Search - BFS Algorithm):",
+    opts: [
+      "تعتمد على هيكلة البيانات المصفوفة الأحادية.",
+      "تعتمد على هيكلة البيانات المكدس.",
+      "تستخدم هيكل البيانات الطابور بخاصية الأولوية (Priority Queue).",
+      "لا تستخدم هيكلة بيانات."
+    ],
+    ans: 2,
+    mainExp: "في صفحة 67 من الملزمة: تستخدم خوارزمية البحث بأولوية الأفضل (Best First Search) هيكلة البيانات 'الطابور بالأولوية (Priority Queue)' حيث يتم ترتيب العقد المضافة في الطابور حسب الأقل تكلفة/مسافة استدلالية أولاً.",
+    optExps: [
+      "خاطئ: لا تستخدم المصفوفة العادية.",
+      "خاطئ: المكدس خاص بخوارزمية العمق (DFS).",
+      "صحيح: تستخدم الطابور بالأولوية (Priority Queue) لترتيب العقد بحيث تؤخذ العقدة الأفضل (الأقل تكلفة) أولاً.",
+      "خاطئ: تحتاج لطابور الأولوية لحفظ وترتيب العقد."
+    ]
+  },
+  {
+    id: 61, sec: "ch6", tag: "الفصل 6 • الوحدة 2",
+    q: "(3) خوارزمية البحث بأولوية الأفضل (Best First Search - BFS Algorithm):",
+    opts: [
+      "لإيجاد الحل تتطلب استخدام تعريف المشكلة فقط بدون دالة استدلال.",
+      "تتحرك من عقدة إلى عقدة بفحص دالة الاستدلال (أقصر مسافة أو تكلفة) للانتقال إلى العقدة التالية.",
+      "الأولوية بالتحرك بالعمق إلى الأبناء أولاً بغض النظر عن التكلفة.",
+      "يتم التحرك في البحث عن الهدف بطريقة عشوائية."
+    ],
+    ans: 1,
+    mainExp: "في صفحة 66 من الملزمة: تعمل خوارزمية البحث بأولوية الأفضل (Best First Search) على معالجة عقدة واحدة في كل مرة وتتحرك من عقدة إلى عقدة بفحص دالة الاستدلال (أقصر مسافة أو أقل تكلفة) للانتقال إلى العقدة التالية.",
+    optExps: [
+      "خاطئ: هي بحث مستنير يتطلب دالة استدلالية إضافية.",
+      "صحيح: تنتقل للعقدة التالية بناءً على فحص دالة الاستدلال واختيار أقصر مسافة أو أقل تكلفة.",
+      "خاطئ: هذا وصف خوارزمية العمق (DFS).",
+      "خاطئ: تحركها موجه بدالة الاستدلال وليس عشوائياً."
+    ]
+  },
+  {
+    id: 62, sec: "ch6", tag: "الفصل 6 • الوحدة 3",
+    q: "(1) خوارزمية البحث تسلق التل (Hill Climbing):",
+    opts: [
+      "تعتمد على البحث عن الحل الأفضل من الحل الحالي من الحلول المجاورة.",
+      "تعتمد البحث في العمق بغض النظر عن المستوى أو القيمة.",
+      "تفحص المستوى تلو الآخر للوصول للحل الأفضل.",
+      "تفحص الأفرع البعيدة قبل الأشقاء المجاورين."
+    ],
+    ans: 0,
+    mainExp: "في صفحة 72 من الملزمة: تعمل خوارزمية تسلق التل (Hill Climbing Algorithm) من خلال البحث دائماً عن وضع وحل أفضل من الحل الحالي من بين الحلول المجاورة مباشرة.",
+    optExps: [
+      "صحيح: تبحث عن الحل الأفضل من الحل الحالي من بين الحلول المجاورة.",
+      "خاطئ: هي لا تتعمق إلا إذا كانت العقدة المجاورة أفضل من الحالية.",
+      "خاطئ: فحص المستوى تلو الآخر هو عمل خوارزمية الاتساع (BFS).",
+      "خاطئ: هي تنظر فقط للحلول المجاورة للمكان الحالي."
+    ]
+  },
+  {
+    id: 63, sec: "ch6", tag: "الفصل 6 • الوحدة 3",
+    q: "(2) من مشاكل خوارزمية البحث تسلق التل (Hill Climbing):",
+    opts: [
+      "لإيجاد الحل لا تتطلب استخدام تعريف المشكلة فقط.",
+      "لا يوجد رجوع للخلف في مخطط البحث.",
+      "الأولوية بالتحرك بالمستوى ثم إلى الأبناء أولاً.",
+      "يتم التحرك في البحث عن الهدف بطريقة عشوائية."
+    ],
+    ans: 1,
+    mainExp: "في صفحة 72 من الملزمة: من أبرز قيود ومشاكل خوارزمية تسلق التل أنه 'لا يوجد رجوع للخلف، دائماً نتجه للأمام' لأنها لا تحتفظ بتاريخ البحث، مما يجعلها تعلق في القمم المحلية (Local Maxima) أو المناطق المسطحة (Flat Local).",
+    optExps: [
+      "خاطئ: هذه ميزة البحث المستنير وليست مشكلة.",
+      "صحيح: عدم وجود رجوع للخلف (No Backtracking) في مخطط البحث هو من أبرز مشاكلها.",
+      "خاطئ: لا تتحرك بأولوية المستوى.",
+      "خاطئ: تتحرك نحو الجار الأفضل وليس عشوائياً."
+    ]
+  },
+  {
+    id: 64, sec: "ch6", tag: "الفصل 6 • الوحدة 3",
+    q: "(3) في فضاء خوارزمية تسلق التل (Hill Climbing):",
+    opts: [
+      "Local Max: أعلى نقطة بالنقاط المجاورة، وهي الحل الأفضل المطلق.",
+      "Flat Local: كل الحلول المجاورة متساوية ويوجد حل أفضل في المنتصف.",
+      "Global max: أفضل حل (القمة).",
+      "Shoulder: كل الحلول المتساوية أرض مسطحة والتوقف النهائي."
+    ],
+    ans: 2,
+    mainExp: "في صفحة 74 من الملزمة، وُضحت المصطلحات الأربعة لفضاء تسلق التل نصاً: (Global max: أفضل حل القمة)، (Local Max: أعلى نقطة بالنقاط المجاورة، ليس الحل الأفضل - مشكلة)، (Flat Local: كل الحلول المجاورة متساوية، لا يوجد حل أفضل - مشكلة)، و(Shoulder: أرض مسطحة ولكن بنهايتها ممكن إيجاد حل أفضل أو أسوأ).",
+    optExps: [
+      "خاطئ: القمة المحلية (Local Max) ليست الحل الأفضل المطلق بل هي مشكلة توقف الخوارزمية دون الوصول للقمة العالمية.",
+      "خاطئ: في الـ Flat Local لا يوجد حل أفضل مجاور فتتوقف الخوارزمية كمشكلة.",
+      "صحيح: القمة العالمية (Global max) هي أفضل حل في فضاء البحث بالكامل.",
+      "خاطئ: في الكتف (Shoulder) يمكن بنهاية الأرض المسطحة إيجاد حل أفضل للاستمرار في الصعود."
+    ]
+  },
+
+  // ==================== الفصل السابع (65 - 73) ====================
+  {
+    id: 65, sec: "ch7", tag: "الفصل 7 • الوحدة 1",
+    q: "(1) تعتبر خوارزمية البحث (A*) من:",
+    opts: [
+      "خوارزميات البحث المستنير.",
+      "خوارزميات البحث الأعمى.",
+      "خوارزميات القائمة البحثية المترابطة.",
+      "الخوارزميات التي تعتمد على مخطط ثابت."
+    ],
+    ans: 0,
+    mainExp: "في صفحة 75 من الملزمة: تعتبر خوارزمية البحث (A*) حالة من خوارزمية البحث بأولوية الأفضل (Best-First Search) وتعتمد دالة استدلالية (Heuristic Function)؛ لذا فهي من خوارزميات البحث المستنير.",
+    optExps: [
+      "صحيح: خوارزمية A* من خوارزميات البحث المستنير (Informed Search).",
+      "خاطئ: البحث الأعمى لا يستخدم دالة استدلالية.",
+      "خاطئ: تستخدم طابور الأولوية (Priority Queue).",
+      "خاطئ: لا تصنف كمخطط ثابت."
+    ]
+  },
+  {
+    id: 66, sec: "ch7", tag: "الفصل 7 • الوحدة 1",
+    q: "(2) خوارزمية البحث (A*):",
+    opts: [
+      "تعتمد على هيكلة البيانات المصفوفة الأحادية (Array).",
+      "تعتمد على هيكلة البيانات المكدس (Stack).",
+      "تستخدم هيكل البيانات الطابور بالأولوية (Priority Queue).",
+      "لا تستخدم هيكلة بيانات."
+    ],
+    ans: 2,
+    mainExp: "في صفحة 76 من الملزمة (مبدأ عمل A*): تستخدم هيكلة البيانات 'طابور بأولوية (Priority Queue)' لترتيب العقد واختيار أفضل مسار وهو صاحب أقل قيمة F(n) = G(n) + H(n).",
+    optExps: [
+      "خاطئ: لا تعتمد على المصفوفة الأحادية.",
+      "خاطئ: المكدس (Stack) خاص بخوارزمية العمق (DFS).",
+      "صحيح: تستخدم A* هيكل البيانات الطابور بالأولوية (Priority Queue).",
+      "خاطئ: تحتاج لطابور الأولوية لترتيب العقد المفتوحة حسب قيمة F(n)."
+    ]
+  },
+  {
+    id: 67, sec: "ch7", tag: "الفصل 7 • الوحدة 1",
+    q: "(3) في خوارزمية البحث (A*)، الدالة الاستدلالية H(n) تستخدم:",
+    opts: [
+      "لتقدير قرب العقدة (Node) الحالية إلى العقدة الهدف (Goal Node).",
+      "لكي تتطلب معلومات إضافية لرسم شجرة البحث.",
+      "لإبعاد العقد عن بعضها البعض.",
+      "لرسم شجرة البحث فقط."
+    ],
+    ans: 0,
+    mainExp: "في صفحة 75 من الملزمة: 'الدالة الاستدلالية (Heuristic Function) تستخدم لتقدير قرب العقدة (Node) الحالية إلى العقدة الهدف (Goal Node)'، بينما G(n) هي التكلفة الفعلية من عقدة البداية S إلى العقدة n.",
+    optExps: [
+      "صحيح: تُستخدم الدالة الاستدلالية لتقدير مدى قرب العقدة الحالية من العقدة الهدف.",
+      "خاطئ: وظيفتها تقدير المسافة المتبقية للهدف وليس رسم الشجرة.",
+      "خاطئ: لا تُستخدم لإبعاد العقد.",
+      "خاطئ: شجرة البحث يمكن رسمها بدون دالة استدلالية كما في البحث الأعمى."
+    ]
+  },
+  {
+    id: 68, sec: "ch7", tag: "الفصل 7 • الوحدة 2",
+    q: "(1) في حل مشكلة اللغز (8-Puzzle) باستخدام خوارزمية (A*)، قيمة H(n) للحالة (1) أعلاه هي:",
+    visual: PUZZLE_CH7_VISUAL,
+    opts: [
+      "5",
+      "6",
+      "3",
+      "4"
+    ],
+    ans: 3,
+    mainExp: "في صفحة 79 من الملزمة: الدالة الاستدلالية H(n) تحسب 'عدد الأرقام التي ليست في موقعها الصحيح مقارنة بالحالة الهدف'. في الحالة (1) [الصف الأول: فراغ،2،3 / الصف الثاني: 1،4،6 / الصف الثالث: 7،5،8] نجد أن الأرقام (2، 3، 6، 7) في مكانها الصحيح، بينما الأرقام الأربعة (1، 4، 5، 8) ليست في مكانها الصحيح؛ إذن H(n) = 4.",
+    optExps: [
+      "خاطئ: 5 هي قيمة F(n) الكلية للحالة (1) لأن F(n) = G(1) + H(4) = 5، ولكن السؤال يطلب قيمة H(n) فقط!",
+      "خاطئ: عدد الأرقام الخاطئة هو 4 وليس 6.",
+      "خاطئ: 3 هي قيمة H(n) للحالة الابتدائية قبل التحرك.",
+      "صحيح: في الحالة (1) توجد 4 أرقام في غير مكانها الصحيح (1 و 4 و 5 و 8)، فتكون H(n) = 4."
+    ]
+  },
+  {
+    id: 69, sec: "ch7", tag: "الفصل 7 • الوحدة 2",
+    q: "(2) في حل مشكلة اللغز (8-Puzzle) باستخدام خوارزمية (A*)، قيمة H(n) للحالة (2) أعلاه هي:",
+    visual: PUZZLE_CH7_VISUAL,
+    opts: [
+      "5",
+      "2",
+      "3",
+      "4"
+    ],
+    ans: 1,
+    mainExp: "في الحالة (2) بصفحة 79 [الصف الأول: 1،2،3 / الصف الثاني: 4،فراغ،6 / الصف الثالث: 7،5،8]، نجد أن الأرقام (1، 2، 3، 4، 6، 7) كلها في مواقعها الصحيحة مقارنة بالهدف، ولم يتبقَّ سوى رقمين فقط في غير مكانهما وهما (5 و 8)؛ إذن H(n) = 2.",
+    optExps: [
+      "خاطئ: لا توجد 5 أرقام خاطئة.",
+      "صحيح: الرقمان (5 و 8) فقط ليسا في مكانهما الصحيح، لذا فإن H(n) = 2 (وهي الحالة الأفضل التي تختارها الخوارزمية).",
+      "خاطئ: 3 هي قيمة F(n) الكلية للحالة (2) حيث F(n) = G(1) + H(2) = 3، بينما H(n) تساوي 2.",
+      "خاطئ: 4 هي قيمة H(n) للحالتين (1) و (3)."
+    ]
+  },
+  {
+    id: 70, sec: "ch7", tag: "الفصل 7 • الوحدة 2",
+    q: "(3) في حل مشكلة اللغز (8-Puzzle) باستخدام خوارزمية (A*)، قيمة H(n) للحالة (3) أعلاه هي:",
+    visual: PUZZLE_CH7_VISUAL,
+    opts: [
+      "5",
+      "2",
+      "3",
+      "4"
+    ],
+    ans: 3,
+    mainExp: "في الحالة (3) بصفحة 79 [الصف الأول: 1،2،3 / الصف الثاني: 7،4،6 / الصف الثالث: فراغ،5،8]، نجد أن الأرقام الأربعة (7، 4، 5، 8) ليست في مواقعها الصحيحة مقارنة باللوحة الهدف؛ إذن H(n) = 4.",
+    optExps: [
+      "خاطئ: 5 هي قيمة F(n) = 1 + 4 = 5، بينما المطلوب H(n).",
+      "خاطئ: 2 هي قيمة H(n) للحالة الثانية.",
+      "خاطئ: 3 هي قيمة H(n) للحالة الابتدائية.",
+      "صحيح: توجد 4 أرقام في غير مكانها الصحيح (7 و 4 و 5 و 8)، فتكون H(n) = 4."
+    ]
+  },
+  {
+    id: 71, sec: "ch7", tag: "الفصل 7 • الوحدة 3",
+    q: "(1) عند استخدام خوارزمية تسلق التل (Hill Climbing) في حل مشكلة (8-Puzzle)، قيمة H(n) للحالة (1) أعلاه هي:",
+    visual: PUZZLE_CH7_VISUAL,
+    opts: [
+      "5",
+      "6",
+      "3",
+      "4"
+    ],
+    ans: 3,
+    mainExp: "في صفحة 81 من الملزمة: تستخدم خوارزمية تسلق التل نفس الدالة الاستدلالية H(n) (عدد الأرقام التي ليست في مكانها الصحيح)، وفي الحالة (1) توجد 4 أرقام في غير مكانها الصحيح (1، 4، 5، 8)، فتكون H(n) = 4.",
+    optExps: [
+      "خاطئ: عدد الأرقام غير المرتبة في الحالة (1) هو 4 وليس 5.",
+      "خاطئ: توجد 4 أرقام فقط في غير موضعها.",
+      "خاطئ: 3 هي قيمة H(n) للحالة الابتدائية.",
+      "صحيح: قيمة H(n) للحالة (1) تساوي 4."
+    ]
+  },
+  {
+    id: 72, sec: "ch7", tag: "الفصل 7 • الوحدة 3",
+    q: "(2) عند استخدام خوارزمية تسلق التل (Hill Climbing) في حل مشكلة (8-Puzzle)، قيمة H(n) للحالة (2) أعلاه هي:",
+    visual: PUZZLE_CH7_VISUAL,
+    opts: [
+      "5",
+      "2",
+      "3",
+      "4"
+    ],
+    ans: 1,
+    mainExp: "في صفحة 81 من الملزمة: في الحالة (2) في المنتصف، جميع الأرقام في أماكنها الصحيحة ما عدا الرقمين (5 و 8)، فتكون H(n) = 2.",
+    optExps: [
+      "خاطئ: لا توجد 5 أرقام خاطئة.",
+      "صحيح: قيمة H(n) للحالة (2) تساوي 2 لأن الرقمين 5 و 8 فقط في غير موضعهما.",
+      "خاطئ: 3 هي قيمة H(n) للحالة الابتدائية.",
+      "خاطئ: 4 هي قيمة H(n) للحالتين (1) و (3)."
+    ]
+  },
+  {
+    id: 73, sec: "ch7", tag: "الفصل 7 • الوحدة 3",
+    q: "(3) عند استخدام خوارزمية تسلق التل (Hill Climbing) في حل مشكلة (8-Puzzle)، قيمة H(n) للحالة (3) أعلاه هي:",
+    visual: PUZZLE_CH7_VISUAL,
+    opts: [
+      "5",
+      "2",
+      "3",
+      "4"
+    ],
+    ans: 3,
+    mainExp: "في صفحة 81 من الملزمة: في الحالة (3) على اليمين، الأرقام الأربعة (7، 4، 5، 8) ليست في مكانها الصحيح مقارنة بالهدف، فتكون قيمة H(n) = 4.",
+    optExps: [
+      "خاطئ: عدد الأرقام في غير مكانها هو 4 وليس 5.",
+      "خاطئ: 2 تخص الحالة الثانية.",
+      "خاطئ: 3 تخص الحالة الابتدائية.",
+      "صحيح: قيمة H(n) للحالة (3) تساوي 4."
+    ]
+  }
+];
+
+
+
+const QUESTIONS_PART2 = [
+  {
+    id: 1, sec: "ch8", tag: "الفصل 8 • الوحدة 1",
+    q: "(1) إحدى الخصائص الأساسية للوكيل المنطقي (Logical Agent):",
+    opts: [
+      "الذاكرة الطويلة الأمد.",
+      "القدرة على الاستشعار من البيئة المحيطة.",
+      "القدرة على تغيير البيئة بشكل دائم.",
+      "القدرة على التعلم العميق."
+    ],
+    ans: 1,
+    mainExp: "في صفحة 83 من الملزمة، الخصائص الخمس الأساسية للوكيل المنطقي هي: (1) الاستشعار Perception، (2) تمثيل المعرفة Knowledge Representation، (3) الاستدلال Reasoning، (4) اتخاذ القرار Decision Making، و(5) التنفيذ Execution.",
+    optExps: [
+      "خاطئ: يمتلك الوكيل المنطقي قاعدة معرفية (Knowledge Base) وليس ذاكرة طويلة الأمد بهذا المسمى.",
+      "صحيح: الاستشعار (Perception) لتلقي المدخلات من البيئة عبر أجهزة الاستشعار هي الخاصية الأولى للوكيل المنطقي.",
+      "خاطئ: هو ينفذ إجراءات في البيئة ولا يشترط تغييرها بشكل دائم.",
+      "خاطئ: يعتمد الوكيل المنطقي على القواعد المنطقية والاستدلال الرمزي وليس الشبكات العصبية للتعلم العميق."
+    ]
+  },
+  {
+    id: 2, sec: "ch8", tag: "الفصل 8 • الوحدة 1",
+    q: "(2) من التطبيقات التي يستخدم فيها الوكلاء المنطقيون للمساعدة في اتخاذ قرارات تشخيصية:",
+    opts: [
+      "الألعاب الإلكترونية.",
+      "الروبوتات الذكية.",
+      "أنظمة التشخيص الطبي.",
+      "التجارة الإلكترونية."
+    ],
+    ans: 2,
+    mainExp: "في صفحة 84 من الملزمة: تُستخدم 'أنظمة التشخيص الطبي (Medical Diagnosis Systems)' لمساعدة الأطباء في التشخيص بناءً على الأعراض والاختبارات واستنتاج الأمراض المحتملة باستخدام القواعد الطبية.",
+    optExps: [
+      "خاطئ: في الألعاب الإلكترونية يُستخدم الوكيل المنطقي لتطوير شخصيات ذكية تخطط للهجوم أو الدفاع.",
+      "خاطئ: في الروبوتات الذكية يُستخدم لتحليل البيانات الحسية وتجنب العوائق.",
+      "صحيح: أنظمة التشخيص الطبي هي التطبيق المخصص لمساعدة الأطباء في اتخاذ القرارات التشخيصية.",
+      "خاطئ: في التجارة الإلكترونية يُستخدم لتحليل سلوك المستهلكين واقتراح منتجات (أنظمة التوصية)."
+    ]
+  },
+  {
+    id: 3, sec: "ch8", tag: "الفصل 8 • الوحدة 1",
+    q: "(3) نوع الاستدلال الذي يعتمد عليه الوكيل المنطقي لاستخلاص نتائج من الملاحظات والأمثلة أو الحالات المعينة لبناء قاعدة عامة:",
+    opts: [
+      "الاستدلال الاستقرائي (Inductive Reasoning).",
+      "الاستدلال الاحتمالي (Probabilistic Reasoning).",
+      "الاستدلال الاستنباطي (Deductive Reasoning).",
+      "الاستدلال التجريبي."
+    ],
+    ans: 0,
+    mainExp: "في صفحة 84 و 102 من الملزمة، توجد 3 أنواع للاستدلال: (1) الاستقرائي (Inductive): ينطلق من ملاحظة أمثلة أو حالات خاصة معينة لبناء قاعدة عامة، (2) الاستنباطي (Deductive): ينطلق من القوانين العامة للوصول لنتيجة محددة (مثل كل البشر فانون -> سقراط فان)، و(3) الاحتمالي: عند التعامل مع معلومات غير مؤكدة.",
+    optExps: [
+      "صحيح: الاستدلال الاستقرائي (Inductive) هو الذي يعتمد على ملاحظة أمثلة أو حالات معينة لبناء قواعد عامة.",
+      "خاطئ: الاستدلال الاحتمالي يُستخدم عند التعامل مع معلومات غير مؤكدة لبناء افتراض قابل للاختبار.",
+      "خاطئ: الاستدلال الاستنباطي (Deductive) هو العكس تماماً؛ ينطلق من القواعد العامة للوصول لاستنتاجات محددة.",
+      "خاطئ: ليس من أنواع الاستدلال الثلاثة المصنفة للوكيل المنطقي."
+    ]
+  },
+  {
+    id: 4, sec: "ch8", tag: "الفصل 8 • الوحدة 2",
+    q: "(1) الهدف الأساسي من تمثيل المعرفة (Knowledge Representation) في أنظمة الذكاء الاصطناعي هو:",
+    opts: [
+      "تحسين سرعة الحواسيب.",
+      "تخزين وتنظيم المعلومات لاستنتاج حقائق جديدة.",
+      "تحسين الذاكرة العشوائية.",
+      "إنشاء صور واقعية."
+    ],
+    ans: 1,
+    mainExp: "في صفحة 87 من الملزمة: 'تمثيل المعرفة هو الطريقة التي يتم بها تخزين وتنظيم المعلومات في أنظمة الذكاء الاصطناعي بحيث تكون قادرة على استخدامها لاستنتاج حقائق جديدة أو اتخاذ قرارات بناءً على المعرفة المتاحة'.",
+    optExps: [
+      "خاطئ: سرعة الحواسيب تعتمد على المعالج وموارد العتاد.",
+      "صحيح: يهدف تمثيل المعرفة إلى تخزين وتنظيم المعلومات لتمكين الآلة من الاستدلال واستنتاج حقائق جديدة.",
+      "خاطئ: لا يختص بتحسين عتاد الذاكرة العشوائية (RAM).",
+      "خاطئ: إنشاء الصور الواقعية يختص به الذكاء التوليدي (GANs / Diffusion)."
+    ]
+  },
+  {
+    id: 5, sec: "ch8", tag: "الفصل 8 • الوحدة 2",
+    q: "(2) المثال التالي يمثل قاعدة إنتاجية (Production Rule):",
+    opts: [
+      "\"القطط هي نوع من الحيوانات\".",
+      "\"السيارة تحتوي على خصائص مثل اللون والنوع\".",
+      "\"إذا كانت السماء ملبدة بالغيوم، إذاً احتمال سقوط المطر مرتفع\".",
+      "\"الإنسان يأكل الطعام\"."
+    ],
+    ans: 2,
+    mainExp: "في صفحة 88 من الملزمة: القواعد الإنتاجية (Production Rules) تتكون من مجموعة قواعد على شكل (إذا - إذاً / IF - THEN) وتُستخدم للاستدلال في الأنظمة الخبيرة، ومثالها النصي في الملزمة: 'إذا كانت السماء ملبدة بالغيوم، إذاً احتمال سقوط المطر مرتفع'.",
+    optExps: [
+      "خاطئ: 'القطة هي نوع من الحيوانات' هو المثال النصي على الشبكات الدلالية (Semantic Networks).",
+      "خاطئ: 'السيارة تحتوي على خصائص مثل اللون والنوع والعمر' هو المثال النصي على الإطارات (Frames).",
+      "صحيح: صيغة الشرط والنتيجة (إذا ... إذاً ...) تمثل قاعدة إنتاجية (Production Rule).",
+      "خاطئ: 'الإنسان يأكل الطعام' هو المثال النصي على الأنماط التصورية (Conceptual Graphs)."
+    ]
+  },
+  {
+    id: 6, sec: "ch8", tag: "الفصل 8 • الوحدة 2",
+    q: "(3) أي نوع من تمثيل المعرفة يستخدم العلاقات بين العقد (Nodes) والروابط (Edges) لتوضيح المعرفة بشكل هرمي؟",
+    opts: [
+      "الإطارات (Frames).",
+      "الأنطولوجيا (Ontologies).",
+      "الشبكات الدلالية (Semantic Networks).",
+      "الأنماط التصورية (Conceptual Graphs)."
+    ],
+    ans: 2,
+    mainExp: "في صفحة 88 من الملزمة: تُعرّف الشبكات الدلالية (Semantic Networks) نصاً بأنها: 'تمثل المعرفة بشكل هرمي على شكل عقد (Nodes) تمثل الكائنات أو المفاهيم، وروابط (Edges) تمثل العلاقات بينها'.",
+    optExps: [
+      "خاطئ: الإطارات (Frames) هي هياكل تجمع سمات وخصائص كائن معين (مثل إطار سيارة: اللون، النوع، العمر).",
+      "خاطئ: الأنطولوجيا (Ontologies) تمثل المفاهيم والكيانات والعلاقات في مجال معرفي معين (مثل مجال الطب: طبيب، مرض، علاج).",
+      "صحيح: الشبكات الدلالية (Semantic Networks) هي التي تستخدم العقد (Nodes) والروابط (Edges).",
+      "خاطئ: الأنماط التصورية تستخدم الرسوم البيانية لتمثيل الكائنات والأفعال بصرياً."
+    ]
+  },
+  {
+    id: 7, sec: "ch8", tag: "الفصل 8 • الوحدة 3",
+    q: "(1) الهدف الرئيسي من استخدام المنطق (Logic) في تمثيل المعرفة في الذكاء الاصطناعي:",
+    opts: [
+      "تحسين الرسومات الحاسوبية.",
+      "تحليل المعلومات واستنتاج حقائق جديدة.",
+      "تحسين دقة شاشات الحواسيب.",
+      "توفير واجهة مستخدم أكثر سهولة."
+    ],
+    ans: 1,
+    mainExp: "في صفحة 9 [يتوقف نص الشرح هنا في الملف المرفق؛ بقية الشرح غير متاحة.]",
+    optExps: []
+  }
+];
+const QUESTIONS_PART3 = [
+  // ==================== الفصل الثامن: الوحدة 3 ====================
+  {
+    id: 1,
+    sec: "ch8u3",
+    unit: "الفصل 8 — الوحدة 3: الوكيل المنطقي وتمثيل المعرفة",
+    q: "(1) الهدف الرئيسي من استخدام المنطق في تمثيل المعرفة في الذكاء الاصطناعي:",
+    opts: [
+      { t: "تحسين الرسومات الحاسوبية.", why: "خيار مستبعد؛ يرتبط بمعالجة الرسوميات الحاسوبية (Computer Graphics) وليس بتمثيل المعرفة المنطقي." },
+      { t: "تحليل المعلومات واستنتاج حقائق جديدة.", why: "إجابة صحيحة؛ يهدف المنطق في الذكاء الاصطناعي إلى صياغة المعلومات صياغة دقيقة لتحليلها واستنباط استنتاجات وحقائق جديدة منها." },
+      { t: "تحسين دقة الحواسيب.", why: "خيار مستبعد؛ دقة الحواسيب المادية ترتبط بالمعالجات والعتاد (Hardware) وليس بقواعد المنطق." },
+      { t: "توفير واجهة مستخدم أكثر سهولة.", why: "خيار مستبعد؛ يرتبط بتصميم تجربة وواجهة المستخدم (UI/UX)." }
+    ],
+    ans: 1,
+    summary: "يُستخدم المنطق (Logic) كأداة أساسية لتمثيل المعرفة بشكل رسمي ومنهجي، مما يمكّن الأنظمة الذكية من تحليل المعطيات المتاحة واستنتاج حقائق وقرارات جديدة."
+  },
+  {
+    id: 2,
+    sec: "ch8u3",
+    unit: "الفصل 8 — الوحدة 3: الوكيل المنطقي وتمثيل المعرفة",
+    q: "(2) نوع من المنطق يعتمد على تمثيل المعرفة باستخدام جمل أو قضايا يمكن أن تكون صحيحة أو خاطئة:",
+    opts: [
+      { t: "المنطق المبني على القضايا.", why: "إجابة صحيحة؛ المنطق المبني على القضايا (Propositional Logic) هو أبسط أنواع المنطق ويمثل المعرفة بجمل خبرية (قضايا) تحتمل الصواب (True) أو الخطأ (False) فقط." },
+      { t: "المنطق الضبابي.", why: "خيار مستبعد؛ المنطق الضبابي (Fuzzy Logic) يعالج الغموض ودرجات الحقيقة بين الصواب والخطأ (صحيح جزئياً) ولا يقتصر على قيمتين مطلقتين." },
+      { t: "المنطق الحملي.", why: "خيار مستبعد؛ المنطق الحملي (Predicate Logic) يتعامل مع المتغيرات والكائنات والخصائص والعلاقات داخل الجملة وليس مجرد قضايا بسيطة." },
+      { t: "المنطق من الدرجة الأولى.", why: "خيار مستبعد؛ هو تطوير للمنطق الحملي يستخدم الكميات (لكل ∀، يوجد ∃) لتمثيل العلاقات المعقدة بين الكائنات." }
+    ],
+    ans: 0,
+    summary: "المنطق المبني على القضايا (Propositional Logic) يتعامل مع الجمل البسيطة ككتلة واحدة (إما صحيحة أو خاطئة) دون تحليل الكائنات والعلاقات بداخلها."
+  },
+  {
+    id: 3,
+    sec: "ch8u3",
+    unit: "الفصل 8 — الوحدة 3: الوكيل المنطقي وتمثيل المعرفة",
+    q: "(3) ما العامل المنطقي الذي يستخدم لربط قضايا بحيث تكون صحيحة إذا كانت كلاهما صحيحتين؟",
+    opts: [
+      { t: "النفي (¬)", why: "خيار مستبعد؛ عامل النفي (Negation) يدخل على قضية واحدة فيعكس قيمتها (يجعل الصحيحة خاطئة والخاطئة صحيحة)." },
+      { t: "الفصل (∨)", why: "خيار مستبعد؛ عامل الفصل (Disjunction - أو OR) يكون صحيحاً إذا كانت إحدى القضيتين على الأقل صحيحة." },
+      { t: "الشرط (→)", why: "خيار مستبعد؛ عامل الشرط (Implication - إذا كان... فإن) يكون خاطئاً في حالة واحدة فقط هي صدق المقدم وكذب التالي." },
+      { t: "الاقتران (∧)", why: "إجابة صحيحة؛ عامل الاقتران أو العطف (Conjunction - و AND) يربط بين قضيتين ولا تكون نتيجته صحيحة إلا إذا كانت كلتا القضيتين صحيحتين معاً." }
+    ],
+    ans: 3,
+    summary: "عامل الاقتران (∧) يمثل رابط العطف (و / AND)، ويشترط لصحته تحقق الطرفين (P و Q) معاً."
+  },
+
+  // ==================== الفصل التاسع: الوحدة 1 ====================
+  {
+    id: 4,
+    sec: "ch9u1",
+    unit: "الفصل 9 — الوحدة 1: المنطق أنواعه - أمثلة توضيحية",
+    q: "(1) تربط بين قضيتين بحيث تكون النتيجة صحيحة فقط إذا كانت كلتاهما صحيحتين:",
+    opts: [
+      { t: "Negation , ¬", why: "خيار مستبعد؛ يمثل أداة النفي (NOT) التي تعكس قيمة الحقيقة لقضية واحدة." },
+      { t: "Conjunction , ∧", why: "إجابة صحيحة؛ مصطلح (Conjunction) ورمزه (∧) يعني الاقتران (AND)، وتكون نتيجته صحيحة فقط عندما تكون P و Q صحيحتين معاً." },
+      { t: "Implication , →", why: "خيار مستبعد؛ يمثل أداة الشرط (IF-THEN) وليس الاقتران." },
+      { t: "Disjunction , ∨", why: "خيار مستبعد؛ يمثل أداة الفصل (OR) التي يكفي فيها صحة إحدى القضيتين." }
+    ],
+    ans: 1,
+    summary: "الاقتران بالإنجليزية هو (Conjunction) ورمزه (∧) نحو القمة (يشبه حرف A في AND)."
+  },
+  {
+    id: 5,
+    sec: "ch9u1",
+    unit: "الفصل 9 — الوحدة 1: المنطق أنواعه - أمثلة توضيحية",
+    q: "(2) تربط بين قضيتين وتكون صحيحة إذا كانت واحدة منهما أو كلاهما صحيحة:",
+    opts: [
+      { t: "Conjunction , ∧", why: "خيار مستبعد؛ الاقتران (∧) يشترط صحة القضيتين معاً ولا يكتفي بواحدة." },
+      { t: "Negation , ¬", why: "خيار مستبعد؛ النفي (¬) يعكس قيمة قضية مفردة." },
+      { t: "Disjunction , ∨", why: "إجابة صحيحة؛ الفصل (Disjunction) ورمزه (∨) يعني (أو / OR)، ويكون صحيحاً إذا صحّت إحدى القضيتين أو كلتاهما." },
+      { t: "Implication , →", why: "خيار مستبعد؛ الشرط (→) يربط جملة الشرط بجواب الشرط." }
+    ],
+    ans: 2,
+    summary: "الفصل المنطقي (Disjunction) رمزه (∨) ويعني (أو / OR)، ولا يكون خاطئاً إلا إذا كانت القضيتان خاطئتين معاً."
+  },
+  {
+    id: 6,
+    sec: "ch9u1",
+    unit: "الفصل 9 — الوحدة 1: المنطق أنواعه - أمثلة توضيحية",
+    q: "(3) ينفي الحقيقة. إذا كانت القضية صحيحة، تصبح خاطئة والعكس:",
+    opts: [
+      { t: "Negation , ¬", why: "إجابة صحيحة؛ النفي (Negation) ورمزه (¬) يقوم بعكس القيمة المنطقية للقضية (True تصبح False والعكس)." },
+      { t: "Conjunction , ∧", why: "خيار مستبعد؛ يمثل الاقتران (AND) بين قضيتين." },
+      { t: "Implication , →", why: "خيار مستبعد؛ يمثل علاقة الشرط (إذا كان... فإن)." },
+      { t: "Disjunction , ∨", why: "خيار مستبعد؛ يمثل علاقة الفصل (OR)." }
+    ],
+    ans: 0,
+    summary: "النفي (Negation) يرمز له بالرمز (¬P) ويُقرأ (Not P)."
+  },
+
+  // ==================== الفصل التاسع: الوحدة 2 ====================
+  {
+    id: 7,
+    sec: "ch9u2",
+    unit: "الفصل 9 — الوحدة 2: المنطق الحملي ومن الدرجة الأولى",
+    q: "(1) المنطق الحملي (Predicate Logic):",
+    opts: [
+      { t: "نظام منطق لا يعبر عن العبارات التي تشمل المتغيرات والعلاقات.", why: "خيار مستبعد؛ ينفي الوظيفة الأساسية للمنطق الحملي." },
+      { t: "نظام منطق يستخدم للتعبير عن العبارات التي لا تشمل المتغيرات والعلاقات.", why: "خيار مستبعد؛ الذي لا يشمل العلاقات بين الكائنات هو المنطق المبني على القضايا البسيطة." },
+      { t: "نظام منطق يستخدم للتعبير عن العبارات التي تشمل المتغيرات والعلاقات.", why: "إجابة صحيحة؛ المنطق الحملي يمتاز بقدرته على تمثيل الكائنات والمتغيرات والخواص والعلاقات بينها." },
+      { t: "نظام منطق يستخدم العبارات التي تشمل المتغيرات فقط.", why: "خيار مستبعد؛ لأنه لا يقتصر على المتغيرات فقط بل يشمل الكائنات والخواص والعلاقات والدوال والكميات." }
+    ],
+    ans: 2,
+    summary: "المنطق الحملي (Predicate Logic) هو توسعة لمنطق القضايا، صُمم خصيصاً للتعبير عن المتغيرات والخواص والعلاقات بين الكائنات."
+  },
+  {
+    id: 8,
+    sec: "ch9u2",
+    unit: "الفصل 9 — الوحدة 2: المنطق الحملي ومن الدرجة الأولى",
+    q: "(2) تستخدم للتعامل مع العبارات الأكثر تعقيداً:",
+    opts: [
+      { t: "المنطق المبني على القضايا.", why: "خيار مستبعد؛ منطق القضايا مخصص للجمل البسيطة وعاجز عن تمثيل العلاقات المعقدة بين الكائنات." },
+      { t: "المنطق الحملي.", why: "إجابة صحيحة؛ يُستخدم المنطق الحملي (Predicate Logic) للتعامل مع العبارات الأكثر تعقيداً التي تتضمن كائنات وعلاقات وكميات." },
+      { t: "المنطق الغامض.", why: "خيار مستبعد؛ المنطق الغامض/الضبابي يختص بمعالجة عدم الدقة اللغوية ودرجات الحقيقة." },
+      { t: "المنطق النوعي.", why: "خيار مستبعد؛ مصطلح مشتت غير معتمد كبديل للمنطق الحملي في تمثيل العلاقات." }
+    ],
+    ans: 1,
+    summary: "نصت الملزمة (صفحة 98) صراحةً على أن المنطق الحملي يُستخدم للتعامل مع العبارات الأكثر تعقيداً من المنطق المبني على القضايا."
+  },
+  {
+    id: 9,
+    sec: "ch9u2",
+    unit: "الفصل 9 — الوحدة 2: المنطق الحملي ومن الدرجة الأولى",
+    q: "(3) المنطق من الدرجة الأولى (First-Order Logic) هو:",
+    opts: [
+      { t: "المنطق الغامض.", why: "خيار مستبعد؛ المنطق الغامض هو (Fuzzy Logic)." },
+      { t: "المنطق المبني على القضايا.", why: "خيار مستبعد؛ منطق القضايا هو (Propositional Logic) ويسمى منطق الدرجة الصفرية." },
+      { t: "المنطق السائد.", why: "خيار مستبعد؛ تسمية غير علمية." },
+      { t: "المنطق الحملي.", why: "إجابة صحيحة؛ ذكرت الملزمة (صفحة 98) أن المنطق من الدرجة الأولى (First-Order Logic) هو في الحقيقة نفسه المنطق الحملي (Predicate Logic) وتطوير مباشر له." }
+    ],
+    ans: 3,
+    summary: "المنطق من الدرجة الأولى (FOL) هو نفسه المنطق الحملي، ويسمح بالتعبير عن العلاقات بين الأفراد باستخدام محددات الكميات (∀ و ∃)."
+  },
+
+  // ==================== الفصل التاسع: الوحدة 3 ====================
+  {
+    id: 10,
+    sec: "ch9u3",
+    unit: "الفصل 9 — الوحدة 3: أمثلة المنطق الحملي",
+    q: "(1) التمثيل بالمنطق من الدرجة الأولى للجملة (No student is taller than the professor) هو: <span class='math-dir'>¬∃x (Student(x) ∧ TallerThan(x, Professor))</span>",
+    opts: [
+      { t: "صح", why: "إجابة صحيحة؛ عبارة (لا يوجد طالب أطول من الأستاذ) تعني نفي وجود أي عنصر x يحقق الصفتين معاً: أنه طالب وأنه أطول من الأستاذ." },
+      { t: "خطأ", why: "خيار مستبعد؛ لأن الصياغة الرياضية المنطقية المعطاة صحيحة تماماً." }
+    ],
+    ans: 0,
+    summary: "عبارة (No student...) تُترجم بنفي الكم الجزئي: ¬∃x (Student(x) ∧ ...)."
+  },
+  {
+    id: 11,
+    sec: "ch9u3",
+    unit: "الفصل 9 — الوحدة 3: أمثلة المنطق الحملي",
+    q: "(2) التمثيل بالمنطق من الدرجة الأولى للجملة (Not all birds can fly) هو: <span class='math-dir'>¬(∀x (Bird(x) → CanFly(x)))</span>",
+    opts: [
+      { t: "صح", why: "إجابة صحيحة؛ عبارة (ليست كل الطيور تطير) هي نفي مباشر لعبارة (كل الطيور تطير ∀x (Bird(x) → CanFly(x)))." },
+      { t: "خطأ", why: "خيار مستبعد؛ لأن التمثيل المنطقي مطابق للمثال المشروح في الملزمة (صفحة 100)." }
+    ],
+    ans: 0,
+    summary: "عبارة (Not all...) تُترجم بوضع رمز النفي (¬) قبل الكم الشامل: ¬∀x (...)."
+  },
+  {
+    id: 12,
+    sec: "ch9u3",
+    unit: "الفصل 9 — الوحدة 3: أمثلة المنطق الحملي",
+    q: "(3) التمثيل بالمنطق من الدرجة الأولى للجملة (Some animals are dogs) هو: <span class='math-dir'>¬(∀x (Animal(x) ∧ Dog(x)))</span>",
+    opts: [
+      { t: "صح", why: "خيار مستبعد؛ لأن كلمة (Some = بعض) لا تُمثّل بنفي الكل (¬∀x) بل تُمثّل بالكم الجزئي (∃x)." },
+      { t: "خطأ", why: "إجابة صحيحة؛ العبارة خاطئة لأن التمثيل الصحيح لجملة (بعض الحيوانات كلاب) هو استخدام الكم الجزئي: ∃x (Animal(x) ∧ Dog(x))." }
+    ],
+    ans: 1,
+    summary: "انتبهي لهذا الفخ: كلمة (Some = بعض/يوجد) تُمثّل دائماً بالرمز (∃x) مع الاقتران (∧)، وليس بـ (¬∀x)."
+  },
+
+  // ==================== الفصل العاشر: الوحدة 1 ====================
+  {
+    id: 13,
+    sec: "ch10u1",
+    unit: "الفصل 10 — الوحدة 1: الاستدلال المنطقي",
+    q: "(1) الاستدلال الخلفي يبدأ من الحقائق المعروفة (الحقائق الحالية) ويستخدم القواعد لاستخلاص استنتاجات جديدة.",
+    opts: [
+      { t: "صح", why: "خيار مستبعد؛ الذي يبدأ من الحقائق المعروفة للوصول إلى النتائج هو الاستدلال الأمامي (Forward Chaining)." },
+      { t: "خطأ", why: "إجابة صحيحة؛ العبارة خاطئة لأن الاستدلال الخلفي (Backward Chaining) يبدأ من النتيجة المطلوبة (الهدف) ويعمل بالعكس للوصول إلى الحقائق التي تدعمها." }
+    ],
+    ans: 1,
+    summary: "فرق جوهري يتكرر في الاختبار والواجب الثالث: الاستدلال الأمامي يبدأ من (الحقائق الحالية)، أما الاستدلال الخلفي فيبدأ من (النتيجة المطلوبة/الهدف) ويعمل عكسياً."
+  },
+  {
+    id: 14,
+    sec: "ch10u1",
+    unit: "الفصل 10 — الوحدة 1: الاستدلال المنطقي",
+    q: "(2) الاستدلال من مجموعة من الفرضيات أو القوانين العامة للوصول إلى استنتاجات محددة:",
+    opts: [
+      { t: "الاستدلال الاستقرائي (Inductive)", why: "خيار مستبعد؛ الاستقرائي يعمل بالعكس: يبدأ من ملاحظة أمثلة وحالات خاصة لبناء قاعدة عامة." },
+      { t: "الاستدلال الاستنباطي (Deductive)", why: "إجابة صحيحة؛ الاستدلال الاستنباطي ينطلق من القوانين والفرضيات العامة للوصول إلى نتيجة خاصة ومحددة مؤكدة (مثل: كل البشر فانون + سقراط إنسان ← سقراط فانٍ)." },
+      { t: "الاستدلال الاحتمالي (Abductive)", why: "خيار مستبعد؛ يُستخدم عند التعامل مع معلومات غير مؤكدة لاقتراح أفضل تفسير محتمل (مثل: الأضواء مطفأة ← ربما لا يوجد أحد)." },
+      { t: "الاستدلال الأمامي (Forward Chaining)", why: "خيار مستبعد؛ هو آلية عمل في قواعد المعرفة وليس تصنيف الانتقال من العام للخاص." }
+    ],
+    ans: 1,
+    summary: "من القوانين العامة إلى نتيجة محددة = استدلال استنباطي (Deductive)."
+  },
+  {
+    id: 15,
+    sec: "ch10u1",
+    unit: "الفصل 10 — الوحدة 1: الاستدلال المنطقي",
+    q: "(3) يعتمد على ملاحظة أمثلة أو حالات معينة لبناء قواعد عامة:",
+    opts: [
+      { t: "الاستدلال الاستنباطي (Deductive)", why: "خيار مستبعد؛ ينتقل من القواعد العامة إلى الحالات المحددة." },
+      { t: "الاستدلال الاحتمالي (Abductive)", why: "خيار مستبعد؛ يستنتج تفسيراً محتملاً لحدث غير مؤكد." },
+      { t: "الاستدلال الأمامي (Forward Chaining)", why: "خيار مستبعد؛ يطبق القواعد على الحقائق الحالية." },
+      { t: "الاستدلال الاستقرائي (Inductive)", why: "إجابة صحيحة؛ الاستدلال الاستقرائي يلاحظ أمثلة وحالات جزئية متكررة (مثل: الشمس أشرقت اليوم وأشرقت أمس) ليبني منها قاعدة عامة." }
+    ],
+    ans: 3,
+    summary: "من الأمثلة والحالات المعينة إلى بناء قواعد عامة = استدلال استقرائي (Inductive)."
+  },
+
+  // ==================== الفصل العاشر: الوحدة 2 ====================
+  {
+    id: 16,
+    sec: "ch10u2",
+    unit: "الفصل 10 — الوحدة 2: البحث في وجود الخصوم",
+    q: "(1) الهدف الرئيسي من الذكاء الاصطناعي في وجود الخصوم (Adversarial AI):",
+    opts: [
+      { t: "تحسين أداء الأنظمة الذكية في البيئات غير التنافسية.", why: "خيار مستبعد؛ لأنه يعمل في البيئات التنافسية ذات المصالح المتضاربة وليس غير التنافسية." },
+      { t: "استخدام التعلم الآلي.", why: "خيار مستبعد؛ التعلم الآلي تقنية عامة وليس الهدف الخاص بالبحث في وجود الخصوم." },
+      { t: "حماية الأنظمة الذكية من الهجمات واستغلال نقاط الضعف.", why: "إجابة صحيحة؛ يركز الذكاء الاصطناعي في وجود الخصوم على حماية الأنظمة ضد هجمات المنافسين وتطوير استراتيجيات قوية للدفاع واتخاذ القرارات المثلى." },
+      { t: "تطوير الأنظمة الذكية في المجالات الطبية فقط.", why: "خيار مستبعد؛ يُستخدم في الألعاب والأمن السيبراني والأنظمة التنافسية وليس الطب فقط." }
+    ],
+    ans: 2,
+    summary: "حسب الملزمة (صفحة 106)، يتطلب الذكاء الاصطناعي في وجود الخصوم التفكير في كيفية حماية الأنظمة ضد هجمات الخصوم الذين يسعون لاستغلال نقاط ضعفها."
+  },
+  {
+    id: 17,
+    sec: "ch10u2",
+    unit: "الفصل 10 — الوحدة 2: البحث في وجود الخصوم",
+    q: "(2) في سياق الذكاء الاصطناعي في وجود الخصوم، الخوارزمية المستخدمة على نطاق واسع في الألعاب ثنائية اللاعبين مثل الشطرنج هي:",
+    opts: [
+      { t: "خوارزمية Minimax.", why: "إجابة صحيحة؛ خوارزمية Minimax تُستخدم على نطاق واسع في الألعاب ثنائية اللاعبين (مثل الشطرنج و X-O) حيث يحاول لاعب Max تعظيم النتيجة ولاعب Min تقليلها." },
+      { t: "خوارزمية Dijkstra.", why: "خيار مستبعد؛ خوارزمية ديكسترا تُستخدم لإيجاد أقصر مسار في المخططات دون وجود خصم." },
+      { t: "خوارزمية A*.", why: "خيار مستبعد؛ خوارزمية بحث مستنير لإيجاد أقصر مسار لوكيل فردي وليست للألعاب التنافسية." },
+      { t: "خوارزمية Monte Carlo.", why: "خيار مستبعد؛ تعتمد على المحاكاة العشوائية لتقدير المخاطر وعدم اليقين." }
+    ],
+    ans: 0,
+    summary: "خوارزمية (Minimax) هي الخوارزمية الأساسية للبحث في الألعاب التنافسية ثنائية اللاعبين."
+  },
+  {
+    id: 18,
+    sec: "ch10u2",
+    unit: "الفصل 10 — الوحدة 2: البحث في وجود الخصوم",
+    q: "(3) في بيئات الذكاء الاصطناعي التنافسية التحدي الرئيسي الذي يواجه الأنظمة الذكية هو:",
+    opts: [
+      { t: "تحديد أسرع مسار.", why: "خيار مستبعد؛ هذا هدف خوارزميات البحث العادية عن المسار." },
+      { t: "زيادة كفاءة النظام بدون منافسة.", why: "خيار مستبعد؛ لأن البيئة التنافسية قائمة أساساً على وجود منافسة." },
+      { t: "التعامل مع خصوم يحاولون إحباط النظام.", why: "إجابة صحيحة؛ في البيئات التنافسية يوجد خصم يسعى إلى إحباط النظام الذكي أو تحقيق أهداف متعارضة معه." },
+      { t: "تقليل استهلاك الطاقة.", why: "خيار مستبعد؛ لا يمثل التحدي الجوهري في نظريات الألعاب التنافسية." }
+    ],
+    ans: 2,
+    summary: "التحدي الجوهري في (Adversarial AI) هو وجود طرف آخر (خصم) تتضارب مصالحه مع النظام ويحاول إحباطه."
+  },
+
+  // ==================== الفصل العاشر: الوحدة 3 ====================
+  {
+    id: 19,
+    sec: "ch10u3",
+    unit: "الفصل 10 — الوحدة 3: تقليم ألفا - بيتا Alpha-Beta",
+    q: "(1) الهدف الرئيسي من استخدام خوارزمية ألفا - بيتا التقليم Alpha-Beta:",
+    opts: [
+      { t: "زيادة عدد العقد التي يتم تقييمها في شجرة البحث.", why: "خيار مستبعد؛ الخوارزمية تهدف لتقليل العقد وليس زيادتها." },
+      { t: "تقليل عدد العقد التي يتم تقييمها في شجرة البحث.", why: "إجابة صحيحة؛ تقليم ألفا-بيتا هو تحسين لخوارزمية Minimax يقلل من عدد العقد التي يتم فحصها وتقييمها عبر قصّ وتجاهل الفروع التي لا تؤثر على القرار النهائي." },
+      { t: "تحسين دقة التوقعات في الذكاء الاصطناعي.", why: "خيار مستبعد؛ القرار النهائي يظل نفسه تماماً كما في Minimax ولكن بسرعة وكفاءة أعلى." },
+      { t: "تحديد أسرع طريق لحل المشكلة.", why: "خيار مستبعد؛ هذا يخص خوارزميات البحث في المسارات مثل A*." }
+    ],
+    ans: 1,
+    summary: "خوارزمية (Alpha-Beta Pruning) تتجاهل الفروع غير المؤثرة عندما يتحقق الشرط (α ≥ β)، مما يقلل عدد العقد المقيّمة في شجرة البحث."
+  },
+  {
+    id: 20,
+    sec: "ch10u3",
+    unit: "الفصل 10 — الوحدة 3: تقليم ألفا - بيتا Alpha-Beta",
+    q: "(2) أي نوع من البيئات تستخدم خوارزميات البحث مثل Minimax و Alpha-Beta بشكل شائع؟",
+    opts: [
+      { t: "في البيئات غير التنافسية.", why: "خيار مستبعد؛ البيئات غير التنافسية تستخدم خوارزميات البحث العادية (BFS, DFS, A*)." },
+      { t: "في التطبيقات الطبية فقط.", why: "خيار مستبعد؛ لا تقتصر على الطب بل أساسها الألعاب والأمن السيبراني." },
+      { t: "في العمليات الحسابية المالية.", why: "خيار مستبعد؛ العمليات المالية تستخدم نماذج الاحتمالات والتنبؤ." },
+      { t: "في البيئات التنافسية مع خصوم.", why: "إجابة صحيحة؛ تُستخدم خوارزميتا Minimax و Alpha-Beta في البيئات التنافسية التي تتضمن خصوماً (مثل الألعاب والأمن السيبراني)." }
+    ],
+    ans: 3,
+    summary: "كل من Minimax و Alpha-Beta مصممتان للبيئات التنافسية في وجود خصوم."
+  },
+  {
+    id: 21,
+    sec: "ch10u3",
+    unit: "الفصل 10 — الوحدة 3: تقليم ألفا - بيتا Alpha-Beta",
+    q: "(3) ما هو التأثير الأساسي للتقليم Alpha-Beta على شجرة البحث؟",
+    opts: [
+      { t: "يقلل من مساحة البحث ويزيد الكفاءة.", why: "إجابة صحيحة؛ عبر تجاهل الأجزاء غير ذات الصلة في شجرة اللعبة، يقلل التقليم من مساحة البحث ويحسن الكفاءة دون التأثير على القرار النهائي." },
+      { t: "يزيد من عمق الشجرة بشكل غير محدود.", why: "خيار مستبعد؛ هو يسمح بالبحث بعمق أكبر في نفس الوقت لكنه لا يجعل الشجرة غير محدودة." },
+      { t: "يزيد من عدد القرارات الممكنة.", why: "خيار مستبعد؛ هو يستبعد الفروع الزائدة ولا يزيدها." },
+      { t: "يؤخر عملية اتخاذ القرار.", why: "خيار مستبعد؛ بل يسرّع عملية اتخاذ القرار." }
+    ],
+    ans: 0,
+    summary: "تقليم ألفا-بيتا يقلص مساحة البحث في الشجرة ويزيد كفاءة الخوارزمية وسرعتها."
+  },
+
+  // ==================== الفصل الحادي عشر: الوحدة 1 ====================
+  {
+    id: 22,
+    sec: "ch11u1",
+    unit: "الفصل 11 — الوحدة 1: الحل باستخدام الشكل الشرطي",
+    q: "(1) توزيع وتبسيط العبارة <span class='math-dir'>¬(P ∧ Q)</span> :",
+    opts: [
+      { t: "¬P ∨ ¬Q", why: "إجابة صحيحة؛ حسب قانون دي مورغان (De Morgan's Law) عند إدخال النفي (¬) على القوس، يتوزع النفي على P و Q وتنقلب علامة الاقتران (∧) إلى فصل (∨)." },
+      { t: "¬P ∧ ¬Q", why: "خيار مستبعد؛ لأنكِ نسيتِ قلب علامة الاقتران (∧) إلى (∨) عند توزيع النفي." }
+    ],
+    ans: 0,
+    summary: "قاعدة ذهبية في الشكل الشرطي: النفي خارج القوس يوزع على ما بداخله ويقلب (∧ إلى ∨) ويقلب (∨ إلى ∧)."
+  },
+  {
+    id: 23,
+    sec: "ch11u1",
+    unit: "الفصل 11 — الوحدة 1: الحل باستخدام الشكل الشرطي",
+    q: "(2) نفي العبارة <span class='math-dir'>¬∀x : P(x)</span> :",
+    opts: [
+      { t: "¬∃X : ¬P(x)", why: "خيار مستبعد؛ لأن رمز النفي الخارجي تم تطبيقه لتحويل ∀ إلى ∃ فلا يبقى خارج القوس." },
+      { t: "∃X : ¬P(X)", why: "إجابة صحيحة؛ عند نفي الكم الشامل (¬∀x) يتحول إلى الكم الجزئي (∃x) ويدخل النفي على الدالة لتصبح ¬P(x)." }
+    ],
+    ans: 1,
+    summary: "نفي (لكل ¬∀x) يصبح (يوجد ∃x) مع نفي الجملة التي بعده: ∃x : ¬P(x)."
+  },
+  {
+    id: 24,
+    sec: "ch11u1",
+    unit: "الفصل 11 — الوحدة 1: الحل باستخدام الشكل الشرطي",
+    q: "(3) نفي العبارة <span class='math-dir'>¬∃x : P(x)</span> :",
+    opts: [
+      { t: "∀X : ¬P(x)", why: "إجابة صحيحة؛ عند نفي الكم الجزئي (¬∃x) يتحول إلى الكم الشامل (∀x) ويدخل النفي على الدالة لتصبح ¬P(x)." },
+      { t: "¬∀X : ¬P(x)", why: "خيار مستبعد؛ لا نبقي علامة النفي قبل ∀x بعد تحويلها من ∃x." }
+    ],
+    ans: 0,
+    summary: "نفي (يوجد ¬∃x) يصبح (لكل ∀x) مع نفي الجملة التي بعده: ∀x : ¬P(x)."
+  },
+
+  // ==================== الفصل الحادي عشر: الوحدة 2 ====================
+  {
+    id: 25,
+    sec: "ch11u2",
+    unit: "الفصل 11 — الوحدة 2: الحل باستخدام الشكل الشرطي",
+    q: "(1) توزيع وتبسيط العبارة <span class='math-dir'>¬(P ∧ ¬Q)</span> :",
+    opts: [
+      { t: "¬P ∧ Q", why: "خيار مستبعد؛ لم يتم قلب علامة الاقتران (∧) إلى فصل (∨)." },
+      { t: "¬P ∨ Q", why: "إجابة صحيحة؛ النفي يدخل على P فتصبح (¬P)، ويقلب (∧) إلى (∨)، ويدخل على (¬Q) فينفي النفي وتصبح (Q) موجبة." }
+    ],
+    ans: 1,
+    summary: "نفي النفي إثبات (¬¬Q = Q)، وعلامة (∧) تنقلب إلى (∨)، فتصبح العبارة: ¬P ∨ Q."
+  },
+  {
+    id: 26,
+    sec: "ch11u2",
+    unit: "الفصل 11 — الوحدة 2: الحل باستخدام الشكل الشرطي",
+    q: "(2) توزيع وتبسيط العبارة <span class='math-dir'>¬(¬P ∧ Q)</span> :",
+    opts: [
+      { t: "P ∨ ¬Q", why: "إجابة صحيحة؛ النفي يلغي نفي P فتصبح (P)، وتنقلب (∧) إلى (∨)، وتُنفى Q فتصبح (¬Q)." },
+      { t: "P ∧ ¬Q", why: "خيار مستبعد؛ لأن علامة (∧) يجب أن تنقلب إلى (∨) عند توزيع النفي." }
+    ],
+    ans: 0,
+    summary: "توزيع النفي على ¬(¬P ∧ Q) يعطي: P ∨ ¬Q."
+  },
+  {
+    id: 27,
+    sec: "ch11u2",
+    unit: "الفصل 11 — الوحدة 2: الحل باستخدام الشكل الشرطي",
+    q: "(3) نفي العبارة <span class='math-dir'>¬∃x : ¬P(x)</span> :",
+    opts: [
+      { t: "∀X : ¬P(x)", why: "خيار مستبعد؛ لأن الدالة فيها نفي مسبق (¬P)، وعند دخول النفي الخارجي عليها يصبح نفي النفي إثباتاً P(x)." },
+      { t: "∀X : P(x)", why: "إجابة صحيحة؛ تتحول (¬∃x) إلى (∀x)، ويلتقي النفي مع (¬P(x)) فيلغي أحدهما الآخر وتصبح P(x)." }
+    ],
+    ans: 1,
+    summary: "نفي (¬∃x : ¬P(x)) يحول ∃ إلى ∀ ويزيل النفي عن P(x) لتصبح: ∀X : P(x)."
+  },
+
+  // ==================== الفصل الحادي عشر: الوحدة 3 ====================
+  {
+    id: 28,
+    sec: "ch11u3",
+    unit: "الفصل 11 — الوحدة 3: الحل باستخدام الشكل الشرطي",
+    q: "(1) المنطق من الدرجة الأولى للعبارة (Everyone passing his AI exam and winning the prize is happy):",
+    opts: [
+      { t: "∀X: pass(X, AI-exam) ∧ win(X, prize) → happy(X)", why: "إجابة صحيحة؛ لأن العبارة شرطية عامة: كل شخص X إذا نجح في اختبار الذكاء الاصطناعي وفاز بالجائزة فإنه يكون سعيداً (→ happy(X))." },
+      { t: "∀X: pass(X, AI-exam) ∧ win(X, prize) ∧ happy(X)", why: "خيار مستبعد؛ استخدام (∧) في النهاية يعني أن كل الناس في العالم نجحوا وفازوا وسعداء، ولا يعبر عن الشرط." }
+    ],
+    ans: 0,
+    summary: "مع الكم الشامل (Everyone / ∀x)، تُربط الصفة الشرطية بالنتيجة باستخدام سهم الشرط (→)."
+  },
+  {
+    id: 29,
+    sec: "ch11u3",
+    unit: "الفصل 11 — الوحدة 3: الحل باستخدام الشكل الشرطي",
+    q: "(2) المنطق من الدرجة الأولى للعبارة (Ali did not study, and he is lucky):",
+    opts: [
+      { t: "¬study(Ali) ∨ lucky(Ali)", why: "خيار مستبعد؛ الرمز (∨) يعني (أو / or)، بينما الجملة فيها الرابط (and = و)." },
+      { t: "¬study(Ali) ∧ lucky(Ali)", why: "إجابة صحيحة؛ علي لم يدرس (¬study(Ali))، والرابط (and) يُترجم إلى (∧)، وهو محظوظ (lucky(Ali))." }
+    ],
+    ans: 1,
+    summary: "كلمة (not) تُترجم إلى (¬)، وكلمة (and) تُترجم إلى (∧)."
+  },
+  {
+    id: 30,
+    sec: "ch11u3",
+    unit: "الفصل 11 — الوحدة 3: الحل باستخدام الشكل الشرطي",
+    q: "(3) الشكل الشرطي (Clausal Form) للعبارة (Everyone who is lucky win the prize):",
+    opts: [
+      { t: "∀X: Lucky(X) → win(X, prize)", why: "خيار مستبعد؛ هذا هو تمثيل المنطق من الدرجة الأولى قبل تحويله إلى الشكل الشرطي (Clausal Form)." },
+      { t: "¬Lucky(Z) ∨ win(Z, prize)", why: "إجابة صحيحة؛ لأن الشكل الشرطي (Clausal Form) يتطلب حذف السهم (A → B تصبح ¬A ∨ B) وحذف رمز الكل (∀) مع تخصيص اسم المتغير (Z)." }
+    ],
+    ans: 1,
+    summary: "انتبهي لطلب السؤال: إذا طلب (المنطق من الدرجة الأولى) نختار التي فيها (∀ و →)، أما إذا طلب (الشكل الشرطي Clausal Form) فنختار التي حُذف منها السهم والـ ∀ وأصبحت بصيغة (¬A ∨ B)!"
+  },
+
+  // ==================== الفصل الثاني عشر: الوحدة 1 ====================
+  {
+    id: 31,
+    sec: "ch12u1",
+    unit: "الفصل 12 — الوحدة 1: الذكاء الاصطناعي وعدم اليقين",
+    q: "(1) من أسباب عدم اليقين في الذكاء الاصطناعي التي تجعل البيانات أو النماذج السابقة غير دقيقة أو غير كافية لاتخاذ قرارات جديدة:",
+    opts: [
+      { t: "عدم اكتمال المعلومات.", why: "خيار مستبعد؛ يعني غياب بعض البيانات الضرورية أصلاً وقت اتخاذ القرار." },
+      { t: "تغير البيئة.", why: "إجابة صحيحة؛ البيئات الديناميكية تتغير باستمرار وبسرعة، مما يجعل البيانات أو النماذج السابقة غير دقيقة أو غير كافية لاتخاذ قرارات جديدة (صفحة 120)." },
+      { t: "الغموض.", why: "خيار مستبعد؛ يرتبط بعدم وضوح صياغة البيانات اللغوية أو تشوشها." },
+      { t: "التعقيد والتفاعل.", why: "خيار مستبعد؛ يشير لتداخل عوامل متعددة يصعب التنبؤ بها." }
+    ],
+    ans: 1,
+    summary: "المفتاح في السؤال هو عبارة (تجعل البيانات أو النماذج السابقة غير دقيقة لاتخاذ قرارات جديدة) وهذا نص تعريف (تغير البيئة) في الملزمة."
+  },
+  {
+    id: 32,
+    sec: "ch12u1",
+    unit: "الفصل 12 — الوحدة 1: الذكاء الاصطناعي وعدم اليقين",
+    q: "(2) في حالة احتمال سقوط المطر في يوم معين؛ حتى مع توفر بيانات الطقس، وعدم الدقة بسبب طبيعة الظواهر الجوية يعد من نوع:",
+    opts: [
+      { t: "عدم اليقين الوجودي.", why: "خيار مستبعد؛ عدم اليقين الوجودي/المعرفي (Epistemic) ناتج عن نقص البيانات ويمكن تقليله بجمع مزيد من البيانات (مثل تشخيص مريض)." },
+      { t: "عدم اليقين الضبابي.", why: "خيار مستبعد؛ يرتبط بالألفاظ غير المحددة بدقة مثل (قريب، طويل، حار قليلاً)." },
+      { t: "عدم اليقين العشوائي.", why: "إجابة صحيحة؛ عدم اليقين العشوائي (Aleatory Uncertainty) ناتج عن عشوائية النظام أو الطبيعة ذاتها (مثل حالة الطقس وسقوط المطر) ولا يمكن إزالته بجمع بيانات إضافية." },
+      { t: "عدم اليقين المفاهيمي.", why: "خيار مستبعد؛ يرتبط بتعدد معاني الكلمات في اللغات الطبيعية (مثل كلمة عين)." }
+    ],
+    ans: 2,
+    summary: "مثال احتمال سقوط المطر والظواهر الجوية في الملزمة (صفحة 121) هو المثال النصي لـ (عدم اليقين العشوائي Aleatory Uncertainty)."
+  },
+  {
+    id: 33,
+    sec: "ch12u1",
+    unit: "الفصل 12 — الوحدة 1: الذكاء الاصطناعي وعدم اليقين",
+    q: "(3) يحدث عند تفسير المعاني في النصوص أو الأوامر اللغوية، ويُستخدم بشكل خاص في معالجة اللغة الطبيعية حيث يمكن أن تحمل الكلمات معاني مختلفة تبعاً للسياق:",
+    opts: [
+      { t: "عدم اليقين المفاهيمي.", why: "إجابة صحيحة؛ عدم اليقين المفاهيمي/الدلالي (Semantic Uncertainty) يحدث في معالجة اللغة الطبيعية عندما تحمل الكلمة الواحدة (مثل كلمة 'عين') عدة معانٍ حسب السياق." },
+      { t: "عدم اليقين الوجودي.", why: "خيار مستبعد؛ ناتج عن نقص المعرفة أو قلة البيانات." },
+      { t: "عدم اليقين العشوائي.", why: "خيار مستبعد؛ ناتج عن العشوائية الطبيعية مثل الطقس." },
+      { t: "عدم اليقين الضبابي.", why: "خيار مستبعد؛ يرتبط بالصفات النسبية غير الحدية مثل (قصير/كبير)." }
+    ],
+    ans: 0,
+    summary: "تفسير المعاني في النصوص ومعالجة اللغة الطبيعية وتعدد معاني الكلمات تبعاً للسياق = عدم اليقين المفاهيمي (Semantic Uncertainty)."
+  },
+
+  // ==================== الفصل الثاني عشر: الوحدة 2 ====================
+  {
+    id: 34,
+    sec: "ch12u2",
+    unit: "الفصل 12 — الوحدة 2: طرق معالجة عدم اليقين",
+    q: "(1) يستخدم الذكاء الاصطناعي في قطاع ............ لدعم القرارات الاستراتيجية في ظل عدم اليقين الاقتصادي:",
+    opts: [
+      { t: "الرعاية الصحية.", why: "خيار مستبعد؛ في الرعاية الصحية يُستخدم للتنبؤ بتفشي الأوبئة والتشخيص المبكر." },
+      { t: "إدارة الأعمال.", why: "إجابة صحيحة؛ نصت الملزمة (صفحة 125) على أنه في مجال (إدارة الأعمال) يدعم الذكاء الاصطناعي القرارات الاستراتيجية في ظل التقلبات الاقتصادية وعدم اليقين في الأسواق." },
+      { t: "القطاع المالي.", why: "خيار مستبعد؛ في القطاع المالي يُستخدم لتحليل تقلبات الأسهم وتحسين استراتيجيات الاستثمار." },
+      { t: "الشبكات العصبية البايزية.", why: "خيار مستبعد؛ هذه أداة تقنية وليست قطاعاً اقتصادياً." }
+    ],
+    ans: 1,
+    summary: "المفتاح النصي في الملزمة (ص125): (دعم القرارات الاستراتيجية في ظل التقلبات الاقتصادية) = قطاع إدارة الأعمال."
+  },
+  {
+    id: 35,
+    sec: "ch12u2",
+    unit: "الفصل 12 — الوحدة 2: طرق معالجة عدم اليقين",
+    q: "(2) تستخدم ............ عند التعامل مع بيانات تسلسلية، حيث تساعد على التنبؤ بالحالات المستقبلية بناءً على البيانات الحالية، مع الأخذ في الاعتبار الاحتمالات غير المرئية:",
+    opts: [
+      { t: "نظرية الأدلة.", why: "خيار مستبعد؛ تُستخدم لدمج أدلة متعددة من مصادر أو مستشعرات مختلفة عند نقص البيانات." },
+      { t: "التعلم العميق العشوائي.", why: "خيار مستبعد؛ يدمج طبقات احتمالية بايزية داخل الشبكات العصبية." },
+      { t: "نماذج ماركوف المخفية.", why: "إجابة صحيحة؛ نماذج ماركوف المخفية (Hidden Markov Models) تُستخدم مع البيانات التسلسلية (كالصوت واللغة الطبيعية) للتنبؤ بالحالات المستقبلية مع مراعاة الاحتمالات غير المرئية." },
+      { t: "نماذج مونت كارلو.", why: "خيار مستبعد؛ تعتمد على إجراء محاكاة عشوائية متكررة لحساب توزيع المخاطر." }
+    ],
+    ans: 2,
+    summary: "البيانات التسلسلية + الاحتمالات غير المرئية (المخفية) = نماذج ماركوف المخفية."
+  },
+  {
+    id: 36,
+    sec: "ch12u2",
+    unit: "الفصل 12 — الوحدة 2: طرق معالجة عدم اليقين",
+    q: "(3) تعتمد هذه الطرق على إجراء محاكاة عشوائية متكررة للوصول إلى توزيع احتمالي للنتائج المحتملة، مما يتيح حساب المخاطر المرتبطة باتخاذ قرارات معينة:",
+    opts: [
+      { t: "نظرية الأدلة.", why: "خيار مستبعد؛ تدمج الأدلة المتعددة ولا تقوم على المحاكاة العشوائية المتكررة." },
+      { t: "نماذج ماركوف المخفية.", why: "خيار مستبعد؛ تختص بالبيانات التسلسلية كالصوتيات." },
+      { t: "التعلم العميق العشوائي.", why: "خيار مستبعد؛ يختص بإضافة طبقات بايزية للشبكات العصبية." },
+      { t: "نماذج مونت كارلو.", why: "إجابة صحيحة؛ نماذج مونت كارلو (Monte Carlo) تقوم على إجراء محاكاة عشوائية متكررة للوصول إلى توزيع احتمالي للنتائج وحساب المخاطر (صفحة 128)." }
+    ],
+    ans: 3,
+    summary: "إجراء محاكاة عشوائية متكررة للوصول إلى توزيع احتمالي للنتائج = نماذج مونت كارلو."
+  },
+
+  // ==================== الفصل الثاني عشر: الوحدة 3 ====================
+  {
+    id: 37,
+    sec: "ch12u3",
+    unit: "الفصل 12 — الوحدة 3: تطبيقات التعامل مع عدم اليقين",
+    q: "(1) ما هي التقنية التي تُستخدم في السيارات ذاتية القيادة للتعامل مع التشويش في بيانات الاستشعار؟",
+    opts: [
+      { t: "التصفية الكالمانية.", why: "إجابة صحيحة؛ تُستخدم تقنيات التصفية الكالمانية (Kalman Filters) في السيارات ذاتية القيادة لتقدير مواقع الكائنات المتحركة بدقة حتى عند وجود تشويش في بيانات الرادار أو الكاميرات (صفحة 130)." },
+      { t: "الشبكات العصبية العميقة.", why: "خيار مستبعد؛ تُستخدم للرؤية وكشف الاحتيال ولكن التقنية المحددة في الملزمة لمعالجة تشويش مستشعرات السيارة هي التصفية الكالمانية." },
+      { t: "الشبكات العصبية البايزية.", why: "خيار مستبعد؛ ذُكرت في الملزمة كمثال في نظم التشخيص الطبي لتقدير احتمالية الإصابة بمرض." },
+      { t: "سلاسل ماركوف.", why: "خيار مستبعد؛ ذُكرت مع التنبؤ بالطقس والأسواق المالية." }
+    ],
+    ans: 0,
+    summary: "في السيارات ذاتية القيادة ومستشعراتها (أو خرائط الروبوتات) نختار دائماً: التصفية الكالمانية (Kalman Filters)."
+  },
+  {
+    id: 38,
+    sec: "ch12u3",
+    unit: "الفصل 12 — الوحدة 3: تطبيقات التعامل مع عدم اليقين",
+    q: "(2) في تطبيقات التنبؤ المالي، أي من النماذج التالية يُستخدم لتقدير احتمالية المخاطر بناءً على بيانات غير مستقرة؟",
+    opts: [
+      { t: "خرائط كالمانية.", why: "خيار مستبعد؛ الخرائط الاحتمالية الكالمانية تُستخدم في تنقل الروبوتات في البيئات غير المعروفة." },
+      { t: "سلاسل ماركوف مونت كارلو (MCMC).", why: "إجابة صحيحة؛ نصت الملزمة (صفحة 130) على أن القطاع المالي يستخدم نماذج مثل سلاسل ماركوف مونت كارلو (MCMC) لتوقع الأداء المستقبلي للأسهم وتقييم المخاطر عند توافر بيانات غير مستقرة." },
+      { t: "شبكات ماركوف.", why: "خيار مستبعد؛ ذُكرت في تطبيقات التنبؤ بالطقس." },
+      { t: "النماذج الضبابية.", why: "خيار مستبعد؛ ذُكرت في معالجة اللغة الطبيعية وأنظمة التكييف الذكية." }
+    ],
+    ans: 1,
+    summary: "التنبؤ المالي وتقدير مخاطر الأسهم = سلاسل ماركوف مونت كارلو (MCMC)."
+  },
+  {
+    id: 39,
+    sec: "ch12u3",
+    unit: "الفصل 12 — الوحدة 3: تطبيقات التعامل مع عدم اليقين",
+    q: "(3) إحدى الطرق التي يستخدمها الذكاء الاصطناعي للتعامل مع عدم اليقين من خلال تحليل كميات كبيرة من البيانات؟",
+    opts: [
+      { t: "التصفية الضبابية.", why: "خيار مستبعد؛ مصطلح مدمج غير دقيق." },
+      { t: "التفاعل البشري المباشر.", why: "خيار مستبعد؛ يعتمد على العنصر البشري وليس على تحليل البيانات الضخمة آلياً." },
+      { t: "التحليل الضخم للبيانات وبناء سيناريوهات متعددة.", why: "إجابة صحيحة؛ يقلل الذكاء الاصطناعي من عدم اليقين عبر تحليل كميات هائلة من البيانات واستخلاص الأنماط وبناء سيناريوهات متعددة لتوقع كيف يتطور الوضع مستقبلاً (صفحة 132-133)." },
+      { t: "إيقاف جمع البيانات.", why: "خيار مستبعد؛ إيقاف جمع البيانات يزيد من عدم اليقين ولا يعالجه." }
+    ],
+    ans: 2,
+    summary: "من خلال تحليل الكميات الضخمة من البيانات وبناء سيناريوهات متعددة، يقدّم الذكاء الاصطناعي رؤى دقيقة لتقليل عدم اليقين."
+  },
+
+  // ==================== الفصل الثالث عشر: الوحدة 1 ====================
+  {
+    id: 40,
+    sec: "ch13u1",
+    unit: "الفصل 13 — الوحدة 1: مقدمة إلى خوارزميات التعلم الآلي",
+    q: "(1) يتم في مرحلة ............ توحيد التنسيقات ومعالجة القيم المفقودة، وضمان أن تكون البيانات جاهزة للاستخدام الفعال في التدريب:",
+    opts: [
+      { t: "تنظيف البيانات.", why: "إجابة صحيحة؛ في مرحلة تنظيف وإعداد البيانات (Data Preprocessing - المرحلة الثانية) يتم إزالة الأخطاء وتوحيد التنسيقات ومعالجة القيم المفقودة." },
+      { t: "جمع البيانات.", why: "خيار مستبعد؛ جمع البيانات (Data Collection) هي المرحلة الأولى ويتم فيها تجميع البيانات الخام المتعلقة بالمشكلة." },
+      { t: "اختيار النموذج.", why: "خيار مستبعد؛ اختيار النموذج (Model Selection) هي المرحلة الثالثة لتحديد الخوارزمية المناسبة." },
+      { t: "التحسين والتنبؤ.", why: "خيار مستبعد؛ هي المرحلة السادسة والأخيرة لضبط المعاملات واستخدام النموذج على بيانات جديدة." }
+    ],
+    ans: 0,
+    summary: "توحيد التنسيقات + معالجة القيم المفقودة + إزالة الأخطاء = مرحلة تنظيف البيانات (Data Preprocessing)."
+  },
+  {
+    id: 41,
+    sec: "ch13u1",
+    unit: "الفصل 13 — الوحدة 1: مقدمة إلى خوارزميات التعلم الآلي",
+    q: "(2) يتم في مرحلة ............ قياس الأداء باستخدام مقاييس مثل الدقة، الدقة التنبؤية، ومستوى الخطأ:",
+    opts: [
+      { t: "تنظيف البيانات.", why: "خيار مستبعد؛ تختص بتجهيز البيانات قبل التدريب." },
+      { t: "اختيار النموذج.", why: "خيار مستبعد؛ تختص باختيار نوع الخوارزمية قبل التدريب." },
+      { t: "تقييم النموذج.", why: "إجابة صحيحة؛ في مرحلة تقييم النموذج (Model Evaluation - المرحلة الخامسة) يُختبر النموذج على بيانات اختبار جديدة ويُقاس أداؤه بمقاييس الدقة ومستوى الخطأ." },
+      { t: "التحسين والتنبؤ.", why: "خيار مستبعد؛ تأتي بعد التقييم لضبط المعاملات وإجراء التنبؤ الفعلي." }
+    ],
+    ans: 2,
+    summary: "قياس الأداء بمقاييس الدقة ومستوى الخطأ على بيانات الاختبار = مرحلة تقييم النموذج (Model Evaluation)."
+  },
+  {
+    id: 42,
+    sec: "ch13u1",
+    unit: "الفصل 13 — الوحدة 1: مقدمة إلى خوارزميات التعلم الآلي",
+    q: "(3) يستخدم ............ عندما لا تكون هناك مخرجات محددة في البيانات، ويهدف إلى اكتشاف الأنماط أو الهيكليات داخل البيانات:",
+    opts: [
+      { t: "التعلم تحت الإشراف.", why: "خيار مستبعد؛ التعلم تحت الإشراف (Supervised Learning) يشترط وجود مدخلات ومخرجات صحيحة مسماة مسبقاً (مثل الانحدار والتصنيف)." },
+      { t: "التعلم غير الخاضع للإشراف.", why: "إجابة صحيحة؛ التعلم غير الخاضع للإشراف (Unsupervised Learning) يعمل على بيانات بدون مخرجات محددة لاكتشاف الأنماط وتجميع البيانات (مثل K-Means و PCA)." },
+      { t: "التعلم العميق العشوائي.", why: "خيار مستبعد؛ تقنية للتعامل مع عدم اليقين في الشبكات العصبية." },
+      { t: "التعلم المعزز.", why: "خيار مستبعد؛ التعلم المعزز (Reinforcement Learning) يعتمد على وكيل يتفاعل مع بيئة ويتلقى مكافآت أو عقوبات (مثل Q-Learning)." }
+    ],
+    ans: 1,
+    summary: "عدم وجود مخرجات محددة في البيانات + اكتشاف الأنماط والتجميع = التعلم غير الخاضع للإشراف (Unsupervised Learning)."
+  },
+
+  // ==================== الفصل الثالث عشر: الوحدة 2 ====================
+  {
+    id: 43,
+    sec: "ch13u2",
+    unit: "الفصل 13 — الوحدة 2: التعلم العميق والشبكات العصبية",
+    q: "(1) يعتمد ............ على الشبكات العصبية العميقة، وهي شبكات متعددة الطبقات تحاكي طريقة عمل العقل البشري:",
+    opts: [
+      { t: "التعلم الآلي.", why: "خيار مستبعد؛ التعلم الآلي التقليدي يستخدم غالباً خوارزميات أبسط (كالانحدار وشجرة القرار) ولا يشترط شبكات عصبية عميقة." },
+      { t: "التعلم العميق.", why: "إجابة صحيحة؛ التعلم العميق (Deep Learning) هو فرع من التعلم الآلي يعتمد بشكل أساسي على الشبكات العصبية العميقة متعددة الطبقات لمحاكاة الدماغ البشري (شريحة 504 و 510)." },
+      { t: "الشبكات العصبية العميقة.", why: "خيار مستبعد؛ لأن السؤال يقول (يعتمد .... على الشبكات العصبية العميقة)، فالذي يعتمد عليها هو مجال التعلم العميق نفسه." },
+      { t: "الشبكات العصبية المتكررة.", why: "خيار مستبعد؛ هي نوع فرعي لمعالجة البيانات المتسلسلة (RNN)." }
+    ],
+    ans: 1,
+    summary: "انتبهي لصياغة السؤال (شريحة 510): الذي 'يعتمد على الشبكات العصبية العميقة' هو (التعلم العميق Deep Learning)."
+  },
+  {
+    id: 44,
+    sec: "ch13u2",
+    unit: "الفصل 13 — الوحدة 2: التعلم العميق والشبكات العصبية",
+    q: "(2) تتكون ............ من عدة طبقات خفية، قادرة على تعلم الأنماط المعقدة والمتعددة الأبعاد وتستخدم في تطبيقات مثل التعرف على الصور وتحليل النصوص:",
+    opts: [
+      { t: "الشبكات العصبية المتحولة.", why: "خيار مستبعد؛ الشبكات المتحولة (Transformers) تُعرّف باعتمادها على آلية الانتباه الذاتي (Self-Attention)." },
+      { t: "الشبكات العصبية التلافيفية.", why: "خيار مستبعد؛ الشبكات التلافيفية (CNN) تُعرّف باعتمادها على الطبقات التلافيفية لتجزئة الصور." },
+      { t: "الشبكات العصبية العميقة.", why: "إجابة صحيحة؛ هذا هو التعريف النصي لـ (الشبكات العصبية العميقة DNN) في شريحة 507 و 511." },
+      { t: "الشبكات العصبية المتكررة.", why: "خيار مستبعد؛ الشبكات المتكررة (RNN) تحتوي على حلقات داخلية لحفظ الذاكرة للبيانات المتسلسلة." }
+    ],
+    ans: 2,
+    summary: "تتكون من عدة طبقات خفية لتعلم الأنماط المعقدة والمتعددة الأبعاد (شريحة 511) = الشبكات العصبية العميقة (DNN)."
+  },
+  {
+    id: 45,
+    sec: "ch13u2",
+    unit: "الفصل 13 — الوحدة 2: التعلم العميق والشبكات العصبية",
+    q: "(3) تعتمد ............ على آلية الانتباه الذاتي، ويمكن للنموذج التركيز على أجزاء معينة من البيانات بناءً على أهميتها، مما يسهل تحليل العلاقات الطويلة الأمد بين الكلمات:",
+    opts: [
+      { t: "الشبكات العصبية التلافيفية.", why: "خيار مستبعد؛ تعتمد CNN على المرشحات والطبقات التلافيفية لتحليل الصور." },
+      { t: "الشبكات العصبية العميقة.", why: "خيار مستبعد؛ مفهوم عام للشبكات متعددة الطبقات الخفية." },
+      { t: "الشبكات العصبية المتكررة.", why: "خيار مستبعد؛ تعتمد RNN على الحلقات الداخلية وتعاني مع السلاسل الطويلة جداً مقارنة بالمتحولة." },
+      { t: "الشبكات العصبية المتحولة.", why: "إجابة صحيحة؛ الشبكات العصبية المتحولة (Transformers) تعتمد على آلية الانتباه الذاتي (Self-Attention) وهي الأساس لنماذج مثل BERT و GPT (شريحة 508 و 512)." }
+    ],
+    ans: 3,
+    summary: "آلية الانتباه الذاتي (Self-Attention) + العلاقات طويلة الأمد بين الكلمات = الشبكات العصبية المتحولة (Transformers)."
+  },
+
+  // ==================== الفصل الثالث عشر: الوحدة 3 ====================
+  {
+    id: 46,
+    sec: "ch13u3",
+    unit: "الفصل 13 — الوحدة 3: الذكاء الاصطناعي التوليدي",
+    q: "(1) تعتمد ............ على 'آلية الانتباه' التي تحدد وتحافظ على العلاقات في تسلسل البيانات، مما يجعلها فعالة للغاية في توليد النصوص المتسقة:",
+    opts: [
+      { t: "نماذج الانتشار.", why: "خيار مستبعد؛ نماذج الانتشار (Diffusion Models) تعمل على تحويل الضوضاء تدريجياً لإنتاج صور عالية الجودة." },
+      { t: "المشفرات التلقائية المتغيرة.", why: "خيار مستبعد؛ تقوم VAEs بضغط البيانات في مساحة كامنة مضغوطة ثم فك ضغطها." },
+      { t: "النماذج التحويلية.", why: "إجابة صحيحة؛ النماذج التحويلية (Transformers) تعتمد على آلية الانتباه لتوليد النصوص المتسقة كما في GPT (شريحة 518 و 530)." },
+      { t: "الشبكات التوليدية.", why: "خيار مستبعد؛ الشبكات التوليدية العدائية (GANs) تتكون من شبكتي المولد والمميز لإنتاج الصور والفيديو." }
+    ],
+    ans: 2,
+    summary: "في أنواع النماذج التوليدية (شريحة 530): آلية الانتباه + توليد النصوص المتسقة = النماذج التحويلية (Transformers)."
+  },
+  {
+    id: 47,
+    sec: "ch13u3",
+    unit: "الفصل 13 — الوحدة 3: الذكاء الاصطناعي التوليدي",
+    q: "(2) تقوم ............ تدريجياً بتحويل الضوضاء إلى إخراج منظم، عكس عملية الضوضاء لتوضيح التفاصيل خطوة بخطوة، وتنتج صوراً مفصلة وعالية الجودة لكنها تتطلب طاقة حسابية عالية:",
+    opts: [
+      { t: "نماذج الانتشار.", why: "إجابة صحيحة؛ هذا هو التعريف النصي لـ نماذج الانتشار (Diffusion Models) في شريحة 519 و 531." },
+      { t: "المشفرات التلقائية المتغيرة.", why: "خيار مستبعد؛ تعتمد VAEs على الضغط في المساحة الكامنة (Latent Space) وليست عكس الضوضاء تدريجياً." },
+      { t: "الشبكات التوليدية.", why: "خيار مستبعد؛ تعتمد GANs على التنافس بين شبكة المولد وشبكة المميز." },
+      { t: "النماذج التحويلية.", why: "خيار مستبعد؛ تعتمد على آلية الانتباه في تسلسل النصوص." }
+    ],
+    ans: 0,
+    summary: "تحويل الضوضاء تدريجياً إلى إخراج منظم خطوة بخطوة = نماذج الانتشار (Diffusion Models)."
+  },
+  {
+    id: 48,
+    sec: "ch13u3",
+    unit: "الفصل 13 — الوحدة 3: الذكاء الاصطناعي التوليدي",
+    q: "(3) يسمح ............ للذكاء الاصطناعي بتعديل مخرجاته بناءً على التفضيلات أو المتطلبات، ويساعد على إنتاج ردود تتماشى بشكل أفضل مع الحالات الخاصة:",
+    opts: [
+      { t: "الانتباه الذاتي.", why: "خيار مستبعد؛ آلية داخل المحولات للتركيز على الكلمات المهمة في السياق." },
+      { t: "التعلم التعزيزي مع تغذية راجعة من البشر (RLHF).", why: "إجابة صحيحة؛ في نماذج مثل ChatGPT يسمح (RLHF) للنموذج بالتعلم من التغذية الراجعة البشرية وتعديل مخرجاته وفق التفضيلات (شريحة 520 و 532)." },
+      { t: "التعديل والتوجيه الذكي (Prompt Engineering).", why: "خيار مستبعد؛ هندسة الأوامر تعني صياغة المدخلات والتوجيهات بدقة من قِبل المستخدم لتوجيه المخرجات." },
+      { t: "النماذج التحويلية.", why: "خيار مستبعد؛ هي البنية المعمارية للشبكة وليست عملية التغذية الراجعة البشرية." }
+    ],
+    ans: 1,
+    summary: "تعديل المخرجات بناءً على التفضيلات عبر حلقة تغذية راجعة بشرية = التعلم التعزيزي مع تغذية راجعة من البشر (RLHF)."
+  },
+
+  // ==================== الفصل الرابع عشر: الوحدة 1 ====================
+  {
+    id: 49,
+    sec: "ch14u1",
+    unit: "الفصل 14 — الوحدة 1: تطبيقات الذكاء الاصطناعي",
+    q: "(1) أي من التطبيقات التالية يُستخدم في تشخيص الأمراض بشكل مبكر باستخدام الذكاء الاصطناعي؟",
+    opts: [
+      { t: "الطب الدقيق.", why: "خيار مستبعد؛ الطب الدقيق أو الشخصي يختص بتخصيص الخطط العلاجية بناءً على جينات وتاريخ كل مريض." },
+      { t: "تحليل الأسواق المالية.", why: "خيار مستبعد؛ تطبيق في القطاع المالي وليس الرعاية الصحية." },
+      { t: "تشخيص الأمراض من خلال تحليل صور الأشعة والاختبارات الطبية.", why: "إجابة صحيحة؛ يعتمد التشخيص الطبي المبكر للسرطان والسكري على تحليل صور الأشعة والاختبارات الطبية بتقنيات تعلم الآلة والتعلم العميق (شريحة 537 و 550)." },
+      { t: "تحسين تجارب التسوق.", why: "خيار مستبعد؛ تطبيق في التجارة الإلكترونية." }
+    ],
+    ans: 2,
+    summary: "تشخيص الأمراض المبكر في شريحة 537 و 550 يتم عبر (تحليل صور الأشعة والاختبارات الطبية)."
+  },
+  {
+    id: 50,
+    sec: "ch14u1",
+    unit: "الفصل 14 — الوحدة 1: تطبيقات الذكاء الاصطناعي",
+    q: "(2) من هذه التقنيات تستخدم في التجارة الإلكترونية لتحليل سلوك المستخدمين واقتراح منتجات جديدة:",
+    opts: [
+      { t: "أنظمة التوصية.", why: "إجابة صحيحة؛ تقوم أنظمة التوصية (Recommendation Systems) في التجارة الإلكترونية بتحليل سلوك المستخدمين وتاريخ الشراء والتصفح لاقتراح منتجات جديدة (شريحة 539 و 551)." },
+      { t: "أتمتة العمليات التجارية.", why: "خيار مستبعد؛ تختص بتنفيذ المهام الإدارية الروتينية بواسطة الروبوتات الذكية." },
+      { t: "الطب الشخصي.", why: "خيار مستبعد؛ يختص بتخصيص العلاج الطبي للمرضى." },
+      { t: "تحليل البيانات الحكومية.", why: "خيار مستبعد؛ يختص بتحسين الخدمات العامة في القطاع الحكومي." }
+    ],
+    ans: 0,
+    summary: "تحليل سلوك المستخدمين واقتراح منتجات جديدة في التجارة الإلكترونية = أنظمة التوصية."
+  },
+  {
+    id: 51,
+    sec: "ch14u1",
+    unit: "الفصل 14 — الوحدة 1: تطبيقات الذكاء الاصطناعي",
+    q: "(3) في أي مجال يُستخدم الذكاء الاصطناعي لتحسين إدارة المدن وتحليل البيانات المتعلقة بحركة المرور؟",
+    opts: [
+      { t: "القطاع المالي.", why: "خيار مستبعد؛ يختص بتحليل الأسواق ومكافحة الاحتيال وإدارة مخاطر القروض." },
+      { t: "الأمن السيبراني.", why: "خيار مستبعد؛ يختص بكشف الهجمات والتهديدات السيبرانية في الشبكات." },
+      { t: "إدارة المدن الذكية.", why: "إجابة صحيحة؛ في القطاع الحكومي والخدمات العامة يُستخدم الذكاء الاصطناعي في (إدارة المدن الذكية) لتحليل البيانات الضخمة المتعلقة بحركة المرور واستهلاك الطاقة وإدارة النفايات (شريحة 542 و 552)." },
+      { t: "التعليم.", why: "خيار مستبعد؛ يختص بالتعلم التكيفي وتصحيح الاختبارات." }
+    ],
+    ans: 2,
+    summary: "تحسين إدارة المدن وتحليل بيانات حركة المرور واستهلاك الطاقة والنفايات = إدارة المدن الذكية."
+  },
+
+  // ==================== الفصل الرابع عشر: الوحدة 2 ====================
+  {
+    id: 52,
+    sec: "ch14u2",
+    unit: "الفصل 14 — الوحدة 2: مستقبل الذكاء الاصطناعي",
+    q: "(1) التعلم الآلي هو:",
+    opts: [
+      { t: "تقنية تستخدم فقط في الألعاب الرقمية.", why: "خيار مستبعد؛ يُستخدم في كافة المجالات الطبية والمالية والصناعية وليس الألعاب فقط." },
+      { t: "فرع من الذكاء الاصطناعي يتعلم من البيانات لتحسين الأداء بمرور الوقت.", why: "إجابة صحيحة؛ التعريف الرسمي للتعلم الآلي (Machine Learning) في شريحة 556 و 566." },
+      { t: "نظام يعتمد على الإنسان بالكامل لتحليل البيانات.", why: "خيار مستبعد؛ لأنه يتعلم ذاتياً من البيانات دون الحاجة لتدخل بشري كامل أو برمجة صريحة." },
+      { t: "نوع من البرامج التي لا تحتاج إلى بيانات لتحسين أدائها.", why: "خيار مستبعد؛ البيانات هي الوقود والأساس الذي يتعلم منه نظام التعلم الآلي." }
+    ],
+    ans: 1,
+    summary: "التعلم الآلي (Machine Learning) هو فرع من الذكاء الاصطناعي تتعلم فيه الأنظمة من البيانات لتحسين أدائها مع مرور الوقت."
+  },
+  {
+    id: 53,
+    sec: "ch14u2",
+    unit: "الفصل 14 — الوحدة 2: مستقبل الذكاء الاصطناعي",
+    q: "(2) من التطبيقات التالية التي تعد مثالاً على تعلم الآلة العميق:",
+    opts: [
+      { t: "تحرير الفيديو.", why: "خيار مستبعد؛ برامج المونتاج التقليدية ليست هي المثال النصي لتعلم الآلة العميق في الشريحة." },
+      { t: "الألعاب التقليدية.", why: "خيار مستبعد؛ الألعاب التقليدية تعتمد على قواعد برمجية ثابتة." },
+      { t: "معالجة النصوص.", why: "خيار مستبعد؛ معالجة النصوص ذُكرت تحت عنوان معالجة اللغات الطبيعية (NLP) في شريحة 557." },
+      { t: "التعرف على الصوت والصورة.", why: "إجابة صحيحة؛ نصت شريحة 556 و 567 حرفياً على أن تطبيقات تعلم الآلة العميق (Deep Learning) هي: التعرف على الصوت والصورة، السيارات ذاتية القيادة، والرؤية الحاسوبية." }
+    ],
+    ans: 3,
+    summary: "المثال المعتمد في شريحة 556 و 567 لتعلم الآلة العميق هو (التعرف على الصوت والصورة)."
+  },
+  {
+    id: 54,
+    sec: "ch14u2",
+    unit: "الفصل 14 — الوحدة 2: مستقبل الذكاء الاصطناعي",
+    q: "(3) من المجالات التي يستخدم الذكاء الاصطناعي فيها لتحسين تجربة التعلم والتدريب:",
+    opts: [
+      { t: "التدريب المهني الافتراضي والتعلم التفاعلي.", why: "إجابة صحيحة؛ عند دمج الذكاء الاصطناعي مع الواقع المعزز والافتراضي (AR/VR) يُستخدم في التدريب المهني الافتراضي والتعلم التفاعلي كالتدريب على القيادة أو العمليات الطبية (شريحة 559 و 568)." },
+      { t: "التسوق عبر الإنترنت.", why: "خيار مستبعد؛ يرتبط بالتجارة الإلكترونية وليس بالتعلم والتدريب." },
+      { t: "الألعاب الإلكترونية فقط.", why: "خيار مستبعد؛ يرتبط بالترفيه." },
+      { t: "المراسلات النصية.", why: "خيار مستبعد؛ يرتبط بالتواصل." }
+    ],
+    ans: 0,
+    summary: "تحسين تجربة التعلم والتدريب عبر تقنيات الواقع الافتراضي والمعزز = التدريب المهني الافتراضي والتعلم التفاعلي."
+  },
+
+  // ==================== الفصل الرابع عشر: الوحدة 3 ====================
+  {
+    id: 55,
+    sec: "ch14u3",
+    unit: "الفصل 14 — الوحدة 3: القضايا الأخلاقية ومبادئ سدايا",
+    q: "(1) هي إحدى المخاوف الأخلاقية المرتبطة باستخدام الذكاء الاصطناعي:",
+    opts: [
+      { t: "زيادة سرعة الإنترنت.", why: "خيار مستبعد؛ ميزة تقنية إيجابية وليست تخوفاً أخلاقياً." },
+      { t: "قلة البيانات المتاحة.", why: "خيار مستبعد؛ تحدٍ تقني/إحصائي وليس قضية أخلاقية." },
+      { t: "التبعية الزائدة على الذكاء الاصطناعي.", why: "إجابة صحيحة؛ التبعية الزائدة والاعتماد المفرط على الذكاء الاصطناعي (مما قد يؤدي لتخلي البشر عن المسؤولية في اتخاذ القرارات) هي من أبرز المخاوف الأخلاقية المذكورة في شريحة 572 و 580." },
+      { t: "تحسين أداء الأجهزة.", why: "خيار مستبعد؛ فائدة تقنية وليست مشكلة أخلاقية." }
+    ],
+    ans: 2,
+    summary: "من القضايا الأخلاقية في الملزمة (ص136 وشريحة 572 و 580): التبعية الزائدة على الذكاء الاصطناعي."
+  },
+  {
+    id: 56,
+    sec: "ch14u3",
+    unit: "الفصل 14 — الوحدة 3: القضايا الأخلاقية ومبادئ سدايا",
+    q: "(2) هو المبدأ الذي يؤكد على أهمية وضوح قرارات أنظمة الذكاء الاصطناعي:",
+    opts: [
+      { t: "النزاهة والإنصاف.", why: "خيار مستبعد؛ المبدأ الأول في وثيقة سدايا ويركز على منع التحيز والتمييز والتنميط ضد الأفراد أو الفئات." },
+      { t: "الإنسانية.", why: "خيار مستبعد؛ المبدأ الثالث ويركز على توافق الأنظمة مع حقوق الإنسان والقيم الثقافية وعدم خداع البشر." },
+      { t: "المنافع الاجتماعية والبيئية.", why: "خيار مستبعد؛ المبدأ الرابع ويركز على تحقيق الأثر الإيجابي المستدام للمجتمع والبيئة." },
+      { t: "الشفافية والقابلية للتفسير.", why: "إجابة صحيحة؛ المبدأ السادس في وثيقة مبادئ أخلاقيات الذكاء الاصطناعي الصادرة عن (سدايا SDAIA) هو (الشفافية والقابلية للتفسير) الذي يؤكد على بناء الأنظمة بدرجة عالية من الوضوح وتتبع مراحل اتخاذ القرارات (شريحة 578 و 581)." }
+    ],
+    ans: 3,
+    summary: "وضوح قرارات أنظمة الذكاء الاصطناعي وإمكانية تتبعها وتبريرها = مبدأ الشفافية والقابلية للتفسير."
+  },
+  {
+    id: 57,
+    sec: "ch14u3",
+    unit: "الفصل 14 — الوحدة 3: القضايا الأخلاقية ومبادئ سدايا",
+    q: "(3) كيف تساهم الأطر القانونية في تنظيم استخدام الذكاء الاصطناعي؟",
+    opts: [
+      { t: "من خلال وضع لوائح تحكم استخدام الذكاء الاصطناعي لضمان الأمان والخصوصية.", why: "إجابة صحيحة؛ تسهم الأطر القانونية والتنظيمية في وضع لوائح ومعايير واضحة تحكم استخدام الذكاء الاصطناعي لضمان المساءلة والعدالة والأمان والخصوصية (شريحة 582)." },
+      { t: "من خلال تشجيع استخدام الذكاء الاصطناعي بدون قيود.", why: "خيار مستبعد؛ الاستخدام بدون قيود يعرّض سلامة الناس وحقوقهم لمخاطر عالية وغير مقبولة." },
+      { t: "بتحديد استخدام الذكاء الاصطناعي فقط في التطبيقات الترفيهية.", why: "خيار مستبعد؛ الذكاء الاصطناعي يُستخدم في كافة القطاعات الحيوية كالطب والأمن والاقتصاد." },
+      { t: "عبر تقليل عدد التطبيقات المستخدمة.", why: "خيار مستبعد؛ القوانين تنظّم جودة وأخلاقيات التطبيقات ولا تهدف لمنع التطور التقني." }
+    ],
+    ans: 0,
+    summary: "تهدف الأطر القانونية إلى وضع لوائح تحكم استخدام الذكاء الاصطناعي لضمان الأمان والخصوصية والمساءلة."
+  },
+
+  // ==================== مراجعة أسئلة الواجبات الثلاثة (10 أسئلة) ====================
+  {
+    id: 58,
+    sec: "hw",
+    unit: "الواجب الأول — السؤال 1",
+    q: "1. ما هي أهم التحديات الرئيسية التي تواجه تقنيات التعلم العميق عند استخدامها في معالجة البيانات؟",
+    opts: [
+      { t: "القدرة على التعامل مع البيانات البسيطة فقط.", why: "خيار مستبعد؛ التعلم العميق مصمم أصلاً للتعامل مع البيانات الضخمة والمعقدة وغير المنظمة." },
+      { t: "جودة البيانات المنخفضة، مثل البيانات التي تحتوي على أخطاء وقيم متطرفة، والتي تؤثر على دقة النتائج.", why: "إجابة صحيحة؛ تتطلب تقنيات التعلم العميق بيانات عالية الجودة، والبيانات الرديئة ذات الأخطاء والقيم المتطرفة تمنع الخوارزمية من العمل بصورة صحيحة (صفحة 29)." },
+      { t: "عدم القدرة على تمييز الصور بشكل صحيح في جميع الحالات.", why: "خيار مستبعد؛ التعلم العميق (خصوصاً CNN) متفوق جداً في تمييز الصور." },
+      { t: "عدم وجود تطبيقات عملية لهذه التقنيات في الحياة اليومية.", why: "خيار مستبعد؛ تطبيقاته منتشرة يومياً مثل التعرف على الوجوه والمساعدات الصوتية." }
+    ],
+    ans: 1,
+    summary: "التحدي الرئيسي المذكور في الفصل الثاني (صفحة 29) للتعلم العميق هو (الجودة الضعيفة للبيانات) التي تحتوي على أخطاء وقيم متطرفة."
+  },
+  {
+    id: 59,
+    sec: "hw",
+    unit: "الواجب الأول — السؤال 2",
+    q: "2. ما هي أبرز عيوب الوكلاء البسيطة القائمين على القواعد (Simple Reflex Agents) في التعامل مع البيئات؟",
+    opts: [
+      { t: "يمكنهم التعامل مع المستجدات الجديدة بكفاءة.", why: "خيار مستبعد؛ هذا من مزايا الوكلاء التكيفيين أو القائمين على النموذج وليس الوكيل البسيط." },
+      { t: "يتطلبون بيئة عمل متغيرة لأداء وظائفهم بشكل صحيح.", why: "خيار مستبعد؛ هم يفشلون في البيئات غير المرئية بالكامل ويتطلبون بيئة معروفة بالكامل." },
+      { t: "يعتمد قرارهم على الإدراك الحالي فقط دون الاعتماد على الذاكرة.", why: "إجابة صحيحة؛ الوكيل البسيط القائم على القواعد (Simple Reflex Agent) ليس له ذاكرة ولا يلجأ إلى تاريخ الإدراك السابق بل يعتمد قراره على الإدراك الحالي فقط (قاعدة شرط - فعل)." },
+      { t: "يمكنهم تحديث قواعدهم بناءً على التجارب السابقة.", why: "خيار مستبعد؛ القواعد لديهم ثابتة ولا يتعلمون من التجارب." }
+    ],
+    ans: 2,
+    summary: "أبرز عيب ومحدودية للوكيل البسيط القائم على القواعد (صفحة 38) أنه لا يمتلك ذاكرة ويعتمد قراره على حدث الإدراك الحالي فقط."
+  },
+  {
+    id: 60,
+    sec: "hw",
+    unit: "الواجب الأول — السؤال 3",
+    q: "3. أي من المجالات التالية تتركز على تمكين الآلات من فهم وتحليل الصور والفيديوهات؟",
+    opts: [
+      { t: "التعلم الآلي Machine Learning", why: "خيار مستبعد؛ يركز على تعلم الأنماط من البيانات لتحسين الأداء." },
+      { t: "معالجة اللغة الطبيعية NLP", why: "خيار مستبعد؛ تركز على فهم اللغة البشرية النصية والصوتية." },
+      { t: "رؤية الحاسوب Computer Vision", why: "إجابة صحيحة؛ رؤية الحاسوب (Computer Vision) هي المجال الذي يهدف إلى تمكين الآلات من فهم وتحليل الصور والفيديوهات (مثل التعرف على الوجوه والقيادة الذاتية)." },
+      { t: "الذكاء الاصطناعي في الألعاب AI in Gaming", why: "خيار مستبعد؛ يركز على تطوير شخصيات وأنظمة ذكية تتفاعل مع اللاعبين." }
+    ],
+    ans: 2,
+    summary: "فهم وتحليل الصور والفيديوهات = رؤية الحاسوب (Computer Vision)."
+  },
+  {
+    id: 61,
+    sec: "hw",
+    unit: "الواجب الثاني — السؤال 1",
+    q: "1. خوارزمية البحث بأولوية العمق (Depth First Search - DFS Algorithm):",
+    opts: [
+      { t: "من خوارزميات البحث المستنير.", why: "خيار مستبعد؛ البحث المستنير يشمل (Best-First, A*, Hill Climbing) التي تستخدم دالة استدلالية." },
+      { t: "من خوارزميات البحث الأعمى.", why: "إجابة صحيحة؛ خوارزمية البحث بأولوية العمق (DFS) والبحث بأولوية الاتساع (BFS) هما من خوارزميات البحث الأعمى (Uninformed Search) التي تعتمد على تعريف المشكلة فقط دون دالة استدلالية." },
+      { t: "من خوارزميات القائمة المترابطة.", why: "خيار مستبعد؛ DFS تستخدم هيكل بيانات المكدس (Stack) وليس القائمة المترابطة." },
+      { t: "تعتمد على مخطط ثابت.", why: "خيار مستبعد؛ وصف غير علمي لتصنيف الخوارزمية." }
+    ],
+    ans: 1,
+    summary: "خوارزميتا (DFS) و (BFS) تنتميان إلى استراتيجيات البحث الأعمى (Uninformed Search)."
+  },
+  {
+    id: 62,
+    sec: "hw",
+    unit: "الواجب الثاني — السؤال 2",
+    q: "2. إحدى الخصائص الأساسية للوكيل المنطقي (Logical Agent):",
+    opts: [
+      { t: "القدرة على الاستشعار من البيئة المحيطة.", why: "إجابة صحيحة؛ الخصائص الخمس الأساسية للوكيل المنطقي (صفحة 83) هي: الاستشعار (Perception)، تمثيل المعرفة، الاستدلال، اتخاذ القرار، والتنفيذ." },
+      { t: "الذاكرة الطويلة الأمد.", why: "خيار مستبعد؛ ليست من الخصائص الخمس الأساسية للوكيل المنطقي." },
+      { t: "القدرة على تغيير البيئة بشكل دائم.", why: "خيار مستبعد؛ يتفاعل مع البيئة عبر أجهزة التنفيذ ولكنه لا يشترط تغييرها بشكل دائم." },
+      { t: "القدرة على التعلم العميق.", why: "خيار مستبعد؛ الوكيل المنطقي يعتمد على قواعد المنطق والاستدلال وليس الشبكات العصبية العميقة." }
+    ],
+    ans: 0,
+    summary: "أول خاصية من الخصائص الأساسية للوكيل المنطقي (صفحة 83) هي الاستشعار (Perception) لتلقي المدخلات من بيئته."
+  },
+  {
+    id: 63,
+    sec: "hw",
+    unit: "الواجب الثاني — السؤال 3",
+    q: "3. تعتبر خوارزمية البحث (A*) من:",
+    opts: [
+      { t: "من خوارزميات البحث الأعمى.", why: "خيار مستبعد؛ البحث الأعمى لا يستخدم دوال استدلالية." },
+      { t: "من خوارزميات القائمة البحثية المترابطة.", why: "خيار مستبعد؛ تستخدم A* هيكل بيانات طابور الأولوية (Priority Queue)." },
+      { t: "من خوارزميات البحث المستنير.", why: "إجابة صحيحة؛ خوارزمية (A*) هي من خوارزميات البحث المستنير (Informed Search) لأنها تعتمد على دالة التقييم الاستدلالية F(n) = G(n) + H(n)." },
+      { t: "تعتمد على مخطط ثابت.", why: "خيار مستبعد؛ خيار مشتت." }
+    ],
+    ans: 2,
+    summary: "خوارزميات البحث المستنير (Informed Search) في المنهج هي: Best-First Search، و A*، وتسلق التل Hill Climbing."
+  },
+  {
+    id: 64,
+    sec: "hw",
+    unit: "الواجب الثالث — السؤال 1",
+    q: "1. الاستدلال الخلفي يبدأ من الحقائق المعروفة (الحقائق الحالية) ويستخدم القواعد لاستخلاص استنتاجات جديدة:",
+    opts: [
+      { t: "صح", why: "خيار مستبعد؛ لأن هذا تعريف الاستدلال الأمامي." },
+      { t: "خطأ", why: "إجابة صحيحة؛ الاستدلال الخلفي يبدأ من الهدف (النتيجة المطلوبة) ويعمل بالعكس نحو الحقائق." }
+    ],
+    ans: 1,
+    summary: "الاستدلال الأمامي يبدأ من الحقائق الحالية، بينما الخلفي يبدأ من الهدف."
+  },
+  {
+    id: 65,
+    sec: "hw",
+    unit: "الواجب الثالث — السؤال 2",
+    q: "2. من أسباب عدم اليقين في الذكاء الاصطناعي التي تجعل البيانات أو النماذج السابقة غير دقيقة أو غير كافية لاتخاذ قرارات جديدة:",
+    opts: [
+      { t: "عدم اكتمال المعلومات", why: "خيار مستبعد؛ يعني نقص المعطيات المتوفرة عن الحالة." },
+      { t: "الغموض", why: "خيار مستبعد؛ يعني عدم وضوح البيانات اللغوية." },
+      { t: "تغير البيئة", why: "إجابة صحيحة؛ التغير المستمر في البيئات الديناميكية يجعل النماذج والبيانات السابقة غير دقيقة لاتخاذ قرارات جديدة." },
+      { t: "التعقيد والتفاعل", why: "خيار مستبعد؛ يعني تداخل العوامل في الأنظمة المعقدة." }
+    ],
+    ans: 2,
+    summary: "تغير البيئة هو السبب الذي يفقد البيانات أو النماذج السابقة دقتها عند اتخاذ قرارات جديدة."
+  },
+  {
+    id: 66,
+    sec: "hw",
+    unit: "الواجب الثالث — السؤال 3",
+    q: "3. توزيع وتبسيط العبارة <span class='math-dir'>¬(P ∧ ¬Q)</span> :",
+    opts: [
+      { t: "¬P ∨ Q", why: "إجابة صحيحة؛ بتوزيع النفي تصبح P منفية (¬P)، وتنقلب (∧) إلى (∨)، ويلغى نفي Q فتصبح (Q)." },
+      { t: "¬P ∧ Q", why: "خيار مستبعد؛ لم يتم قلب علامة (∧) إلى (∨)." }
+    ],
+    ans: 0,
+    summary: "حسب قانون دي مورغان: ¬(P ∧ ¬Q) تكافئ ¬P ∨ Q."
+  },
+  {
+    id: 67,
+    sec: "hw",
+    unit: "الواجب الثالث — السؤال 4",
+    q: "4. تربط بين قضيتين بحيث تكون النتيجة صحيحة فقط إذا كانت كلتاهما صحيحتين:",
+    opts: [
+      { t: "Negation , ¬", why: "خيار مستبعد؛ أداة النفي." },
+      { t: "Implication , →", why: "خيار مستبعد؛ أداة الشرط." },
+      { t: "Disjunction , ∨", why: "خيار مستبعد؛ أداة الفصل (أو)." },
+      { t: "Conjunction , ∧", why: "إجابة صحيحة؛ أداة الاقتران (و / AND) التي تشترط صحة القضيتين معاً." }
+    ],
+    ans: 3,
+    summary: "الاقتران (Conjunction , ∧) يكون صحيحاً في حالة واحدة فقط هي صحة كلتا القضيتين."
+  }
+];
+const chapterEightExplanations = QUESTIONS_PART3.find(question => question.sec === "ch8u3" && question.id === 1);
+const QUESTIONS_PART2_NORMALIZED = QUESTIONS_PART2.map(question => ({
+  ...question,
+  id: question.id + 73,
+  sec: question.id <= 3 ? "ch8u1" : question.id <= 6 ? "ch8u2" : "ch8u3",
+  ...(question.id === 7 && chapterEightExplanations ? {
+    mainExp: chapterEightExplanations.summary,
+    optExps: chapterEightExplanations.opts.map(option => option.why)
+  } : {})
+}));
+const QUESTIONS_PART3_NORMALIZED = QUESTIONS_PART3.map(question => ({
+  id: question.id + 80,
+  sec: question.sec,
+  tag: question.unit,
+  q: question.q,
+  opts: question.opts.map(option => option.t),
+  ans: question.ans,
+  mainExp: question.summary,
+  optExps: question.opts.map(option => option.why)
+}));
+const ALL_QUESTIONS = [...QUESTIONS_PART1, ...QUESTIONS_PART2_NORMALIZED, ...QUESTIONS_PART3_NORMALIZED];
+
+function addQuestionSectionOptions() {
+  const selector = document.getElementById("sectionSelect");
+  const sections = [...new Set(ALL_QUESTIONS.map(question => question.sec))]
+    .filter(section => /^ch(?:8|9|10|11|12|13|14)u[1-3]$/.test(section));
+
+  sections.forEach(section => {
+    const questions = ALL_QUESTIONS.filter(question => question.sec === section);
+    const sectionNames = {
+      ch8u1: "الفصل 8 — الوحدة 1: الوكيل المنطقي",
+      ch8u2: "الفصل 8 — الوحدة 2: تمثيل المعرفة"
+    };
+    const title = sectionNames[section] || questions.find(question => question.unit)?.unit || questions[0].tag;
+    const option = document.createElement("option");
+    option.value = section;
+    option.textContent = `${title} (${questions.length} أسئلة)`;
+    selector.append(option);
+  });
+}
+
+const STORAGE_KEY_P1 = "kfu_ai_bank_part1_v1";
+let state = {
+  section: "all",
+  listMode: false,
+  mistakesMode: false,
+  idx: 0,
+  answers: {},
+  mistakes: []
+};
+
+try {
+  const saved = localStorage.getItem(STORAGE_KEY_P1);
+  if (saved) state = { ...state, ...JSON.parse(saved) };
+} catch (e) {}
+
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY_P1, JSON.stringify(state)); } catch (e) {}
+}
+
+function getFilteredQuestions() {
+  if (state.mistakesMode) {
+    return ALL_QUESTIONS.filter(q => state.mistakes.includes(q.id));
+  }
+  if (state.section === "all") return ALL_QUESTIONS;
+  if (state.section === "ch8") return ALL_QUESTIONS.filter(question => question.sec.startsWith("ch8"));
+  return ALL_QUESTIONS.filter(q => q.sec === state.section);
+}
+
+function updateHeaderStats() {
+  let corr = 0, wrg = 0;
+  Object.keys(state.answers).forEach(id => {
+    const q = ALL_QUESTIONS.find(x => x.id === Number(id));
+    if (q) {
+      if (state.answers[id] === q.ans) corr++;
+      else wrg++;
+    }
+  });
+
+  const activeList = getFilteredQuestions();
+  const currentPos = activeList.length ? Math.min(state.idx + 1, activeList.length) : 0;
+
+  document.getElementById("statProgress").textContent = state.listMode
+    ? `العدد: ${activeList.length}`
+    : `${currentPos} / ${activeList.length}`;
+  document.getElementById("statCorrect").textContent = `صحيحة: ${corr}`;
+  document.getElementById("statWrong").textContent = `خاطئة: ${wrg}`;
+  document.getElementById("mistakesCounter").textContent = state.mistakes.length;
+
+  document.getElementById("modeToggleBtn").classList.toggle("active", state.listMode);
+  document.getElementById("modeToggleBtn").textContent = state.listMode ? "عرض سؤال بسؤال" : "عرض كقائمة";
+  document.getElementById("mistakesToggleBtn").classList.toggle("active", state.mistakesMode);
+
+  const answeredInList = activeList.filter(q => state.answers[q.id] !== undefined).length;
+  const pct = activeList.length ? Math.round((answeredInList / activeList.length) * 100) : 0;
+  document.getElementById("progressBar").style.width = pct + "%";
+}
+
+function renderCard(qObj, indexInList, totalLen, withNav) {
+  const userChoice = state.answers[qObj.id];
+  const isAnswered = userChoice !== undefined;
+  const letters = ["أ", "ب", "ج", "د"];
+
+  const optionsHtml = qObj.opts.map((optText, oIdx) => {
+    let cls = "option-btn";
+    let statusLabel = "";
+    if (isAnswered) {
+      if (oIdx === qObj.ans) {
+        cls += " correct";
+        statusLabel = "إجابة صحيحة";
+      } else if (oIdx === userChoice) {
+        cls += " wrong";
+        statusLabel = "اختيارك";
+      } else {
+        cls += " dimmed";
+      }
+    }
+    return `
+      <button class="${cls}" ${isAnswered ? "disabled" : ""} onclick="chooseOption(${qObj.id}, ${oIdx})">
+        <div class="opt-content">
+          <span class="opt-char">${letters[oIdx]}</span>
+          <span>${optText}</span>
+        </div>
+        <span class="opt-status">${statusLabel}</span>
+      </button>
+    `;
+  }).join("");
+
+  let explanationHtml = "";
+  if (isAnswered) {
+    const isCorrect = userChoice === qObj.ans;
+    const optBreakdown = qObj.opts.map((optText, oIdx) => {
+      const isRightOpt = oIdx === qObj.ans;
+      const reason = (qObj.optExps && qObj.optExps[oIdx]) ? qObj.optExps[oIdx] : "";
+      return `
+        <div class="exp-opt-item ${isRightOpt ? 'correct-item' : 'wrong-item'}">
+          <span class="exp-opt-name">الخيار (${letters[oIdx]}) ${optText}:</span>
+          <div>${reason}</div>
+        </div>
+      `;
+    }).join("");
+
+    explanationHtml = `
+      <div class="explanation-panel">
+        <div class="exp-header ${isCorrect ? 'is-correct' : 'is-wrong'}">
+          ${isCorrect ? 'إجابة صحيحة — تحليل الإجابة:' : 'إجابة غير صحيحة — تم حفظ السؤال في مراجعة الأخطاء:'}
+        </div>
+        <div class="exp-main-reason">${qObj.mainExp}</div>
+        <div class="exp-options-title">تفصيل جميع الخيارات (لماذا اخترنا الإجابة ولماذا استبعدنا الباقي):</div>
+        <div class="exp-options-list">${optBreakdown}</div>
+      </div>
+    `;
+  }
+
+  let navHtml = "";
+  if (withNav) {
+    const activeList = getFilteredQuestions();
+    const jumpOpts = activeList.map((item, i) => {
+      const a = state.answers[item.id];
+      const mark = a === undefined ? "" : (a === item.ans ? " (صح)" : " (خطأ)");
+      return `<option value="${i}" ${i === state.idx ? "selected" : ""}>سؤال ${i + 1}${mark}</option>`;
+    }).join("");
+
+    navHtml = `
+      <div class="nav-footer">
+        <button class="btn-nav" ${state.idx === 0 ? "disabled" : ""} onclick="moveStep(-1)">السابق</button>
+        <select onchange="jumpTo(this.value)" style="max-width:150px;text-align:center">${jumpOpts}</select>
+        <button class="btn-nav primary" ${state.idx >= totalLen - 1 ? "disabled" : ""} onclick="moveStep(1)">التالي</button>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="question-card" id="q-${qObj.id}">
+      <div class="card-header">
+        <span class="section-badge">${qObj.tag}</span>
+        <span class="question-counter">سؤال ${indexInList + 1} من ${totalLen}</span>
+      </div>
+      <div class="question-title">${qObj.q}</div>
+      ${qObj.visual ? qObj.visual : ''}
+      <div class="options-container">${optionsHtml}</div>
+      ${explanationHtml}
+      ${navHtml}
+    </div>
+  `;
+}
+
+function renderApp() {
+  updateHeaderStats();
+  const main = document.getElementById("mainContainer");
+  const list = getFilteredQuestions();
+
+  if (list.length === 0) {
+    main.innerHTML = `
+      <div class="question-card" style="text-align:center;padding:40px 20px">
+        <div style="font-size:1.1rem;font-weight:800;margin-bottom:8px">لا توجد أخطاء مسجلة في هذا القسم حالياً</div>
+        <div style="color:var(--text-muted);font-size:0.9rem;margin-bottom:18px">يمكنك العودة لاستعراض جميع الأسئلة أو اختيار فصل آخر.</div>
+        <button class="btn-nav primary" onclick="toggleMistakesMode()">العودة لجميع الأسئلة</button>
+      </div>
+    `;
+    return;
+  }
+
+  if (state.idx >= list.length) state.idx = list.length - 1;
+  if (state.idx < 0) state.idx = 0;
+
+  if (state.listMode) {
+    main.innerHTML = list.map((q, i) => renderCard(q, i, list.length, false)).join("");
+  } else {
+    main.innerHTML = renderCard(list[state.idx], state.idx, list.length, true);
+  }
+}
+
+function chooseOption(qId, optIdx) {
+  state.answers[qId] = optIdx;
+  const qObj = ALL_QUESTIONS.find(x => x.id === qId);
+  if (qObj) {
+    if (optIdx !== qObj.ans) {
+      if (!state.mistakes.includes(qId)) state.mistakes.push(qId);
+    } else if (state.mistakesMode) {
+      state.mistakes = state.mistakes.filter(id => id !== qId);
+    }
+  }
+  saveState();
+  renderApp();
+}
+
+function moveStep(delta) {
+  const list = getFilteredQuestions();
+  const target = state.idx + delta;
+  if (target >= 0 && target < list.length) {
+    state.idx = target;
+    saveState();
+    renderApp();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+}
+
+function jumpTo(val) {
+  state.idx = Number(val);
+  saveState();
+  renderApp();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function setSection(secVal) {
+  state.section = secVal;
+  state.mistakesMode = false;
+  state.idx = 0;
+  saveState();
+  renderApp();
+}
+
+function toggleDisplayMode() {
+  state.listMode = !state.listMode;
+  saveState();
+  renderApp();
+}
+
+function toggleMistakesMode() {
+  state.mistakesMode = !state.mistakesMode;
+  state.idx = 0;
+  if (state.mistakesMode) {
+    state.mistakes.forEach(id => { delete state.answers[id]; });
+  }
+  
+  saveState();
+  renderApp();
+}
+
+function resetAll() {
+  if (confirm("هل ترغبين في مسح الإجابات المحفوظة والبدء من جديد؟")) {
+    state.answers = {};
+    state.mistakes = [];
+    state.idx = 0;
+    state.mistakesMode = false;
+    saveState();
+    renderApp();
+  }
+}
+
+addQuestionSectionOptions();
+document.getElementById("sectionSelect").value = state.section || "all";
+renderApp();
+</script>
+</body>
+</html>
