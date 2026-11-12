@@ -2,1013 +2,1822 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>الفصل الثالث الشامل (ص 30-40) | وكلاء الذكاء الاصطناعي (AI Agents)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الفصل الثالث: وكلاء الذكاء الاصطناعي (Artificial Intelligence Agents)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#f4f6fb;
-  --card:#ffffff;
-  --ink:#0f172a;
-  --muted:#64748b;
-  --accent:#4f46e5;
-  --accent-dark:#3730a3;
-  --accent2:#eef2ff;
-  --teal:#0d9488;
-  --teal-light:#ccfbf1;
-  --line:#e2e8f0;
-  --good:#059669;
-  --good-bg:#ecfdf5;
-  --bad:#dc2626;
-  --bad-bg:#fef2f2;
-  --warn:#d97706;
-  --warn-bg:#fffbeb;
+:root {
+  --bg-page: #f4f6fb;
+  --card-bg: #ffffff;
+  --indigo-dark: #1e1b4b;
+  --indigo-main: #312e81;
+  --indigo-accent: #4338ca;
+  --indigo-soft: #eef2ff;
+  --teal-accent: #0f766e;
+  --text-dark: #0f172a;
+  --text-body: #334155;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  --good-bg: #f0fdf4;
+  --good-border: #86efac;
+  --good-text: #166534;
+  --bad-bg: #fef2f2;
+  --bad-border: #fca5a5;
+  --bad-text: #991b1b;
+  --warn-bg: #fffbeb;
+  --warn-border: #fde68a;
+  --warn-text: #92400e;
 }
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
-header{background:linear-gradient(135deg,#1e1b4b,#3730a3,#0d9488);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(30,27,75,0.2)}
-.wrap{max-width:1060px;margin:auto;padding:0 16px}
-.eyebrow{opacity:.95;font-size:.9rem;background:rgba(255,255,255,0.16);display:inline-block;padding:4px 14px;border-radius:99px;margin-bottom:6px;font-weight:bold}
-h1{margin:5px 0;font-size:clamp(1.55rem,4vw,2.25rem)}
-header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
-nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
-nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:rgba(255,255,255,0.18);color:#ffffff;font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
-nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
-nav button.active{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
-main .btn{background:var(--accent2);color:var(--accent-dark)}
-main .btn.primary{background:var(--accent);color:white}
-main{padding:22px 0 48px}
-.panel{display:none}
-.panel.active{display:block;animation:fadeIn .25s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(15,23,42,0.04)}
-h2{font-size:1.35rem;margin:0 0 12px;color:#1e1b4b}
-h3{font-size:1.06rem;margin:10px 0 6px;color:var(--accent-dark)}
-h4{font-size:.98rem;margin:8px 0 4px;color:#0f172a}
-small,.muted{color:var(--muted)}
-ul,ol{padding-right:22px;margin:8px 0}
-li{margin:6px 0}
-details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
-summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f8faff;color:#1e1b4b;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
-details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
-.details-body{padding:16px 18px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
-.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
-.tag.teal{background:var(--teal-light);color:var(--teal)}
-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
-th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
-th{background:#f1f5f9;color:#1e1b4b;font-weight:bold}
-tr:last-child td{border-bottom:0}
-.note{border-right:4px solid var(--accent);padding:10px 14px;background:#f5f7ff;border-radius:8px;margin:10px 0}
-.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
-.formula-box{background:#1e1b4b;color:#fff;padding:12px 16px;border-radius:12px;text-align:center;font-size:1.05rem;margin:10px 0;direction:ltr;font-family:monospace}
-.step-card{border:1px solid var(--line);border-radius:12px;padding:14px;background:#f8fafc}
-.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
-.options{display:grid;gap:8px;margin-top:12px}
-.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
-.option:hover:not(:disabled){border-color:var(--accent);background:#f8faff}
-.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
-.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
-.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
-.feedback.good{color:var(--good);background:var(--good-bg)}
-.feedback.bad{color:var(--bad);background:var(--bad-bg)}
-.progress{height:10px;background:#e2e8f0;border-radius:9px;overflow:hidden;margin:12px 0}
-.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
-.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#eef2ff);border:2px solid #c7d2fe;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
-.flashcard:hover{transform:scale(1.005)}
-.flashcard .term{font-size:1.35rem;font-weight:bold;color:#1e1b4b}
-.flashcard .answer{margin-top:16px;font-size:1.08rem;color:var(--accent-dark);background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04)}
-.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
-.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
-footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
-@media(max-width:600px){
-  .card{padding:14px}
-  nav button{flex:1 1 calc(50% - 8px);text-align:center}
-  .flashcard{min-height:200px;padding:18px}
-  th,td{padding:8px 10px;font-size:.88rem}
+
+body.dark-mode {
+  --bg-page: #0f172a;
+  --card-bg: #1e293b;
+  --indigo-dark: #e0e7ff;
+  --indigo-main: #a5b4fc;
+  --indigo-accent: #818cf8;
+  --indigo-soft: #312e81;
+  --teal-accent: #2dd4bf;
+  --text-dark: #f8fafc;
+  --text-body: #cbd5e1;
+  --text-muted: #94a3b8;
+  --border-color: #334155;
+  --good-bg: #064e3b;
+  --good-border: #059669;
+  --good-text: #a7f3d0;
+  --bad-bg: #7f1d1d;
+  --bad-border: #dc2626;
+  --bad-text: #fecaca;
+  --warn-bg: #78350f;
+  --warn-border: #d97706;
+  --warn-text: #fde68a;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-page);
+  color: var(--text-dark);
+  font-family: 'Tajawal', -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.75;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Top Utility Bar matching user website */
+.top-utility-bar {
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border-color);
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 60;
+}
+
+.btn-back {
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 6px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-dark);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-complete {
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 6px 18px;
+  border-radius: 8px;
+  border: none;
+  background: #15803d;
+  color: #ffffff;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.btn-complete.done {
+  background: #0f766e;
+}
+
+.btn-theme {
+  font-family: inherit;
+  font-size: 0.95rem;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-body);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hero Banner matching screenshot */
+.hero-banner {
+  background: linear-gradient(115deg, #27175c 0%, #312e81 52%, #0f766e 100%);
+  color: #ffffff;
+  padding: 36px 20px 30px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(30, 27, 75, 0.12);
+}
+
+.hero-inner {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.course-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #f8fafc;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 5px 16px;
+  border-radius: 99px;
+  margin-bottom: 14px;
+}
+
+.hero-title {
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 0 0 12px;
+  letter-spacing: -0.3px;
+}
+
+.hero-subtitle {
+  font-size: 0.98rem;
+  color: rgba(255, 255, 255, 0.88);
+  max-width: 840px;
+  margin: 0 auto 24px;
+  line-height: 1.7;
+}
+
+.nav-pills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.nav-pill {
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 700;
+  padding: 9px 20px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.nav-pill:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.nav-pill.active {
+  background: #ffffff;
+  color: #1e1b4b;
+  border-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* Main Container */
+.main-container {
+  max-width: 1040px;
+  width: 100%;
+  margin: 26px auto 50px;
+  padding: 0 16px;
+  flex: 1;
+}
+
+.tab-section {
+  display: none;
+}
+
+.tab-section.active {
+  display: block;
+}
+
+/* Chapter Map Card */
+.map-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 28px 26px;
+  margin-bottom: 22px;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+}
+
+.map-title {
+  font-size: 1.22rem;
+  font-weight: 800;
+  color: var(--indigo-dark);
+  margin: 0 0 20px;
+}
+
+.map-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+@media (max-width: 820px) {
+  .map-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero-title {
+    font-size: 1.55rem;
+  }
+}
+
+.map-col {
+  padding: 6px 4px;
+}
+
+.unit-pill {
+  display: inline-block;
+  background: var(--indigo-soft);
+  color: var(--indigo-accent);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.map-col-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--indigo-accent);
+  margin: 0 0 8px;
+}
+
+.map-col-desc {
+  font-size: 0.9rem;
+  color: var(--text-body);
+  margin: 0;
+  line-height: 1.65;
+}
+
+/* Accordion Sections */
+.accordion-item {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  margin-bottom: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);
+}
+
+.accordion-header {
+  width: 100%;
+  background: var(--card-bg);
+  border: none;
+  padding: 18px 22px;
+  text-align: right;
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--indigo-dark);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background 0.15s ease;
+}
+
+.accordion-header:hover {
+  background: rgba(67, 56, 202, 0.04);
+}
+
+.acc-arrow {
+  display: inline-block;
+  font-size: 0.85rem;
+  color: var(--indigo-dark);
+  transition: transform 0.2s ease;
+}
+
+.accordion-item.open .acc-arrow {
+  transform: rotate(-90deg);
+}
+
+.accordion-body {
+  display: none;
+  padding: 6px 24px 26px;
+  border-top: 1px solid var(--border-color);
+}
+
+.accordion-item.open .accordion-body {
+  display: block;
+}
+
+.sec-heading {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--indigo-main);
+  margin: 20px 0 10px;
+  padding-right: 12px;
+  border-right: 4px solid var(--indigo-accent);
+}
+
+.study-list {
+  margin: 8px 0 14px;
+  padding-right: 20px;
+  color: var(--text-body);
+  font-size: 0.95rem;
+}
+
+.study-list li {
+  margin-bottom: 8px;
+}
+
+.hl-term {
+  font-weight: 800;
+  color: var(--indigo-dark);
+}
+
+.exam-tag {
+  display: inline-block;
+  background: var(--warn-bg);
+  border: 1px solid var(--warn-border);
+  color: var(--warn-text);
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 1px 8px;
+  border-radius: 6px;
+  margin-right: 6px;
+}
+
+.info-box {
+  background: rgba(15, 118, 110, 0.06);
+  border: 1px solid var(--border-color);
+  border-right: 4px solid var(--teal-accent);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: 0.93rem;
+  color: var(--text-body);
+}
+
+.hierarchy-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 14px 0;
+}
+
+@media (max-width: 720px) {
+  .hierarchy-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.h-card {
+  background: rgba(67, 56, 202, 0.04);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.h-card-title {
+  font-weight: 800;
+  color: var(--indigo-main);
+  margin-bottom: 6px;
+  font-size: 0.96rem;
+}
+
+/* Tables */
+.table-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 22px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+}
+
+.table-card h3 {
+  margin: 0 0 14px;
+  color: var(--indigo-dark);
+  font-size: 1.1rem;
+}
+
+table.comp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.91rem;
+}
+
+table.comp-table th,
+table.comp-table td {
+  border: 1px solid var(--border-color);
+  padding: 11px 14px;
+  text-align: right;
+  vertical-align: top;
+}
+
+table.comp-table th {
+  background: var(--indigo-soft);
+  color: var(--indigo-dark);
+  font-weight: 800;
+}
+
+table.comp-table tr:nth-child(even) td {
+  background: rgba(148, 163, 184, 0.05);
+}
+
+.ltr-cell {
+  direction: ltr;
+  text-align: left;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+/* Terms & Concepts */
+.terms-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 240px;
+  padding: 11px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-dark);
+  font-family: inherit;
+  font-size: 0.93rem;
+}
+
+.filter-btn {
+  padding: 9px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-body);
+  font-family: inherit;
+  font-size: 0.86rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.filter-btn.active {
+  background: var(--indigo-main);
+  color: #ffffff;
+  border-color: var(--indigo-main);
+}
+
+.terms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
+}
+
+.term-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 18px;
+}
+
+.term-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.term-ar {
+  font-weight: 800;
+  color: var(--indigo-dark);
+  font-size: 1rem;
+}
+
+.term-en {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--teal-accent);
+  background: rgba(15, 118, 110, 0.1);
+  padding: 2px 8px;
+  border-radius: 6px;
+  direction: ltr;
+}
+
+.term-def {
+  font-size: 0.9rem;
+  color: var(--text-body);
+  margin: 0;
+}
+
+/* Flashcards */
+.flashcard-wrap {
+  max-width: 640px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.fc-box {
+  background: var(--card-bg);
+  border: 2px solid var(--border-color);
+  border-radius: 16px;
+  min-height: 250px;
+  padding: 32px 26px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+  margin-bottom: 18px;
+  transition: border-color 0.2s ease;
+}
+
+.fc-box:hover {
+  border-color: var(--indigo-accent);
+}
+
+.fc-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--indigo-accent);
+  background: var(--indigo-soft);
+  padding: 4px 12px;
+  border-radius: 99px;
+  margin-bottom: 14px;
+}
+
+.fc-text {
+  font-size: 1.18rem;
+  font-weight: 800;
+  color: var(--indigo-dark);
+  line-height: 1.65;
+}
+
+.fc-controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Quiz */
+.quiz-toolbar {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 16px 20px;
+  margin-bottom: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.quiz-stats {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.q-stat {
+  font-size: 0.84rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 8px;
+  background: var(--indigo-soft);
+  color: var(--text-body);
+}
+
+.q-stat.good { background: var(--good-bg); color: var(--good-text); }
+.q-stat.bad { background: var(--bad-bg); color: var(--bad-text); }
+
+.q-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 22px;
+  margin-bottom: 16px;
+}
+
+.q-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.q-title {
+  font-size: 1.08rem;
+  font-weight: 800;
+  color: var(--indigo-dark);
+  margin: 0 0 16px;
+}
+
+.q-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.q-opt {
+  width: 100%;
+  text-align: right;
+  padding: 13px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-dark);
+  font-family: inherit;
+  font-size: 0.94rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  transition: all 0.15s ease;
+}
+
+.q-opt:hover:not(:disabled) {
+  background: var(--indigo-soft);
+  border-color: var(--indigo-accent);
+}
+
+.q-opt:disabled {
+  cursor: default;
+}
+
+.q-opt.correct {
+  background: var(--good-bg);
+  border-color: var(--good-border);
+  color: var(--good-text);
+}
+
+.q-opt.wrong {
+  background: var(--bad-bg);
+  border-color: var(--bad-border);
+  color: var(--bad-text);
+}
+
+.opt-char {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background: var(--indigo-soft);
+  color: var(--indigo-dark);
+  font-weight: 800;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.q-opt.correct .opt-char { background: var(--good-text); color: #fff; }
+.q-opt.wrong .opt-char { background: var(--bad-text); color: #fff; }
+
+.exp-box {
+  margin-top: 16px;
+  padding: 16px 18px;
+  border-radius: 12px;
+  background: rgba(148, 163, 184, 0.06);
+  border: 1px solid var(--border-color);
+  display: none;
+}
+
+.exp-box.show {
+  display: block;
+}
+
+.exp-summary {
+  font-size: 0.92rem;
+  color: var(--text-dark);
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.exp-item {
+  font-size: 0.86rem;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  margin-bottom: 6px;
+  color: var(--text-body);
+}
+
+.exp-item.right-choice {
+  border-right: 4px solid var(--good-text);
+}
+
+.exp-item.wrong-choice {
+  border-right: 4px solid #94a3b8;
+}
+
+footer {
+  text-align: center;
+  padding: 18px;
+  color: var(--text-muted);
+  font-size: 0.86rem;
+  border-top: 1px solid var(--border-color);
+  background: var(--card-bg);
 }
 </style>
 </head>
 <body>
-<header>
-  <div class="wrap">
-    <div class="eyebrow">مقرر الذكاء الاصطناعي • الفصل الثالث (صفحات 30 إلى 40)</div>
-    <h1>الفصل الثالث: وكلاء الذكاء الاصطناعي (AI Agents)</h1>
-    <p>يغطي مفهوم الوكيل والبيئة، المستشعرات والمشغلات، الوكيل العقلاني (Rational Agent)، توصيف بيئة العمل (PEAS)، خصائص البيئات السبعة، وبنية وأنواع الوكلاء الأذكياء الخمسة</p>
-    <nav>
-      <button class="active" data-tab="summary">الشرح الشامل</button>
-      <button data-tab="tables">جداول المقارنات والملخصات (4)</button>
-      <button data-tab="terms">المصطلحات والمفاهيم (28)</button>
-      <button data-tab="cards">البطاقات التعليمية (28)</button>
-      <button data-tab="quiz">الاختبار الشامل (25)</button>
-    </nav>
+
+<div class="top-utility-bar">
+  <a href="#back" class="btn-back" onclick="history.back(); return false;">رجوع</a>
+  <button class="btn-complete" id="completeBtn" onclick="toggleComplete()">اكتمل</button>
+  <button class="btn-theme" onclick="toggleDarkMode()" title="تبديل الوضع الليلي">☾</button>
+</div>
+
+<header class="hero-banner">
+  <div class="hero-inner">
+    <div class="course-badge">مقرر الذكاء الاصطناعي • تغطية شاملة 100%</div>
+    <h1 class="hero-title">الفصل الثالث: وكلاء الذكاء الاصطناعي (Artificial Intelligence Agents)</h1>
+    <p class="hero-subtitle">
+      يغطي مفهوم الوكيل الذكي (الإدراك، المعالجة، ردة الفعل)، مثال مكنسة التنظيف، الوكيل العقلاني (Rational Agent)، توصيف بيئة العمل (PEAS)، خصائص البيئة المحيطة الست، وأنواع وكلاء الذكاء الاصطناعي الستة
+    </p>
+    <div class="nav-pills">
+      <button class="nav-pill active" onclick="switchTab('study', this)">الشرح الشامل</button>
+      <button class="nav-pill" onclick="switchTab('tables', this)">جداول المقارنات والملخصات (4)</button>
+      <button class="nav-pill" onclick="switchTab('terms', this)">المصطلحات والمفاهيم (26)</button>
+      <button class="nav-pill" onclick="switchTab('cards', this)">البطاقات التعليمية (26)</button>
+      <button class="nav-pill" onclick="switchTab('quiz', this)">الاختبار الشامل (20)</button>
+    </div>
   </div>
 </header>
 
-<main class="wrap">
-  <!-- ================= التبويب الأول: الشرح الشامل ================= -->
-  <section id="summary" class="panel active">
-    <div class="card">
-      <h2>خريطة الفصل الثالث: وكلاء الذكاء الاصطناعي (AI Agents) (ص 30 - 40)</h2>
-      <div class="grid">
-        <div>
-          <span class="tag">الوحدة الأولى (ص 30 - 33)</span>
-          <h3>مفهوم الوكيل، البيئة، والعقلانية</h3>
-          <p>تعريف الوكيل (المستشعرات والمشغلات)، الإدراك ودالة الوكيل، مثال عالم المكنسة، ومفهوم الوكيل العقلاني وعوامله الأربعة والاستقلالية.</p>
+<main class="main-container">
+
+  <!-- ==================== التبويب 1: الشرح الشامل ==================== -->
+  <section id="tab-study" class="tab-section active">
+    <div class="map-card">
+      <h2 class="map-title">خريطة الفصل الثالث: وكلاء الذكاء الاصطناعي (Artificial Intelligence Agents)</h2>
+      <div class="map-grid">
+        <div class="map-col">
+          <span class="unit-pill">الوحدة الأولى</span>
+          <h3 class="map-col-title">الوكيل الذكي والوكيل العقلاني (Rational Agent)</h3>
+          <p class="map-col-desc">
+            مفهوم الوكيل الذكي، آلية التفاعل مع البيئة (الإدراك، المعالجة، ردة الفعل)، مثال روبوت مكنسة التنظيف (Vacuum Cleaner)، وخصائص وعوامل الوكيل العقلاني.
+          </p>
         </div>
-        <div>
-          <span class="tag">الوحدة الثانية (ص 34 - 36)</span>
-          <h3>إطار PEAS وخصائص البيئات</h3>
-          <p>توصيف بيئة المهمة (PEAS) مع الأمثلة التطبيقية، وتصنيف خصائص وأبعاد بيئات العمل السبعة (من الملاحظة الكلية إلى المعروفة).</p>
+        <div class="map-col">
+          <span class="unit-pill">الوحدة الثانية</span>
+          <h3 class="map-col-title">علاقة الوكيل بالبيئة (PEAS) وخواص البيئة المحيطة</h3>
+          <p class="map-col-desc">
+            تحديد علاقة الوكيل بالبيئة عبر عناصر (PEAS) الأربعة مع أمثلة سائق التاكسي وروبوت التقاط القطع والمكنسة، والخصائص الست لبيئة المهمة وتصنيف البيئات.
+          </p>
         </div>
-        <div>
-          <span class="tag">الوحدة الثالثة (ص 37 - 40)</span>
-          <h3>بنية الوكيل وأنواعه الخمسة</h3>
-          <p>المعمارية والبرنامج، الوكيل الجدولي، والأنواع الخمسة: البسيط، المبني على نموذج، المبني على الهدف، المبني على المنفعة، والمتعلم.</p>
+        <div class="map-col">
+          <span class="unit-pill">الوحدة الثالثة</span>
+          <h3 class="map-col-title">أنواع وكلاء الذكاء الاصطناعي الستة</h3>
+          <p class="map-col-desc">
+            الوكلاء البسيطة القائمون على القواعد، القائمة على النموذج، القائمون على الهدف، القائمة على المنفعة، الوكلاء التكيفيون (Learning Agents)، والأنظمة متعددة الوكلاء.
+          </p>
         </div>
       </div>
     </div>
 
     <!-- الوحدة الأولى -->
-    <details open>
-      <summary>1) الوحدة الأولى: مفهوم الوكيل والبيئة، دالة الوكيل، مثال المكنسة، والوكيل العقلاني (ص 30 - 33)</summary>
-      <div class="details-body">
-        <h3>أولاً: مفهوم الوكيل (<span dir="ltr">Agent</span>) والبيئة (<span dir="ltr">Environment</span>)</h3>
-        <ul>
-          <li><b>تعريف الوكيل (<span dir="ltr">Agent</span>):</b> هو أي كيان يمكن النظر إليه على أنه <b>يدرك بيئته المحيطة (<span dir="ltr">Environment</span>) من خلال المستشعرات (<span dir="ltr">Sensors</span>) ويتصرف ويؤثر في تلك البيئة من خلال المشغلات أو المؤثرات (<span dir="ltr">Actuators / Effectors</span>)</b>.</li>
-          <li><b>أمثلة مقارنة لأنواع الوكلاء (المستشعرات مقابل المشغلات):</b>
-            <ol>
-              <li><b>الوكيل البشري (<span dir="ltr">Human Agent</span>):</b> المستشعرات هي (العينان، الأذنان، وأعضاء الحس الأخرى)، والمشغلات هي (اليدان، الساقان، الحبال الصوتية، وبقية عضلات الجسم).</li>
-              <li><b>الوكيل الروبوتي / الآلي (<span dir="ltr">Robotic Agent</span>):</b> المستشعرات هي (الكاميرات، ومحددات المدى بالأشعة تحت الحمراء <span dir="ltr">Infrared range finders</span>، والرادار)، والمشغلات هي (المحركات الكهربائية <span dir="ltr">Motors</span>، والأذرع الميكانيكية، والعجلات).</li>
-              <li><b>الوكيل البرمجي (<span dir="ltr">Software Agent</span>):</b> المستشعرات هي (ضغطات لوحة المفاتيح، محتويات الملفات المقروءة، وحزم البيانات المستقبلة عبر الشبكة)، والمشغلات هي (العرض على الشاشة، كتابة الملفات، وإرسال الحزم عبر الشبكة).</li>
-            </ol>
-          </li>
+    <div class="accordion-item">
+      <button class="accordion-header" onclick="toggleAccordion(this)">
+        <span class="acc-arrow">◄</span>
+        <span>1) الوحدة الأولى: مفهوم الوكيل الذكي (Intelligent Agent)، مثال المكنسة، والوكيل العقلاني (Rational Agent)</span>
+      </button>
+      <div class="accordion-body">
+        <h4 class="sec-heading">أولاً: مفهوم الوكيل الذكي (Intelligent Agent) وآلية عمله</h4>
+        <div class="info-box">
+          <strong>تعريف الوكيل الذكي (Intelligent Agent):</strong> هي برامج أو أنظمة قادرة على اتخاذ قرارات بشكل مستقل أو شبه مستقل بناءً على البيئة المحيطة بها والمعلومات المتاحة. وقد يكون الوكيل: (بسيط – معقد – خبير – يعمل في بيئة محددة – يعمل في بيئات متنوعة – ذاتي التحكم).
+        </div>
+        <ul class="study-list">
+          <li><span class="hl-term">كيف يتفاعل الوكيل مع البيئة؟</span> يستطيع الوكيل (<strong>Agent</strong>) إدراك (<strong>Percept</strong>) البيئة (<strong>Environment</strong>) التي يكون موجوداً فيها من خلال <strong>المستشعرات (Sensors)</strong> التي يمتلكها، ثم التفاعل والتجاوب بواسطة <strong>آليات التنفيذ (Actuators)</strong> معتمداً على المعطيات والمعلومات من البيئة <span class="exam-tag">سؤال في بنك الأسئلة</span></li>
         </ul>
 
-        <div class="exam-alert">
-          <h3>ثانياً: الإدراك (<span dir="ltr">Percept</span>)، دالة الوكيل (<span dir="ltr">Agent Function</span>)، وبرنامج الوكيل (<span dir="ltr">Agent Program</span>):</h3>
-          <ul>
-            <li><b>الإدراك (<span dir="ltr">Percept</span>):</b> يشير إلى المدخلات الإدراكية التي يستقبلها الوكيل من مستشعراته في أي لحظة زمنية معينة.</li>
-            <li><b>تسلسل الإدراكات (<span dir="ltr">Percept Sequence</span>):</b> هو <b>التاريخ الكامل لكل ما أدركه الوكيل طوال فترة عمله</b>؛ واختيار الوكيل لأي فعل في أي لحظة يعتمد على تسلسل الإدراكات الذي لاحظه حتى تلك اللحظة (وليس على شيء لم يدركه).</li>
-            <li><b>الفرق بين دالة الوكيل وبرنامج الوكيل:</b>
-              <ul>
-                <li><b>دالة الوكيل (<span dir="ltr">Agent Function</span>):</b> وصف رياضي مجرد (<span dir="ltr">Abstract mathematical description</span>) يربط أي تسلسل إدراكات محتمل بالفعل المناسب الذي سيتخذه الوكيل: <code dir="ltr">f: P* &rarr; A</code>.</li>
-                <li><b>برنامج الوكيل (<span dir="ltr">Agent Program</span>):</b> هو التنفيذ البرمجي العملي الملموس (<span dir="ltr">Concrete implementation</span>) الذي يعمل داخل بنية حاسوبية أو مادية (<span dir="ltr">Architecture</span>).</li>
-              </ul>
-            </li>
-          </ul>
+        <div class="hierarchy-grid">
+          <div class="h-card">
+            <div class="h-card-title">1. الإدراك (Percept)</div>
+            <div>البيانات التي يتلقاها الوكيل عن طريق المستشعرات (<strong>Input</strong>).</div>
+          </div>
+          <div class="h-card">
+            <div class="h-card-title">2. المعالجة (Processing)</div>
+            <div><strong>تحدد سلوك الوكيل الذكي</strong>، وتتكون من: برامج (Agent program) + خوارزميات (Algorithms) + قواعد معرفة (Knowledge-base) <span class="exam-tag">سؤال في بنك الأسئلة</span></div>
+          </div>
+          <div class="h-card">
+            <div class="h-card-title">3. ردة الفعل (Action)</div>
+            <div>الأحداث والإجراءات الصادرة عن الوكيل عبر آليات التنفيذ (<strong>Output</strong>).</div>
+          </div>
         </div>
 
-        <h3>ثالثاً: مثال عالم المكنسة الكهربائية (<span dir="ltr">Vacuum-Cleaner World</span>)</h3>
-        <ul>
-          <li>لتوضيح مفهوم الوكيل، نفترض عالماً بسيطاً يتكون من مربعين فقط هما: <b>المربع A</b> و<b>المربع B</b>:
+        <h4 class="sec-heading">ثانياً: مثال الوكيل الذكي والبيئة المحيطة — روبوت مكنسة التنظيف (Vacuum Cleaner)</h4>
+        <ul class="study-list">
+          <li><span class="hl-term">البيئة (Environment):</span> تنظيف مربعين (<strong>A, B</strong>) وتقع المكنسة داخل أحدهما في كل لحظة.</li>
+          <li><span class="hl-term">الإدراك (Perception):</span> يتم من خلال المستشعرات (<strong>Sensors</strong>).</li>
+          <li><span class="hl-term">الحالة (State):</span> نظيف (<strong>Clean</strong>) أو غير نظيف (<strong>Dirty</strong>).</li>
+          <li><span class="hl-term">ردة الفعل (Action) — الأحداث الصادرة عن الوكيل (Output):</span>
+            <ol>
+              <li>الاتجاه يميناً (<strong>Right</strong>).</li>
+              <li>الاتجاه يساراً (<strong>Left</strong>).</li>
+              <li>الشفط (<strong>Suck</strong>).</li>
+            </ol>
+          </li>
+          <li><span class="hl-term">قاعدة العمل في المكنسة:</span>
             <ul>
-              <li><b>الإدراكات (<span dir="ltr">Percepts</span>):</b> تدرك المكنسة موقعها الحالي وهل المربع نظيف أم متسخ، مثل: <code dir="ltr">[A, Clean]</code> أو <code dir="ltr">[A, Dirty]</code> أو <code dir="ltr">[B, Dirty]</code>.</li>
-              <li><b>الأفعال المتاحة (<span dir="ltr">Actions</span>):</b> التحرك لليمين (<code dir="ltr">Right</code>)، التحرك لليسار (<code dir="ltr">Left</code>)، شفط الأتربة (<code dir="ltr">Suck</code>)، أو عدم فعل شيء (<code dir="ltr">NoOp</code>).</li>
-              <li><b>قاعدة عمل بسيطة للمكنسة:</b> إذا كان المربع الحالي متسخاً (<code dir="ltr">Dirty</code>) &larr; نفذ فعل الشفط (<code dir="ltr">Suck</code>)؛ وإذا كان المربع نظيفاً وفي الموقع A &larr; تحرك لليمين (<code dir="ltr">Right</code>)؛ وإذا كان نظيفاً وفي الموقع B &larr; تحرك لليسار (<code dir="ltr">Left</code>).</li>
+              <li>إذا كانت البيئة الحالية <strong>نظيفة (Clean)</strong> ← انتقل إلى المربع الآخر (إذا كان في A يتجه يميناً <code>Right</code>، وإذا كان في B يتجه يساراً <code>Left</code>).</li>
+              <li>غير ذلك (إذا كانت <strong>غير نظيفة Dirty</strong>) ← قم بالشفط (<code>Suck</code>).</li>
             </ul>
           </li>
         </ul>
 
-        <div class="exam-alert">
-          <h3>رابعاً: مفهوم الوكيل العقلاني / الرشيد (<span dir="ltr">Rational Agent</span>) وعوامله الأربعة - موضع أسئلة مؤكدة:</h3>
-          <ul>
-            <li><b>تعريف الوكيل العقلاني (<span dir="ltr">Rational Agent</span>):</b> هو الوكيل الذي يفعل "الشيء الصحيح"؛ وبشكل علمي دقيق: <b>لكل تسلسل إدراكات ممكن، يجب أن يختار الوكيل العقلاني الفعل الذي يُتوقع أن يعظم مقياس أدائه (<span dir="ltr">Performance Measure</span>)</b>، بالاعتماد على الأدلة التي يوفرها تسلسل الإدراكات وأي معرفة مسبقة مدمجة لدى الوكيل.</li>
-            <li><b>العوامل الأربعة التي يعتمد عليها تحديد ما هو "عقلاني" في أي لحظة:</b>
-              <ol>
-                <li><b>مقياس الأداء (<span dir="ltr">Performance Measure</span>):</b> المعيار الذي يحدد درجة نجاح الوكيل في البيئة.</li>
-                <li><b>المعرفة المسبقة (<span dir="ltr">Prior Knowledge</span>):</b> ما يعرفه الوكيل مسبقاً عن البيئة.</li>
-                <li><b>الأفعال الممكنة (<span dir="ltr">Actions</span>):</b> الإجراءات التي يستطيع الوكيل تنفيذها.</li>
-                <li><b>تسلسل الإدراكات (<span dir="ltr">Percept Sequence</span>):</b> كل ما أدركه الوكيل حتى هذه اللحظة.</li>
-              </ol>
-            </li>
-            <li><b>الفرق بين العقلانية (<span dir="ltr">Rationality</span>) والعلم الكلي/الكمال (<span dir="ltr">Omniscience</span>):</b>
-              <ul>
-                <li>الوكيل الكلي العلم (<span dir="ltr">Omniscient</span>) يعرف النتيجة الفعلية الحقيقية لأفعاله مسبقاً (وهو أمر مستحيل في الواقع).</li>
-                <li>أما <b>الوكيل العقلاني</b> فيعظم <b>الأداء المتوقع (<span dir="ltr">Expected Performance</span>)</b> بناءً على ما أدركه؛ ولكي يتصرف بعقلانية في بيئة غير معروفة، يجب أن يقوم بـ: 1) <b>جمع المعلومات / الاستكشاف (<span dir="ltr">Information Gathering</span>)</b> (كالنظر يميناً ويساراً قبل عبور الشارع)، و2) <b>التعلم (<span dir="ltr">Learning</span>)</b> من إدراكاته لزيادة <b>استقلاليته (<span dir="ltr">Autonomy</span>)</b> وتقليل اعتماده على المعرفة المسبقة لمصممه.</li>
-              </ul>
-            </li>
-          </ul>
-        </div>
+        <h4 class="sec-heading">ثالثاً: الوكيل العقلاني (Rational Agent) وخصائصه وعوامله</h4>
+        <ul class="study-list">
+          <li>تُعد <strong>العقلانية (Rationality)</strong> نقطة ارتكاز أنظمة الذكاء الاصطناعي الحديثة؛ حيث يُظهر الوكيل العقلاني خصائص تمنحه امتيازات ذكاء عن الأنظمة الآلية البسيطة من خلال عملية الاستدلال بناءً على خوارزميات معقدة.</li>
+          <li><span class="hl-term">الخصائص الخمس للوكيل العقلاني:</span>
+            <ol>
+              <li>القدرة على التفكير والتفكير المنطقي.</li>
+              <li><strong>القدرة على التعلم من الخبرات السابقة والتكيف</strong> <span class="exam-tag">سؤال في بنك الأسئلة</span></li>
+              <li><strong>تحديث معارفهم وسلوكهم بناءً على معلومات أو تجارب جديدة</strong> <span class="exam-tag">سؤال في بنك الأسئلة</span></li>
+              <li>تحليل المعلومات المتاحة وتقييم الخيارات المختلفة واختيار الإجراء الأمثل.</li>
+              <li>يعمل على تحسين عملية صنع القرار مع مرور الوقت.</li>
+            </ol>
+          </li>
+          <li><span class="hl-term">تعريف الوكيل العقلاني (Rational Agent):</span> كيانات ذكية تدرك بيئتها وتتخذ قراراتها بناءً على الخصائص أعلاه، بحيث <strong>تعطي استجابته أكبر قيمة ممكنة لمعيار الأداء</strong> (إذا أخذ بعين الاعتبار معلوماته السابقة عن البيئة وكذلك معلوماته اللاحقة القادمة من المستشعرات).</li>
+          <li><span class="hl-term">عوامل عقلانية الوكيل الأربعة (تعتمد عليها عقلانية الوكيل في أي وقت):</span>
+            <ol>
+              <li><strong>مقياس الأداء الذي يحدد معيار النجاح (Performance measure value):</strong> يتصرف بشكل صحيح وهو مقياس السلوك/القرار السليم للوكيل، ومقدار تطابقه مع ما يتوقعه الوكيل ويحدد فعالية أداء الوكيل.</li>
+              <li><strong>المعرفة المسبقة للوكيل بالبيئة:</strong> معلومات الوكيل السابقة عن البيئة المحيطة (<strong>Environment</strong>).</li>
+              <li><strong>ردود فعل الوكيل والإجراءات التي يمكن للوكيل القيام بها:</strong> وتجاوبه مع التغييرات الحادثة في البيئة أو بشكل آخر <strong>آليات التنفيذ (Actuator)</strong>.</li>
+              <li><strong>تسلسل إدراك الوكيل للأحداث:</strong> التي تسجلها <strong>أدوات الاستشعار (Sensor)</strong>.</li>
+            </ol>
+          </li>
+        </ul>
       </div>
-    </details>
+    </div>
 
     <!-- الوحدة الثانية -->
-    <details open>
-      <summary>2) الوحدة الثانية: توصيف بيئة المهمة (إطار PEAS) وخصائص وأنواع البيئات السبعة (ص 34 - 36)</summary>
-      <div class="details-body">
-        <div class="exam-alert">
-          <h3>أولاً: توصيف بيئة المهمة (<span dir="ltr">PEAS Framework</span>) - مهم جداً في الاختبار:</h3>
-          <p>لتصميم أي وكيل عقلاني، تكون الخطوة الأولى دائماً هي تحديد <b>بيئة المهمة (<span dir="ltr">Task Environment</span>)</b> بأكبر قدر ممكن من الدقة من خلال العناصر الأربعة في اختصار <b dir="ltr">PEAS</b>:</p>
-          <div class="grid">
-            <div class="step-card">
-              <span class="tag">P - Performance Measure</span>
-              <h4>مقياس الأداء</h4>
-              <p>المعايير التي نقيس بها نجاح سلوك الوكيل في البيئة (الأمان، السرعة، الدقة، الأرباح، الراحة).</p>
-            </div>
-            <div class="step-card">
-              <span class="tag">E - Environment</span>
-              <h4>البيئة المحيطة</h4>
-              <p>العالم الخارجي والظروف والكائنات التي يتواجد ويتفاعل معها الوكيل.</p>
-            </div>
-            <div class="step-card">
-              <span class="tag">A - Actuators</span>
-              <h4>المشغلات / المؤثرات</h4>
-              <p>الأدوات أو الأعضاء التي ينفذ بها الوكيل أفعاله للتأثير في البيئة وتغيير حالتها.</p>
-            </div>
-            <div class="step-card">
-              <span class="tag">S - Sensors</span>
-              <h4>المستشعرات / الحساسات</h4>
-              <p>الأجهزة أو الوسائل التي يستقبل بها الوكيل الإدراكات والمدخلات من البيئة.</p>
-            </div>
-          </div>
+    <div class="accordion-item">
+      <button class="accordion-header" onclick="toggleAccordion(this)">
+        <span class="acc-arrow">◄</span>
+        <span>2) الوحدة الثانية: علاقة الوكيل بالبيئة المحيطة (PEAS) وخواص البيئة المحيطة (Properties of Task Environment)</span>
+      </button>
+      <div class="accordion-body">
+        <h4 class="sec-heading">أولاً: تحديد علاقة الوكيل بالبيئة المحيطة — إطار (PEAS)</h4>
+        <div class="info-box">
+          لتوصيف بيئة المهمة (<strong>Task Environment</strong>) وتحديد علاقة الوكيل بالبيئة المحيطة، نعتمد على أربعة عناصر أساسية يُرمز لها اختصاراً بـ <strong>PEAS</strong>:
         </div>
-
-        <div class="exam-alert">
-          <h3>ثانياً: خصائص وأبعاد بيئات العمل السبعة (<span dir="ltr">Properties of Task Environments</span>) - موضع أسئلة مؤكدة:</h3>
-          <p>تحدد خصائص البيئة إلى حد كبير التصميم المناسب لبرنامج الوكيل، وتُصنف البيئات وفق <b>7 أبعاد ثنائية</b>:</p>
-          <ol>
-            <li><b>قابلة للملاحظة كلياً مقابل قابلة للملاحظة جزئياً (<span dir="ltr">Fully Observable vs. Partially Observable</span>):</b>
-              <ul>
-                <li>تكون البيئة <b>قابلة للملاحظة كلياً</b> إذا كانت مستشعرات الوكيل تمنحه إمكانية الوصول إلى <b>الحالة الكاملة للبيئة</b> في كل نقطة زمنية (فلا يحتاج الوكيل للاحتفاظ بحالة داخلية لتتبع العالم، مثل الشطرنج).</li>
-                <li>وتكون <b>قابلة للملاحظة جزئياً</b> بسبب ضوضاء وعدم دقة المستشعرات أو غياب أجزاء من البيانات عن المستشعرات (مثل قيادة السيارة أو لعبة الورق/البوكر). (وإذا لم يمتلك الوكيل أي مستشعرات على الإطلاق تسمى البيئة <b>غير قابلة للملاحظة <span dir="ltr">Unobservable</span></b>).</li>
-              </ul>
-            </li>
-            <li><b>وكيل منفرد مقابل متعدد الوكلاء (<span dir="ltr">Single-Agent vs. Multi-Agent</span>):</b>
-              <ul>
-                <li><b>وكيل منفرد:</b> يعمل الوكيل بمفرده في البيئة (مثل وكيل يحل لغز الكلمات المتقاطعة بمفرده).</li>
-                <li><b>متعدد الوكلاء:</b> يتواجد وكلاء آخرون يؤثرون في مقياس الأداء؛ وتنقسم إلى: <b>بيئة تنافسية (<span dir="ltr">Competitive</span>)</b> حيث يتعارض نجاح أحدهم مع الآخر (مثل لعبة الشطرنج)، و<b>بيئة تعاونية (<span dir="ltr">Cooperative</span>)</b> حيث يشترك الوكلاء في هدف مشترك (مثل تجنب الاصطدام بين السيارات ذاتية القيادة).</li>
-              </ul>
-            </li>
-            <li><b>حتمية مقابل عشوائية / احتمالية (<span dir="ltr">Deterministic vs. Stochastic</span>):</b>
-              <ul>
-                <li>تكون البيئة <b>حتمية</b> إذا كانت الحالة التالية للبيئة <b>تتحدد بالكامل</b> من خلال الحالة الحالية والفعل الذي ينفذه الوكيل (مثل الشطرنج ولغز الكلمات المتقاطعة).</li>
-                <li>وتكون <b>عشوائية / احتمالية (<span dir="ltr">Stochastic</span>)</b> إذا كان هناك عدم يقين في النتيجة (مثل قيادة التاكسي أو رمي النرد). <i>(ملاحظة: إذا كانت البيئة حتمية في طبيعتها باستثناء أفعال الوكلاء الآخرين فتسمى <b>بيئة استراتيجية <span dir="ltr">Strategic</span></b>).</i></li>
-              </ul>
-            </li>
-            <li><b>عرضية / منفصلة الحلقات مقابل متسلسلة (<span dir="ltr">Episodic vs. Sequential</span>):</b>
-              <ul>
-                <li>في البيئة <b>العرضية (<span dir="ltr">Episodic</span>)</b>، تنقسم خبرة الوكيل إلى "حلقات ذرية" مستقلة؛ في كل حلقة يدرك الوكيل ثم ينفذ فعلاً واحداً، و<b>لا تتوقف الحلقة التالية على الأفعال المتخذة في الحلقات السابقة</b> (مثل روبوت يفحص القطع المعيبة على خط إنتاج أو تصنيف صور الأشعة؛ فكل صورة مستقلة عن الأخرى).</li>
-                <li>في البيئة <b>المتسلسلة (<span dir="ltr">Sequential</span>)</b>، القرار الحالي <b>يؤثر على جميع القرارات والحالات المستقبلية</b> (مثل الشطرنج وقيادة السيارة).</li>
-              </ul>
-            </li>
-            <li><b>ثابتة مقابل ديناميكية (<span dir="ltr">Static vs. Dynamic</span>):</b>
-              <ul>
-                <li>تكون البيئة <b>ديناميكية</b> إذا كان من الممكن أن <b>تتغير أثناء قيام الوكيل بالتفكير والتداول</b> لاتخاذ القرار (مثل قيادة سيارة الأجرة حيث تتحرك السيارات الأخرى بينما يفكر الوكيل).</li>
-                <li>وتكون <b>ثابتة (<span dir="ltr">Static</span>)</b> إذا كانت لا تتغير أثناء تفكير الوكيل (مثل الكلمات المتقاطعة). <i>(ملاحظة: إذا كانت البيئة نفسها لا تتغير بمرور الوقت ولكن درجة أداء الوكيل تتناقص مع مرور الزمن — مثل الشطرنج مع ساعة توقيت — فإنها تُسمى <b>شبه ديناميكية <span dir="ltr">Semidynamic</span></b>).</i></li>
-              </ul>
-            </li>
-            <li><b>منفصلة / متقطعة مقابل مستمرة / متصلة (<span dir="ltr">Discrete vs. Continuous</span>):</b>
-              <ul>
-                <li>تتعلق بطريقة التعامل مع <b>الحالات، الزمن، الإدراكات، والأفعال</b>؛ فلعبة الشطرنج ذات حالات وأفعال <b>منفصلة (<span dir="ltr">Discrete</span>)</b> ومحددة العدد، بينما قيادة سيارة الأجرة ذات حالة وزمن وأفعال <b>مستمرة (<span dir="ltr">Continuous</span>)</b> (تتغير فيها السرعة وزاوية المقود بشكل متصل).</li>
-              </ul>
-            </li>
-            <li><b>معروفة مقابل غير معروفة (<span dir="ltr">Known vs. Unknown</span>):</b>
-              <ul>
-                <li>لا تخص البيئة ذاتها بل تخص <b>مستوى معرفة الوكيل بقوانين البيئة</b>؛ ففي البيئة <b>المعروفة</b> يعلم الوكيل نتائج واحتمالات جميع الأفعال، أما في البيئة <b>غير المعروفة</b> فيجب على الوكيل أن يتعلم كيف تعمل البيئة من خلال التجربة والاستكشاف.</li>
-              </ul>
-            </li>
-          </ol>
-        </div>
-      </div>
-    </details>
-
-    <!-- الوحدة الثالثة -->
-    <details open>
-      <summary>3) الوحدة الثالثة: بنية الوكلاء الأذكياء وأنواعهم الخمسة (ص 37 - 40)</summary>
-      <div class="details-body">
-        <h3>أولاً: معادلة بنية الوكيل والوكيل المعتمد على الجدول</h3>
-        <ul>
-          <li>مهمة الذكاء الاصطناعي هي تصميم <b>برنامج الوكيل (<span dir="ltr">Agent Program</span>)</b> الذي ينفذ دالة الوكيل، ويعمل هذا البرنامج على <b>معمارية حاسوبية/مادية (<span dir="ltr">Architecture</span>)</b> تحتوي على مستشعرات ومشغلات:
-            <div class="formula-box">Agent = Architecture + Program</div>
-          </li>
-          <li><b>الوكيل المعتمد على الجدول (<span dir="ltr">Table-Driven Agent</span>):</b> يعتمد على جدول ضخم للبحث (<span dir="ltr">Lookup Table</span>) يحتوي على كل تسلسل إدراكات ممكن والفعل المقابل له؛ ولكنه <b>محكوم عليه بالفشل في الواقع</b> لأن حجم الجدول سيكون فلكياً (يفوق سعة أي ذاكرة)، ويستحيل على المصمم كتابة جميع المدخلات مسبقاً، كما يفتقر الوكيل لأي استقلالية.</li>
+        <ul class="study-list">
+          <li><span class="hl-term">1. P — Performance measure (value):</span> مقياس الأداء الذي يحدد معيار النجاح.</li>
+          <li><span class="hl-term">2. E — Environment:</span> البيئة المحيطة التي يعمل فيها الوكيل.</li>
+          <li><span class="hl-term">3. A — Actuator:</span> آليات التنفيذ التي ينفذ بها الوكيل أفعاله.</li>
+          <li><span class="hl-term">4. S — Sensor:</span> أدوات الاستشعار التي يجمع بها الوكيل المعلومات من بيئته <span class="exam-tag">سؤال في بنك الأسئلة</span></li>
         </ul>
 
-        <div class="exam-alert">
-          <h3>ثانياً: الأنواع الأساسية الخمسة لبرامج الوكلاء الأذكياء (من الأبسط إلى الأكثر كفاءة) - مهمة جداً:</h3>
-          
-          <h4>1. وكيل رد الفعل البسيط (<span dir="ltr">Simple Reflex Agent</span>):</h4>
-          <ul>
-            <li><b>آلية العمل:</b> يختار الأفعال بناءً على <b>الإدراك الحالي فقط (<span dir="ltr">Current Percept</span>)</b>، متجاهلاً بقية تاريخ الإدراكات السابقة.</li>
-            <li>يعتمد على قواعد <b>الشرط والفعل (<span dir="ltr">Condition-Action Rules</span>)</b> التي تكتب على صورة: <code dir="ltr">if condition then action</code> (مثال: إذا كان المربع متسخاً فاشفط، أو إذا أضاءت فرامل السيارة الأمامية فاضغط الفرامل).</li>
-            <li><b>مميزاته وعيوبه:</b> بسيط جداً وسريع، ولكنه ذو ذكاء محدود جداً و<b>لا يعمل بنجاح إلا إذا كانت البيئة قابلة للملاحظة كلياً (<span dir="ltr">Fully Observable</span>)</b>، وإلا فإنه قد يقع في حلقات لا نهائية.</li>
-          </ul>
+        <h4 class="sec-heading">ثانياً: أمثلة الملزمة الثلاثة لتوصيف (PEAS)</h4>
+        <ul class="study-list">
+          <li><span class="hl-term">1. سائق التاكسي الآلي (Taxi driver):</span>
+            <ul>
+              <li><strong>مقياس الأداء (Performance Measure):</strong> رحلة آمنة، سريعة، قانونية، مريحة، وتعظيم الأرباح (Safe, fast, legal, comfortable trip, maximize profits).</li>
+              <li><strong>البيئة (Environment):</strong> الطرق، حركة المرور الأخرى، المشاة، والعملاء (Roads, other traffic, pedestrians, customers).</li>
+              <li><strong>آليات التنفيذ (Actuators):</strong> المقود/التوجيه، دواسة الوقود، الفرامل، الإشارات، البوق، وشاشة العرض (Steering, accelerator, brake, signal, horn, display).</li>
+              <li><strong>أدوات الاستشعار (Sensors):</strong> الكاميرات، السونار، عداد السرعة، GPS، عداد المسافات، مقياس التسارع، حساسات المحرك، ولوحة المفاتيح (Cameras, sonar, speedometer, GPS, odometer, accelerometer, engine sensors, keyboard).</li>
+            </ul>
+          </li>
+          <li><span class="hl-term">2. روبوت التقاط القطع (Part-picking robot):</span>
+            <ul>
+              <li><strong>مقياس الأداء (Performance Measure):</strong> النسبة المئوية للقطع الموضوعة في الصناديق الصحيحة (Percentage of parts in correct bins).</li>
+              <li><strong>البيئة (Environment):</strong> الحزام الناقل مع القطع، والصناديق (Conveyor belt with parts; bins).</li>
+              <li><strong>آليات التنفيذ (Actuators):</strong> ذراع ويد مفصلية (Jointed arm and hand).</li>
+              <li><strong>أدوات الاستشعار (Sensors):</strong> الكاميرا، وحساسات زوايا المفاصل (Camera, joint angle sensors).</li>
+            </ul>
+          </li>
+          <li><span class="hl-term">3. وكيل المكنسة (Vacuum Agent):</span>
+            <ul>
+              <li><strong>مقياس الأداء (Performance Measure):</strong> تنظيف المربع / الوقت (Clean square/time).</li>
+              <li><strong>البيئة (Environment):</strong> مناطق محددة بمربعات (Areas defined by square regions).</li>
+              <li><strong>آليات التنفيذ (Actuators):</strong> العجلات، وأجهزة الشفط (Wheels, suckers).</li>
+              <li><strong>أدوات الاستشعار (Sensors):</strong> مستشعرات الأشعة تحت الحمراء (Infrared sensors).</li>
+            </ul>
+          </li>
+        </ul>
 
-          <hr style="border:0;border-top:1px solid #fcd34d;margin:12px 0">
-
-          <h4>2. وكيل رد الفعل المبني على نموذج (<span dir="ltr">Model-Based Reflex Agent</span>):</h4>
-          <ul>
-            <li><b>آلية العمل:</b> أكثر الطرق فعالية للتعامل مع <b>الملاحظة الجزئية (<span dir="ltr">Partial Observability</span>)</b> هي أن يحتفظ الوكيل بـ <b>حالة داخلية (<span dir="ltr">Internal State</span>)</b> تتبع الجوانب غير المرئية من العالم بالاعتماد على تاريخ الإدراكات السابقة.</li>
-            <li>لتحديث هذه الحالة الداخلية بمرور الوقت، يحتاج الوكيل إلى نوعين من المعرفة يمثلان <b>"نموذج العالم" (<span dir="ltr">Model of the World</span>)</b>:
-              <br>أ) كيف يتطور العالم ويتغير بشكل مستقل عن الوكيل.
-              <br>ب) كيف تؤثر أفعال الوكيل نفسه في العالم.</li>
-          </ul>
-
-          <hr style="border:0;border-top:1px solid #fcd34d;margin:12px 0">
-
-          <h4>3. الوكيل المبني على الهدف (<span dir="ltr">Goal-Based Agent</span>):</h4>
-          <ul>
-            <li><b>آلية العمل:</b> معرفة الحالة الحالية للبيئة لا تكفي دائماً لتحديد الفعل الصحيح (ففي تقاطع الطرق يعتمد الانعطاف يميناً أو يساراً على المكان الذي يريد التاكسي الوصول إليه!).</li>
-            <li>لذلك يدمج هذا الوكيل معلومات الحالة مع معلومات <b>الهدف (<span dir="ltr">Goal</span>)</b> التي تصف المواقف المرغوب الوصول إليها، ويستخدم خوارزميات <b>البحث والتخطيط (<span dir="ltr">Search and Planning</span>)</b> لإيجاد سلسلة الأفعال التي تحقق الهدف.</li>
-            <li><b>ميزته:</b> أكثر مرونة بكثير؛ فإذا تغيرت الوجهة يكفي تغيير الهدف دون الحاجة لإعادة كتابة جميع القواعد.</li>
-          </ul>
-
-          <hr style="border:0;border-top:1px solid #fcd34d;margin:12px 0">
-
-          <h4>4. الوكيل المبني على المنفعة (<span dir="ltr">Utility-Based Agent</span>):</h4>
-          <ul>
-            <li><b>لماذا لا تكفي الأهداف وحدها؟</b> لأن الأهداف تقدم تمييزاً ثنائياً خاماً فقط بين حالة "وصل للهدف" و"لم يصل للهدف"، بينما قد توجد عدة مسارات توصل للهدف نفسه ولكن بعضها أسرع أو أكثر أماناً أو أقل تكلفة من غيرها.</li>
-            <li><b>آلية العمل:</b> يستخدم الوكيل <b>دالة المنفعة (<span dir="ltr">Utility Function</span>)</b> وهي تبطين داخلي لمقياس الأداء يقيس درجة "السعادة" أو الرضا التي تحققها أي حالة، فيختار الفعل الذي يعظم <b>المنفعة المتوقعة (<span dir="ltr">Expected Utility</span>)</b>.</li>
-            <li><b>متى يتفوق الوكيل المبني على المنفعة؟</b> في حالتين: 1) عند وجود <b>أهداف متعارضة</b> لا يمكن تحقيقها معاً بالكامل (كالسرعة والأمان)، و2) عند وجود <b>عدة أهداف محتملة مع عدم يقين</b> في تحقيق أي منها.</li>
-          </ul>
-
-          <hr style="border:0;border-top:1px solid #fcd34d;margin:12px 0">
-
-          <h4>5. الوكيل المتعلم (<span dir="ltr">Learning Agent</span>):</h4>
-          <ul>
-            <li>يسمح للوكيل بالعمل في بيئات غير معروفة مسبقاً وأن يصبح أكثر كفاءة مما تسمح به معرفته الأولية وحدها، وينقسم إلى <b>4 مكونات مفاهيمية</b>:
-              <ol>
-                <li><b>عنصر التعلم (<span dir="ltr">Learning Element</span>):</b> مسؤول عن إجراء التحسينات والتعديلات في مكونات الوكيل ليتوافق مع التغذية الراجعة.</li>
-                <li><b>عنصر الأداء (<span dir="ltr">Performance Element</span>):</b> مسؤول عن اختيار الأفعال الخارجية (وهو ما كان يمثل الوكيل بأكمله في الأنواع السابقة: يستقبل الإدراكات ويختار الأفعال).</li>
-                <li><b>الناقد (<span dir="ltr">Critic</span>):</b> يخبر عنصر التعلم بمدى جودة أداء الوكيل من خلال مقارنة ما يحدث في البيئة بـ <b>معيار أداء ثابت (<span dir="ltr">Fixed Performance Standard</span>)</b>.</li>
-                <li><b>مولد المشكلات (<span dir="ltr">Problem Generator</span>):</b> مسؤول عن اقتراح أفعال استكشافية تقود إلى <b>تجارب جديدة ومعلوماتية</b> (حتى لو لم تكن الأفضل على المدى القصير، لكي يكتشف الوكيل أفعالاً أفضل بكثير على المدى الطويل).</li>
-              </ol>
-            </li>
-          </ul>
-        </div>
+        <h4 class="sec-heading">ثالثاً: خواص البيئة المحيطة (Properties of Task Environment) — الخصائص الست المتقابلة</h4>
+        <ul class="study-list">
+          <li><span class="hl-term">1. معرفة بالكامل / معرفة بشكل جزئي (Fully Observable vs. Partially Observable):</span>
+            <ul>
+              <li><strong>معرفة بالكامل (Fully Observable):</strong> إذا كانت المستشعرات تعطي تصوراً واضحاً وكاملاً عن بيئته والمعلومات التي يطلبها الوكيل.</li>
+              <li><strong>معرفة جزئياً (Partially Observable):</strong> إذا كانت المعلومات المتوفرة عن البيئة جزئية.</li>
+            </ul>
+          </li>
+          <li><span class="hl-term">2. محددة / عشوائية (Deterministic vs. Stochastic):</span> <span class="exam-tag">سؤال في بنك الأسئلة</span>
+            <ul>
+              <li><strong>محددة (Deterministic):</strong> الحالة التالية معروفة (يمكن التنبؤ بها) بالنسبة إلى الحالة الحالية بناءً على تنفيذ إجراء معين.</li>
+              <li><strong>عشوائية (Stochastic):</strong> الحالة التالية غير معروفة بالنسبة إلى الحالة الحالية بناءً على تنفيذ إجراء معين.</li>
+            </ul>
+          </li>
+          <li><span class="hl-term">3. متسلسلة / عرضية (Sequential vs. Episodic / Consequential):</span>
+            <ul>
+              <li><strong>متسلسلة (Sequential):</strong> رد فعل الوكيل يعتمد على ردود الفعل السابقة.</li>
+              <li><strong>عرضية (Episodic):</strong> رد الفعل لا يعتمد على ردود الفعل السابقة — ولا يحتاج إلى التفكير في المستقبل.</li>
+            </ul>
+          </li>
+          <li><span class="hl-term">4. ثابتة / متغيرة (Static vs. Dynamic):</span> <span class="exam-tag">سؤال في بنك الأسئلة</span>
+            <ul>
+              <li><strong>ثابتة (Static):</strong> البيئة ثابتة لا تتغير أثناء اتخاذ القرار.</li>
+              <li><strong>متغيرة (Dynamic):</strong> البيئة تتغير أثناء اتخاذ القرار.</li>
+            </ul>
+          </li>
+          <li><span class="hl-term">5. مستمرة / متقطعة (Continuous vs. Discrete):</span>
+            <ul>
+              <li><strong>متقطعة (Discrete):</strong> التغيير من حالة لأخرى يتم في زمن متقطع (خطوات محددة).</li>
+              <li><strong>مستمرة (Continuous):</strong> التغير يتم في وقت متصل ومستمر.</li>
+            </ul>
+          </li>
+          <li><span class="hl-term">6. أحادية الوكلاء / متعددة الوكلاء (Single Agent vs. Multi Agents):</span>
+            <ul>
+              <li><strong>أحادية الوكيل (Single Agent):</strong> هناك وكيل واحد فقط يؤثر في البيئة.</li>
+              <li><strong>متعددة الوكلاء (Multi Agents):</strong> هناك أكثر من وكيل في البيئة.</li>
+            </ul>
+          </li>
+        </ul>
       </div>
-    </details>
+    </div>
+
+    <!-- الوحدة الثالثة -->
+    <div class="accordion-item">
+      <button class="accordion-header" onclick="toggleAccordion(this)">
+        <span class="acc-arrow">◄</span>
+        <span>3) الوحدة الثالثة: أنواع وكلاء الذكاء الاصطناعي الستة (Types of AI Agents)</span>
+      </button>
+      <div class="accordion-body">
+        <h4 class="sec-heading">1. الوكلاء البسيطة القائمون على القواعد (Simple Reflex Agents)</h4>
+        <ul class="study-list">
+          <li>يعتمد هذا النوع على مجموعة من القواعد الثابتة التي تحدد كيفية الاستجابة لمواقف معينة؛ حيث يستجيب بشكل مباشر وفوري بناءً على <strong>الحالة الحالية للبيئة، دون النظر إلى الخبرة السابقة</strong>.</li>
+          <li><span class="hl-term">خصائصه وعيوبه (موضع أسئلة متكرر):</span>
+            <ul>
+              <li>أبسط الأنواع لأنه لا يلجأ إلى حوادث الإدراك كاملة وإنما <strong>الإدراك الحالي فقط (ليس له ذاكرة)</strong> <span class="exam-tag">سؤال في الواجب الأول وبنك الأسئلة</span></li>
+              <li>المبدأ الرئيسي لهذا النوع هو قاعدة <strong>(حالة – ردة فعل) Condition-Action rules</strong>.</li>
+              <li>يمتاز بالسهولة في مقابل محدودية قدراته لأن القرار يعتمد بشكل كامل على حدث الإدراك الحالي فقط.</li>
+              <li><strong>يتطلب بيئة عمل معروفة بشكل كامل (Fully Observable)</strong>، أما المعرفة الجزئية فتتسبب له في مشاكل حقيقية.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h4 class="sec-heading">2. الوكلاء القائمة على النموذج (Model-Based Agents)</h4>
+        <ul class="study-list">
+          <li>تعتمد هذه الوكلاء على نموذج للبيئة المحيطة بها؛ حيث <strong>تقوم ببناء نموذج داخلي للبيئة واستخدامه لتحديد تصرفاتها</strong> <span class="exam-tag">سؤال في بنك الأسئلة</span></li>
+          <li>تستطيع التعامل مع مواقف أكثر تعقيداً مقارنة بالوكلاء البسيطة.</li>
+          <li><span class="hl-term">آلية العمل:</span> مع كل تحديث للبيئة المحيطة بواسطة المستشعرات وتفاعل هذه المعلومات مع المعلومات السابقة (الحالة <code>State</code> + كيف يتطور العالم <code>How the world evolves</code> + ماذا تفعل أفعالي <code>What my actions do</code>)، يبني الوكيل تصوراً جديداً عن البيئة المحيطة، وبموجب هذا التصور الجديد يحدد ردة الفعل المناسبة.</li>
+        </ul>
+
+        <h4 class="sec-heading">3. الوكلاء القائمون على الهدف (Goal-Based Agents)</h4>
+        <ul class="study-list">
+          <li>تعمل هذه الوكلاء على تحقيق أهداف محددة (<strong>Goals</strong>)؛ فبدلاً من مجرد الاستجابة للمواقف، تقوم بتحليل النتائج المحتملة لأفعالها (<code>What it will be like if I do action A</code>) وتختار الفعل الذي يقربها من تحقيق أهدافها.</li>
+          <li>تقرير ما يجب فعله يعتمد على الهدف المطلوب؛ فبالإضافة إلى معلوماته عن البيئة الحالية لديه معلومات عن الهدف المراد الوصول إليه.</li>
+        </ul>
+
+        <h4 class="sec-heading">4. الوكلاء القائمة على المنفعة (Utility-Based Agents)</h4>
+        <ul class="study-list">
+          <li>بالإضافة لتحقيق الأهداف، تسعى هذه الوكلاء إلى <strong>تعظيم الكفاءة والوصول إلى الهدف بأقصى قدر من الكفاءة</strong>.</li>
+          <li>تقوم بتقييم مختلف النتائج المحتملة للأفعال (<code>How happy I will be in such a state</code>) وتختار الفعل الذي يوفر <strong>أكبر منفعة ممكنة (Utility)</strong>.</li>
+          <li>تُستخدم عند وجود أكثر من طريقة للوصول إلى الهدف، حيث تفاضل بين الطرق المختلفة وتجد الطريق الأكثر كفاءة.</li>
+        </ul>
+
+        <h4 class="sec-heading">5. الوكلاء التكيفيون (Learning Agents)</h4>
+        <ul class="study-list">
+          <li>تمتلك هذه الوكلاء القدرة على <strong>التعلم من تجاربها السابقة وتعديل سلوكها بمرور الوقت</strong> لتحسين أدائها بناءً على البيانات التي تجمعها من البيئة المحيطة.</li>
+          <li><span class="hl-term">المكونات الأربعة في مخطط الوكيل التكيفي:</span>
+            <ol>
+              <li><strong>الناقد (Critic):</strong> يقيم الإدراك القادم من المستشعرات مقارنةً بمعيار الأداء (<strong>Performance standard</strong>) ويرسل تغذية راجعة (<strong>feedback</strong>) إلى عنصر التعلم.</li>
+              <li><strong>عنصر التعلم (Learning element):</strong> يستقبل التغذية الراجعة ويجري تعديلات وتغييرات (<strong>changes</strong>) لتحسين عنصر الأداء.</li>
+              <li><strong>عنصر الأداء (Performance element):</strong> يستقبل المدخلات من المستشعرات ويختار الإجراءات لإرسالها إلى آليات التنفيذ (Actuators).</li>
+              <li><strong>مولد المشكلات (Problem generator):</strong> يقترح تجارب وأفعالاً جديدة بناءً على أهداف التعلم (<strong>learning goals</strong>) لاكتساب خبرات جديدة.</li>
+            </ol>
+          </li>
+        </ul>
+
+        <h4 class="sec-heading">6. الوكلاء المتعددون (Multi-Agent Systems)</h4>
+        <ul class="study-list">
+          <li>يشيرون إلى الأنظمة التي تتضمن <strong>أكثر من وكيل واحد (برمجيات أو روبوتات) يتفاعلون مع بعضهم البعض داخل بيئة معينة</strong>.</li>
+          <li><span class="hl-term">الهدف الرئيسي منها:</span> يتعاونون أو يتنافسون لتحقيق أهداف مشتركة أو متعارضة <span class="exam-tag">سؤال في بنك الأسئلة</span></li>
+          <li>في الأنظمة متعددة الوكلاء يصبح التعامل مع التفاعلات بين الوكلاء أكثر تعقيداً؛ حيث يجب على كل وكيل أن يأخذ في الاعتبار أفعال الوكلاء الآخرين بسبب الحاجة إلى <strong>التنسيق والتواصل</strong>.</li>
+        </ul>
+      </div>
+    </div>
   </section>
 
-  <!-- ================= التبويب الثاني: جداول المقارنات والملخصات ================= -->
-  <section id="tables" class="panel">
-    <div class="card">
-      <h2>1. جدول توصيف بيئة المهمة (PEAS) لأربعة أمثلة قياسية في الفصل الثالث</h2>
-      <table>
+  <!-- ==================== التبويب 2: جداول المقارنات والملخصات (4) ==================== -->
+  <section id="tab-tables" class="tab-section">
+    <div class="table-card">
+      <h3>1. جدول توصيف علاقة الوكيل بالبيئة المحيطة (PEAS) للأمثلة الثلاثة في الملزمة</h3>
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>نوع الوكيل (Agent Type)</th>
+            <th>مقياس الأداء (Performance Measure)</th>
+            <th>البيئة المحيطة (Environment)</th>
+            <th>آليات التنفيذ (Actuators)</th>
+            <th>أدوات الاستشعار (Sensors)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>سائق التاكسي<br>(Taxi driver)</strong></td>
+            <td>رحلة آمنة، سريعة، قانونية، مريحة، تعظيم الأرباح<br><span class="ltr-cell">Safe, fast, legal, comfortable trip, maximize profits</span></td>
+            <td>الطرق، حركة المرور الأخرى، المشاة، العملاء<br><span class="ltr-cell">Roads, other traffic, pedestrians, customers</span></td>
+            <td>المقود، دواسة الوقود، الفرامل، الإشارة، البوق، الشاشة<br><span class="ltr-cell">Steering, accelerator, brake, signal, horn, display</span></td>
+            <td>الكاميرات، السونار، عداد السرعة، GPS، عداد المسافة، مقياس التسارع، حساسات المحرك، لوحة المفاتيح</td>
+          </tr>
+          <tr>
+            <td><strong>روبوت التقاط القطع<br>(Part-picking robot)</strong></td>
+            <td>النسبة المئوية للقطع في الصناديق الصحيحة<br><span class="ltr-cell">Percentage of parts in correct bins</span></td>
+            <td>الحزام الناقل مع القطع، الصناديق<br><span class="ltr-cell">Conveyor belt with parts; bins</span></td>
+            <td>ذراع ويد مفصلية<br><span class="ltr-cell">Jointed arm and hand</span></td>
+            <td>الكاميرا، حساسات زوايا المفاصل<br><span class="ltr-cell">Camera, joint angle sensors</span></td>
+          </tr>
+          <tr>
+            <td><strong>وكيل المكنسة<br>(Vacuum Agent)</strong></td>
+            <td>تنظيف المربع / الوقت<br><span class="ltr-cell">Clean square/time</span></td>
+            <td>مناطق محددة بمربعات<br><span class="ltr-cell">Areas defined by square regions</span></td>
+            <td>العجلات، الشفاطات<br><span class="ltr-cell">Wheels, suckers</span></td>
+            <td>حساسات الأشعة تحت الحمراء<br><span class="ltr-cell">Infrared sensors</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-card">
+      <h3>2. جدول تصنيف أمثلة البيئات المحيطة وخصائصها الست (مطابق لجدول الملزمة ص 36)</h3>
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>بيئة المهمة (Task Environment)</th>
+            <th>القابلية للملاحظة (Observable)</th>
+            <th>عدد الوكلاء (Agents)</th>
+            <th>الحتمية (Deterministic)</th>
+            <th>الترابط (Episodic)</th>
+            <th>الثبات (Static)</th>
+            <th>الزمن (Discrete)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>قيادة التاكسي (Taxi driving)</strong></td>
+            <td>معرفة جزئياً (Partially)</td>
+            <td>متعدد (Multi)</td>
+            <td>عشوائية (Stochastic)</td>
+            <td>متسلسلة (Sequential)</td>
+            <td>متغيرة (Dynamic)</td>
+            <td>مستمرة (Continuous)</td>
+          </tr>
+          <tr>
+            <td><strong>روبوت التقاط القطع (Part-picking robot)</strong></td>
+            <td>معرفة جزئياً (Partially)</td>
+            <td>أحادي (Single)</td>
+            <td>عشوائية (Stochastic)</td>
+            <td>عرضية (Episodic)</td>
+            <td>متغيرة (Dynamic)</td>
+            <td>مستمرة (Continuous)</td>
+          </tr>
+          <tr>
+            <td><strong>لغز الأرقام (8-Puzzle)</strong></td>
+            <td>معرفة بالكامل (Fully)</td>
+            <td>أحادي (Single)</td>
+            <td>محددة (Deterministic)</td>
+            <td>متسلسلة (Sequential)</td>
+            <td>ثابتة (Static)</td>
+            <td>متقطعة (Discrete)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-card">
+      <h3>3. جدول المقارنة بين الأنواع الستة لوكلاء الذكاء الاصطناعي</h3>
+      <table class="comp-table">
         <thead>
           <tr>
             <th>نوع الوكيل</th>
-            <th>مقياس الأداء (Performance)</th>
-            <th>البيئة (Environment)</th>
-            <th>المشغلات (Actuators)</th>
-            <th>المستشعرات (Sensors)</th>
+            <th>المبدأ الأساسي لاتخاذ القرار</th>
+            <th>الذاكرة / الخبرة السابقة</th>
+            <th>المميزات والمتطلبات</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><b>1. سائق التاكسي الآلي<br>(Automated Taxi)</b></td>
-            <td>الأمان، السرعة، القانونية، راحة الرحلة، تعظيم الأرباح.</td>
-            <td>الطرق، حركة المرور الأخرى، المشاة، العملاء، الطقس.</td>
-            <td>عجلة القيادة، دواسة الوقود، الفرامل، الإشارات، البوق، الشاشة.</td>
-            <td>الكاميرات، السونار/الليدار، عداد السرعة، GPS، الميكروفون.</td>
+            <td><strong>1. البسيط القائم على القواعد (Simple Reflex)</strong></td>
+            <td>قواعد ثابتة (حالة - ردة فعل Condition-Action) بناءً على الإدراك الحالي فقط.</td>
+            <td>ليس له ذاكرة (لا ينظر للخبرة السابقة).</td>
+            <td>سهل وبسيط ولكنه محدود القدرات، ويتطلب بيئة معروفة بالكامل (Fully Observable).</td>
           </tr>
           <tr>
-            <td><b>2. نظام التشخيص الطبي<br>(Medical Diagnosis)</b></td>
-            <td>مريض سليم، تقليل التكاليف، تجنب الدعاوى القضائية.</td>
-            <td>المريض، المستشفى، الطاقم الطبي.</td>
-            <td>شاشة العرض (لعرض الأسئلة، الفحوصات، التشخيص، والعلاج).</td>
-            <td>لوحة المفاتيح (لإدخال الأعراض، النتائج، وإجابات المريض).</td>
+            <td><strong>2. القائم على النموذج (Model-Based)</strong></td>
+            <td>يبني نموذجاً داخلياً للبيئة ويحدثه عند كل إدراك جديد من المستشعرات.</td>
+            <td>يمتلك حالة داخلية وتصوراً عن تطور البيئة.</td>
+            <td>يتعامل مع المواقف الأكثر تعقيداً والبيئات المعرفة جزئياً.</td>
           </tr>
           <tr>
-            <td><b>3. روبوت فرز القطع<br>(Part-Picking Robot)</b></td>
-            <td>النسبة المئوية للقطع الموضوعة في الصناديق الصحيحة.</td>
-            <td>حزام ناقل عليه قطع، والصناديق المخصصة.</td>
-            <td>ذراع ويد مفصلية لالتقاط القطع ووضعها.</td>
-            <td>الكاميرا، ومستشعرات زوايا المفاصل.</td>
+            <td><strong>3. القائم على الهدف (Goal-Based)</strong></td>
+            <td>يحلل النتائج المحتملة للأفعال ويختار الفعل الذي يقربه من تحقيق الهدف (Goals).</td>
+            <td>نموذج للبيئة + معلومات عن الهدف المطلوب.</td>
+            <td>مرن ويوجه سلوكه نحو الوصول لهدف محدد مسبقاً.</td>
           </tr>
           <tr>
-            <td><b>4. معلم اللغة التفاعلي<br>(English Tutor)</b></td>
-            <td>تعظيم درجات الطالب في اختبار اللغة الإنجليزية.</td>
-            <td>مجموعة من الطلاب، وجهة الاختبار.</td>
-            <td>شاشة العرض (لعرض التمارين، الاقتراحات، والتصحيحات).</td>
-            <td>لوحة المفاتيح (لإدخال كتابات وإجابات الطالب).</td>
+            <td><strong>4. القائم على المنفعة (Utility-Based)</strong></td>
+            <td>يقيم النتائج المحتملة ويفاضل بين الطرق المتعددة لاختيار الفعل ذي المنفعة الأكبر (Utility).</td>
+            <td>نموذج للبيئة + دالة قياس المنفعة والكفاءة.</td>
+            <td>يحقق الهدف بأقصى قدر من الكفاءة عندما تتعدد طرق الوصول للهدف.</td>
+          </tr>
+          <tr>
+            <td><strong>5. التكيفي (Learning Agent)</strong></td>
+            <td>يتعلم من تجاربه السابقة ويعدل سلوكه بمرور الوقت عبر (الناقد، عنصر التعلم، الأداء، مولد المشكلات).</td>
+            <td>يتعلم ويراكم المعرفة والخبرات باستمرار.</td>
+            <td>قادر على التكيف وتحسين الأداء في البيئات غير المعروفة مسبقاً.</td>
+          </tr>
+          <tr>
+            <td><strong>6. الأنظمة متعددة الوكلاء (Multi-Agent)</strong></td>
+            <td>تفاعل أكثر من وكيل (تعاوناً أو تنافساً) لتحقيق أهداف مشتركة أو متعارضة.</td>
+            <td>يأخذ في الاعتبار أفعال وقرارات الوكلاء الآخرين.</td>
+            <td>يحتاج إلى آليات متقدمة للتنسيق والتواصل بين الوكلاء.</td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <div class="card">
-      <h2>2. جدول مقارنة خصائص وأبعاد البيئات السبعة (Properties of Task Environments)</h2>
-      <table>
+    <div class="table-card">
+      <h3>4. جدول تسلسل الإدراك والإجراء لروبوت مكنسة التنظيف (Vacuum Cleaner)</h3>
+      <table class="comp-table">
         <thead>
           <tr>
-            <th>البُعد / الخاصية</th>
-            <th>النوع الأول</th>
-            <th>النوع الثاني المقابل</th>
-            <th>مثال توضيحي للمقارنة</th>
+            <th>تسلسل الإدراك (Percept sequence)</th>
+            <th>الحالة المفهومة</th>
+            <th>الإجراء الصادر (Action)</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><b>1. قابلية الملاحظة</b></td>
-            <td><b>ملاحظة كلياً (Fully Observable):</b> المستشعرات تكشف الحالة الكاملة للبيئة في كل لحظة.</td>
-            <td><b>ملاحظة جزئياً (Partially Observable):</b> بعض أجزاء الحالة مخفية أو المستشعرات مشوشة.</td>
-            <td>الشطرنج ملاحظ كلياً، بينما قيادة التاكسي والبوكر ملاحظة جزئياً.</td>
+            <td class="ltr-cell">[A, Clean]</td>
+            <td>المكنسة في المربع A والمربع نظيف</td>
+            <td>الاتجاه يميناً إلى B (<strong>Right</strong>)</td>
           </tr>
           <tr>
-            <td><b>2. عدد الوكلاء</b></td>
-            <td><b>وكيل منفرد (Single-Agent):</b> يعمل الوكيل بمفرده دون وكلاء آخرين.</td>
-            <td><b>متعدد الوكلاء (Multi-Agent):</b> تنافسية (<span dir="ltr">Competitive</span>) أو تعاونية (<span dir="ltr">Cooperative</span>).</td>
-            <td>الكلمات المتقاطعة وكيل منفرد، بينما الشطرنج والقيادة متعدد الوكلاء.</td>
+            <td class="ltr-cell">[A, Dirty]</td>
+            <td>المكنسة في المربع A والمربع متسخ</td>
+            <td>الشفط والتنظيف (<strong>Suck</strong>)</td>
           </tr>
           <tr>
-            <td><b>3. الحتمية</b></td>
-            <td><b>حتمية (Deterministic):</b> الحالة التالية تتحدد بالكامل من الحالة الحالية والفعل.</td>
-            <td><b>عشوائية / احتمالية (Stochastic):</b> توجد احتمالات وعدم يقين في النتيجة التالية.</td>
-            <td>الكلمات المتقاطعة حتمية، بينما قيادة التاكسي ورمي النرد عشوائية.</td>
+            <td class="ltr-cell">[B, Clean]</td>
+            <td>المكنسة في المربع B والمربع نظيف</td>
+            <td>الاتجاه يساراً إلى A (<strong>Left</strong>)</td>
           </tr>
           <tr>
-            <td><b>4. الترابط الزمني للقرارات</b></td>
-            <td><b>عرضية (Episodic):</b> حلقات مستقلة؛ الفعل الحالي لا يؤثر على الحلقات القادمة.</td>
-            <td><b>متسلسلة (Sequential):</b> الفعل الحالي يؤثر على جميع القرارات المستقبلية.</td>
-            <td>فحص القطع المعيبة عرضي، بينما الشطرنج والقيادة متسلسلة.</td>
+            <td class="ltr-cell">[B, Dirty]</td>
+            <td>المكنسة في المربع B والمربع متسخ</td>
+            <td>الشفط والتنظيف (<strong>Suck</strong>)</td>
           </tr>
           <tr>
-            <td><b>5. التغير مع الزمن</b></td>
-            <td><b>ثابتة (Static):</b> لا تتغير البيئة أثناء تفكير الوكيل (أو شبه ديناميكية إذا تغير الوقت فقط).</td>
-            <td><b>ديناميكية (Dynamic):</b> تتغير البيئة باستمرار أثناء تفكير الوكيل.</td>
-            <td>الكلمات المتقاطعة ثابتة، الشطرنج بساعة شبه ديناميكي، والقيادة ديناميكية.</td>
+            <td class="ltr-cell">[A, Clean], [A, Clean]</td>
+            <td>المربع الحالي A نظيف</td>
+            <td>الاتجاه يميناً (<strong>Right</strong>)</td>
           </tr>
           <tr>
-            <td><b>6. طبيعة القيم والزمن</b></td>
-            <td><b>منفصلة (Discrete):</b> عدد محدد ومنفصل من الحالات والأفعال.</td>
-            <td><b>مستمرة (Continuous):</b> تتغير الحالات والزمن والأفعال بشكل متصل غير منقطع.</td>
-            <td>الشطرنج منفصل، بينما قيادة التاكسي مستمرة.</td>
-          </tr>
-          <tr>
-            <td><b>7. معرفة القوانين</b></td>
-            <td><b>معروفة (Known):</b> قوانين البيئة ونتائج الأفعال معروفة للوكيل.</td>
-            <td><b>غير معروفة (Unknown):</b> يجب على الوكيل استكشاف وتعلم قوانين البيئة.</td>
-            <td>لعبة ورق بقوانين معلنة معروفة، ولعبة فيديو جديدة بدون دليل غير معروفة.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="card">
-      <h2>3. جدول مقارنة شامل للأنواع الخمسة لوكلاء الذكاء الاصطناعي (AI Agents)</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>نوع الوكيل</th>
-            <th>المصطلح الإنجليزي</th>
-            <th>الأساس الذي يتخذ به القرار</th>
-            <th>متى نستخدمه؟ وما حدوده؟</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><b>1. وكيل رد الفعل البسيط</b></td>
-            <td dir="ltr"><b>Simple Reflex Agent</b></td>
-            <td>قواعد (شرط - فعل <span dir="ltr">Condition-Action</span>) بناءً على <b>الإدراك الحالي فقط</b>.</td>
-            <td>ينجح فقط في البيئات <b>القابلة للملاحظة كلياً</b>؛ ويفشل أو يقع في حلقات في البيئات الجزئية.</td>
-          </tr>
-          <tr>
-            <td><b>2. وكيل رد الفعل المبني على نموذج</b></td>
-            <td dir="ltr"><b>Model-Based Reflex Agent</b></td>
-            <td>يحتفظ بـ <b>حالة داخلية (<span dir="ltr">Internal State</span>)</b> ونموذج لكيفية تطور العالم وتأثير أفعاله.</td>
-            <td>يُستخدم للتغلب على <b>الملاحظة الجزئية</b> للبيئة عن طريق تتبع الأجزاء غير المرئية.</td>
-          </tr>
-          <tr>
-            <td><b>3. الوكيل المبني على الهدف</b></td>
-            <td dir="ltr"><b>Goal-Based Agent</b></td>
-            <td>يدمج الحالة الداخلية مع <b>الهدف (<span dir="ltr">Goal</span>)</b> ويستخدم البحث والتخطيط للوصول إليه.</td>
-            <td>مرن جداً عند تغير الأهداف، لكنه لا يميز بين المسارات المختلفة في جودتها وكفاءتها.</td>
-          </tr>
-          <tr>
-            <td><b>4. الوكيل المبني على المنفعة</b></td>
-            <td dir="ltr"><b>Utility-Based Agent</b></td>
-            <td>يستخدم <b>دالة المنفعة (<span dir="ltr">Utility Function</span>)</b> لتعظيم درجة الرضا والمنفعة المتوقعة.</td>
-            <td>الأفضل عند وجود <b>أهداف متعارضة</b> (كالسرعة والأمان) أو <b>عدم يقين</b> وتعدد طرق الوصول للهدف.</td>
-          </tr>
-          <tr>
-            <td><b>5. الوكيل المتعلم</b></td>
-            <td dir="ltr"><b>Learning Agent</b></td>
-            <td>يضم 4 مكونات: (عنصر التعلم، عنصر الأداء، الناقد، ومولد المشكلات).</td>
-            <td>يعمل بكفاءة في <b>البيئات غير المعروفة مسبقاً</b> ويطور أداءه ذاتياً من التجارب.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="card">
-      <h2>4. جدول المكونات الأربعة للوكيل المتعلم (Learning Agent)</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>المكون</th>
-            <th>المصطلح الإنجليزي</th>
-            <th>الدور الوظيفي الدقيق داخل الوكيل المتعلم</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><b>1. عنصر التعلم</b></td>
-            <td dir="ltr"><b>Learning Element</b></td>
-            <td>المسؤول عن إجراء التحسينات والتعديلات في سلوك ومعرفة الوكيل ليتطور بمرور الوقت.</td>
-          </tr>
-          <tr>
-            <td><b>2. عنصر الأداء</b></td>
-            <td dir="ltr"><b>Performance Element</b></td>
-            <td>المسؤول عن استقبال الإدراكات واختيار الأفعال الخارجية التي تنفذها المشغلات.</td>
-          </tr>
-          <tr>
-            <td><b>3. الناقد</b></td>
-            <td dir="ltr"><b>Critic</b></td>
-            <td>يقيم مدى جودة عمل الوكيل بمقارنة النتائج بمعيار أداء ثابت، ويرسل تغذية راجعة لعنصر التعلم.</td>
-          </tr>
-          <tr>
-            <td><b>4. مولد المشكلات</b></td>
-            <td dir="ltr"><b>Problem Generator</b></td>
-            <td>يقترح أفعالاً استكشافية جديدة تقود الوكيل إلى تجارب وخبرات جديدة ومفيدة على المدى الطويل.</td>
+            <td class="ltr-cell">[A, Clean], [A, Dirty]</td>
+            <td>المربع الحالي A أصبح متسخاً</td>
+            <td>الشفط والتنظيف (<strong>Suck</strong>)</td>
           </tr>
         </tbody>
       </table>
     </div>
   </section>
 
-  <!-- ================= التبويب الثالث: المصطلحات ================= -->
-  <section id="terms" class="panel">
-    <div class="card">
-      <h2>قاموس المصطلحات والمفاهيم الشامل للفصل الثالث (28 مصطلحاً)</h2>
-      <p class="muted">جميع المصطلحات الأساسية لوكلاء الذكاء الاصطناعي والبيئات باللغتين الإنجليزية والعربية:</p>
-      <div id="termsGrid" class="grid"></div>
+  <!-- ==================== التبويب 3: المصطلحات والمفاهيم (26) ==================== -->
+  <section id="tab-terms" class="tab-section">
+    <div class="terms-controls">
+      <input type="text" id="termSearch" class="search-input" placeholder="ابحثي عن مصطلح بالعربي أو الإنجليزي..." oninput="renderTerms()">
+      <button class="filter-btn active" onclick="filterTerms('all', this)">الكل (26)</button>
+      <button class="filter-btn" onclick="filterTerms('u1', this)">الوحدة الأولى (8)</button>
+      <button class="filter-btn" onclick="filterTerms('u2', this)">الوحدة الثانية (10)</button>
+      <button class="filter-btn" onclick="filterTerms('u3', this)">الوحدة الثالثة (8)</button>
+    </div>
+    <div class="terms-grid" id="termsContainer"></div>
+  </section>
+
+  <!-- ==================== التبويب 4: البطاقات التعليمية (26) ==================== -->
+  <section id="tab-cards" class="tab-section">
+    <div class="flashcard-wrap">
+      <div class="fc-box" onclick="flipCard()">
+        <span class="fc-label" id="fcUnitLabel">الوحدة الأولى • اضغطي لقلب البطاقة</span>
+        <div class="fc-text" id="fcContent">...</div>
+      </div>
+      <div style="margin-bottom:14px;font-weight:700;color:var(--text-muted)" id="fcCounter">1 / 26</div>
+      <div class="fc-controls">
+        <button class="filter-btn" onclick="moveCard(-1)">السابق</button>
+        <button class="filter-btn active" onclick="flipCard()">اقلب البطاقة</button>
+        <button class="filter-btn" onclick="moveCard(1)">التالي</button>
+        <button class="filter-btn" onclick="shuffleCards()">خلط عشوائي</button>
+      </div>
     </div>
   </section>
 
-  <!-- ================= التبويب الرابع: البطاقات التعليمية ================= -->
-  <section id="cards" class="panel">
-    <div class="card">
-      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
-      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
-      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
-        <div class="term" id="flashTerm"></div>
-        <div class="answer" id="flashAnswer" hidden></div>
-        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+  <!-- ==================== التبويب 5: الاختبار الشامل (20) ==================== -->
+  <section id="tab-quiz" class="tab-section">
+    <div class="quiz-toolbar">
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="filter-btn active" id="qFilter-all" onclick="setQuizFilter('all')">جميع الأسئلة (20)</button>
+        <button class="filter-btn" id="qFilter-official" onclick="setQuizFilter('official')">أسئلة البنك الرسمية (9)</button>
+        <button class="filter-btn" id="qFilter-extra" onclick="setQuizFilter('extra')">أسئلة تدريبية شاملة (11)</button>
+        <button class="filter-btn" id="qFilter-mistakes" onclick="setQuizFilter('mistakes')">أخطائي للمراجعة (0)</button>
       </div>
-      <div class="row" style="margin-top:14px">
-        <button class="btn" id="prevCard">السابق</button>
-        <span id="cardCount" class="muted"></span>
-        <button class="btn primary" id="nextCard">التالي</button>
+      <div class="quiz-stats">
+        <span class="q-stat good" id="qRightStat">صحيحة: 0</span>
+        <span class="q-stat bad" id="qWrongStat">خاطئة: 0</span>
+        <button class="filter-btn" onclick="resetQuiz()">إعادة الاختبار</button>
       </div>
     </div>
+    <div id="quizContainer"></div>
   </section>
 
-  <!-- ================= التبويب الخامس: الاختبار الشامل ================= -->
-  <section id="quiz" class="panel">
-    <div class="card">
-      <div class="row">
-        <div>
-          <h2>الاختبار الشامل للفصل الثالث (25 سؤالاً)</h2>
-          <p class="muted">يغطي كافة تفاصيل وكلاء الذكاء الاصطناعي وإطار PEAS وخصائص البيئات وأنواع الوكلاء الخمسة مع تصحيح وتعليل فوري.</p>
-        </div>
-        <div class="score" id="score">النتيجة: 0 / 25</div>
-      </div>
-      <div class="progress"><div id="progressBar"></div></div>
-      <div id="quizArea"></div>
-      <div class="row">
-        <button class="btn" id="resetQuiz">إعادة الاختبار</button>
-        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
-      </div>
-      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
-    </div>
-  </section>
 </main>
 
-<footer>الفصل الثالث: وكلاء الذكاء الاصطناعي (AI Agents) • مراجعة تفاعلية شاملة (صفحات 30 - 40)</footer>
+<footer>
+  الفصل الثالث: وكلاء الذكاء الاصطناعي (Artificial Intelligence Agents) • مراجعة تفاعلية شاملة مطابقة 100% للملزمة
+</footer>
 
 <script>
-const terms = [
-  ["Agent (الوكيل)", "أي كيان يدرك بيئته المحيطة من خلال المستشعرات (Sensors) ويتصرف ويؤثر في تلك البيئة من خلال المشغلات أو المؤثرات (Actuators)."],
-  ["Sensors (المستشعرات / الحساسات)", "الأدوات التي يستقبل بها الوكيل المدخلات من البيئة (كالعينين والأذنين للإنسان، والكاميرات والليدار للروبوت، وضغطات المفاتيح للبرنامج)."],
-  ["Actuators (المشغلات / المؤثرات)", "الأدوات التي ينفذ بها الوكيل أفعاله للتأثير في البيئة (كاليدين والساقين للإنسان، والمحركات للروبوت، والعرض على الشاشة للبرنامج)."],
-  ["Percept (الإدراك اللحظي)", "المدخلات الحسية أو الإدراكية التي يستقبلها الوكيل في أي لحظة زمنية معينة."],
-  ["Percept Sequence (تسلسل الإدراكات)", "التاريخ الكامل لكل ما أدركه الوكيل طوال فترة عمله، وعليه يعتمد قرار الوكيل في اختيار الفعل."],
-  ["Agent Function (دالة الوكيل)", "وصف رياضي مجرد يربط أي تسلسل إدراكات محتمل بالفعل الذي سيتخذه الوكيل (f: P* → A)."],
-  ["Agent Program (برنامج الوكيل)", "التنفيذ البرمجي الملموس والفعلي الذي يعمل داخل معمارية الوكيل (Architecture) لتنفيذ دالة الوكيل."],
-  ["Agent Architecture (معمارية الوكيل)", "الجهاز الحاسوبي أو الهيكل المادي المزود بالمستشعرات والمشغلات والذي يعمل عليه برنامج الوكيل: Agent = Architecture + Program."],
-  ["Rational Agent (الوكيل العقلاني / الرشيد)", "الوكيل الذي يختار لكل تسلسل إدراكات الفعل الذي يُتوقع أن يعظم مقياس أدائه بناءً على إدراكاته ومعرفته المسبقة."],
-  ["Performance Measure (مقياس الأداء)", "المعيار الموضوعي الذي يُستخدم لتقييم مدى نجاح سلوك الوكيل في تحقيق الهدف داخل البيئة."],
-  ["Omniscience vs. Rationality", "العلم الكلي (Omniscience) يعني معرفة النتائج الفعلية مسبقاً (مستحيل)، بينما العقلانية تعظم الأداء المتوقع بناءً على ما أدركه الوكيل."],
-  ["Autonomy (الاستقلالية)", "قدرة الوكيل على الاعتماد على إدراكاته وتعلمه الذاتي من الخبرة بدلاً من الاعتماد فقط على المعرفة المسبقة التي وضعها مصممه."],
-  ["PEAS Framework (إطار توصيف البيئة)", "اختصار للعناصر الأربعة لتوصيف بيئة المهمة: Performance (الأداء)، Environment (البيئة)، Actuators (المشغلات)، و Sensors (المستشعرات)."],
-  ["Fully vs. Partially Observable", "البيئة الملاحظة كلياً تكشف فيها المستشعرات كامل حالة البيئة في كل لحظة، بينما الجزئية تخفي أجزاء من الحالة."],
-  ["Deterministic vs. Stochastic", "في البيئة الحتمية تتحدد الحالة التالية بالكامل من الحالة الحالية والفعل، بينما في العشوائية (الاحتمالية) يوجد عدم يقين."],
-  ["Strategic Environment (البيئة الاستراتيجية)", "بيئة تكون حتمية في جميع جوانبها باستثناء الأفعال التي يقوم بها الوكلاء الآخرون (مثل لعبة الشطرنج)."],
-  ["Episodic vs. Sequential", "في البيئة العرضية تنقسم الخبرة لحلقات مستقلة لا يؤثر فيها قرار اليوم على الغد، بينما في المتسلسلة يؤثر كل قرار على المستقبل."],
-  ["Static vs. Dynamic", "البيئة الثابتة لا تتغير أثناء تفكير الوكيل، بينما الديناميكية تتغير باستمرار أثناء تفكير الوكيل (مثل قيادة السيارة)."],
-  ["Semidynamic (شبه ديناميكية)", "بيئة لا تتغير حالتها بمرور الوقت، ولكن درجة تقييم أداء الوكيل تتناقص مع مرور الزمن (مثل الشطرنج مع ساعة توقيت)."],
-  ["Discrete vs. Continuous", "البيئة المنفصلة لها عدد محدد من الحالات والأفعال (كالشطرنج)، والمستمرة تتغير قيمها وزمنها بشكل متصل (كقيادة التاكسي)."],
-  ["Table-Driven Agent (الوكيل الجدولي)", "وكيل يعتمد على جدول بحث ضخم يخزن كل تسلسل إدراكات والفعل المقابل له؛ ويفشل عملياً لضخامة حجم الجدول."],
-  ["Simple Reflex Agent (وكيل رد الفعل البسيط)", "يختار الفعل بناءً على الإدراك الحالي فقط باستخدام قواعد (شرط - فعل Condition-Action) دون النظر لتاريخ الإدراكات."],
-  ["Condition-Action Rule (قاعدة شرط - فعل)", "قاعدة على صورة (إذا تحقق الشرط ← نفذ الفعل) يعتمد عليها وكيل رد الفعل البسيط."],
-  ["Model-Based Reflex Agent", "وكيل رد الفعل المبني على نموذج: يحتفظ بحالة داخلية (Internal State) ونموذج للعالم للتعامل مع البيئات الملاحظة جزئياً."],
-  ["Goal-Based Agent (الوكيل المبني على الهدف)", "وكيل يستخدم معلومات الهدف (Goal) مع البحث والتخطيط لاختيار سلسلة الأفعال التي توصل للهدف."],
-  ["Utility-Based Agent (الوكيل المبني على المنفعة)", "وكيل يستخدم دالة المنفعة (Utility Function) لقياس درجة الرضا واختيار الفعل الذي يعظم المنفعة المتوقعة عند تعارض الأهداف."],
-  ["Learning Agent (الوكيل المتعلم)", "وكيل يتعلم من الخبرة للعمل في بيئات غير معروفة، ويتكون من: عنصر التعلم، عنصر الأداء، الناقد، ومولد المشكلات."],
-  ["Critic & Problem Generator", "في الوكيل المتعلم: الناقد (Critic) يقيم الأداء ويرسل التغذية الراجعة، ومولد المشكلات يقترح أفعالاً استكشافية جديدة."]
+// ==================== بيانات المصطلحات والبطاقات (26 مصطلحاً من الفصل الثالث) ====================
+const TERMS_DATA = [
+  // الوحدة الأولى (8)
+  { u: "u1", unitName: "الوحدة الأولى", ar: "الوكيل الذكي", en: "Intelligent Agent", def: "برامج أو أنظمة قادرة على اتخاذ قرارات بشكل مستقل أو شبه مستقل بناءً على البيئة المحيطة بها والمعلومات المتاحة." },
+  { u: "u1", unitName: "الوحدة الأولى", ar: "المستشعرات / أدوات الاستشعار", en: "Sensors", def: "الأدوات التي يمتلكها الوكيل الذكي ويدرك من خلالها البيئة المحيطة به لجمع البيانات والمدخلات." },
+  { u: "u1", unitName: "الوحدة الأولى", ar: "آليات التنفيذ", en: "Actuators", def: "الوسائل والأدوات التي يتفاعل ويتجاوب بها الوكيل مع البيئة المحيطة لتنفيذ الإجراءات وردود الفعل." },
+  { u: "u1", unitName: "الوحدة الأولى", ar: "الإدراك", en: "Percept", def: "البيانات التي يتلقاها الوكيل الذكي عن طريق المستشعرات وتمثل المدخلات (Input)." },
+  { u: "u1", unitName: "الوحدة الأولى", ar: "ردة الفعل / الإجراء", en: "Action", def: "الأحداث والإجراءات الصادرة عن الوكيل الذكي عبر آليات التنفيذ وتمثل المخرجات (Output)." },
+  { u: "u1", unitName: "الوحدة الأولى", ar: "المعالجة", en: "Processing", def: "العنصر الذي يحدد سلوك الوكيل الذكي، ويتكون من: برامج الوكيل (Agent program) + خوارزميات (Algorithms) + قواعد معرفة (Knowledge-base)." },
+  { u: "u1", unitName: "الوحدة الأولى", ar: "الوكيل العقلاني", en: "Rational Agent", def: "كيانات ذكية تدرك بيئتها وتتخذ قراراتها بحيث تعطي استجابتها أكبر قيمة ممكنة لمعيار الأداء أخذاً بعين الاعتبار معرفتها السابقة ومعلومات المستشعرات." },
+  { u: "u1", unitName: "الوحدة الأولى", ar: "مقياس الأداء", en: "Performance Measure", def: "المعيار الذي يحدد نجاح الوكيل العقلاني ومقدار تطابق سلوكه وقراره مع ما هو متوقع منه." },
+
+  // الوحدة الثانية (10)
+  { u: "u2", unitName: "الوحدة الثانية", ar: "إطار توصيف بيئة المهمة", en: "PEAS Framework", def: "اختصار للعناصر الأربعة التي تحدد علاقة الوكيل بالبيئة: مقياس الأداء (Performance)، البيئة (Environment)، آليات التنفيذ (Actuators)، والمستشعرات (Sensors)." },
+  { u: "u2", unitName: "الوحدة الثانية", ar: "بيئة معرفة بالكامل", en: "Fully Observable", def: "بيئة تعطي فيها المستشعرات تصوراً واضحاً وكاملاً عن البيئة وجميع المعلومات التي يطلبها الوكيل (مثل لغز 8-Puzzle)." },
+  { u: "u2", unitName: "الوحدة الثانية", ar: "بيئة معرفة جزئياً", en: "Partially Observable", def: "بيئة تكون فيها المعلومات المتوفرة للوكيل عبر مستشعراته جزئية وغير مكتملة (مثل قيادة التاكسي)." },
+  { u: "u2", unitName: "الوحدة الثانية", ar: "بيئة محددة", en: "Deterministic", def: "بيئة تكون فيها الحالة التالية معروفة ومؤكدة بالنسبة إلى الحالة الحالية بناءً على تنفيذ إجراء معين." },
+  { u: "u2", unitName: "الوحدة الثانية", ar: "بيئة عشوائية", en: "Stochastic", def: "بيئة تكون فيها الحالة التالية غير معروفة بالنسبة إلى الحالة الحالية عند تنفيذ إجراء معين." },
+  { u: "u2", unitName: "الوحدة الثانية", ar: "بيئة متسلسلة", en: "Sequential", def: "بيئة يعتمد فيها رد فعل الوكيل الحالي على ردود الفعل السابقة وتؤثر قراراته الحالية في المستقبل." },
+  { u: "u2", unitName: "الوحدة الثانية", ar: "بيئة عرضية", en: "Episodic / Consequential", def: "بيئة لا يعتمد فيها رد الفعل على ردود الفعل السابقة ولا يحتاج الوكيل فيها إلى التفكير في المستقبل (مثل روبوت التقاط القطع)." },
+  { u: "u2", unitName: "الوحدة الثانية", ar: "بيئة ثابتة / متغيرة", en: "Static vs. Dynamic", def: "الثابتة لا تتغير أثناء اتخاذ الوكيل للقرار، بينما المتغيرة تتغير أثناء تفكير الوكيل واتخاذه للقرار." },
+  { u: "u2", unitName: "الوحدة الثانية", ar: "بيئة مستمرة / متقطعة", en: "Continuous vs. Discrete", def: "المتقطعة يتم فيها التغير من حالة لأخرى في زمن متقطع، بينما المستمرة يتم فيها التغير في وقت متصل." },
+  { u: "u2", unitName: "الوحدة الثانية", ar: "أحادية الوكيل / متعددة الوكلاء", en: "Single vs. Multi Agents", def: "أحادية الوكيل يوجد بها وكيل واحد يؤثر في البيئة، ومتعددة الوكلاء يوجد بها أكثر من وكيل في البيئة." },
+
+  // الوحدة الثالثة (8)
+  { u: "u3", unitName: "الوحدة الثالثة", ar: "الوكلاء البسيطة القائمون على القواعد", en: "Simple Reflex Agents", def: "أبسط أنواع الوكلاء؛ يعتمد على قواعد (حالة - ردة فعل) ويستجيب بناءً على الإدراك الحالي فقط دون ذاكرة، ويتطلب بيئة معروفة بالكامل." },
+  { u: "u3", unitName: "الوحدة الثالثة", ar: "الوكلاء القائمة على النموذج", en: "Model-Based Agents", def: "وكلاء تبني نموذجاً داخلياً للبيئة المحيطة وتحدثه باستمرار بتفاعل معلومات المستشعرات الجديدة مع المعلومات السابقة." },
+  { u: "u3", unitName: "الوحدة الثالثة", ar: "الوكلاء القائمون على الهدف", en: "Goal-Based Agents", def: "وكلاء تمتلك معلومات عن الهدف المراد الوصول إليه، وتحلل النتائج المحتملة لأفعالها لاختيار الفعل الذي يقربها من تحقيق الهدف." },
+  { u: "u3", unitName: "الوحدة الثالثة", ar: "الوكلاء القائمة على المنفعة", en: "Utility-Based Agents", def: "وكلاء تسعى لتعظيم الكفاءة عند تعدد طرق الوصول للهدف، فتقيم النتائج وتختار الفعل الذي يوفر أكبر منفعة ممكنة." },
+  { u: "u3", unitName: "الوحدة الثالثة", ar: "الوكلاء التكيفيون", en: "Learning Agents", def: "وكلاء لديها القدرة على التعلم من تجاربها السابقة وتعديل سلوكها بمرور الوقت لتحسين أدائها." },
+  { u: "u3", unitName: "الوحدة الثالثة", ar: "الناقد في الوكيل التكيفي", en: "Critic", def: "مكون في الوكيل التكيفي يقارن الإدراك بمعيار الأداء ويرسل تغذية راجعة (Feedback) إلى عنصر التعلم." },
+  { u: "u3", unitName: "الوحدة الثالثة", ar: "مولد المشكلات", en: "Problem Generator", def: "مكون في الوكيل التكيفي يقترح أفعالاً استكشافية جديدة بناءً على أهداف التعلم لاكتساب تجارب وخبرات جديدة." },
+  { u: "u3", unitName: "الوحدة الثالثة", ar: "الوكلاء المتعددون", en: "Multi-Agent Systems", def: "أنظمة تتضمن أكثر من وكيل واحد يتفاعلون مع بعضهم داخل بيئة معينة ويتعاونون أو يتنافسون لتحقيق أهداف مشتركة أو متعارضة." }
 ];
 
-const cards = [
-  ["ما هو تعريف الوكيل (Agent) في الذكاء الاصطناعي؟", "هو أي شيء يمكن النظر إليه على أنه يدرك بيئته المحيطة (Environment) من خلال المستشعرات (Sensors) ويتصرف ويؤثر في تلك البيئة من خلال المشغلات أو المؤثرات (Actuators)."],
-  ["قارني بين المستشعرات والمشغلات في: الوكيل البشري، والروبوتي، والبرمجي.", "• البشري: المستشعرات (العينان، الأذنان) والمشغلات (اليدان، الساقان، الصوت).\n• الروبوتي: المستشعرات (الكاميرات، الأشعة تحت الحمراء) والمشغلات (المحركات Motors).\n• البرمجي: المستشعرات (ضغطات المفاتيح، الملفات، الشبكة) والمشغلات (الشاشة، كتابة الملفات)."],
-  ["ما الفرق بين الإدراك (Percept) وتسلسل الإدراكات (Percept Sequence)؟", "• الإدراك (Percept): المدخلات الحسية للوكيل في لحظة معينة.\n• تسلسل الإدراكات (Percept Sequence): التاريخ الكامل لكل ما أدركه الوكيل طوال فترة عمله."],
-  ["ما الفرق بين دالة الوكيل (Agent Function) وبرنامج الوكيل (Agent Program)؟", "• دالة الوكيل: وصف رياضي مجرد يربط أي تسلسل إدراكات بالفعل المقابل (f: P* → A).\n• برنامج الوكيل: التنفيذ البرمجي الفعلي الملموس الذي يعمل داخل معمارية الوكيل المادية."],
-  ["ما هي الإدراكات والأفعال في مثال عالم المكنسة الكهربائية (Vacuum-Cleaner World)؟", "• الإدراكات: الموقع والحالة، مثل [A, Dirty] أو [B, Clean].\n• الأفعال: التحرك لليمين (Right)، التحرك لليسار (Left)، الشفط (Suck)، أو عدم فعل شيء (NoOp)."],
-  ["ما هو تعريف الوكيل العقلاني / الرشيد (Rational Agent)؟", "هو الوكيل الذي يختار، لكل تسلسل إدراكات ممكن، الفعل الذي يُتوقع أن يعظم مقياس أدائه (Performance Measure) بالاعتماد على الأدلة من تسلسل الإدراكات ومعرفته المسبقة."],
-  ["ما هي العوامل الأربعة التي تعتمد عليها العقلانية في أي وقت؟", "1) مقياس الأداء (Performance Measure) الذي يحدد معيار النجاح.\n2) المعرفة المسبقة للوكيل عن البيئة.\n3) الأفعال التي يستطيع الوكيل القيام بها.\n4) تسلسل الإدراكات الذي لاحظه الوكيل حتى الآن."],
-  ["ما الفرق بين العقلانية (Rationality) والعلم الكلي/الكمال (Omniscience)؟", "العلم الكلي يتطلب معرفة النتائج الفعلية المستقبلية مسبقاً (وهو مستحيل)، بينما العقلانية تعتمد على تعظيم الأداء (المتوقع) بناءً على ما أدركه الوكيل فقط."],
-  ["ماذا تعني الاستقلالية (Autonomy) لدى الوكيل العقلاني؟", "تعني قدرة الوكيل على التعلم من إدراكاته وخبرته الخاصة للتعويض عن نقص أو خطأ المعرفة المسبقة، بدلاً من الاعتماد الكلي على ما برمجه المصمم مسبقاً."],
-  ["إلى ماذا يرمز اختصار (PEAS) عند توصيف بيئة المهمة للوكيل الذكي؟", "• P: مقياس الأداء (Performance Measure).\n• E: البيئة (Environment).\n• A: المشغلات / المؤثرات (Actuators).\n• S: المستشعرات / الحساسات (Sensors)."],
-  ["ما هو توصيف PEAS لنظام التشخيص الطبي الآلي (Medical Diagnosis System)؟", "• الأداء (P): مريض سليم، تقليل التكاليف، تجنب الدعاوى.\n• البيئة (E): المريض، المستشفى، الطاقم الطبي.\n• المشغلات (A): شاشة العرض (لعرض الأسئلة والتشخيص والعلاج).\n• المستشعرات (S): لوحة المفاتيح (لإدخال الأعراض والنتائج)."],
-  ["ما الفرق بين البيئة القابلة للملاحظة كلياً (Fully Observable) والقابلة للملاحظة جزئياً (Partially Observable)؟", "• ملاحظة كلياً: تصل مستشعرات الوكيل إلى الحالة الكاملة للبيئة في كل لحظة (فلا يحتاج لحالة داخلية).\n• ملاحظة جزئياً: تغيب بعض أجزاء الحالة بسبب حدود أو ضوضاء المستشعرات."],
-  ["ما الفرق بين البيئة الحتمية (Deterministic) والبيئة العشوائية/الاحتمالية (Stochastic)؟ وما هي البيئة الاستراتيجية؟", "• حتمية: الحالة التالية تتحدد بالكامل من الحالة الحالية والفعل.\n• عشوائية: هناك عدم يقين واحتمالات في النتيجة.\n• استراتيجية (Strategic): حتمية في كل شيء باستثناء أفعال الوكلاء الآخرين (كالشطرنج)."],
-  ["ما الفرق بين البيئة العرضية (Episodic) والبيئة المتسلسلة (Sequential)؟ مع مثال.", "• عرضية: تنقسم لحلقات مستقلة لا يؤثر فيها قرار الحلقة الحالية على الحلقات التالية (مثل روبوت فحص القطع المعيبة على خط إنتاج).\n• متسلسلة: القرار الحالي يؤثر على جميع القرارات المستقبلية (مثل الشطرنج والقيادة)."],
-  ["ما الفرق بين البيئة الثابتة (Static)، والديناميكية (Dynamic)، وشبه الديناميكية (Semidynamic)؟", "• ثابتة: لا تتغير البيئة أثناء تفكير الوكيل (كالكلمات المتقاطعة).\n• ديناميكية: تتغير أثناء تفكير الوكيل (كالقيادة).\n• شبه ديناميكية: لا تتغير البيئة نفسها، ولكن درجة تقييم الوكيل تنقص بمرور الوقت (كالشطرنج مع ساعة توقيت)."],
-  ["ما الفرق بين البيئة المنفصلة (Discrete) والبيئة المستمرة (Continuous)؟", "المنفصلة لها عدد محدد ومنفصل من الحالات والأفعال والخطوات الزمنية (كالشطرنج)، بينما المستمرة تتغير فيها الحالات والسرعات والزمن بشكل متصل (كقيادة التاكسي)."],
-  ["ما هي معادلة بنية الوكيل الذكي؟", "الوكيل = المعمارية + البرنامج\nAgent = Architecture + Program."],
-  ["لماذا يفشل الوكيل المعتمد على الجدول (Table-Driven Agent) في التطبيقات الواقعية؟", "لأن حجم جدول البحث الذي يخزن كل تسلسل إدراكات ممكن سيكون فلكياً يفوق سعة أي ذاكرة، ويستحيل على المصمم كتابته مسبقاً، كما يفتقر الوكيل لأي استقلالية."],
-  ["ما هي الأنواع الأساسية الخمسة لبرامج الوكلاء الأذكياء؟", "1) وكيل رد الفعل البسيط (Simple Reflex).\n2) وكيل رد الفعل المبني على نموذج (Model-Based).\n3) الوكيل المبني على الهدف (Goal-Based).\n4) الوكيل المبني على المنفعة (Utility-Based).\n5) الوكيل المتعلم (Learning Agent)."],
-  ["كيف يعمل وكيل رد الفعل البسيط (Simple Reflex Agent)؟ وما شرط نجاحه؟", "يختار الفعل بناءً على الإدراك الحالي فقط متجاهلاً تاريخ الإدراكات، باستخدام قواعد (شرط - فعل Condition-Action)؛ ولا ينجح إلا إذا كانت البيئة قابلة للملاحظة كلياً."],
-  ["كيف يعالج وكيل رد الفعل المبني على نموذج (Model-Based Reflex Agent) مشكلة الملاحظة الجزئية؟", "من خلال الاحتفاظ بـ (حالة داخلية Internal State) تعتمد على تاريخ الإدراكات، واستخدام نموذج للعالم يوضح كيف يتطور العالم وكيف تؤثر أفعال الوكيل فيه."],
-  ["بماذا يتميز الوكيل المبني على الهدف (Goal-Based Agent) عن وكلاء رد الفعل؟", "لا يكتفي بالحالة الحالية بل يمتلك معلومات صريحة عن (الهدف Goal) المرغوب، ويستخدم البحث والتخطيط لإيجاد سلسلة الأفعال الموصلة للهدف، مما يجعله أكثر مرونة عند تغير الأهداف."],
-  ["متى نحتاج إلى الوكيل المبني على المنفعة (Utility-Based Agent) بدلاً من المبني على الهدف؟", "عندما توجد عدة طرق توصل للهدف ويلزم اختيار الأفضل بينها، أو عند وجود أهداف متعارضة (كالسرعة والأمان) أو عدم يقين؛ فيستخدم دالة المنفعة (Utility Function) لتعظيم المنفعة المتوقعة."],
-  ["ما هي المكونات الأربعة للوكيل المتعلم (Learning Agent)؟", "1) عنصر التعلم (Learning Element).\n2) عنصر الأداء (Performance Element).\n3) الناقد (Critic).\n4) مولد المشكلات (Problem Generator)."],
-  ["ما هي وظيفة كل من (عنصر التعلم) و(عنصر الأداء) في الوكيل المتعلم؟", "• عنصر التعلم: مسؤول عن إجراء التحسينات والتعديلات في مكونات الوكيل.\n• عنصر الأداء: مسؤول عن اختيار الأفعال الخارجية بناءً على الإدراكات."],
-  ["ما هي وظيفة كل من (الناقد Critic) و(مولد المشكلات Problem Generator) في الوكيل المتعلم؟", "• الناقد: يقيم سلوك الوكيل مقارنة بمعيار أداء ثابت ويزود عنصر التعلم بالتغذية الراجعة.\n• مولد المشكلات: يقترح أفعالاً استكشافية جديدة تقود لتجارب وخبرات جديدة."],
-  ["ما هي خصائص بيئة لعبة الشطرنج (مع ساعة توقيت) وفق الأبعاد السبعة؟", "قابلة للملاحظة كلياً، متعددة الوكلاء (تنافسية)، حتمية (استراتيجية)، متسلسلة، شبه ديناميكية، ومنفصلة."],
-  ["ما هي خصائص بيئة قيادة سيارة الأجرة الآلية (Automated Taxi) وفق الأبعاد السبعة؟", "قابلة للملاحظة جزئياً، متعددة الوكلاء، عشوائية (غير حتمية)، متسلسلة، ديناميكية، ومستمرة (وهي من أصعب البيئات)."]
-];
+// ==================== بيانات الاختبار الشامل (20 سؤالاً: 9 رسمية من البنك + 11 تدريبية شاملة) ====================
+const QUIZ_QUESTIONS = [
+  // الأسئلة الـ 9 الرسمية في بنك الأسئلة (الفصل الثالث: الوحدات 1، 2، 3 + الواجب الأول)
+  {
+    id: 1,
+    cat: "official",
+    badge: "بنك الأسئلة الرسمي — الوحدة 1 (س1)",
+    q: "(1) يستطيع الوكيل إدراك البيئة التي يكون موجوداً فيها من خلال:",
+    opts: [
+      { t: "المعالجة.", why: "خيار مستبعد؛ المعالجة (Processing) هي التي تحدد سلوك الوكيل الذكي بعد وصول بيانات الإدراك." },
+      { t: "آليات التنفيذ.", why: "خيار مستبعد؛ آليات التنفيذ (Actuators) تُستخدم لإصدار ردة الفعل والتأثير في البيئة وليس لإدراكها." },
+      { t: "المستشعرات.", why: "إجابة صحيحة؛ نصت الملزمة (صفحة 30) على أن الوكيل يدرك (percept) البيئة التي يكون موجوداً فيها من خلال المستشعرات (sensors) التي يمتلكها." },
+      { t: "الخوارزميات.", why: "خيار مستبعد؛ الخوارزميات جزء من عملية المعالجة الداخلية وليست أداة الإدراك." }
+    ],
+    ans: 2,
+    rule: "يدرك الوكيل الذكي بيئته المحيطة من خلال المستشعرات (Sensors)، ويتفاعل ويتجاوب معها بواسطة آليات التنفيذ (Actuators)."
+  },
+  {
+    id: 2,
+    cat: "official",
+    badge: "بنك الأسئلة الرسمي — الوحدة 1 (س2)",
+    q: "(2) أي من النقاط التالية تعبر عن أحد الخصائص الأساسية للوكيل العقلاني (Rational Agent)؟",
+    opts: [
+      { t: "القدرة على تنفيذ مهام محددة مسبقاً دون تغيير.", why: "خيار مستبعد؛ هذا يصف الأنظمة الآلية التقليدية البسيطة وليس الوكيل العقلاني." },
+      { t: "القدرة على التعلم من الخبرات السابقة وتحديث السلوك بناءً على معلومات جديدة.", why: "إجابة صحيحة؛ من الخصائص الخمس للوكيل العقلاني في الملزمة (صفحة 32): القدرة على التعلم من الخبرات السابقة والتكيف، وتحديث معارفهم وسلوكهم بناءً على معلومات أو تجارب جديدة." },
+      { t: "القدرة على العمل بدون تدخل بشري أو استجابة للبيئة.", why: "خيار مستبعد؛ لأن الوكيل العقلاني يجب أن يدرك بيئته ويستجيب لها لتحقيق أعلى قيمة لمعيار الأداء." },
+      { t: "القدرة على اتخاذ القرارات بناءً على العواطف والتفضيلات الشخصية.", why: "خيار مستبعد؛ الوكيل العقلاني يعتمد على التفكير المنطقي والاستدلال وليس العواطف." }
+    ],
+    ans: 1,
+    rule: "يمتاز الوكيل العقلاني بالقدرة على التفكير المنطقي، التعلم من الخبرات السابقة والتكيف، وتحديث المعارف والسلوك بناءً على معلومات أو تجارب جديدة."
+  },
+  {
+    id: 3,
+    cat: "official",
+    badge: "بنك الأسئلة الرسمي — الوحدة 1 (س3)",
+    q: "(3) أي من العناصر التالية تحدد سلوك الوكيل الذكي؟",
+    opts: [
+      { t: "المعالجة.", why: "إجابة صحيحة؛ نصت الملزمة (صفحة 30) حرفياً على أن: المعالجة (Processing) تحدد سلوك الوكيل الذكي." },
+      { t: "الإدراك.", why: "خيار مستبعد؛ الإدراك (Percept) هو البيانات التي يتلقاها الوكيل عن طريق المستشعرات (input)." },
+      { t: "ردة الفعل.", why: "خيار مستبعد؛ ردة الفعل (Action) هي الأحداث الصادرة عن الوكيل (output)." },
+      { t: "قواعد المعرفة.", why: "خيار مستبعد؛ قواعد المعرفة هي أحد المكونات الفرعية الثلاثة داخل المعالجة إلى جانب البرامج والخوارزميات." }
+    ],
+    ans: 0,
+    rule: "في الملزمة (صفحة 30): الإدراك = البيانات الواردة (input)، ردة الفعل = الأحداث الصادرة (output)، والمعالجة (Processing) = تحدد سلوك الوكيل الذكي."
+  },
+  {
+    id: 4,
+    cat: "official",
+    badge: "بنك الأسئلة الرسمي — الوحدة 2 (س1)",
+    q: "(4) أي من الخيارات التالية يمثل الفرق بين البيئة المحددة (Deterministic) والبيئة العشوائية (Stochastic) للوكيل العقلاني؟",
+    opts: [
+      { t: "البيئة المحددة تتطلب تفاعلات تسلسلية، بينما البيئة العشوائية تعتمد على المعلومات العرضية.", why: "خيار مستبعد؛ يخلط بين خاصية الحتمية وخاصية الترابط (متسلسلة/عرضية)." },
+      { t: "البيئة المحددة تعتمد على الاستجابات العاطفية، بينما البيئة العشوائية تعتمد على الاستجابات المنطقية.", why: "خيار مستبعد؛ لا علاقة للعواطف بخصائص البيئة." },
+      { t: "في البيئة المحددة، يمكن التنبؤ بالحالة التالية بناءً على الحالة الحالية، بينما في البيئة العشوائية تكون الحالة التالية غير معروفة.", why: "إجابة صحيحة؛ نصت الملزمة (صفحة 35) على أن البيئة المحددة تكون فيها الحالة التالية معروفة بالنسبة إلى الحالة الحالية بناءً على تنفيذ إجراء معين، بينما في العشوائية تكون الحالة التالية غير معروفة." },
+      { t: "البيئة المحددة تعتمد على معلومات كاملة بينما البيئة العشوائية تعتمد على معلومات جزئية.", why: "خيار مستبعد؛ هذا تعريف البيئة المعرفة بالكامل (Fully Observable) والمعرفة جزئياً (Partially Observable)." }
+    ],
+    ans: 2,
+    rule: "البيئة المحددة (Deterministic): الحالة التالية معروفة عند تنفيذ إجراء معين؛ البيئة العشوائية (Stochastic): الحالة التالية غير معروفة."
+  },
+  {
+    id: 5,
+    cat: "official",
+    badge: "بنك الأسئلة الرسمي — الوحدة 2 (س2)",
+    q: "(5) ما العنصر من مكونات PEAS الذي يشير إلى الأدوات التي يستخدمها الوكيل العقلاني لجمع المعلومات من بيئته؟",
+    opts: [
+      { t: "مقياس الأداء.", why: "خيار مستبعد؛ مقياس الأداء (Performance measure) يحدد معيار النجاح." },
+      { t: "آليات التنفيذ.", why: "خيار مستبعد؛ آليات التنفيذ (Actuators) هي الأدوات التي ينفذ بها الوكيل أفعاله في البيئة." },
+      { t: "البيئة المحيطة.", why: "خيار مستبعد؛ البيئة المحيطة (Environment) هي الوسط الخارجي الذي يعمل فيه الوكيل." },
+      { t: "أدوات الاستشعار.", why: "إجابة صحيحة؛ حرف S في PEAS يرمز إلى أدوات الاستشعار (Sensors) التي يجمع بها الوكيل المعلومات والبيانات من بيئته." }
+    ],
+    ans: 3,
+    rule: "في إطار PEAS: حرف S يرمز إلى أدوات الاستشعار (Sensors) المسؤولة عن جمع المعلومات من البيئة."
+  },
+  {
+    id: 6,
+    cat: "official",
+    badge: "بنك الأسئلة الرسمي — الوحدة 2 (س3)",
+    q: "(6) ما الذي يميز البيئة المتغيرة (Dynamic) عن البيئة الثابتة (Static) في سياق الوكلاء العقلانيين؟",
+    opts: [
+      { t: "البيئة الثابتة تتضمن أكثر من وكيل واحد.", why: "خيار مستبعد؛ عدد الوكلاء يرتبط بخاصية (أحادية/متعددة الوكلاء)." },
+      { t: "البيئة المتغيرة تتغير أثناء اتخاذ القرار.", why: "إجابة صحيحة؛ نصت الملزمة (صفحة 36) على أن البيئة الثابتة لا تتغير أثناء اتخاذ القرار، بينما البيئة المتغيرة تتغير أثناء اتخاذ القرار." },
+      { t: "البيئة الثابتة تتغير في وقت متصل.", why: "خيار مستبعد؛ الوقت المتصل يرتبط بخاصية البيئة المستمرة (Continuous)." },
+      { t: "البيئة المتغيرة تتيح التفاعلات المتقطعة بين الوكلاء.", why: "خيار مستبعد؛ المتقطعة ترتبط بخاصية الزمن (Discrete)." }
+    ],
+    ans: 1,
+    rule: "البيئة الثابتة (Static) لا تتغير أثناء اتخاذ القرار، أما البيئة المتغيرة (Dynamic) فتتغير أثناء اتخاذ الوكيل للقرار."
+  },
+  {
+    id: 7,
+    cat: "official",
+    badge: "بنك الأسئلة الرسمي + الواجب الأول — الوحدة 3 (س1)",
+    q: "(7) ما هي أبرز عيوب الوكلاء البسيطة القائمين على القواعد (Simple Reflex Agents) في التعامل مع البيئات؟",
+    opts: [
+      { t: "يمكنهم التعامل مع تغييرات البيئة بكفاءة عالية.", why: "خيار مستبعد؛ قدراتهم محدودة جداً ولا يتعاملون بكفاءة مع البيئات المعقدة أو الجزئية." },
+      { t: "يعتمد قرارهم على الإدراك الحالي فقط دون الاعتماد على الذاكرة.", why: "إجابة صحيحة؛ نصت الملزمة (صفحة 37-38) على أن الوكيل البسيط القائم على القواعد لا يلجأ إلى حوادث الإدراك كاملة وإنما الإدراك الحالي فقط (ليس له ذاكرة)." },
+      { t: "يتطلبون بيئة عمل متغيرة لأداء وظائفهم بشكل صحيح.", why: "خيار مستبعد؛ هم يتطلبون بيئة عمل معروفة بشكل كامل (Fully Observable)." },
+      { t: "يستطيعون تحديث قواعدهم بناءً على التجارب السابقة.", why: "خيار مستبعد؛ قواعدهم ثابتة ولا يتعلمون من التجارب السابقة." }
+    ],
+    ans: 1,
+    rule: "سؤال مهم جداً تكرر في الواجب الأول وبنك الأسئلة: عيب الوكيل البسيط القائم على القواعد أنه يعتمد في قراره على الإدراك الحالي فقط دون الاعتماد على الذاكرة."
+  },
+  {
+    id: 8,
+    cat: "official",
+    badge: "بنك الأسئلة الرسمي — الوحدة 3 (س2)",
+    q: "(8) كيف تعمل الوكلاء القائمة على النموذج (Model-Based Agents) في التعامل مع التغيرات في البيئة المحيطة بها؟",
+    opts: [
+      { t: "تتجاهل الوكلاء القائمة على النموذج التغيرات في البيئة وتعمل وفقاً لبرمجة مسبقة.", why: "خيار مستبعد؛ هي ترصد التغيرات باستمرار عبر المستشعرات." },
+      { t: "تستخدم الوكلاء القائمة على النموذج الإدراك الحالي فقط لاتخاذ القرارات دون النظر إلى التحديثات.", why: "خيار مستبعد؛ الذي يستخدم الإدراك الحالي فقط هو الوكيل البسيط القائم على القواعد." },
+      { t: "تبني الوكلاء القائمة على النموذج نموذجاً داخلياً للبيئة وتحدثه باستمرار بناءً على المستجدات.", why: "إجابة صحيحة؛ نصت الملزمة (صفحة 38) على أنها تبني نموذجاً داخلياً للبيئة، ومع كل تحديث من المستشعرات وتفاعله مع المعلومات السابقة تبني تصوراً جديداً لتحديد ردة الفعل المناسبة." },
+      { t: "تعتمد الوكلاء القائمة على النموذج على البيانات الماضية فقط دون الحاجة لأي تحديثات جديدة.", why: "خيار مستبعد؛ لأنها تدمج التحديثات الجديدة من المستشعرات مع المعلومات السابقة." }
+    ],
+    ans: 2,
+    rule: "الوكلاء القائمة على النموذج (Model-Based Agents) تبني نموذجاً داخلياً للبيئة المحيطة وتحدثه باستمرار بناءً على المستجدات."
+  },
+  {
+    id: 9,
+    cat: "official",
+    badge: "بنك الأسئلة الرسمي — الوحدة 3 (س3)",
+    q: "(9) ما هو الهدف الرئيسي من استخدام الأنظمة متعددة الوكلاء (Multi-Agent Systems)؟",
+    opts: [
+      { t: "تحسين التفاعل بين الوكلاء لتحقيق أهداف مشتركة أو متعارضة من خلال التعاون أو التنافس.", why: "إجابة صحيحة؛ نصت الملزمة (صفحة 40) على أن هذا النوع يتكون من عدة وكلاء يتعاونون أو يتنافسون لتحقيق أهداف مشتركة أو متعارضة." },
+      { t: "تقليل تكلفة الإنتاج من خلال تقليل عدد الوكلاء المشاركين في النظام.", why: "خيار مستبعد؛ الأنظمة متعددة الوكلاء تضم أكثر من وكيل واحد ولا تهدف لتقليل عددهم." },
+      { t: "زيادة تعقيد النظام عن طريق إضافة المزيد من الوكلاء بهدف تحقيق التنسيق بين الوكلاء.", why: "خيار مستبعد؛ زيادة التعقيد هي تحدٍ ناتج عن تعدد الوكلاء وليست الهدف الرئيسي من استخدامهم." },
+      { t: "تطوير نظم تعمل بشكل مستقل دون الحاجة للتواصل بين الوكلاء.", why: "خيار مستبعد؛ لأن الأنظمة متعددة الوكلاء تتطلب التنسيق والتواصل المستمر بين الوكلاء." }
+    ],
+    ans: 0,
+    rule: "في الأنظمة متعددة الوكلاء (Multi-Agent Systems) يتفاعل عدة وكلاء بالتعاون أو التنافس لتحقيق أهداف مشتركة أو متعارضة."
+  },
 
-const questions = [
+  // ==================== 11 سؤالاً تدريبياً شاملاً لباقي فقرات الفصل الثالث ====================
   {
-    q: "في علم الذكاء الاصطناعي، ماذا نُطلق على أي كيان يدرك بيئته المحيطة من خلال (المستشعرات Sensors) ويتصرف ويؤثر في تلك البيئة من خلال (المشغلات أو المؤثرات Actuators)؟",
-    o: [
-      "جدول البيانات الثابت",
-      "الوكيل (Agent)",
-      "مقياس الأداء",
-      "القائمة المغلقة"
+    id: 10,
+    cat: "extra",
+    badge: "تدريب شامل — الوحدة 1",
+    q: "(10) في مثال روبوت مكنسة التنظيف (Vacuum Cleaner)، إذا كان تسلسل الإدراك الحالي هو [B, Clean]، فما هو الإجراء (Action) الصحيح الذي تتخذه المكنسة؟",
+    opts: [
+      { t: "الشفط (Suck).", why: "خيار مستبعد؛ الشفط يتم فقط عندما تكون حالة المربع غير نظيفة (Dirty)." },
+      { t: "الاتجاه يميناً (Right).", why: "خيار مستبعد؛ الاتجاه يميناً يتم عندما تكون المكنسة في المربع A وهو نظيف [A, Clean]." },
+      { t: "الاتجاه يساراً (Left).", why: "إجابة صحيحة؛ حسب جدول الملزمة (صفحة 32)، عندما تكون المكنسة في المربع B ويكون نظيفاً [B, Clean] فإنها تنتقل للمربع الآخر باتجاه اليسار (Left)." },
+      { t: "التوقف التام عن العمل.", why: "خيار مستبعد؛ المكنسة تنتقل إلى المربع الآخر لفحصه." }
     ],
-    a: 1,
-    e: "الوكيل (Agent) هو أي شيء يدرك بيئته عبر المستشعرات (Sensors) ويتصرف فيها عبر المشغلات (Actuators) (ص 30)."
+    ans: 2,
+    rule: "في جدول المكنسة (ص 32): [A, Clean] -> Right | [A, Dirty] -> Suck | [B, Clean] -> Left | [B, Dirty] -> Suck."
   },
   {
-    q: "بالنسبة لـ (الوكيل البرمجي - Software Agent)، أي مما يلي يمثل مستشعراته (Sensors) ومشغلاته (Actuators)؟",
-    o: [
-      "الكاميرات والمحركات الميكانيكية",
-      "العينان والأذنان واليدان",
-      "المستشعرات هي (ضغطات المفاتيح، محتويات الملفات، وحزم الشبكة المستقبلة)، والمشغلات هي (العرض على الشاشة، كتابة الملفات، وإرسال حزم الشبكة)",
-      "الرادار وعجلة القيادة والفرامل"
+    id: 11,
+    cat: "extra",
+    badge: "تدريب شامل — الوحدة 1",
+    q: "(11) مما تتكون عملية 'المعالجة' (Processing) التي تحدد سلوك الوكيل الذكي وفقاً للملزمة؟",
+    opts: [
+      { t: "برامج (Agent program) + خوارزميات (Algorithms) + قواعد معرفة (Knowledge-base).", why: "إجابة صحيحة؛ نصت الملزمة (صفحة 30) بالمعادلة الصريحة على أن المعالجة تتكون من: برامج + خوارزميات + قواعد معرفة." },
+      { t: "عجلات + أذرع مفصلية + شاشات عرض فقط.", why: "خيار مستبعد؛ هذه أمثلة على آليات التنفيذ المادية (Actuators)." },
+      { t: "كاميرات + أشعة تحت حمراء + سونار فقط.", why: "خيار مستبعد؛ هذه أمثلة على أدوات الاستشعار (Sensors)." },
+      { t: "بيئة ثابتة + بيئة متقطعة فقط.", why: "خيار مستبعد؛ هذه من خصائص البيئة المحيطة." }
     ],
-    a: 2,
-    e: "الوكيل البرمجي يستقبل مدخلاته من ضغطات المفاتيح والملفات والشبكة (مستشعرات)، ويؤثر عبر العرض على الشاشة وكتابة الملفات وإرسال الحزم (مشغلات)."
+    ans: 0,
+    rule: "المعالجة (Processing) = برامج (Agent program) + خوارزميات (Algorithms) + قواعد معرفة (Knowledge-base)."
   },
   {
-    q: "ما هو المصطلح الذي يشير إلى 'التاريخ الكامل لكل ما أدركه الوكيل طوال فترة عمله وحتى اللحظة الحالية'؟",
-    o: [
-      "المشغل الميكانيكي (Actuator)",
-      "مقياس الأداء الخارجي",
-      "معمارية الوكيل (Architecture)",
-      "تسلسل الإدراكات (Percept Sequence)"
+    id: 12,
+    cat: "extra",
+    badge: "تدريب شامل — الوحدة 1",
+    q: "(12) أي مما يلي يُعد من العوامل الأربعة التي تعتمد عليها عقلانية الوكيل (Rational Agent)؟",
+    opts: [
+      { t: "حجم الذاكرة العشوائية وسرعة بطاقة الرسوميات فقط.", why: "خيار مستبعد؛ مواصفات عتاد الحاسوب ليست من عوامل عقلانية الوكيل الأربعة." },
+      { t: "مقياس الأداء، المعرفة المسبقة بالبيئة، آليات التنفيذ المتاحة، وتسلسل إدراك المستشعرات.", why: "إجابة صحيحة؛ هذه هي العوامل الأربعة لعقلانية الوكيل المذكورة نصاً في الملزمة (صفحة 32-33)." },
+      { t: "الاعتماد على الصدفة والعشوائية دون معيار نجاح.", why: "خيار مستبعد؛ يتناقض تماماً مع مفهوم العقلانية." },
+      { t: "تجاهل بيانات المستشعرات والاكتفاء بالمعرفة السابقة فقط.", why: "خيار مستبعد؛ الوكيل العقلاني يجمع بين معرفته السابقة عن البيئة ومعلوماته اللاحقة القادمة من المستشعرات." }
     ],
-    a: 3,
-    e: "الإدراك (Percept) هو المدخل الحسي في لحظة واحدة، أما تسلسل الإدراكات (Percept Sequence) فهو التاريخ الكامل لكل ما أدركه الوكيل."
+    ans: 1,
+    rule: "عوامل عقلانية الوكيل الأربعة (ص 32-33): 1) مقياس الأداء، 2) المعرفة المسبقة بالبيئة، 3) الإجراءات المتاحة (Actuator)، 4) تسلسل الإدراك (Sensor)."
   },
   {
-    q: "ما الفرق بين (دالة الوكيل - Agent Function) و(برنامج الوكيل - Agent Program)؟",
-    o: [
-      "دالة الوكيل هي وصف رياضي مجرد يربط تسلسل الإدراكات بالفعل، بينما برنامج الوكيل هو التنفيذ البرمجي العملي الملموس الذي يعمل داخل معمارية الوكيل",
-      "دالة الوكيل هي الكاميرا، وبرنامج الوكيل هو المحرك الكهربائي",
-      "لا يوجد أي فرق بينهما إطلاقاً",
-      "برنامج الوكيل وصف نظري مجرد، ودالة الوكيل جهاز مادي"
+    id: 13,
+    cat: "extra",
+    badge: "تدريب شامل — الوحدة 2",
+    q: "(13) في جدول توصيف PEAS لـ 'روبوت التقاط القطع' (Part-picking robot)، ما هي آليات التنفيذ (Actuators) الخاصة به؟",
+    opts: [
+      { t: "الكاميرا وحساسات زوايا المفاصل (Camera, joint angle sensors).", why: "خيار مستبعد؛ الكاميرا وحساسات المفاصل هي أدوات الاستشعار (Sensors) وليست آليات التنفيذ." },
+      { t: "الحزام الناقل مع القطع والصناديق (Conveyor belt with parts; bins).", why: "خيار مستبعد؛ الحزام الناقل والصناديق هي البيئة المحيطة (Environment)." },
+      { t: "النسبة المئوية للقطع في الصناديق الصحيحة.", why: "خيار مستبعد؛ هذا هو مقياس الأداء (Performance Measure)." },
+      { t: "ذراع ويد مفصلية (Jointed arm and hand).", why: "إجابة صحيحة؛ في جدول PEAS (صفحة 34) آليات التنفيذ لروبوت التقاط القطع هي الذراع واليد المفصلية (Jointed arm and hand)." }
     ],
-    a: 0,
-    e: "دالة الوكيل هي الوصف الرياضي المجرد، بينما برنامج الوكيل هو التنفيذ الفعلي الملموس على معمارية الوكيل (Agent = Architecture + Program)."
+    ans: 3,
+    rule: "لروبوت التقاط القطع: Actuators = ذراع ويد مفصلية (Jointed arm and hand)، بينما Sensors = الكاميرا وحساسات زوايا المفاصل."
   },
   {
-    q: "ما هو التعريف العلمي الدقيق لـ (الوكيل العقلاني / الرشيد - Rational Agent)؟",
-    o: [
-      "الوكيل الذي يعلم الغيب والنتائج الفعلية المستقبلية بنسبة 100% دائماً",
-      "الوكيل الذي يختار، لكل تسلسل إدراكات ممكن، الفعل الذي يُتوقع أن يعظم مقياس أدائه بالاعتماد على تسلسل إدراكاته ومعرفته المسبقة",
-      "الوكيل الذي يعمل بدون أي مستشعرات أو مشغلات",
-      "الوكيل الذي يتصرف عشوائياً دون هدف"
+    id: 14,
+    cat: "extra",
+    badge: "تدريب شامل — الوحدة 2",
+    q: "(14) ما هي الخاصية التي تطلق على البيئة عندما يكون رد فعل الوكيل لا يعتمد على ردود الفعل السابقة ولا يحتاج إلى التفكير في المستقبل؟",
+    opts: [
+      { t: "بيئة متسلسلة (Sequential).", why: "خيار مستبعد؛ في البيئة المتسلسلة يعتمد رد فعل الوكيل على ردود الفعل السابقة." },
+      { t: "بيئة عرضية (Episodic / Consequential).", why: "إجابة صحيحة؛ نصت الملزمة (صفحة 35) على أن البيئة العرضية هي التي لا يعتمد فيها رد الفعل على ردود الفعل السابقة ولا يحتاج إلى التفكير في المستقبل." },
+      { t: "بيئة متعددة الوكلاء (Multi Agents).", why: "خيار مستبعد؛ تخص عدد الوكلاء في البيئة." },
+      { t: "بيئة متغيرة (Dynamic).", why: "خيار مستبعد؛ تخص تغير البيئة أثناء اتخاذ القرار." }
     ],
-    a: 1,
-    e: "الوكيل العقلاني يختار الفعل المتوقع أن يعظم مقياس أدائه (Performance Measure) بناءً على الأدلة من تسلسل الإدراكات والمعرفة المسبقة."
+    ans: 1,
+    rule: "رد الفعل يعتمد على السابق = متسلسلة (Sequential)؛ رد الفعل لا يعتمد على السابق = عرضية (Episodic)."
   },
   {
-    q: "ما هي العوامل الأربعة التي يعتمد عليها تحديد ما هو 'عقلاني' (Rational) بالنسبة للوكيل في أي وقت؟",
-    o: [
-      "حجم الشاشة، وسرعة الإنترنت، ونوع الكيبورد، ولون الجهاز",
-      "الجمع، والطرح، والضرب، والقسمة",
-      "مقياس الأداء (Performance Measure)، والمعرفة المسبقة عن البيئة، والأفعال التي يستطيع القيام بها، وتسلسل الإدراكات حتى هذه اللحظة",
-      "عدد الوكلاء المنافسين فقط"
+    id: 15,
+    cat: "extra",
+    badge: "تدريب شامل — الوحدة 2",
+    q: "(15) حسب جدول أمثلة البيئات المحيطة في الملزمة (صفحة 36)، ما هي خصائص بيئة لعبة لغز الأرقام (8-Puzzle)؟",
+    opts: [
+      { t: "معرفة بالكامل، أحادية الوكيل، محددة، متسلسلة، ثابتة، ومتقطعة.", why: "إجابة صحيحة؛ مطابقة تماماً لصف (Puzzle) في جدول الملزمة صفحة 36: (Fully, Single, Deterministic, Sequential, Static, Discrete)." },
+      { t: "معرفة جزئياً، متعددة الوكلاء، عشوائية، متسلسلة، متغيرة، ومستمرة.", why: "خيار مستبعد؛ هذه خصائص بيئة قيادة التاكسي (Taxi driving)." },
+      { t: "معرفة جزئياً، أحادية الوكيل، عشوائية، عرضية، متغيرة، ومستمرة.", why: "خيار مستبعد؛ هذه خصائص بيئة روبوت التقاط القطع (Part-picking robot)." },
+      { t: "معرفة جزئياً، متعددة الوكلاء، عشوائية، عرضية، متغيرة، ومتقطعة.", why: "خيار مستبعد؛ توصيف غير صحيح للعبة اللغز." }
     ],
-    a: 2,
-    e: "تعتمد العقلانية على 4 عوامل: مقياس الأداء، المعرفة المسبقة، الأفعال المتاحة، وتسلسل الإدراكات (Percept Sequence)."
+    ans: 0,
+    rule: "لغز الأرقام (Puzzle) بيئته مثالية وواضحة: معرفة بالكامل (Fully)، أحادي (Single)، محددة (Deterministic)، متسلسلة (Sequential)، ثابتة (Static)، ومتقطعة (Discrete)."
   },
   {
-    q: "ما الفرق الجوهري بين (العقلانية - Rationality) و(العلم الكلي / الكمال - Omniscience)؟",
-    o: [
-      "العقلانية تعني عدم ارتكاب أي خطأ حتى لو كانت المعلومة مستحيلة الإدراك",
-      "كلاهما يعنيان نفس الشيء تماماً",
-      "الوكيل العقلاني لا يحتاج إلى استكشاف البيئة أو التعلم",
-      "العلم الكلي يفترض معرفة النتيجة الفعلية الحقيقية للأفعال مسبقاً (وهو مستحيل)، بينما العقلانية تعظم الأداء المتوقع بناءً على ما أدركه الوكيل فقط"
+    id: 16,
+    cat: "extra",
+    badge: "تدريب شامل — الوحدة 3",
+    q: "(16) لماذا يواجه 'الوكيل البسيط القائم على القواعد' (Simple Reflex Agent) مشاكل حقيقية في البيئات المعرفة جزئياً؟",
+    opts: [
+      { t: "لأنه يمتلك ذاكرة ضخمة تبطئ عمله.", why: "خيار مستبعد؛ الوكيل البسيط ليس له ذاكرة أصلاً." },
+      { t: "لأن قراره يعتمد كلياً على حدث الإدراك الحالي فقط، لذا يتطلب بيئة عمل معروفة بشكل كامل.", why: "إجابة صحيحة؛ نصت الملزمة (صفحة 38) على أنه يتطلب بيئة عمل معروفة بشكل كامل، وأن المعرفة الجزئية تتسبب له في مشاكل حقيقية لاعتماده على الإدراك اللحظي فقط." },
+      { t: "لأنه يفرط في تحليل الأهداف المستقبلية البعيدة.", why: "خيار مستبعد؛ هو لا يحلل الأهداف المستقبلية بل يطبق قاعدة (شرط - فعل) فورية." },
+      { t: "لأنه يستخدم دالة منفعة معقدة.", why: "خيار مستبعد؛ دالة المنفعة تخص الوكيل القائم على المنفعة (Utility-Based)." }
     ],
-    a: 3,
-    e: "العقلانية لا تعني العلم الكلي بالغيب؛ فالوكيل العقلاني يختار أفضل فعل بناءً على الأداء المتوقع من إدراكاته المتاحة."
+    ans: 1,
+    rule: "الوكيل البسيط القائم على القواعد يتطلب بيئة عمل معروفة بالكامل (Fully Observable) لأنه يفتقر للذاكرة ويعتمد على الإدراك الحالي فقط."
   },
   {
-    q: "عندما يعتمد الوكيل على تعلمه الذاتي من إدراكاته وتجاربه للتعويض عن نقص أو عدم دقة المعرفة المسبقة التي وضعها مصممه، فإن هذه الخاصية تُسمى:",
-    o: [
-      "الاستقلالية (Autonomy)",
-      "الملاحظة الجزئية",
-      "الجدولة الثابتة",
-      "الانحدار الخطي"
+    id: 17,
+    cat: "extra",
+    badge: "تدريب شامل — الوحدة 3",
+    q: "(17) أي نوع من الوكلاء يقوم بتحليل النتائج المحتملة لأفعاله ويختار الفعل الذي يقربه من تحقيق أهداف محددة (Goals)؟",
+    opts: [
+      { t: "الوكلاء البسيطة القائمون على القواعد (Simple Reflex Agents).", why: "خيار مستبعد؛ يستجيب فوراً للحالة الحالية دون تحليل نتائج الأفعال أو الأهداف." },
+      { t: "الوكلاء القائمة على النموذج (Model-Based Agents).", why: "خيار مستبعد؛ يبني نموذجاً للبيئة لكنه لا يمتلك معلومات صريحة عن الهدف المستقبلي المراد تحقيقه." },
+      { t: "الوكلاء القائمون على الهدف (Goal-Based Agents).", why: "إجابة صحيحة؛ الوكيل القائم على الهدف (صفحة 39) يمتلك معلومات عن الهدف المراد الوصول إليه ويحلل النتائج المحتملة لأفعاله ليختار ما يقربه من هدفه." },
+      { t: "أدوات الاستشعار الأولية.", why: "خيار مستبعد؛ ليست نوعاً من أنواع الوكلاء." }
     ],
-    a: 0,
-    e: "الاستقلالية (Autonomy) تعني قدرة الوكيل على التعلم والتكيف من خبرته الخاصة بدلاً من الاعتماد الأعمى على المعرفة المدمجة مسبقاً."
+    ans: 2,
+    rule: "تحليل النتائج المحتملة للأفعال لاختيار الفعل الذي يقرب من تحقيق هدف محدد = الوكلاء القائمون على الهدف (Goal-Based Agents)."
   },
   {
-    q: "لتوصيف بيئة المهمة (Task Environment) عند تصميم وكيل ذكي نستخدم اختصار (PEAS)؛ فإلى ماذا يرمز هذا الاختصار؟",
-    o: [
-      "التخطيط، التنفيذ، التحليل، والبرمجة",
-      "مقياس الأداء (Performance Measure)، البيئة (Environment)، المشغلات (Actuators)، والمستشعرات (Sensors)",
-      "المعالج، الطاقة، الخوارزمية، والنظام",
-      "الإدراك، التقييم، الفعل، والتخزين"
+    id: 18,
+    cat: "extra",
+    badge: "تدريب شامل — الوحدة 3",
+    q: "(18) عند وجود أكثر من طريقة للوصول إلى الهدف، أي وكيل يفاضل بين الطرق المختلفة لاختيار الطريق الأكثر كفاءة والذي يوفر أكبر منفعة ممكنة؟",
+    opts: [
+      { t: "الوكيل البسيط القائم على القواعد (Simple Reflex Agent).", why: "خيار مستبعد؛ لا يقارن بين طرق الوصول للهدف." },
+      { t: "الوكيل القائم على النموذج (Model-Based Agent).", why: "خيار مستبعد؛ يكتفي بتتبع حالة البيئة دون دالة منفعة." },
+      { t: "الوكيل القائم على الهدف (Goal-Based Agent).", why: "خيار مستبعد؛ يهمه الوصول للهدف فقط دون المفاضلة الرقمية لتعظيم المنفعة والكفاءة بين الطرق." },
+      { t: "الوكيل القائم على المنفعة (Utility-Based Agent).", why: "إجابة صحيحة؛ نصت الملزمة (صفحة 39) على أن الوكلاء القائمة على المنفعة تسعى لتعظيم الكفاءة وتفاضل بين الطرق المختلفة لإيجاد الطريق الأكثر كفاءة وأكبر منفعة." }
     ],
-    a: 1,
-    e: "PEAS يرمز إلى: Performance Measure، و Environment، و Actuators، و Sensors."
+    ans: 3,
+    rule: "المفاضلة بين عدة طرق للوصول للهدف لاختيار الأكثر كفاءة وأكبر منفعة = الوكلاء القائمة على المنفعة (Utility-Based Agents)."
   },
   {
-    q: "في توصيف (PEAS) لوكيل (روبوت فرز القطع على حزام ناقل - Part-Picking Robot)، ماذا يمثل كل من 'الذراع واليد المفصلية' و'النسبة المئوية للقطع الموضوعة في الصناديق الصحيحة'؟",
-    o: [
-      "الذراع المفصلية هي المستشعر، والنسبة المئوية هي البيئة",
-      "كلاهما يمثلان المستشعرات (Sensors)",
-      "الذراع واليد المفصلية تمثل المشغلات (Actuators)، والنسبة المئوية للقطع في الصناديق الصحيحة تمثل مقياس الأداء (Performance Measure)",
-      "الذراع المفصلية هي مقياس الأداء، والنسبة المئوية هي المشغل"
+    id: 19,
+    cat: "extra",
+    badge: "تدريب شامل — الوحدة 3",
+    q: "(19) في مخطط 'الوكيل التكيفي' (Learning Agent)، ما هو المكون المسؤول عن مقارنة الإدراك بمعيار الأداء وإرسال تغذية راجعة (Feedback) إلى عنصر التعلم؟",
+    opts: [
+      { t: "الناقد (Critic).", why: "إجابة صحيحة؛ في مخطط الوكيل التكيفي (صفحة 40)، يستقبل الناقد (Critic) معيار الأداء ومعلومات المستشعرات ويرسل التغذية الراجعة (feedback) إلى عنصر التعلم (Learning element)." },
+      { t: "مولد المشكلات (Problem generator).", why: "خيار مستبعد؛ مولد المشكلات يقترح أفعالاً جديدة على عنصر الأداء لتحقيق أهداف التعلم." },
+      { t: "عنصر الأداء (Performance element).", why: "خيار مستبعد؛ عنصر الأداء هو الذي ينفذ القرارات عبر آليات التنفيذ." },
+      { t: "قاعدة حالة - ردة فعل.", why: "خيار مستبعد؛ تخص الوكيل البسيط القائم على القواعد." }
     ],
-    a: 2,
-    e: "الذراع واليد المفصلية تنفذ فعل التقاط ووضع القطع فهي مشغلات (Actuators)، ونسبة القطع الصحيحة هي معيار النجاح أي مقياس الأداء (Performance)."
+    ans: 0,
+    rule: "في مخطط الوكيل التكيفي (ص 40): الناقد (Critic) يرسل التغذية الراجعة (feedback) إلى عنصر التعلم (Learning element)."
   },
   {
-    q: "إذا كانت مستشعرات الوكيل تمنحه إمكانية الوصول إلى الحالة الكاملة للبيئة في كل نقطة زمنية بحيث لا يحتاج إلى الاحتفاظ بحالة داخلية لتتبع العالم، فإن البيئة توصف بأنها:",
-    o: [
-      "قابلة للملاحظة جزئياً (Partially Observable)",
-      "غير قابلة للملاحظة (Unobservable)",
-      "بيئة عشوائية (Stochastic)",
-      "قابلة للملاحظة كلياً (Fully Observable)"
+    id: 20,
+    cat: "extra",
+    badge: "تدريب شامل — الوحدة 3",
+    q: "(20) لماذا يصبح التعامل مع التفاعلات أكثر تعقيداً في الأنظمة متعددة الوكلاء (Multi-Agent Systems)؟",
+    opts: [
+      { t: "لأنها تحتوي على وكيل واحد فقط يعمل في بيئة ثابتة.", why: "خيار مستبعد؛ هي تتكون من أكثر من وكيل واحد." },
+      { t: "لأنه يجب على كل وكيل أن يأخذ في الاعتبار أفعال الوكلاء الآخرين بسبب الحاجة إلى التنسيق والتواصل.", why: "إجابة صحيحة؛ نصت الملزمة (صفحة 40) على أنه في الأنظمة متعددة الوكلاء يجب على كل وكيل أن يأخذ في الاعتبار أفعال الوكلاء الآخرين ويصبح التعامل مع التفاعلات أكثر تعقيداً بسبب الحاجة إلى التنسيق والتواصل." },
+      { t: "لأنها لا تستخدم أي خوارزميات أو برمجيات.", why: "خيار مستبعد؛ الوكلاء فيها هم برمجيات أو روبوتات ذكية." },
+      { t: "لأنها تمنع أي تفاعل أو تواصل بين الوكلاء داخل البيئة.", why: "خيار مستبعد؛ هي قائمة أساساً على التفاعل والتنسيق والتواصل بين الوكلاء." }
     ],
-    a: 3,
-    e: "تكون البيئة قابلة للملاحظة كلياً (Fully Observable) عندما تكشف المستشعرات جميع الجوانب ذات الصلة باتخاذ القرار في كل لحظة."
-  },
-  {
-    q: "في خصائص بيئات العمل، متى تُوصف البيئة بأنها (حتمية - Deterministic)، ومتى تُسمى (استراتيجية - Strategic)؟",
-    o: [
-      "تكون حتمية إذا كانت الحالة التالية تتحدد بالكامل من الحالة الحاليةوفعل الوكيل؛ وتُسمى استراتيجية إذا كانت حتمية في كل شيء باستثناء أفعال الوكلاء الآخرين (كالشطرنج)",
-      "تكون حتمية عندما تعتمد على رمي النرد والحظ العشوائي",
-      "تكون استراتيجية عندما يعمل فيها وكيل واحد بمفرده فقط",
-      "لا يوجد فرق بين البيئة الحتمية والبيئة العشوائية"
-    ],
-    a: 0,
-    e: "في البيئة الحتمية لا يوجد عدم يقين في نتيجة الفعل، وإذا كان عدم اليقين ناتجاً فقط عن حركات الخصوم سميت استراتيجية (Strategic)."
-  },
-  {
-    q: "في أي نوع من البيئات تنقسم خبرة الوكيل إلى 'حلقات ذرية مستقلة' بحيث لا يعتمد القرار في الحلقة الحالية على الأفعال المتخذة في الحلقات السابقة ولا يؤثر على الحلقات التالية (مثل فحص القطع المعيبة على خط إنتاج)؟",
-    o: [
-      "البيئة المتسلسلة (Sequential)",
-      "البيئة العرضية / منفصلة الحلقات (Episodic)",
-      "البيئة الديناميكية (Dynamic)",
-      "البيئة التنافسية"
-    ],
-    a: 1,
-    e: "في البيئة العرضية (Episodic) كل حلقة إدراك وفعل مستقلة تماماً عن غيرها، عكس البيئة المتسلسلة (Sequential) كالشطرنج."
-  },
-  {
-    q: "ما الفرق بين البيئة (الديناميكية Dynamic)، والبيئة (الثابتة Static)، والبيئة (شبه الديناميكية Semidynamic)؟",
-    o: [
-      "الثابتة تتغير باستمرار أثناء تفكير الوكيل، والديناميكية لا تتغير أبداً",
-      "جميعها لا تتأثر بمرور الوقت",
-      "الديناميكية تتغير أثناء تفكير الوكيل (كالقيادة)، والثابتة لا تتغير أثناء تفكيره (كالكلمات المتقاطعة)، وشبه الديناميكية لا تتغير البيئة نفسها ولكن درجة تقييم الوكيل تنقص بمرور الوقت (كالشطرنج بساعة توقيت)",
-      "شبه الديناميكية تعمل بدون وكيل"
-    ],
-    a: 2,
-    e: "هذا هو التفريق الدقيق بين Static و Dynamic و Semidynamic في خصائص بيئات العمل."
-  },
-  {
-    q: "ما هي المعادلة الأساسية التي تربط بين الوكيل الذكي ومعماريته وبرنامجه؟",
-    o: [
-      "الوكيل = البيئة × مقياس الأداء",
-      "الوكيل = المستشعرات - المشغلات",
-      "الوكيل = الجدول فقط",
-      "الوكيل = المعمارية + البرنامج (Agent = Architecture + Program)"
-    ],
-    a: 3,
-    e: "يعمل برنامج الوكيل (Program) فوق معمارية مادية/حاسوبية (Architecture) ليشكلا معاً الوكيل: Agent = Architecture + Program."
-  },
-  {
-    q: "لماذا يفشل (الوكيل المعتمد على الجدول - Table-Driven Agent) في حل المشكلات الواقعية المعقدة؟",
-    o: [
-      "لأن حجم جدول البحث الذي يخزن كل تسلسل إدراكات ممكن سيكون فلكياً يفوق سعة أي ذاكرة، ويستحيل على المصمم كتابته مسبقاً، ويفتقر الوكيل للاستقلالية",
-      "لأنه سريع جداً ولا يحتاج إلى ذاكرة",
-      "لأنه يتعلم ذاتياً دون الحاجة لجدول",
-      "لأنه يعمل فقط مع الشبكات العصبية"
-    ],
-    a: 0,
-    e: "يفشل الوكيل الجدولي بسبب الانفجار الأسي في حجم الجدول ($|P|^T$) واستحالة تعبئته يدوياً."
-  },
-  {
-    q: "أي نوع من أنواع الوكلاء الأذكياء الخمسة يختار أفعاله بناءً على (الإدراك الحالي فقط) متجاهلاً تاريخ الإدراكات السابقة، ويعتمد على قواعد (شرط - فعل Condition-Action Rules)؟",
-    o: [
-      "الوكيل المبني على المنفعة (Utility-Based Agent)",
-      "وكيل رد الفعل البسيط (Simple Reflex Agent)",
-      "الوكيل المبني على الهدف (Goal-Based Agent)",
-      "الوكيل المتعلم (Learning Agent)"
-    ],
-    a: 1,
-    e: "وكيل رد الفعل البسيط (Simple Reflex Agent) ينظر للإدراك الحالي فقط ويطبق قاعدة (إذا تحقق الشرط ← نفذ الفعل)."
-  },
-  {
-    q: "متى ينجح (وكيل رد الفعل البسيط - Simple Reflex Agent) في العمل بشكل صحيح، وماذا يحدث له إذا غاب هذا الشرط؟",
-    o: [
-      "ينجح في البيئات غير القابلة للملاحظة فقط",
-      "ينجح دائماً في جميع البيئات دون قيود",
-      "ينجح فقط إذا كانت البيئة قابلة للملاحظة كلياً (Fully Observable)؛ وإذا كانت ملاحظة جزئياً فإنه يخطئ وقد يقع في حلقات لا نهائية",
-      "ينجح فقط عندما يحتفظ بحالة داخلية وتاريخ كامل للإدراكات"
-    ],
-    a: 2,
-    e: "بما أن وكيل رد الفعل البسيط لا يملك ذاكرة، فإنه يشترط أن تكون البيئة قابلة للملاحظة كلياً في اللحظة الحالية."
-  },
-  {
-    q: "ما هو المكون الأساسي الذي يضيفه (وكيل رد الفعل المبني على نموذج - Model-Based Reflex Agent) لكي يتمكن من العمل في البيئات القابلة للملاحظة جزئياً؟",
-    o: [
-      "حذف المستشعرات والمشغلات",
-      "الاعتماد على الحظ العشوائي فقط",
-      "تجاهل الإدراك الحالي تماماً",
-      "الاحتفاظ بحالة داخلية (Internal State) تتبع الأجزاء غير المرئية من العالم بالاعتماد على تاريخ الإدراكات ونموذج لكيفية تطور العالم"
-    ],
-    a: 3,
-    e: "يحتفظ وكيل رد الفعل المبني على نموذج بحالة داخلية (Internal State) تحدث مع كل إدراك جديد لتمثيل ما لا تراه المستشعرات حالياً."
-  },
-  {
-    q: "لماذا نحتاج أحياناً للانتقال من وكيل رد الفعل المبني على نموذج إلى (الوكيل المبني على الهدف - Goal-Based Agent)؟",
-    o: [
-      "لأن معرفة الحالة الحالية للبيئة لا تكفي دائماً لتحديد الفعل الصحيح، بل يحتاج الوكيل لمعلومات عن (الهدف Goal) المرغوب ليستخدم البحث والتخطيط للوصول إليه",
-      "لأن الوكيل المبني على الهدف لا يحتاج إلى معرفة حالة البيئة",
-      "لأن الوكيل المبني على الهدف يعمل بدون مشغلات",
-      "لإلغاء المرونة ومنع تغير الأهداف"
-    ],
-    a: 0,
-    e: "الوكيل المبني على الهدف يدمج الحالة الداخلية مع معلومات الهدف (Goal) ويستخدم البحث والتخطيط، وهو أكثر مرونة عند تغير الوجهة أو الهدف."
-  },
-  {
-    q: "في أي الحالات يتفوق (الوكيل المبني على المنفعة - Utility-Based Agent) على الوكيل المبني على الهدف؟",
-    o: [
-      "عندما لا يكون هناك أي هدف للوكيل",
-      "عندما توجد عدة مسارات لتحقيق الهدف ويلزم اختيار الأفضل، أو عند وجود أهداف متعارضة (كالسرعة والأمان) أو عدم يقين؛ فيستخدم دالة المنفعة لتعظيم المنفعة المتوقعة",
-      "عندما تكون البيئة ثابتة وبها فعل واحد فقط",
-      "عندما نريد تجاهل الكفاءة والأمان"
-    ],
-    a: 1,
-    e: "الهدف يعطي تمييزاً ثنائياً (نجح/فشل)، أما دالة المنفعة (Utility Function) فتقيس درجة جودة المسار وتوازن بين الأهداف المتعارضة كالسرعة والأمان."
-  },
-  {
-    q: "ما هي المكونات المفاهيمية الأربعة التي يتكون منها (الوكيل المتعلم - Learning Agent)؟",
-    o: [
-      "البيئة، والمستشعر، والجدول، والشاشة",
-      "الشرط، والفعل، والقاعدة، والهدف",
-      "عنصر التعلم (Learning Element)، وعنصر الأداء (Performance Element)، والناقد (Critic)، ومولد المشكلات (Problem Generator)",
-      "المعالج، والذاكرة، والقرص الصلب، والشبكة"
-    ],
-    a: 2,
-    e: "يتكون الوكيل المتعلم من 4 عناصر: عنصر التعلم، عنصر الأداء، الناقد (Critic)، ومولد المشكلات (Problem Generator)."
-  },
-  {
-    q: "في بنية الوكيل المتعلم (Learning Agent)، ما هي الوظيفة الدقيقة للمكون المسمى (الناقد - Critic)؟",
-    o: [
-      "تنفيذ الأفعال الميكانيكية في البيئة",
-      "اقتراح أفعال استكشافية عشوائية",
-      "إلغاء معيار الأداء",
-      "تقييم مدى جودة سلوك الوكيل بمقارنة ما يحدث في البيئة بمعيار أداء ثابت، وتزويد عنصر التعلم بالتغذية الراجعة"
-    ],
-    a: 3,
-    e: "الناقد (Critic) يراقب البيئة ويقيم أداء الوكيل وفق معيار أداء خارجي ثابت ليرشد عنصر التعلم."
-  },
-  {
-    q: "في بنية الوكيل المتعلم، ما هو المكون المسؤول عن 'اقتراح أفعال استكشافية تقود الوكيل إلى تجارب جديدة ومفيدة لاكتشاف استراتيجيات أفضل على المدى الطويل'؟",
-    o: [
-      "مولد المشكلات (Problem Generator)",
-      "عنصر الأداء (Performance Element)",
-      "قاعدة الشرط والفعل",
-      "الجدول الثابت"
-    ],
-    a: 0,
-    e: "مولد المشكلات (Problem Generator) يدفع الوكيل لتجربة أفعال استكشافية جديدة بدلاً من الاكتفاء بالأفعال الروتينية المعتادة."
-  },
-  {
-    q: "كيف تُصنّف بيئة (قيادة سيارة الأجرة الآلية - Automated Taxi) وفق أبعاد البيئة الستة؟",
-    o: [
-      "ملاحظة كلياً، وكيل منفرد، حتمية، عرضية، ثابتة، ومنفصلة",
-      "قابلة للملاحظة جزئياً، متعددة الوكلاء، عشوائية (غير حتمية)، متسلسلة، ديناميكية، ومستمرة",
-      "ملاحظة كلياً، ثابتة، ومنفصلة مثل الكلمات المتقاطعة",
-      "عرضية وحتمية وثابتة"
-    ],
-    a: 1,
-    e: "بيئة قيادة التاكسي الآلي هي من أعقد البيئات: ملاحظة جزئياً، متعددة الوكلاء، عشوائية، متسلسلة، ديناميكية، ومستمرة."
+    ans: 1,
+    rule: "يزداد التعقيد في الأنظمة متعددة الوكلاء لأن كل وكيل يجب أن يراعي أفعال الوكلاء الآخرين وللحاجة إلى التنسيق والتواصل."
   }
 ];
 
-// بناء شبكة المصطلحات
-const termsGrid = document.getElementById("termsGrid");
-terms.forEach(([en, ar]) => {
-  const d = document.createElement("div");
-  d.className = "card";
-  d.style.margin = "0";
-  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
-  termsGrid.appendChild(d);
-});
-
-// إدارة البطاقات التعليمية
-let ci = 0, showAnswer = false;
-function renderCard() {
-  document.getElementById("flashTerm").textContent = cards[ci][0];
-  const ansEl = document.getElementById("flashAnswer");
-  ansEl.innerHTML = cards[ci][1].replace(/\n/g, "<br>");
-  ansEl.hidden = !showAnswer;
-  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
-  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+// ==================== وظائف شريط الأدوات العلوي والتبويبات ====================
+function toggleDarkMode() {
+  document.body.classList.toggle("dark-mode");
 }
-document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
-document.getElementById("flashcard").addEventListener("keydown", e => {
-  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
-});
-document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
-document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
-renderCard();
 
-// التنقل بين التبويبات
-document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
-  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
-  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
-  window.scrollTo({ top: 0, behavior: "smooth" });
-});
+function toggleComplete() {
+  const btn = document.getElementById("completeBtn");
+  btn.classList.toggle("done");
+  btn.textContent = btn.classList.contains("done") ? "✓ مكتمل" : "اكتمل";
+}
 
-// إدارة الاختبار
-let answers = {};
-function renderQuiz() {
-  const area = document.getElementById("quizArea");
-  area.innerHTML = "";
-  const letters = ["أ", "ب", "ج", "د"];
-  questions.forEach((item, i) => {
-    const box = document.createElement("div");
-    box.className = "qbox";
-    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
-    const opts = box.querySelector(".options");
-    item.o.forEach((opt, j) => {
-      const btn = document.createElement("button");
-      btn.className = "option";
-      btn.textContent = `${letters[j]}) ${opt}`;
-      btn.onclick = () => {
-        answers[i] = j;
-        [...opts.children].forEach((x, k) => {
-          x.classList.remove("correct", "wrong");
-          x.disabled = true;
-          if (k === item.a) x.classList.add("correct");
-          if (k === j && j !== item.a) x.classList.add("wrong");
-        });
-        const fb = document.getElementById("fb" + i);
-        fb.hidden = false;
-        fb.className = "feedback " + (j === item.a ? "good" : "bad");
-        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
-        updateScore();
-      };
-      opts.appendChild(btn);
-    });
-    area.appendChild(box);
+function switchTab(tabId, btn) {
+  document.querySelectorAll(".tab-section").forEach(sec => sec.classList.remove("active"));
+  document.querySelectorAll(".nav-pill").forEach(pill => pill.classList.remove("active"));
+  document.getElementById("tab-" + tabId).classList.add("active");
+  btn.classList.add("active");
+}
+
+function toggleAccordion(headerBtn) {
+  const item = headerBtn.parentElement;
+  item.classList.toggle("open");
+}
+
+// ==================== وظائف المصطلحات (Tab 3) ====================
+let currentTermFilter = "all";
+
+function filterTerms(cat, btn) {
+  currentTermFilter = cat;
+  document.querySelectorAll("#tab-terms .filter-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  renderTerms();
+}
+
+function renderTerms() {
+  const q = (document.getElementById("termSearch").value || "").trim().toLowerCase();
+  const container = document.getElementById("termsContainer");
+  const filtered = TERMS_DATA.filter(item => {
+    const matchCat = currentTermFilter === "all" || item.u === currentTermFilter;
+    const matchText = !q || item.ar.toLowerCase().includes(q) || item.en.toLowerCase().includes(q) || item.def.toLowerCase().includes(q);
+    return matchCat && matchText;
   });
-  updateScore();
+
+  container.innerHTML = filtered.map(item => `
+    <div class="term-card">
+      <div class="term-top">
+        <span class="term-ar">${item.ar}</span>
+        <span class="term-en">${item.en}</span>
+      </div>
+      <div style="margin-bottom:6px"><span class="unit-pill" style="font-size:0.72rem;padding:2px 8px">${item.unitName}</span></div>
+      <p class="term-def">${item.def}</p>
+    </div>
+  `).join("");
 }
 
-function updateScore() {
-  let correct = 0;
-  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
-  document.getElementById("score").textContent = `النتيجة: ${correct} / ${questions.length}`;
-  document.getElementById("progressBar").style.width = (Object.keys(answers).length / questions.length * 100) + "%";
+// ==================== وظائف البطاقات التعليمية (Tab 4) ====================
+let fcList = [...TERMS_DATA];
+let fcIndex = 0;
+let fcFlipped = false;
+
+function renderFlashcard() {
+  const item = fcList[fcIndex];
+  const label = document.getElementById("fcUnitLabel");
+  const content = document.getElementById("fcContent");
+  const counter = document.getElementById("fcCounter");
+
+  if (!fcFlipped) {
+    label.textContent = `${item.unitName} • المصطلح (اضغطي لقلب البطاقة)`;
+    content.innerHTML = `${item.ar}<br><span style="font-size:0.95rem;color:var(--teal-accent);font-weight:700">${item.en}</span>`;
+  } else {
+    label.textContent = `${item.unitName} • التعريف والشرح المعتمد`;
+    content.innerHTML = `<span style="font-size:1.02rem;font-weight:600;color:var(--text-body)">${item.def}</span>`;
+  }
+  counter.textContent = `${fcIndex + 1} / ${fcList.length}`;
 }
 
-document.getElementById("resetQuiz").onclick = () => {
-  answers = {};
-  document.getElementById("finalResult").textContent = "";
+function flipCard() {
+  fcFlipped = !fcFlipped;
+  renderFlashcard();
+}
+
+function moveCard(step) {
+  fcIndex = (fcIndex + step + fcList.length) % fcList.length;
+  fcFlipped = false;
+  renderFlashcard();
+}
+
+function shuffleCards() {
+  fcList.sort(() => Math.random() - 0.5);
+  fcIndex = 0;
+  fcFlipped = false;
+  renderFlashcard();
+}
+
+// ==================== وظائف الاختبار الشامل (Tab 5) ====================
+const QUIZ_STORAGE = "kfu_ai_ch3_corrected_v1";
+let quizState = {
+  filter: "all",
+  answers: {},
+  mistakes: []
+};
+
+try {
+  const saved = localStorage.getItem(QUIZ_STORAGE);
+  if (saved) quizState = { ...quizState, ...JSON.parse(saved) };
+} catch (e) {}
+
+function saveQuizState() {
+  try { localStorage.setItem(QUIZ_STORAGE, JSON.stringify(quizState)); } catch (e) {}
+}
+
+function setQuizFilter(f) {
+  quizState.filter = f;
+  document.querySelectorAll(".quiz-toolbar .filter-btn").forEach(b => b.classList.remove("active"));
+  const activeBtn = document.getElementById("qFilter-" + f);
+  if (activeBtn) activeBtn.classList.add("active");
+  if (f === "mistakes") {
+    quizState.mistakes.forEach(id => { delete quizState.answers[id]; });
+  }
+  saveQuizState();
   renderQuiz();
-};
+}
 
-document.getElementById("finishQuiz").onclick = () => {
-  let correct = 0;
-  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
-  const pct = Math.round(correct / questions.length * 100);
-  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${questions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! إتقان كامل للفصل الثالث (وكلاء الذكاء الاصطناعي)." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
-};
+function renderQuiz() {
+  let right = 0, wrong = 0;
+  Object.keys(quizState.answers).forEach(id => {
+    const q = QUIZ_QUESTIONS.find(x => x.id === Number(id));
+    if (q) {
+      if (quizState.answers[id] === q.ans) right++;
+      else wrong++;
+    }
+  });
 
+  document.getElementById("qRightStat").textContent = `صحيحة: ${right}`;
+  document.getElementById("qWrongStat").textContent = `خاطئة: ${wrong}`;
+  document.getElementById("qFilter-mistakes").textContent = `أخطائي للمراجعة (${quizState.mistakes.length})`;
+
+  let list = QUIZ_QUESTIONS;
+  if (quizState.filter === "official") list = QUIZ_QUESTIONS.filter(q => q.cat === "official");
+  else if (quizState.filter === "extra") list = QUIZ_QUESTIONS.filter(q => q.cat === "extra");
+  else if (quizState.filter === "mistakes") list = QUIZ_QUESTIONS.filter(q => quizState.mistakes.includes(q.id));
+
+  const container = document.getElementById("quizContainer");
+  if (list.length === 0) {
+    container.innerHTML = `
+      <div class="q-card" style="text-align:center;padding:36px">
+        <h3 style="margin:0 0 8px">لا توجد أخطاء مسجلة في هذا الفصل</h3>
+        <p style="color:var(--text-muted);margin:0">جميع إجاباتك صحيحة، ممتاز!</p>
+      </div>
+    `;
+    return;
+  }
+
+  const letters = ["أ", "ب", "ج", "د"];
+  container.innerHTML = list.map((q, idx) => {
+    const chosen = quizState.answers[q.id];
+    const answered = chosen !== undefined;
+
+    const optsHtml = q.opts.map((opt, oIdx) => {
+      let cls = "q-opt";
+      let status = "";
+      if (answered) {
+        if (oIdx === q.ans) { cls += " correct"; status = "الإجابة الصحيحة"; }
+        else if (oIdx === chosen) { cls += " wrong"; status = "اختيارك"; }
+      }
+      return `
+        <button class="${cls}" ${answered ? "disabled" : ""} onclick="selectQuizAnswer(${q.id}, ${oIdx})">
+          <div style="display:flex;align-items:center;gap:12px">
+            <span class="opt-char">${letters[oIdx]}</span>
+            <span>${opt.t}</span>
+          </div>
+          <span style="font-size:0.8rem;font-weight:800">${status}</span>
+        </button>
+      `;
+    }).join("");
+
+    const expItemsHtml = q.opts.map((opt, oIdx) => `
+      <div class="exp-item ${oIdx === q.ans ? "right-choice" : "wrong-choice"}">
+        <strong>الخيار (${letters[oIdx]}) ${opt.t}:</strong> ${opt.why}
+      </div>
+    `).join("");
+
+    return `
+      <div class="q-card">
+        <div class="q-meta">
+          <span class="unit-pill">${q.badge}</span>
+          <span style="font-size:0.82rem;color:var(--text-muted);font-weight:700">سؤال ${idx + 1} من ${list.length}</span>
+        </div>
+        <h3 class="q-title">${q.q}</h3>
+        <div class="q-options">${optsHtml}</div>
+        <div class="exp-box ${answered ? "show" : ""}">
+          <div class="exp-summary"><strong>القاعدة من الملزمة:</strong> ${q.rule}</div>
+          <div style="font-size:0.85rem;font-weight:800;margin-bottom:8px;color:var(--indigo-dark)">تفصيل جميع الخيارات الأربعة:</div>
+          ${expItemsHtml}
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function selectQuizAnswer(qId, oIdx) {
+  quizState.answers[qId] = oIdx;
+  const q = QUIZ_QUESTIONS.find(x => x.id === qId);
+  if (q) {
+    if (oIdx !== q.ans) {
+      if (!quizState.mistakes.includes(qId)) quizState.mistakes.push(qId);
+    } else if (quizState.filter === "mistakes") {
+      quizState.mistakes = quizState.mistakes.filter(id => id !== qId);
+    }
+  }
+  saveQuizState();
+  renderQuiz();
+}
+
+function resetQuiz() {
+  quizState.answers = {};
+  quizState.mistakes = [];
+  quizState.filter = "all";
+  saveQuizState();
+  setQuizFilter("all");
+}
+
+// تشغيل أولي
+renderTerms();
+renderFlashcard();
 renderQuiz();
 </script>
 </body>

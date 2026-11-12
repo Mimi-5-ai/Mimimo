@@ -2,1067 +2,2190 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>الفصل السادس الشامل (ص 59-74) | خوارزميات البحث (DFS، أولوية الأفضل، وتسلق التل)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الفصل السادس: خوارزميات حل المشكلات عن طريق البحث</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#f4f6fb;
-  --card:#ffffff;
-  --ink:#0f172a;
-  --muted:#64748b;
-  --accent:#4f46e5;
-  --accent-dark:#3730a3;
-  --accent2:#eef2ff;
-  --teal:#0d9488;
-  --teal-light:#ccfbf1;
-  --line:#e2e8f0;
-  --good:#059669;
-  --good-bg:#ecfdf5;
-  --bad:#dc2626;
-  --bad-bg:#fef2f2;
-  --warn:#d97706;
-  --warn-bg:#fffbeb;
+:root {
+  --bg-page: #f4f6fb;
+  --card-bg: #ffffff;
+  --indigo-dark: #1e1b4b;
+  --indigo-main: #1d4ed8;
+  --indigo-accent: #4338ca;
+  --indigo-soft: #eef2ff;
+  --teal-accent: #0d9488;
+  --teal-dark: #0f766e;
+  --text-dark: #0f172a;
+  --text-body: #334155;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  --good-bg: #f0fdf4;
+  --good-border: #86efac;
+  --good-text: #166534;
+  --bad-bg: #fef2f2;
+  --bad-border: #fca5a5;
+  --bad-text: #991b1b;
+  --warn-bg: #fffbeb;
+  --warn-border: #fde68a;
+  --warn-text: #92400e;
 }
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
-header{background:linear-gradient(135deg,#1e1b4b,#3730a3,#0d9488);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(30,27,75,0.2)}
-.wrap{max-width:1060px;margin:auto;padding:0 16px}
-.eyebrow{opacity:.95;font-size:.9rem;background:rgba(255,255,255,0.16);display:inline-block;padding:4px 14px;border-radius:99px;margin-bottom:6px;font-weight:bold}
-h1{margin:5px 0;font-size:clamp(1.5rem,3.8vw,2.2rem)}
-header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
-nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
-nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:rgba(255,255,255,0.18);color:#ffffff;font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
-nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
-nav button.active{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
-main .btn{background:var(--accent2);color:var(--accent-dark)}
-main .btn.primary{background:var(--accent);color:white}
-main{padding:22px 0 48px}
-.panel{display:none}
-.panel.active{display:block;animation:fadeIn .25s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(15,23,42,0.04)}
-h2{font-size:1.35rem;margin:0 0 12px;color:#1e1b4b}
-h3{font-size:1.06rem;margin:10px 0 6px;color:var(--accent-dark)}
-h4{font-size:.98rem;margin:8px 0 4px;color:#0f172a}
-small,.muted{color:var(--muted)}
-ul,ol{padding-right:22px;margin:8px 0}
-li{margin:6px 0}
-details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
-summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f8faff;color:#1e1b4b;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
-details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
-.details-body{padding:16px 18px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
-.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
-.tag.teal{background:var(--teal-light);color:var(--teal)}
-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
-th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
-th{background:#f1f5f9;color:#1e1b4b;font-weight:bold}
-tr:last-child td{border-bottom:0}
-.note{border-right:4px solid var(--accent);padding:10px 14px;background:#f5f7ff;border-radius:8px;margin:10px 0}
-.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
-.formula-box{background:#1e1b4b;color:#fff;padding:12px 16px;border-radius:12px;text-align:center;font-size:1.04rem;margin:10px 0;direction:ltr;font-family:monospace}
-.code-box{background:#0f172a;color:#f8fafc;padding:14px 18px;border-radius:12px;font-family:monospace;font-size:.92rem;margin:10px 0;direction:ltr;text-align:left;overflow-x:auto;line-height:1.65}
-.step-card{border:1px solid var(--line);border-radius:12px;padding:14px;background:#f8fafc}
-.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
-.options{display:grid;gap:8px;margin-top:12px}
-.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
-.option:hover:not(:disabled){border-color:var(--accent);background:#f8faff}
-.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
-.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
-.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
-.feedback.good{color:var(--good);background:var(--good-bg)}
-.feedback.bad{color:var(--bad);background:var(--bad-bg)}
-.progress{height:10px;background:#e2e8f0;border-radius:9px;overflow:hidden;margin:12px 0}
-.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
-.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#eef2ff);border:2px solid #c7d2fe;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
-.flashcard:hover{transform:scale(1.005)}
-.flashcard .term{font-size:1.35rem;font-weight:bold;color:#1e1b4b}
-.flashcard .answer{margin-top:16px;font-size:1.08rem;color:var(--accent-dark);background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04)}
-.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
-.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
-footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
-@media(max-width:600px){
-  .card{padding:14px}
-  nav button{flex:1 1 calc(50% - 8px);text-align:center}
-  .flashcard{min-height:200px;padding:18px}
-  th,td{padding:8px 10px;font-size:.88rem}
+
+body.dark-mode {
+  --bg-page: #0f172a;
+  --card-bg: #1e293b;
+  --indigo-dark: #e0e7ff;
+  --indigo-main: #93c5fd;
+  --indigo-accent: #818cf8;
+  --indigo-soft: #312e81;
+  --teal-accent: #2dd4bf;
+  --teal-dark: #14b8a6;
+  --text-dark: #f8fafc;
+  --text-body: #cbd5e1;
+  --text-muted: #94a3b8;
+  --border-color: #334155;
+  --good-bg: #064e3b;
+  --good-border: #059669;
+  --good-text: #a7f3d0;
+  --bad-bg: #7f1d1d;
+  --bad-border: #dc2626;
+  --bad-text: #fecaca;
+  --warn-bg: #78350f;
+  --warn-border: #d97706;
+  --warn-text: #fde68a;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-page);
+  color: var(--text-dark);
+  font-family: 'Tajawal', 'Cairo', -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.75;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* 1. Top Utility Bar */
+.top-utility-bar {
+  background: var(--card-bg);
+  height: 56px;
+  padding: 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+}
+
+.btn-back {
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 6px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-dark);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+.btn-back:hover {
+  background: var(--indigo-soft);
+}
+
+.btn-complete {
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 6px 20px;
+  border-radius: 6px;
+  border: none;
+  background: #10b981;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-complete.done {
+  background: var(--teal-dark);
+}
+
+.btn-theme {
+  font-family: inherit;
+  font-size: 0.95rem;
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-body);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 2. Hero Header Banner */
+.hero-banner {
+  background: linear-gradient(135deg, #1e1b4b 0%, #1d4ed8 55%, #0d9488 100%);
+  color: #ffffff;
+  padding: 36px 20px 30px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(30, 27, 75, 0.12);
+}
+
+.hero-inner {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.course-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #f8fafc;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 5px 16px;
+  border-radius: 99px;
+  margin-bottom: 14px;
+}
+
+.hero-title {
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 0 0 12px;
+  letter-spacing: -0.3px;
+}
+
+.hero-subtitle {
+  font-size: 0.96rem;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 880px;
+  margin: 0 auto 24px;
+  line-height: 1.7;
+}
+
+.nav-pills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.nav-pill {
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 700;
+  padding: 9px 20px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.nav-pill:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.nav-pill.active {
+  background: #ffffff;
+  color: #1e1b4b;
+  border-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* Main Container */
+.main-container {
+  max-width: 1040px;
+  width: 100%;
+  margin: 26px auto 50px;
+  padding: 0 16px;
+  flex: 1;
+}
+
+.tab-section {
+  display: none;
+}
+
+.tab-section.active {
+  display: block;
+}
+
+/* Chapter Map Card */
+.map-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 26px;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+}
+
+.map-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.map-title {
+  font-size: 1.22rem;
+  font-weight: 800;
+  color: var(--indigo-dark);
+  margin: 0;
+}
+
+.acc-ctrl-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-sm {
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-body);
+  cursor: pointer;
+}
+
+.btn-sm:hover {
+  background: var(--indigo-soft);
+  color: var(--indigo-accent);
+}
+
+.map-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 820px) {
+  .map-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero-title {
+    font-size: 1.55rem;
+  }
+}
+
+.map-col {
+  padding: 6px 4px;
+}
+
+.unit-pill {
+  display: inline-block;
+  background: var(--indigo-soft);
+  color: var(--indigo-accent);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.map-col-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--indigo-accent);
+  margin: 0 0 8px;
+}
+
+.map-col-desc {
+  font-size: 0.9rem;
+  color: var(--text-body);
+  margin: 0;
+  line-height: 1.65;
+}
+
+/* Accordion Sections */
+.accordion-item {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  margin-bottom: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);
+}
+
+.accordion-header {
+  width: 100%;
+  background: var(--card-bg);
+  border: none;
+  padding: 18px 22px;
+  text-align: right;
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--indigo-dark);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background 0.15s ease;
+}
+
+.accordion-header:hover {
+  background: rgba(67, 56, 202, 0.04);
+}
+
+.acc-arrow {
+  display: inline-block;
+  font-size: 0.85rem;
+  color: var(--indigo-dark);
+  transition: transform 0.2s ease;
+}
+
+.accordion-item.open .acc-arrow {
+  transform: rotate(-90deg);
+}
+
+.accordion-body {
+  display: none;
+  padding: 6px 24px 26px;
+  border-top: 1px solid var(--border-color);
+}
+
+.accordion-item.open .accordion-body {
+  display: block;
+}
+
+.sec-heading {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--indigo-main);
+  margin: 20px 0 10px;
+  padding-right: 12px;
+  border-right: 4px solid var(--indigo-accent);
+}
+
+.study-list {
+  margin: 8px 0 14px;
+  padding-right: 20px;
+  color: var(--text-body);
+  font-size: 0.95rem;
+}
+
+.study-list li {
+  margin-bottom: 8px;
+}
+
+.hl-term {
+  font-weight: 800;
+  color: var(--indigo-dark);
+}
+
+.exam-tag {
+  display: inline-block;
+  background: var(--warn-bg);
+  border: 1px solid var(--warn-border);
+  color: var(--warn-text);
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 1px 8px;
+  border-radius: 6px;
+  margin-right: 6px;
+}
+
+.info-box {
+  background: rgba(15, 118, 110, 0.06);
+  border: 1px solid var(--border-color);
+  border-right: 4px solid var(--teal-accent);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: 0.93rem;
+  color: var(--text-body);
+}
+
+.two-col-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin: 14px 0;
+}
+
+@media (max-width: 720px) {
+  .two-col-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sub-card {
+  background: rgba(67, 56, 202, 0.03);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+
+.sub-card-title {
+  font-weight: 800;
+  color: var(--indigo-main);
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+
+.code-badge {
+  direction: ltr;
+  display: inline-block;
+  font-family: 'Courier New', monospace;
+  font-weight: 800;
+  background: var(--indigo-soft);
+  color: var(--indigo-accent);
+  padding: 1px 8px;
+  border-radius: 6px;
+  margin: 0 3px;
+  font-size: 0.88rem;
+}
+
+/* Interactive Simulators */
+.sim-box {
+  background: rgba(148, 163, 184, 0.06);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 20px;
+  margin: 16px 0;
+}
+
+.sim-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.sim-step-desc {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-right: 4px solid var(--indigo-accent);
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.93rem;
+  margin-bottom: 14px;
+}
+
+.sim-layout-dfs {
+  display: grid;
+  grid-template-columns: 1fr 160px;
+  gap: 16px;
+  align-items: center;
+}
+
+@media (max-width: 680px) {
+  .sim-layout-dfs {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stack-box-wrap {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+}
+
+.stack-title {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.stack-tower {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 195px;
+  width: 90px;
+  margin: 0 auto;
+  border-left: 3px solid var(--indigo-dark);
+  border-right: 3px solid var(--indigo-dark);
+  border-bottom: 4px solid var(--indigo-dark);
+  border-radius: 0 0 8px 8px;
+  padding: 6px;
+  gap: 5px;
+  background: rgba(148, 163, 184, 0.05);
+}
+
+.stack-item {
+  width: 100%;
+  height: 34px;
+  border-radius: 6px;
+  border: 2px solid #dc2626;
+  background: #fee2e2;
+  color: #991b1b;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+}
+
+.stack-item.top-el {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+/* Priority Queue Strip */
+.pq-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  direction: ltr;
+  flex-wrap: wrap;
+  padding: 12px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  margin-top: 12px;
+}
+
+.pq-slot {
+  width: 50px;
+  border: 2px solid #94a3b8;
+  border-radius: 8px;
+  overflow: hidden;
+  text-align: center;
+  background: #f8fafc;
+}
+
+.pq-slot.best-front {
+  border-color: #0d9488;
+  box-shadow: 0 0 0 2px rgba(13, 148, 136, 0.2);
+}
+
+.pq-cost {
+  background: #e2e8f0;
+  color: #0f172a;
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 2px 0;
+  border-bottom: 1px solid #cbd5e1;
+}
+
+.pq-slot.best-front .pq-cost {
+  background: #0d9488;
+  color: #ffffff;
+}
+
+.pq-node {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #0f172a;
+  padding: 4px 0;
+}
+
+/* Tables */
+.table-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 22px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+}
+
+.table-card h3 {
+  margin: 0 0 14px;
+  color: var(--indigo-dark);
+  font-size: 1.1rem;
+}
+
+table.comp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.91rem;
+}
+
+table.comp-table th,
+table.comp-table td {
+  border: 1px solid var(--border-color);
+  padding: 11px 14px;
+  text-align: right;
+  vertical-align: top;
+}
+
+table.comp-table th {
+  background: var(--indigo-soft);
+  color: var(--indigo-dark);
+  font-weight: 800;
+}
+
+table.comp-table tr:nth-child(even) td {
+  background: rgba(148, 163, 184, 0.05);
+}
+
+.ltr-cell {
+  direction: ltr;
+  text-align: left;
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+}
+
+/* Terms & Concepts */
+.terms-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 240px;
+  padding: 11px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-dark);
+  font-family: inherit;
+  font-size: 0.93rem;
+}
+
+.filter-btn {
+  padding: 9px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-body);
+  font-family: inherit;
+  font-size: 0.86rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.filter-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.filter-btn.active {
+  background: var(--indigo-main);
+  color: #ffffff;
+  border-color: var(--indigo-main);
+}
+
+.terms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
+}
+
+.term-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 18px;
+}
+
+.term-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.term-ar {
+  font-weight: 800;
+  color: var(--indigo-dark);
+  font-size: 1rem;
+}
+
+.term-en {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--teal-accent);
+  background: rgba(15, 118, 110, 0.1);
+  padding: 2px 8px;
+  border-radius: 6px;
+  direction: ltr;
+}
+
+.term-def {
+  font-size: 0.9rem;
+  color: var(--text-body);
+  margin: 0;
+}
+
+/* Flashcards */
+.flashcard-wrap {
+  max-width: 640px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.fc-box {
+  background: var(--card-bg);
+  border: 2px solid var(--border-color);
+  border-radius: 16px;
+  min-height: 250px;
+  padding: 32px 26px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+  margin-bottom: 18px;
+  transition: border-color 0.2s ease;
+}
+
+.fc-box:hover {
+  border-color: var(--indigo-accent);
+}
+
+.fc-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--indigo-accent);
+  background: var(--indigo-soft);
+  padding: 4px 12px;
+  border-radius: 99px;
+  margin-bottom: 14px;
+}
+
+.fc-text {
+  font-size: 1.18rem;
+  font-weight: 800;
+  color: var(--indigo-dark);
+  line-height: 1.65;
+}
+
+.fc-controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Quiz */
+.quiz-toolbar {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 16px 20px;
+  margin-bottom: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.quiz-stats {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.q-stat {
+  font-size: 0.84rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 8px;
+  background: var(--indigo-soft);
+  color: var(--text-body);
+}
+
+.q-stat.good { background: var(--good-bg); color: var(--good-text); }
+.q-stat.bad { background: var(--bad-bg); color: var(--bad-text); }
+
+.q-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 22px;
+  margin-bottom: 16px;
+}
+
+.q-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.q-title {
+  font-size: 1.08rem;
+  font-weight: 800;
+  color: var(--indigo-dark);
+  margin: 0 0 14px;
+}
+
+.q-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.q-opt {
+  width: 100%;
+  text-align: right;
+  padding: 13px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-dark);
+  font-family: inherit;
+  font-size: 0.94rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  transition: all 0.15s ease;
+}
+
+.q-opt:hover:not(:disabled) {
+  background: var(--indigo-soft);
+  border-color: var(--indigo-accent);
+}
+
+.q-opt:disabled {
+  cursor: default;
+}
+
+.q-opt.correct {
+  background: var(--good-bg);
+  border-color: var(--good-border);
+  color: var(--good-text);
+}
+
+.q-opt.wrong {
+  background: var(--bad-bg);
+  border-color: var(--bad-border);
+  color: var(--bad-text);
+}
+
+.opt-char {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background: var(--indigo-soft);
+  color: var(--indigo-dark);
+  font-weight: 800;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.q-opt.correct .opt-char { background: var(--good-text); color: #fff; }
+.q-opt.wrong .opt-char { background: var(--bad-text); color: #fff; }
+
+.exp-box {
+  margin-top: 16px;
+  padding: 16px 18px;
+  border-radius: 12px;
+  background: rgba(148, 163, 184, 0.06);
+  border: 1px solid var(--border-color);
+  display: none;
+}
+
+.exp-box.show {
+  display: block;
+}
+
+.exp-summary {
+  font-size: 0.92rem;
+  color: var(--text-dark);
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.exp-item {
+  font-size: 0.86rem;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  margin-bottom: 6px;
+  color: var(--text-body);
+}
+
+.exp-item.right-choice {
+  border-right: 4px solid var(--good-text);
+}
+
+.exp-item.wrong-choice {
+  border-right: 4px solid #94a3b8;
+}
+
+.single-nav-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-color);
+}
+
+footer {
+  text-align: center;
+  padding: 18px;
+  color: var(--text-muted);
+  font-size: 0.86rem;
+  border-top: 1px solid var(--border-color);
+  background: var(--card-bg);
 }
 </style>
 </head>
 <body>
-<header>
-  <div class="wrap">
-    <div class="eyebrow">مقرر الذكاء الاصطناعي • الفصل السادس (صفحات 59 إلى 74)</div>
-    <h1>الفصل السادس: خوارزميات حل المشكلات عن طريق البحث (DFS، أولوية الأفضل، وتسلق التل)</h1>
-    <p>يغطي خوارزمية البحث بالعمق أولاً (DFS) وكودها بلغة بايثون، البحث الموجه ودالة الإرشاد h(n)، خوارزمية البحث بأولوية الأفضل (Best-First Search)، وخوارزمية تسلق التل (Hill Climbing) وأنواعها وعيوبها الثلاثة</p>
-    <nav>
-      <button class="active" data-tab="summary">الشرح الشامل</button>
-      <button data-tab="tables">جداول المقارنات والتتبع (4)</button>
-      <button data-tab="terms">المصطلحات والمفاهيم (28)</button>
-      <button data-tab="cards">البطاقات التعليمية (28)</button>
-      <button data-tab="quiz">الاختبار الشامل (25)</button>
-    </nav>
+
+<div class="top-utility-bar">
+  <a href="#back" class="btn-back" onclick="history.back(); return false;">رجوع</a>
+  <button class="btn-complete" id="completeBtn" onclick="toggleComplete(this)">اكتمل</button>
+  <button class="btn-theme" onclick="toggleDark()" title="تبديل الوضع الليلي">☾</button>
+</div>
+
+<header class="hero-banner">
+  <div class="hero-inner">
+    <div class="course-badge">مقرر الذكاء الاصطناعي • تغطية شاملة 100%</div>
+    <h1 class="hero-title">الفصل السادس: خوارزميات حل المشكلات عن طريق البحث</h1>
+    <p class="hero-subtitle">
+      يغطي خوارزمية البحث بأولوية العمق (DFS) والمكدس (Stack)، المقارنة الشاملة بين DFS و BFS، خوارزمية البحث بأولوية الأفضل (Best-First Search) والطابور بالأولوية، وخوارزمية تسلق التل (Hill Climbing) ومشاكل القمم المحلية
+    </p>
+    <div class="nav-pills">
+      <button class="nav-pill active" onclick="switchTab('study', this)">الشرح الشامل</button>
+      <button class="nav-pill" onclick="switchTab('tables', this)">جداول المقارنات والملخصات (4)</button>
+      <button class="nav-pill" onclick="switchTab('terms', this)">المصطلحات والمفاهيم (22)</button>
+      <button class="nav-pill" onclick="switchTab('cards', this)">البطاقات التعليمية (22)</button>
+      <button class="nav-pill" onclick="switchTab('quiz', this)">الاختبار الشامل (20)</button>
+    </div>
   </div>
 </header>
 
-<main class="wrap">
-  <!-- ================= التبويب الأول: الشرح الشامل ================= -->
-  <section id="summary" class="panel active">
-    <div class="card">
-      <h2>خريطة الفصل السادس (ص 59 - 74)</h2>
-      <div class="grid">
-        <div>
-          <span class="tag">الوحدة الأولى (ص 59 - 64)</span>
-          <h3>البحث بالعمق أولاً (DFS)</h3>
-          <p>مفهوم وآلية عمل DFS والتراجع (Backtracking)، هيكل المكدس (LIFO Stack)، مثال التتبع، التحليل بالمعايير الأربعة، كود بايثون، والعمق المحدود والتعميق التكراري.</p>
+<main class="main-container">
+
+  <!-- ==================== التبويب 1: الشرح الشامل ==================== -->
+  <section id="tab-study" class="tab-section active">
+    <div class="map-card">
+      <div class="map-top-row">
+        <h2 class="map-title">خريطة الفصل السادس: خوارزميات حل المشكلات عن طريق البحث</h2>
+        <div class="acc-ctrl-btns">
+          <button class="btn-sm" onclick="toggleAllAccordions(true)">فتح جميع الوحدات</button>
+          <button class="btn-sm" onclick="toggleAllAccordions(false)">طي جميع الوحدات</button>
         </div>
-        <div>
-          <span class="tag">الوحدة الثانية (ص 65 - 69)</span>
-          <h3>البحث الموجه وأولوية الأفضل</h3>
-          <p>مفهوم البحث الموجه (الاستدلالي)، دالة الإرشاد h(n)، خوارزمية البحث بأولوية الأفضل / الجشع (Best-First Search)، قائمتا OPEN و CLOSED، ومثال التتبع.</p>
+      </div>
+      <div class="map-grid">
+        <div class="map-col">
+          <span class="unit-pill">الوحدة الأولى</span>
+          <h3 class="map-col-title">خوارزمية البحث بأولوية العمق (DFS)</h3>
+          <p class="map-col-desc">
+            مفهوم البحث بأولوية العمق، التوسع عبر الأبناء والتراجع عند العقد الورقية، استخدام هيكل البيانات المكدس (Stack)، والمقارنة الشاملة مع (BFS).
+          </p>
         </div>
-        <div>
-          <span class="tag">الوحدة الثالثة (ص 70 - 74)</span>
-          <h3>خوارزمية تسلق التل (Hill Climbing)</h3>
-          <p>مفهوم البحث المحلي، آلية عمل تسلق التل، أنواعها الثلاثة (البسيط، أشد انحدار، العشوائي)، مشكلاتها الثلاث (القمة المحلية، الهضبة، الحافة)، وطرق علاجها.</p>
+        <div class="map-col">
+          <span class="unit-pill">الوحدة الثانية</span>
+          <h3 class="map-col-title">خوارزميات البحث المستنير و Best-First Search</h3>
+          <p class="map-col-desc">
+            مفهوم البحث المستنير والدالة الاستدلالية (Heuristic)، آلية عمل البحث بأولوية الأفضل، وتتبع الطابور بالأولوية (Priority Queue) خطوة بخطوة.
+          </p>
+        </div>
+        <div class="map-col">
+          <span class="unit-pill">الوحدة الثالثة</span>
+          <h3 class="map-col-title">خوارزمية البحث تسلق التل (Hill Climbing)</h3>
+          <p class="map-col-desc">
+            مبدأ عمل تسلق التل، البحث في الحلول المجاورة دون رجوع للخلف، تتبع مسار الحل، وفضاء البحث: القمة العالمية والمحلية والمسطحة والكتف.
+          </p>
         </div>
       </div>
     </div>
 
     <!-- الوحدة الأولى -->
-    <details open>
-      <summary>1) الوحدة الأولى: خوارزمية البحث بالعمق أولاً (Depth-First Search - DFS) وتقييمها وكود بايثون (ص 59 - 64)</summary>
-      <div class="details-body">
-        <div class="exam-alert">
-          <h3>أولاً: مفهوم وآلية عمل خوارزمية البحث بالعمق أولاً (<span dir="ltr">Depth-First Search - DFS</span>) (ص 59 - 60):</h3>
-          <ul>
-            <li><b>الفكرة الأساسية:</b> هي إحدى خوارزميات <b>البحث غير الموجه (الأعمى <span dir="ltr">Uninformed / Blind Search</span>)</b>؛ وتقوم بتوسيع <b>أعمق عقدة (<span dir="ltr">Deepest Node</span>)</b> في الحافة الحالية لشجرة البحث.</li>
-            <li><b>آلية التغلغل والتراجع (<span dir="ltr">Backtracking</span>):</b> تبدأ الخوارزمية من العقدة الجذرية (البداية) وتستمر في النزول والتغلغل عمودياً في فرع واحد (عادةً الفرع الأيسر أولاً) من مستوى إلى مستوى أعمق حتى تصل إلى <b>عقدة ورقية (<span dir="ltr">Leaf Node</span> / طريق مسدود)</b> ليس لها أبناء غير مزارين؛ وعندئذٍ تقوم بعملية <b>التراجع للخلف (<span dir="ltr">Backtracking</span>)</b> إلى أقرب عقدة أب لا يزال لديها أبناء لم يتم استكشافهم بعد.</li>
-            <li><b>هيكل البيانات المعتمد:</b> تعتمد خوارزمية <span dir="ltr">DFS</span> على هيكل بيانات <b>المكدس (<span dir="ltr">Stack</span>)</b> الذي يعمل بقاعدة <b>آخراً يدخل أولاً يخرج (<span dir="ltr">LIFO - Last-In, First-Out</span>)</b>؛ حيث توضع العقد المولدة حديثاً في قمة المكدس (<code dir="ltr">Push</code>) وتُسحب منها مباشرةً (<code dir="ltr">Pop</code>)، كما يمكن تنفيذها برمجياً بسهولة باستخدام <b>الاستدعاء الذاتي / العودية (<span dir="ltr">Recursion</span>)</b>.</li>
-          </ul>
+    <div class="accordion-item open">
+      <button class="accordion-header" onclick="toggleAccordion(this)">
+        <span class="acc-arrow">◄</span>
+        <span>1) الوحدة الأولى: خوارزمية البحث بأولوية العمق (Depth First Search - DFS) ومقارنتها مع BFS</span>
+      </button>
+      <div class="accordion-body">
+        <h4 class="sec-heading">أولاً: مفهوم وآلية عمل خوارزمية البحث بأولوية العمق (DFS Algorithm)</h4>
+        <div class="info-box">
+          في خوارزمية البحث بأولوية العمق (<span class="code-badge">Depth First Search - DFS Algorithm</span>) نبدأ من الجذر في شجرة البحث ويتم <strong>التوسع من خلال الأبناء (عمقاً)</strong> حتى نصل إلى العقدة الأعمق، ويستمر البحث تكرارياً للتنقل بين العقد بهذه الاستراتيجية ليتم فحص العقد وصولاً إلى العقدة الهدف.
         </div>
-
-        <h3>ثانياً: خطوات خوارزمية <span dir="ltr">DFS</span> ومثال تتبع عملي خطوة بخطوة (ص 60 - 61)</h3>
-        <ul>
-          <li><b>خطوات الخوارزمية باستخدام المكدس (<span dir="ltr">Stack</span>):</b>
-            <ol>
-              <li>ضع عقدة البداية (الجذر) في قمة المكدس (<code dir="ltr">Stack</code>).</li>
-              <li>طالما أن المكدس غير فارغ، اسحب العقدة الموجودة في <b>قمة المكدس (<code dir="ltr">Top</code>)</b>.</li>
-              <li>إذا كانت هذه العقدة هي عقدة الهدف، توقف وأرجع الحل.</li>
-              <li>إذا لم تكن العقدة مزارة من قبل، أضفها إلى قائمة العقد المزارة (<code dir="ltr">Visited</code>)، ثم ادفع (<code dir="ltr">Push</code>) جيرانها غير المزارين إلى قمة المكدس.</li>
-              <li>كرر الخطوات حتى تجد الهدف أو يصبح المكدس فارغاً.</li>
-            </ol>
-          </li>
+        <ul class="study-list">
+          <li><span class="hl-term">1. تصنيف الخوارزمية:</span> تُصنف خوارزمية البحث بأولوية العمق (<span class="code-badge">DFS</span>) ضمن <strong>خوارزميات البحث الأعمى (Uninformed Search)</strong> <span class="exam-tag">سؤال في الواجب الثاني وبنك الأسئلة</span></li>
+          <li><span class="hl-term">2. هيكلة البيانات المستخدمة:</span> تستخدم خوارزمية البحث بأولوية العمق (<span class="code-badge">DFS</span>) هيكلة البيانات <strong>المكدس (Stack)</strong> الذي يعمل بمبدأ (آخر عنصر يُضاف هو أول عنصر يخرج <code>LIFO</code>) <span class="exam-tag">سؤال في بنك الأسئلة</span></li>
+          <li><span class="hl-term">3. أولوية الحركة والفحص:</span> الأولوية في (<span class="code-badge">DFS</span>) هي <strong>التحرك بالعمق إلى الأبناء أولاً</strong> قبل الانتقال إلى الأشقاء في نفس المستوى <span class="exam-tag">سؤال في بنك الأسئلة</span></li>
+          <li><span class="hl-term">4. قاعدة التراجع عند العقدة الورقية:</span> إذا تم الوصول إلى عقدة نهائية ليس لها أبناء <strong>(ورقة / Leaf)</strong> وليست هي الهدف، <strong>تُحذف من المكدس (Pop) وتعود الخوارزمية إلى العقدة السابقة</strong> لفحص بقية أبنائها، وهكذا وصولاً إلى الهدف أو تفحص كافة عقد شجرة البحث.</li>
         </ul>
 
-        <div class="note">
-          <p><b>مثال عملي لتتبع شجرة البحث بخوارزمية <span dir="ltr">DFS</span> ومقارنتها مع <span dir="ltr">BFS</span> (ص 61):</b><br>
-          لنفترض نفس الشجرة التي درسناها في الفصل الخامس:<br>
-          • الجذر <b dir="ltr">A</b> يتفرع منه ابنان (من اليسار لليمين): <b dir="ltr">B</b> و <b dir="ltr">C</b>.<br>
-          • العقدة <b dir="ltr">B</b> يتفرع منها ابنان: <b dir="ltr">D</b> و <b dir="ltr">E</b> (ويتفرع من <b dir="ltr">E</b> العقدة <b dir="ltr">F</b>).<br>
-          • العقدة <b dir="ltr">C</b> يتفرع منها العقدة <b dir="ltr">F</b>.<br>
-          <b>تتبع مسار <span dir="ltr">DFS</span> خطوة بخطوة:</b></p>
-          <ol>
-            <li>نبدأ من الجذر <b dir="ltr">A</b> &larr; نذهب لأول ابن له في اليسار وهو <b dir="ltr">B</b>.</li>
-            <li>من <b dir="ltr">B</b> لا ننتقل إلى جاره <span dir="ltr">C</span>، بل نتغلغل أعمق إلى أول ابن لـ <span dir="ltr">B</span> وهو <b dir="ltr">D</b>.</li>
-            <li>العقدة <b dir="ltr">D</b> ورقة لا أبناء لها &larr; نتراجع (<span dir="ltr">Backtrack</span>) إلى أبيها <b dir="ltr">B</b> ونأخذ ابنه الثاني وهو <b dir="ltr">E</b>.</li>
-            <li>من <b dir="ltr">E</b> نتغلغل إلى ابنه <b dir="ltr">F</b> (ورقة لا أبناء لها).</li>
-            <li>نتراجع إلى <b dir="ltr">A</b> ونزور فرعه الأيمن <b dir="ltr">C</b> (وابنه <span dir="ltr">F</span> تمت زيارته مسبقاً فلا نكرره).</li>
-          </ol>
-          <p style="margin-bottom:0"><b>الترتيب النهائي لزيارة العقد بواسطة <span dir="ltr">DFS</span> هو:</b> <b dir="ltr">A &rarr; B &rarr; D &rarr; E &rarr; F &rarr; C</b> (بينما في <span dir="ltr">BFS</span> كان: <span dir="ltr">A &rarr; B &rarr; C &rarr; D &rarr; E &rarr; F</span>).</p>
-        </div>
-
-        <div class="exam-alert">
-          <h3>ثالثاً: تقييم خوارزمية البحث بالعمق أولاً (<span dir="ltr">DFS</span>) وفق المعايير الأربعة (ص 62 - 63) - موضع أسئلة مؤكدة:</h3>
-          <ol>
-            <li><b>الاكتمال (<span dir="ltr">Completeness</span>):</b>
-              <br>خوارزمية <span dir="ltr">DFS</span> <b>غير مكتملة (<span dir="ltr">Incomplete</span>)</b> في فضاءات الحالات اللانهائية أو التي تحتوي على مسارات دائرية/حلقات (لأنها قد تستمر في النزول في فرع لا نهائي العمق $m = \infty$ وتترك الهدف الموجود في فرع آخر)؛ وتكون مكتملة فقط إذا كان فضاء الحالات محدوداً وخالياً من الحلقات (أو مع استخدام قائمة <code dir="ltr">Visited</code>).</li>
-            <li><b>الأمثلية (<span dir="ltr">Optimality</span>):</b>
-              <br>خوارزمية <span dir="ltr">DFS</span> <b>غير أمثلية (<span dir="ltr">Not Optimal</span>)</b>؛ لأنها قد تعثر على هدف يقع في عمق سحيق جداً بتكلفة عالية في الفرع الأيسر وتُرجعه كحل قبل أن تفحص هدفاً أقرب وأقل تكلفة يقع في الفرع الأيمن!</li>
-            <li><b>التعقيد الزمني (<span dir="ltr">Time Complexity</span>):</b>
-              <br>إذا كان عامل التفرع هو $b$ وأقصى عمق للشجرة هو $m$، فإن التعقيد الزمني في أسوأ الحالات هو:
-              <div class="formula-box">Time Complexity = O(bᵐ)</div>
-              ويكون هذا الوقت سيئاً جداً إذا كان أقصى عمق للشجرة $m$ أكبر بكثير من عمق الحل الفعلي $d$.</li>
-            <li><b>التعقيد المكاني (<span dir="ltr">Space Complexity</span>) [الميزة الذهبية لـ <span dir="ltr">DFS</span>]:</b>
-              <br>تحتاج خوارزمية <span dir="ltr">DFS</span> في الذاكرة إلى تخزين مسار واحد فقط من الجذر حتى العقدة الحالية، بالإضافة إلى العقد الإخوة غير الموسعة على طول هذا المسار؛ ولذلك فإن تعقيدها المكاني <b>خطي وصغير جداً</b>:
-              <div class="formula-box">Space Complexity = O(b · m)</div>
-              <b>استنتاج هام للاختبار:</b> تتفوق خوارزمية <span dir="ltr">DFS</span> بشكل ساحق على <span dir="ltr">BFS</span> في <b>توفير الذاكرة</b> ($O(b \cdot m)$ الخطية مقابل $O(b^d)$ الأسية في <span dir="ltr">BFS</span>).</li>
-          </ol>
-        </div>
-
-        <div class="exam-alert">
-          <h3>رابعاً: الكود البرمجي الكامل لخوارزمية <span dir="ltr">DFS</span> بلغة بايثون (<span dir="ltr">Python</span>) وشرحه (ص 63 - 64):</h3>
-          <div class="code-box"># تمثيل الرسم البياني باستخدام قاموس بايثون (Adjacency List)
-graph = {
-  'A' : ['B','C'],
-  'B' : ['D', 'E'],
-  'C' : ['F'],
-  'D' : [],
-  'E' : ['F'],
-  'F' : []
-}
-
-visited = set() # مجموعة (أو قائمة) لحفظ وتتبع العقد المزارة
-
-def dfs(visited, graph, node):
-    if node not in visited:
-        print (node, end=" ")
-        visited.add(node) # تعليم العقدة الحالية كمزارة
-        # استدعاء ذاتي (Recursion) لكل جار للتغلغل بالعمق أولاً!
-        for neighbour in graph[node]:
-            dfs(visited, graph, neighbour)
-
-# استدعاء الدالة بدءاً من العقدة الجذرية 'A'
-dfs(visited, graph, 'A')
-# المخرجات (Output): A B D E F C</div>
-          <p class="note" style="margin-bottom:0"><b>ملاحظة برمجية هامة:</b> يعتمد الكود أعلاه على <b>الاستدعاء الذاتي (<span dir="ltr">Recursion</span>)</b> الذي يستخدم مكدس النظام تلقائياً؛ ولو استخدمنا قائمة كطابور صريح كما في الفصل الخامس، فإننا نستبدل <code dir="ltr">queue.pop(0)</code> بـ <code dir="ltr">stack.pop()</code> (بدون صفر) ليسحب آخر عنصر دخل القائمة وفق مبدأ <b dir="ltr">LIFO</b>.</p>
-        </div>
-
-        <h3>خامساً: معالجة عيوب <span dir="ltr">DFS</span> (البحث بالعمق المحدود <span dir="ltr">DLS</span> والتعميق التكراري <span dir="ltr">IDS</span>) (ص 64)</h3>
-        <ul>
-          <li><b>1. البحث بالعمق المحدود (<span dir="ltr">Depth-Limited Search - DLS</span>):</b> لتجنب ضياع <span dir="ltr">DFS</span> في المسارات اللانهائية، نضع حداً أقصى مسبقاً للعمق $l$، فلا تُوسع أي عقدة تقع عند العمق $l$. (عيبه: يفشل إذا كان الهدف أعمق من $l$ أي $d > l$).</li>
-          <li><b>2. البحث بالتعميق التكراري (<span dir="ltr">Iterative Deepening Search - IDS</span>):</b> يكرر تشغيل <span dir="ltr">DLS</span> بزيادة حد العمق تدريجياً ($l = 0, 1, 2, \dots, d$)، فيجمع بين <b>اكتمال وأمثلية <span dir="ltr">BFS</span></b> ($O(b^d)$ وقتاً) و<b>الذاكرة الخطية الضئيلة لـ <span dir="ltr">DFS</span></b> ($O(b \cdot d)$ مكاناً).</li>
-        </ul>
-      </div>
-    </details>
-
-    <!-- الوحدة الثانية -->
-    <details open>
-      <summary>2) الوحدة الثانية: البحث الموجه (Informed Search) وخوارزمية البحث بأولوية الأفضل (Best-First Search) (ص 65 - 69)</summary>
-      <div class="details-body">
-        <h3>أولاً: مفهوم البحث الموجه / الاستدلالي (<span dir="ltr">Informed / Heuristic Search</span>) ودالة الإرشاد $h(n)$ (ص 65 - 66)</h3>
-        <ul>
-          <li>تُعاني خوارزميات البحث الأعمى (<span dir="ltr">BFS</span> و <span dir="ltr">DFS</span>) من البطء واستهلاك الذاكرة لأنها تبحث في الفضاء بشكل أعمى دون معرفة اتجاه الهدف.</li>
-          <li>يعالج <b>البحث الموجه (أو الاستدلالي / الإرشادي <span dir="ltr">Heuristic Search</span>)</b> هذه المشكلة عن طريق استخدام <b>معرفة إضافية خاصة بالمشكلة</b> لتوجيه البحث نحو المسارات الأكثر واعدية وقرباً من الهدف.</li>
-          <li><b>دالة الاستدلال / الإرشاد (<span dir="ltr">Heuristic Function</span> $h(n)$):</b>
-            <ul>
-              <li>هي دالة تقدر <b>تكلفة أرخص مسار من العقدة الحالية $n$ إلى عقدة الهدف</b>.</li>
-              <li>تعتمد $h(n)$ فقط على الحالة المرتبطة بالعقدة $n$، ويجب دائماً أن تحقق الشرط: <b dir="ltr">h(Goal) = 0</b> (لأن المسافة المتبقية من الهدف إلى نفسه تساوي صفراً).</li>
-              <li><b>أمثلة حساب $h(n)$:</b> مسافة الخط المستقيم (<span dir="ltr">SLD / Euclidean Distance</span>) في الخرائط، أو مسافة مانهاتن (<span dir="ltr">Manhattan Distance</span>) في أحجية الأرقام.</li>
-            </ul>
-          </li>
-        </ul>
-
-        <div class="exam-alert">
-          <h3>ثانياً: خوارزمية البحث بأولوية الأفضل / البحث الجشع (<span dir="ltr">Best-First Search / Greedy Best-First Search</span>) (ص 66 - 68):</h3>
-          <ul>
-            <li><b>الفكرة الأساسية:</b> تختار دائماً للتوسيع العقدة التي تبدو <b>الأقرب إلى الهدف</b> وفقاً لدالة التقييم؛ وفي البحث الجشع بأولوية الأفضل تكون دالة التقييم مساوية لدالة الاستدلال وحدها:
-              <div class="formula-box">f(n) = h(n)</div>
-            </li>
-            <li><b>هيكل البيانات والقوائم المستخدمة:</b>
-              <ol>
-                <li><b>القائمة المفتوحة (<span dir="ltr">OPEN List</span>):</b> تضم العقد التي تم توليدها ولم يتم توسيعها بعد، وتُنفذ كـ <b>طابور أولوية (<span dir="ltr">Priority Queue</span>)</b> يُرتب العقد <b>تصاعدياً حسب أقل قيمة لدالة الاستدلال $h(n)$</b> (بحيث تكون العقدة صاحبة أصغر $h(n)$ في مقدمة الطابور دائماً).</li>
-                <li><b>القائمة المغلقة (<span dir="ltr">CLOSED List</span>):</b> تحفظ العقد التي تم سحبها وفحصها وتوسيعها بالفعل، لمنع إعادة زيارتها.</li>
-              </ol>
-            </li>
-            <li><b>خطوات خوارزمية البحث بأولوية الأفضل (<span dir="ltr">Best-First Search</span>) بالتفصيل (ص 67):</b>
-              <ol>
-                <li>ضع عقدة البداية (الجذر) في القائمة المفتوحة <code dir="ltr">OPEN</code>.</li>
-                <li>إذا كانت القائمة <code dir="ltr">OPEN</code> فارغة، توقف وأعلن الفشل.</li>
-                <li>اسحب من مقدمة <code dir="ltr">OPEN</code> العقدة <b dir="ltr">n</b> التي تمتلك <b>أفضل (أقل) قيمة لدالة الاستدلال $h(n)$</b>، وانقلها إلى القائمة المغلقة <code dir="ltr">CLOSED</code>.</li>
-                <li>إذا كانت العقدة <b dir="ltr">n</b> هي عقدة الهدف، توقف بنجاح وأرجع مسار الحل.</li>
-                <li>وإلا، قم بتوسيع العقدة <b dir="ltr">n</b> بتوليد جميع خلفائها (أبنائها)، ولكل ابن غير موجود في <code dir="ltr">OPEN</code> أو <code dir="ltr">CLOSED</code>، احسب قيمة $h$ الخاصة به وأدرجه في <code dir="ltr">OPEN</code>، ثم <b>أعد ترتيب القائمة <code dir="ltr">OPEN</code> تصاعدياً حسب قيم $h(n)$</b>.</li>
-                <li>كرر الخطوات من 2 إلى 5 حتى الوصول للهدف.</li>
-              </ol>
-            </li>
-          </ul>
-        </div>
-
-        <h3>ثالثاً: مثال عملي محلول خطوة بخطوة لتتبع خوارزمية البحث بأولوية الأفضل (<span dir="ltr">Best-First Search</span>) (ص 68 - 69)</h3>
-        <div class="note">
-          <p><b>المعطيات في شجرة البحث:</b> عقدة البداية هي <b dir="ltr">S</b> وعقدة الهدف هي <b dir="ltr">G</b> ($h(G)=0$):<br>
-          • الجذر <b dir="ltr">S</b> يتفرع إلى: <b dir="ltr">A</b> ($h=12$) و <b dir="ltr">B</b> ($h=4$).<br>
-          • العقدة <b dir="ltr">A</b> تتفرع إلى: <b dir="ltr">C</b> ($h=7$) و <b dir="ltr">D</b> ($h=3$).<br>
-          • العقدة <b dir="ltr">B</b> تتفرع إلى: <b dir="ltr">E</b> ($h=8$) و <b dir="ltr">F</b> ($h=2$).<br>
-          • العقدة <b dir="ltr">E</b> تتفرع إلى: <b dir="ltr">H</b> ($h=4$).<br>
-          • العقدة <b dir="ltr">F</b> تتفرع إلى: <b dir="ltr">I</b> ($h=9$) و <b dir="ltr">G</b> ($h=0$ - الهدف).<br>
-          <b>التتبع باستخدام قائمتي <code dir="ltr">OPEN</code> (مرتبة تصاعدياً حسب $h$) و <code dir="ltr">CLOSED</code>:</b></p>
-          <ol>
-            <li><b>البداية:</b> ندرج <span dir="ltr">S</span> في المفتوحة:<br>
-              <code dir="ltr">OPEN = [S]</code> | <code dir="ltr">CLOSED = []</code></li>
-            <li><b>الخطوة 1 (سحب S وتوسيعه):</b> يولد الأبناء <span dir="ltr">A(12)</span> و <span dir="ltr">B(4)</span>، ونرتب <code dir="ltr">OPEN</code> تصاعدياً:<br>
-              <code dir="ltr">OPEN = [B(4), A(12)]</code> | <code dir="ltr">CLOSED = [S]</code></li>
-            <li><b>الخطوة 2 (سحب الأقل وهو B(4) وتوسيعه):</b> يولد الأبناء <span dir="ltr">E(8)</span> و <span dir="ltr">F(2)</span>، ونرتب <code dir="ltr">OPEN</code>:<br>
-              <code dir="ltr">OPEN = [F(2), E(8), A(12)]</code> | <code dir="ltr">CLOSED = [S, B]</code></li>
-            <li><b>الخطوة 3 (سحب الأقل وهو F(2) وتوسيعه):</b> يولد الأبناء <span dir="ltr">I(9)</span> و <span dir="ltr">G(0)</span>، ونرتب <code dir="ltr">OPEN</code>:<br>
-              <code dir="ltr">OPEN = [G(0), E(8), I(9), A(12)]</code> | <code dir="ltr">CLOSED = [S, B, F]</code></li>
-            <li><b>الخطوة 4 (سحب الأقل وهو G(0)):</b> العقدة <b dir="ltr">G</b> هي الهدف! نتوقف بنجاح.<br>
-              <code dir="ltr">CLOSED = [S, B, F, G]</code> &larr; <b>مسار الحل هو: <span dir="ltr">S &rarr; B &rarr; F &rarr; G</span></b>.</li>
-          </ol>
-          <p style="margin-bottom:0"><b>تقييم البحث بأولوية الأفضل (الجشع):</b> يتميز بالسرعة العالية وتوجيه البحث نحو الهدف، ولكنه <b>غير أمثلي (<span dir="ltr">Not Optimal</span>)</b> لأنه يتجاهل تكلفة المسار الفعلي $g(n)$ وقد يسلك طريقاً يبدو قريباً من الهدف ولكنه مكلف جداً، كما أنه <b>غير مكتمل</b> إذا لم نستخدم قائمة مغلقة لمنع الحلقات.</p>
-        </div>
-      </div>
-    </details>
-
-    <!-- الوحدة الثالثة -->
-    <details open>
-      <summary>3) الوحدة الثالثة: البحث المحلي وخوارزمية تسلق التل (Hill Climbing) وأنواعها ومشكلاتها الثلاث (ص 70 - 74)</summary>
-      <div class="details-body">
-        <h3>أولاً: مفهوم البحث المحلي (<span dir="ltr">Local Search</span>) وآلية عمل خوارزمية تسلق التل (<span dir="ltr">Hill Climbing</span>) (ص 70 - 71)</h3>
-        <ul>
-          <li><b>فلسفة البحث المحلي:</b> في كثير من مشكلات التحسين (مثل مسألة الملكات الثماني أو تصميم الدوائر)، لا يهمنا المسار الذي سلكناه، بل تهمنا <b>الحالة النهائية فقط</b>؛ وتحتفظ خوارزميات البحث المحلي <b>بحالة حالية واحدة فقط</b> في الذاكرة وتنتقل منها إلى أحد جيرانها لتحسين قيمة الدالة، فلا تحتفظ بشجرة بحث وتستهلك ذاكرة ثابتة $O(1)$.</li>
-          <li><b>خوارزمية تسلق التل (<span dir="ltr">Hill Climbing Search</span>):</b>
-            <ul>
-              <li>تُعرف أيضاً بـ <b>البحث المحلي الجشع (<span dir="ltr">Greedy Local Search</span>)</b> لأنها تمسك بجار جيد وتتحرك نحوه فوراً دون التفكير مسبقاً إلى أين سيقودها هذا الطريق.</li>
-              <li><b>تشبيه متسلق الجبال في الضباب الكثيف (فقدان الذاكرة):</b> تشبه متسلقاً يحاول الوصول لقمة الجبل وسط ضباب كثيف وهو مصاب بفقدان الذاكرة؛ فهو ينظر فقط للخطوة المجاورة له مباشرةً ويتحرك في اتجاه الصعود للأعلى، ولا يتذكر الأماكن التي زارها سابقاً!</li>
-              <li><b>خطوات الخوارزمية:</b>
-                <ol>
-                  <li>قيّم الحالة الابتدائية؛ فإذا كانت هي الهدف توقف، وإلا اجعلها هي <b>الحالة الحالية (<span dir="ltr">Current State</span>)</b>.</li>
-                  <li>كرر: اختر جاراً للحالة الحالية وقيّمه؛ فإذا كان <b>أفضل من الحالة الحالية</b>، اجعل هذا الجار هو الحالة الحالية الجديدة.</li>
-                  <li>إذا لم يوجد أي جار أفضل من الحالة الحالية، <b>توقف وأرجع الحالة الحالية كحل</b>.</li>
-                </ol>
-              </li>
-            </ul>
-          </li>
-        </ul>
-
-        <div class="exam-alert">
-          <h3>ثانياً: الأنواع الثلاثة لخوارزمية تسلق التل (ص 71 - 72) - موضع أسئلة مباشرة:</h3>
-          <div class="grid">
-            <div class="step-card">
-              <span class="tag">1. تسلق التل البسيط</span>
-              <h4>Simple Hill Climbing</h4>
-              <p>يفحص الجيران واحداً تلو الآخر بالترتيب، وبمجرد أن يجد <b>أول جار أفضل من الحالة الحالية</b> ينتقل إليه فوراً دون فحص بقية الجيران (سريع الحساب لكل خطوة لكنه قد لا يختار الجار الأفضل).</p>
+        <h4 class="sec-heading">ثانياً: محاكي تفاعلي خطوة بخطوة لخوارزمية (DFS) والمكدس (Stack) — مطابق لصفحات 60 إلى 65 بالملزمة</h4>
+        <div class="sim-box">
+          <div class="sim-controls">
+            <span class="unit-pill" id="dfsStepBadge">الخطوة 1 من 12</span>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="filter-btn" id="dfsPrevBtn" onclick="stepDfs(-1)">الخطوة السابقة</button>
+              <button class="filter-btn active" id="dfsNextBtn" onclick="stepDfs(1)">الخطوة التالية</button>
+              <button class="filter-btn" onclick="resetDfs()">إعادة الضبط</button>
             </div>
-            <div class="step-card">
-              <span class="tag">2. تسلق التل بأشد انحدار (الأعلى صعوداً)</span>
-              <h4>Steepest-Ascent Hill Climbing</h4>
-              <p>يفحص ويقيّم <b>جميع الجيران الممكنين</b> للحالة الحالية أولاً، ثم يختار من بينهم <b>أفضل جار على الإطلاق</b> (صاحب أعلى تحسين) وينتقل إليه.</p>
+          </div>
+
+          <div class="sim-step-desc" id="dfsStepText">...</div>
+
+          <div class="sim-layout-dfs">
+            <div style="text-align:center;overflow-x:auto">
+              <svg id="dfsTreeSvg" viewBox="0 0 560 250" style="width:100%;max-width:540px;background:#ffffff;border-radius:10px;border:1px solid #cbd5e1">
+                <g stroke="#64748b" stroke-width="1.6">
+                  <line x1="280" y1="30" x2="155" y2="85"/>
+                  <line x1="280" y1="30" x2="280" y2="85"/>
+                  <line x1="280" y1="30" x2="415" y2="85"/>
+                  <line x1="155" y1="85" x2="100" y2="150"/>
+                  <line x1="155" y1="85" x2="200" y2="150"/>
+                  <line x1="280" y1="85" x2="275" y2="150"/>
+                  <line x1="415" y1="85" x2="365" y2="150"/>
+                  <line x1="415" y1="85" x2="480" y2="150"/>
+                  <line x1="100" y1="150" x2="55" y2="215"/>
+                  <line x1="100" y1="150" x2="145" y2="215"/>
+                  <line x1="275" y1="150" x2="230" y2="215"/>
+                  <line x1="365" y1="150" x2="330" y2="215"/>
+                  <line x1="365" y1="150" x2="410" y2="215"/>
+                  <line x1="480" y1="150" x2="495" y2="215"/>
+                </g>
+                <g id="dfsNodesLayer"></g>
+              </svg>
+              <div style="font-size:0.78rem;color:var(--text-muted);margin-top:6px">
+                الأحمر: في المكدس حالياً • الأزرق الفاتح: عقدة انتهى فحصها وحُذفت من المكدس (Pop)
+              </div>
             </div>
-            <div class="step-card">
-              <span class="tag teal">3. تسلق التل العشوائي</span>
-              <h4>Stochastic Hill Climbing</h4>
-              <p>يختار <b>عشوائياً</b> من بين الحركات الصاعدة (الجيران الأفضل)، حيث تزداد احتمالية اختيار الجار كلما زادت درجة انحداره/تحسينه.</p>
+
+            <div class="stack-box-wrap">
+              <div class="stack-title">المكدس Stack (LIFO)</div>
+              <div class="stack-tower" id="dfsStackTower"></div>
+              <div style="font-size:0.75rem;color:var(--text-muted);margin-top:6px">القمة (Top) في الأعلى</div>
             </div>
           </div>
         </div>
 
-        <div class="exam-alert">
-          <h3>ثالثاً: المشكلات والعيوب الثلاث الشهيرة لخوارزمية تسلق التل (ص 72 - 74) - موضع سؤال مؤكد في الاختبار:</h3>
-          <p>تتوقف خوارزمية تسلق التل غالباً وتفشل في الوصول إلى الحل الأمثل الشامل / القمة العالمية (<span dir="ltr">Global Maximum</span>) بسبب وقوعها في إحدى <b>المصائد الثلاث التالية</b> في فضاء الحالات:</p>
-          <ol>
-            <li><b>النهاية العظمى المحلية / القمة المحلية (<span dir="ltr">Local Maximum / Local Optimum</span>):</b>
-              <ul>
-                <li><b>تعريفها:</b> هي قمة (حالة) تكون <b>أفضل (أعلى) من جميع جيرانها المباشرين، ولكنها أقل من القمة العالمية (<span dir="ltr">Global Maximum</span>)</b> الموجودة في مكان آخر من الفضاء.</li>
-                <li><b>ماذا يحدث للخوارزمية؟</b> بمجرد وصول الخوارزمية إلى القمة المحلية، تجد أن جميع الخطوات المجاورة تؤدي للنزول لأسفل (قيم أسوأ)، فتتوقف هناك وتفشل في الوصول للقمة العالمية!</li>
-                <li><b>الحل المقترح:</b> استخدام آلية <b>التراجع (<span dir="ltr">Backtracking</span>)</b> بالاحتفاظ بقائمة للمسارات البديلة والعودة إليها، أو استخدام <b>إعادة التشغيل العشوائي (<span dir="ltr">Random-Restart Hill Climbing</span>)</b>.</li>
-              </ul>
-            </li>
-            <li><b>الهضبة / السطح المستوي (<span dir="ltr">Plateau / Flat Local Maximum</span>):</b>
-              <ul>
-                <li><b>تعريفها:</b> هي منطقة مسطحة واسعة في فضاء البحث <b>تتساوى فيها قيم جميع الحالات المجاورة مع قيمة الحالة الحالية</b> (تكون المشتقة/الميل مساوياً للصفر).</li>
-                <li><b>ماذا يحدث للخوارزمية؟</b> يصبح من المستحيل على الخوارزمية تحديد أفضل اتجاه للتحرك عن طريق المقارنات المحلية فتتيه أو تتوقف.</li>
-                <li><b>الحل المقترح:</b> القفز بخطوة كبيرة جداً (<span dir="ltr">Big Jump</span>) في اتجاه معين على أمل الخروج من منطقة الهضبة إلى منطقة جديدة ذات ميل واضح، أو السماح بعدد محدود من الحركات الجانبية (<span dir="ltr">Sideways Moves</span>).</li>
-              </ul>
-            </li>
-            <li><b>الحافة / التلال الضيقة (<span dir="ltr">Ridge</span>):</b>
-              <ul>
-                <li><b>تعريفها:</b> هي منطقة خاصة تكون أعلى من المناطق المحيطة بها ولها ميل صاعد نحو القمة، ولكنها ضيقة ومائلة بزاوية بحيث <b>لا يمكن الوصول إليها أو تسلقها بحركة واحدة في الاتجاهات الأربعة القياسية</b> (شمال، جنوب، شرق، غرب) لأن كل حركة مفردة تقود إلى النزول على جانبي الحافة!</li>
-                <li><b>الحل المقترح:</b> تطبيق <b>قاعدتين أو أكثر معاً (حركة مركبة / قطرية)</b> في خطوة واحدة قبل إجراء اختبار التقييم.</li>
-              </ul>
-            </li>
-          </ol>
-        </div>
-
-        <h3>رابعاً: مقارنة بين خوارزمية تسلق التل وخوارزمية البحث بأولوية الأفضل (ص 74)</h3>
-        <ul>
-          <li>تتشابه خوارزمية <b>تسلق التل (<span dir="ltr">Hill Climbing</span>)</b> مع <b>البحث بأولوية الأفضل (<span dir="ltr">Best-First Search</span>)</b> في أن كلتيهما تستخدمان دالة الاستدلال $h(n)$ لاختيار الحالة الأفضل التالية.</li>
-          <li><b>الفرق الجوهري بينهما:</b>
-            <ul>
-              <li>في <b>تسلق التل:</b> يحتفظ الوكيل بالحالة الحالية فقط وينسى جميع الفروع والبدائل السابقة (لا يحتفظ بقائمة <code dir="ltr">OPEN</code> للعقد غير المختارة)، لذا لا يمكنه التراجع إذا وصل لطريق مسدود أو قمة محلية، ولكنه لا يستهلك ذاكرة!</li>
-              <li>في <b>البحث بأولوية الأفضل:</b> يحتفظ الوكيل بجميع العقد المكتشفة غير الموسعة في القائمة المفتوحة (<code dir="ltr">OPEN List</code>)، فإذا وصل لطريق مسدود يستطيع سحب أفضل عقدة بديلة من <code dir="ltr">OPEN</code> ومواصلة البحث، مما يجعله أكثر اكتمالاً ولكنه يستهلك ذاكرة أكبر.</li>
+        <h4 class="sec-heading">ثالثاً: المقارنة الجوهرية بين البحث بأولوية العمق (DFS) والبحث بأولوية الاتساع (BFS) — صفحة 65</h4>
+        <div class="two-col-cards">
+          <div class="sub-card">
+            <h5 class="sub-card-title">خوارزمية البحث بأولوية العمق (DFS)</h5>
+            <ul class="study-list" style="margin-bottom:0">
+              <li>يتم التحرك والتنقل في شجرة البحث <strong>بأولوية العمق</strong> في الشجرة.</li>
+              <li>تكون فعالة عندما تكون شجرة البحث <strong>ضيقة (المستويات كثيرة) وعميقة</strong>.</li>
+              <li>تستخدم هيكلة البيانات <strong>المكدس (Stack)</strong>.</li>
+              <li>يتم <strong>فحص عقد الأبناء أولاً</strong> قبل الانتقال إلى الأشقاء في المستوى.</li>
             </ul>
+          </div>
+          <div class="sub-card">
+            <h5 class="sub-card-title">خوارزمية البحث بأولوية الاتساع (BFS)</h5>
+            <ul class="study-list" style="margin-bottom:0">
+              <li>يتم التحرك والتنقل في شجرة البحث <strong>بأولوية المستوى</strong> في الشجرة.</li>
+              <li>تكون فعالة عندما تكون شجرة البحث <strong>واسعة (مستويات قليلة) وليست عميقة</strong>.</li>
+              <li>تستخدم هيكلة البيانات <strong>الطابور (Queue)</strong>.</li>
+              <li>يتم <strong>فحص عقد الأشقاء في المستوى أولاً</strong> قبل الأفرع أو الأبناء.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- الوحدة الثانية -->
+    <div class="accordion-item">
+      <button class="accordion-header" onclick="toggleAccordion(this)">
+        <span class="acc-arrow">◄</span>
+        <span>2) الوحدة الثانية: خوارزميات البحث المستنير وخوارزمية البحث بأولوية الأفضل (Best First Search)</span>
+      </button>
+      <div class="accordion-body">
+        <h4 class="sec-heading">أولاً: مفهوم خوارزميات البحث المستنير (Informed Search Algorithms)</h4>
+        <div class="info-box">
+          تستخدم <strong>خوارزميات البحث المستنير (Informed Search Algorithms)</strong> معلومات ودالات استدلالية (<strong>Heuristic</strong>) لتقود البحث في شجرة البحث؛ وبالتالي تستخدم هذه الخوارزميات معلومات حول المشكلة وشجرة البحث لقيادة وتوجيه عملية البحث نحو الهدف.
+        </div>
+        <ul class="study-list">
+          <li><span class="hl-term">أبرز خوارزميات البحث المستنير المذكورة في الملزمة (صفحة 66):</span>
+            <ol>
+              <li>خوارزمية البحث بأولوية الأفضل (<span class="code-badge">Best First Search Algorithm</span>).</li>
+              <li>خوارزمية البحث تسلق التل (<span class="code-badge">Hill Climbing Algorithm</span>) <span class="exam-tag">سؤال في بنك الأسئلة</span></li>
+              <li>خوارزمية البحث ديكسترا (<span class="code-badge">Dijkstra Algorithm</span>).</li>
+            </ol>
           </li>
         </ul>
-      </div>
-    </details>
-  </section>
 
-  <!-- ================= التبويب الثاني: جداول المقارنات والتتبع ================= -->
-  <section id="tables" class="panel">
-    <div class="card">
-      <h2>1. جدول المقارنة الشامل بين الخوارزميات الأربع (BFS vs DFS vs Best-First vs Hill Climbing)</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>وجه المقارنة</th>
-            <th>البحث بالعرض أولاً (BFS)</th>
-            <th>البحث بالعمق أولاً (DFS)</th>
-            <th>البحث بأولوية الأفضل (Best-First)</th>
-            <th>تسلق التل (Hill Climbing)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><b>تصنيف البحث</b></td>
-            <td>غير موجه (أعمى)</td>
-            <td>غير موجه (أعمى)</td>
-            <td>موجه (استدلالي <span dir="ltr">Heuristic</span>)</td>
-            <td>بحث محلي استدلالي (<span dir="ltr">Local Search</span>)</td>
-          </tr>
-          <tr>
-            <td><b>هيكل البيانات</b></td>
-            <td>طابور <b dir="ltr">FIFO Queue</b></td>
-            <td>مكدس <b dir="ltr">LIFO Stack</b></td>
-            <td>طابور أولوية <b dir="ltr">Priority Queue</b> (<code dir="ltr">OPEN</code> & <code dir="ltr">CLOSED</code>)</td>
-            <td>لا يستخدم طابوراً (يحفظ <b>الحالة الحالية فقط</b>)</td>
-          </tr>
-          <tr>
-            <td><b>آلية اختيار العقدة</b></td>
-            <td>الأقدم / الأقل عمقاً (مستوى بمستوى)</td>
-            <td>الأعمق في الفرع الحالي ثم التراجع (<span dir="ltr">Backtracking</span>)</td>
-            <td>العقدة صاحبة أفضل (أقل) قيمة لـ $h(n)$ في كل <code dir="ltr">OPEN</code></td>
-            <td>الجار المباشر الأفضل من الحالة الحالية فقط</td>
-          </tr>
-          <tr>
-            <td><b>الاكتمال والأمثلية</b></td>
-            <td><b>مكتمل وأمثلي</b> (عند تساوي تكاليف الخطوات)</td>
-            <td><b>غير مكتمل</b> (في اللانهائي) و<b>غير أمثلي</b></td>
-            <td><b>غير أمثلي</b> (يتجاهل $g(n)$)، ومكتمل في الفضاء المحدود مع <code dir="ltr">CLOSED</code></td>
-            <td><b>غير مكتمل وغير أمثلي</b> (يعلق في القمم المحلية والهضاب)</td>
-          </tr>
-          <tr>
-            <td><b>استهلاك الذاكرة</b></td>
-            <td>أسي ضخم جداً <b dir="ltr">O(bᵈ)</b></td>
-            <td>خطي منخفض جداً <b dir="ltr">O(b · m)</b></td>
-            <td>أسي في أسوأ حالة <b dir="ltr">O(bᵐ)</b> (يحفظ كل عقد <code dir="ltr">OPEN</code>)</td>
-            <td>ثابت ومعدوم تقريباً <b dir="ltr">O(1)</b> (لا يحفظ الشجرة)</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+        <h4 class="sec-heading">ثانياً: خوارزمية البحث بأولوية الأفضل (Best First Search Algorithm - BFS)</h4>
+        <ul class="study-list">
+          <li><span class="hl-term">آلية العمل:</span> تعالج عقدة واحدة في شجرة البحث كل مرة، <strong>وتتحرك من عقدة إلى عقدة بفحص دالة الاستدلال (أقصر مسافة أو أقل تكلفة) للانتقال إلى العقدة التالية</strong> <span class="exam-tag">سؤال في بنك الأسئلة</span></li>
+          <li><span class="hl-term">هيكلة البيانات المستخدمة:</span> تستخدم خوارزمية البحث بأولوية الأفضل هيكلة البيانات <strong>الطابور بالأولوية / الطابور بخاصية الأولوية (Priority Queue)</strong> <span class="exam-tag">سؤال في بنك الأسئلة</span></li>
+          <li><span class="hl-term">ملاحظة هامة جداً عند الإضافة للطابور بالأولوية:</span> عند حذف العقدة الحالية من الطابور وإضافة أفرعها (أبنائها)، <strong>ننتبه لترتيب جميع العقد في الطابور بحيث تكون العقدة الأقل تكلفة (الأفضل) في المقدمة أولاً ثم التي تليها تصاعدياً</strong>.</li>
+        </ul>
 
-    <div class="card">
-      <h2>2. جدول تتبع خوارزمية البحث بالعمق أولاً (DFS Trace Table) خطوة بخطوة (ص 61 - 63)</h2>
-      <p class="muted">تتبع الرسم البياني: <code dir="ltr">A:['B','C'], B:['D','E'], C:['F'], D:[], E:['F'], F:[]</code> بدءاً من الجذر <b dir="ltr">A</b>:</p>
-      <table>
-        <thead>
-          <tr>
-            <th>الخطوة</th>
-            <th>العقدة الحالية المزارة</th>
-            <th>الأبناء غير المزارين</th>
-            <th>الإجراء المتخذ في DFS (التغلغل والتراجع Backtracking)</th>
-            <th>قائمة العقد المزارة <code dir="ltr">Visited</code> حتى الآن</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><b>الخطوة 1</b></td>
-            <td><b dir="ltr">A</b> (الجذر)</td>
-            <td><b dir="ltr">B, C</b></td>
-            <td>نزور <b dir="ltr">A</b> ونتغلغل فوراً في أول ابن أيسر له وهو <b dir="ltr">B</b>.</td>
-            <td dir="ltr"><code>[A]</code></td>
-          </tr>
-          <tr>
-            <td><b>الخطوة 2</b></td>
-            <td><b dir="ltr">B</b></td>
-            <td><b dir="ltr">D, E</b></td>
-            <td>نزور <b dir="ltr">B</b> ونتغلغل أعمق في أول ابن له وهو <b dir="ltr">D</b> (نؤجل C و E).</td>
-            <td dir="ltr"><code>[A, B]</code></td>
-          </tr>
-          <tr>
-            <td><b>الخطوة 3</b></td>
-            <td><b dir="ltr">D</b> (ورقة)</td>
-            <td>لا يوجد <code dir="ltr">[]</code></td>
-            <td>نزور <b dir="ltr">D</b>؛ ولأنه ورقة لا أبناء لها نتراجع (<span dir="ltr">Backtrack</span>) إلى <b dir="ltr">B</b> ونأخذ ابنه التالي <b dir="ltr">E</b>.</td>
-            <td dir="ltr"><code>[A, B, D]</code></td>
-          </tr>
-          <tr>
-            <td><b>الخطوة 4</b></td>
-            <td><b dir="ltr">E</b></td>
-            <td><b dir="ltr">F</b></td>
-            <td>نزور <b dir="ltr">E</b> ونتغلغل في ابنه الوحيد <b dir="ltr">F</b>.</td>
-            <td dir="ltr"><code>[A, B, D, E]</code></td>
-          </tr>
-          <tr>
-            <td><b>الخطوة 5</b></td>
-            <td><b dir="ltr">F</b> (ورقة)</td>
-            <td>لا يوجد <code dir="ltr">[]</code></td>
-            <td>نزور <b dir="ltr">F</b>؛ ولانتهاء فرع B بالكامل نتراجع إلى الجذر <b dir="ltr">A</b> ونأخذ ابنه الأيمن <b dir="ltr">C</b>.</td>
-            <td dir="ltr"><code>[A, B, D, E, F]</code></td>
-          </tr>
-          <tr>
-            <td><b>الخطوة 6</b></td>
-            <td><b dir="ltr">C</b></td>
-            <td>(<span dir="ltr">F</span> مزارة مسبقاً)</td>
-            <td>نزور <b dir="ltr">C</b>؛ وبما أن ابنه <span dir="ltr">F</span> تمت زيارته مسبقاً تتوقف الخوارزمية.</td>
-            <td dir="ltr"><b>المخرج النهائي: A B D E F C</b></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+        <h4 class="sec-heading">ثالثاً: محاكي تفاعلي خطوة بخطوة لخوارزمية (Best-First Search) والطابور بالأولوية — مطابق لصفحات 67 إلى 71</h4>
+        <div class="sim-box">
+          <div class="sim-controls">
+            <span class="unit-pill" id="bestStepBadge">الخطوة 1 من 9</span>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="filter-btn" id="bestPrevBtn" onclick="stepBest(-1)">الخطوة السابقة</button>
+              <button class="filter-btn active" id="bestNextBtn" onclick="stepBest(1)">الخطوة التالية</button>
+              <button class="filter-btn" onclick="resetBest()">إعادة الضبط</button>
+            </div>
+          </div>
 
-    <div class="card">
-      <h2>3. جدول تتبع قائمتي OPEN و CLOSED في البحث بأولوية الأفضل (Best-First Search) (ص 68 - 69)</h2>
-      <p class="muted">البحث عن الهدف <b dir="ltr">G(0)</b> انطلاقاً من <b dir="ltr">S</b> حيث تُرتب قائمة <code dir="ltr">OPEN</code> تصاعدياً حسب أقل قيمة لدالة الإرشاد $h(n)$:</p>
-      <table>
-        <thead>
-          <tr>
-            <th>الخطوة</th>
-            <th>العقدة المسحوبة للتوسيع (الأقل في $h$)</th>
-            <th>الأبناء المولدون مع قيم $h(n)$</th>
-            <th>القائمة المفتوحة <code dir="ltr">OPEN List</code> (مرتبة تصاعدياً حسب $h$)</th>
-            <th>القائمة المغلقة <code dir="ltr">CLOSED List</code></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><b>الابتدائية</b></td>
-            <td>— (إدراج البداية <b dir="ltr">S</b>)</td>
-            <td>—</td>
-            <td dir="ltr"><code>[S]</code></td>
-            <td dir="ltr"><code>[]</code></td>
-          </tr>
-          <tr>
-            <td><b>الخطوة 1</b></td>
-            <td><b dir="ltr">S</b></td>
-            <td dir="ltr"><code>A(12), B(4)</code></td>
-            <td dir="ltr"><code>[B(4), A(12)]</code></td>
-            <td dir="ltr"><code>[S]</code></td>
-          </tr>
-          <tr>
-            <td><b>الخطوة 2</b></td>
-            <td><b dir="ltr">B(4)</b> (لأن $4 < 12$)</td>
-            <td dir="ltr"><code>E(8), F(2)</code></td>
-            <td dir="ltr"><code>[F(2), E(8), A(12)]</code></td>
-            <td dir="ltr"><code>[S, B]</code></td>
-          </tr>
-          <tr>
-            <td><b>الخطوة 3</b></td>
-            <td><b dir="ltr">F(2)</b> (لأن $2 < 8 < 12$)</td>
-            <td dir="ltr"><code>I(9), G(0)</code></td>
-            <td dir="ltr"><code>[G(0), E(8), I(9), A(12)]</code></td>
-            <td dir="ltr"><code>[S, B, F]</code></td>
-          </tr>
-          <tr>
-            <td><b>الخطوة 4</b></td>
-            <td><b dir="ltr">G(0)</b> (عقدة الهدف!)</td>
-            <td>توقف بنجاح</td>
-            <td dir="ltr"><code>[E(8), I(9), A(12)]</code></td>
-            <td dir="ltr"><b><code>[S, B, F, G]</code> (المسار: S&rarr;B&rarr;F&rarr;G)</b></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+          <div class="sim-step-desc" id="bestStepText">...</div>
 
-    <div class="card">
-      <h2>4. جدول المشكلات والعيوب الثلاثة لخوارزمية تسلق التل (Hill Climbing) وطرق علاجها (ص 72 - 74)</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>المشكلة / العقبة</th>
-            <th>المصطلح الإنجليزي</th>
-            <th>الوصف الدقيق لما يحدث في فضاء الحالات</th>
-            <th>الحل وطريقة التغلب عليها</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><b>1. النهاية العظمى المحلية<br>(القمة المحلية)</b></td>
-            <td dir="ltr"><b>Local Maximum</b></td>
-            <td>حالة أعلى (أفضل) من جميع جيرانها المباشرين، ولكنها أقل من <b>القمة العالمية (<span dir="ltr">Global Maximum</span>)</b>؛ فتتوقف الخوارزمية عندها لعدم وجود جار مباشر أفضل.</td>
-            <td>استخدام <b>التراجع (<span dir="ltr">Backtracking</span>)</b> إلى عقدة سابقة وتجربة اتجاه بديل، أو إعادة التشغيل العشوائي (<span dir="ltr">Random-Restart</span>).</td>
-          </tr>
-          <tr>
-            <td><b>2. الهضبة / السطح المستوي</b></td>
-            <td dir="ltr"><b>Plateau</b></td>
-            <td>منطقة مسطحة واسعة تتساوى فيها قيم جميع الحالات المجاورة مع الحالة الحالية، فيستحيل تحديد اتجاه التحسن بالمقارنة المحلية.</td>
-            <td><b>القفز بخطوة كبيرة (<span dir="ltr">Big Jump</span>)</b> في اتجاه جديد للخروج من الهضبة إلى منطقة ذات ميل واضح.</td>
-          </tr>
-          <tr>
-            <td><b>3. الحافة / التلال الضيقة</b></td>
-            <td dir="ltr"><b>Ridge</b></td>
-            <td>سلسلة مرتفعة ضيقة ومائلة؛ أي حركة مفردة في الاتجاهات القياسية تقود للنزول لأسفل رغم أن القمة نفسها ترتفع بزاوية مائلة.</td>
-            <td>تطبيق <b>قاعدتين أو أكثر معاً (حركة مركبة)</b> في خطوة واحدة قبل إجراء اختبار التقييم.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
+          <div style="text-align:center;overflow-x:auto">
+            <svg id="bestTreeSvg" viewBox="0 0 560 250" style="width:100%;max-width:550px;background:#ffffff;border-radius:10px;border:1px solid #cbd5e1">
+              <g stroke="#64748b" stroke-width="1.6">
+                <line x1="280" y1="32" x2="155"
+                y2="90"/>
+                <line x1="280" y1="32" x2="280" y2="90"/>
+                <line x1="280" y1="32" x2="405" y2="90"/>
+                <line x1="155" y1="90" x2="105" y2="155"/>
+                <line x1="155" y1="90" x2="195" y2="155"/>
+                <line x1="280" y1="90" x2="280" y2="155"/>
+                <line x1="405" y1="90" x2="365" y2="155"/>
+                <line x1="405" y1="90" x2="455" y2="155"/>
+                <line x1="105" y1="155" x2="65" y2="220"/>
+                <line x1="105" y1="155" x2="140" y2="220"/>
+                <line x1="280" y1="155" x2="245" y2="220"/>
+                <line x1="365" y1="155" x2="325" y2="220"/>
+                <line x1="365" y1="155" x2="395" y2="220"/>
+                <line x1="455" y1="155" x2="475" y2="220"/>
+              </g>
+              <!-- Nodes with Heuristic H(n) -->
+              <g id="bestNodesGroup" font-family="Tajawal, sans-serif" font-weight="700" text-anchor="middle">
+                <g id="bnode-A"><circle cx="280" cy="32" r="18" fill="#e2e8f0" stroke="#475569" stroke-width="2"/><text x="280" y="37" font-size="14" fill="#0f172a">A</text><text x="252" y="28" font-size="12" fill="#dc2626">7</text></g>
+                <g id="bnode-B"><circle cx="155" cy="90" r="18" fill="#e2e8f0" stroke="#475569" stroke-width="2"/><text x="155" y="95" font-size="14" fill="#0f172a">B</text><text x="128" y="86" font-size="12" fill="#dc2626">4</text></g>
+                <g id="bnode-C"><circle cx="280" cy="90" r="18" fill="#e2e8f0" stroke="#475569" stroke-width="2"/><text x="280" y="95" font-size="14" fill="#0f172a">C</text><text x="252" y="86" font-size="12" fill="#dc2626">6</text></g>
+                <g id="bnode-D"><circle cx="405" cy="90" r="18" fill="#e2e8f0" stroke="#475569" stroke-width="2"/><text x="405" y="95" font-size="14" fill="#0f172a">D</text><text x="378" y="86" font-size="12" fill="#dc2626">3</text></g>
+                <g id="bnode-E"><circle cx="105" cy="155" r="18" fill="#e2e8f0" stroke="#475569" stroke-width="2"/><text x="105" y="160" font-size="14" fill="#0f172a">E</text><text x="78" y="151" font-size="12" fill="#dc2626">5</text></g>
+                <g id="bnode-F"><circle cx="195" cy="155" r="18" fill="#e2e8f0" stroke="#475569" stroke-width="2"/><text x="195" y="160" font-size="14" fill="#0f172a">F</text><text x="168" y="151" font-size="12" fill="#dc2626">2</text></g>
+                <g id="bnode-G"><circle cx="280" cy="155" r="18" fill="#e2e8f0" stroke="#475569" stroke-width="2"/><text x="280" y="160" font-size="14" fill="#0f172a">G</text><text x="252" y="151" font-size="12" fill="#dc2626">1</text></g>
+                <g id="bnode-H"><circle cx="365" cy="155" r="18" fill="#e2e8f0" stroke="#475569" stroke-width="2"/><text x="365" y="160" font-size="14" fill="#0f172a">H</text><text x="338" y="151" font-size="12" fill="#dc2626">3</text></g>
+                <g id="bnode-I"><circle cx="455" cy="155" r="18" fill="#e2e8f0" stroke="#475569" stroke-width="2"/><text x="455" y="160" font-size="14" fill="#0f172a">I</text><text x="430" y="151" font-size="12" fill="#dc2626">1</text></g>
+                <g id="bnode-J"><circle cx="65" cy="220" r="18" fill="#e2e8f0" stroke="#475569" stroke-width="2"/><text x="65" y="225" font-size="14" fill="#0f172a">J</text><text x="38" y="216" font-size="12" fill="#dc2626">5</text></g>
+                <g id="bnode-K"><circle cx="140" cy="220" r="18" fill="#e2e8f0" stroke="#475569" stroke-width="2"/><text x="140" y="225" font-size="14" fill="#0f172a">K</text><text x="114" y="216" font-size="12" fill="#dc2626">9</text></g>
+                <g id="bnode-L"><circle cx="245" cy="220" r="18" fill="#e2e8f0" stroke="#475569" stroke-width="2"/><text x="245" y="225" font-size="14" fill="#0f172a">L</text><text x="220" y="216" font-size="12" fill="#dc2626">2</text></g>
+                <g id="bnode-M"><circle cx="325" cy="220" r="18" fill="#e2e8f0" stroke="#475569" stroke-width="2"/><text x="325" y="225" font-size="14" fill="#0f172a">M</text><text x="298" y="216" font-size="12" fill="#dc2626">5</text></g>
+                <g id="bnode-N"><circle cx="395" cy="220" r="18" fill="#e2e8f0" stroke="#475569" stroke-width="2"/><text x="395" y="225" font-size="14" fill="#0f172a">N</text><text x="370" y="216" font-size="12" fill="#dc2626">7</text></g>
+                <g id="bnode-O"><circle cx="475" cy="220" r="18" fill="#e2e8f0" stroke="#475569" stroke-width="2"/><text x="475" y="225" font-size="14" fill="#0f172a">O</text><text x="448" y="216" font-size="12" fill="#dc2626">8</text></g>
+              </g>
+            </svg>
+          </div>
 
-  <!-- ================= التبويب الثالث: المصطلحات ================= -->
-  <section id="terms" class="panel">
-    <div class="card">
-      <h2>قاموس المصطلحات والمفاهيم الشامل للفصل السادس (28 مصطلحاً)</h2>
-      <p class="muted">جميع مصطلحات البحث بالعمق أولاً، البحث الموجه وأولوية الأفضل، وخوارزمية تسلق التل (ص 59 - 74):</p>
-      <div id="termsGrid" class="grid"></div>
-    </div>
-  </section>
-
-  <!-- ================= التبويب الرابع: البطاقات التعليمية ================= -->
-  <section id="cards" class="panel">
-    <div class="card">
-      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
-      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
-      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
-        <div class="term" id="flashTerm"></div>
-        <div class="answer" id="flashAnswer" hidden></div>
-        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
-      </div>
-      <div class="row" style="margin-top:14px">
-        <button class="btn" id="prevCard">السابق</button>
-        <span id="cardCount" class="muted"></span>
-        <button class="btn primary" id="nextCard">التالي</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= التبويب الخامس: الاختبار الشامل ================= -->
-  <section id="quiz" class="panel">
-    <div class="card">
-      <div class="row">
-        <div>
-          <h2>الاختبار الشامل للفصل السادس (25 سؤالاً)</h2>
-          <p class="muted">يغطي خوارزمية DFS وكودها، البحث بأولوية الأفضل وتتبع قوائمه، وخوارزمية تسلق التل ومشكلاتها مع تصحيح فوري.</p>
+          <div style="margin-top:12px">
+            <div style="font-weight:700;font-size:0.9rem;margin-bottom:6px;color:#1e293b">حالة الطابور بالأولوية (Priority Queue) — مرتب تصاعدياً حسب الأقل تكلفة أولاً:</div>
+            <div id="bestQueueBox" style="display:flex;gap:8px;flex-wrap:wrap;min-height:42px;padding:8px;background:#f8fafc;border:1px dashed #94a3b8;border-radius:8px;align-items:center"></div>
+          </div>
+          <div style="margin-top:10px;font-size:0.88rem;color:#334155">
+            <strong>مسار فحص العقد للوصول إلى الهدف (J):</strong>
+            <span dir="ltr" style="font-family:monospace;font-weight:700;color:#1d4ed8">A → D → I → H → B → F → E → J</span>
+          </div>
         </div>
-        <div class="score" id="score">النتيجة: 0 / 25</div>
       </div>
-      <div class="progress"><div id="progressBar"></div></div>
-      <div id="quizArea"></div>
-      <div class="row">
-        <button class="btn" id="resetQuiz">إعادة الاختبار</button>
-        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
-      </div>
-      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
     </div>
-  </section>
-</main>
 
-<footer>الفصل السادس: خوارزميات حل المشكلات عن طريق البحث (DFS، أولوية الأفضل، وتسلق التل) • مراجعة تفاعلية شاملة (صفحات 59 - 74)</footer>
+    <!-- الوحدة الثالثة: خوارزمية البحث تسلق التل Hill Climbing -->
+    <div class="accordion-item">
+      <button class="accordion-header" onclick="toggleAccordion(this)">
+        <span class="acc-arrow">◄</span>
+        <span>3) الوحدة الثالثة: خوارزمية البحث تسلق التل (Hill Climbing Algorithm) وفضاء حالتها</span>
+      </button>
+      <div class="accordion-body">
+        <h4 class="sec-heading">أولاً: مفهوم ومبدأ عمل خوارزمية تسلق التل (Hill Climbing Algorithm)</h4>
+        <ul class="study-list">
+          <li><span class="hl-term">تشبيه الخوارزمية:</span> تشبه شخصاً يتسلق جبلاً ولا يعرف الطريق إلى القمة ولا يوجد دليل للوصول إلى الهدف؛ كل ما يعرفه هو <strong>المكان الحالي والطرق المتاحة حوله فقط</strong>.</li>
+          <li><span class="hl-term">آلية العمل الأساسية:</span> تعمل خوارزمية تسلق التل من خلال <strong>البحث عن الحل الأفضل من الحل الحالي من بين الحلول المجاورة</strong>، وتبحث دائماً عن وضع أفضل من الوضع الحالي <span class="exam-tag">سؤال في بنك الأسئلة</span></li>
+          <li><span class="hl-term">اتجاه الفحص:</span> نبدأ فحص الحلول المجاورة من <strong>اليسار</strong>، ويمكنها إيجاد حلول معقولة لمشاكل معقدة.</li>
+          <li><span class="hl-term">أبرز مشكلة في خوارزمية تسلق التل:</span> <strong>لا يوجد رجوع للخلف (No Backtracking) في مخطط البحث؛ دائماً نتجه للأمام فقط</strong> <span class="exam-tag">سؤال في بنك الأسئلة</span></li>
+        </ul>
+
+        <h4 class="sec-heading">ثانياً: تتبع مثال شجرة البحث في خوارزمية تسلق التل — مطابق لصفحتي 72 و 73</h4>
+        <div class="sim-box" style="background:#f8fafc;padding:14px;border-radius:10px;border:1px solid #e2e8f0">
+          <p style="margin-top:0;font-size:0.92rem;color:#334155">
+            في شجرة البحث الخاصة بتسلق التل (حيث الهدف هو العقدة <strong>N</strong>):
+          </p>
+          <ol class="study-list" style="margin-bottom:10px">
+            <li>نبدأ من الجذر <strong>A (5)</strong>، ونفحص الحلول المجاورة الأبناء: <code>B(6), C(7), D(4)</code> ← نختار الحل المجاور الأفضل (الأقل تكلفة) وهو <strong>D (4)</strong>.</li>
+            <li>من العقدة <strong>D (4)</strong> نفحص الحلول المجاورة من اليسار: نجد العقدة <strong>H (3)</strong> وهي أفضل من الحالة الحالية (4) فننتقل فوراً إلى <strong>H (3)</strong> دون الرجوع للخلف.</li>
+            <li>من العقدة <strong>H (3)</strong> نفحص أبناءها: <code>M(4), N(2)</code> ← ننتقل إلى الأفضل <strong>N (2)</strong> ونصل إلى الهدف.</li>
+          </ol>
+          <div style="padding:10px;background:#eff6ff;border-right:4px solid #2563eb;border-radius:6px;font-weight:700;color:#1e3a8a">
+            المسار إلى الهدف في مثال الملزمة: <span dir="ltr" style="font-family:monospace">A → D → H → N</span>
+          </div>
+        </div>
+
+        <h4 class="sec-heading">ثالثاً: فضاء خوارزمية تسلق التل (Hill Climbing State Space) ومشاكله الأربع — مطابق لصفحة 74</h4>
+        <div style="text-align:center;margin:14px 0;overflow-x:auto">
+          <svg viewBox="0 0 600 230" style="width:100%;max-width:580px;background:#ffffff;border:1px solid #cbd5e1;border-radius:10px">
+            <!-- Axes -->
+            <line x1="45" y1="200" x2="575" y2="200" stroke="#334155" stroke-width="2"/>
+            <line x1="45" y1="200" x2="45" y2="20" stroke="#334155" stroke-width="2"/>
+            <text x="310" y="222" font-family="Tajawal,sans-serif" font-size="13" font-weight="700" fill="#334155" text-anchor="middle">فضاء الحالة (State Space)</text>
+            <text x="18" y="110" font-family="Tajawal,sans-serif" font-size="12" font-weight="700" fill="#334155" text-anchor="middle" transform="rotate(-90 18,110)">دالة الهدف (Objective Function)</text>
+            <!-- Curve: Flat Local -> Local Max -> Global Max -> Shoulder -->
+            <path d="M 55 160 L 145 160 Q 170 160 190 130 Q 220 85 245 125 Q 265 155 295 100 Q 335 20 370 95 Q 400 150 430 125 L 505 125 Q 535 125 560 80" fill="none" stroke="#2563eb" stroke-width="3.5"/>
+            <!-- Points & Labels -->
+            <circle cx="100" cy="160" r="5" fill="#dc2626"/>
+            <text x="100" y="145" font-family="Tajawal,sans-serif" font-size="12" font-weight="700" fill="#dc2626" text-anchor="middle">Flat Local Max</text>
+            <circle cx="220" cy="104" r="6" fill="#f59e0b"/>
+            <text x="220" y="88" font-family="Tajawal,sans-serif" font-size="12" font-weight="700" fill="#b45309" text-anchor="middle">Local Maximum</text>
+            <circle cx="335" cy="56" r="7" fill="#16a34a"/>
+            <text x="335" y="40" font-family="Tajawal,sans-serif" font-size="13" font-weight="700" fill="#15803d" text-anchor="middle">Global Maximum (القمة)</text>
+            <circle cx="470" cy="125" r="5" fill="#7c3aed"/>
+            <text x="470" y="110" font-family="Tajawal,sans-serif" font-size="12" font-weight="700" fill="#6d28d9" text-anchor="middle">Shoulder (الكتف)</text>
+          </svg>
+        </div>
+
+        <ul class="study-list">
+          <li><span class="hl-term">1. القمة العالمية (Global Maximum):</span> <strong>أفضل حل (القمة)</strong> في فضاء البحث بالكامل <span class="exam-tag">سؤال في بنك الأسئلة</span></li>
+          <li><span class="hl-term">2. القمة المحلية (Local Maximum):</span> أعلى نقطة مقارنةً بالنقاط المجاورة لها فقط، <strong>ولكنها ليست الحل الأفضل</strong> (تعد مشكلة لأن الخوارزمية تتوقف عندها لعدم وجود جار أعلى).</li>
+          <li><span class="hl-term">3. القمة المحلية المسطحة (Flat Local Maximum):</span> منطقة تكون فيها <strong>كل الحلول المجاورة متساوية ولا يوجد حل أفضل</strong> (تعد مشكلة).</li>
+          <li><span class="hl-term">4. الكتف (Shoulder):</span> منطقة تتساوى فيها الحلول المجاورة (أرض مسطحة)، <strong>ولكن بنهايتها يمكن إيجاد حل أفضل أو حل أسوأ</strong>.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- التبويب الثاني: جداول المقارنات والملخصات (4) -->
+  <div id="tab-tables" class="tab-content" style="display:none">
+    <div class="card-box">
+      <h3 class="sec-heading" style="margin-top:0">1) جدول المقارنة الرسمي بين البحث بأولوية العمق (DFS) والبحث بأولوية الاتساع (BFS) — ص 65</h3>
+      <div class="table-wrap">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th>وجه المقارنة</th>
+              <th>خوارزمية البحث بأولوية العمق (DFS)</th>
+              <th>خوارزمية البحث بأولوية الاتساع (BFS)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>نوع الاستراتيجية</strong></td>
+              <td>بحث أعمى (Uninformed Search) — تتطلب تعريف المشكلة فقط</td>
+              <td>بحث أعمى (Uninformed Search) — تتطلب تعريف المشكلة فقط</td>
+            </tr>
+            <tr>
+              <td><strong>أولوية التحرك والتنقل</strong></td>
+              <td>تتحرك بأولوية <strong>العمق</strong> (تفحص عقد الأبناء أولاً قبل الانتقال إلى الأشقاء)</td>
+              <td>تتحرك بأولوية <strong>المستوى</strong> (تفحص عقد الأشقاء في المستوى أولاً قبل الأبناء)</td>
+            </tr>
+            <tr>
+              <td><strong>هيكلة البيانات المستخدمة</strong></td>
+              <td>المكدس <strong>(Stack - LIFO)</strong></td>
+              <td>الطابور <strong>(Queue - FIFO)</strong></td>
+            </tr>
+            <tr>
+              <td><strong>متى تكون أكثر فعالية؟</strong></td>
+              <td>عندما تكون شجرة البحث <strong>ضيقة (المستويات كثيرة وعميقة)</strong></td>
+              <td>عندما تكون شجرة البحث <strong>واسعة (مستويات قليلة) وليست عميقة</strong></td>
+            </tr>
+            <tr>
+              <td><strong>التعامل مع العقدة الورقة (Leaf)</strong></td>
+              <td>تحذف من المكدس وتعود (Backtrack) إلى العقدة السابقة</td>
+              <td>تحذف من الطابور وتكمل فحص باقي عقد المستوى الحالي</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card-box">
+      <h3 class="sec-heading" style="margin-top:0">2) مقارنة شاملة لخوارزميات الفصل السادس (DFS vs Best-First vs Hill Climbing)</h3>
+      <div class="table-wrap">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th>المعيار</th>
+              <th>البحث بأولوية العمق (DFS)</th>
+              <th>البحث بأولوية الأفضل (Best-First)</th>
+              <th>البحث بتسلق التل (Hill Climbing)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>تصنيف الخوارزمية</strong></td>
+              <td>بحث أعمى (Uninformed)</td>
+              <td>بحث مستنير (Informed)</td>
+              <td>بحث مستنير (Informed)</td>
+            </tr>
+            <tr>
+              <td><strong>الاعتماد على دالة استدلال (Heuristic)</strong></td>
+              <td>لا تستخدم دالة استدلال</td>
+              <td>نعم، تختار العقدة ذات أقصر مسافة أو أقل تكلفة في الطابور</td>
+              <td>نعم، تختار الحل الأفضل من الحل الحالي من بين الحلول المجاورة</td>
+            </tr>
+            <tr>
+              <td><strong>هيكلة البيانات / الذاكرة</strong></td>
+              <td>المكدس (Stack)</td>
+              <td>الطابور بالأولوية (Priority Queue)</td>
+              <td>لا تحتفظ بشجرة البحث ولا ترجع للخلف (تتذكر الوضع الحالي فقط)</td>
+            </tr>
+            <tr>
+              <td><strong>الرجوع للخلف (Backtracking)</strong></td>
+              <td>نعم، تعود للعقدة السابقة عند الوصول لعقدة ورقية</td>
+              <td>نعم، تحتفظ بجميع العقد المكتشفة مرتبة في الطابور بالأولوية</td>
+              <td><strong>لا يوجد رجوع للخلف أبداً</strong> (دائماً تتجه للأمام)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card-box">
+      <h3 class="sec-heading" style="margin-top:0">3) جدول مناطق ونقاط فضاء خوارزمية تسلق التل (Hill Climbing Space) — ص 74</h3>
+      <div class="table-wrap">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th>المصطلح الإنجليزي</th>
+              <th>المصطلح العربي</th>
+              <th>التعريف الدقيق في الملزمة</th>
+              <th>الحالة في البحث</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Global Maximum</strong></td>
+              <td>القمة العالمية</td>
+              <td>أعلى قمة في فضاء الحالة بالكامل</td>
+              <td><strong>أفضل حل (الهدف الأمثل)</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Local Maximum</strong></td>
+              <td>القمة المحلية</td>
+              <td>أعلى نقطة مقارنة بالنقاط المجاورة لها فقط</td>
+              <td>مشكلة — ليست الحل الأفضل وتتوقف عندها الخوارزمية</td>
+            </tr>
+            <tr>
+              <td><strong>Flat Local Maximum</strong></td>
+              <td>القمة المحلية المسطحة</td>
+              <td>منطقة تكون فيها كل الحلول المجاورة متساوية</td>
+              <td>مشكلة — لا يوجد حل أفضل مجاور للتحرك إليه</td>
+            </tr>
+            <tr>
+              <td><strong>Shoulder</strong></td>
+              <td>الكتف</td>
+              <td>أرض مسطحة تتساوى فيها الحلول المجاورة</td>
+              <td>بنهايتها يمكن إيجاد حل أفضل أو حل أسوأ</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card-box">
+      <h3 class="sec-heading" style="margin-top:0">4) ملخص أسئلة بنك الأسئلة الرسمية للفصل السادس (الـ 9 أسئلة المعتمدة)</h3>
+      <div class="table-wrap">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th>الوحدة</th>
+              <th>السؤال في بنك الأسئلة</th>
+              <th>الإجابة المعتمدة</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>الوحدة 1</strong></td>
+              <td>خوارزمية البحث بأولوية العمق (DFS) تعتبر:</td>
+              <td>من خوارزميات البحث الأعمى</td>
+            </tr>
+            <tr>
+              <td><strong>الوحدة 1</strong></td>
+              <td>خوارزمية البحث بأولوية العمق (DFS) تعتمد على هيكلة البيانات:</td>
+              <td>المكدس (Stack)</td>
+            </tr>
+            <tr>
+              <td><strong>الوحدة 1</strong></td>
+              <td>في خوارزمية البحث بأولوية العمق (DFS) كيف يكون التحرك؟</td>
+              <td>الأولوية بالتحرك بالعمق إلى الأبناء أولاً</td>
+            </tr>
+            <tr>
+              <td><strong>الوحدة 2</strong></td>
+              <td>خوارزمية البحث تسلق التل (Hill Climbing) تعتبر:</td>
+              <td>من خوارزميات البحث المستنير</td>
+            </tr>
+            <tr>
+              <td><strong>الوحدة 2</strong></td>
+              <td>خوارزمية البحث بأولوية الأفضل (Best First Search) تستخدم:</td>
+              <td>هيكل البيانات الطابور بخاصية الأولوية (Priority Queue)</td>
+            </tr>
+            <tr>
+              <td><strong>الوحدة 2</strong></td>
+              <td>آلية عمل خوارزمية البحث بأولوية الأفضل (Best First Search):</td>
+              <td>تتحرك من عقدة إلى عقدة بفحص دالة الاستدلال أقصر مسافة أو تكلفة للانتقال للعقدة التالية</td>
+            </tr>
+            <tr>
+              <td><strong>الوحدة 3</strong></td>
+              <td>مبدأ عمل خوارزمية البحث تسلق التل (Hill Climbing):</td>
+              <td>البحث عن الحل الأفضل من الحل الحالي من الحلول المجاورة</td>
+            </tr>
+            <tr>
+              <td><strong>الوحدة 3</strong></td>
+              <td>من مشاكل خوارزمية البحث تسلق التل (Hill Climbing):</td>
+              <td>لا يوجد رجوع للخلف في مخطط البحث</td>
+            </tr>
+            <tr>
+              <td><strong>الوحدة 3</strong></td>
+              <td>في فضاء خوارزمية تسلق التل (Hill Climbing) ما العبارة الصحيحة؟</td>
+              <td>Global max: أفضل حل القمة</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- التبويب الثالث: المصطلحات والمفاهيم (22) -->
+  <div id="tab-terms" class="tab-content" style="display:none">
+    <div class="card-box">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+        <h3 class="sec-heading" style="margin:0">قاموس مصطلحات ومفاهيم الفصل السادس (22 مصطلحاً)</h3>
+        <input type="text" id="termSearchInput" oninput="filterTerms()" placeholder="ابحثي عن مصطلح بالعربي أو الإنجليزي..." style="padding:8px 12px;border:1px solid #cbd5e1;border-radius:8px;min-width:240px;font-family:inherit">
+      </div>
+      <div id="termsGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px"></div>
+    </div>
+  </div>
+
+  <!-- التبويب الرابع: البطاقات التعليمية (22) -->
+  <div id="tab-cards" class="tab-content" style="display:none">
+    <div class="card-box" style="text-align:center">
+      <h3 class="sec-heading" style="margin-top:0">البطاقات التعليمية التفاعلية — اضغطي على البطاقة لقلبها</h3>
+      <div style="margin-bottom:10px;font-weight:700;color:#475569" id="fcCounter">بطاقة 1 من 22</div>
+      <div id="flashcardBox" onclick="flipCard()" style="max-width:520px;min-height:210px;margin:0 auto 16px;padding:24px;border-radius:14px;background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#ffffff;display:flex;flex-direction:column;justify-content:center;align-items:center;cursor:pointer;box-shadow:0 6px 18px rgba(37,99,235,0.2);transition:transform 0.2s">
+        <div id="fcSideLabel" style="font-size:0.8rem;opacity:0.85;margin-bottom:8px;background:rgba(255,255,255,0.18);padding:3px 10px;border-radius:99px">المصطلح / المفهوم</div>
+        <div id="fcMainText" style="font-size:1.2rem;font-weight:700;line-height:1.6"></div>
+        <div style="font-size:0.78rem;opacity:0.75;margin-top:14px">اضغطي هنا لعرض التعريف والشرح</div>
+      </div>
+      <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap">
+        <button class="filter-btn" onclick="prevCard()">السابق</button>
+        <button class="filter-btn active" onclick="flipCard()">قلب البطاقة</button>
+        <button class="filter-btn" onclick="nextCard()">التالي</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- التبويب الخامس: الاختبار الشامل (20) -->
+  <div id="tab-quiz" class="tab-content" style="display:none">
+    <div class="card-box">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+        <div>
+          <h3 class="sec-heading" style="margin:0">الاختبار التفاعلي الشامل للفصل السادس (20 سؤالاً)</h3>
+          <p style="margin:4px 0 0;font-size:0.88rem;color:#64748b">يشمل جميع أسئلة بنك الأسئلة والواجبات للفصل السادس + أسئلة تدريبية شاملة مع تفسير كل خيار.</p>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <span id="quizScoreBadge" class="unit-pill" style="background:#dcfce7;color:#166534">النتيجة: 0 / 20</span>
+          <button class="filter-btn" onclick="filterQuiz('all')" id="qFilterAll">الكل (20)</button>
+          <button class="filter-btn" onclick="filterQuiz('bank')" id="qFilterBank">أسئلة البنك الرسمية (9)</button>
+          <button class="filter-btn" onclick="filterQuiz('wrong')" id="qFilterWrong">أخطائي</button>
+          <button class="filter-btn" onclick="resetQuiz()">إعادة الاختبار</button>
+        </div>
+      </div>
+      <div id="quizContainer"></div>
+    </div>
+  </div>
 
 <script>
-const terms = [
-  ["Depth-First Search (DFS)", "البحث بالعمق أولاً: خوارزمية بحث غير موجه توسع دائماً أعمق عقدة في الحافة الحالية باستخدام مكدس LIFO أو الاستدعاء الذاتي."],
-  ["Backtracking (التراجع للخلف)", "العملية التي تقوم بها خوارزمية DFS عندما تصل إلى عقدة ورقية لا أبناء لها، فتعود لأقرب عقدة أب لديها فروع لم تُستكشف بعد."],
-  ["LIFO Stack (مكدس آخراً يدخل أولاً يخرج)", "هيكل البيانات الأساسي لخوارزمية DFS؛ حيث تُسحب آخر عقدة أُضيفت لقمة المكدس لتوسيعها أولاً."],
-  ["DFS Time Complexity O(b^m)", "التعقيد الزمني لـ DFS أسي بدلالة أقصى عمق للشجرة m، ويكون بطيئاً جداً إذا كان m أكبر بكثير من عمق الحل d."],
-  ["DFS Space Complexity O(b·m)", "التعقيد المكاني لـ DFS خطي وصغير جداً؛ وهي الميزة الكبرى لـ DFS مقارنة بالذاكرة الأسية لـ BFS."],
-  ["Recursion in Python DFS", "الاستدعاء الذاتي للدالة dfs(visited, graph, neighbour) داخل حلقة for، وهو الذي يحقق التغلغل بالعمق في بايثون."],
-  ["Depth-Limited Search (DLS)", "البحث بالعمق المحدود: يضع حداً أقصى مسبقاً للعمق (l) لمنع DFS من السقوط في مسارات لا نهائية."],
-  ["Iterative Deepening Search (IDS)", "البحث بالتعميق التكراري: يكرر DLS بزيادة حد العمق تدريجياً (0, 1, 2..) ليجمع بين أمثلية BFS وذاكرة DFS الخطية O(b·d)."],
-  ["Informed / Heuristic Search", "البحث الموجه (الاستدلالي / الإرشادي): يستخدم معلومات إضافية ودالة إرشاد h(n) لتوجيه البحث نحو الهدف بكفاءة."],
-  ["Heuristic Function h(n)", "دالة الاستدلال / الإرشاد: تقدر تكلفة أرخص مسار من العقدة الحالية n إلى عقدة الهدف، وتساوي صفراً عند الهدف h(Goal) = 0."],
-  ["Evaluation Function f(n)", "دالة التقييم: الدالة التي تحدد أولوية العقد في القائمة المفتوحة OPEN ليتم اختيار العقدة صاحبة القيمة الأفضل."],
-  ["Best-First Search", "البحث بأولوية الأفضل: خوارزمية بحث موجه تستخدم طابور أولوية وقائمتي OPEN و CLOSED لتوسيع العقدة الأكثر واعدية."],
-  ["Greedy Best-First Search", "البحث الجشع بأولوية الأفضل: يعتمد على دالة الاستدلال وحدها f(n) = h(n) لاختيار العقدة الأقرب ظاهرياً للهدف."],
-  ["OPEN List (القائمة المفتوحة)", "في البحث بأولوية الأفضل: طابور أولوية يحفظ العقد المولدة التي لم تُوسع بعد، مرتبة تصاعدياً حسب قيم h(n)."],
-  ["CLOSED List (القائمة المغلقة)", "في البحث بأولوية الأفضل: قائمة تحفظ العقد التي تم سحبها وتوسيعها بالفعل لمنع تكرار زيارتها والوقوع في حلقات."],
-  ["Euclidean / SLD Distance", "المسافة الإقليدية (مسافة الخط المستقيم): دالة استدلال شائعة لحساب h(n) في خرائط المدن والطرق."],
-  ["Manhattan Distance (مسافة مانهاتن)", "مجموع المسافات الأفقية والعمودية، وتُستخدم كدالة استدلال h(n) في الشبكات وأحجية الأرقام."],
-  ["Local Search (البحث المحلي)", "خوارزميات تعمل على حالة حالية واحدة فقط وتنتقل لجيرانها دون حفظ شجرة البحث في الذاكرة (الذاكرة O(1))."],
-  ["Hill Climbing Search (خوارزمية تسلق التل)", "خوارزمية بحث محلي جشع تتحرك باستمرار في اتجاه الجار الأفضل قيمة وتتوقف عندما لا يوجد جار أفضل من الحالة الحالية."],
-  ["Simple Hill Climbing", "تسلق التل البسيط: يفحص الجيران واحداً تلو الآخر وينتقل فوراً إلى أول جار يجد قيمته أفضل من الحالة الحالية."],
-  ["Steepest-Ascent Hill Climbing", "تسلق التل بأشد انحدار (الأعلى صعوداً): يفحص جميع الجيران أولاً ثم يختار أفضل جار على الإطلاق من بينهم."],
-  ["Stochastic Hill Climbing", "تسلق التل العشوائي: يختار عشوائياً من بين الجيران الأفضل باحتمالية تتناسب مع مقدار التحسن."],
-  ["Global Maximum (القمة العالمية / الشاملة)", "أفضل حالة على الإطلاق في فضاء الحالات بأكمله والتي تسعى خوارزميات البحث للوصول إليها."],
-  ["Local Maximum (القمة المحلية / النهاية العظمى المحلية)", "العيب الأول لتسلق التل: قمة أعلى من جميع جيرانها المباشرين لكنها أقل من القمة العالمية فتعلق الخوارزمية عندها."],
-  ["Plateau (الهضبة / السطح المستوي)", "العيب الثاني لتسلق التل: منطقة مسطحة تتساوى فيها قيم جميع الجيران مع الحالة الحالية فيضيع اتجاه التحسن."],
-  ["Ridge (الحافة / التلال الضيقة)", "العيب الثالث لتسلق التل: منطقة مرتفعة ضيقة ومائلة لا يمكن تسلقها بحركة مفردة في الاتجاهات القياسية."],
-  ["Random-Restart Hill Climbing", "إعادة التشغيل العشوائي لتسلق التل من حالات ابتدائية مختلفة للتغلب على مشكلة الوقوع في القمم المحلية."],
-  ["Simulated Annealing (محاكاة التبريد)", "خوارزمية تسمح ببعض الحركات نحو حالات أسوأ باحتمالية تقل تدريجياً مع انخفاض درجة الحرارة للهروب من القمم المحلية."]
+// التبديل بين التبويبات والوضع الليلي والأكورديون
+function switchTab(tabId, btn) {
+  document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+  const target = document.getElementById(tabId);
+  if (target) target.style.display = 'block';
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+}
+function showTab(tabId, btn) { switchTab(tabId, btn); }
+
+function toggleAcc(header) {
+  const item = header.closest('.accordion-item, .acc-item');
+  if (!item) return;
+  const isOpen = item.classList.toggle('open');
+  const body = item.querySelector('.accordion-body, .acc-body');
+  if (body) body.style.display = isOpen ? 'block' : 'none';
+}
+function toggleAccordion(header) { toggleAcc(header); }
+function toggleAllAccordions(open) {
+  document.querySelectorAll('.accordion-item, .acc-item').forEach(item => {
+    item.classList.toggle('open', open);
+    const body = item.querySelector('.accordion-body, .acc-body');
+    if (body) body.style.display = open ? 'block' : 'none';
+  });
+}
+
+function toggleDark() {
+  document.body.classList.toggle('dark-mode');
+}
+function toggleTheme() { toggleDark(); }
+
+function markComplete(btn) {
+  const b = btn || document.getElementById('completeBtn');
+  if (b) {
+    b.classList.toggle('done');
+    b.textContent = b.classList.contains('done') ? 'مكتمل ✓' : 'اكتمل';
+  }
+}
+function toggleComplete(btn) { markComplete(btn); }
+
+// 1) محاكي خوارزمية البحث بأولوية العمق (DFS) - الوحدة 1
+const dfsSteps = [
+  { visited: ['A'], current: 'A', stack: ['A'], text: 'الخطوة 1: نبدأ من الجذر (A) ونضيفه إلى المكدس (Stack).' },
+  { visited: ['A','B'], current: 'B', stack: ['B','A'], text: 'الخطوة 2: نتوسع بالعمق إلى الابن الأيسر (B) ونضيفه في قمة المكدس فوق A.' },
+  { visited: ['A','B','E'], current: 'E', stack: ['E','B','A'], text: 'الخطوة 3: نواصل النزول بالعمق من B إلى ابنه الأيسر (E) ونضيفه لقمة المكدس.' },
+  { visited: ['A','B','E','J'], current: 'J', stack: ['J','E','B','A'], text: 'الخطوة 4: ننزل بالعمق إلى العقدة الورقية (J). ليس لها أبناء، فتحذف من المكدس ونعود إلى E.' },
+  { visited: ['A','B','E','J','K'], current: 'K', stack: ['K','E','B','A'], text: 'الخطوة 5: من E نفحص ابنها الثاني (K). عقدة ورقية ليس لها أبناء، فتحذف هي و E ونعود إلى B.' },
+  { visited: ['A','B','E','J','K','F'], current: 'F', stack: ['F','B','A'], text: 'الخطوة 6: من B نفحص ابنها الثاني (F). عقدة ورقية ليس لها أبناء، فتحذف F و B ونعود للجذر A.' },
+  { visited: ['A','B','E','J','K','F','C'], current: 'C', stack: ['C','A'], text: 'الخطوة 7: من الجذر A ننتقل للفرع الأوسط (C) ونضيفه للمكدس.' },
+  { visited: ['A','B','E','J','K','F','C','G'], current: 'G', stack: ['G','C','A'], text: 'الخطوة 8: ننزل بالعمق من C إلى ابنه (G) ونضيفه لقمة المكدس.' },
+  { visited: ['A','B','E','J','K','F','C','G','L'], current: 'L', stack: ['L','G','C','A'], text: 'الخطوة 9: ننزل بالعمق من G إلى العقدة الورقية (L)، وبانتهائها نعود لاستكمال الفرع الأيمن D ثم H فالهدف.' }
+];
+let dfsIdx = 0;
+
+function renderDfs() {
+  const s = dfsSteps[dfsIdx];
+  const badge = document.getElementById('dfsStepBadge');
+  if (badge) badge.textContent = `الخطوة ${dfsIdx + 1} من ${dfsSteps.length}`;
+  const desc = document.getElementById('dfsStepText');
+  if (desc) desc.textContent = s.text;
+
+  const svg = document.getElementById('dfsTreeSvg');
+  if (svg) {
+    svg.querySelectorAll('g').forEach(g => {
+      const txt = g.querySelector('text');
+      const cir = g.querySelector('circle');
+      if (txt && cir) {
+        const label = txt.textContent.trim();
+        if (s.current === label) {
+          cir.setAttribute('fill', '#f59e0b');
+          cir.setAttribute('stroke', '#b45309');
+        } else if (s.visited.includes(label)) {
+          cir.setAttribute('fill', '#bfdbfe');
+          cir.setAttribute('stroke', '#1d4ed8');
+        } else {
+          cir.setAttribute('fill', '#e2e8f0');
+          cir.setAttribute('stroke', '#475569');
+        }
+      }
+    });
+  }
+
+  const stackBox = document.getElementById('dfsStackBox') || document.getElementById('dfsQueueBox');
+  if (stackBox) {
+    stackBox.innerHTML = s.stack.map((n, i) =>
+      `<span style="padding:5px 12px;border-radius:6px;font-weight:700;background:${i===0?'#fef3c7':'#e0f2fe'};border:1px solid ${i===0?'#f59e0b':'#0284c7'};color:#0f172a">${n}${i===0?' (قمة المكدس)':''}</span>`
+    ).join('');
+  }
+}
+function stepDfs(dir) {
+  dfsIdx = Math.max(0, Math.min(dfsSteps.length - 1, dfsIdx + dir));
+  renderDfs();
+}
+function resetDfs() {
+  dfsIdx = 0;
+  renderDfs();
+}
+
+// 2) محاكي خوارزمية البحث بأولوية الأفضل (Best-First Search) - الوحدة 2
+const bestSteps = [
+  { visited: [], current: 'A', queue: [{n:'A',h:7}], text: 'الخطوة 1: البدء من الجذر (A) وإضافته إلى الطابور بالأولوية Priority Queue: [A(7)].' },
+  { visited: ['A'], current: 'D', queue: [{n:'D',h:3},{n:'B',h:4},{n:'C',h:6}], text: 'الخطوة 2: معالجة A وحذفها من الطابور، وإضافة أفرعها (B=4, C=6, D=3) مرتبة تصاعدياً حسب الأقل تكلفة أولاً: نأخذ الأفضل D(3).' },
+  { visited: ['A','D'], current: 'I', queue: [{n:'I',h:1},{n:'H',h:3},{n:'B',h:4},{n:'C',h:6}], text: 'الخطوة 3: معالجة D وحذفها من الطابور، وإضافة فرعيها (I=1, H=3) وترتيب الطابور بالأقل تكلفة أولاً: تتصدر I(1).' },
+  { visited: ['A','D','I'], current: 'H', queue: [{n:'H',h:3},{n:'B',h:4},{n:'C',h:6},{n:'O',h:8}], text: 'الخطوة 4: معالجة I وحذفها من الطابور، وإضافة فرعها O(8) في مكانه المناسب حسب التكلفة. الأفضل الآن هو H(3).' },
+  { visited: ['A','D','I','H'], current: 'B', queue: [{n:'B',h:4},{n:'M',h:5},{n:'C',h:6},{n:'N',h:7},{n:'O',h:8}], text: 'الخطوة 5: معالجة H وحذفها من الطابور، وإضافة فرعيها (M=5, N=7) مع إعادة الترتيب. الأفضل الآن في المقدمة هو B(4).' },
+  { visited: ['A','D','I','H','B'], current: 'F', queue: [{n:'F',h:2},{n:'E',h:5},{n:'M',h:5},{n:'C',h:6},{n:'N',h:7},{n:'O',h:8}], text: 'الخطوة 6: معالجة B وحذفها من الطابور، وإضافة فرعيها (F=2, E=5) مرتبة حسب التكلفة. تتصدر F(2).' },
+  { visited: ['A','D','I','H','B','F'], current: 'E', queue: [{n:'E',h:5},{n:'M',h:5},{n:'C',h:6},{n:'N',h:7},{n:'O',h:8}], text: 'الخطوة 7: معالجة F وحذفها من الطابور (ليس لها أفرع فلا يضاف شيء). ننتقل للأفضل في المقدمة وهو E(5).' },
+  { visited: ['A','D','I','H','B','F','E'], current: 'J', queue: [{n:'J',h:5},{n:'M',h:5},{n:'C',h:6},{n:'N',h:7},{n:'O',h:8},{n:'K',h:9}], text: 'الخطوة 8: معالجة E وحذفها من الطابور، وإضافة فرعيها (J=5, K=9) مرتبة. تصبح العقدة الهدف J(5) في مقدمة الطابور!' },
+  { visited: ['A','D','I','H','B','F','E','J'], current: 'J', queue: [{n:'M',h:5},{n:'C',h:6},{n:'N',h:7},{n:'O',h:8},{n:'K',h:9}], text: 'الخطوة 9: معالجة العقدة الهدف (J) وحذفها من الطابور، وبذلك يكتمل مسار الفحص: A → D → I → H → B → F → E → J.' }
+];
+let bestIdx = 0;
+
+function renderBest() {
+  const s = bestSteps[bestIdx];
+  const badge = document.getElementById('bestStepBadge');
+  if (badge) badge.textContent = `الخطوة ${bestIdx + 1} من ${bestSteps.length}`;
+  const desc = document.getElementById('bestStepText');
+  if (desc) desc.textContent = s.text;
+
+  const allNodes = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O'];
+  allNodes.forEach(n => {
+    const g = document.getElementById('bnode-' + n);
+    if (!g) return;
+    const cir = g.querySelector('circle');
+    if (s.current === n) {
+      cir.setAttribute('fill', '#fde68a');
+      cir.setAttribute('stroke', '#d97706');
+      cir.setAttribute('stroke-width', '3');
+    } else if (s.visited.includes(n)) {
+      cir.setAttribute('fill', '#bbf7d0');
+      cir.setAttribute('stroke', '#16a34a');
+      cir.setAttribute('stroke-width', '2');
+    } else {
+      cir.setAttribute('fill', '#e2e8f0');
+      cir.setAttribute('stroke', '#475569');
+      cir.setAttribute('stroke-width', '2');
+    }
+  });
+
+  const qBox = document.getElementById('bestQueueBox');
+  if (qBox) {
+    qBox.innerHTML = s.queue.map((item, idx) =>
+      `<span style="padding:5px 11px;border-radius:6px;font-weight:700;font-size:0.86rem;background:${idx===0?'#fef3c7':'#ffffff'};border:1.5px solid ${idx===0?'#d97706':'#cbd5e1'};color:#0f172a">${item.n} <small style="color:#dc2626">(${item.h})</small></span>`
+    ).join(' <span style="color:#94a3b8">←</span> ');
+  }
+}
+function stepBest(dir) {
+  bestIdx = Math.max(0, Math.min(bestSteps.length - 1, bestIdx + dir));
+  renderBest();
+}
+function resetBest() {
+  bestIdx = 0;
+  renderBest();
+}
+
+// 3) بيانات المصطلحات والبطاقات التعليمية (22 مصطلحاً)
+const termsData = [
+  { term: 'Depth First Search (DFS)', ar: 'خوارزمية البحث بأولوية العمق', def: 'خوارزمية بحث أعمى تبدأ من الجذر وتتوسع عمقاً عبر الأبناء أولاً حتى تصل للعقدة الأعمق، وتستخدم هيكلة البيانات المكدس (Stack).' },
+  { term: 'Breadth First Search (BFS)', ar: 'خوارزمية البحث بأولوية الاتساع', def: 'خوارزمية بحث أعمى تتحرك بأولوية المستوى (تفحص الأشقاء أولاً قبل الأبناء)، وتستخدم هيكلة البيانات الطابور (Queue).' },
+  { term: 'Stack (LIFO)', ar: 'المكدس', def: 'هيكلة البيانات المستخدمة في خوارزمية البحث بأولوية العمق (DFS)، تعمل بمبدأ آخر عنصر يضاف هو أول عنصر يخرج.' },
+  { term: 'Leaf Node', ar: 'العقدة الورقية (النهائية)', def: 'عقدة في نهاية الفرع ليس لها أبناء؛ عند الوصول إليها في DFS تحذف من المكدس ونعود للعقدة السابقة.' },
+  { term: 'Backtracking', ar: 'التراجع / العودة للخلف', def: 'العودة إلى العقدة الأب السابقة عند الوصول إلى عقدة نهائية (ورقة) في خوارزمية DFS، بينما ينعدم في خوارزمية تسلق التل.' },
+  { term: 'Narrow & Deep Tree', ar: 'شجرة بحث ضيقة وعميقة', def: 'نوع شجرة البحث (مستويات كثيرة وعميقة) التي تكون فيها خوارزمية البحث بأولوية العمق (DFS) أكثر فعالية.' },
+  { term: 'Wide & Shallow Tree', ar: 'شجرة بحث واسعة وقليلة العمق', def: 'نوع شجرة البحث (مستويات قليلة) التي تكون فيها خوارزمية البحث بأولوية الاتساع (BFS) أكثر فعالية.' },
+  { term: 'Informed Search Algorithms', ar: 'خوارزميات البحث المستنير', def: 'خوارزميات تستخدم معلومات ودالات استدلالية (Heuristic) حول المشكلة وشجرة البحث لقيادة وتوجيه عملية البحث.' },
+  { term: 'Heuristic Function', ar: 'الدالة الاستدلالية', def: 'دالة تقديرية تقيس أقصر مسافة أو أقل تكلفة للانتقال إلى العقدة التالية أو القرب من الهدف في البحث المستنير.' },
+  { term: 'Best First Search Algorithm', ar: 'خوارزمية البحث بأولوية الأفضل', def: 'خوارزمية بحث مستنير تفحص عقدة واحدة كل مرة وتتحرك بفحص دالة الاستدلال (أقصر مسافة أو أقل تكلفة) باستخدام طابور الأولوية.' },
+  { term: 'Priority Queue', ar: 'الطابور بالأولوية (بخاصية الأولوية)', def: 'هيكلة البيانات المستخدمة في خوارزمية Best-First Search حيث ترتب العقد داخلها بحيث تكون الأقل تكلفة أولاً.' },
+  { term: 'Dijkstra Algorithm', ar: 'خوارزمية ديكسترا', def: 'إحدى خوارزميات البحث المذكورة ضمن قائمة خوارزميات البحث المستنير في الفصل السادس لإيجاد أقصر المسارات.' },
+  { term: 'Hill Climbing Algorithm', ar: 'خوارزمية البحث تسلق التل', def: 'خوارزمية بحث مستنير تبحث دائماً عن الحل الأفضل من الحل الحالي من بين الحلول المجاورة دون الرجوع للخلف.' },
+  { term: 'No Backtracking', ar: 'عدم الرجوع للخلف', def: 'السمة والمشكلة الرئيسية في خوارزمية تسلق التل؛ حيث تتجه دائماً للأمام ولا تحتفظ بتاريخ العقد السابقة للرجوع إليها.' },
+  { term: 'Neighbor Solutions', ar: 'الحلول المجاورة', def: 'العقد المتاحة مباشرة من الحالة الحالية في خوارزمية تسلق التل، ويبدأ فحصها من اليسار لاختيار الأفضل.' },
+  { term: 'Objective Function', ar: 'دالة الهدف', def: 'المحور الرأسي في فضاء خوارزمية تسلق التل الذي يقيس جودة الحالة للوصول إلى القمة.' },
+  { term: 'Global Maximum', ar: 'القمة العالمية', def: 'أعلى قمة في فضاء خوارزمية تسلق التل وتمثل أفضل حل على الإطلاق.' },
+  { term: 'Local Maximum', ar: 'القمة المحلية', def: 'أعلى نقطة مقارنة بالنقاط المجاورة لها فقط ولكنها ليست الحل الأفضل، وتمثل مشكلة لتوقف تسلق التل عندها.' },
+  { term: 'Flat Local Maximum', ar: 'القمة المحلية المسطحة', def: 'منطقة في فضاء تسلق التل تكون فيها كل الحلول المجاورة متساوية ولا يوجد حل أفضل، وتمثل مشكلة.' },
+  { term: 'Shoulder', ar: 'الكتف (أرض مسطحة)', def: 'منطقة تتساوى فيها الحلول المجاورة في فضاء تسلق التل، ولكن بنهايتها يمكن إيجاد حل أفضل أو حل أسوأ.' },
+  { term: 'Current State', ar: 'الحالة الحالية (الوضع الحالي)', def: 'المكان الوحيد الذي تعرفه خوارزمية تسلق التل إلى جانب الطرق المتاحة حوله مباشرة.' },
+  { term: 'Children Before Siblings', ar: 'فحص الأبناء قبل الأشقاء', def: 'قاعدة التحرك الأساسية في خوارزمية البحث بأولوية العمق (DFS) على عكس BFS التي تفحص الأشقاء أولاً.' }
 ];
 
-const cards = [
-  ["ما هي الفكرة الأساسية لخوارزمية البحث بالعمق أولاً (DFS)؟", "توسيع أعمق عقدة في الحافة الحالية لشجرة البحث؛ فتتغلغل عمودياً في فرع واحد حتى تصل إلى عقدة ورقية لا أبناء لها، ثم تتراجع للخلف (Backtracking) لاستكشاف أقرب فرع بديل."],
-  ["ما هو هيكل البيانات الذي تعتمد عليه خوارزمية DFS؟ وما مبدأ عمله؟", "تعتمد على المكدس (Stack) الذي يعمل بمبدأ: آخراً يدخل أولاً يخرج (LIFO - Last-In, First-Out)، أو باستخدام الاستدعاء الذاتي (Recursion)."],
-  ["متى تحدث عملية التراجع للخلف (Backtracking) في خوارزمية DFS؟", "عندما تصل الخوارزمية إلى عقدة ورقية (Leaf Node / طريق مسدود) ليس لها أبناء غير مزارين، فتعود للخلف إلى أقرب عقدة أب لا يزال لديها فروع لم تُستكشف."],
-  ["ما هو تقييم خوارزمية DFS من حيث (الاكتمال) و(الأمثلية)؟", "• الاكتمال: غير مكتملة في الفضاءات اللانهائية أو ذات الحلقات (ومكتملة فقط في الفضاءات المحدودة مع منع التكرار).\n• الأمثلية: غير أمثلية (Not Optimal) لأنها قد تجد هدفاً عميقاً ومكلفاً في الفرع الأيسر قبل فحص هدف أقرب في فرع آخر."],
-  ["ما هو التعقيد الزمني والتعقيد المكاني لخوارزمية DFS؟ وما ميزتها الذهبية؟", "• التعقيد الزمني: O(b^m) حيث m أقصى عمق للشجرة.\n• التعقيد المكاني (الميزة الذهبية لـ DFS): خطي وصغير جداً O(b · m) لأنها تحفظ مساراً واحداً فقط من الجذر للورقة مع إخوة العقد."],
-  ["قارني بين DFS و BFS من حيث استهلاك الذاكرة وأيهما أفضل عندما يكون الهدف قريباً من الجذر؟", "• في الذاكرة: تتفوق DFS بشكل ساحق بذاكرة خطية O(b·m) مقابل ذاكرة أسية ضخمة O(b^d) في BFS.\n• عند قرب الهدف من الجذر: تكون BFS أفضل وأضمن لإيجاد أقصر مسار."],
-  ["في كود DFS بلغة بايثون، كيف يتم التغلغل في العمق برمجياً؟", "عن طريق الاستدعاء الذاتي (Recursion): استدعاء الدالة dfs(visited, graph, neighbour) لنفسها داخل حلقة for على الجيران غير المزارين."],
-  ["في شجرة جذرها A وأبناؤه (B, C)، وأبناء B هم (D, E)، وابن E هو (F)؛ ما ترتيب زيارة العقد بواسطة DFS؟", "تتغلغل في اليسار أولاً:\nA → B → D (تتراجع إلى B) → E → F (تتراجع إلى A) → C.\nالترتيب النهائي: A B D E F C."],
-  ["كيف يعالج كل من البحث بالعمق المحدود (DLS) والتعميق التكراري (IDS) عيوب خوارزمية DFS؟", "• DLS: يضع حداً أقصى للعمق (l) لمنع النزول في مسارات لا نهائية.\n• IDS: يكرر DLS بزيادة حد العمق تدريجياً (0, 1, 2..) فيجمع بين اكتمال وأمثلية BFS وذاكرة DFS الصغيرة O(b·d)."],
-  ["ما الفرق بين البحث غير الموجه (الأعمى) والبحث الموجه (الاستدلالي / الإرشادي)؟", "• البحث الأعمى: لا يمتلك أي معلومات إضافية عن موقع الهدف فيفحص المسارات بشكل أعمى.\n• البحث الموجه (Heuristic Search): يستخدم معرفة إرشادية خاصة بالمشكلة عبر دالة الاستدلال h(n) لتوجيه البحث نحو المسارات الواعدة."],
-  ["ما هو تعريف دالة الاستدلال / الإرشاد h(n)؟ وما قيمتها عند عقدة الهدف؟", "هي دالة تقدر تكلفة أرخص مسار من العقدة الحالية n إلى عقدة الهدف؛ ويجب دائماً أن تكون قيمتها عند عقدة الهدف مساوية للصفر: h(Goal) = 0."],
-  ["كيف تعمل خوارزمية البحث بأولوية الأفضل / الجشع (Greedy Best-First Search)؟", "تعتمد على دالة التقييم f(n) = h(n)؛ فتختار دائماً للتوسيع العقدة التي تبدو الأقرب إلى الهدف (صاحبة أقل قيمة لـ h(n)) من بين جميع العقد الموجودة في القائمة المفتوحة OPEN."],
-  ["ما وظيفة كل من القائمة المفتوحة (OPEN List) والقائمة المغلقة (CLOSED List) في البحث بأولوية الأفضل؟", "• القائمة المفتوحة (OPEN): طابور أولوية يحفظ العقد المولدة التي لم تُوسع بعد، مرتبة تصاعدياً حسب أقل قيمة لـ h(n).\n• القائمة المغلقة (CLOSED): تحفظ العقد التي تم سحبها وتوسيعها بالفعل لمنع التكرار والحلقات."],
-  ["لماذا يُعد البحث الجشع بأولوية الأفضل (Greedy Best-First Search) غير أمثلي (Not Optimal)؟", "لأنه يعتمد فقط على التكلفة التقديرية المتبقية للهدف h(n) ويتجاهل تكلفة المسار الفعلي المقطوع من البداية g(n)، فقد يسلك طريقاً يبدو قريباً للهدف ولكنه ذو تكلفة إجمالية عالية."],
-  ["إذا كانت القائمة المفتوحة تحتوي على العقد: [A(12), B(4), E(8), F(2)]، فأي عقدة ستسحبها خوارزمية Best-First Search لتوسيعها؟", "ستسحب العقدة F(2) لأنها تمتلك أقل قيمة لدالة الاستدلال h(n) = 2 (الأقرب تقديرياً إلى الهدف)."],
-  ["ما هي الفلسفة الأساسية لخوارزميات البحث المحلي (Local Search)؟", "تُستخدم عندما يكون المسار غير مهم والمهم هو الحالة النهائية فقط؛ فتحتفظ بحالة حالية واحدة وتنتقل لجيرانها لتحسين الدالة دون حفظ شجرة البحث في الذاكرة (الذاكرة ثابتة O(1))."],
-  ["كيف تعمل خوارزمية تسلق التل (Hill Climbing)؟ ومتى تتوقف؟", "تبدأ من حالة ابتدائية وتتحرك في كل خطوة نحو جار أفضل من الحالة الحالية (أعلى قيمة أو أقل تكلفة h)، وتتوقف عندما لا يوجد أي جار مباشر أفضل من الحالة الحالية."],
-  ["بماذا تُشبّه خوارزمية تسلق التل (Hill Climbing) لتوضيح سلوكها وقصورها؟", "تُشبّه بمتسلق جبال يحاول الوصول للقمة وسط ضباب كثيف وهو مصاب بفقدان الذاكرة؛ فينظر فقط للخطوة المجاورة له مباشرة ولا يتذكر الأماكن التي زارها سابقاً."],
-  ["ما هي الأنواع الثلاثة لخوارزمية تسلق التل؟", "1) تسلق التل البسيط (Simple Hill Climbing).\n2) تسلق التل بأشد انحدار / الأعلى صعوداً (Steepest-Ascent Hill Climbing).\n3) تسلق التل العشوائي (Stochastic Hill Climbing)."],
-  ["ما الفرق الدقيق بين (تسلق التل البسيط Simple) و(تسلق التل بأشد انحدار Steepest-Ascent)؟", "• تسلق التل البسيط: يفحص الجيران واحداً تلو الآخر وينتقل فوراً إلى (أول جار أفضل) يصادفه.\n• تسلق التل بأشد انحدار: يفحص (جميع الجيران) أولاً ثم يختار (أفضل جار على الإطلاق) من بينهم."],
-  ["ما هي المشكلات والعيوب الثلاث الشهيرة التي قد تعلق فيها خوارزمية تسلق التل قبل الوصول للقمة العالمية؟", "1) النهاية العظمى المحلية / القمة المحلية (Local Maximum).\n2) الهضبة / السطح المستوي (Plateau).\n3) الحافة / التلال الضيقة (Ridge)."],
-  ["ما هي القمة المحلية (Local Maximum) في تسلق التل؟ وكيف يمكن التغلب عليها؟", "• تعريفها: قمة أعلى (أفضل) من جميع جيرانها المباشرين، ولكنها أقل من القمة العالمية (Global Maximum) فتتوقف الخوارزمية عندها.\n• علاجها: استخدام التراجع (Backtracking) أو إعادة التشغيل العشوائي (Random-Restart)."],
-  ["ما هي الهضبة (Plateau) في تسلق التل؟ وكيف يمكن التغلب عليها؟", "• تعريفها: منطقة مسطحة واسعة تتساوى فيها قيم جميع الحالات المجاورة مع الحالة الحالية، فيضيع اتجاه التحسن.\n• علاجها: القفز بخطوة كبيرة (Big Jump) في اتجاه جديد للخروج من الهضبة."],
-  ["ما هي الحافة / التلال الضيقة (Ridge) في تسلق التل؟ وكيف يمكن التغلب عليها؟", "• تعريفها: منطقة مرتفعة ضيقة ومائلة بزاوية بحيث تؤدي أي حركة مفردة في الاتجاهات القياسية إلى النزول لأسفل.\n• علاجها: تطبيق قاعدتين أو أكثر معاً (حركة مركبة/قطرية) في خطوة واحدة قبل التقييم."],
-  ["ما الفرق الجوهري بين خوارزمية (تسلق التل Hill Climbing) وخوارزمية (البحث بأولوية الأفضل Best-First Search)؟", "تسلق التل تحتفظ بالحالة الحالية فقط وتتخلص من جميع البدائل السابقة (ذاكرة O(1) ولا تراجع)، بينما البحث بأولوية الأفضل يحتفظ بجميع العقد المكتشفة غير الموسعة في القائمة المفتوحة OPEN فيمكنه التراجع واستكشاف فروع بديلة."],
-  ["لماذا تُسمى خوارزمية تسلق التل بالبحث المحلي الجشع (Greedy Local Search)؟", "لأنها تلتقط الجار الأفضل المباشر وتتحرك نحوه فوراً دون النظر إلى الأمام أو التخطيط لما وراء الجيران المباشرين."],
-  ["كيف تساعد خوارزمية محاكاة التبريد (Simulated Annealing) في حل مشكلة القمة المحلية في تسلق التل؟", "تسمح بقبول بعض الحركات العشوائية نحو حالات أسوأ باحتمالية تكون مرتفعة في البداية ثم تتناقص تدريجياً مع انخفاض 'درجة الحرارة'، مما يمكنها من الإفلات من القمم المحلية."],
-  ["هل خوارزمية تسلق التل مكتملة وأمثلية؟ ولماذا؟", "غير مكتملة وغير أمثلية؛ لأنها قد تعلق في قمة محلية أو هضبة أو حافة وتفشل في الوصول إلى القمة العالمية (الحل الأمثل)."]
-];
+function renderTerms(list) {
+  const grid = document.getElementById('termsGrid');
+  if (!grid) return;
+  grid.innerHTML = list.map(t => `
+    <div style="padding:14px;border:1px solid #e2e8f0;border-radius:10px;background:#f8fafc">
+      <div style="font-weight:700;color:#1e3a8a;font-size:0.95rem">${t.ar}</div>
+      <div style="font-size:0.82rem;color:#2563eb;font-family:monospace;margin-bottom:6px">${t.term}</div>
+      <div style="font-size:0.88rem;color:#334155;line-height:1.55">${t.def}</div>
+    </div>
+  `).join('');
+}
+function filterTerms() {
+  const q = (document.getElementById('termSearchInput')?.value || '').trim().toLowerCase();
+  const filtered = termsData.filter(t => t.term.toLowerCase().includes(q) || t.ar.includes(q) || t.def.includes(q));
+  renderTerms(filtered);
+}
 
-const questions = [
+// 4) البطاقات التعليمية
+let fcIdx = 0;
+let fcFlipped = false;
+function renderCard() {
+  const item = termsData[fcIdx];
+  const counter = document.getElementById('fcCounter');
+  const label = document.getElementById('fcSideLabel');
+  const main = document.getElementById('fcMainText');
+  if (counter) counter.textContent = `بطاقة ${fcIdx + 1} من ${termsData.length}`;
+  if (!fcFlipped) {
+    if (label) label.textContent = 'المصطلح / المفهوم';
+    if (main) main.innerHTML = `${item.ar}<br><span style="font-size:0.95rem;opacity:0.9;font-family:monospace">${item.term}</span>`;
+  } else {
+    if (label) label.textContent = 'التعريف والشرح في الملزمة';
+    if (main) main.textContent = item.def;
+  }
+}
+function flipCard() { fcFlipped = !fcFlipped; renderCard(); }
+function nextCard() { fcIdx = (fcIdx + 1) % termsData.length; fcFlipped = false; renderCard(); }
+function prevCard() { fcIdx = (fcIdx - 1 + termsData.length) % termsData.length; fcFlipped = false; renderCard(); }
+
+// 5) بنك الأسئلة التفاعلي الشامل للفصل السادس (20 سؤالاً: 9 أسئلة البنك الرسمية + 11 سؤالاً تدريبياً شاملاً)
+const quizData = [
   {
-    q: "كيف تعمل خوارزمية (البحث بالعمق أولاً - Depth-First Search - DFS) عند استكشاف شجرة البحث؟",
-    o: [
-      "تستكشف الشجرة أفقياً مستوى تلو الآخر باستخدام طابور FIFO",
-      "توسع دائماً أعمق عقدة في الفرع الحالي حتى تصل إلى عقدة ورقية لا أبناء لها، ثم تتراجع للخلف (Backtracking) لاستكشاف أقرب فرع بديل",
-      "تختار العقدة الأقرب للهدف باستخدام دالة الاستدلال h(n)",
-      "تحتفظ بالحالة الحالية فقط ولا تتراجع أبداً"
+    id: 1, isBank: true, unit: 'الوحدة 1 (بنك الأسئلة والواجب 2)',
+    q: 'خوارزمية البحث بأولوية العمق (Depth First Search - DFS Algorithm):',
+    options: [
+      'من خوارزميات البحث المستنير.',
+      'من خوارزميات البحث الأعمى.',
+      'من خوارزميات القائمة المترابطة.',
+      'تعتمد على مخطط ثابت.'
     ],
-    a: 1,
-    e: "تتغلغل خوارزمية DFS عمودياً في أعمق عقدة بالفرع الحالي حتى تصل لطريق مسدود (ورقة) ثم تتراجع للخلف (Backtracking) (ص 59)."
+    correct: 1,
+    exp: 'خوارزمية البحث بأولوية العمق (DFS) وخوارزمية البحث بأولوية الاتساع (BFS) هما من خوارزميات البحث الأعمى (Uninformed Search) لأنها تعتمد على تعريف المشكلة فقط دون دالة استدلال.',
+    optExps: [
+      'خطأ: البحث المستنير يشمل Best-First و Hill Climbing و A*.',
+      'صحيح: DFS من خوارزميات البحث الأعمى (Uninformed Search).',
+      'خطأ: القوائم المترابطة هيكل بيانات وليست تصنيفاً لخوارزميات البحث.',
+      'خطأ: تعمل على شجرة البحث باستخدام المكدس وليس مخططاً ثابتاً.'
+    ]
   },
   {
-    q: "أي هيكل بيانات تعتمد عليه خوارزمية البحث بالعمق أولاً (DFS) لإدارة الحافة، وما هو مبدأ عمله؟",
-    o: [
-      "الطابور العادي (FIFO Queue)",
-      "طابور الأولوية حسب دالة الإرشاد",
-      "المكدس (Stack) الذي يعمل بمبدأ آخراً يدخل أولاً يخرج (LIFO - Last-In, First-Out)، أو الاستدعاء الذاتي (Recursion)",
-      "المصفوفة الثنائية الثابتة"
+    id: 2, isBank: true, unit: 'الوحدة 1 (بنك الأسئلة ص 20)',
+    q: 'خوارزمية البحث بأولوية العمق (Depth First Search - DFS Algorithm):',
+    options: [
+      'تعتمد على هيكلة البيانات المصفوفة الأحادية.',
+      'تعتمد على هيكلة البيانات المكدس (Stack).',
+      'تستخدم هيكل البيانات الطابور (Queue).',
+      'لا تستخدم هيكلة بيانات.'
     ],
-    a: 2,
-    e: "تعتمد خوارزمية DFS على المكدس (LIFO Stack) حيث تُسحب آخر عقدة أُضيفت لقمة المكدس لتوسيعها أولاً (ص 60)."
+    correct: 1,
+    exp: 'تستخدم خوارزمية البحث بأولوية العمق (DFS) هيكلة البيانات المكدس (Stack - LIFO) لتتبع العقد والرجوع للعقدة السابقة عند انتهاء الفرع.',
+    optExps: [
+      'خطأ: المصفوفة الأحادية هيكل ثابت لا يستخدم لتتبع DFS.',
+      'صحيح: DFS تعتمد على هيكلة البيانات المكدس (Stack).',
+      'خطأ: الطابور (Queue) يُستخدم في خوارزمية البحث بأولوية الاتساع (BFS).',
+      'خطأ: لا بد لها من استخدام المكدس لحفظ مسار العقد.'
+    ]
   },
   {
-    q: "[مسألة تتبع DFS]: في شجرة بحث جذرها (A) يتفرع إلى (B, C) من اليسار لليمين، ويتفرع (B) إلى (D, E)، ويتفرع (C) إلى (F, G)؛ ما هو الترتيب الصحيح لزيارة العقد باستخدام خوارزمية البحث بالعمق أولاً (DFS)؟",
-    o: [
-      "A → B → C → D → E → F → G",
-      "D → E → B → F → G → C → A",
-      "A → C → G → F → B → E → D",
-      "A → B → D → E → C → F → G"
+    id: 3, isBank: true, unit: 'الوحدة 1 (بنك الأسئلة ص 20)',
+    q: 'خوارزمية البحث بأولوية العمق (Depth First Search - DFS Algorithm):',
+    options: [
+      'لإيجاد الحل لا تتطلب استخدام تعريف المشكلة فقط.',
+      'تتطلب معلومات إضافية على الحواف للتحرك.',
+      'الأولوية بالتحرك بالعمق إلى الأبناء أولاً.',
+      'يتم التحرك في البحث عن الهدف بطريقة عشوائية.'
     ],
-    a: 3,
-    e: "تبدأ DFS من الجذر A ← تتغلغل في اليسار B ← ثم ابنه الأيسر D (ورقة) ← تتراجع لـ B وتأخذ ابنه E (ورقة) ← تتراجع لـ A وتأخذ الفرع الأيمن C ← ثم F ← ثم G (ص 61)."
+    correct: 2,
+    exp: 'في خوارزمية DFS نبدأ من الجذر ونتوسع من خلال الأبناء عمقاً أولاً قبل الانتقال إلى الأشقاء في نفس المستوى.',
+    optExps: [
+      'خطأ: لأنها بحث أعمى فهي تتطلب استخدام تعريف المشكلة فقط.',
+      'خطأ: لا تستخدم أوزاناً أو معلومات استدلالية إضافية.',
+      'صحيح: الأولوية في DFS هي التحرك بالعمق إلى الأبناء أولاً.',
+      'خطأ: تتحرك بشكل منهجي تكراري بالعمق وليس عشوائياً.'
+    ]
   },
   {
-    q: "ما هي الميزة الكبرى التي تتفوق بها خوارزمية البحث بالعمق أولاً (DFS) على خوارزمية البحث بالعرض أولاً (BFS)؟",
-    o: [
-      "التعقيد المكاني الخطي المنخفض جداً O(b · m)؛ لأنها تحفظ في الذاكرة مساراً واحداً فقط من الجذر للورقة مع إخوة العقد على هذا المسار",
-      "أنها تضمن إيجاد الحل الأمثل الأقرب للجذر دائماً",
-      "أنها لا تقع أبداً في المسارات اللانهائية",
-      "أنها تستخدم دالة الاستدلال h(n) لتسريع البحث"
+    id: 4, isBank: true, unit: 'الوحدة 2 (بنك الأسئلة ص 21)',
+    q: 'خوارزمية البحث تسلق التل (Hill Climbing Algorithm):',
+    options: [
+      'من خوارزميات البحث المستنير.',
+      'من خوارزميات البحث الأعمى.',
+      'من خوارزميات القائمة المترابطة.',
+      'تعتمد على مخطط ثابت.'
     ],
-    a: 0,
-    e: "أهم ميزة لخوارزمية DFS هي توفير الذاكرة بتعقيد مكاني خطي O(b · m) مقارنة بالذاكرة الأسية الضخمة O(b^d) في BFS (ص 62)."
+    correct: 0,
+    exp: 'خوارزمية تسلق التل (Hill Climbing) وخوارزمية البحث بأولوية الأفضل (Best-First) هما من خوارزميات البحث المستنير (Informed Search) لأنها تعتمد على دالة استدلال لتقييم الحالات.',
+    optExps: [
+      'صحيح: تسلق التل من خوارزميات البحث المستنير (Informed Search).',
+      'خطأ: البحث الأعمى يشمل BFS و DFS فقط.',
+      'خطأ: القائمة المترابطة هيكل بيانات خطي.',
+      'خطأ: ليست مقيدة بمخطط ثابت.'
+    ]
   },
   {
-    q: "لماذا تُعتبر خوارزمية البحث بالعمق أولاً (DFS) غير أمثلية (Not Optimal) وغير مكتملة في الفضاءات اللانهائية؟",
-    o: [
-      "لأنها تفحص الشجرة مستوى بمستوى ببطء شديد",
-      "غير أمثلية لأنها قد تعثر على هدف في عمق سحيق بتكلفة عالية في الفرع الأيسر قبل فحص هدف أقرب وأرخص في فرع آخر، وغير مكتملة لأنها قد تضيع في فرع لا نهائي العمق",
-      "لأنها تستخدم طابور FIFO بدلاً من المكدس",
-      "لأنها تستهلك ذاكرة أكبر من سعة الحاسوب في المستوى الأول"
+    id: 5, isBank: true, unit: 'الوحدة 2 (بنك الأسئلة ص 21)',
+    q: 'خوارزمية البحث بأولوية الأفضل (Best First Search - BFS Algorithm):',
+    options: [
+      'تعتمد على هيكلة البيانات المصفوفة الأحادية.',
+      'تعتمد على هيكلة البيانات المكدس.',
+      'تستخدم هيكل البيانات الطابور بخاصية الأولوية (Priority Queue).',
+      'لا تستخدم هيكلة بيانات.'
     ],
-    a: 1,
-    e: "قد تنزل DFS في مسار لا نهائي فلا تكتمل، وقد تجد حلاً مكلفاً في عمق بعيد قبل رؤية الحل الأقرب في فرع مجاور فلا تكون أمثلية (ص 62)."
+    correct: 2,
+    exp: 'تستخدم خوارزمية البحث بأولوية الأفضل (Best First Search) هيكلة البيانات الطابور بالأولوية (Priority Queue) لترتيب العقد حسب الأقل تكلفة أولاً.',
+    optExps: [
+      'خطأ: لا تعتمد على المصفوفة الأحادية.',
+      'خطأ: المكدس خاص بخوارزمية DFS.',
+      'صحيح: تستخدم الطابور بخاصية الأولوية (Priority Queue).',
+      'خطأ: تحتاج لطابور الأولوية لحفظ وترتيب العقد.'
+    ]
   },
   {
-    q: "في كود تطبيق خوارزمية DFS بلغة بايثون (ص 63)، ما هي الآلية البرمجية المستخدمة داخل حلقة for neighbour in graph[node]: للتغلغل في العمق؟",
-    o: [
-      "استخدام الدالة queue.pop(0)",
-      "حذف القاموس graph في كل خطوة",
-      "الاستدعاء الذاتي / العودية (Recursion) باستدعاء الدالة dfs(visited, graph, neighbour) لنفسها",
-      "ترتيب الجيران حسب دالة الاستدلال h(n)"
+    id: 6, isBank: true, unit: 'الوحدة 2 (بنك الأسئلة ص 21)',
+    q: 'خوارزمية البحث بأولوية الأفضل (Best First Search - BFS Algorithm):',
+    options: [
+      'لإيجاد الحل تتطلب استخدام تعريف المشكلة فقط.',
+      'تتحرك من عقدة إلى عقدة بفحص دالة الاستدلال أقصر مسافة أو تكلفة للانتقال إلى العقدة التالية.',
+      'الأولوية بالتحرك بالعمق إلى الأبناء أولاً.',
+      'يتم التحرك في البحث عن الهدف بطريقة عشوائية.'
     ],
-    a: 2,
-    e: "يعتمد كود بايثون لخوارزمية DFS على الاستدعاء الذاتي (Recursion) للدالة dfs على كل جار غير مزار للتغلغل في العمق مباشرة (ص 63)."
+    correct: 1,
+    exp: 'تعمل خوارزمية البحث بأولوية الأفضل على عقدة واحدة في كل مرة وتتحرك من عقدة إلى عقدة بفحص دالة الاستدلال (أقصر مسافة أو أقل تكلفة) للانتقال للعقدة التالية.',
+    optExps: [
+      'خطأ: لأنها بحث مستنير فهي تحتاج لدالة استدلال بجانب تعريف المشكلة.',
+      'صحيح: تفحص دالة الاستدلال لاختيار العقدة ذات أقصر مسافة أو أقل تكلفة.',
+      'خطأ: التحرك بالعمق للأبناء أولاً خاص بخوارزمية DFS.',
+      'خطأ: تتحرك بشكل موجه بدالة الاستدلال وليس عشوائياً.'
+    ]
   },
   {
-    q: "ما هو الغرض من استخدام (دالة الاستدلال / الإرشاد - Heuristic Function h(n)) في خوارزميات البحث الموجه؟ وما قيمتها عند عقدة الهدف؟",
-    o: [
-      "حساب التكلفة الفعلية المقطوعة من البداية فقط، وقيمتها عند الهدف تساوي ما لا نهاية",
-      "عدّ جميع العقد في الشجرة، وقيمتها عند الهدف تساوي 100",
-      "إجبار الخوارزمية على فحص جميع الفروع الخاطئة أولاً",
-      "تقدير تكلفة أرخص مسار متبقٍ من العقدة الحالية n إلى عقدة الهدف لتوجيه البحث نحو المسارات الواعدة، وقيمتها عند عقدة الهدف تساوي صفراً: h(Goal) = 0"
+    id: 7, isBank: true, unit: 'الوحدة 3 (بنك الأسئلة ص 22)',
+    q: 'خوارزمية البحث تسلق التل (Hill Climbing):',
+    options: [
+      'البحث عن الحل الأفضل من الحل الحالي من الحلول المجاورة.',
+      'تعتمد البحث في العمق بغض النظر عن المستوى.',
+      'تفحص المستوى تلو الآخر للوصول للحل الأفضل.',
+      'تفحص الأفرع قبل الأشقاء.'
     ],
-    a: 3,
-    e: "دالة الاستدلال h(n) هي تقدير للتكلفة المتبقية للوصول للهدف، وعند الهدف نفسه تكون التكلفة المتبقية صفراً h(Goal) = 0 (ص 65-66)."
+    correct: 0,
+    exp: 'تعمل خوارزمية البحث تسلق التل (Hill Climbing) من خلال البحث عن الحل الأفضل من الحل الحالي من بين الحلول المجاورة.',
+    optExps: [
+      'صحيح: تبحث عن الحل الأفضل من الحل الحالي من الحلول المجاورة.',
+      'خطأ: هذا وصف البحث بأولوية العمق (DFS).',
+      'خطأ: فحص المستوى تلو الآخر هو وصف البحث بأولوية الاتساع (BFS).',
+      'خطأ: فحص الأفرع قبل الأشقاء خاص بـ DFS.'
+    ]
   },
   {
-    q: "على أي دالة تقييم تعتمد خوارزمية (البحث بأولوية الأفضل الجشع - Greedy Best-First Search)، وكيف ترتب العقد في القائمة المفتوحة (OPEN List)؟",
-    o: [
-      "تعتمد على f(n) = h(n)، وترتب العقد في القائمة المفتوحة (طابور أولوية) تصاعدياً حسب أقل قيمة لدالة الاستدلال h(n)",
-      "تعتمد على f(n) = g(n) فقط بدون دالة استدلال",
-      "ترتب العقد تنازلياً بحيث تختار العقدة الأبعد عن الهدف أولاً",
-      "تعتمد على مبدأ LIFO بدون ترتيب"
+    id: 8, isBank: true, unit: 'الوحدة 3 (بنك الأسئلة ص 22)',
+    q: 'من مشاكل خوارزمية البحث تسلق التل (Hill Climbing):',
+    options: [
+      'لإيجاد الحل لا تتطلب استخدام تعريف المشكلة فقط.',
+      'لا يوجد رجوع للخلف في مخطط البحث.',
+      'الأولوية بالتحرك بالمستوى ثم إلى الأبناء أولاً.',
+      'يتم التحرك في البحث عن الهدف بطريقة عشوائية.'
     ],
-    a: 0,
-    e: "يعتمد البحث الجشع بأولوية الأفضل على f(n) = h(n)، فيرتب القائمة المفتوحة OPEN كطابور أولوية يسحب دائماً العقدة صاحبة أقل قيمة لـ h(n) (ص 66-67)."
+    correct: 1,
+    exp: 'من أبرز مشاكل خوارزمية تسلق التل أنه لا يوجد رجوع للخلف (No Backtracking) في مخطط البحث؛ فهي تتجه للأمام دائماً مما قد يوقعها في القمم المحلية.',
+    optExps: [
+      'خطأ: استخدام الدالة الاستدلالية ميزة في البحث المستنير وليس مشكلة.',
+      'صحيح: لا يوجد رجوع للخلف في مخطط البحث، بل تتجه للأمام دائماً.',
+      'خطأ: هذا خاص بـ BFS.',
+      'خطأ: لا تتحرك عشوائياً بل تختار الجار الأفضل.'
+    ]
   },
   {
-    q: "في خوارزمية البحث بأولوية الأفضل (Best-First Search)، ما هي وظيفة كل من القائمة المفتوحة (OPEN List) والقائمة المغلقة (CLOSED List)؟",
-    o: [
-      "كلتاهما تحذفان عقدة الهدف من الشجرة",
-      "القائمة المفتوحة OPEN تحفظ العقد المولدة التي تنتظر التوسيع (مرتبة حسب الأفضلية)، والقائمة المغلقة CLOSED تحفظ العقد التي تم فحصها وتوسيعها بالفعل لمنع التكرار",
-      "القائمة المفتوحة للعقد الموسعة سابقاً، والمغلقة للعقد الجديدة",
-      "لا تستخدم خوارزمية Best-First Search أي قوائم"
+    id: 9, isBank: true, unit: 'الوحدة 3 (بنك الأسئلة ص 22)',
+    q: 'في فضاء خوارزمية تسلق التل (Hill Climbing):',
+    options: [
+      'Global max: أفضل حل القمة.',
+      'Local Max: أعلى نقطة بالنقاط المجاورة، الحل الأفضل.',
+      'Flat Local: كل الحلول المجاورة متساوية - يوجد حل أفضل في المنتصف.',
+      'Shoulder: كل الحلول المتساوية أرض مسطحة والتوقف.'
     ],
-    a: 1,
-    e: "تحفظ OPEN العقد المكتشفة المنتظرة للتوسيع، وتحفظ CLOSED العقد التي تم توسيعها لمنع التكرار والوقوع في حلقات (ص 67)."
+    correct: 0,
+    exp: 'في فضاء خوارزمية تسلق التل، يمثل Global Max أفضل حل (القمة العالمية)، بينما Local Max ليس الحل الأفضل، و Flat Local لا يوجد فيها حل أفضل، و Shoulder يمكن بنهايتها إيجاد حل أفضل أو أسوأ.',
+    optExps: [
+      'صحيح: Global max يمثل أفضل حل (القمة).',
+      'خطأ: Local Max أعلى من جيرانها فقط وليست الحل الأفضل (مشكلة).',
+      'خطأ: في Flat Local كل الحلول المجاورة متساوية ولا يوجد حل أفضل.',
+      'خطأ: في Shoulder يمكن بنهاية الأرض المسطحة إيجاد حل أفضل أو أسوأ.'
+    ]
   },
   {
-    q: "[مسألة تتبع Best-First Search]: بدأنا من العقدة S فولدت الأبناء: A(h=10) و B(h=5). سحبنا B(5) فولدت الأبناء: C(h=8) و D(h=3). كيف تصبح حالة القائمة المفتوحة (OPEN) مرتبة، وأي عقدة ستُسحب في الخطوة التالية؟",
-    o: [
-      "OPEN = [A(10), C(8), D(3)] وتُسحب A(10)",
-      "OPEN = [B(5), D(3)] وتُسحب B(5)",
-      "OPEN = [D(3), C(8), A(10)] وتُسحب العقدة D(3) لأنها صاحبة أقل قيمة استدلال h=3",
-      "OPEN = [C(8), D(3)] وتُسحب C(8)"
+    id: 10, isBank: false, unit: 'الوحدة 1 (مقارنة DFS و BFS)',
+    q: 'متى تكون خوارزمية البحث بأولوية العمق (DFS) أكثر فعالية مقارنةً بخوارزمية البحث بأولوية الاتساع (BFS)؟',
+    options: [
+      'عندما تكون شجرة البحث واسعة (مستويات قليلة) وليست عميقة.',
+      'عندما تكون شجرة البحث ضيقة (المستويات كثيرة وعميقة).',
+      'عندما تتوفر دالة استدلالية لتقدير المسافة للهدف.',
+      'عندما نستخدم الطابور (Queue) بدلاً من المكدس.'
     ],
-    a: 2,
-    e: "بعد سحب B(5) ونقلها إلى CLOSED، نضيف أبناءها C(8) و D(3) إلى OPEN مع A(10) المتبقية ونرتبها تصاعدياً: [D(3), C(8), A(10)]، فتُسحب D(3) (ص 68)."
+    correct: 1,
+    exp: 'وفق جدول المقارنة في الملزمة (ص 65)، تكون DFS فعالة عندما تكون شجرة البحث ضيقة (المستويات كثيرة وعميقة)، بينما تكون BFS فعالة عندما تكون الشجرة واسعة ومستوياتها قليلة.',
+    optExps: [
+      'خطأ: الشجرة الواسعة قليلة المستويات تناسب BFS.',
+      'صحيح: DFS فعالة عندما تكون شجرة البحث ضيقة وعميقة.',
+      'خطأ: DFS خوارزمية بحث أعمى لا تستخدم دالة استدلال.',
+      'خطأ: DFS تستخدم المكدس (Stack) دائماً.'
+    ]
   },
   {
-    q: "لماذا تُعتبر خوارزمية البحث بأولوية الأفضل الجشع (Greedy Best-First Search) غير أمثلية (Not Optimal)؟",
-    o: [
-      "لأنها لا تستخدم دالة الاستدلال h(n)",
-      "لأنها تفحص جميع عقد الشجرة مستوى بمستوى",
-      "لأنها تتحرك دائماً عكس اتجاه الهدف",
-      "لأنها تنظر فقط للتكلفة التقديرية المتبقية h(n) وتتجاهل تكلفة المسار الفعلي المقطوع من البداية g(n)، فقد تختار مساراً يبدو قريباً للهدف ولكنه ذو تكلفة إجمالية عالية"
+    id: 11, isBank: false, unit: 'الوحدة 1 (آلية DFS)',
+    q: 'ماذا يحدث في خوارزمية البحث بأولوية العمق (DFS) عند الوصول إلى عقدة نهائية ليس لها أبناء (ورقة) وهي ليست الهدف؟',
+    options: [
+      'يتوقف البحث تماماً وتفشل الخوارزمية.',
+      'تُحذف العقدة من المكدس وتعود الخوارزمية إلى العقدة السابقة.',
+      'تُنقل العقدة إلى بداية الطابور.',
+      'تُعاد قراءة الشجرة من الجذر من جديد.'
     ],
-    a: 3,
-    e: "إهمال تكلفة الطريق المقطوع g(n) والاعتماد فقط على h(n) قد يوقع البحث الجشع في مسارات غير أمثلية (ص 69)."
+    correct: 1,
+    exp: 'نص الملزمة (ص 59): إذا تم الوصول إلى عقدة نهائية ليس لها أبناء (ورقة) تُحذف من المكدس (Pop) وتعود الخوارزمية إلى العقدة السابقة.',
+    optExps: [
+      'خطأ: لا يتوقف البحث إلا بالوصول للهدف أو فحص كافة عقد الشجرة.',
+      'صحيح: تحذف من المكدس وتعود إلى العقدة السابقة (Backtracking).',
+      'خطأ: DFS لا تستخدم الطابور.',
+      'خطأ: لا تعيد البحث من الجذر بل ترجع للعقدة الأب المباشرة.'
+    ]
   },
   {
-    q: "بماذا تتميز خوارزميات (البحث المحلي - Local Search) مثل خوارزمية تسلق التل (Hill Climbing) من حيث التعامل مع المسار والذاكرة؟",
-    o: [
-      "تعمل على حالة حالية واحدة فقط وتنتقل إلى جيرانها لتحسين التقييم دون الاحتفاظ بشجرة البحث أو المسار في الذاكرة (تستهلك ذاكرة ثابتة O(1))",
-      "تخزن جميع العقد والمسارات السابقة في قائمة OPEN ضخمة",
-      "تستهلك ذاكرة أسية O(b^d) مثل خوارزمية BFS",
-      "تحتاج إلى معرفة المسار الكامل من البداية للهدف قبل البدء"
+    id: 12, isBank: false, unit: 'الوحدة 1 (مقارنة DFS و BFS)',
+    q: 'أي من العبارات التالية صحيحة حول ترتيب فحص العقد في كل من (DFS) و (BFS)؟',
+    options: [
+      'في DFS يتم فحص الأشقاء أولاً، وفي BFS يتم فحص الأبناء أولاً.',
+      'في DFS يتم فحص عقد الأبناء أولاً قبل الأشقاء، وفي BFS يتم فحص عقد الأشقاء في المستوى أولاً قبل الأبناء.',
+      'كلتا الخوارزميتين تفحصان الأشقاء قبل الأبناء.',
+      'كلتا الخوارزميتين تفحصان الأبناء قبل الأشقاء.'
     ],
-    a: 0,
-    e: "لا تحتفظ خوارزميات البحث المحلي كـ Hill Climbing بشجرة البحث ولا تتذكر الفروع السابقة، بل تحفظ الحالة الحالية فقط (ص 70)."
+    correct: 1,
+    exp: 'في DFS الأولوية للعمق (فحص الأبناء أولاً قبل الأشقاء)، وفي BFS الأولوية للاتساع/المستوى (فحص الأشقاء أولاً قبل الأبناء).',
+    optExps: [
+      'خطأ: هذا عكس آلية عمل الخوارزميتين.',
+      'صحيح: مطابق حرفياً لجدول المقارنة في الملزمة صفحة 65.',
+      'خطأ: هذا ينطبق على BFS فقط.',
+      'خطأ: هذا ينطبق على DFS فقط.'
+    ]
   },
   {
-    q: "متى تتوقف خوارزمية تسلق التل (Hill Climbing) عن البحث وتُرجع الحالة الحالية كحل؟",
-    o: [
-      "عندما تمتلئ القائمة المفتوحة OPEN بالعقد",
-      "عندما لا يوجد أي جار مباشر للحالة الحالية يمتلك تقييماً أفضل من الحالة الحالية (أو عند الوصول للهدف)",
-      "بعد فحص عقدة واحدة فقط دائماً",
-      "عندما تتراجع للخلف إلى العقدة الجذرية"
+    id: 13, isBank: false, unit: 'الوحدة 2 (البحث المستنير)',
+    q: 'ما الذي يميز خوارزميات البحث المستنير (Informed Search) عن البحث الأعمى؟',
+    options: [
+      'عدم حاجتها لأي معلومات عن المشكلة.',
+      'استخدامها لمعلومات ودالات استدلالية (Heuristic) لتقود وتوجه البحث في شجرة البحث.',
+      'اعتمادها الحصري على المكدس (Stack).',
+      'فحصها لجميع عقد الشجرة بالتساوي دون تفضيل.'
     ],
-    a: 1,
-    e: "تتحرك تسلق التل صعوداً نحو الجار الأفضل، فإذا لم تجد أي جار أفضل من الحالة الحالية تتوقف فوراً (ص 71)."
+    correct: 1,
+    exp: 'تستخدم خوارزميات البحث المستنير معلومات ودالات استدلالية (Heuristic) حول المشكلة وشجرة البحث لقيادة وتوجيه عملية البحث نحو الهدف بكفاءة.',
+    optExps: [
+      'خطأ: هي تحتاج لتعريف المشكلة بالإضافة للدالة الاستدلالية.',
+      'صحيح: تستخدم دالات استدلالية (Heuristic) لتوجيه البحث.',
+      'خطأ: تستخدم غالباً طابور الأولوية كما في Best-First و A*.',
+      'خطأ: البحث الأعمى هو الذي يفحص دون معلومات تفضيلية.'
+    ]
   },
   {
-    q: "ما هو الفرق الدقيق بين (تسلق التل البسيط - Simple Hill Climbing) و(تسلق التل بأشد انحدار - Steepest-Ascent Hill Climbing)؟",
-    o: [
-      "البسيط يفحص جميع الجيران، وأشد انحدار يختار أسوأ جار",
-      "كلاهما يعملان بنفس الطريقة تماماً دون أي اختلاف",
-      "تسلق التل البسيط يفحص الجيران واحداً تلو الآخر وينتقل فوراً إلى (أول جار أفضل) يصادفه، بينما يفحص (أشد انحدار Steepest-Ascent) جميع الجيران أولاً ثم يختار (أفضل جار على الإطلاق) من بينهم",
-      "تسلق التل البسيط يستخدم طابور FIFO، وأشد انحدار يستخدم مكدس LIFO"
+    id: 14, isBank: false, unit: 'الوحدة 2 (Best-First Search)',
+    q: 'في مثال خوارزمية البحث بأولوية الأفضل (Best-First Search)، إذا كانت أفرع الجذر A هي: B(4) و C(6) و D(3)، فكيف يتم ترتيبها في طابور الأولوية؟',
+    options: [
+      'ترتب أبجدياً: B(4) ثم C(6) ثم D(3).',
+      'ترتب تنازلياً حسب الأكبر تكلفة: C(6) ثم B(4) ثم D(3).',
+      'ترتب تصاعدياً حسب الأقل تكلفة أولاً: D(3) ثم B(4) ثم C(6).',
+      'يتم اختيار C(6) لأنها في المنتصف.'
     ],
-    a: 2,
-    e: "Simple Hill Climbing يلتقط أول جار أفضل يصادفه، أما Steepest-Ascent فيقارن كل الجيران ويختار الأفضل على الإطلاق (ص 71-72)."
+    correct: 2,
+    exp: 'في الطابور بالأولوية (Priority Queue) نرتب العقد بحيث تكون الأقل تكلفة (الأفضل استدلالاً) في المقدمة أولاً ثم التي تليها: D(3) ثم B(4) ثم C(6).',
+    optExps: [
+      'خطأ: لا ترتب أبجدياً بل حسب قيمة دالة الاستدلال.',
+      'خطأ: نبحث عن أقصر مسافة أو أقل تكلفة وليس الأكبر.',
+      'صحيح: ترتب الأقل تكلفة أولاً [D(3), B(4), C(6)] ونأخذ الأفضل D.',
+      'خطأ: موقع العقدة في الرسم لا يحدد الأولوية بل قيمتها الاستدلالية.'
+    ]
   },
   {
-    q: "ما هي المشكلات (المصائد) الثلاث الشهيرة التي قد تتوقف عندها خوارزمية تسلق التل وتفشل بسببها في الوصول إلى القمة العالمية (Global Maximum)؟",
-    o: [
-      "الطابور، والمكدس، والشجرة",
-      "الاكتمال، والأمثلية، والوقت",
-      "الإدراك، والمشغل، والمستشعر",
-      "النهاية العظمى المحلية / القمة المحلية (Local Maximum)، والهضبة / السطح المستوي (Plateau)، والحافة / التلال الضيقة (Ridge)"
+    id: 15, isBank: false, unit: 'الوحدة 2 (Best-First Search)',
+    q: 'في خوارزمية البحث بأولوية الأفضل، عند معالجة العقدة (F) التي ليس لها أي أفرع (أبناء) وليست هي الهدف، ماذا يحدث للطابور بالأولوية؟',
+    options: [
+      'تُحذف F من الطابور ولا يُضاف شيء جديد، ثم ننتقل لمعالجة العقدة التالية في مقدمة الطابور.',
+      'يتوقف البحث وتفشل الخوارزمية لعدم وجود أبناء للعقدة F.',
+      'يتم إفراغ الطابور بالكامل والبدء من الجذر.',
+      'تبقى F في مقدمة الطابور إلى نهاية البحث.'
     ],
-    a: 3,
-    e: "العيوب الثلاثة لخوارزمية تسلق التل هي: القمة المحلية (Local Maximum)، الهضبة (Plateau)، والحافة (Ridge) (ص 72-73)."
+    correct: 0,
+    exp: 'كما في خطوات الملزمة (ص 70): عند معالجة F وحذفها من الطابور، بما أنه ليس لها أفرع لا يضاف شيء للطابور وننتقل للعقدة التي تليها في مقدمة طابور الأولوية.',
+    optExps: [
+      'صحيح: تحذف F من الطابور ونكمل معالجة العقدة التالية في الطابور (E).',
+      'خطأ: لا تتوقف الخوارزمية طالما أن طابور الأولوية يحتوي على عقد أخرى.',
+      'خطأ: الطابور يحتفظ ببقية العقد المكتشفة سابقاً.',
+      'خطأ: العقدة التي تتم معالجتها تحذف من الطابور.'
+    ]
   },
   {
-    q: "في مشكلات خوارزمية تسلق التل، ماذا نُطلق على 'الحالة التي تكون أفضل (أعلى) من جميع جيرانها المباشرين، ولكنها أقل من القمة العالمية (Global Maximum)'؟",
-    o: [
-      "النهاية العظمى المحلية / القمة المحلية (Local Maximum)",
-      "الهضبة المسطحة (Plateau)",
-      "العقدة الجذرية (Root Node)",
-      "القائمة المغلقة (Closed List)"
+    id: 16, isBank: false, unit: 'الوحدة 3 (تسلق التل Hill Climbing)',
+    q: 'من أين تبدأ خوارزمية تسلق التل (Hill Climbing) فحص الحلول المجاورة في شجرة البحث؟',
+    options: [
+      'تبدأ فحص الحلول المجاورة من اليسار.',
+      'تبدأ فحص الحلول المجاورة من المنتصف فقط.',
+      'تفحص عقد المستوى الأخير أولاً.',
+      'تقفز مباشرة إلى العقد غير المجاورة.'
     ],
-    a: 0,
-    e: "القمة المحلية (Local Maximum) هي قمة أعلى من كل جيرانها المباشرين لكنها أقل من القمة العالمية، فتتوقف الخوارزمية عندها (ص 72)."
+    correct: 0,
+    exp: 'نصت الملزمة في خصائص خوارزمية تسلق التل (ص 72) على أننا نبدأ فحص الحلول المجاورة من اليسار.',
+    optExps: [
+      'صحيح: تبدأ فحص الحلول المجاورة من اليسار.',
+      'خطأ: لا تبدأ من المنتصف.',
+      'خطأ: هي لا ترى إلا الحلول المجاورة للحالة الحالية فقط.',
+      'خطأ: لا تستطيع القفز لعقد غير مجاورة.'
+    ]
   },
   {
-    q: "في مشكلات خوارزمية تسلق التل، ماذا نُطلق على 'المنطقة المسطحة التي تتساوى فيها قيم جميع الحالات المجاورة مع الحالة الحالية فيضيع اتجاه التحسن'، وما هو الحل المقترح للتغلب عليها؟",
-    o: [
-      "القمة العالمية؛ وحلها التوقف الفوري",
-      "الهضبة / السطح المستوي (Plateau)؛ وحلها القفز بخطوة كبيرة (Big Jump) في اتجاه جديد للخروج من المنطقة المسطحة",
-      "الحافة الضيقة؛ وحلها حذف جميع الجيران",
-      "التراجع؛ وحله إغلاق البرنامج"
+    id: 17, isBank: false, unit: 'الوحدة 3 (فضاء تسلق التل)',
+    q: 'ما اسم المشكلة في فضاء خوارزمية تسلق التل التي تكون فيها النقطة أعلى من جميع النقاط المجاورة لها، ولكنها ليست الحل الأفضل في الفضاء الكلي؟',
+    options: [
+      'القمة العالمية (Global Maximum).',
+      'القمة المحلية (Local Maximum).',
+      'الكتف (Shoulder).',
+      'الحالة الابتدائية (Initial State).'
     ],
-    a: 1,
-    e: "في الهضبة (Plateau) تتساوى قيم الجيران مع الحالة الحالية، ويتم التغلب عليها بالقفز بخطوة كبيرة للخروج لمنطقة ذات ميل (ص 73)."
+    correct: 1,
+    exp: 'القمة المحلية (Local Maximum) هي أعلى نقطة مقارنةً بالنقاط المجاورة لها فقط وليست الحل الأفضل، وتعد مشكلة لأن تسلق التل يتوقف عندها.',
+    optExps: [
+      'خطأ: Global Maximum هي القمة العالمية وأفضل حل.',
+      'صحيح: Local Maximum هي أعلى نقطة بالنقاط المجاورة وليست الحل الأفضل.',
+      'خطأ: الكتف (Shoulder) منطقة مسطحة تتساوى فيها الحلول.',
+      'خطأ: الحالة الابتدائية هي نقطة انطلاق البحث.'
+    ]
   },
   {
-    q: "كيف يمكن التغلب على مشكلة (الحافة / التلال الضيقة - Ridge) في خوارزمية تسلق التل عندما تقود كل حركة مفردة في الاتجاهات القياسية إلى النزول لأسفل؟",
-    o: [
-      "التوقف عن البحث وإعلان الفشل",
-      "تقليل حجم الخطوة إلى الصفر",
-      "تطبيق قاعدتين أو أكثر معاً (حركة مركبة / قطرية) في خطوة واحدة قبل إجراء اختبار التقييم",
-      "حذف دالة التقييم"
+    id: 18, isBank: false, unit: 'الوحدة 3 (فضاء تسلق التل)',
+    q: 'ما الفرق بين (Flat Local Maximum) و (Shoulder) في فضاء خوارزمية تسلق التل؟',
+    options: [
+      'كلاهما يمثل القمة العالمية.',
+      'في Flat Local كل الحلول المجاورة متساوية ولا يوجد حل أفضل، بينما في Shoulder الأرض مسطحة ولكن بنهايتها يمكن إيجاد حل أفضل أو أسوأ.',
+      'Shoulder هي أعلى قمة في الفضاء، و Flat Local هي أخفض قاع.',
+      'لا يوجد أي فرق بينهما في الملزمة.'
     ],
-    a: 2,
-    e: "لأن الحافة (Ridge) تكون مائلة بزاوية، فإن التحرك عليها يتطلب دمج قاعدتين أو أكثر (حركة مركبة) في خطوة واحدة قبل التقييم (ص 73)."
+    correct: 1,
+    exp: 'وفق صفحة 74 بالملزمة: Flat Local كل الحلول المجاورة متساوية ولا يوجد حل أفضل (مشكلة)، أما Shoulder فكل الحلول متساوية (أرض مسطحة) ولكن بنهايتها ممكن إيجاد حل أفضل أو أسوأ.',
+    optExps: [
+      'خطأ: القمة العالمية هي Global Maximum.',
+      'صحيح: تفريق دقيق مطابق لنص الملزمة صفحة 74.',
+      'خطأ: كلاهما مناطق مسطحة تتساوى فيها القيم المتجاورة.',
+      'خطأ: الملزمة فرقت بينهما بوضوح في إمكانية التحسن بنهاية الكتف.'
+    ]
   },
   {
-    q: "ما هو الفرق الجوهري بين خوارزمية (تسلق التل Hill Climbing) وخوارزمية (البحث بأولوية الأفضل Best-First Search) رغم أن كلتيهما تستخدمان دالة الاستدلال h(n)؟",
-    o: [
-      "تسلق التل تحتفظ بقائمة OPEN ضخمة، وأولوية الأفضل لا تستخدم أي قوائم",
-      "تسلق التل أمثلية دائماً، وأولوية الأفضل لا تستخدم h(n)",
-      "لا يوجد أي فرق بين الخوارزميتين في الذاكرة أو التراجع",
-      "تسلق التل تحتفظ بالحالة الحالية فقط وتتخلص من جميع البدائل السابقة (فلا تستطيع التراجع وتستهلك ذاكرة O(1))، بينما يحتفظ البحث بأولوية الأفضل بجميع العقد المكتشفة غير الموسعة في القائمة المفتوحة OPEN فيمكنه التراجع واستكشاف فروع بديلة"
+    id: 19, isBank: false, unit: 'الوحدة 2 (أمثلة البحث المستنير)',
+    q: 'أي من الخوارزميات التالية وردت في الملزمة (ص 66) ضمن أمثلة خوارزميات البحث المستنير إلى جانب Best-First و Hill Climbing؟',
+    options: [
+      'خوارزمية البحث ديكسترا (Dijkstra Algorithm).',
+      'خوارزمية البحث بأولوية الاتساع (BFS).',
+      'خوارزمية البحث بأولوية العمق (DFS).',
+      'خوارزمية المكدس الخطي.'
     ],
-    a: 3,
-    e: "تنسى تسلق التل جميع الفروع الأخرى (بدون قائمة OPEN)، بينما يحتفظ Best-First Search بجميع البدائل في قائمة OPEN ليعود لأفضلها عند الحاجة (ص 74)."
+    correct: 0,
+    exp: 'ذكرت الملزمة في بداية الوحدة الثانية (ص 66) ثلاث خوارزميات تحت عنوان خوارزميات البحث المستنير: Best First Search، و Hill Climbing، و Dijkstra Algorithm.',
+    optExps: [
+      'صحيح: خوارزمية ديكسترا ذكرت في ص 66 ضمن قائمة البحث المستنير.',
+      'خطأ: BFS من خوارزميات البحث الأعمى.',
+      'خطأ: DFS من خوارزميات البحث الأعمى.',
+      'خطأ: المكدس هيكل بيانات وليس خوارزمية بحث مستنير.'
+    ]
   },
   {
-    q: "أي نوع من أنواع تسلق التل يختار (عشوائياً) من بين الحركات الصاعدة (الجيران الأفضل) باحتمالية تزداد كلما زادت درجة التحسن؟",
-    o: [
-      "تسلق التل العشوائي (Stochastic Hill Climbing)",
-      "تسلق التل البسيط (Simple Hill Climbing)",
-      "البحث بالعرض أولاً (BFS)",
-      "البحث بالعمق المحدود (DLS)"
+    id: 20, isBank: false, unit: 'الوحدة 3 (تتبع مثال تسلق التل)',
+    q: 'في مثال شجرة خوارزمية تسلق التل بالملزمة (ص 73)، بدءاً من الجذر A(5) وأبنائه B(6), C(7), D(4)، ما هو المسار الذي سلكته الخوارزمية للوصول إلى الهدف N(2)؟',
+    options: [
+      'A → B → E → J',
+      'A → C → G → L',
+      'A → D → H → N',
+      'A → D → I → H → B → F → E → J'
     ],
-    a: 0,
-    e: "تسلق التل العشوائي (Stochastic Hill Climbing) يختار عشوائياً من بين الجيران الأفضل (ص 72)."
-  },
-  {
-    q: "لماذا شُبّهت خوارزمية تسلق التل بـ 'متسلق جبال في ضباب كثيف مصاب بفقدان الذاكرة'؟",
-    o: [
-      "لأنها ترى خريطة الجبل كاملة من البداية وتتذكر كل خطوة سابقة",
-      "لأن رؤيتها تقتصر على الجيران المباشرين فقط (ضباب كثيف) ولا تحتفظ بأي شجرة بحث أو تاريخ للحالات السابقة (فقدان الذاكرة)",
-      "لأنها تتحرك دائماً نحو أسفل الوادي",
-      "لأنها تستخدم طابور FIFO لتخزين جميع المسارات"
-    ],
-    a: 1,
-    e: "الضباب يمثل اقتصار رؤيتها على الجيران المحليين المباشرين فقط، وفقدان الذاكرة يمثل عدم احتفاظها بأي حالات أو فروع سابقة (ص 70)."
-  },
-  {
-    q: "[سؤال مقارن]: إذا كان الهدف يقع في مستوى قريب جداً من الجذر (مثلاً d = 2)، وكان الفرع الأيسر من الشجرة عميقاً جداً (m = 10,000) ولا يحتوي على الهدف؛ فأي خوارزمية ستعاني من مشكلة خطيرة هنا ولماذا؟",
-    o: [
-      "خوارزمية BFS لأنها ستتغلغل في الفرع الأيسر حتى العمق 10,000",
-      "خوارزمية IDS لأنها لا تفحص المستوى الثاني",
-      "خوارزمية DFS لأنها ستتغلغل في الفرع الأيسر العميق (10,000 مستوى) وتستغرق وقتاً طويلاً جداً قبل أن تتراجع وتكتشف الهدف القريب في المستوى 2",
-      "جميع الخوارزميات ستجد الهدف في خطوة واحدة"
-    ],
-    a: 2,
-    e: "تورط DFS نفسها في الفروع العميقة جداً O(b^m) حتى لو كان الحل قريباً من الجذر في فرع آخر، بينما تجده BFS و IDS بسرعة O(b^d) (ص 62)."
-  },
-  {
-    q: "في مسائل تقليل التكلفة/المسافة (Minimization) باستخدام البحث بأولوية الأفضل أو تسلق التل، ماذا تعني القيمة الأصغر لدالة الاستدلال h(n)؟",
-    o: [
-      "أن العقدة أبعد عن الهدف وأسوأ تقييماً",
-      "أن العقدة لا يمكن الوصول إليها",
-      "أن العقدة تقع في القائمة المغلقة دائماً",
-      "أن العقدة أقرب تقديرياً إلى الهدف وأفضل تقييماً (حيث h(Goal) = 0 هي الأفضل على الإطلاق)"
-    ],
-    a: 3,
-    e: "لأن h(n) تقدر المسافة/التكلفة المتبقية للهدف، فإن القيمة الأصغر لـ h(n) تعني الاقتراب من الهدف (حتى نصل إلى h=0 عند الهدف) (ص 66)."
-  },
-  {
-    q: "ما هي التقنية المستخدمة للتغلب على مشكلة الوقوع في القمة المحلية (Local Maximum) عن طريق تنفيذ سلسلة من عمليات بحث تسلق التل من حالات ابتدائية مولدة عشوائياً؟",
-    o: [
-      "تسلق التل بإعادة التشغيل العشوائي (Random-Restart Hill Climbing)",
-      "البحث بالعرض أولاً (BFS)",
-      "حذف دالة الاستدلال",
-      "مصفوفة التجاور"
-    ],
-    a: 0,
-    e: "إعادة التشغيل العشوائي (Random-Restart Hill Climbing) تبدأ البحث من نقاط عشوائية متعددة للهروب من القمم المحلية والوصول للقمة العالمية (ص 73)."
-  },
-  {
-    q: "عند مقارنة خوارزميتي البحث غير الموجه (BFS و DFS)، أي العبارات التالية صحيحة 100%؟",
-    o: [
-      "تستخدم BFS مكدس LIFO، وتستخدم DFS طابور FIFO",
-      "تستخدم BFS طابور FIFO وتستهلك ذاكرة أسية O(b^d)، بينما تستخدم DFS مكدس LIFO وتستهلك ذاكرة خطية O(b · m)",
-      "كلتا الخوارزميتين تعتمدان على دالة الاستدلال h(n)",
-      "خوارزمية DFS أمثلية دائماً، وخوارزمية BFS غير مكتملة"
-    ],
-    a: 1,
-    e: "هذا هو الفرق الجوهري بين BFS (طابور FIFO وذاكرة O(b^d) ومكتملة/أمثلية لتساوي الخطوات) و DFS (مكدس LIFO وذاكرة خطية O(b·m) وغير أمثلية) (ص 62)."
+    correct: 2,
+    exp: 'من A(5) انتقلت الخوارزمية إلى الجار الأفضل D(4)، ومن D(4) فحصت من اليسار فوجدت H(3) أفضل، ومن H(3) انتقلت إلى الهدف N(2)، فكان المسار: A - D - H - N.',
+    optExps: [
+      'خطأ: B(6) أسوأ من A(5).',
+      'خطأ: C(7) أسوأ من A(5).',
+      'صحيح: المسار إلى الهدف في مثال تسلق التل هو A → D → H → N.',
+      'خطأ: هذا مسار خوارزمية البحث بأولوية الأفضل (Best-First Search).'
+    ]
   }
 ];
 
-// بناء شبكة المصطلحات
-const termsGrid = document.getElementById("termsGrid");
-terms.forEach(([en, ar]) => {
-  const d = document.createElement("div");
-  d.className = "card";
-  d.style.margin = "0";
-  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
-  termsGrid.appendChild(d);
-});
+let userAnswers = {};
+let currentQuizFilter = 'all';
 
-// إدارة البطاقات التعليمية
-let ci = 0, showAnswer = false;
-function renderCard() {
-  document.getElementById("flashTerm").textContent = cards[ci][0];
-  const ansEl = document.getElementById("flashAnswer");
-  ansEl.innerHTML = cards[ci][1].replace(/\n/g, "<br>");
-  ansEl.hidden = !showAnswer;
-  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
-  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
-}
-document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
-document.getElementById("flashcard").addEventListener("keydown", e => {
-  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
-});
-document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
-document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
-renderCard();
-
-// التنقل بين التبويبات
-document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
-  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
-  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
-  window.scrollTo({ top: 0, behavior: "smooth" });
-});
-
-// إدارة الاختبار
-let answers = {};
 function renderQuiz() {
-  const area = document.getElementById("quizArea");
-  area.innerHTML = "";
-  const letters = ["أ", "ب", "ج", "د"];
-  questions.forEach((item, i) => {
-    const box = document.createElement("div");
-    box.className = "qbox";
-    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
-    const opts = box.querySelector(".options");
-    item.o.forEach((opt, j) => {
-      const btn = document.createElement("button");
-      btn.className = "option";
-      btn.textContent = `${letters[j]}) ${opt}`;
-      btn.onclick = () => {
-        answers[i] = j;
-        [...opts.children].forEach((x, k) => {
-          x.classList.remove("correct", "wrong");
-          x.disabled = true;
-          if (k === item.a) x.classList.add("correct");
-          if (k === j && j !== item.a) x.classList.add("wrong");
-        });
-        const fb = document.getElementById("fb" + i);
-        fb.hidden = false;
-        fb.className = "feedback " + (j === item.a ? "good" : "bad");
-        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
-        updateScore();
-      };
-      opts.appendChild(btn);
-    });
-    area.appendChild(box);
-  });
-  updateScore();
+  const container = document.getElementById('quizContainer');
+  if (!container) return;
+
+  let filtered = quizData;
+  if (currentQuizFilter === 'bank') filtered = quizData.filter(q => q.isBank);
+  if (currentQuizFilter === 'wrong') filtered = quizData.filter(q => userAnswers[q.id] !== undefined && userAnswers[q.id] !== q.correct);
+
+  if (filtered.length === 0) {
+    container.innerHTML = `<div style="padding:20px;text-align:center;color:#64748b;font-weight:700">لا توجد أسئلة في هذا التصنيف حالياً.</div>`;
+    return;
+  }
+
+  const letters = ['أ', 'ب', 'ج', 'د'];
+  container.innerHTML = filtered.map((q, idx) => {
+    const ans = userAnswers[q.id];
+    const isAnswered = ans !== undefined;
+    return `
+      <div style="border:1px solid #e2e8f0;border-radius:12px;padding:16px;margin-bottom:14px;background:#ffffff">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px">
+          <span class="unit-pill">${q.unit}</span>
+          ${q.isBank ? '<span class="exam-tag">سؤال رسمي في بنك الأسئلة</span>' : '<span style="font-size:0.78rem;color:#64748b">سؤال تدريبي شامل</span>'}
+        </div>
+        <div style="font-weight:700;font-size:1rem;color:#0f172a;margin-bottom:12px">${idx + 1}. ${q.q}</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          ${q.options.map((opt, oIdx) => {
+            let bg = '#f8fafc', border = '#cbd5e1', color = '#1e293b';
+            if (isAnswered) {
+              if (oIdx === q.correct) { bg = '#dcfce7'; border = '#16a34a'; color = '#14532d'; }
+              else if (oIdx === ans && ans !== q.correct) { bg = '#fee2e2'; border = '#dc2626'; color = '#7f1d1d'; }
+            }
+            return `
+              <button onclick="selectAnswer(${q.id}, ${oIdx})" style="text-align:right;padding:10px 14px;border-radius:8px;border:1.5px solid ${border};background:${bg};color:${color};font-family:inherit;font-size:0.93rem;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
+                <span><strong>${letters[oIdx]}.</strong> ${opt}</span>
+                ${isAnswered ? (oIdx === q.correct ? '<span>✓</span>' : (oIdx === ans ? '<span>✗</span>' : '')) : ''}
+              </button>
+            `;
+          }).join('')}
+        </div>
+        ${isAnswered ? `
+          <div style="margin-top:12px;padding:12px;border-radius:8px;background:#f1f5f9;border-right:4px solid ${ans === q.correct ? '#16a34a' : '#dc2626'}">
+            <div style="font-weight:700;color:${ans === q.correct ? '#15803d' : '#b91c1c'};margin-bottom:6px">
+              ${ans === q.correct ? 'إجابة صحيحة!' : 'إجابة خاطئة — الإجابة الصحيحة هي (' + letters[q.correct] + ')'}
+            </div>
+            <div style="font-size:0.9rem;color:#334155;margin-bottom:8px"><strong>القاعدة من الملزمة:</strong> ${q.exp}</div>
+            <div style="font-size:0.85rem;color:#475569;border-top:1px dashed #cbd5e1;padding-top:6px">
+              <strong>تفسير جميع الخيارات:</strong>
+              <ul style="margin:4px 0 0;padding-right:18px">
+                ${q.optExps.map((oe, i) => `<li><strong>(${letters[i]}):</strong> ${oe}</li>`).join('')}
+              </ul>
+            </div>
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }).join('');
+
+  const correctCount = Object.keys(userAnswers).filter(id => {
+    const qObj = quizData.find(x => x.id === Number(id));
+    return qObj && userAnswers[id] === qObj.correct;
+  }).length;
+  const badge = document.getElementById('quizScoreBadge');
+  if (badge) badge.textContent = `النتيجة: ${correctCount} / ${quizData.length}`;
 }
 
-function updateScore() {
-  let correct = 0;
-  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
-  document.getElementById("score").textContent = `النتيجة: ${correct} / ${questions.length}`;
-  document.getElementById("progressBar").style.width = (Object.keys(answers).length / questions.length * 100) + "%";
-}
-
-document.getElementById("resetQuiz").onclick = () => {
-  answers = {};
-  document.getElementById("finalResult").textContent = "";
+function selectAnswer(qId, optIdx) {
+  userAnswers[qId] = optIdx;
   renderQuiz();
-};
+}
+function filterQuiz(type) {
+  currentQuizFilter = type;
+  renderQuiz();
+}
+function resetQuiz() {
+  userAnswers = {};
+  currentQuizFilter = 'all';
+  renderQuiz();
+}
 
-document.getElementById("finishQuiz").onclick = () => {
-  let correct = 0;
-  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
-  const pct = Math.round(correct / questions.length * 100);
-  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${questions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! إتقان كامل للفصل السادس (DFS، أولوية الأفضل، وتسلق التل)." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
-};
-
-renderQuiz();
+// تهيئة الصفحة عند التحميل
+window.addEventListener('DOMContentLoaded', () => {
+  renderDfs();
+  renderBest();
+  renderTerms(termsData);
+  renderCard();
+  renderQuiz();
+});
 </script>
+</div>
 </body>
 </html>

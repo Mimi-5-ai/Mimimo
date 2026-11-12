@@ -2,999 +2,2091 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>الفصل الخامس الشامل (ص 50-58) | خوارزميات البحث (هياكل البيانات و BFS)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الفصل الخامس: خوارزميات حل المشكلات عن طريق البحث</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#f4f6fb;
-  --card:#ffffff;
-  --ink:#0f172a;
-  --muted:#64748b;
-  --accent:#4f46e5;
-  --accent-dark:#3730a3;
-  --accent2:#eef2ff;
-  --teal:#0d9488;
-  --teal-light:#ccfbf1;
-  --line:#e2e8f0;
-  --good:#059669;
-  --good-bg:#ecfdf5;
-  --bad:#dc2626;
-  --bad-bg:#fef2f2;
-  --warn:#d97706;
-  --warn-bg:#fffbeb;
+:root {
+  --bg-page: #f4f6fb;
+  --card-bg: #ffffff;
+  --indigo-dark: #1e1b4b;
+  --indigo-main: #312e81;
+  --indigo-accent: #4338ca;
+  --indigo-soft: #eef2ff;
+  --teal-accent: #0d9488;
+  --teal-dark: #0f766e;
+  --text-dark: #0f172a;
+  --text-body: #334155;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  --good-bg: #f0fdf4;
+  --good-border: #86efac;
+  --good-text: #166534;
+  --bad-bg: #fef2f2;
+  --bad-border: #fca5a5;
+  --bad-text: #991b1b;
+  --warn-bg: #fffbeb;
+  --warn-border: #fde68a;
+  --warn-text: #92400e;
 }
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
-header{background:linear-gradient(135deg,#1e1b4b,#3730a3,#0d9488);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(30,27,75,0.2)}
-.wrap{max-width:1060px;margin:auto;padding:0 16px}
-.eyebrow{opacity:.95;font-size:.9rem;background:rgba(255,255,255,0.16);display:inline-block;padding:4px 14px;border-radius:99px;margin-bottom:6px;font-weight:bold}
-h1{margin:5px 0;font-size:clamp(1.55rem,4vw,2.25rem)}
-header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
-nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
-nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:rgba(255,255,255,0.18);color:#ffffff;font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
-nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
-nav button.active{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
-main .btn{background:var(--accent2);color:var(--accent-dark)}
-main .btn.primary{background:var(--accent);color:white}
-main{padding:22px 0 48px}
-.panel{display:none}
-.panel.active{display:block;animation:fadeIn .25s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(15,23,42,0.04)}
-h2{font-size:1.35rem;margin:0 0 12px;color:#1e1b4b}
-h3{font-size:1.06rem;margin:10px 0 6px;color:var(--accent-dark)}
-h4{font-size:.98rem;margin:8px 0 4px;color:#0f172a}
-small,.muted{color:var(--muted)}
-ul,ol{padding-right:22px;margin:8px 0}
-li{margin:6px 0}
-details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
-summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f8faff;color:#1e1b4b;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
-details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
-.details-body{padding:16px 18px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
-.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
-.tag.teal{background:var(--teal-light);color:var(--teal)}
-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
-th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
-th{background:#f1f5f9;color:#1e1b4b;font-weight:bold}
-tr:last-child td{border-bottom:0}
-.note{border-right:4px solid var(--accent);padding:10px 14px;background:#f5f7ff;border-radius:8px;margin:10px 0}
-.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
-.formula-box{background:#1e1b4b;color:#fff;padding:12px 16px;border-radius:12px;text-align:center;font-size:1.04rem;margin:10px 0;direction:ltr;font-family:monospace}
-.code-box{background:#0f172a;color:#f8fafc;padding:14px 18px;border-radius:12px;font-family:monospace;font-size:.92rem;margin:10px 0;direction:ltr;text-align:left;overflow-x:auto;line-height:1.65}
-.step-card{border:1px solid var(--line);border-radius:12px;padding:14px;background:#f8fafc}
-.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
-.options{display:grid;gap:8px;margin-top:12px}
-.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
-.option:hover:not(:disabled){border-color:var(--accent);background:#f8faff}
-.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
-.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
-.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
-.feedback.good{color:var(--good);background:var(--good-bg)}
-.feedback.bad{color:var(--bad);background:var(--bad-bg)}
-.progress{height:10px;background:#e2e8f0;border-radius:9px;overflow:hidden;margin:12px 0}
-.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
-.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#eef2ff);border:2px solid #c7d2fe;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
-.flashcard:hover{transform:scale(1.005)}
-.flashcard .term{font-size:1.35rem;font-weight:bold;color:#1e1b4b}
-.flashcard .answer{margin-top:16px;font-size:1.08rem;color:var(--accent-dark);background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04)}
-.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
-.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
-footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
-@media(max-width:600px){
-  .card{padding:14px}
-  nav button{flex:1 1 calc(50% - 8px);text-align:center}
-  .flashcard{min-height:200px;padding:18px}
-  th,td{padding:8px 10px;font-size:.88rem}
+
+body.dark-mode {
+  --bg-page: #0f172a;
+  --card-bg: #1e293b;
+  --indigo-dark: #e0e7ff;
+  --indigo-main: #a5b4fc;
+  --indigo-accent: #818cf8;
+  --indigo-soft: #312e81;
+  --teal-accent: #2dd4bf;
+  --teal-dark: #14b8a6;
+  --text-dark: #f8fafc;
+  --text-body: #cbd5e1;
+  --text-muted: #94a3b8;
+  --border-color: #334155;
+  --good-bg: #064e3b;
+  --good-border: #059669;
+  --good-text: #a7f3d0;
+  --bad-bg: #7f1d1d;
+  --bad-border: #dc2626;
+  --bad-text: #fecaca;
+  --warn-bg: #78350f;
+  --warn-border: #d97706;
+  --warn-text: #fde68a;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-page);
+  color: var(--text-dark);
+  font-family: 'Tajawal', -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.75;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Top Utility Bar */
+.top-utility-bar {
+  background: var(--card-bg);
+  height: 56px;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  border-bottom: 4px solid var(--teal-accent);
+}
+
+.btn-back {
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 6px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-dark);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-complete {
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 6px 20px;
+  border-radius: 8px;
+  border: none;
+  background: #15803d;
+  color: #ffffff;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.btn-complete.done {
+  background: var(--teal-dark);
+}
+
+.btn-theme {
+  font-family: inherit;
+  font-size: 0.95rem;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-body);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hero Banner */
+.hero-banner {
+  background: linear-gradient(135deg, #2e236c 0%, #1f3b64 55%, #115e59 100%);
+  color: #ffffff;
+  padding: 36px 20px 30px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(30, 27, 75, 0.12);
+}
+
+.hero-inner {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.course-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #f8fafc;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 5px 16px;
+  border-radius: 99px;
+  margin-bottom: 14px;
+}
+
+.hero-title {
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 0 0 12px;
+  letter-spacing: -0.3px;
+}
+
+.hero-subtitle {
+  font-size: 0.98rem;
+  color: rgba(255, 255, 255, 0.88);
+  max-width: 860px;
+  margin: 0 auto 24px;
+  line-height: 1.7;
+}
+
+.nav-pills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.nav-pill {
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 700;
+  padding: 9px 20px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.nav-pill:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.nav-pill.active {
+  background: #ffffff;
+  color: #1e1b4b;
+  border-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* Main Container */
+.main-container {
+  max-width: 1040px;
+  width: 100%;
+  margin: 26px auto 50px;
+  padding: 0 16px;
+  flex: 1;
+}
+
+.tab-section {
+  display: none;
+}
+
+.tab-section.active {
+  display: block;
+}
+
+/* Chapter Map Card */
+.map-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 28px 26px;
+  margin-bottom: 22px;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+}
+
+.map-title {
+  font-size: 1.22rem;
+  font-weight: 800;
+  color: var(--indigo-dark);
+  margin: 0 0 20px;
+}
+
+.map-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+@media (max-width: 820px) {
+  .map-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero-title {
+    font-size: 1.55rem;
+  }
+}
+
+.map-col {
+  padding: 6px 4px;
+}
+
+.unit-pill {
+  display: inline-block;
+  background: var(--indigo-soft);
+  color: var(--indigo-accent);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.map-col-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--indigo-accent);
+  margin: 0 0 8px;
+}
+
+.map-col-desc {
+  font-size: 0.9rem;
+  color: var(--text-body);
+  margin: 0;
+  line-height: 1.65;
+}
+
+/* Accordion Sections */
+.accordion-item {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  margin-bottom: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);
+}
+
+.accordion-header {
+  width: 100%;
+  background: var(--card-bg);
+  border: none;
+  padding: 18px 22px;
+  text-align: right;
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--indigo-dark);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background 0.15s ease;
+}
+
+.accordion-header:hover {
+  background: rgba(67, 56, 202, 0.04);
+}
+
+.acc-arrow {
+  display: inline-block;
+  font-size: 0.85rem;
+  color: var(--indigo-dark);
+  transition: transform 0.2s ease;
+}
+
+.accordion-item.open .acc-arrow {
+  transform: rotate(-90deg);
+}
+
+.accordion-body {
+  display: none;
+  padding: 6px 24px 26px;
+  border-top: 1px solid var(--border-color);
+}
+
+.accordion-item.open .accordion-body {
+  display: block;
+}
+
+.sec-heading {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--indigo-main);
+  margin: 20px 0 10px;
+  padding-right: 12px;
+  border-right: 4px solid var(--indigo-accent);
+}
+
+.study-list {
+  margin: 8px 0 14px;
+  padding-right: 20px;
+  color: var(--text-body);
+  font-size: 0.95rem;
+}
+
+.study-list li {
+  margin-bottom: 8px;
+}
+
+.hl-term {
+  font-weight: 800;
+  color: var(--indigo-dark);
+}
+
+.exam-tag {
+  display: inline-block;
+  background: var(--warn-bg);
+  border: 1px solid var(--warn-border);
+  color: var(--warn-text);
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 1px 8px;
+  border-radius: 6px;
+  margin-right: 6px;
+}
+
+.info-box {
+  background: rgba(15, 118, 110, 0.06);
+  border: 1px solid var(--border-color);
+  border-right: 4px solid var(--teal-accent);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: 0.93rem;
+  color: var(--text-body);
+}
+
+.two-col-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin: 14px 0;
+}
+
+@media (max-width: 720px) {
+  .two-col-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sub-card {
+  background: rgba(67, 56, 202, 0.03);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+
+.sub-card-title {
+  font-weight: 800;
+  color: var(--indigo-main);
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+
+.code-badge {
+  direction: ltr;
+  display: inline-block;
+  font-family: 'Courier New', monospace;
+  font-weight: 800;
+  background: var(--indigo-soft);
+  color: var(--indigo-accent);
+  padding: 1px 8px;
+  border-radius: 6px;
+  margin: 0 3px;
+  font-size: 0.88rem;
+}
+
+/* Data Structure Visual Boxes */
+.ds-visual-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  direction: ltr;
+  margin: 12px 0;
+}
+
+.ds-cell {
+  min-width: 38px;
+  height: 38px;
+  padding: 0 10px;
+  border: 2px solid var(--indigo-main);
+  background: var(--card-bg);
+  color: var(--text-dark);
+  font-weight: 800;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.92rem;
+}
+
+.ds-cell.top-item {
+  background: #fee2e2;
+  border-color: #dc2626;
+  color: #991b1b;
+}
+
+.ds-cell.front-item {
+  background: #dcfce7;
+  border-color: #16a34a;
+  color: #166534;
+}
+
+/* Interactive BFS Simulator */
+.sim-box {
+  background: rgba(148, 163, 184, 0.06);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 20px;
+  margin: 16px 0;
+}
+
+.sim-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.sim-step-desc {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-right: 4px solid var(--indigo-accent);
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.93rem;
+  margin-bottom: 14px;
+}
+
+.queue-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  direction: ltr;
+  flex-wrap: wrap;
+  padding: 12px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  margin-top: 12px;
+}
+
+.q-slot {
+  width: 42px;
+  height: 38px;
+  border: 2px solid #94a3b8;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.95rem;
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.q-slot.active-front {
+  border-color: #0d9488;
+  background: #ccfbf1;
+  color: #115e59;
+}
+
+/* Tables */
+.table-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 22px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+}
+
+.table-card h3 {
+  margin: 0 0 14px;
+  color: var(--indigo-dark);
+  font-size: 1.1rem;
+}
+
+table.comp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.91rem;
+}
+
+table.comp-table th,
+table.comp-table td {
+  border: 1px solid var(--border-color);
+  padding: 11px 14px;
+  text-align: right;
+  vertical-align: top;
+}
+
+table.comp-table th {
+  background: var(--indigo-soft);
+  color: var(--indigo-dark);
+  font-weight: 800;
+}
+
+table.comp-table tr:nth-child(even) td {
+  background: rgba(148, 163, 184, 0.05);
+}
+
+.ltr-cell {
+  direction: ltr;
+  text-align: left;
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+}
+
+/* Terms & Concepts */
+.terms-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 240px;
+  padding: 11px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-dark);
+  font-family: inherit;
+  font-size: 0.93rem;
+}
+
+.filter-btn {
+  padding: 9px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-body);
+  font-family: inherit;
+  font-size: 0.86rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.filter-btn.active {
+  background: var(--indigo-main);
+  color: #ffffff;
+  border-color: var(--indigo-main);
+}
+
+.terms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
+}
+
+.term-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 18px;
+}
+
+.term-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.term-ar {
+  font-weight: 800;
+  color: var(--indigo-dark);
+  font-size: 1rem;
+}
+
+.term-en {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--teal-accent);
+  background: rgba(15, 118, 110, 0.1);
+  padding: 2px 8px;
+  border-radius: 6px;
+  direction: ltr;
+}
+
+.term-def {
+  font-size: 0.9rem;
+  color: var(--text-body);
+  margin: 0;
+}
+
+/* Flashcards */
+.flashcard-wrap {
+  max-width: 640px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.fc-box {
+  background: var(--card-bg);
+  border: 2px solid var(--border-color);
+  border-radius: 16px;
+  min-height: 250px;
+  padding: 32px 26px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+  margin-bottom: 18px;
+  transition: border-color 0.2s ease;
+}
+
+.fc-box:hover {
+  border-color: var(--indigo-accent);
+}
+
+.fc-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--indigo-accent);
+  background: var(--indigo-soft);
+  padding: 4px 12px;
+  border-radius: 99px;
+  margin-bottom: 14px;
+}
+
+.fc-text {
+  font-size: 1.18rem;
+  font-weight: 800;
+  color: var(--indigo-dark);
+  line-height: 1.65;
+}
+
+.fc-controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Quiz */
+.quiz-toolbar {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 16px 20px;
+  margin-bottom: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.quiz-stats {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.q-stat {
+  font-size: 0.84rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 8px;
+  background: var(--indigo-soft);
+  color: var(--text-body);
+}
+
+.q-stat.good { background: var(--good-bg); color: var(--good-text); }
+.q-stat.bad { background: var(--bad-bg); color: var(--bad-text); }
+
+.q-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 22px;
+  margin-bottom: 16px;
+}
+
+.q-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.q-title {
+  font-size: 1.08rem;
+  font-weight: 800;
+  color: var(--indigo-dark);
+  margin: 0 0 14px;
+}
+
+.q-visual {
+  margin: 12px 0 16px;
+  padding: 14px;
+  background: rgba(148, 163, 184, 0.06);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+}
+
+.q-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.q-opt {
+  width: 100%;
+  text-align: right;
+  padding: 13px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-dark);
+  font-family: inherit;
+  font-size: 0.94rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  transition: all 0.15s ease;
+}
+
+.q-opt:hover:not(:disabled) {
+  background: var(--indigo-soft);
+  border-color: var(--indigo-accent);
+}
+
+.q-opt:disabled {
+  cursor: default;
+}
+
+.q-opt.correct {
+  background: var(--good-bg);
+  border-color: var(--good-border);
+  color: var(--good-text);
+}
+
+.q-opt.wrong {
+  background: var(--bad-bg);
+  border-color: var(--bad-border);
+  color: var(--bad-text);
+}
+
+.opt-char {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background: var(--indigo-soft);
+  color: var(--indigo-dark);
+  font-weight: 800;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.q-opt.correct .opt-char { background: var(--good-text); color: #fff; }
+.q-opt.wrong .opt-char { background: var(--bad-text); color: #fff; }
+
+.exp-box {
+  margin-top: 16px;
+  padding: 16px 18px;
+  border-radius: 12px;
+  background: rgba(148, 163, 184, 0.06);
+  border: 1px solid var(--border-color);
+  display: none;
+}
+
+.exp-box.show {
+  display: block;
+}
+
+.exp-summary {
+  font-size: 0.92rem;
+  color: var(--text-dark);
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.exp-item {
+  font-size: 0.86rem;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  margin-bottom: 6px;
+  color: var(--text-body);
+}
+
+.exp-item.right-choice {
+  border-right: 4px solid var(--good-text);
+}
+
+.exp-item.wrong-choice {
+  border-right: 4px solid #94a3b8;
+}
+
+footer {
+  text-align: center;
+  padding: 18px;
+  color: var(--text-muted);
+  font-size: 0.86rem;
+  border-top: 1px solid var(--border-color);
+  background: var(--card-bg);
 }
 </style>
 </head>
 <body>
-<header>
-  <div class="wrap">
-    <div class="eyebrow">مقرر الذكاء الاصطناعي • الفصل الخامس (صفحات 50 إلى 58)</div>
-    <h1>الفصل الخامس: خوارزميات حل المشكلات عن طريق البحث (هياكل البيانات و BFS)</h1>
-    <p>يغطي هياكل البيانات الأساسية للبحث (الطابور FIFO، المكدس LIFO، طابور الأولوية)، تمثيل الرسوم البيانية والأشجار، البحث غير الموجه (الأعمى)، خوارزمية البحث بالعرض أولاً (BFS) وتتبعها خطوة بخطوة، تحليل تعقيدها، وتطبيقها بلغة بايثون</p>
-    <nav>
-      <button class="active" data-tab="summary">الشرح الشامل</button>
-      <button data-tab="tables">جداول المقارنات والتتبع (4)</button>
-      <button data-tab="terms">المصطلحات والمفاهيم (28)</button>
-      <button data-tab="cards">البطاقات التعليمية (28)</button>
-      <button data-tab="quiz">الاختبار الشامل (25)</button>
-    </nav>
+
+<div class="top-utility-bar">
+  <a href="#back" class="btn-back" onclick="history.back(); return false;">رجوع</a>
+  <button class="btn-complete" id="completeBtn" onclick="toggleComplete()">اكتمل</button>
+  <button class="btn-theme" onclick="toggleDarkMode()" title="تبديل الوضع الليلي">☾</button>
+</div>
+
+<header class="hero-banner">
+  <div class="hero-inner">
+    <div class="course-badge">مقرر الذكاء الاصطناعي • تغطية شاملة 100%</div>
+    <h1 class="hero-title">الفصل الخامس: خوارزميات حل المشكلات عن طريق البحث</h1>
+    <p class="hero-subtitle">
+      يغطي تصنيف استراتيجيات البحث، هياكل البيانات الخطية (المصفوفات الثابتة، المكدس LIFO، الطابور FIFO، القائمة المترابطة)، وهياكل البيانات غير الخطية (الشجرة والمخطط)، وخوارزمية البحث بأولوية الاتساع (BFS)
+    </p>
+    <div class="nav-pills">
+      <button class="nav-pill active" onclick="switchTab('study', this)">الشرح الشامل</button>
+      <button class="nav-pill" onclick="switchTab('tables', this)">جداول المقارنات والملخصات (4)</button>
+      <button class="nav-pill" onclick="switchTab('terms', this)">المصطلحات والمفاهيم (22)</button>
+      <button class="nav-pill" onclick="switchTab('cards', this)">البطاقات التعليمية (22)</button>
+      <button class="nav-pill" onclick="switchTab('quiz', this)">الاختبار الشامل (20)</button>
+    </div>
   </div>
 </header>
 
-<main class="wrap">
-  <!-- ================= التبويب الأول: الشرح الشامل ================= -->
-  <section id="summary" class="panel active">
-    <div class="card">
-      <h2>خريطة الفصل الخامس (ص 50 - 58)</h2>
-      <div class="grid">
-        <div>
-          <span class="tag">الوحدة الأولى (ص 50 - 52)</span>
-          <h3>هياكل البيانات والرسوم البيانية</h3>
-          <p>الطابور (Queue - FIFO)، المكدس (Stack - LIFO)، طابور الأولوية (Priority Queue)، وتمثيل الرسوم البيانية والأشجار بمصفوفة وقائمة التجاور.</p>
+<main class="main-container">
+
+  <!-- ==================== التبويب 1: الشرح الشامل ==================== -->
+  <section id="tab-study" class="tab-section active">
+    <div class="map-card">
+      <h2 class="map-title">خريطة الفصل الخامس: خوارزميات حل المشكلات عن طريق البحث</h2>
+      <div class="map-grid">
+        <div class="map-col">
+          <span class="unit-pill">الوحدة الأولى</span>
+          <h3 class="map-col-title">استراتيجيات البحث وهياكل البيانات الخطية</h3>
+          <p class="map-col-desc">
+            تصنيف البحث (الأعمى والمستنير)، مفهوم هيكلة البيانات، وهياكل البيانات الخطية: المصفوفات الثابتة (Static)، المكدس (Stack - LIFO)، الطابور (Queue - FIFO)، والقائمة المترابطة (Linked List).
+          </p>
         </div>
-        <div>
-          <span class="tag">الوحدة الثانية (ص 53 - 55)</span>
-          <h3>البحث الأعمى وخوارزمية BFS</h3>
-          <p>مفهوم البحث غير الموجه (الأعمى)، آلية عمل البحث بالعرض أولاً (BFS) مستوى بمستوى، القوائم المستخدمة، ومثال تتبع كامل خطوة بخطوة.</p>
+        <div class="map-col">
+          <span class="unit-pill">الوحدة الثانية</span>
+          <h3 class="map-col-title">هياكل البيانات غير الخطية (الشجرة والمخطط)</h3>
+          <p class="map-col-desc">
+            الفرق بين الشجرة (Tree) والمخطط (Graph)، أنواع المخططات (الموجه Directed وغير الموجه UnDirected)، وبنية الشجرة الهرمية ومستوياتها من الجذر للأوراق.
+          </p>
         </div>
-        <div>
-          <span class="tag">الوحدة الثالثة (ص 56 - 58)</span>
-          <h3>تحليل أداء BFS وكود بايثون و UCS</h3>
-          <p>تقييم BFS بالمعايير الأربعة (الاكتمال، الأمثلية، الوقت، والذاكرة)، المميزات والعيوب، الكود البرمجي الكامل بلغة بايثون، والبحث بالتكلفة الموحدة (UCS).</p>
+        <div class="map-col">
+          <span class="unit-pill">الوحدة الثالثة</span>
+          <h3 class="map-col-title">خوارزمية البحث بأولوية الاتساع (BFS Algorithm)</h3>
+          <p class="map-col-desc">
+            مبدأ فحص المستوى كاملاً (الأشقاء أولاً) قبل الانتقال للمستوى التالي، استخدام هيكل البيانات الطابور (Queue)، ومحاكاة تتبع الشجرة من A إلى P خطوة بخطوة.
+          </p>
         </div>
       </div>
     </div>
 
     <!-- الوحدة الأولى -->
-    <details open>
-      <summary>1) الوحدة الأولى: هياكل البيانات الأساسية في خوارزميات البحث وتمثيل الرسوم البيانية والأشجار (ص 50 - 52)</summary>
-      <div class="details-body">
-        <h3>أولاً: دور هياكل البيانات في خوارزميات البحث</h3>
-        <ul>
-          <li>تحتاج خوارزميات البحث في الذكاء الاصطناعي إلى الاحتفاظ بالعقد التي تم توليدها ولم يتم فحصها وتوسيعها بعد في بنية تسمى <b>الحافة (<span dir="ltr">Frontier</span>)</b> أو <b>القائمة المفتوحة (<span dir="ltr">Open List</span>)</b>.</li>
-          <li>إن <b>الفرق الجوهري بين استراتيجيات البحث المختلفة</b> (مثل البحث بالعرض أولاً <span dir="ltr">BFS</span>، أو بالعمق أولاً <span dir="ltr">DFS</span>، أو بالتكلفة الموحدة <span dir="ltr">UCS</span>) يكمن في <b>نوع هيكل البيانات (الطابور) المستخدم لترتيب وسحب العقد من الحافة</b>!</li>
-        </ul>
-
-        <div class="exam-alert">
-          <h3>ثانياً: هياكل البيانات الثلاثة لإدارة الحافة (<span dir="ltr">Frontier Queues</span>) (ص 50 - 51) - موضع أسئلة مؤكدة:</h3>
-          <div class="grid">
-            <div class="step-card">
-              <span class="tag">1. الطابور (Queue - FIFO)</span>
-              <h4>أولاً يدخل أولاً يخرج (<span dir="ltr">First-In, First-Out</span>)</h4>
-              <ul>
-                <li>يعمل تماماً مثل طابور الانتظار الواقعي؛ العنصر الذي يدخل الطابور أولاً هو الذي يتم سحبه ومعالجته أولاً.</li>
-                <li><b>عملياته الأساسية:</b>
-                  <br>• <b>الإضافة (<span dir="ltr">Enqueue / Append</span>):</b> إضافة العقد الجديدة في <b>نهاية (مؤخرة <span dir="ltr">Rear / Back</span>)</b> الطابور.
-                  <br>• <b>السحب (<span dir="ltr">Dequeue / Pop(0)</span>):</b> إزالة وسحب العقدة الأقدم من <b>بداية (مقدمة <span dir="ltr">Front / Head</span>)</b> الطابور.</li>
-                <li><b>الخوارزمية المعتمدة عليه:</b> خوارزمية <b>البحث بالعرض أولاً (<span dir="ltr">BFS</span>)</b>.</li>
-              </ul>
-            </div>
-
-            <div class="step-card">
-              <span class="tag">2. المكدس (Stack - LIFO)</span>
-              <h4>آخراً يدخل أولاً يخرج (<span dir="ltr">Last-In, First-Out</span>)</h4>
-              <ul>
-                <li>يشبه كومة من الأطباق؛ العنصر الذي يُوضع أخيراً في القمة هو أول عنصر يتم سحبه.</li>
-                <li><b>عملياته الأساسية:</b>
-                  <br>• <b>الدفع (<span dir="ltr">Push / Append</span>):</b> إضافة عنصر جديد إلى <b>قمة المكدس (<span dir="ltr">Top</span>)</b>.
-                  <br>• <b>السحب (<span dir="ltr">Pop</span>):</b> إزالة وإرجاع العنصر الأخير من <b>قمة المكدس (<span dir="ltr">Top</span>)</b>.</li>
-                <li><b>الخوارزمية المعتمدة عليه:</b> خوارزمية <b>البحث بالعمق أولاً (<span dir="ltr">DFS</span>)</b>.</li>
-              </ul>
-            </div>
-
-            <div class="step-card">
-              <span class="tag teal">3. طابور الأولوية (Priority Queue)</span>
-              <h4>السحب حسب الأفضلية / الأقل تكلفة</h4>
-              <ul>
-                <li>يتم فيه إسناد قيمة رقمية (تمثل التكلفة أو الأولوية) لكل عقدة، وعند السحب (<code dir="ltr">POP</code>) يتم إخراج العقدة صاحبة <b>أعلى أولوية (الأقل تكلفة أو الأفضل تقييماً)</b> بغض النظر عن وقت دخولها.</li>
-                <li><b>الخوارزميات المعتمدة عليه:</b> البحث بالتكلفة الموحدة (<b dir="ltr">UCS</b>)، البحث الجشع (<b dir="ltr">Greedy</b>)، وخوارزمية (<b dir="ltr">A*</b>).</li>
-              </ul>
-            </div>
+    <div class="accordion-item open">
+      <button class="accordion-header" onclick="toggleAccordion(this)">
+        <span class="acc-arrow">◄</span>
+        <span>1) الوحدة الأولى: استراتيجيات البحث ومراجعة هياكل البيانات الخطية (Linear Data Structures)</span>
+      </button>
+      <div class="accordion-body">
+        <h4 class="sec-heading">أولاً: تصنيف استراتيجيات البحث ومفهوم هيكلة البيانات (Data Structure)</h4>
+        <div class="two-col-cards">
+          <div class="sub-card">
+            <h5 class="sub-card-title">1. استراتيجيات البحث الأعمى (Uninformed)</h5>
+            <ul class="study-list" style="margin-bottom:0">
+              <li>خوارزمية البحث بأولوية العمق (<span class="code-badge">Depth First Search - DFS</span>).</li>
+              <li>خوارزمية البحث بأولوية الاتساع (<span class="code-badge">Breadth First Search - BFS</span>).</li>
+            </ul>
+          </div>
+          <div class="sub-card">
+            <h5 class="sub-card-title">2. استراتيجيات البحث المستنيرة (Informed)</h5>
+            <ul class="study-list" style="margin-bottom:0">
+              <li>خوارزمية البحث بأولوية الأفضل (<span class="code-badge">Best First Search - BFS</span>).</li>
+              <li>خوارزمية البحث تسلق التل (<span class="code-badge">Hill Climbing</span>).</li>
+            </ul>
           </div>
         </div>
 
-        <h3>ثالثاً: الرسوم البيانية (<span dir="ltr">Graphs</span>) والأشجار (<span dir="ltr">Trees</span>) وطرق تمثيلها برمجياً (ص 51 - 52)</h3>
-        <ul>
-          <li><b>الرسم البياني (<span dir="ltr">Graph</span> $G = (V, E)$):</b> يتكون من مجموعة من <b>العقد أو الرؤوس (<span dir="ltr">Vertices / Nodes</span> $V$)</b> التي تمثل الحالات، ومجموعة من <b>الأضلاع أو الحواف (<span dir="ltr">Edges / Links</span> $E$)</b> التي تمثل الأفعال والانتقالات بينها:
-            <ul>
-              <li><b>رسم بياني موجه (<span dir="ltr">Directed Graph</span>):</b> تكون الحواف ذات اتجاه محدد (سهم من $A$ إلى $B$).</li>
-              <li><b>رسم بياني غير موجه (<span dir="ltr">Undirected Graph</span>):</b> الحواف ثنائية الاتجاه (إذا كان هناك طريق بين $A$ و $B$ يمكن الانتقال في الاتجاهين).</li>
-              <li><b>رسم بياني موزون (<span dir="ltr">Weighted Graph</span>):</b> لكل حافة وزن أو تكلفة رقمية (مثل المسافة بالكيلومترات).</li>
-              <li><b>الشجرة (<span dir="ltr">Tree</span>):</b> هي حالة خاصة من الرسم البياني <b>متصلة وخالية من الحلقات أو الدورات (<span dir="ltr">Acyclic</span>)</b>، ولها عقدة مميزة تسمى الجذر (<span dir="ltr">Root</span>)، ولكل عقدة (ما عدا الجذر) أب واحد فقط.</li>
+        <div class="info-box">
+          <strong>مفهوم هيكلة البيانات (Data Structure):</strong> هي آلية تخزين وتنظيم البيانات في ذاكرة الحواسيب بهدف تسهيل استخدامها بكفاءة. وبما أن برامج الذكاء الاصطناعي تعتمد على البيانات ومعالجتها، فإن هيكلة البيانات توفر طرقاً فعالة لتخزين وتنظيم البيانات مما ينعكس على <strong>(كفاءة – سرعة – دقة)</strong> استخدام خوارزميات تطبيقات الذكاء الاصطناعي.
+        </div>
+
+        <h4 class="sec-heading">ثانياً: التقسيم الرئيسي لهياكل البيانات (Data Structures)</h4>
+        <ul class="study-list">
+          <li><span class="hl-term">1. هياكل البيانات الخطية (Linear Data Structures):</span> وتشمل <strong>المصفوفات (Arrays)</strong>، و<strong>القائمة (List)</strong> التي تتفرع إلى: المكدس (<strong>Stack</strong>)، الطابور (<strong>Queue</strong>)، والقائمة المترابطة (<strong>Linked List</strong>).</li>
+          <li><span class="hl-term">2. هياكل البيانات غير الخطية (Non-Linear Data Structures):</span> وتشمل <strong>الشجرة (Tree Structure)</strong>، و<strong>المخطط (Graph)</strong>.</li>
+        </ul>
+
+        <h4 class="sec-heading">ثالثاً: تفصيل هياكل البيانات الخطية الأربعة (مواضع أسئلة مؤكدة)</h4>
+        <div class="two-col-cards">
+          <div class="sub-card">
+            <h5 class="sub-card-title">1. المصفوفات (ARRAYS) <span class="exam-tag">سؤال في بنك الأسئلة</span></h5>
+            <ul class="study-list">
+              <li>تُصنف بأنها <strong>هياكل بيانات ثابتة (STATIC)</strong>.</li>
+              <li>تنقسم في الملزمة إلى: <strong>مصفوفة البعد الواحد (One Dim Array)</strong>، و<strong>مصفوفة ثنائية البعد (Two Dim Array)</strong>.</li>
             </ul>
-          </li>
-          <li><b>طريقتا تمثيل الرسم البياني في ذاكرة الحاسوب:</b>
+            <div class="ds-visual-row">
+              <span class="ds-cell">1</span><span class="ds-cell">5</span><span class="ds-cell">2</span><span class="ds-cell">3</span><span class="ds-cell">7</span><span class="ds-cell">9</span><span class="ds-cell">8</span><span class="ds-cell">4</span>
+            </div>
+          </div>
+
+          <div class="sub-card">
+            <h5 class="sub-card-title">2. المكدس (STACK) <span class="exam-tag">سؤال في بنك الأسئلة</span></h5>
+            <ul class="study-list">
+              <li>تُصنف بأنها <strong>هياكل بيانات غير ثابتة / ديناميكية (DYNAMIC)</strong>.</li>
+              <li>تعمل بمبدأ <span class="code-badge">Last In First Out (LIFO)</span> أي: <strong>آخر عنصر يضاف هو أول عنصر يخرج</strong>.</li>
+              <li><strong>الأمر <span class="code-badge">Push</span>:</strong> يستخدم لإضافة عنصر في قمة المكدس.</li>
+              <li><strong>الأمر <span class="code-badge">Pop</span>:</strong> يستخدم لحذف/إخراج عنصر من قمة المكدس.</li>
+            </ul>
+            <div class="ds-visual-row">
+              <span style="font-size:0.8rem;font-weight:700">القاع:</span>
+              <span class="ds-cell">1</span><span class="ds-cell">5</span><span class="ds-cell">2</span><span class="ds-cell">3</span><span class="ds-cell">7</span><span class="ds-cell">9</span><span class="ds-cell">8</span>
+              <span class="ds-cell top-item" title="قمة المكدس">4 (Top)</span>
+            </div>
+          </div>
+
+          <div class="sub-card">
+            <h5 class="sub-card-title">3. الطابور (QUEUE) <span class="exam-tag">سؤال في بنك الأسئلة</span></h5>
+            <ul class="study-list">
+              <li>تُصنف بأنها <strong>هياكل بيانات غير ثابتة / ديناميكية (DYNAMIC)</strong>.</li>
+              <li>تعمل بمبدأ <span class="code-badge">First In First Out (FIFO)</span> أي: <strong>أول عنصر يضاف هو أول عنصر يخرج</strong>.</li>
+              <li>في مثال الملزمة: أضفنا <span class="code-badge">4</span> ثم <span class="code-badge">8</span> ثم <span class="code-badge">9</span> ثم <span class="code-badge">1</span>، وعند الخروج يخرج العنصر الأول <span class="code-badge">4</span> أولاً فيتبقى <span class="code-badge">[8, 9, 1]</span>.</li>
+            </ul>
+            <div class="ds-visual-row">
+              <span style="font-size:0.8rem;font-weight:700">أول من دخل (يخرج أولاً):</span>
+              <span class="ds-cell front-item">4</span><span class="ds-cell">8</span><span class="ds-cell">9</span><span class="ds-cell">1</span>
+            </div>
+          </div>
+
+          <div class="sub-card">
+            <h5 class="sub-card-title">4. القائمة المترابطة (LINKED LIST)</h5>
+            <ul class="study-list">
+              <li>تتكون من سلسلة من العقد المترابطة، تبدأ بمؤشر البداية (<span class="code-badge">start</span>) وتنتهي بـ (<span class="code-badge">Null</span>).</li>
+              <li>كل عقدة تحتوي على قسمين: <strong>البيانات (Data)</strong> + <strong>مؤشر (pointer / Next)</strong> يشير للعقدة التالية.</li>
+              <li>قد تكون أحادية الاتجاه (<span class="code-badge">Data | Next</span>) أو مزدوجة الاتجاه (<span class="code-badge">prev | data | next</span>).</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- الوحدة الثانية -->
+    <div class="accordion-item">
+      <button class="accordion-header" onclick="toggleAccordion(this)">
+        <span class="acc-arrow">◄</span>
+        <span>2) الوحدة الثانية: هياكل البيانات غير الخطية (الشجرة Tree والمخطط Graph)</span>
+      </button>
+      <div class="accordion-body">
+        <div class="info-box">
+          <strong>تنبيه هام جداً للاختبار (سؤال صح وخطأ في البنك):</strong> كل من <strong>المخطط (Graph)</strong> و<strong>الشجرة (Tree)</strong> يصنفان ضمن <strong>هياكل البيانات غير الخطية (Non-Linear Data Structures)</strong>؛ فإذا جاء في السؤال أن "المخطط نوع من هياكل البيانات الخطية" فالإجابة <strong>خطأ</strong> قاطعاً!
+        </div>
+
+        <h4 class="sec-heading">أولاً: المخطط (GRAPH) وأنواعه</h4>
+        <ul class="study-list">
+          <li><span class="hl-term">تعريف المخطط (Graph):</span> نوع من <strong>هياكل البيانات غير الخطية</strong> يتكون من مجموعة من العقد (Nodes) ترتبط وتتصل بخطوط (Edges) <span class="exam-tag">سؤال في بنك الأسئلة</span></li>
+          <li><span class="hl-term">نوعا المخطط في الملزمة (صفحة 54):</span>
             <ol>
-              <li><b>مصفوفة التجاور (<span dir="ltr">Adjacency Matrix</span>):</b> مصفوفة ثنائية الأبعاد بحجم $N \times N$ (حيث $N$ عدد العقد)؛ توضع القيمة $1$ (أو وزن الحافة) في الخانة $(i, j)$ إذا كان هناك اتصال مباشر بين العقدة $i$ والعقدة $j$، وتوضع $0$ إذا لم يوجد اتصال. (سهلة الفحص لكنها تستهلك ذاكرة كبيرة $O(V^2)$ خاصة إذا كانت الروابط قليلة).</li>
-              <li><b>قائمة التجاور (<span dir="ltr">Adjacency List</span>):</b> يتم تمثيل كل عقدة بقائمة تحتوي فقط على العقد المجاورة المتصلة بها مباشرةً (وفي لغة بايثون تُمثل بسهولة كـ <b>قاموس <span dir="ltr">Dictionary</span></b> تكون فيه العقدة هي المفتاح <span dir="ltr">Key</span> وقائمة جيرانها هي القيمة <span dir="ltr">Value</span>)، وهي أكفأ في استهلاك الذاكرة $O(V + E)$.</li>
+              <li><strong>المخطط الموجه (Directed Graph):</strong> ترتبط فيه العقد بأسهم ذات اتجاه محدد (مثل مخطط الانتقال من S إلى G).</li>
+              <li><strong>المخطط غير الموجه (UnDirected Graph):</strong> ترتبط فيه العقد بخطوط عادية بدون أسهم اتجاه (مثل مخطط العقد A, B, C, D, E, F).</li>
             </ol>
           </li>
         </ul>
-      </div>
-    </details>
 
-    <!-- الوحدة الثانية -->
-    <details open>
-      <summary>2) الوحدة الثانية: البحث غير الموجه (الأعمى) وخوارزمية البحث بالعرض أولاً (BFS) مع مثال تتبع كامل (ص 53 - 55)</summary>
-      <div class="details-body">
-        <h3>أولاً: استراتيجيات البحث غير الموجه / الأعمى (<span dir="ltr">Uninformed / Blind Search</span>) (ص 53)</h3>
-        <ul>
-          <li>تُسمى <b>غير موجهة (أو عمياء)</b> لأنها لا تمتلك أي معلومات إضافية عن الحالات خارج ما هو معطى في تعريف المشكلة؛ فهي تولد الخلفاء وتفحص هل العقدة هدف أم لا، لكنها <b>لا تعرف أي العقد غير الهدف أقرب إلى الهدف</b> (لا تستخدم دالة استدلال $h(n)$).</li>
-          <li><b>أهم خوارزميات البحث غير الموجه:</b>
-            <br>1) البحث بالعرض أولاً (<span dir="ltr">Breadth-First Search - BFS</span>) • 2) البحث بالتكلفة الموحدة (<span dir="ltr">Uniform-Cost Search - UCS</span>) • 3) البحث بالعمق أولاً (<span dir="ltr">Depth-First Search - DFS</span>) • 4) البحث بالعمق المحدود (<span dir="ltr">Depth-Limited Search - DLS</span>) • 5) البحث بالتعميق التكراري (<span dir="ltr">Iterative Deepening Search - IDS</span>).</li>
+        <div class="two-col-cards">
+          <div class="sub-card" style="text-align:center">
+            <h5 class="sub-card-title">1. المخطط الموجه (Directed Graph) <span class="exam-tag">سؤال في البنك</span></h5>
+            <svg viewBox="0 0 340 155" style="width:100%;max-width:320px;background:#fff;border-radius:8px;border:1px solid #cbd5e1">
+              <defs>
+                <marker id="darr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+                  <polygon points="0 0, 7 3.5, 0 7" fill="#334155"/>
+                </marker>
+              </defs>
+              <line x1="38" y1="95" x2="96" y2="70" stroke="#334155" stroke-width="1.5" marker-end="url(#darr)"/>
+              <line x1="38" y1="101" x2="195" y2="63" stroke="#334155" stroke-width="1.5" marker-end="url(#darr)"/>
+              <line x1="36" y1="107" x2="68" y2="133" stroke="#334155" stroke-width="1.5" marker-end="url(#darr)"/>
+              <line x1="106" y1="57" x2="58" y2="37" stroke="#334155" stroke-width="1.5" marker-end="url(#darr)"/>
+              <line x1="60" y1="27" x2="95" y2="17" stroke="#334155" stroke-width="1.5" marker-end="url(#darr)"/>
+              <line x1="118" y1="59" x2="158" y2="35" stroke="#334155" stroke-width="1.5" marker-end="url(#darr)"/>
+              <line x1="158" y1="27" x2="120" y2="17" stroke="#334155" stroke-width="1.5" marker-end="url(#darr)"/>
+              <line x1="122" y1="65" x2="195" y2="57" stroke="#334155" stroke-width="1.5" marker-end="url(#darr)"/>
+              <line x1="205" y1="69" x2="190" y2="95" stroke="#334155" stroke-width="1.5" marker-end="url(#darr)"/>
+              <line x1="215" y1="67" x2="248" y2="120" stroke="#334155" stroke-width="1.5" marker-end="url(#darr)"/>
+              <line x1="175" y1="107" x2="92" y2="135" stroke="#334155" stroke-width="1.5" marker-end="url(#darr)"/>
+              <line x1="180" y1="113" x2="150" y2="137" stroke="#334155" stroke-width="1.5" marker-end="url(#darr)"/>
+              <line x1="92" y1="140" x2="128" y2="140" stroke="#334155" stroke-width="1.5" marker-end="url(#darr)"/>
+              <line x1="262" y1="120" x2="278" y2="90" stroke="#334155" stroke-width="1.5" marker-end="url(#darr)"/>
+              <line x1="285" y1="65" x2="302" y2="30" stroke="#334155" stroke-width="1.5" marker-end="url(#darr)"/>
+              <circle cx="26" cy="100" r="13" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/><text x="26" y="105" text-anchor="middle" font-size="12" font-weight="bold" fill="#dc2626">S</text>
+              <circle cx="48" cy="31" r="11" fill="#f8fafc" stroke="#334155"/><text x="48" y="35" text-anchor="middle" font-size="11">b</text>
+              <circle cx="108" cy="15" r="11" fill="#f8fafc" stroke="#334155"/><text x="108" y="19" text-anchor="middle" font-size="11">a</text>
+              <circle cx="110" cy="65" r="11" fill="#f8fafc" stroke="#334155"/><text x="110" y="69" text-anchor="middle" font-size="11">d</text>
+              <circle cx="170" cy="31" r="11" fill="#f8fafc" stroke="#334155"/><text x="170" y="35" text-anchor="middle" font-size="11">c</text>
+              <circle cx="208" cy="57" r="11" fill="#f8fafc" stroke="#334155"/><text x="208" y="61" text-anchor="middle" font-size="11">e</text>
+              <circle cx="185" cy="105" r="11" fill="#f8fafc" stroke="#334155"/><text x="185" y="109" text-anchor="middle" font-size="11">h</text>
+              <circle cx="80" cy="139" r="11" fill="#f8fafc" stroke="#334155"/><text x="80" y="143" text-anchor="middle" font-size="11">p</text>
+              <circle cx="140" cy="140" r="11" fill="#f8fafc" stroke="#334155"/><text x="140" y="144" text-anchor="middle" font-size="11">q</text>
+              <circle cx="255" cy="131" r="11" fill="#f8fafc" stroke="#334155"/><text x="255" y="135" text-anchor="middle" font-size="11">r</text>
+              <circle cx="282" cy="77" r="11" fill="#f8fafc" stroke="#334155"/><text x="282" y="81" text-anchor="middle" font-size="11">f</text>
+              <circle cx="308" cy="17" r="13" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/><text x="308" y="22" text-anchor="middle" font-size="12" font-weight="bold" fill="#1d4ed8">G</text>
+            </svg>
+          </div>
+
+          <div class="sub-card" style="text-align:center">
+            <h5 class="sub-card-title">2. المخطط غير الموجه (UnDirected Graph)</h5>
+            <svg viewBox="0 0 340 155" style="width:100%;max-width:320px;background:#fff;border-radius:8px;border:1px solid #cbd5e1">
+              <line x1="45" y1="80" x2="115" y2="80" stroke="#475569" stroke-width="2"/>
+              <line x1="115" y1="80" x2="175" y2="30" stroke="#475569" stroke-width="2"/>
+              <line x1="115" y1="80" x2="175" y2="125" stroke="#475569" stroke-width="2"/>
+              <line x1="175" y1="30" x2="235" y2="75" stroke="#475569" stroke-width="2"/>
+              <line x1="175" y1="125" x2="235" y2="75" stroke="#475569" stroke-width="2"/>
+              <line x1="235" y1="75" x2="295" y2="120" stroke="#475569" stroke-width="2"/>
+              <circle cx="45" cy="80" r="16" fill="#bae6fd" stroke="#0284c7" stroke-width="1.5"/><text x="45" y="85" text-anchor="middle" font-weight="bold" fill="#0f172a">A</text>
+              <circle cx="115" cy="80" r="16" fill="#c7d2fe" stroke="#4f46e5" stroke-width="1.5"/><text x="115" y="85" text-anchor="middle" font-weight="bold" fill="#0f172a">B</text>
+              <circle cx="175" cy="30" r="16" fill="#fed7aa" stroke="#ea580c" stroke-width="1.5"/><text x="175" y="35" text-anchor="middle" font-weight="bold" fill="#0f172a">C</text>
+              <circle cx="175" cy="125" r="16" fill="#99f6e4" stroke="#0d9488" stroke-width="1.5"/><text x="175" y="130" text-anchor="middle" font-weight="bold" fill="#0f172a">D</text>
+              <circle cx="235" cy="75" r="16" fill="#fecdd3" stroke="#e11d48" stroke-width="1.5"/><text x="235" y="80" text-anchor="middle" font-weight="bold" fill="#0f172a">E</text>
+              <circle cx="295" cy="120" r="16" fill="#fca5a5" stroke="#dc2626" stroke-width="1.5"/><text x="295" y="125" text-anchor="middle" font-weight="bold" fill="#0f172a">F</text>
+            </svg>
+          </div>
+        </div>
+
+        <h4 class="sec-heading">ثانياً: هيكل البيانات الشجرة (TREE DATA STRUCTURE)</h4>
+        <ul class="study-list">
+          <li><span class="hl-term">تعريف الشجرة (Tree):</span> نوع من هياكل البيانات غير الخطية ويتكون من مجموعة من العقد <strong>تكون مرتبة هرمياً</strong> <span class="exam-tag">سؤال في بنك الأسئلة</span></li>
+          <li><span class="hl-term">ترتيب المستويات في شجرة البحث (صفحة 54):</span>
+            <ul>
+              <li><strong>المستوى 0 (الجذر Root):</strong> يضم العقدة <span class="code-badge">A</span>.</li>
+              <li><strong>المستوى 1:</strong> يضم أبناء A وهم <span class="code-badge">B , C , D</span>.</li>
+              <li><strong>المستوى 2:</strong> يضم العقد <span class="code-badge">E , F , G , H , I</span>.</li>
+              <li><strong>المستوى 3 (الأوراق Leaves):</strong> يضم العقد <span class="code-badge">J , K , L , M , N , O , P</span>.</li>
+            </ul>
+          </li>
         </ul>
-
-        <div class="exam-alert">
-          <h3>ثانياً: مفهوم وآلية عمل خوارزمية البحث بالعرض أولاً (<span dir="ltr">Breadth-First Search - BFS</span>) (ص 53 - 54):</h3>
-          <ul>
-            <li><b>الفكرة الأساسية:</b> هي استراتيجية بحث بسيطة تبدأ بتوسيع العقدة الجذرية (المستوى $0$)، ثم تقوم بتوسيع <b>جميع الخلفاء المباشرين للجذر (المستوى $1$)</b>، ثم جميع خلفائهم (المستوى $2$)، وهكذا <b>مستوى تلو الآخر (أفقياً بالعرض)</b>؛ أي يتم توسيع جميع العقد على العمق $d$ قبل توسيع أي عقدة على العمق $d+1$.</li>
-            <li><b>هيكل البيانات المعتمد:</b> تستخدم خوارزمية <span dir="ltr">BFS</span> طابوراً يعمل بقاعدة <b>أولاً يدخل أولاً يخرج (<span dir="ltr">FIFO Queue</span>)</b> لإدارة الحافة (<span dir="ltr">Frontier</span>)؛ لأن وضع الأبناء الجدد في نهاية الطابور يضمن عدم فحصهم إلا بعد الانتهاء من جميع عقد المستوى الأعلى الموجودة في مقدمة الطابور.</li>
-            <li><b>القوائم المستخدمة لمنع التكرار:</b>
-              <ol>
-                <li><b>طابور الانتظار / الحافة (<span dir="ltr">Queue / Frontier / Open List</span>):</b> يضم العقد التي تم اكتشافها وتنتظر دورها للتوسيع.</li>
-                <li><b>قائمة العقد المزارة / المستكشفة (<span dir="ltr">Visited / Explored / Closed List</span>):</b> تحفظ العقد التي تمت زيارتها بالفعل حتى لا نعيد إضافتها للطابور مرة أخرى.</li>
-              </ol>
-            </li>
-            <li><b>خطوات الخوارزمية بالتفصيل:</b>
-              <ol>
-                <li>أدخل عقدة البداية (الجذر) في طابور الانتظار <code dir="ltr">Queue</code>، وأضفها إلى قائمة المزارات <code dir="ltr">Visited</code>.</li>
-                <li>طالما أن الطابور غير فارغ، اسحب العقدة الموجودة في <b>مقدمة الطابور</b> (أقدم عقدة).</li>
-                <li>إذا كانت هذه العقدة هي عقدة الهدف المطلوبة، توقف وأرجع الحل (أو اطبع العقدة).</li>
-                <li>وإلا، استخرج جميع جيرانها (أبنائها المباشرين)؛ ولكل جار <b>لم تتم زيارته من قبل</b> (غير موجود في <code dir="ltr">Visited</code>)، قم بإضافته إلى <code dir="ltr">Visited</code> وأدرجه في <b>نهاية الطابور <code dir="ltr">Queue</code></b>.</li>
-                <li>كرر الخطوات من 2 إلى 4 حتى تجد الهدف أو يصبح الطابور فارغاً.</li>
-              </ol>
-            </li>
-          </ul>
-        </div>
-
-        <h3>ثالثاً: مثال عملي محلول خطوة بخطوة لتتبع خوارزمية <span dir="ltr">BFS</span> (ص 54 - 55)</h3>
-        <div class="note">
-          <p><b>المعطيات في شجرة البحث:</b><br>
-          • الجذر (المستوى 0): العقدة <b dir="ltr">A</b>، ويتفرع منها ابنان (من اليسار لليمين): <b dir="ltr">B</b> و <b dir="ltr">C</b> (المستوى 1).<br>
-          • العقدة <b dir="ltr">B</b> يتفرع منها ابنان: <b dir="ltr">D</b> و <b dir="ltr">E</b> (المستوى 2).<br>
-          • العقدة <b dir="ltr">C</b> يتفرع منها ابن واحد: <b dir="ltr">F</b> (المستوى 2).<br>
-          • العقد <b dir="ltr">D, E, F</b> هي عقد ورقية ليس لها أبناء.<br>
-          <b>المطلوب:</b> تتبعي مسار عمل خوارزمية البحث بالعرض أولاً (<span dir="ltr">BFS</span>) بدءاً من الجذر <b dir="ltr">A</b>:</p>
-          <ol>
-            <li><b>الخطوة 1 (البداية):</b> نضع الجذر <b dir="ltr">A</b> في الطابور وفي قائمة الزيارة:<br>
-              <code dir="ltr">Queue = [A]</code> | <code dir="ltr">Visited = [A]</code></li>
-            <li><b>الخطوة 2 (سحب A وتوسيعه):</b> نسحب <b dir="ltr">A</b> من أول الطابور، ونضيف أبناءه (<b dir="ltr">B, C</b>) في نهاية الطابور:<br>
-              العقدة المخرجة: <b dir="ltr">A</b> | <code dir="ltr">Queue = [B, C]</code> | <code dir="ltr">Visited = [A, B, C]</code></li>
-            <li><b>الخطوة 3 (سحب B وتوسيعه):</b> نسحب الأول في الطابور وهو <b dir="ltr">B</b>، ونضيف أبناءه (<b dir="ltr">D, E</b>) في نهاية الطابور (بعد C!):<br>
-              العقدة المخرجة: <b dir="ltr">B</b> | <code dir="ltr">Queue = [C, D, E]</code> | <code dir="ltr">Visited = [A, B, C, D, E]</code></li>
-            <li><b>الخطوة 4 (سحب C وتوسيعه):</b> نسحب الأول في الطابور وهو <b dir="ltr">C</b>، ونضيف ابنه (<b dir="ltr">F</b>) في نهاية الطابور:<br>
-              العقدة المخرجة: <b dir="ltr">C</b> | <code dir="ltr">Queue = [D, E, F]</code> | <code dir="ltr">Visited = [A, B, C, D, E, F]</code></li>
-            <li><b>الخطوة 5 (سحب D ثم E ثم F):</b> نسحب <b dir="ltr">D</b> (لا أبناء له)، ثم نسحب <b dir="ltr">E</b> (لا أبناء له)، ثم نسحب <b dir="ltr">F</b> (لا أبناء له)، فيصبح الطابور فارغاً <code dir="ltr">Queue = []</code> وتتوقف الخوارزمية.</li>
-          </ol>
-          <p style="margin-bottom:0"><b>الترتيب النهائي لزيارة واستكشاف العقد بواسطة <span dir="ltr">BFS</span> هو:</b> <b dir="ltr">A &rarr; B &rarr; C &rarr; D &rarr; E &rarr; F</b> (المستوى 0 ثم المستوى 1 بالكامل ثم المستوى 2 بالكامل).</p>
-        </div>
       </div>
-    </details>
+    </div>
 
     <!-- الوحدة الثالثة -->
-    <details open>
-      <summary>3) الوحدة الثالثة: تقييم أداء خوارزمية BFS، المميزات والعيوب، كود بايثون، ومقارنتها مع UCS (ص 56 - 58)</summary>
-      <div class="details-body">
-        <div class="exam-alert">
-          <h3>أولاً: تقييم خوارزمية البحث بالعرض أولاً (<span dir="ltr">BFS</span>) وفق المعايير الأربعة (ص 56 - 57) - موضع أسئلة مؤكدة:</h3>
-          <ol>
-            <li><b>الاكتمال (<span dir="ltr">Completeness</span>):</b>
-              <br>خوارزمية <span dir="ltr">BFS</span> <b>مكتملة دائماً (نعم)</b> إذا كان عامل التفرع $b$ محدوداً (أي أن لكل عقدة عدداً منتهياً من الأبناء)، فإذا كان الحل موجوداً على عمق منتهٍ $d$ فستصل إليه الخوارزمية حتماً.</li>
-            <li><b>الأمثلية (<span dir="ltr">Optimality</span>):</b>
-              <br>تضمن خوارزمية <span dir="ltr">BFS</span> دائماً إيجاد <b>الحل الأقل عمقاً (<span dir="ltr">Shallowest Goal Node</span>)</b> (أي المسار الذي يحتوي على أقل عدد من الخطوات/الحواف)؛ ولكنها تكون <b>أمثلية (تجد الحل الأرخص تكلفة) بشرط واحد فقط: أن تكون تكلفة جميع الخطوات متساوية</b> (أو بشكل أعم أن تكون تكلفة المسار دالة غير متناقصة مع عمق العقدة).</li>
-            <li><b>التعقيد الزمني (<span dir="ltr">Time Complexity</span>):</b>
-              <br>إذا كان عامل التفرع هو $b$ والهدف على عمق $d$، فإن أقصى عدد من العقد المولدة هو:<br>
-              <div class="formula-box">1 + b + b² + b³ + ... + bᵈ = O(bᵈ)</div>
-              (ملاحظة: إذا طُبق اختبار الهدف عند اختيار العقدة للتوسيع بدلاً من لحظة توليدها، فسيكون التعقيد الزمني $O(b^{d+1})$).</li>
-            <li><b>التعقيد المكاني (<span dir="ltr">Space Complexity</span>):</b>
-              <br>تحتفظ خوارزمية <span dir="ltr">BFS</span> بجميع العقد المستكشفة في الذاكرة (لتتبع مسار الحل ومنع التكرار) بالإضافة لجميع عقد المستوى الأخير في الحافة، لذا فإن تعقيدها المكاني هو أيضاً <b dir="ltr">O(bᵈ)</b> (أو $O(b^{d+1})$).
-              <br><b>استنتاج هام جداً (ص 57):</b> في خوارزمية <span dir="ltr">BFS</span>، تعد <b>متطلبات الذاكرة (التعقيد المكاني) مشكلة أكبر بكثير من وقت التنفيذ</b>! (فمثلاً عند $b=10$ وعمق $d=12$، قد تحتاج الخوارزمية إلى بيتابايتات من الذاكرة تستنفد ذاكرة أي حاسوب قبل انتهاء الوقت).</li>
-          </ol>
-        </div>
-
-        <h3>ثانياً: ملخص مميزات وعيوب خوارزمية البحث بالعرض أولاً (<span dir="ltr">BFS</span>)</h3>
-        <div class="grid">
-          <div class="step-card">
-            <span class="tag" style="background:var(--good-bg);color:var(--good)">مميزات خوارزمية BFS</span>
-            <ul>
-              <li><b>مكتملة:</b> تضمن إيجاد حل طالما أنه موجود وعامل التفرع محدود.</li>
-              <li><b>لا تقع في المسارات اللانهائية العميقة:</b> لأنها تفحص الشجرة مستوى بمستوى.</li>
-              <li><b>تجد أقصر مسار (أقل عدد خطوات):</b> وتكون أمثلية عندما تتساوى تكاليف الخطوات.</li>
-            </ul>
-          </div>
-          <div class="step-card">
-            <span class="tag" style="background:var(--bad-bg);color:var(--bad)">عيوب خوارزمية BFS</span>
-            <ul>
-              <li><b>استهلاك هائل للذاكرة $O(b^d)$:</b> لأنها تخزن جميع عقد المستوى الحالي في الذاكرة دفعة واحدة.</li>
-              <li><b>بطيئة إذا كان الهدف عميقاً:</b> تستغرق وقتاً طويلاً جداً إذا كان الهدف يقع في مستوى عميق بعيد عن الجذر.</li>
-              <li><b>غير أمثلية عند اختلاف تكاليف الخطوات:</b> لأنها تنظر لعدد الخطوات وليس لمجموع أوزان الطرق.</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="exam-alert">
-          <h3>ثالثاً: الكود البرمجي الكامل لخوارزمية <span dir="ltr">BFS</span> بلغة بايثون (<span dir="ltr">Python</span>) وشرحه (ص 57 - 58) - مهم جداً:</h3>
-          <div class="code-box"># 1. تمثيل الرسم البياني/الشجرة باستخدام قاموس (Dictionary) يمثل قائمة التجاور
-graph = {
-  'A' : ['B','C'],
-  'B' : ['D', 'E'],
-  'C' : ['F'],
-  'D' : [],
-  'E' : ['F'],
-  'F' : []
-}
-
-visited = [] # قائمة لحفظ وتتبع العقد التي تمت زيارتها (Closed List)
-queue = []   # قائمة تعمل كطابور انتظار FIFO (Frontier / Open List)
-
-def bfs(visited, graph, node):
-  visited.append(node) # إضافة عقدة البداية لقائمة الزيارة
-  queue.append(node)   # إضافة عقدة البداية لطابور الانتظار
-
-  while queue:         # حلقة تستمر طالما أن الطابور غير فارغ
-    s = queue.pop(0)   # سحب وإزالة العنصر الأول من مقدمة الطابور (مبدأ FIFO!)
-    print (s, end = " ") 
-
-    # المرور على جميع الجيران (الأبناء) المتصلين بالعقدة الحالية s
-    for neighbour in graph[s]:
-      if neighbour not in visited:   # فحص عدم زيارة الجار مسبقاً لمنع التكرار
-        visited.append(neighbour)    # تعليمه كمزار
-        queue.append(neighbour)      # إضافته في نهاية الطابور
-
-# استدعاء الدالة بدءاً من العقدة الجذرية 'A'
-bfs(visited, graph, 'A')
-# المخرجات (Output): A B C D E F</div>
-          <p class="note" style="margin-bottom:0"><b>ملاحظة برمجية هامة للاختبار:</b> الدالة <code dir="ltr">queue.pop(0)</code> في الكود أعلاه هي التي تطبق مبدأ <b>طابور <span dir="ltr">FIFO</span></b> لأنها تسحب العنصر الموجود في الفهرس <code dir="ltr">0</code> (أول عنصر دخل القائمة)، بينما لو كتبنا <code dir="ltr">pop()</code> بدون صفر فستسحب آخر عنصر (مبدأ المكدس <span dir="ltr">LIFO</span> الخاص بـ <span dir="ltr">DFS</span>)!</p>
-        </div>
-
-        <h3>رابعاً: البحث بالتكلفة الموحدة (<span dir="ltr">Uniform-Cost Search - UCS</span>) كامتداد لـ <span dir="ltr">BFS</span></h3>
-        <ul>
-          <li>عندما تكون تكاليف الخطوات <b>غير متساوية</b> (مثل خرائط المدن حيث تختلف المسافات بالكيلومترات بين مدينة وأخرى)، تفقد خوارزمية <span dir="ltr">BFS</span> خاصية الأمثلية لأنها تختار الطريق الأقل في "عدد المدن" حتى لو كانت مسافته أطول!</li>
-          <li>تعالج خوارزمية <b>البحث بالتكلفة الموحدة (<span dir="ltr">UCS</span>)</b> ذلك عن طريق استبدال طابور <span dir="ltr">FIFO</span> بـ <b>طابور الأولوية (<span dir="ltr">Priority Queue</span>)</b> الذي يرتب العقد حسب <b>أقل تكلفة مسار تراكمية $g(n)$</b> من البداية، مما يضمن إيجاد الحل الأمثل دائماً لأي تكاليف خطوات موجبة.</li>
+    <div class="accordion-item">
+      <button class="accordion-header" onclick="toggleAccordion(this)">
+        <span class="acc-arrow">◄</span>
+        <span>3) الوحدة الثالثة: خوارزمية البحث بأولوية الاتساع (Breadth First Search - BFS Algorithm)</span>
+      </button>
+      <div class="accordion-body">
+        <h4 class="sec-heading">أولاً: مبدأ عمل وخصائص خوارزمية البحث بأولوية الاتساع (BFS)</h4>
+        <ul class="study-list">
+          <li><span class="hl-term">تصنيفها:</span> هي من <strong>خوارزميات البحث الأعمى (Uninformed Search)</strong>، ولإيجاد الحل <strong>تتطلب استخدام تعريف المشكلة فقط</strong> دون معلومات استدلالية إضافية <span class="exam-tag">سؤالان في بنك الأسئلة</span></li>
+          <li><span class="hl-term">آلية الحركة والفحص:</span> يتم البحث عن الهدف من خلال <strong>فحص المستوى كاملاً ثم الانتقال إلى المستوى الذي يليه (الاتساع باتجاه الإخوة/الأشقاء أولاً)</strong>؛ حيث تبدأ من الجذر ثم تفحص كل العقد في المستوى الحالي من اليسار إلى اليمين قبل النزول للمستوى التالي.</li>
+          <li><span class="hl-term">هيكل البيانات المستخدم:</span> تستخدم هيكلة البيانات <strong>الطابور (Queue - FIFO)</strong> لتتبع مسار إيجاد الهدف <span class="exam-tag">سؤال في بنك الأسئلة</span></li>
         </ul>
+
+        <h4 class="sec-heading">ثانياً: محاكي تفاعلي خطوة بخطوة لخوارزمية (BFS) وحالة الطابور (Queue) — مطابق لصفحات 55 إلى 58</h4>
+        <div class="sim-box">
+          <div class="sim-controls">
+            <span class="unit-pill" id="bfsStepBadge">الخطوة 1 من 10</span>
+            <div style="display:flex;gap:8px">
+              <button class="filter-btn" id="bfsPrevBtn" onclick="stepBFS(-1)">الخطوة السابقة</button>
+              <button class="filter-btn active" id="bfsNextBtn" onclick="stepBFS(1)">الخطوة التالية</button>
+              <button class="filter-btn" onclick="resetBFS()">إعادة من البداية</button>
+            </div>
+          </div>
+
+          <div class="sim-step-desc" id="bfsStepText">...</div>
+
+          <!-- رسم الشجرة التفاعلي -->
+          <div style="text-align:center;overflow-x:auto">
+            <svg id="bfsTreeSvg" viewBox="0 0 600 250" style="width:100%;max-width:580px;background:#ffffff;border-radius:10px;border:1px solid #cbd5e1">
+              <!-- Edges -->
+              <g stroke="#64748b" stroke-width="1.6">
+                <line x1="300" y1="30" x2="170" y2="85"/>
+                <line x1="300" y1="30" x2="300" y2="85"/>
+                <line x1="300" y1="30" x2="430" y2="85"/>
+                <line x1="170" y1="85" x2="110" y2="150"/>
+                <line x1="170" y1="85" x2="210" y2="150"/>
+                <line x1="300" y1="85" x2="285" y2="150"/>
+                <line x1="430" y1="85" x2="375" y2="150"/>
+                <line x1="430" y1="85" x2="495" y2="150"/>
+                <line x1="110" y1="150" x2="65" y2="215"/>
+                <line x1="110" y1="150" x2="150" y2="215"/>
+                <line x1="285" y1="150" x2="235" y2="215"/>
+                <line x1="375" y1="150" x2="335" y2="215"/>
+                <line x1="375" y1="150" x2="420" y2="215"/>
+                <line x1="495" y1="150" x2="485" y2="215"/>
+                <line x1="495" y1="150" x2="545" y2="215"/>
+              </g>
+              <!-- Nodes rendered dynamically by JS -->
+              <g id="bfsNodesLayer"></g>
+            </svg>
+          </div>
+
+          <div style="text-align:center;margin-top:10px;font-size:0.85rem;font-weight:700;color:var(--text-muted)">
+            حالة الطابور (Queue — أول عنصر على اليسار يخرج أولاً FIFO):
+          </div>
+          <div class="queue-strip" id="bfsQueueStrip"></div>
+        </div>
       </div>
-    </details>
+    </div>
   </section>
 
-  <!-- ================= التبويب الثاني: جداول المقارنات والتتبع ================= -->
-  <section id="tables" class="panel">
-    <div class="card">
-      <h2>1. جدول مقارنة هياكل البيانات الثلاثة المستخدمة في إدارة الحافة (Frontier) (ص 50 - 51)</h2>
-      <table>
+  <!-- ==================== التبويب 2: جداول المقارنات والملخصات (4) ==================== -->
+  <section id="tab-tables" class="tab-section">
+    <div class="table-card">
+      <h3>1. جدول المقارنة الشامل بين هياكل البيانات الخطية الأربعة (Linear Data Structures)</h3>
+      <table class="comp-table">
         <thead>
           <tr>
             <th>هيكل البيانات</th>
-            <th>مبدأ العمل</th>
-            <th>عملية الإضافة (Insert)</th>
-            <th>عملية السحب (Remove)</th>
-            <th>خوارزميات البحث التي تستخدمه</th>
+            <th>المصطلح الإنجليزي</th>
+            <th>الثبات / الديناميكية</th>
+            <th>مبدأ العمل والعمليات الأساسية</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><b>1. الطابور العادي<br>(Queue)</b></td>
-            <td><b dir="ltr">FIFO</b><br>(أولاً يدخل أولاً يخرج)</td>
-            <td>في <b>نهاية (مؤخرة)</b> الطابور<br>(<code dir="ltr">Enqueue / append</code>)</td>
-            <td>من <b>بداية (مقدمة)</b> الطابور<br>(<code dir="ltr">Dequeue / pop(0)</code>)</td>
-            <td><b>البحث بالعرض أولاً (<span dir="ltr">BFS</span>)</b></td>
+            <td><strong>1. المصفوفات</strong></td>
+            <td>Arrays</td>
+            <td><strong>ثابتة (STATIC)</strong></td>
+            <td>تخزين العناصر في مواقع متجاورة بحجم ثابت (أحادية البعد One Dim أو ثنائية البعد Two Dim).</td>
           </tr>
           <tr>
-            <td><b>2. المكدس<br>(Stack)</b></td>
-            <td><b dir="ltr">LIFO</b><br>(آخراً يدخل أولاً يخرج)</td>
-            <td>في <b>قمة</b> المكدس<br>(<code dir="ltr">Push / append</code>)</td>
-            <td>من <b>قمة (نهاية)</b> المكدس<br>(<code dir="ltr">Pop / pop()</code>)</td>
-            <td><b>البحث بالعمق أولاً (<span dir="ltr">DFS</span>)</b>، والعمق المحدود (<span dir="ltr">DLS</span>)، والتعميق التكراري (<span dir="ltr">IDS</span>)</td>
+            <td><strong>2. المكدس</strong></td>
+            <td>Stack</td>
+            <td><strong>غير ثابتة / ديناميكية (DYNAMIC)</strong></td>
+            <td>يعمل بمبدأ <strong>LIFO (Last In First Out)</strong>: آخر عنصر يضاف هو أول عنصر يخرج. الإضافة بـ <code>Push</code> والحذف بـ <code>Pop</code> من القمة.</td>
           </tr>
           <tr>
-            <td><b>3. طابور الأولوية<br>(Priority Queue)</b></td>
-            <td>حسب <b>الأولوية الأعلى</b><br>(القيمة الأقل لدالة التقييم)</td>
-            <td>يُدرج العنصر مع حفظ الترتيب حسب التكلفة/التقييم</td>
-            <td>يسحب العنصر ذا <b>أقل تكلفة أو أفضل تقييم</b></td>
-            <td><b>البحث بالتكلفة الموحدة (<span dir="ltr">UCS</span>)</b>، البحث الجشع (<span dir="ltr">Greedy</span>)، وخوارزمية (<span dir="ltr">A*</span>)</td>
+            <td><strong>3. الطابور</strong></td>
+            <td>Queue</td>
+            <td><strong>غير ثابتة / ديناميكية (DYNAMIC)</strong></td>
+            <td>يعمل بمبدأ <strong>FIFO (First In First Out)</strong>: أول عنصر يضاف هو أول عنصر يخرج.</td>
+          </tr>
+          <tr>
+            <td><strong>4. القائمة المترابطة</strong></td>
+            <td>Linked List</td>
+            <td><strong>غير ثابتة / ديناميكية (DYNAMIC)</strong></td>
+            <td>سلسلة عقد تتكون كل عقدة فيها من البيانات (<code>Data</code>) ومؤشر (<code>Pointer / Next</code>) يشير للعقدة التالية حتى <code>Null</code>.</td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <div class="card">
-      <h2>2. جدول تتبع خوارزمية البحث بالعرض أولاً (BFS Trace Table) خطوة بخطوة (ص 54 - 55)</h2>
-      <p class="muted">تتبع الرسم البياني: <code dir="ltr">A:['B','C'], B:['D','E'], C:['F'], D:[], E:['F'], F:[]</code> بدءاً من الجذر <b dir="ltr">A</b>:</p>
-      <table>
-        <thead>
-          <tr>
-            <th>رقم الخطوة</th>
-            <th>العقدة المسحوبة من مقدمة الطابور <code dir="ltr">s = queue.pop(0)</code></th>
-            <th>الجيران الجدد المضافون</th>
-            <th>حالة طابور الانتظار <code dir="ltr">Queue (FIFO)</code> بعد الخطوة</th>
-            <th>قائمة العقد المزارة <code dir="ltr">Visited</code> حتى الآن</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><b>الابتدائية</b></td>
-            <td>— (إدراج البداية <b dir="ltr">A</b>)</td>
-            <td><b dir="ltr">A</b></td>
-            <td dir="ltr"><code>[A]</code></td>
-            <td dir="ltr"><code>[A]</code></td>
-          </tr>
-          <tr>
-            <td><b>الخطوة 1</b></td>
-            <td><b dir="ltr">A</b> (المستوى 0)</td>
-            <td><b dir="ltr">B, C</b></td>
-            <td dir="ltr"><code>[B, C]</code></td>
-            <td dir="ltr"><code>[A, B, C]</code></td>
-          </tr>
-          <tr>
-            <td><b>الخطوة 2</b></td>
-            <td><b dir="ltr">B</b> (المستوى 1)</td>
-            <td><b dir="ltr">D, E</b></td>
-            <td dir="ltr"><code>[C, D, E]</code></td>
-            <td dir="ltr"><code>[A, B, C, D, E]</code></td>
-          </tr>
-          <tr>
-            <td><b>الخطوة 3</b></td>
-            <td><b dir="ltr">C</b> (المستوى 1)</td>
-            <td><b dir="ltr">F</b></td>
-            <td dir="ltr"><code>[D, E, F]</code></td>
-            <td dir="ltr"><code>[A, B, C, D, E, F]</code></td>
-          </tr>
-          <tr>
-            <td><b>الخطوة 4</b></td>
-            <td><b dir="ltr">D</b> (المستوى 2)</td>
-            <td>لا يوجد</td>
-            <td dir="ltr"><code>[E, F]</code></td>
-            <td dir="ltr"><code>[A, B, C, D, E, F]</code></td>
-          </tr>
-          <tr>
-            <td><b>الخطوة 5</b></td>
-            <td><b dir="ltr">E</b> (المستوى 2)</td>
-            <td>لا يوجد (لأن <b dir="ltr">F</b> مزارة مسبقاً!)</td>
-            <td dir="ltr"><code>[F]</code></td>
-            <td dir="ltr"><code>[A, B, C, D, E, F]</code></td>
-          </tr>
-          <tr>
-            <td><b>الخطوة 6</b></td>
-            <td><b dir="ltr">F</b> (المستوى 2)</td>
-            <td>لا يوجد</td>
-            <td dir="ltr"><code>[]</code> (فارغ &rarr; توقف)</td>
-            <td dir="ltr"><b>المخرج النهائي: A B C D E F</b></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="card">
-      <h2>3. جدول تقييم خوارزمية BFS بالمعايير الأربعة ونمو استهلاك الذاكرة والوقت (ص 56 - 57)</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>معيار التقييم</th>
-            <th>تقييم خوارزمية BFS</th>
-            <th>التعليل والشروط الهندسية</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><b>1. الاكتمال (Completeness)</b></td>
-            <td><b style="color:var(--good)">نعم (مكتملة)</b></td>
-            <td>بشرط أن يكون عامل التفرع $b$ منتهياً (محدوداً)، فتصل لأي هدف على عمق منتهٍ $d$.</td>
-          </tr>
-          <tr>
-            <td><b>2. الأمثلية (Optimality)</b></td>
-            <td><b style="color:var(--good)">نعم (بشرط)</b></td>
-            <td>تكون أمثلية <b>فقط إذا كانت تكاليف جميع الخطوات متساوية</b> (أو دالة غير متناقصة مع عمق العقدة).</td>
-          </tr>
-          <tr>
-            <td><b>3. التعقيد الزمني (Time Complexity)</b></td>
-            <td dir="ltr"><b style="color:var(--bad)">O(bᵈ)</b></td>
-            <td>لأنها تولد $1 + b + b^2 + \dots + b^d$ عقدة حتى تصل للعمق $d$ (أسي الأساس $b$).</td>
-          </tr>
-          <tr>
-            <td><b>4. التعقيد المكاني (Space Complexity)</b></td>
-            <td dir="ltr"><b style="color:var(--bad)">O(bᵈ)</b></td>
-            <td>تحتفظ بجميع العقد في الذاكرة؛ وتُعد <b>الذاكرة هي المشكلة الأكبر في BFS أكثر من الوقت</b>.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="card">
-      <h2>4. جدول مقارنة طرق تمثيل الرسوم البيانية برمجياً (مصفوفة التجاور مقابل قائمة التجاور)</h2>
-      <table>
+    <div class="table-card">
+      <h3>2. جدول المقارنة بين هياكل البيانات غير الخطية: الشجرة (Tree) والمخطط (Graph)</h3>
+      <table class="comp-table">
         <thead>
           <tr>
             <th>وجه المقارنة</th>
-            <th>مصفوفة التجاور (Adjacency Matrix)</th>
-            <th>قائمة التجاور (Adjacency List)</th>
+            <th>الشجرة (Tree Data Structure)</th>
+            <th>المخطط (Graph)</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><b>طريقة التمثيل</b></td>
-            <td>مصفوفة ثنائية الأبعاد $V \times V$ تحتوي على $1$ عند وجود ضلع و $0$ عند عدم وجوده.</td>
-            <td>لكل عقدة قائمة تحتوي فقط على العقد المتصلة بها مباشرةً (مثل القاموس <span dir="ltr">Dictionary</span> في بايثون).</td>
+            <td><strong>التصنيف الأساسي</strong></td>
+            <td>هيكل بيانات <strong>غير خطي (Non-Linear)</strong>.</td>
+            <td>هيكل بيانات <strong>غير خطي (Non-Linear)</strong>.</td>
           </tr>
           <tr>
-            <td><b>استهلاك الذاكرة</b></td>
-            <td>كبير وثابت <b dir="ltr">O(V²)</b> (غير كفؤ للرسوم المتفرقة ذات الحواف القليلة).</td>
-            <td>موفر جداً للذاكرة <b dir="ltr">O(V + E)</b> يتناسب مع عدد العقد والحواف الفعلية.</td>
+            <td><strong>التعريف والبنية</strong></td>
+            <td>مجموعة من العقد تكون <strong>مرتبة هرمياً</strong> في مستويات (تبدأ من الجذر Root في المستوى 0 وتتفرع للأبناء).</td>
+            <td>مجموعة من العقد (Nodes) ترتبط وتتصل بخطوط (Edges) وقد تحتوي على مسارات متداخلة أو حلقات.</td>
           </tr>
           <tr>
-            <td><b>أهم الاستخدامات</b></td>
-            <td>الرسوم البيانية الكثيفة (<span dir="ltr">Dense Graphs</span>) وفحص وجود ضلع بين عقدتين بسرعة $O(1)$.</td>
-            <td>الرسوم البيانية المتفرقة (<span dir="ltr">Sparse Graphs</span>) وتطبيق خوارزميات البحث مثل <span dir="ltr">BFS</span> و <span dir="ltr">DFS</span> في بايثون.</td>
+            <td><strong>الأنواع والمكونات</strong></td>
+            <td>جذر (Root)، عقد داخلية (آباء وأبناء وأشقاء)، وعقد طرفية (أوراق Leaves).</td>
+            <td>1) <strong>مخطط موجه (Directed Graph):</strong> خطوطه أسهم ذات اتجاه.<br>2) <strong>مخطط غير موجه (UnDirected Graph):</strong> خطوطه بدون أسهم.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-card">
+      <h3>3. جدول تتبع حالة الطابور (Queue) لخوارزمية البحث بأولوية الاتساع (BFS) في الملزمة (ص 55-58)</h3>
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>الخطوة</th>
+            <th>العقدة المفحوصة حالياً (تخرج من الطابور)</th>
+            <th>الأبناء المضافون لنهاية الطابور</th>
+            <th>محتوى الطابور (Queue) بعد الخطوة</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>البدء</strong></td>
+            <td>إدراج عقدة الجذر A</td>
+            <td>A</td>
+            <td class="ltr-cell">[ A ]</td>
+          </tr>
+          <tr>
+            <td><strong>1</strong></td>
+            <td>فحص وإخراج <strong>A</strong></td>
+            <td>B, C, D</td>
+            <td class="ltr-cell">[ B, C, D ]</td>
+          </tr>
+          <tr>
+            <td><strong>2</strong></td>
+            <td>فحص وإخراج <strong>B</strong></td>
+            <td>E, F</td>
+            <td class="ltr-cell">[ C, D, E, F ]</td>
+          </tr>
+          <tr>
+            <td><strong>3</strong></td>
+            <td>فحص وإخراج <strong>C</strong></td>
+            <td>G</td>
+            <td class="ltr-cell">[ D, E, F, G ]</td>
+          </tr>
+          <tr>
+            <td><strong>4</strong></td>
+            <td>فحص وإخراج <strong>D</strong></td>
+            <td>H, I</td>
+            <td class="ltr-cell">[ E, F, G, H, I ]</td>
+          </tr>
+          <tr>
+            <td><strong>5</strong></td>
+            <td>فحص وإخراج <strong>E</strong></td>
+            <td>J, K</td>
+            <td class="ltr-cell">[ F, G, H, I, J, K ]</td>
+          </tr>
+          <tr>
+            <td><strong>6</strong></td>
+            <td>فحص وإخراج <strong>F</strong></td>
+            <td>لا يوجد أبناء</td>
+            <td class="ltr-cell">[ G, H, I, J, K ]</td>
+          </tr>
+          <tr>
+            <td><strong>7</strong></td>
+            <td>فحص وإخراج <strong>G</strong></td>
+            <td>L</td>
+            <td class="ltr-cell">[ H, I, J, K, L ]</td>
+          </tr>
+          <tr>
+            <td><strong>8</strong></td>
+            <td>فحص وإخراج <strong>H</strong></td>
+            <td>M, N</td>
+            <td class="ltr-cell">[ I, J, K, L, M, N ]</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-card">
+      <h3>4. البطاقة المرجعية لخوارزمية البحث بأولوية الاتساع (Breadth First Search - BFS)</h3>
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>الخاصية</th>
+            <th>التفصيل المعتمد في الملزمة وبنك الأسئلة</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>نوع استراتيجية البحث</strong></td>
+            <td>من خوارزميات <strong>البحث الأعمى (Uninformed Search)</strong>.</td>
+          </tr>
+          <tr>
+            <td><strong>المعلومات المطلوبة للحل</strong></td>
+            <td>تتطلب استخدام <strong>تعريف المشكلة فقط</strong> (لا تستخدم دالة استدلالية ولا أوزان على الحواف).</td>
+          </tr>
+          <tr>
+            <td><strong>هيكل البيانات المعتمد</strong></td>
+            <td>تستخدم هيكل البيانات <strong>الطابور (Queue)</strong> الذي يعمل بمبدأ <strong>FIFO</strong>.</td>
+          </tr>
+          <tr>
+            <td><strong>اتجاه وأولوية الفحص</strong></td>
+            <td>تفحص المستوى كاملاً (الأشقاء / الإخوة أولاً من اليسار لليمين) ثم تنتقل إلى المستوى الذي يليه.</td>
+          </tr>
+          <tr>
+            <td><strong>مسار الفحص الكامل للشجرة</strong></td>
+            <td class="ltr-cell">A → B → C → D → E → F → G → H → I → J → K → L → M → N → O → P</td>
           </tr>
         </tbody>
       </table>
     </div>
   </section>
 
-  <!-- ================= التبويب الثالث: المصطلحات ================= -->
-  <section id="terms" class="panel">
-    <div class="card">
-      <h2>قاموس المصطلحات والمفاهيم الشامل للفصل الخامس (28 مصطلحاً)</h2>
-      <p class="muted">جميع مصطلحات هياكل البيانات والرسوم البيانية وخوارزمية BFS الواردة في الصفحات (50 - 58):</p>
-      <div id="termsGrid" class="grid"></div>
+  <!-- ==================== التبويب 3: المصطلحات والمفاهيم (22) ==================== -->
+  <section id="tab-terms" class="tab-section">
+    <div class="terms-controls">
+      <input type="text" id="termSearch" class="search-input" placeholder="ابحثي عن مصطلح بالعربي أو الإنجليزي..." oninput="renderTerms()">
+      <button class="filter-btn active" onclick="filterTerms('all', this)">الكل (22)</button>
+      <button class="filter-btn" onclick="filterTerms('u1', this)">الوحدة الأولى (10)</button>
+      <button class="filter-btn" onclick="filterTerms('u2', this)">الوحدة الثانية (6)</button>
+      <button class="filter-btn" onclick="filterTerms('u3', this)">الوحدة الثالثة (6)</button>
+    </div>
+    <div class="terms-grid" id="termsContainer"></div>
+  </section>
+
+  <!-- ==================== التبويب 4: البطاقات التعليمية (22) ==================== -->
+  <section id="tab-cards" class="tab-section">
+    <div class="flashcard-wrap">
+      <div class="fc-box" onclick="flipCard()">
+        <span class="fc-label" id="fcUnitLabel">الوحدة الأولى • اضغطي لقلب البطاقة</span>
+        <div class="fc-text" id="fcContent">...</div>
+      </div>
+      <div style="margin-bottom:14px;font-weight:700;color:var(--text-muted)" id="fcCounter">1 / 22</div>
+      <div class="fc-controls">
+        <button class="filter-btn" onclick="moveCard(-1)">السابق</button>
+        <button class="filter-btn active" onclick="flipCard()">اقلب البطاقة</button>
+        <button class="filter-btn" onclick="moveCard(1)">التالي</button>
+        <button class="filter-btn" onclick="shuffleCards()">خلط عشوائي</button>
+      </div>
     </div>
   </section>
 
-  <!-- ================= التبويب الرابع: البطاقات التعليمية ================= -->
-  <section id="cards" class="panel">
-    <div class="card">
-      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
-      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
-      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
-        <div class="term" id="flashTerm"></div>
-        <div class="answer" id="flashAnswer" hidden></div>
-        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
+  <!-- ==================== التبويب 5: الاختبار الشامل (20) ==================== -->
+  <section id="tab-quiz" class="tab-section">
+    <div class="quiz-toolbar">
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="filter-btn active" id="qFilter-all" onclick="setQuizFilter('all')">جميع الأسئلة (20)</button>
+        <button class="filter-btn" id="qFilter-official" onclick="setQuizFilter('official')">أسئلة البنك الرسمية (9)</button>
+        <button class="filter-btn" id="qFilter-extra" onclick="setQuizFilter('extra')">أسئلة تدريبية شاملة (11)</button>
+        <button class="filter-btn" id="qFilter-mistakes" onclick="setQuizFilter('mistakes')">أخطائي للمراجعة (0)</button>
       </div>
-      <div class="row" style="margin-top:14px">
-        <button class="btn" id="prevCard">السابق</button>
-        <span id="cardCount" class="muted"></span>
-        <button class="btn primary" id="nextCard">التالي</button>
+      <div class="quiz-stats">
+        <span class="q-stat good" id="qRightStat">صحيحة: 0</span>
+        <span class="q-stat bad" id="qWrongStat">خاطئة: 0</span>
+        <button class="filter-btn" onclick="resetQuiz()">إعادة الاختبار</button>
       </div>
     </div>
+    <div id="quizContainer"></div>
   </section>
 
-  <!-- ================= التبويب الخامس: الاختبار الشامل ================= -->
-  <section id="quiz" class="panel">
-    <div class="card">
-      <div class="row">
-        <div>
-          <h2>الاختبار الشامل للفصل الخامس (25 سؤالاً)</h2>
-          <p class="muted">يغطي هياكل البيانات وتمثيل الرسوم البيانية وتتبع خوارزمية BFS وتحليل أدائها وكود بايثون مع تصحيح فوري.</p>
-        </div>
-        <div class="score" id="score">النتيجة: 0 / 25</div>
-      </div>
-      <div class="progress"><div id="progressBar"></div></div>
-      <div id="quizArea"></div>
-      <div class="row">
-        <button class="btn" id="resetQuiz">إعادة الاختبار</button>
-        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
-      </div>
-      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
-    </div>
-  </section>
 </main>
 
-<footer>الفصل الخامس: خوارزميات حل المشكلات عن طريق البحث (هياكل البيانات و BFS) • مراجعة تفاعلية شاملة (صفحات 50 - 58)</footer>
+<footer>
+  الفصل الخامس: خوارزميات حل المشكلات عن طريق البحث • مراجعة تفاعلية شاملة مطابقة 100% للملزمة وبنك الأسئلة
+</footer>
 
 <script>
-const terms = [
-  ["Queue (الطابور العادي)", "هيكل بيانات خطي يعمل بمبدأ أولاً يدخل أولاً يخرج (FIFO)، وتُستخدم في خوارزمية البحث بالعرض أولاً (BFS)."],
-  ["FIFO (First-In, First-Out)", "مبدأ عمل الطابور العادي؛ حيث إن أول عقدة تدخل الطابور هي أول عقدة يتم سحبها وتوسيعها."],
-  ["Enqueue & Dequeue", "عمليتا الطابور: Enqueue لإضافة عنصر في نهاية الطابور، و Dequeue لسحب العنصر الأقدم من مقدمة الطابور."],
-  ["Stack (المكدس)", "هيكل بيانات خطي يعمل بمبدأ آخراً يدخل أولاً يخرج (LIFO)، ويُستخدم في خوارزمية البحث بالعمق أولاً (DFS)."],
-  ["LIFO (Last-In, First-Out)", "مبدأ عمل المكدس؛ حيث إن آخر عقدة أُضيفت لقمة المكدس هي أول عقدة يتم سحبها وتوسيعها."],
-  ["Push & Pop", "عمليتا المكدس: Push لإدراج عنصر في قمة المكدس، و Pop لسحب وإزالة العنصر الموجود في قمة المكدس."],
-  ["Priority Queue (طابور الأولوية)", "هيكل بيانات يسحب دائماً العقدة ذات الأولوية الأعلى (الأقل تكلفة أو الأفضل تقييماً)، ويُستخدم في UCS و Greedy و A*."],
-  ["Graph G = (V, E) (الرسم البياني)", "بنية رياضية تتكون من مجموعة من العقد أو الرؤوس (Vertices V) ومجموعة من الحواف أو الأضلاع (Edges E) التي تربط بينها."],
-  ["Directed vs. Undirected Graph", "الرسم الموجه تكون حوافه ذات اتجاه واحد (أسهم)، بينما غير الموجه تكون حوافه ثنائية الاتجاه."],
-  ["Weighted Graph (رسم بياني موزون)", "رسم بياني تُسند فيه قيمة رقمية (وزن أو تكلفة) لكل حافة أو ضلع بين عقدتين."],
-  ["Tree (الشجرة)", "حالة خاصة من الرسم البياني متصلة وخالية من الحلقات أو الدورات (Acyclic)، تبدأ من عقدة جذرية (Root)."],
-  ["Adjacency Matrix (مصفوفة التجاور)", "تمثيل الرسم البياني بمصفوفة ثنائية الأبعاد V×V تضع 1 عند وجود اتصال و 0 عند عدمه، وتستهلك ذاكرة O(V²)."],
-  ["Adjacency List (قائمة التجاور)", "تمثيل كل عقدة بقائمة تضم جيرانها المتصلين بها مباشرة فقط (كالقاموس في بايثون)، وتستهلك ذاكرة O(V + E)."],
-  ["Uninformed / Blind Search", "البحث غير الموجه (الأعمى): استراتيجيات بحث لا تمتلك أي معلومات إرشادية عن مدى قرب الحالات من الهدف."],
-  ["Breadth-First Search (BFS)", "البحث بالعرض أولاً: خوارزمية بحث غير موجه تستكشف شجرة البحث مستوى تلو الآخر بدءاً من الجذر باستخدام طابور FIFO."],
-  ["Shallowest Goal Node", "عقدة الهدف الأقل عمقاً (الأقرب للجذر بعدد الخطوات)، وهي التي تضمن خوارزمية BFS العثور عليها أولاً."],
-  ["Visited / Closed List", "قائمة العقد المزارة: قائمة تحفظ العقد التي تمت زيارتها لمنع إعادة زيارتها وتجنب الوقوع في حلقات لا نهائية."],
-  ["Frontier / Open List", "الحافة أو القائمة المفتوحة: العقد التي تم اكتشافها وتنتظر في الطابور ليتم توسيعها."],
-  ["BFS Completeness (اكتمال BFS)", "خوارزمية BFS مكتملة دائماً بشرط أن يكون عامل التفرع (b) محدوداً (Finite)."],
-  ["BFS Optimality (أمثلية BFS)", "خوارزمية BFS أمثلية بشرط أن تكون تكلفة جميع الخطوات (الأفعال) متساوية."],
-  ["BFS Time Complexity O(b^d)", "التعقيد الزمني لـ BFS أسي الأساس b، حيث تولد الخوارزمية نحو O(b^d) عقدة للوصول للهدف عند العمق d."],
-  ["BFS Space Complexity O(b^d)", "التعقيد المكاني لـ BFS هو O(b^d) لأنها تخزن جميع العقد في الذاكرة، وتُعد الذاكرة هي المشكلة الأكبر في BFS."],
-  ["Python Dictionary for Graph", "تمثيل الرسم البياني في بايثون على شكل قاموس مفاتيحه هي أسماء العقد وقيمه هي قوائم الجيران: graph = {'A': ['B', 'C']}."],
-  ["queue.append(node)", "دالة في بايثون لإضافة عقدة جديدة في نهاية قائمة الطابور (تعمل كعملية Enqueue)."],
-  ["queue.pop(0)", "دالة في بايثون لسحب وإزالة العنصر الأول الموجود في الفهرس 0 من مقدمة الطابور (تطبق مبدأ FIFO في BFS)."],
-  ["if neighbour not in visited", "الشرط البرمجي في كود BFS لفحص ما إذا كان الجار لم تتم زيارته من قبل لمنع تكرار العقد."],
-  ["Uniform-Cost Search (UCS)", "البحث بالتكلفة الموحدة: امتداد لـ BFS يستخدم طابور أولوية لتوسيع العقدة ذات أقل تكلفة مسار تراكمية g(n)."],
-  ["Level-by-Level Exploration", "الاستكشاف مستوى بمستوى: السمة المميزة لخوارزمية BFS حيث تفحص كل عقد المستوى d قبل الانتقال للمستوى d+1."]
+// ==================== بيانات محاكي خوارزمية BFS (صفحات 55 - 58) ====================
+const TREE_NODES_COORDS = [
+  { id: "A", x: 300, y: 30 },
+  { id: "B", x: 170, y: 85 },
+  { id: "C", x: 300, y: 85 },
+  { id: "D", x: 430, y: 85 },
+  { id: "E", x: 110, y: 150 },
+  { id: "F", x: 210, y: 150 },
+  { id: "G", x: 285, y: 150 },
+  { id: "H", x: 375, y: 150 },
+  { id: "I", x: 495, y: 150 },
+  { id: "J", x: 65,  y: 215 },
+  { id: "K", x: 150, y: 215 },
+  { id: "L", x: 235, y: 215 },
+  { id: "M", x: 335, y: 215 },
+  { id: "N", x: 420, y: 215 },
+  { id: "O", x: 485, y: 215 },
+  { id: "P", x: 545, y: 215 }
 ];
 
-const cards = [
-  ["فيماذا يكمن الفرق الجوهري بين استراتيجيات البحث المختلفة (مثل BFS و DFS و UCS)؟", "يكمن في نوع هيكل البيانات (الطابور) المستخدم لترتيب وسحب العقد من الحافة (Frontier / Open List)."],
-  ["ما هو مبدأ عمل الطابور العادي (Queue)؟ وأي خوارزمية بحث تعتمد عليه؟", "يعمل بمبدأ: أولاً يدخل أولاً يخرج (FIFO - First-In, First-Out)، وتعتمد عليه خوارزمية البحث بالعرض أولاً (BFS)."],
-  ["ما هما العمليتان الأساسيتان على الطابور (Queue - FIFO)؟", "1) الإضافة (Enqueue / append): إضافة العقد الجديدة في نهاية (مؤخرة) الطابور.\n2) السحب (Dequeue / pop(0)): إزالة وسحب العقدة الأقدم من مقدمة الطابور."],
-  ["ما هو مبدأ عمل المكدس (Stack)؟ وأي خوارزمية بحث تعتمد عليه؟", "يعمل بمبدأ: آخراً يدخل أولاً يخرج (LIFO - Last-In, First-Out)، وتعتمد عليه خوارزمية البحث بالعمق أولاً (DFS)."],
-  ["كيف يعمل طابور الأولوية (Priority Queue)؟ وما الخوارزميات التي تستخدمه؟", "يسحب دائماً العقدة ذات الأولوية الأعلى (الأقل تكلفة أو الأفضل تقييماً) بغض النظر عن وقت دخولها؛ وتستخدمه خوارزميات: UCS، والبحث الجشع (Greedy)، وخوارزمية A*."],
-  ["مِمَّ يتكون الرسم البياني (Graph G = (V, E))؟ وما الفرق بين الموجه وغير الموجه؟", "يتكون من مجموعة عقد/رؤوس (Vertices V) ومجموعة حواف/أضلاع (Edges E).\n• الموجه (Directed): حوافه ذات اتجاه محدد بسهم.\n• غير الموجه (Undirected): حوافه ثنائية الاتجاه."],
-  ["ما هي الشجرة (Tree) كحالة خاصة من الرسم البياني؟", "هي رسم بياني متصل وخالٍ تماماً من الحلقات أو الدورات (Acyclic)، يبدأ من عقدة وحيدة تسمى الجذر (Root) ولكل عقدة فيه أب واحد فقط."],
-  ["قارني بين مصفوفة التجاور (Adjacency Matrix) وقائمة التجاور (Adjacency List) لتمثيل الرسم البياني.", "• مصفوفة التجاور: مصفوفة ثنائية V×V تضع 1 عند الاتصال و 0 عند عدمه، وتستهلك ذاكرة كبيرة O(V²).\n• قائمة التجاور: قائمة لكل عقدة تضم جيرانها فقط (كالقاموس في بايثون)، وهي موفرة للذاكرة O(V + E)."],
-  ["لماذا تُسمى خوارزميات البحث غير الموجه بالبحث الأعمى (Blind Search)؟", "لأنها لا تمتلك أي معلومات إرشادية عن مدى قرب العقد من الهدف خارج تعريف المشكلة، فتستكشف الفضاء بشكل منهجي أعمى."],
-  ["ما هي الفكرة الأساسية لخوارزمية البحث بالعرض أولاً (Breadth-First Search - BFS)؟", "استكشاف شجرة البحث أفقياً (مستوى تلو الآخر)؛ حيث توسع الجذر (المستوى 0)، ثم جميع عقد المستوى 1، ثم جميع عقد المستوى 2... قبل النزول لأي مستوى أعمق."],
-  ["لماذا تستخدم خوارزمية BFS طابور FIFO تحديداً؟", "لأن إضافة الأبناء الجدد في نهاية الطابور وسحب العقد من مقدمته يضمن فحص جميع عقد المستوى الأعلى الأقدم قبل البدء بفحص أي عقدة في المستوى الأدنى الأحدث."],
-  ["ما وظيفة قائمة العقد المزارة (Visited / Closed List) في خوارزمية BFS؟", "حفظ العقد التي تمت زيارتها بالفعل لمنع إعادة إضافتها للطابور مرة أخرى، مما يحمي الخوارزمية من تكرار العمل أو الوقوع في حلقات لا نهائية."],
-  ["في شجرة جذرها A وأبناؤه (B, C)، وأبناء B هم (D, E)، وابن C هو (F)؛ ما هو ترتيب زيارة العقد بواسطة BFS؟", "تزورها مستوى بمستوى:\nالمستوى 0: A\nالمستوى 1: B ثم C\nالمستوى 2: D ثم E ثم F\nالترتيب النهائي: A → B → C → D → E → F."],
-  ["في المثال السابق، عندما نسحب العقدة B من أول الطابور [B, C] ونولد أبناءها (D, E)، كيف يصبح شكل الطابور؟", "تُضاف D و E في نهاية الطابور بعد C، فيصبح الطابور: [C, D, E]، وتكون العقدة التالية التي ستُسحب هي C."],
-  ["هل خوارزمية البحث بالعرض أولاً (BFS) مكتملة (Complete)؟ وما شرط ذلك؟", "نعم، خوارزمية BFS مكتملة دائماً بشرط أن يكون عامل التفرع (b) محدوداً (Finite) وأن يقع الهدف على عمق محدود (d)."],
-  ["هل خوارزمية البحث بالعرض أولاً (BFS) أمثلية (Optimal)؟ وما الشرط اللازم لذلك؟", "نعم، تكون أمثلية بشرط أن تكون تكلفة جميع الخطوات متساوية (أو أن تكون تكلفة المسار دالة غير متناقصة مع عمق العقدة)، حيث تجد دائماً الهدف الأقل عمقاً."],
-  ["ما هو التعقيد الزمني والتعقيد المكاني لخوارزمية BFS بدلالة عامل التفرع b وعمق الحل d؟", "• التعقيد الزمني: O(b^d).\n• التعقيد المكاني (الذاكرة): O(b^d) لأنها تحتفظ بجميع العقد في الذاكرة."],
-  ["أيهما يمثل المشكلة الأكبر في خوارزمية BFS عملياً: استهلاك الوقت أم استهلاك الذاكرة؟", "استهلاك الذاكرة (التعقيد المكاني Space Complexity) هو المشكلة الأكبر والأخطر في خوارزمية BFS؛ لأن الذاكرة تمتلئ وتنفد أسرع بكثير من الوقت."],
-  ["ما هي أبرز 3 مميزات لخوارزمية البحث بالعرض أولاً (BFS)؟", "1) مكتملة وتضمن إيجاد الحل إن وجد.\n2) تجد المسار الأقصر من حيث عدد الخطوات.\n3) لا تعلق في المسارات اللانهائية العميقة."],
-  ["ما هي أبرز 3 عيوب لخوارزمية البحث بالعرض أولاً (BFS)؟", "1) استهلاك هائل للذاكرة O(b^d).\n2) بطيئة جداً إذا كان الهدف يقع في عمق بعيد.\n3) غير أمثلية إذا كانت تكاليف الخطوات (أوزان الحواف) مختلفة."],
-  ["كيف يتم تمثيل الرسم البياني برمجياً في كود بايثون لتطبيق خوارزمية BFS؟", "يُمثل باستخدام قاموس (Dictionary) يطبق قائمة التجاور؛ حيث المفتاح هو اسم العقدة والقيمة هي قائمة جيرانها، مثل:\ngraph = {'A': ['B', 'C'], 'B': ['D', 'E']}"],
-  ["في كود BFS بلغة بايثون، ما الفرق الجوهري بين استخدام queue.pop(0) واستخدام queue.pop()؟", "• queue.pop(0): تسحب العنصر الأول من بداية القائمة (مبدأ FIFO الخاص بخوارزمية BFS).\n• queue.pop(): تسحب العنصر الأخير من نهاية القائمة (مبدأ المكدس LIFO الخاص بخوارزمية DFS)."],
-  ["ما وظيفة السطر البرمجي: if neighbour not in visited: داخل حلقة for في كود BFS؟", "يتحقق مما إذا كان الجار لم تتم زيارته مسبقاً؛ فإذا لم يُزر تتم إضافته لقائمة visited وللطابور queue، مما يمنع تكرار زيارة العقد."],
-  ["متى تفشل خوارزمية BFS في إيجاد الحل الأرخص تكلفة، وما الخوارزمية البديلة التي تعالج ذلك؟", "تفشل عندما تكون تكاليف الخطوات غير متساوية (أوزان الطرق مختلفة)؛ وتعالج خوارزمية البحث بالتكلفة الموحدة (UCS) ذلك باستخدام طابور الأولوية حسب التكلفة التراكمية g(n)."],
-  ["في شجرة عامل تفرعها b = 10 وعمق الهدف d = 3، كم عدد العقد في كل مستوى من المستويات (0، 1، 2، 3)؟", "• المستوى 0 (الجذر): 1 عقدة.\n• المستوى 1: 10 عقد.\n• المستوى 2: 10² = 100 عقدة.\n• المستوى 3: 10³ = 1,000 عقدة (المجموع الكلي = 1,111 عقدة)."],
-  ["ماذا يحدث إذا كانت العقدة E متصلة بالعقدة F في الرسم البياني، وكانت F قد أُضيفت مسبقاً إلى قائمة visited عن طريق العقدة C؟", "عند توسيع العقدة E وفحص جارتها F، يجد الشرط أن F موجودة مسبقاً في visited، فيتجاهلها ولا يضيفها للطابور مرة أخرى."],
-  ["متى يتوقف تنفيذ حلقة while queue: في خوارزمية BFS؟", "يتوقف في حالتين: إما عند العثور على عقدة الهدف المطلوبة، أو عندما يصبح الطابور فارغاً (queue = []) بعد زيارة جميع العقد القابلة للوصول."],
-  ["ما العلاقة بين خوارزمية البحث بالتكلفة الموحدة (UCS) وخوارزمية البحث بالعرض أولاً (BFS) عندما تكون تكلفة كل خطوة = 1؟", "تتطابق خوارزمية UCS تماماً في سلوكها وترتيب توسيعها للعقد مع خوارزمية BFS عندما تكون جميع تكاليف الخطوات متساوية."]
+const BFS_STEPS = [
+  { visited: [], current: null, queue: ["A"], desc: "البداية (صفحة 55): نضع عقدة الجذر (A) في الطابور Queue استعداداً لبدء البحث بأولوية الاتساع." },
+  { visited: ["A"], current: "A", queue: ["B", "C", "D"], desc: "الخطوة 1 (صفحة 56): نفحص الجذر (A) ونخرجه من الطابور، ونضيف أبناءه في المستوى الأول (B, C, D) إلى الطابور." },
+  { visited: ["A", "B"], current: "B", queue: ["C", "D", "E", "F"], desc: "الخطوة 2 (صفحة 56): نفحص أول عقدة في الطابور (B) ونخرجها، ونضيف أبناءها (E, F) في نهاية الطابور." },
+  { visited: ["A", "B", "C"], current: "C", queue: ["D", "E", "F", "G"], desc: "الخطوة 3 (صفحة 56): نفحص الشقيق التالي (C) ونخرجه من الطابور، ونضيف ابنه (G) في نهاية الطابور." },
+  { visited: ["A", "B", "C", "D"], current: "D", queue: ["E", "F", "G", "H", "I"], desc: "الخطوة 4 (صفحة 57): نفحص الشقيق الثالث (D) ونخرجه (اكتمل المستوى 1)، ونضيف أبناءه (H, I) لنهاية الطابور." },
+  { visited: ["A", "B", "C", "D", "E"], current: "E", queue: ["F", "G", "H", "I", "J", "K"], desc: "الخطوة 5 (صفحة 57): ننتقل للمستوى 2؛ نفحص (E) ونخرجها من الطابور، ونضيف أبناءها (J, K) لنهاية الطابور." },
+  { visited: ["A", "B", "C", "D", "E", "F"], current: "F", queue: ["G", "H", "I", "J", "K"], desc: "الخطوة 6 (صفحة 57): نفحص (F) ونخرجها من الطابور، وبما أنه ليس لها أبناء لا يضاف شيء للطابور." },
+  { visited: ["A", "B", "C", "D", "E", "F", "G"], current: "G", queue: ["H", "I", "J", "K", "L"], desc: "الخطوة 7 (صفحة 58): نفحص (G) ونخرجها من الطابور، ونضيف ابنها (L) في نهاية الطابور." },
+  { visited: ["A", "B", "C", "D", "E", "F", "G", "H"], current: "H", queue: ["I", "J", "K", "L", "M", "N"], desc: "الخطوة 8 (صفحة 58): نفحص (H) ونخرجها من الطابور، ونضيف أبناءها (M, N) في نهاية الطابور." },
+  { visited: ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P"], current: "P", queue: [], desc: "اكتمال البحث (صفحة 55): يستمر الفحص مستوى تلو الآخر حتى زيارة جميع العقد بالترتيب: A → B → C → D → E → F → G → H → I → J → K → L → M → N → O → P." }
 ];
 
-const questions = [
+let bfsIdx = 0;
+
+function renderBFSSimulator() {
+  const step = BFS_STEPS[bfsIdx];
+  document.getElementById("bfsStepBadge").textContent = `الخطوة ${bfsIdx + 1} من ${BFS_STEPS.length}`;
+  document.getElementById("bfsStepText").textContent = step.desc;
+  document.getElementById("bfsPrevBtn").disabled = (bfsIdx === 0);
+  document.getElementById("bfsNextBtn").disabled = (bfsIdx === BFS_STEPS.length - 1);
+
+  const nodesLayer = document.getElementById("bfsNodesLayer");
+  nodesLayer.innerHTML = TREE_NODES_COORDS.map(n => {
+    const isVisited = step.visited.includes(n.id);
+    const isCurrent = step.current === n.id;
+    const isInQueue = step.queue.includes(n.id);
+
+    let fill = "#e2e8f0";
+    let stroke = "#64748b";
+    let textFill = "#0f172a";
+
+    if (isCurrent) {
+      fill = "#fee2e2";
+      stroke = "#dc2626";
+      textFill = "#dc2626";
+    } else if (isVisited) {
+      fill = "#fef2f2";
+      stroke = "#ef4444";
+      textFill = "#dc2626";
+    } else if (isInQueue) {
+      fill = "#ccfbf1";
+      stroke = "#0d9488";
+      textFill = "#0f766e";
+    }
+
+    return `
+      <g>
+        <circle cx="${n.x}" cy="${n.y}" r="18" fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+        <text x="${n.x}" y="${n.y + 6}" text-anchor="middle" font-size="16" font-weight="bold" fill="${textFill}">${n.id}</text>
+      </g>
+    `;
+  }).join("");
+
+  const qStrip = document.getElementById("bfsQueueStrip");
+  const slots = [];
+  for (let i = 0; i < 7; i++) {
+    const val = step.queue[i] || "";
+    const cls = (i === 0 && val) ? "q-slot active-front" : "q-slot";
+    slots.push(`<div class="${cls}">${val}</div>`);
+  }
+  qStrip.innerHTML = slots.join("");
+}
+
+function stepBFS(dir) {
+  const next = bfsIdx + dir;
+  if (next >= 0 && next < BFS_STEPS.length) {
+    bfsIdx = next;
+    renderBFSSimulator();
+  }
+}
+
+function resetBFS() {
+  bfsIdx = 0;
+  renderBFSSimulator();
+}
+
+// ==================== بيانات المصطلحات والبطاقات (22 مصطلحاً من الفصل الخامس) ====================
+const TERMS_DATA = [
+  // الوحدة الأولى (10)
+  { u: "u1", unitName: "الوحدة الأولى", ar: "هيكلة البيانات", en: "Data Structure", def: "آلية تخزين وتنظيم البيانات في ذاكرة الحواسيب بهدف تسهيل استخدامها بكفاءة وسرعة ودقة في خوارزميات الذكاء الاصطناعي." },
+  { u: "u1", unitName: "الوحدة الأولى", ar: "هياكل البيانات الخطية", en: "Linear Data Structures", def: "هياكل تُرتب فيها البيانات بشكل متسلسل خطي، وتشمل: المصفوفات (Arrays)، المكدس (Stack)، الطابور (Queue)، والقائمة المترابطة (Linked List)." },
+  { u: "u1", unitName: "الوحدة الأولى", ar: "هياكل البيانات غير الخطية", en: "Non-Linear Data Structures", def: "هياكل لا تُخزن فيها البيانات بتسلسل خطي واحد، وتشمل: الشجرة (Tree Structure) والمخطط (Graph)." },
+  { u: "u1", unitName: "الوحدة الأولى", ar: "المصفوفات", en: "Arrays (Static)", def: "هياكل بيانات خطية ثابتة (Static) تخزن العناصر في مواقع متجاورة، وتكون أحادية البعد (One Dim) أو ثنائية البعد (Two Dim)." },
+  { u: "u1", unitName: "الوحدة الأولى", ar: "المكدس", en: "Stack (Dynamic)", def: "هيكل بيانات خطي غير ثابت (ديناميكي) يعمل بمبدأ LIFO (آخر عنصر يضاف هو أول عنصر يخرج)." },
+  { u: "u1", unitName: "الوحدة الأولى", ar: "مبدأ عمل المكدس LIFO", en: "Last In First Out (LIFO)", def: "مبدأ خروج البيانات من المكدس (Stack) حيث إن آخر عنصر تمت إضافته في القمة هو أول عنصر يخرج عند الحذف." },
+  { u: "u1", unitName: "الوحدة الأولى", ar: "الأمر Push والأمر Pop", en: "Push & Pop Operations", def: "في المكدس (Stack): يستخدم الأمر Push لإضافة عنصر في القمة، ويستخدم الأمر Pop لحذف عنصر من القمة." },
+  { u: "u1", unitName: "الوحدة الأولى", ar: "الطابور", en: "Queue (Dynamic)", def: "هيكل بيانات خطي غير ثابت (ديناميكي) يعمل بمبدأ FIFO (أول عنصر يضاف هو أول عنصر يخرج)." },
+  { u: "u1", unitName: "الوحدة الأولى", ar: "مبدأ عمل الطابور FIFO", en: "First In First Out (FIFO)", def: "مبدأ خروج البيانات من الطابور (Queue) حيث إن أول عنصر دخل الطابور هو أول عنصر يخرج منه." },
+  { u: "u1", unitName: "الوحدة الأولى", ar: "القائمة المترابطة", en: "Linked List", def: "هيكل بيانات خطي ديناميكي يتكون من عقد تضم كل منها البيانات (Data) ومؤشراً (Pointer/Next) يشير للعقدة التالية حتى Null." },
+
+  // الوحدة الثانية (6)
+  { u: "u2", unitName: "الوحدة الثانية", ar: "المخطط", en: "Graph", def: "نوع من هياكل البيانات غير الخطية يتكون من مجموعة من العقد (Nodes) ترتبط وتتصل بخطوط (Edges)." },
+  { u: "u2", unitName: "الوحدة الثانية", ar: "المخطط الموجه", en: "Directed Graph", def: "مخطط ترتبط فيه العقد بخطوط ذات أسهم تحدد اتجاه الانتقال من عقدة إلى أخرى (مثل المخطط من S إلى G)." },
+  { u: "u2", unitName: "الوحدة الثانية", ar: "المخطط غير الموجه", en: "UnDirected Graph", def: "مخطط ترتبط فيه العقد بخطوط عادية بدون أسهم، مما يسمح بالانتقال بين العقدتين في كلا الاتجاهين." },
+  { u: "u2", unitName: "الوحدة الثانية", ar: "هيكل البيانات الشجرة", en: "Tree Data Structure", def: "نوع من هياكل البيانات غير الخطية يتكون من مجموعة من العقد تكون مرتبة هرمياً في مستويات." },
+  { u: "u2", unitName: "الوحدة الثانية", ar: "عقدة الجذر في الشجرة", en: "Root Node (Level 0)", def: "العقدة العليا الأولى في قمة الشجرة (في المستوى 0 مثل العقدة A) التي تتفرع منها باقي العقد." },
+  { u: "u2", unitName: "الوحدة الثانية", ar: "العقد الأبناء والأشقاء", en: "Children & Siblings", def: "العقد المتفرعة من نفس الأب في نفس المستوى تسمى أشقاء/إخوة (مثل B, C, D أبناء للجذر A)." },
+
+  // الوحدة الثالثة (6)
+  { u: "u3", unitName: "الوحدة الثالثة", ar: "خوارزمية البحث بأولوية الاتساع", en: "Breadth First Search (BFS)", def: "خوارزمية بحث أعمى تبحث عن الهدف من خلال فحص المستوى كاملاً (الأشقاء أولاً) ثم الانتقال إلى المستوى الذي يليه." },
+  { u: "u3", unitName: "الوحدة الثالثة", ar: "تصنيف خوارزمية BFS", en: "Uninformed Search Algorithm", def: "تُصنف BFS ضمن خوارزميات البحث الأعمى لأنها تعتمد على تعريف المشكلة فقط ولا تستخدم دالة استدلالية." },
+  { u: "u3", unitName: "الوحدة الثالثة", ar: "هيكل بيانات خوارزمية BFS", en: "Queue in BFS", def: "تستخدم خوارزمية البحث بأولوية الاتساع (BFS) هيكل البيانات الطابور (Queue - FIFO) لتتبع مسار إيجاد الهدف." },
+  { u: "u3", unitName: "الوحدة الثالثة", ar: "أولوية الفحص في BFS", en: "Level-by-Level (Siblings First)", def: "تبدأ من الجذر ثم تفحص جميع العقد الإخوة في نفس المستوى من اليسار لليمين قبل الانتقال للمستوى الأعمق." },
+  { u: "u3", unitName: "الوحدة الثالثة", ar: "معالجة العقدة الورقية في BFS", en: "Leaf Node in BFS (e.g., Node F)", def: "عند فحص عقدة ليس لها أبناء (مثل F)، تُحذف من الطابور ولا يضاف شيء جديد للطابور ويستمر فحص باقي العقد." },
+  { u: "u3", unitName: "الوحدة الثالثة", ar: "متطلبات إيجاد الحل في BFS", en: "Problem Definition Only", def: "لإيجاد الحل في خوارزمية البحث بأولوية الاتساع (BFS) تتطلب استخدام تعريف المشكلة فقط دون أوزان أو معلومات إضافية." }
+];
+
+const GRAPH_SVG_QUIZ = `
+  <div class="q-visual" style="text-align:center">
+    <svg viewBox="0 0 340 155" style="width:100%;max-width:320px;background:#fff;border-radius:8px;border:1px solid #cbd5e1">
+      <defs>
+        <marker id="qarr5" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+          <polygon points="0 0, 7 3.5, 0 7" fill="#334155"/>
+        </marker>
+      </defs>
+      <line x1="38" y1="95" x2="96" y2="70" stroke="#334155" stroke-width="1.5" marker-end="url(#qarr5)"/>
+      <line x1="38" y1="101" x2="195" y2="63" stroke="#334155" stroke-width="1.5" marker-end="url(#qarr5)"/>
+      <line x1="36" y1="107" x2="68" y2="133" stroke="#334155" stroke-width="1.5" marker-end="url(#qarr5)"/>
+      <line x1="106" y1="57" x2="58" y2="37" stroke="#334155" stroke-width="1.5" marker-end="url(#qarr5)"/>
+      <line x1="60" y1="27" x2="95" y2="17" stroke="#334155" stroke-width="1.5" marker-end="url(#qarr5)"/>
+      <line x1="118" y1="59" x2="158" y2="35" stroke="#334155" stroke-width="1.5" marker-end="url(#qarr5)"/>
+      <line x1="158" y1="27" x2="120" y2="17" stroke="#334155" stroke-width="1.5" marker-end="url(#qarr5)"/>
+      <line x1="122" y1="65" x2="195" y2="57" stroke="#334155" stroke-width="1.5" marker-end="url(#qarr5)"/>
+      <line x1="205" y1="69" x2="190" y2="95" stroke="#334155" stroke-width="1.5" marker-end="url(#qarr5)"/>
+      <line x1="215" y1="67" x2="248" y2="120" stroke="#334155" stroke-width="1.5" marker-end="url(#qarr5)"/>
+      <line x1="175" y1="107" x2="92" y2="135" stroke="#334155" stroke-width="1.5" marker-end="url(#qarr5)"/>
+      <line x1="180" y1="113" x2="150" y2="137" stroke="#334155" stroke-width="1.5" marker-end="url(#qarr5)"/>
+      <line x1="92" y1="140" x2="128" y2="140" stroke="#334155" stroke-width="1.5" marker-end="url(#qarr5)"/>
+      <line x1="262" y1="120" x2="278" y2="90" stroke="#334155" stroke-width="1.5" marker-end="url(#qarr5)"/>
+      <line x1="285" y1="65" x2="302" y2="30" stroke="#334155" stroke-width="1.5" marker-end="url(#qarr5)"/>
+      <circle cx="26" cy="100" r="13" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/><text x="26" y="105" text-anchor="middle" font-size="12" font-weight="bold" fill="#dc2626">S</text>
+      <circle cx="48" cy="31" r="11" fill="#f8fafc" stroke="#334155"/><text x="48" y="35" text-anchor="middle" font-size="11">b</text>
+      <circle cx="108" cy="15" r="11" fill="#f8fafc" stroke="#334155"/><text x="108" y="19" text-anchor="middle" font-size="11">a</text>
+      <circle cx="110" cy="65" r="11" fill="#f8fafc" stroke="#334155"/><text x="110" y="69" text-anchor="middle" font-size="11">d</text>
+      <circle cx="170" cy="31" r="11" fill="#f8fafc" stroke="#334155"/><text x="170" y="35" text-anchor="middle" font-size="11">c</text>
+      <circle cx="208" cy="57" r="11" fill="#f8fafc" stroke="#334155"/><text x="208" y="61" text-anchor="middle" font-size="11">e</text>
+      <circle cx="185" cy="105" r="11" fill="#f8fafc" stroke="#334155"/><text x="185" y="109" text-anchor="middle" font-size="11">h</text>
+      <circle cx="80" cy="139" r="11" fill="#f8fafc" stroke="#334155"/><text x="80" y="143" text-anchor="middle" font-size="11">p</text>
+      <circle cx="140" cy="140" r="11" fill="#f8fafc" stroke="#334155"/><text x="140" y="144" text-anchor="middle" font-size="11">q</text>
+      <circle cx="255" cy="131" r="11" fill="#f8fafc" stroke="#334155"/><text x="255" y="135" text-anchor="middle" font-size="11">r</text>
+      <circle cx="282" cy="77" r="11" fill="#f8fafc" stroke="#334155"/><text x="282" y="81" text-anchor="middle" font-size="11">f</text>
+      <circle cx="308" cy="17" r="13" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/><text x="308" y="22" text-anchor="middle" font-size="12" font-weight="bold" fill="#1d4ed8">G</text>
+    </svg>
+  </div>
+`;
+
+// ==================== بيانات الاختبار الشامل (20 سؤالاً: 9 رسمية من البنك + 11 تدريبية شاملة) ====================
+const QUIZ_QUESTIONS = [
+  // الأسئلة الـ 9 الرسمية في بنك الأسئلة (الفصل الخامس: صفحات 18، 19، 20)
   {
-    q: "ما العامل الأساسي الذي يحدد الفرق الجوهري في سلوك وترتيب استكشاف العقد بين خوارزميات البحث المختلفة (مثل BFS و DFS و UCS)؟",
-    o: [
-      "لون وحجم العقد المرسومة على الورق",
-      "نوع هيكل البيانات (الطابور) المستخدم لإدارة وترتيب وسحب العقد من الحافة (Frontier / Open List)",
-      "سرعة المعالج المركزي للحاسوب",
-      "اسم المتغير المستخدم لحفظ عقدة البداية"
+    id: 1,
+    cat: "official",
+    badge: "بنك الأسئلة الرسمي — الوحدة 1 (س1)",
+    q: "(1) من هياكل البيانات الثابتة (Static):",
+    opts: [
+      { t: "القوائم المترابطة Linked List.", why: "خيار مستبعد؛ القوائم المترابطة هيكل بيانات ديناميكي غير ثابت يتغير حجمه بإضافة وحذف العقد." },
+      { t: "المصفوفات Array.", why: "إجابة صحيحة؛ نصت الملزمة (صفحة 51) تحت عنوان المصفوفات (ARRAYS) على أنها: هياكل بيانات ثابتة STATIC." },
+      { t: "المكدس Stack.", why: "خيار مستبعد؛ المكدس مصنف في الملزمة (صفحة 51) بأنه هياكل بيانات غير ثابتة DYNAMIC." },
+      { t: "الملف File.", why: "خيار مستبعد؛ ليس من هياكل البيانات الثابتة في الذاكرة." }
     ],
-    a: 1,
-    e: "تختلف استراتيجيات البحث جوهرياً في كيفية اختيار العقدة التالية للتوسيع، وهو ما يحدده نوع هيكل البيانات المستخدم للحافة (FIFO أو LIFO أو Priority Queue) (ص 50)."
+    ans: 1,
+    rule: "في الملزمة (صفحة 51): المصفوفات (Arrays) هي هياكل بيانات ثابتة (STATIC)، بينما المكدس (Stack) والطابور (Queue) هياكل بيانات غير ثابتة (DYNAMIC)."
   },
   {
-    q: "أي هيكل من هياكل البيانات التالية يعمل بمبدأ 'أولاً يدخل أولاً يخرج' (FIFO - First-In, First-Out) وتعتمد عليه خوارزمية البحث بالعرض أولاً (BFS)؟",
-    o: [
-      "المكدس (Stack)",
-      "الشجرة الثنائية",
-      "الطابور العادي (Queue)",
-      "مصفوفة التجاور"
+    id: 2,
+    cat: "official",
+    badge: "بنك الأسئلة الرسمي — الوحدة 1 (س2)",
+    q: "(2) يستخدم Push لإضافة عنصر إلى القائمة:",
+    opts: [
+      { t: "الطابور Queue.", why: "خيار مستبعد؛ الطابور يعمل بمبدأ FIFO ولا يستخدم عمليتي Push و Pop الخاصتين بقمة المكدس." },
+      { t: "المصفوفات Array.", why: "خيار مستبعد؛ المصفوفات الثابتة يتم الوصول لعناصرها عبر الفهرس (Index)." },
+      { t: "المكدس Stack.", why: "إجابة صحيحة؛ نصت الملزمة (صفحة 51) في شرح المكدس (Stack) على أن: push تستخدم لإضافة عنصر في القمة، و Pop لحذف عنصر من القمة." },
+      { t: "الملف File.", why: "خيار مستبعد؛ لا علاقة له بعمليات المكدس." }
     ],
-    a: 2,
-    e: "الطابور العادي (Queue) يعمل بمبدأ FIFO (الأقدم دخولاً يخرج أولاً)، وهو الهيكل الأساسي لخوارزمية BFS (ص 50)."
+    ans: 2,
+    rule: "في هيكل البيانات المكدس (Stack): الأمر Push يضيف عنصراً في القمة، والأمر Pop يحذف عنصراً من القمة."
   },
   {
-    q: "في الطابور العادي (Queue - FIFO)، أين تتم عملية إضافة عنصر جديد (Enqueue) وأين تتم عملية سحب وإزالة عنصر (Dequeue)؟",
-    o: [
-      "تتم الإضافة والسحب معاً من قمة الطابور",
-      "تتم الإضافة في المقدمة، ويتم السحب من المؤخرة",
-      "تتم الإضافة والسحب بشكل عشوائي من المنتصف",
-      "تتم الإضافة (Enqueue) في نهاية/مؤخرة الطابور (Rear)، ويتم السحب (Dequeue) من بداية/مقدمة الطابور (Front)"
+    id: 3,
+    cat: "official",
+    badge: "بنك الأسئلة الرسمي — الوحدة 1 (س3)",
+    q: "(3) First In First Out (FIFO):",
+    opts: [
+      { t: "مبدأ خروج البيانات من الطابور Queue.", why: "إجابة صحيحة؛ نصت الملزمة (صفحة 52) على أن الطابور (Queue) يعمل بمبدأ First In First Out (FIFO) أي أول عنصر يضاف هو أول عنصر يخرج." },
+      { t: "مبدأ خروج البيانات من المكدس Stack.", why: "خيار مستبعد؛ المكدس (Stack) يعمل بمبدأ Last In First Out (LIFO) أي آخر عنصر يضاف أول عنصر يخرج." },
+      { t: "مبدأ خروج البيانات من المصفوفة Array.", why: "خيار مستبعد؛ المصفوفة لا تعمل بمبدأ الطابور." },
+      { t: "مبدأ خروج البيانات من الملف File.", why: "خيار مستبعد؛ الملف وحدة تخزين وليس طابوراً." }
     ],
-    a: 3,
-    e: "في طابور FIFO تدخل العناصر الجديدة من الخلف (Rear/Back) وتخرج العناصر الأقدم من الأمام (Front/Head) (ص 50)."
+    ans: 0,
+    rule: "احفظي الفرق جيداً: FIFO (First In First Out) = الطابور Queue | LIFO (Last In First Out) = المكدس Stack."
   },
   {
-    q: "أي هيكل بيانات يعمل بمبدأ 'آخراً يدخل أولاً يخرج' (LIFO - Last-In, First-Out) بعمليتي الدفع (Push) والسحب (Pop)، وتعتمد عليه خوارزمية البحث بالعمق أولاً (DFS)؟",
-    o: [
-      "المكدس (Stack)",
-      "الطابور العادي (FIFO Queue)",
-      "طابور الأولوية (Priority Queue)",
-      "قائمة التجاور"
+    id: 4,
+    cat: "official",
+    badge: "بنك الأسئلة الرسمي — الوحدة 2 (س1)",
+    q: "(4) المخطط نوع من هياكل البيانات الخطية يتكون من مجموعة من العقد ترتبط وتتصل بخطوط:",
+    opts: [
+      { t: "صح", why: "خيار مستبعد؛ احذري من هذا الفخ اللفظي! كلمة (الخطية) في السؤال جعلت العبارة خاطئة." },
+      { t: "خطأ", why: "إجابة صحيحة؛ العبارة خاطئة لأن المخطط (Graph) نوع من هياكل البيانات (غير الخطية Non-Linear) وليس الخطية (صفحة 53)." }
     ],
-    a: 0,
-    e: "المكدس (Stack) يعمل بمبدأ LIFO حيث يُسحب آخر عنصر دخل القمة أولاً، ويُستخدم في خوارزمية DFS (ص 51)."
+    ans: 1,
+    rule: "سؤال فخ مهم جداً في بنك الأسئلة (صفحة 18): المخطط (Graph) والشجرة (Tree) من هياكل البيانات (غير الخطية Non-Linear Data Structures)."
   },
   {
-    q: "عندما نرغب في سحب العقدة ذات التكلفة الأقل أو التقييم الأفضل أولاً بغض النظر عن وقت دخولها للحافة (كما في خوارزميات UCS و A*)، فإننا نستخدم:",
-    o: [
-      "طابور FIFO العادي",
-      "طابور الأولوية (Priority Queue)",
-      "مكدس LIFO",
-      "مصفوفة ثنائية ثابتة"
+    id: 5,
+    cat: "official",
+    badge: "بنك الأسئلة الرسمي — الوحدة 2 (س2)",
+    q: "(5) الشجرة نوع من هياكل البيانات يتكون من مجموعة من العقد تكون مرتبة هرمياً:",
+    opts: [
+      { t: "صح", why: "إجابة صحيحة؛ نصت الملزمة (صفحة 53) حرفياً على أن: الشجرة نوع من هياكل البيانات غير الخطية ويتكون من مجموعة من العقد تكون مرتبة هرمياً." },
+      { t: "خطأ", why: "خيار مستبعد؛ لأن العبارة صحيحة ومطابقة لتعريف الملزمة." }
     ],
-    a: 1,
-    e: "طابور الأولوية (Priority Queue) يرتب العقد حسب أولويتها (الأقل تكلفة أو الأفضل تقييماً) ويخرج الأفضل أولاً (ص 51)."
+    ans: 0,
+    rule: "الشجرة (Tree) تتكون من مجموعة من العقد المرتبة هرمياً في مستويات تبدأ من الجذر."
   },
   {
-    q: "ما هو التعريف الدقيق لـ (الشجرة - Tree) باعتبارها حالة خاصة من الرسم البياني (Graph)؟",
-    o: [
-      "رسم بياني يحتوي على عشرات الحلقات الدائرية المغلقة",
-      "رسم بياني غير متصل تتناثر فيه العقد دون روابط",
-      "رسم بياني متصل وخالٍ تماماً من الحلقات أو الدورات (Acyclic)، يبدأ من عقدة جذرية (Root) ولكل عقدة فيه أب واحد فقط",
-      "مصفوفة مربعة تحتوي على أصفار فقط"
+    id: 6,
+    cat: "official",
+    badge: "بنك الأسئلة الرسمي — الوحدة 2 (س3)",
+    q: "(6) الشكل التالي يمثل:",
+    visual: GRAPH_SVG_QUIZ,
+    opts: [
+      { t: "Tree", why: "خيار مستبعد؛ الشجرة (Tree) تكون مرتبة هرمياً من الأعلى للأسفل بدون حلقات أو مسارات متقاطعة." },
+      { t: "Stack", why: "خيار مستبعد؛ المكدس هيكل خطي." },
+      { t: "Graph", why: "إجابة صحيحة؛ في الفصل الخامس (صفحة 53 و 54) هذا الشكل يمثل المخطط (Graph) وتحديداً المخطط الموجه (Directed Graph)." },
+      { t: "Array", why: "خيار مستبعد؛ المصفوفة جدول خلايا متجاورة." }
     ],
-    a: 2,
-    e: "الشجرة هي رسم بياني متصل وخالٍ من الحلقات (Acyclic) يتفرع هرمياً من الجذر (ص 51)."
+    ans: 2,
+    rule: "في أسئلة الفصل الخامس (الوحدة 2 - س3) حيث الخيارات هي هياكل البيانات (Tree, Graph, Stack, Array)، هذا الشكل يمثل المخطط (Graph)."
   },
   {
-    q: "عند تمثيل الرسم البياني برمجياً في الذاكرة، ما الفرق بين (مصفوفة التجاور Adjacency Matrix) و(قائمة التجاور Adjacency List)؟",
-    o: [
-      "قائمة التجاور تستهلك ذاكرة O(V²) ومصفوفة التجاور لا تستهلك أي ذاكرة",
-      "مصفوفة التجاور تُكتب كقاموس في بايثون، وقائمة التجاور لا تقبل الحروف",
-      "لا يوجد أي فرق بينهما في التمثيل أو الذاكرة",
-      "مصفوفة التجاور مصفوفة ثنائية V×V تضع 1 عند الاتصال و 0 عند عدمه وتستهلك O(V²)، بينما قائمة التجاور تحفظ لكل عقدة قائمة بجيرانها المباشرين فقط (كالقاموس في بايثون) وتستهلك O(V + E)"
+    id: 7,
+    cat: "official",
+    badge: "بنك الأسئلة الرسمي — الوحدة 3 (س1)",
+    q: "(7) خوارزمية البحث بأولوية الاتساع (Breadth First Search - Algorithm):",
+    opts: [
+      { t: "من خوارزميات البحث المستنير.", why: "خيار مستبعد؛ البحث المستنير يشمل Best First Search و Hill Climbing و A*." },
+      { t: "من خوارزميات البحث الأعمى.", why: "إجابة صحيحة؛ خوارزمية البحث بأولوية الاتساع (BFS) هي من استراتيجيات البحث الأعمى (Uninformed Search) كما ورد في صفحة 50." },
+      { t: "من خوارزميات القائمة المترابطة.", why: "خيار مستبعد؛ تسمية غير صحيحة." },
+      { t: "تعتمد على مخطط ثابت.", why: "خيار مستبعد؛ خيار مشتت." }
     ],
-    a: 3,
-    e: "قائمة التجاور (Adjacency List) أكثر كفاءة في الذاكرة للرسوم المتفرقة وتُمثل بسهولة كقاموس (Dictionary) في بايثون (ص 52)."
+    ans: 1,
+    rule: "خوارزمية البحث بأولوية الاتساع (BFS) تنتمي إلى خوارزميات البحث الأعمى (Uninformed Search)."
   },
   {
-    q: "كيف تعمل خوارزمية (البحث بالعرض أولاً - Breadth-First Search - BFS) عند استكشاف شجرة البحث؟",
-    o: [
-      "توسع العقدة الجذرية أولاً، ثم توسع جميع عقد المستوى الأول، ثم جميع عقد المستوى الثاني، وهكذا أفقياً مستوى تلو الآخر قبل النزول لأي مستوى أعمق",
-      "تتغلغل في فرع واحد عميقاً حتى تصل لآخر ورقة ثم تتراجع",
-      "تختار العقد بناءً على دالة الاستدلال h(n) الأقرب للهدف",
-      "تبدأ من عقدة الهدف وتعود عكسياً إلى الجذر"
+    id: 8,
+    cat: "official",
+    badge: "بنك الأسئلة الرسمي — الوحدة 3 (س2)",
+    q: "(8) خوارزمية البحث بأولوية الاتساع (Breadth First Search - BFS Algorithm):",
+    opts: [
+      { t: "تعتمد على هيكلة البيانات المصفوفة الأحادية.", why: "خيار مستبعد؛ لا تستخدم المصفوفة الأحادية لتتبع العقد." },
+      { t: "تعتمد على هيكلة البيانات قائمة.", why: "خيار مستبعد؛ التحديد الدقيق في الملزمة هو الطابور (Queue)." },
+      { t: "تستخدم هيكل البيانات الطابور.", why: "إجابة صحيحة؛ نصت الملزمة (صفحة 55) حرفياً على أن خوارزمية البحث بأولوية الاتساع تستخدم هيكلة البيانات الطابور (Queue) لتتبع مسار إيجاد الهدف." },
+      { t: "لا تستخدم هيكلة بيانات.", why: "خيار مستبعد؛ لا بد لها من هيكل الطابور لحفظ العقد حسب أولوية المستوى." }
     ],
-    a: 0,
-    e: "تستكشف خوارزمية BFS الشجرة مستوى تلو الآخر (Level by Level) بدءاً من الجذر (ص 53)."
+    ans: 2,
+    rule: "خوارزمية البحث بأولوية الاتساع (BFS) تستخدم دائماً هيكل البيانات الطابور (Queue)."
   },
   {
-    q: "[مسألة تتبع BFS]: في شجرة بحث جذرها (S)، يتفرع من S الأبناء (A, B) من اليسار لليمين، ويتفرع من A الأبناء (C, D)، ويتفرع من B الأبناء (E, F). ما هو الترتيب الصحيح لزيارة العقد باستخدام خوارزمية BFS؟",
-    o: [
-      "S → A → C → D → B → E → F",
-      "S → A → B → C → D → E → F",
-      "S → B → F → E → A → D → C",
-      "C → D → A → E → F → B → S"
+    id: 9,
+    cat: "official",
+    badge: "بنك الأسئلة الرسمي — الوحدة 3 (س3)",
+    q: "(9) خوارزمية البحث بأولوية الاتساع (Breadth First Search - BFS Algorithm):",
+    opts: [
+      { t: "لإيجاد الحل تتطلب استخدام تعريف المشكلة فقط.", why: "إجابة صحيحة؛ لأنها من خوارزميات البحث الأعمى (Uninformed Search) التي تعتمد على تعريف المشكلة فقط دون أي دالة استدلالية." },
+      { t: "تتطلب معلومات إضافية على الحواف للتحرك.", why: "خيار مستبعد؛ التي تتطلب معلومات ودالات استدلالية هي خوارزميات البحث المستنير." },
+      { t: "الأولوية بالتحرك بالعمق إلى الأبناء أولاً.", why: "خيار مستبعد؛ التحرك بالعمق إلى الأبناء أولاً يخص خوارزمية البحث بأولوية العمق (DFS) وليس الاتساع (BFS)." },
+      { t: "يتم التحرك في البحث عن الهدف بطريقة عشوائية.", why: "خيار مستبعد؛ التحرك فيها منظم جداً مستوى تلو الآخر من اليسار لليمين." }
     ],
-    a: 1,
-    e: "تزور BFS المستوى 0: (S)، ثم المستوى 1 كاملاً: (A ثم B)، ثم المستوى 2 كاملاً: (C ثم D ثم E ثم F)، فيكون الترتيب: S → A → B → C → D → E → F (ص 54)."
+    ans: 0,
+    rule: "خوارزمية (BFS) هي بحث أعمى، لذلك لإيجاد الحل تتطلب استخدام تعريف المشكلة فقط، والأولوية فيها للتحرك بالاتساع (الأشقاء أولاً مستوى بمستوى)."
+  },
+
+  // ==================== 11 سؤالاً تدريبياً شاملاً لباقي فقرات الفصل الخامس ====================
+  {
+    id: 10,
+    cat: "extra",
+    badge: "تدريب شامل — الوحدة 1",
+    q: "(10) ما المقصود بـ 'هيكلة البيانات' (Data Structure) وما أثرها على خوارزميات الذكاء الاصطناعي؟",
+    opts: [
+      { t: "هي آلية تخزين وتنظيم البيانات في ذاكرة الحواسيب لتسهيل استخدامها بكفاءة وسرعة ودقة.", why: "إجابة صحيحة؛ تعريف هيكلة البيانات وأهميتها كما ورد في الملزمة (صفحة 50)." },
+      { t: "هي الأجزاء المادية الخارجية للحاسوب مثل الشاشة ولوحة المفاتيح.", why: "خيار مستبعد؛ هذا تعريف العتاد المادي (Hardware)." },
+      { t: "هي عملية حذف البيانات من الذاكرة لتقليل سرعة الخوارزميات.", why: "خيار مستبعد؛ هي تنظم البيانات لزيادة الكفاءة والسرعة والدقة." },
+      { t: "هي لغة برمجة مخصصة لتصميم صفحات الويب الثابتة فقط.", why: "خيار مستبعد؛ هيكلة البيانات مفهوم برمجي عام وليس لغة تصميم ويب." }
+    ],
+    ans: 0,
+    rule: "هيكلة البيانات (Data Structure) هي آلية تخزين وتنظيم البيانات في ذاكرة الحواسيب لتوفير (كفاءة - سرعة - دقة) لخوارزميات الذكاء الاصطناعي."
   },
   {
-    q: "[مسألة حالة الطابور في BFS]: في نفس الشجرة السابقة (جذرها S وأبناؤه A, B، وأبناء A هما C, D)، بعد سحب S وإضافة (A, B) للطابور، قمنا في الخطوة التالية بسحب (A) وتوسيعه؛ فكيف تصبح حالة الطابور (Queue) مباشرة بعد توسيع A؟",
-    o: [
-      "Queue = [C, D, B]",
-      "Queue = [A, B, C, D]",
-      "Queue = [B, C, D] (لأن B كان في مقدمة الطابور، وأُضيف أبناء A وهما C, D في نهاية الطابور بعد B)",
-      "Queue = [D, C]"
+    id: 11,
+    cat: "extra",
+    badge: "تدريب شامل — الوحدة 1",
+    q: "(11) أي من المجموعات التالية تنتمي جميع عناصرها إلى 'هياكل البيانات الخطية' (Linear Data Structures)؟",
+    opts: [
+      { t: "الشجرة (Tree) والمخطط (Graph).", why: "خيار مستبعد؛ الشجرة والمخطط هما هياكل البيانات غير الخطية (Non-Linear)." },
+      { t: "المصفوفات (Arrays)، المكدس (Stack)، الطابور (Queue)، والقائمة المترابطة (Linked List).", why: "إجابة صحيحة؛ حسب مخطط التقسيم في الملزمة (صفحة 50)، هذه الأربعة هي هياكل البيانات الخطية." },
+      { t: "الشجرة (Tree) والمكدس (Stack) والمخطط الموجه.", why: "خيار مستبعد؛ لأن الشجرة والمخطط غير خطية." },
+      { t: "المخطط غير الموجه والطابور فقط.", why: "خيار مستبعد؛ المخطط غير الموجه هيكل غير خطي." }
     ],
-    a: 2,
-    e: "كان الطابور [A, B]، سحبنا A من المقدمة فبقي [B]، ثم أضفنا أبناء A (C, D) في المؤخرة وفق مبدأ FIFO، فأصبح الطابور [B, C, D] (ص 54-55)."
+    ans: 1,
+    rule: "هياكل البيانات الخطية (Linear) هي: المصفوفات (Arrays) + القائمة (Stack, Queue, Linked List)."
   },
   {
-    q: "ما هي الوظيفة الأساسية لقائمة (visited) في خوارزمية البحث بالعرض أولاً (BFS)؟",
-    o: [
-      "ترتيب العقد تنازلياً حسب تكلفتها",
-      "حذف عقدة الهدف من الرسم البياني",
-      "زيادة استهلاك الوقت وإبطاء البحث",
-      "حفظ وتتبع العقد التي تمت زيارتها بالفعل لضمان عدم إضافتها للطابور مرة أخرى وتجنب التكرار والوقوع في حلقات لا نهائية"
+    id: 12,
+    cat: "extra",
+    badge: "تدريب شامل — الوحدة 1",
+    q: "(12) ما هو مبدأ خروج البيانات من 'المكدس' (Stack)، وما الأمر المستخدم لحذف عنصر من قمته؟",
+    opts: [
+      { t: "مبدأ FIFO والأمر Push.", why: "خيار مستبعد؛ FIFO يخص الطابور، و Push للإضافة وليس الحذف." },
+      { t: "مبدأ LIFO (آخر عنصر يضاف أول عنصر يخرج) والأمر Pop لحذف عنصر من القمة.", why: "إجابة صحيحة؛ نصت الملزمة (صفحة 51) على أن المكدس يعمل بمبدأ Last In First Out (LIFO) ويستخدم الأمر Pop لحذف عنصر من القمة." },
+      { t: "مبدأ الخروج العشوائي والأمر DeleteAll.", why: "خيار مستبعد؛ الخروج في المكدس محكوم بقمة المكدس (LIFO)." },
+      { t: "مبدأ FIFO والأمر Pop.", why: "خيار مستبعد؛ المكدس يعمل بمبدأ LIFO وليس FIFO." }
     ],
-    a: 3,
-    e: "تحفظ قائمة visited (القائمة المغلقة) جميع العقد المكتشفة سابقاً لمنع زيارتها مجدداً (ص 54 و 57)."
+    ans: 1,
+    rule: "في المكدس (Stack): المبدأ هو Last In First Out (LIFO)، الإضافة للقمة = Push، والحذف من القمة = Pop."
   },
   {
-    q: "ما هو تقييم خوارزمية البحث بالعرض أولاً (BFS) من حيث معيار (الاكتمال - Completeness) ومعيار (الأمثلية - Optimality)؟",
-    o: [
-      "مكتملة دائماً (إذا كان عامل التفرع b محدوداً)، وأمثلية بشرط أن تكون تكلفة جميع الخطوات متساوية",
-      "غير مكتملة إطلاقاً، وغير أمثلية حتى لو تساوت تكاليف الخطوات",
-      "مكتملة فقط في الأشجار اللانهائية، وأمثلية عندما تكون الأوزان سالبة",
-      "غير مكتملة ولكنها أمثلية دائماً"
+    id: 13,
+    cat: "extra",
+    badge: "تدريب شامل — الوحدة 1",
+    q: "(13) في مثال الطابور (Queue) بالملزمة (صفحة 52)، إذا تم إدخال العناصر بالترتيب: (4 ثم 8 ثم 9 ثم 1)، فما هو العنصر الذي سيخرج أولاً من الطابور؟",
+    opts: [
+      { t: "العنصر 1 لأنه آخر عنصر دخل.", why: "خيار مستبعد؛ خروج آخر عنصر أولاً يخص المكدس (Stack) وليس الطابور." },
+      { t: "العنصر 4 لأنه أول عنصر تمت إضافته (مبدأ FIFO).", why: "إجابة صحيحة؛ الطابور يعمل بمبدأ (أول عنصر يضاف أول عنصر يخرج FIFO)، وبما أن 4 أضيف أولاً فإنه يخرج أولاً ويتبقى [8, 9, 1]." },
+      { t: "العنصر 8 لأنه في الوسط.", why: "خيار مستبعد؛ لا يخرج 8 إلا بعد خروج 4." },
+      { t: "العنصر 9.", why: "خيار مستبعد؛ يخرج ثالثاً بعد 4 و 8." }
     ],
-    a: 0,
-    e: "خوارزمية BFS مكتملة (طالما b محدود)، وتكون أمثلية عندما تكون جميع تكاليف الخطوات متساوية لأنها تجد الهدف الأقل عمقاً (ص 56)."
+    ans: 1,
+    rule: "في الطابور (Queue - FIFO): العنصر الذي يدخل أولاً يخرج أولاً."
   },
   {
-    q: "إذا كان عامل التفرع في شجرة البحث هو (b) وعمق عقدة الهدف الأقل عمقاً هو (d)، فما هو التعقيد الزمني والتعقيد المكاني لخوارزمية BFS؟",
-    o: [
-      "الزمني O(b · d) والمكاني O(1)",
-      "التعقيد الزمني O(b^d) والتعقيد المكاني O(b^d)",
-      "الزمني O(d) والمكاني O(b)",
-      "الزمني O(b^m) والمكاني O(b · m)"
+    id: 14,
+    cat: "extra",
+    badge: "تدريب شامل — الوحدة 1",
+    q: "(14) مما تتكون كل عقدة في هيكل 'القائمة المترابطة' (Linked List) أحادية الاتجاه، وبماذا تنتهي القائمة؟",
+    opts: [
+      { t: "تتكون من البيانات (Data) ومؤشر (Pointer / Next) يشير للعقدة التالية، وتنتهي بـ (Null).", why: "إجابة صحيحة؛ كما هو موضح في الرسم التوضيحي للقائمة المترابطة في الملزمة (صفحة 52)." },
+      { t: "تتكون من أرقام عشوائية فقط بدون أي مؤشرات.", why: "خيار مستبعد؛ المؤشر (Pointer) هو الأساس الذي يربط عقد القائمة المترابطة ببعضها." },
+      { t: "تتكون من شجرة هرمية بثلاثة مستويات.", why: "خيار مستبعد؛ القائمة المترابطة هيكل خطي وليست شجرة هرمية." },
+      { t: "تتكون من مصفوفة ثنائية البعد ثابتة الحجم.", why: "خيار مستبعد؛ القائمة المترابطة ديناميكية وتختلف عن المصفوفات." }
     ],
-    a: 1,
-    e: "تولد BFS وتخزن في الذاكرة جميع العقد حتى المستوى d، لذلك فإن تعقيدها الزمني والمكاني كلاهما أسي: O(b^d) (ص 56)."
+    ans: 0,
+    rule: "في القائمة المترابطة (Linked List): كل عقدة تضم البيانات (Data) + مؤشر (Next) للعقدة التالية، ويشير مؤشر العقدة الأخيرة إلى (Null)."
   },
   {
-    q: "وفق تحليل أداء خوارزمية البحث بالعرض أولاً (BFS) في الصفحة 57، ما هي المشكلة الأكبر والأخطر التي تواجه تطبيق BFS عملياً في المسائل الكبيرة؟",
-    o: [
-      "أنها لا تستطيع إيجاد الحل الأقرب للجذر",
-      "أنها تحتاج إلى دالة استدلال معقدة",
-      "متطلبات الذاكرة الهائلة (التعقيد المكاني Space Complexity O(b^d))؛ حيث تمتلئ الذاكرة وتنفد أسرع بكثير من مشكلة وقت التنفيذ",
-      "أنها تقع في المسارات اللانهائية وتترك الهدف القريب"
+    id: 15,
+    cat: "extra",
+    badge: "تدريب شامل — الوحدة 2",
+    q: "(15) ما الفرق بين 'المخطط الموجه' (Directed Graph) و'المخطط غير الموجه' (UnDirected Graph)؟",
+    opts: [
+      { t: "المخطط الموجه تحتوي خطوطه على أسهم تحدد اتجاه الانتقال، بينما غير الموجه تتصل عقده بخطوط بدون أسهم.", why: "إجابة صحيحة؛ كما هو موضح في مقارنة الشكلين بالملزمة (صفحة 54)." },
+      { t: "المخطط الموجه لا يحتوي على أي عقد، بينما غير الموجه يحتوي على عقد فقط بدون خطوط.", why: "خيار مستبعد؛ كلاهما يتكون من عقد وخطوط." },
+      { t: "المخطط الموجه هيكل خطي، بينما غير الموجه هيكل غير خطي.", why: "خيار مستبعد؛ كلاهما من هياكل البيانات غير الخطية." },
+      { t: "لا يوجد أي فرق بينهما في الشكل أو الاتجاه.", why: "خيار مستبعد؛ الفرق الأساسي هو وجود اتجاه للأسهم في المخطط الموجه." }
     ],
-    a: 2,
-    e: "الاحتفاظ بجميع عقد شجرة البحث في الذاكرة يجعل التعقيد المكاني (الذاكرة) هو العائق الأكبر في BFS أكثر من الوقت (ص 57)."
+    ans: 0,
+    rule: "المخطط الموجه (Directed Graph) ترتبط عقده بأسهم تحدد اتجاه المسار، أما غير الموجه (UnDirected Graph) فترتبط عقده بخطوط بدون أسهم."
   },
   {
-    q: "في شجرة بحث عامل تفرعها (b = 4)، كم عدد العقد الموجودة في المستوى الثالث (d = 3) وحده، وكم إجمالي العقد من الجذر (المستوى 0) حتى المستوى الثالث؟",
-    o: [
-      "في المستوى الثالث 12 عقدة، والإجمالي 16 عقدة",
-      "في المستوى الثالث 4 عقد، والإجمالي 10 عقد",
-      "في المستوى الثالث 16 عقدة، والإجمالي 20 عقدة",
-      "في المستوى الثالث 4³ = 64 عقدة، والإجمالي = 1 + 4 + 16 + 64 = 85 عقدة"
+    id: 16,
+    cat: "extra",
+    badge: "تدريب شامل — الوحدة 2",
+    q: "(16) في شكل 'هيكل البيانات الشجرة' (Tree Data Structure) في الملزمة (صفحة 54)، في أي مستوى تقع عقدة الجذر (A)، وفي أي مستوى تقع العقد (E, F, G, H, I)؟",
+    opts: [
+      { t: "الجذر (A) في المستوى 1، والعقد (E, F, G, H, I) في المستوى 3.", why: "خيار مستبعد؛ ترقيم المستويات يبدأ من 0 عند الجذر A." },
+      { t: "الجذر (A) في المستوى 0، والعقد (E, F, G, H, I) في المستوى 2.", why: "إجابة صحيحة؛ في رسم الشجرة (صفحة 54): المستوى 0 يضم (A)، المستوى 1 يضم (B, C, D)، المستوى 2 يضم (E, F, G, H, I)، والمستوى 3 يضم (J, K, L, M, N, O, P)." },
+      { t: "جميع العقد تقع في مستوى واحد هو المستوى 0.", why: "خيار مستبعد؛ الشجرة مرتبة هرمياً في 4 مستويات (من 0 إلى 3)." },
+      { t: "الجذر (A) في المستوى 3، والأوراق في المستوى 0.", why: "خيار مستبعد؛ عكس ترتيب الشجرة." }
     ],
-    a: 3,
-    e: "عدد العقد في المستوى d هو b^d = 4³ = 64 عقدة، والمجموع التراكمي من المستوى 0 إلى 3 هو: 1 + 4 + 4² + 4³ = 1 + 4 + 16 + 64 = 85 عقدة (ص 56)."
+    ans: 1,
+    rule: "ترقيم مستويات الشجرة (صفحة 54): المستوى 0 = [A]، المستوى 1 = [B,C,D]، المستوى 2 = [E,F,G,H,I]، المستوى 3 = [J,K,L,M,N,O,P]."
   },
   {
-    q: "في كود تطبيق خوارزمية BFS بلغة بايثون (ص 57-58)، ما هي التعليمة البرمجية التي تقوم بسحب وإزالة العقدة الأقدم من مقدمة الطابور لتطبيق مبدأ FIFO؟",
-    o: [
-      "s = queue.pop(0)",
-      "s = queue.append(0)",
-      "s = queue.pop()",
-      "s = visited.clear()"
+    id: 17,
+    cat: "extra",
+    badge: "تدريب شامل — الوحدة 3",
+    q: "(17) كيف تتحرك خوارزمية البحث بأولوية الاتساع (BFS) لفحص العقد في شجرة البحث؟",
+    opts: [
+      { t: "تبدأ من الجذر وتفحص المستوى كاملاً (الأشقاء/الإخوة أولاً) ثم تنتقل إلى المستوى الذي يليه.", why: "إجابة صحيحة؛ نصت الملزمة (صفحة 55) على أنه يتم البحث عن الهدف من خلال فحص المستوى كاملاً ثم الانتقال إلى الذي يليه (الاتساع باتجاه الإخوة أولاً)." },
+      { t: "تتجه مباشرة من الجذر إلى أعمق ورقة في أقصى اليسار قبل فحص أبناء الجذر الآخرين.", why: "خيار مستبعد؛ هذا سلوك خوارزمية البحث بأولوية العمق (DFS) في الفصل السادس." },
+      { t: "تختار العقدة ذات الرقم الاستدلالي الأقل دائماً.", why: "خيار مستبعد؛ هذا سلوك خوارزمية البحث بأولوية الأفضل (Best First Search)." },
+      { t: "تبدأ من الأوراق في أسفل الشجرة وتصعد نحو الجذر.", why: "خيار مستبعد؛ البحث يبدأ دائماً من عقدة الجذر A." }
     ],
-    a: 0,
-    e: "الدالة queue.pop(0) تسحب وتزيل العنصر الموجود في الفهرس 0 (مقدمة الطابور) وهو ما يحقق مبدأ FIFO في بايثون (ص 58)."
+    ans: 0,
+    rule: "في خوارزمية البحث بأولوية الاتساع (BFS): الأولوية لفحص المستوى كاملاً (الأشقاء أولاً من اليسار لليمين) قبل النزول للمستوى التالي."
   },
   {
-    q: "ماذا سيحدث لو استبدلنا السطر s = queue.pop(0) بالسطر s = queue.pop() (بدون الرقم 0) في كود البحث بلغة بايثون؟",
-    o: [
-      "سيعطي البرنامج خطأ قواعدياً ويتوقف",
-      "ستعمل القائمة كمكدس (LIFO Stack) يسحب آخر عنصر أُضيف، فتتحول الخوارزمية من البحث بالعرض (BFS) إلى البحث بالعمق (DFS)",
-      "لن يتغير أي شيء في ترتيب طباعة العقد",
-      "سيتم حذف جميع عناصر القاموس graph"
+    id: 18,
+    cat: "extra",
+    badge: "تدريب شامل — الوحدة 3",
+    q: "(18) عند تتبع خوارزمية (BFS) على شجرة البحث في الملزمة (صفحة 56)، إذا كان الطابور يحتوي على [B, C, D] وتم فحص وإخراج العقدة (B) التي لها ابنان هما (E, F)، فكيف يصبح شكل الطابور؟",
+    opts: [
+      { t: "[E, F, C, D] (تُضاف E و F في مقدمة الطابور).", why: "خيار مستبعد؛ في الطابور (Queue - FIFO) تُضاف العناصر الجديدة في نهاية الطابور وليس في مقدمته." },
+      { t: "[C, D, E, F] (تبقى C في المقدمة وتُضاف E و F في نهاية الطابور).", why: "إجابة صحيحة؛ كما في الرسم الثاني بصفحة 56، بعد فحص B تخرج من الطابور وتُضاف أبناؤها E و F في آخر الطابور ليصبح [C, D, E, F]." },
+      { t: "[B, E, F] (تُحذف C و D من الطابور).", why: "خيار مستبعد؛ لا تُحذف C و D لأنه لم يتم فحصهما بعد." },
+      { t: "يفرغ الطابور تماماً.", why: "خيار مستبعد؛ الطابور يحتفظ بالعقد المنتظرة للفحص." }
     ],
-    a: 1,
-    e: "الدالة pop() بدون معامل تسحب العنصر الأخير من نهاية القائمة (مبدأ LIFO)، بينما pop(0) تسحب العنصر الأول من البداية (مبدأ FIFO) (ص 58)."
+    ans: 1,
+    rule: "لأن BFS تستخدم الطابور (FIFO)، فعند إخراج العقدة من المقدمة يُضاف أبناؤها في نهاية الطابور (الخلف)، فبعد إخراج B من [B, C, D] يصبح الطابور: [C, D, E, F]."
   },
   {
-    q: "في كود بايثون التالي: graph = {'A': ['B', 'C'], 'B': ['D'], 'C': [], 'D': []}، ماذا تمثل المفاتيح (Keys) وماذا تمثل القيم (Values) داخل القاموس graph؟",
-    o: [
-      "المفاتيح تمثل تكلفة المسار، والقيم تمثل دالة الاستدلال",
-      "المفاتيح تمثل العقد الورقية فقط، والقيم تمثل الجذر",
-      "المفاتيح تمثل العقد (Nodes) في الرسم البياني، والقيم تمثل قوائم الجيران (الأبناء المباشرين) المتصلين بكل عقدة",
-      "كلاهما يمثلان القائمة المغلقة"
+    id: 19,
+    cat: "extra",
+    badge: "تدريب شامل — الوحدة 3",
+    q: "(19) أثناء تتبع خوارزمية (BFS) في الملزمة (صفحة 57)، عندما وصل الدور لفحص العقدة (F) التي ليس لها أبناء وكان الطابور قبلها [F, G, H, I, J, K]، ماذا حدث للطابور بعد فحص (F)؟",
+    opts: [
+      { t: "خرجت (F) من الطابور ولم يُضف شيء جديد فأصبح الطابور [G, H, I, J, K].", why: "إجابة صحيحة؛ مطابقة تماماً للرسم الثالث في صفحة 57 حيث تمت معالجة F وحذفها من الطابور دون إضافة أي عقدة لأنها عقدة ورقية ليس لها أبناء." },
+      { t: "توقفت الخوارزمية عن العمل وفشلت لعدم وجود أبناء لـ F.", why: "خيار مستبعد؛ الخوارزمية لا تتوقف بل تكمل فحص العقدة التالية في الطابور وهي G." },
+      { t: "أعيدت (F) إلى نهاية الطابور مرة أخرى.", why: "خيار مستبعد؛ العقدة التي يتم فحصها لا تعاد للطابور." },
+      { t: "تم حذف جميع عناصر الطابور.", why: "خيار مستبعد؛ تحذف F فقط وتنتقل المعالجة إلى G." }
     ],
-    a: 2,
-    e: "يُستخدم القاموس (Dictionary) في بايثون لتمثيل قائمة التجاور (Adjacency List)، حيث المفتاح هو العقدة والقيمة هي قائمة جيرانها (ص 57)."
+    ans: 0,
+    rule: "إذا وصلت خوارزمية BFS إلى عقدة ليس لها أبناء (مثل F)، تفحصها وتخرجها من الطابور وتنتقل للعقدة التالية في الطابور."
   },
   {
-    q: "في الكود البرمجي لخوارزمية BFS (ص 58)، لماذا نكتب الشرط: if neighbour not in visited: قبل إضافة الجار إلى الطابور queue؟",
-    o: [
-      "لإجبار الخوارزمية على زيارة العقد المزارة فقط",
-      "لإيقاف البرنامج فور رؤية أول جار",
-      "لحذف الجار من القاموس الأصلي",
-      "للتأكد من أن الجار لم تتم زيارته من قبل، فلا نكرر إضافته للطابور ولا نقع في حلقات لا نهائية في الرسوم البيانية"
+    id: 20,
+    cat: "extra",
+    badge: "تدريب شامل — الوحدة 3",
+    q: "(20) ما هو الترتيب الصحيح لزيارة العقد السبع الأولى في شجرة الملزمة عند استخدام خوارزمية البحث بأولوية الاتساع (BFS)؟",
+    opts: [
+      { t: "A → B → E → J → K → F → C", why: "خيار مستبعد؛ هذا ترتيب البحث بأولوية العمق (DFS) الذي ينزل للأبناء قبل الأشقاء." },
+      { t: "A → B → C → D → E → F → G", why: "إجابة صحيحة؛ يفحص المستوى 0 (A)، ثم المستوى 1 كاملاً (B → C → D)، ثم يبدأ بالمستوى 2 من اليسار لليمين (E → F → G)." },
+      { t: "A → D → C → B → I → H → G", why: "خيار مستبعد؛ الفحص في الملزمة يتم من اليسار إلى اليمين وليس من اليمين لليسار." },
+      { t: "J → K → L → M → N → O → P", why: "خيار مستبعد؛ هذه عقد المستوى الأخير (الأوراق) وليست بداية البحث." }
     ],
-    a: 3,
-    e: "هذا الشرط يمنع إعادة إدراج العقد المزارة سابقاً إلى الطابور، فيضمن عدم التكرار وانتهاء الخوارزمية بسلام (ص 58)."
-  },
-  {
-    q: "متى تفقد خوارزمية البحث بالعرض أولاً (BFS) خاصية الأمثلية (Optimality)، وأي خوارزمية نستخدمها كبديل أمثلي في تلك الحالة؟",
-    o: [
-      "تفقد الأمثلية عندما تكون تكاليف الخطوات (أوزان الحواف) غير متساوية؛ ونستخدم خوارزمية البحث بالتكلفة الموحدة (UCS) كبديل أمثلي",
-      "تفقد الأمثلية عندما تتساوى جميع تكاليف الخطوات؛ ونستخدم DFS كبديل أمثلي",
-      "تفقد الأمثلية إذا كان الجذر في المستوى 0؛ ونستخدم البحث العشوائي",
-      "لا تفقد BFS خاصية الأمثلية تحت أي ظرف"
-    ],
-    a: 0,
-    e: "تبحث BFS عن المسار الأقل في 'عدد الخطوات'، فإذا اختلفت أوزان الخطوات قد تختار خطوة واحدة مكلفة جداً وتترك خطوتين رخيصتين، ويعالج UCS ذلك بترتيب الحافة حسب التكلفة التراكمية g(n) (ص 56-57)."
-  },
-  {
-    q: "[مسألة تتبع كود بايثون]: إذا كان لدينا القاموس: graph = {'1': ['2', '3'], '2': ['4'], '3': ['4', '5'], '4': [], '5': []} واستدعينا الدالة bfs(visited, graph, '1')، فما هو المخرج المطبوع بالترتيب؟",
-    o: [
-      "1 2 4 3 5",
-      "1 2 3 4 5",
-      "1 3 5 4 2",
-      "1 2 3 4 4 5"
-    ],
-    a: 1,
-    e: "نبدأ بـ 1 ← يضيف جيرانه (2, 3) ← يسحب 2 ويضيف جاره (4) ← يسحب 3؛ جاره 4 مزار مسبقاً فلا يكرره ويضيف جاره الجديد (5) ← يسحب 4 ثم 5. المخرج: 1 2 3 4 5 (ص 58)."
-  },
-  {
-    q: "أي من العبارات التالية تُعد من (مميزات) خوارزمية البحث بالعرض أولاً (BFS)؟",
-    o: [
-      "أنها لا تستهلك أي ذاكرة إطلاقاً",
-      "أنها أسرع خوارزمية عندما يكون الهدف في عمق سحيق جداً",
-      "أنها لا تعلق في المسارات اللانهائية العميقة، وتضمن إيجاد أقصر مسار (الأقل عدداً في الخطوات) إذا كان الحل موجوداً",
-      "أنها تستخدم دالة الاستدلال h(n) لتقدير المسافة للهدف"
-    ],
-    a: 2,
-    e: "لأن BFS تفحص الشجرة مستوى بمستوى، فإنها لا تضيع في فرع لا نهائي العمق وتجد دائماً الحل الأقرب للجذر (ص 56)."
-  },
-  {
-    q: "كيف تتعامل خوارزمية البحث بالتكلفة الموحدة (Uniform-Cost Search - UCS) مع عقد الحافة (Frontier)؟",
-    o: [
-      "توسع أعمق عقدة في الشجرة باستخدام مكدس LIFO",
-      "توسع العقدة الأقل عمقاً دائماً بغض النظر عن تكلفة الطريق",
-      "تختار العقد عشوائياً",
-      "ترتب العقد في طابور أولوية (Priority Queue) وتوسع دائماً العقدة ذات أقل تكلفة مسار تراكمية g(n) من عقدة البداية"
-    ],
-    a: 3,
-    e: "يعتمد البحث بالتكلفة الموحدة (UCS) على دالة تكلفة المسار الفعلي g(n) داخل طابور أولوية لضمان إيجاد أرخص مسار (ص 57)."
-  },
-  {
-    q: "في الرسم البياني غير الموجه (Undirected Graph)، إذا كانت هناك حافة (Edge) تربط بين العقدة X والعقدة Y، فماذا يعني ذلك؟",
-    o: [
-      "يمكن الانتقال في الاتجاهين (من X إلى Y، ومن Y إلى X)، وتظهر Y في قائمة تجاور X كما تظهر X في قائمة تجاور Y",
-      "يمكن الانتقال من X إلى Y فقط ولا يمكن العودة",
-      "لا يمكن الانتقال بينهما إطلاقاً",
-      "أن العقدتين X و Y غير متصلتين"
-    ],
-    a: 0,
-    e: "في الرسم البياني غير الموجه تكون الحواف ثنائية الاتجاه، بينما في الموجه (Directed) يتحدد الانتقال باتجاه السهم فقط (ص 51)."
-  },
-  {
-    q: "إذا تم تطبيق اختبار الهدف (Goal Test) في خوارزمية BFS عند لحظة اختيار العقدة للتوسيع (سحبها من الطابور) بدلاً من لحظة توليدها، فماذا يحدث للتعقيد الزمني في أسوأ الحالات؟",
-    o: [
-      "ينخفض التعقيد الزمني إلى الصفر",
-      "يرتفع التعقيد الزمني من O(b^d) إلى O(b^(d+1)) لأنه قد يولد أبناء المستوى d بالكامل قبل أن يكتشف أن الهدف كان في المستوى d",
-      "يتحول التعقيد الزمني إلى خطي O(d)",
-      "لا يتأثر عدد العقد المولدة أبداً"
-    ],
-    a: 1,
-    e: "تأخير اختبار الهدف إلى لحظة التوسيع يجعل الخوارزمية تولد المستوى (d+1) قبل سحب آخر عقدة في المستوى d، فيصبح التعقيد O(b^(d+1)) (ص 56)."
+    ans: 1,
+    rule: "ترتيب BFS يفحص الشجرة أفقياً مستوى بمستوى من اليسار لليمين: A ثم (B, C, D) ثم (E, F, G, H, I) ثم (J, K, L, M, N, O, P)."
   }
 ];
 
-// بناء شبكة المصطلحات
-const termsGrid = document.getElementById("termsGrid");
-terms.forEach(([en, ar]) => {
-  const d = document.createElement("div");
-  d.className = "card";
-  d.style.margin = "0";
-  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
-  termsGrid.appendChild(d);
-});
-
-// إدارة البطاقات التعليمية
-let ci = 0, showAnswer = false;
-function renderCard() {
-  document.getElementById("flashTerm").textContent = cards[ci][0];
-  const ansEl = document.getElementById("flashAnswer");
-  ansEl.innerHTML = cards[ci][1].replace(/\n/g, "<br>");
-  ansEl.hidden = !showAnswer;
-  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
-  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
+// ==================== وظائف شريط الأدوات العلوي والتبويبات ====================
+function toggleDarkMode() {
+  document.body.classList.toggle("dark-mode");
 }
-document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
-document.getElementById("flashcard").addEventListener("keydown", e => {
-  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
-});
-document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
-document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
-renderCard();
 
-// التنقل بين التبويبات
-document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
-  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
-  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
-  window.scrollTo({ top: 0, behavior: "smooth" });
-});
+function toggleComplete() {
+  const btn = document.getElementById("completeBtn");
+  btn.classList.toggle("done");
+  btn.textContent = btn.classList.contains("done") ? "✓ مكتمل" : "اكتمل";
+}
 
-// إدارة الاختبار
-let answers = {};
-function renderQuiz() {
-  const area = document.getElementById("quizArea");
-  area.innerHTML = "";
-  const letters = ["أ", "ب", "ج", "د"];
-  questions.forEach((item, i) => {
-    const box = document.createElement("div");
-    box.className = "qbox";
-    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
-    const opts = box.querySelector(".options");
-    item.o.forEach((opt, j) => {
-      const btn = document.createElement("button");
-      btn.className = "option";
-      btn.textContent = `${letters[j]}) ${opt}`;
-      btn.onclick = () => {
-        answers[i] = j;
-        [...opts.children].forEach((x, k) => {
-          x.classList.remove("correct", "wrong");
-          x.disabled = true;
-          if (k === item.a) x.classList.add("correct");
-          if (k === j && j !== item.a) x.classList.add("wrong");
-        });
-        const fb = document.getElementById("fb" + i);
-        fb.hidden = false;
-        fb.className = "feedback " + (j === item.a ? "good" : "bad");
-        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
-        updateScore();
-      };
-      opts.appendChild(btn);
-    });
-    area.appendChild(box);
+function switchTab(tabId, btn) {
+  document.querySelectorAll(".tab-section").forEach(sec => sec.classList.remove("active"));
+  document.querySelectorAll(".nav-pill").forEach(pill => pill.classList.remove("active"));
+  document.getElementById("tab-" + tabId).classList.add("active");
+  btn.classList.add("active");
+}
+
+function toggleAccordion(headerBtn) {
+  const item = headerBtn.parentElement;
+  item.classList.toggle("open");
+}
+
+// ==================== وظائف المصطلحات (Tab 3) ====================
+let currentTermFilter = "all";
+
+function filterTerms(cat, btn) {
+  currentTermFilter = cat;
+  document.querySelectorAll("#tab-terms .filter-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  renderTerms();
+}
+
+function renderTerms() {
+  const q = (document.getElementById("termSearch").value || "").trim().toLowerCase();
+  const container = document.getElementById("termsContainer");
+  const filtered = TERMS_DATA.filter(item => {
+    const matchCat = currentTermFilter === "all" || item.u === currentTermFilter;
+    const matchText = !q || item.ar.toLowerCase().includes(q) || item.en.toLowerCase().includes(q) || item.def.toLowerCase().includes(q);
+    return matchCat && matchText;
   });
-  updateScore();
+
+  container.innerHTML = filtered.map(item => `
+    <div class="term-card">
+      <div class="term-top">
+        <span class="term-ar">${item.ar}</span>
+        <span class="term-en">${item.en}</span>
+      </div>
+      <div style="margin-bottom:6px"><span class="unit-pill" style="font-size:0.72rem;padding:2px 8px">${item.unitName}</span></div>
+      <p class="term-def">${item.def}</p>
+    </div>
+  `).join("");
 }
 
-function updateScore() {
-  let correct = 0;
-  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
-  document.getElementById("score").textContent = `النتيجة: ${correct} / ${questions.length}`;
-  document.getElementById("progressBar").style.width = (Object.keys(answers).length / questions.length * 100) + "%";
+// ==================== وظائف البطاقات التعليمية (Tab 4) ====================
+let fcList = [...TERMS_DATA];
+let fcIndex = 0;
+let fcFlipped = false;
+
+function renderFlashcard() {
+  const item = fcList[fcIndex];
+  const label = document.getElementById("fcUnitLabel");
+  const content = document.getElementById("fcContent");
+  const counter = document.getElementById("fcCounter");
+
+  if (!fcFlipped) {
+    label.textContent = `${item.unitName} • المصطلح (اضغطي لقلب البطاقة)`;
+    content.innerHTML = `${item.ar}<br><span style="font-size:0.95rem;color:var(--teal-accent);font-weight:700">${item.en}</span>`;
+  } else {
+    label.textContent = `${item.unitName} • التعريف والشرح المعتمد`;
+    content.innerHTML = `<span style="font-size:1.02rem;font-weight:600;color:var(--text-body)">${item.def}</span>`;
+  }
+  counter.textContent = `${fcIndex + 1} / ${fcList.length}`;
 }
 
-document.getElementById("resetQuiz").onclick = () => {
-  answers = {};
-  document.getElementById("finalResult").textContent = "";
+function flipCard() {
+  fcFlipped = !fcFlipped;
+  renderFlashcard();
+}
+
+function moveCard(step) {
+  fcIndex = (fcIndex + step + fcList.length) % fcList.length;
+  fcFlipped = false;
+  renderFlashcard();
+}
+
+function shuffleCards() {
+  fcList.sort(() => Math.random() - 0.5);
+  fcIndex = 0;
+  fcFlipped = false;
+  renderFlashcard();
+}
+
+// ==================== وظائف الاختبار الشامل (Tab 5) ====================
+const QUIZ_STORAGE = "kfu_ai_ch5_corrected_v1";
+let quizState = {
+  filter: "all",
+  answers: {},
+  mistakes: []
+};
+
+try {
+  const saved = localStorage.getItem(QUIZ_STORAGE);
+  if (saved) quizState = { ...quizState, ...JSON.parse(saved) };
+} catch (e) {}
+
+function saveQuizState() {
+  try { localStorage.setItem(QUIZ_STORAGE, JSON.stringify(quizState)); } catch (e) {}
+}
+
+function setQuizFilter(f) {
+  quizState.filter = f;
+  document.querySelectorAll(".quiz-toolbar .filter-btn").forEach(b => b.classList.remove("active"));
+  const activeBtn = document.getElementById("qFilter-" + f);
+  if (activeBtn) activeBtn.classList.add("active");
+  if (f === "mistakes") {
+    quizState.mistakes.forEach(id => { delete quizState.answers[id]; });
+  }
+  saveQuizState();
   renderQuiz();
-};
+}
 
-document.getElementById("finishQuiz").onclick = () => {
-  let correct = 0;
-  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
-  const pct = Math.round(correct / questions.length * 100);
-  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${questions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! إتقان كامل للفصل الخامس (هياكل البيانات وخوارزمية BFS)." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
-};
+function renderQuiz() {
+  let right = 0, wrong = 0;
+  Object.keys(quizState.answers).forEach(id => {
+    const q = QUIZ_QUESTIONS.find(x => x.id === Number(id));
+    if (q) {
+      if (quizState.answers[id] === q.ans) right++;
+      else wrong++;
+    }
+  });
 
+  document.getElementById("qRightStat").textContent = `صحيحة: ${right}`;
+  document.getElementById("qWrongStat").textContent = `خاطئة: ${wrong}`;
+  document.getElementById("qFilter-mistakes").textContent = `أخطائي للمراجعة (${quizState.mistakes.length})`;
+
+  let list = QUIZ_QUESTIONS;
+  if (quizState.filter === "official") list = QUIZ_QUESTIONS.filter(q => q.cat === "official");
+  else if (quizState.filter === "extra") list = QUIZ_QUESTIONS.filter(q => q.cat === "extra");
+  else if (quizState.filter === "mistakes") list = QUIZ_QUESTIONS.filter(q => quizState.mistakes.includes(q.id));
+
+  const container = document.getElementById("quizContainer");
+  if (list.length === 0) {
+    container.innerHTML = `
+      <div class="q-card" style="text-align:center;padding:36px">
+        <h3 style="margin:0 0 8px">لا توجد أخطاء مسجلة في هذا الفصل</h3>
+        <p style="color:var(--text-muted);margin:0">جميع إجاباتك صحيحة، ممتاز!</p>
+      </div>
+    `;
+    return;
+  }
+
+  const letters = ["أ", "ب", "ج", "د"];
+  container.innerHTML = list.map((q, idx) => {
+    const chosen = quizState.answers[q.id];
+    const answered = chosen !== undefined;
+
+    const optsHtml = q.opts.map((opt, oIdx) => {
+      let cls = "q-opt";
+      let status = "";
+      if (answered) {
+        if (oIdx === q.ans) { cls += " correct"; status = "الإجابة الصحيحة"; }
+        else if (oIdx === chosen) { cls += " wrong"; status = "اختيارك"; }
+      }
+      return `
+        <button class="${cls}" ${answered ? "disabled" : ""} onclick="selectQuizAnswer(${q.id}, ${oIdx})">
+          <div style="display:flex;align-items:center;gap:12px">
+            <span class="opt-char">${letters[oIdx]}</span>
+            <span>${opt.t}</span>
+          </div>
+          <span style="font-size:0.8rem;font-weight:800">${status}</span>
+        </button>
+      `;
+    }).join("");
+
+    const expItemsHtml = q.opts.map((opt, oIdx) => `
+      <div class="exp-item ${oIdx === q.ans ? "right-choice" : "wrong-choice"}">
+        <strong>الخيار (${letters[oIdx]}) ${opt.t}:</strong> ${opt.why}
+      </div>
+    `).join("");
+
+    return `
+      <div class="q-card">
+        <div class="q-meta">
+          <span class="unit-pill">${q.badge}</span>
+          <span style="font-size:0.82rem;color:var(--text-muted);font-weight:700">سؤال ${idx + 1} من ${list.length}</span>
+        </div>
+        <h3 class="q-title">${q.q}</h3>
+        ${q.visual ? q.visual : ""}
+        <div class="q-options">${optsHtml}</div>
+        <div class="exp-box ${answered ? "show" : ""}">
+          <div class="exp-summary"><strong>القاعدة من الملزمة:</strong> ${q.rule}</div>
+          <div style="font-size:0.85rem;font-weight:800;margin-bottom:8px;color:var(--indigo-dark)">تفصيل جميع الخيارات الأربعة:</div>
+          ${expItemsHtml}
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function selectQuizAnswer(qId, oIdx) {
+  quizState.answers[qId] = oIdx;
+  const q = QUIZ_QUESTIONS.find(x => x.id === qId);
+  if (q) {
+    if (oIdx !== q.ans) {
+      if (!quizState.mistakes.includes(qId)) quizState.mistakes.push(qId);
+    } else if (quizState.filter === "mistakes") {
+      quizState.mistakes = quizState.mistakes.filter(id => id !== qId);
+    }
+  }
+  saveQuizState();
+  renderQuiz();
+}
+
+function resetQuiz() {
+  quizState.answers = {};
+  quizState.mistakes = [];
+  quizState.filter = "all";
+  saveQuizState();
+  setQuizFilter("all");
+}
+
+// تشغيل أولي
+renderBFSSimulator();
+renderTerms();
+renderFlashcard();
 renderQuiz();
 </script>
 </body>
