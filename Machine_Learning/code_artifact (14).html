@@ -1,660 +1,2240 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>الفصل الثالث الشامل (100%) | تعلم الآلة التطبيقي</title>
-<style>
-:root{
-  --bg:#f4f6fb;
-  --card:#ffffff;
-  --ink:#1b263b;
-  --muted:#637085;
-  --accent:#4f46e5;
-  --accent-dark:#3730a3;
-  --accent2:#eef2ff;
-  --line:#e2e8f0;
-  --good:#0d9488;
-  --good-bg:#e6fffa;
-  --bad:#dc2626;
-  --bad-bg:#fef2f2;
-  --warn:#d97706;
-  --warn-bg:#fffbeb;
-}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
-header{background:linear-gradient(135deg,#1e1b4b,#4f46e5);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(30,27,75,0.15)}
-.wrap{max-width:1040px;margin:auto;padding:0 16px}
-.eyebrow{opacity:.88;font-size:.9rem;background:rgba(255,255,255,0.14);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
-h1{margin:5px 0;font-size:clamp(1.55rem,4vw,2.3rem)}
-header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
-nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
-nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:var(--accent2);color:var(--accent-dark);font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
-nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
-nav button.active,.btn.primary{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
-main .btn.primary{background:var(--accent);color:white}
-main{padding:22px 0 48px}
-.panel{display:none}
-.panel.active{display:block;animation:fadeIn .25s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(36,52,91,0.04)}
-h2{font-size:1.35rem;margin:0 0 12px;color:#1e1b4b}
-h3{font-size:1.06rem;margin:10px 0 6px;color:var(--accent-dark)}
-small,.muted{color:var(--muted)}
-ul,ol{padding-right:22px;margin:8px 0}
-li{margin:6px 0}
-details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
-summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f8faff;color:#1e1b4b;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
-details[open] summary{border-bottom-color:var(--line);background:#eef2ff;color:var(--accent-dark)}
-.details-body{padding:16px 18px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
-.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
-th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
-th{background:#f1f5f9;color:#1e1b4b;font-weight:bold}
-tr:last-child td{border-bottom:0}
-.note{border-right:4px solid var(--accent);padding:10px 14px;background:#f5f7ff;border-radius:8px;margin:10px 0}
-.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
-.step-card{border:1px solid var(--line);border-radius:12px;padding:14px;background:#fafbff}
-.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
-.options{display:grid;gap:8px;margin-top:12px}
-.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
-.option:hover:not(:disabled){border-color:var(--accent);background:#f8faff}
-.option.correct{background:var(--good-bg);border-color:#5eead4;color:#115e59;font-weight:bold}
-.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
-.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
-.feedback.good{color:var(--good);background:var(--good-bg)}
-.feedback.bad{color:var(--bad);background:var(--bad-bg)}
-.progress{height:10px;background:#e2e8f0;border-radius:9px;overflow:hidden;margin:12px 0}
-.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
-.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#eef2ff);border:2px solid #c7d2fe;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
-.flashcard:hover{transform:scale(1.005)}
-.flashcard .term{font-size:1.35rem;font-weight:bold;color:#1e1b4b}
-.flashcard .answer{margin-top:16px;font-size:1.08rem;color:var(--accent-dark);background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04)}
-.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
-.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
-footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
-@media(max-width:600px){
-  .card{padding:14px}
-  nav button{flex:1 1 calc(50% - 8px);text-align:center}
-  .flashcard{min-height:200px;padding:18px}
-  th,td{padding:8px 10px;font-size:.88rem}
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="briefing">
+  <title>الفصل الثالث: التعلم الآلي وتطبيقاته — الدليل التفاعلي المعتمد</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Noto+Sans+Arabic:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces */
+      --background: #f4f6fb;
+      --surface-container-low: #ffffff;
+      --surface-container: #f8faff;
+      --surface-container-high: #eef2ff;
+
+      /* Ink */
+      --on-surface: #1b263b;
+      --on-surface-variant: #637085;
+
+      /* Rules */
+      --outline: #4f46e5;
+      --outline-variant: #e2e8f0;
+
+      /* Accents */
+      --primary: #1e1b4b;
+      --on-primary: #ffffff;
+      --primary-container: #4f46e5;
+      --on-primary-container: #ffffff;
+      --secondary: #4f46e5;
+      --secondary-soft: #eef2ff;
+      --tertiary: #d97706;
+      --tertiary-soft: #fffbeb;
+      --error: #dc2626;
+      --error-soft: #fef2f2;
+      --on-error: #ffffff;
+
+      /* Data series, in order of use */
+      --data-1: #1f4e5f;
+      --data-2: #d99000;
+      --data-3: #2b6e52;
+      --data-4: #b84a39;
+      --data-context: #c4bfb2;
+
+      /* Semantic */
+      --positive: #0d9488;
+      --positive-soft: #e6fffa;
+      --warning: #d97706;
+      --warning-soft: #fffbeb;
+      --focus: #4f46e5;
+
+      /* Fonts */
+      --font-headline: Tahoma, Arial, sans-serif;
+      --font-body: Tahoma, Arial, sans-serif;
+      --font-label: Tahoma, Arial, sans-serif;
+
+      /* Shape */
+      --rounded: 0.75rem;
+      --rounded-lg: 1rem;
+      --rounded-full: 999px;
+
+      /* Style effects */
+      --section-rule: 1px solid var(--outline-variant);
+      --card-border: 1px solid var(--outline-variant);
+      --border-subtle: 1px solid var(--outline-variant);
+      --badge-radius: 999px;
+      --heading-tracking: 0;
+      --label-tracking: 0;
+
+      /* Type scale */
+      --display-size: clamp(1.55rem, 4vw, 2.3rem);
+      --headline-size: 1.35rem;
+      --subhead-size: 1.06rem;
+      --body-size: 1rem;
+      --label-size: 0.82rem;
+
+      /* Spacing scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.7;
+      scroll-behavior: smooth;
+    }
+    header { position: static !important; }
+
+    .page-grid > header {
+      padding: 28px 24px;
+      color: #ffffff;
+      background: linear-gradient(135deg, #1e1b4b, #4f46e5);
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(30, 27, 75, 0.15);
+    }
+    .page-grid > header .dossier-bar { border-color: rgba(255, 255, 255, 0.25); }
+    .page-grid > header .dossier-pill {
+      background: rgba(255, 255, 255, 0.16);
+      color: #ffffff;
+      border-radius: 999px;
+    }
+    .page-grid > header .dossier-meta,
+    .page-grid > header .standfirst { color: #e0e7ff; }
+    .page-grid > header .hero-title { color: #ffffff; }
+    .page-grid > header .status-strip {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      border-radius: 14px;
+    }
+    .page-grid > header .progress-label { color: #ffffff; }
+    .page-grid > header .progress-numbers { color: #e0e7ff; }
+    .page-grid > header .progress-track {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    .page-grid > header .progress-fill { background: #2dd4bf; }
+    .page-grid > header .nav-chip {
+      background: #eef2ff;
+      border-color: transparent;
+      border-radius: 999px;
+      color: #3730a3;
+    }
+    .page-grid > header .nav-chip:hover { background: #ffffff; }
+
+    button, input, select, textarea {
+      font-family: inherit;
+      font-size: inherit;
+      color: inherit;
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-xl);
+      padding: var(--space-lg);
+      max-width: 1120px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Briefing Dossier Header & Section Bars */
+    .dossier-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      border-bottom: var(--section-rule);
+      padding-bottom: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+    .dossier-bar-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .dossier-pill {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-family: var(--font-body);
+      font-weight: 800;
+      font-size: 0.78rem;
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--badge-radius);
+      letter-spacing: 0;
+    }
+    .dossier-meta {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+    }
+
+    .hero-title {
+      font-family: var(--font-headline);
+      font-weight: 800;
+      font-size: var(--display-size);
+      line-height: 1.22;
+      color: var(--on-surface);
+      margin: 0 0 var(--space-sm) 0;
+    }
+    .standfirst {
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: var(--subhead-size);
+      line-height: 1.55;
+      color: var(--secondary);
+      margin: 0 0 var(--space-lg) 0;
+      max-width: 68ch;
+    }
+
+    /* Progress & Navigation Ribbon */
+    .status-strip {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: var(--space-md);
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      align-items: center;
+    }
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-xs);
+    }
+    .progress-label {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--on-surface);
+    }
+    .progress-numbers {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--secondary);
+      font-weight: 600;
+    }
+    .progress-track {
+      width: 100%;
+      height: 10px;
+      background: var(--surface-container);
+      border-radius: var(--rounded);
+      overflow: hidden;
+      border: var(--card-border);
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--secondary);
+      transition: width var(--dur-short) var(--ease-out);
+    }
+    .quick-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+      justify-content: flex-end;
+    }
+    .nav-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      padding: var(--space-xs) var(--space-sm);
+      background: var(--surface-container);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--on-surface);
+      text-decoration: none;
+      min-height: 38px;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .nav-chip:hover {
+      background: var(--surface-container-high);
+      border-color: var(--outline);
+    }
+    .page-grid > header .nav-chip[aria-selected="true"] {
+      background: #ffffff;
+      border-color: #ffffff;
+      color: #3730a3;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    .index-num {
+      font-family: var(--font-label);
+      font-weight: 600;
+      font-size: var(--label-size);
+      color: var(--secondary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Aside / Correction Callout */
+    .aside-box {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-right: 4px solid var(--warning);
+      border-top: var(--section-rule);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      box-shadow: 0 4px 14px rgba(36, 52, 91, 0.04);
+    }
+    .aside-box h2 {
+      margin: 0 0 var(--space-sm) 0;
+      font-size: var(--subhead-size);
+      font-weight: 800;
+      color: var(--on-surface);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .tag-amber {
+      display: inline-block;
+      background: var(--tertiary-soft);
+      color: var(--tertiary);
+      font-weight: 700;
+      font-size: 0.78rem;
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--rounded);
+    }
+    .tag-petrol {
+      display: inline-block;
+      background: var(--secondary-soft);
+      color: var(--secondary);
+      font-weight: 700;
+      font-size: 0.78rem;
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--rounded);
+    }
+    .tag-positive {
+      display: inline-block;
+      background: var(--positive-soft);
+      color: var(--positive);
+      font-weight: 700;
+      font-size: 0.78rem;
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--rounded);
+    }
+
+    /* Comparison Table */
+    .table-wrap {
+      overflow-x: auto;
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      margin-top: var(--space-md);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: right;
+      font-size: 0.94rem;
+    }
+    thead th {
+      background: var(--surface-container);
+      border-bottom: var(--section-rule);
+      padding: var(--space-sm) var(--space-md);
+      font-weight: 800;
+      color: var(--on-surface);
+    }
+    tbody td {
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--card-border);
+      vertical-align: top;
+      line-height: 1.6;
+    }
+    tbody tr:last-child td { border-bottom: none; }
+
+    /* Section Headings */
+    .unit-section {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+      padding-top: var(--space-md);
+    }
+    .tab-panels .tab-panel { display: none; }
+    .tab-panels .tab-panel.active { display: flex; }
+    .tab-panels .tab-panel[hidden] { display: none !important; }
+    .unit-header-block {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: var(--space-md);
+    }
+    .section-title {
+      font-family: var(--font-headline);
+      font-weight: 800;
+      font-size: var(--headline-size);
+      line-height: 1.3;
+      color: var(--on-surface);
+      margin: 0;
+    }
+    .section-deck {
+      color: var(--secondary);
+      font-weight: 600;
+      margin: var(--space-xs) 0 0 0;
+      max-width: 65ch;
+    }
+    .unit-complete-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      border: var(--card-border);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      font-weight: 700;
+      font-size: 0.88rem;
+      min-height: 44px;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+    }
+    .unit-complete-btn:hover { background: var(--surface-container); }
+    .unit-complete-btn.is-done {
+      background: var(--positive);
+      color: var(--on-primary);
+      border-color: var(--positive);
+    }
+
+    /* Figure Cards */
+    .figure-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      box-shadow: 0 4px 14px rgba(36, 52, 91, 0.04);
+    }
+    .figure-card h3 {
+      margin: 0 0 var(--space-sm) 0;
+      font-size: var(--subhead-size);
+      font-weight: 800;
+      color: var(--on-surface);
+    }
+    .figure-card p {
+      margin: 0 0 var(--space-sm) 0;
+      max-width: 65ch;
+    }
+    .figure-card p:last-child { margin-bottom: 0; }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+      gap: var(--space-lg);
+    }
+
+    .asymmetric-split {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+
+    /* Interactive Tabs / Pills inside sections */
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+    .select-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      padding: var(--space-sm) var(--space-md);
+      min-height: 44px;
+      background: var(--surface-container);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--on-surface);
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .select-pill:hover {
+      background: var(--surface-container-high);
+      border-color: var(--outline);
+    }
+    .select-pill.is-active {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+
+    .detail-panel {
+      background: var(--background);
+      border: var(--card-border);
+      border-right: 4px solid var(--secondary);
+      border-radius: var(--rounded);
+      padding: var(--space-md) var(--space-lg);
+    }
+    .detail-panel h4 {
+      margin: 0 0 var(--space-xs) 0;
+      font-size: 1.08rem;
+      font-weight: 800;
+      color: var(--secondary);
+    }
+
+    /* Buttons */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      background: var(--primary);
+      color: var(--on-primary);
+      border: 1px solid var(--primary);
+      border-radius: var(--rounded);
+      padding: var(--space-sm) var(--space-md);
+      min-height: 44px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), transform var(--dur-micro) var(--ease-out);
+    }
+    .btn-primary:hover { background: var(--secondary); border-color: var(--secondary); }
+    .btn-primary:active { transform: translateY(1px); }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      padding: var(--space-sm) var(--space-md);
+      min-height: 44px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .btn-secondary:hover { background: var(--surface-container); border-color: var(--outline); }
+    .btn-secondary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* Form Controls */
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      margin-bottom: var(--space-md);
+    }
+    .control-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+    .mono-val {
+      font-family: var(--font-label);
+      font-weight: 600;
+      color: var(--secondary);
+      font-variant-numeric: tabular-nums;
+    }
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--secondary);
+      cursor: pointer;
+      min-height: 32px;
+    }
+    select.styled-select {
+      width: 100%;
+      padding: var(--space-sm) var(--space-md);
+      min-height: 44px;
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      font-weight: 600;
+    }
+
+    /* Key Figures */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+      gap: var(--space-md);
+      margin-top: var(--space-md);
+    }
+    .kpi-box {
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+    }
+    .kpi-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--on-surface-variant);
+      margin-bottom: var(--space-xs);
+    }
+    .kpi-value {
+      font-family: var(--font-label);
+      font-size: 1.65rem;
+      font-weight: 600;
+      color: var(--secondary);
+      font-variant-numeric: tabular-nums;
+      line-height: 1.2;
+    }
+    .kpi-note {
+      font-size: 0.82rem;
+      color: var(--on-surface-variant);
+      margin-top: var(--space-xs);
+    }
+
+    /* SVG Containers */
+    .viz-frame {
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+      min-height: 240px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .viz-frame svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Clean bullets */
+    .clean-list {
+      margin: var(--space-sm) 0;
+      padding-right: var(--space-lg);
+      padding-left: 0;
+    }
+    .clean-list li {
+      margin-bottom: var(--space-xs);
+      line-height: 1.65;
+    }
+
+    /* Decision Tree Interactive */
+    .tree-interactive-wrap {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+    .tree-question-box {
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+    }
+    .tree-step-badge {
+      display: inline-block;
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-weight: 800;
+      font-size: 0.78rem;
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--badge-radius);
+      margin-bottom: var(--space-sm);
+    }
+    .tree-result-banner {
+      padding: var(--space-md);
+      border-radius: var(--rounded);
+      margin-top: var(--space-sm);
+      font-weight: 700;
+    }
+    .tree-result-banner.is-approved {
+      background: var(--positive-soft);
+      color: var(--positive);
+      border: 1px solid var(--positive);
+    }
+    .tree-result-banner.is-rejected {
+      background: var(--error-soft);
+      color: var(--error);
+      border: 1px solid var(--error);
+    }
+
+    /* Flashcards */
+    .flashcard-stage {
+      perspective: 1200px;
+      margin: var(--space-md) 0;
+    }
+    .flashcard-btn {
+      width: 100%;
+      min-height: 250px;
+      background: transparent;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      text-align: right;
+      display: block;
+    }
+    .flashcard-inner {
+      position: relative;
+      width: 100%;
+      min-height: 250px;
+      transform-style: preserve-3d;
+      transition: transform var(--dur-long) var(--ease-out);
+    }
+    .flashcard-btn.is-flipped .flashcard-inner {
+      transform: rotateY(180deg);
+    }
+    .flashcard-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-xl) var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+    .flashcard-back {
+      transform: rotateY(180deg);
+      background: var(--surface-container);
+      border-color: var(--secondary);
+    }
+    .flashcard-term {
+      font-family: var(--font-headline);
+      font-size: clamp(1.35rem, 1.1rem + 0.9vw, 1.75rem);
+      font-weight: 800;
+      color: var(--on-surface);
+      margin: 0;
+      line-height: 1.35;
+    }
+    .flashcard-def {
+      font-size: 1.04rem;
+      line-height: 1.7;
+      color: var(--on-surface);
+      margin: 0;
+    }
+    .flashcard-controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    /* Quiz Section */
+    .quiz-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      margin-bottom: var(--space-md);
+      box-shadow: 0 4px 14px rgba(36, 52, 91, 0.04);
+    }
+    .quiz-q-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-sm);
+    }
+    .quiz-q-text {
+      font-size: 1.08rem;
+      font-weight: 800;
+      color: var(--on-surface);
+      margin: 0 0 var(--space-md) 0;
+      line-height: 1.55;
+    }
+    .quiz-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+      gap: var(--space-sm);
+    }
+    .quiz-opt-btn {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      text-align: right;
+      padding: var(--space-sm) var(--space-md);
+      min-height: 48px;
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      cursor: pointer;
+      font-weight: 600;
+      line-height: 1.5;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .quiz-opt-btn:hover:not(:disabled) {
+      background: var(--surface-container);
+      border-color: var(--outline);
+    }
+    .quiz-opt-btn.is-correct {
+      background: var(--positive-soft);
+      border-color: var(--positive);
+      color: var(--positive);
+    }
+    .quiz-opt-btn.is-wrong {
+      background: var(--error-soft);
+      border-color: var(--error);
+      color: var(--error);
+    }
+    .quiz-opt-letter {
+      font-family: var(--font-label);
+      font-weight: 700;
+      color: var(--secondary);
+      flex-shrink: 0;
+    }
+    .quiz-feedback {
+      margin-top: var(--space-md);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      font-size: 0.94rem;
+      line-height: 1.6;
+      display: none;
+    }
+    .quiz-feedback.is-visible { display: block; }
+    .quiz-feedback.is-correct {
+      background: var(--positive-soft);
+      border-right: 4px solid var(--positive);
+      color: var(--on-surface);
+    }
+    .quiz-feedback.is-wrong {
+      background: var(--error-soft);
+      border-right: 4px solid var(--error);
+      color: var(--on-surface);
+    }
+
+    .quiz-summary-bar {
+      background: var(--surface-container);
+      border-top: var(--section-rule);
+      padding: var(--space-lg);
+      border-radius: 0 0 var(--rounded-lg) var(--rounded-lg);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-md);
+    }
+
+    .source-footer {
+      border-top: var(--section-rule);
+      padding-top: var(--space-md);
+      color: var(--on-surface-variant);
+      font-size: 0.88rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 780px) {
+      .status-strip,
+      .asymmetric-split,
+      .tree-interactive-wrap {
+        grid-template-columns: 1fr;
+      }
+      .quick-nav { justify-content: flex-start; }
+    }
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-md);
+        gap: var(--space-lg);
+      }
+      .page-grid > header { padding: var(--space-lg) var(--space-md); }
+      .figure-card { padding: var(--space-md); }
+      .flashcard-face { padding: var(--space-lg) var(--space-md); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
 </head>
 <body>
-<header>
-  <div class="wrap">
-    <div class="eyebrow">نسخة شاملة ومحدثة 100% • صفحات الملخص (26 إلى 37)</div>
-    <h1>الفصل الثالث: التعلم الآلي وتطبيقاته</h1>
-    <p>يغطي مفهوم ودورة حياة التعلم الآلي، أنواعه الأربعة، تطبيقاته في التمويل والتجارة الإلكترونية والطب والنقل والصناعة والتعليم والأمن السيبراني، وتحدياته وأخلاقياته</p>
-    <nav>
-      <button class="active" data-tab="summary">الشرح الشامل</button>
-      <button data-tab="tables">جداول المقارنات والتطبيقات (4)</button>
-      <button data-tab="terms">المصطلحات والمفاهيم (26)</button>
-      <button data-tab="cards">البطاقات (28)</button>
-      <button data-tab="quiz">الاختبار الشامل (25)</button>
-    </nav>
-  </div>
-</header>
+  <div class="page-grid">
 
-<main class="wrap">
-  <!-- ================= التبويب الأول: الشرح الشامل ================= -->
-  <section id="summary" class="panel active">
-    <div class="card">
-      <h2>خريطة الفصل الثالث (من ص 26 إلى ص 37 في الملخص)</h2>
-      <div class="grid">
-        <div>
-          <span class="tag">الوحدة 1 (ص 26 - 29)</span>
-          <h3>مفهوم وأنواع التعلم الآلي والتمويل والتجارة</h3>
-          <p>مفهوم التعلم الآلي ودورة حياته، أنواعه الأربعة الرئيسية، وتطبيقاته في القطاع المالي والمصرفي والتجارة الإلكترونية والبيع بالتجزئة.</p>
+    <!-- Header & Dossier Top Bar -->
+    <header>
+      <div class="dossier-bar">
+        <div class="dossier-bar-group">
+          <span class="dossier-pill">المصدر المعتمد للمنهج</span>
+          <span class="dossier-meta">تعلم الآلة التطبيقي • الفصل الثالث</span>
         </div>
+        <span class="dossier-meta">3 وحدات تعليمية • مختبرات تفاعلية • 12 بطاقة • 12 سؤالاً</span>
+      </div>
+
+      <h1 class="hero-title">الفصل الثالث: التعلم الآلي وتطبيقاته</h1>
+      <p class="standfirst">
+        دليل دراسي تفاعلي مُصحَّح ومُطابق كلياً للوحدات التعليمية الثلاث الفعلية في مقرر «تعلم الآلة التطبيقي»: من محرك الابتكار والقيمة المتوقعة، إلى أنواع التعلم ومجموعة التدريب وقدرة التعميم، وصولاً إلى تقنيات التعرف على الأنماط وشجرة القرار ونماذج التوليد.
+      </p>
+
+      <!-- Progress & Quick Jump -->
+      <div class="status-strip" aria-label="تتبع التقدم والتنقل السريع">
         <div>
-          <span class="tag">الوحدة 2 (ص 30 - 33)</span>
-          <h3>تطبيقات الرعاية الصحية، النقل، والصناعة</h3>
-          <p>التشخيص الطبي والطب الشخصي واكتشاف الأدوية، المركبات ذاتية القيادة وإدارة المرور الذكية، والتصنيع الذكي ومراقبة الجودة وسلاسل الإمداد.</p>
+          <div class="progress-header">
+            <span class="progress-label">تقدمك في الفصل الثالث (الوحدات والبطاقات والاختبار)</span>
+            <span class="progress-numbers" id="overall-progress-text">0% مكتمل</span>
+          </div>
+          <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="overall-progress-bar">
+            <div class="progress-fill" id="overall-progress-fill"></div>
+          </div>
         </div>
+        <nav class="quick-nav" role="tablist" aria-label="محتوى الفصل" onkeydown="handleTabKeydown(event)">
+          <button type="button" class="nav-chip" id="tab-unit-1" role="tab" aria-controls="unit-1" aria-selected="true" tabindex="0" onclick="switchTab('unit-1', this)"><span class="index-num">01</span> الوحدة الأولى</button>
+          <button type="button" class="nav-chip" id="tab-unit-2" role="tab" aria-controls="unit-2" aria-selected="false" tabindex="-1" onclick="switchTab('unit-2', this)"><span class="index-num">02</span> الوحدة الثانية</button>
+          <button type="button" class="nav-chip" id="tab-unit-3" role="tab" aria-controls="unit-3" aria-selected="false" tabindex="-1" onclick="switchTab('unit-3', this)"><span class="index-num">03</span> الوحدة الثالثة</button>
+          <button type="button" class="nav-chip" id="tab-flashcards" role="tab" aria-controls="flashcards-section" aria-selected="false" tabindex="-1" onclick="switchTab('flashcards-section', this)"><span class="index-num">04</span> البطاقات</button>
+          <button type="button" class="nav-chip" id="tab-quiz" role="tab" aria-controls="quiz-section" aria-selected="false" tabindex="-1" onclick="switchTab('quiz-section', this)"><span class="index-num">05</span> الاختبار</button>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Curriculum Correction Box -->
+    <section class="aside-box" aria-labelledby="correction-heading">
+      <h2 id="correction-heading">
+        <span class="tag-amber">تنبيه تصحيحي</span>
+        تعديل أخطاء الملاحظة السابقة ومطابقة الوحدات الفعلية للفصل الثالث
+      </h2>
+      <p style="margin: 0 0 var(--space-sm) 0; max-width: 72ch;">
+        تضمنت الملاحظة المحفوظة سابقاً محتوى عاماً لا يطابق تقسيم الفصل الثالث في كتاب «تعلم الآلة التطبيقي» (حيث خلطت بين تطبيقات قطاعية عامة مثل التمويل والتجارة والرعاية الصحية والأمن السيبراني وبين محاور الفصل الثالث المعتمدة). يوضح الجدول الآتي التصحيح الكامل المعتمد في هذه الصفحة:
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>الوحدة</th>
+              <th>الخطأ في الملاحظة السابقة</th>
+              <th>المحتوى الفعلي المعتمد في المنهج</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>الوحدة (1)</strong></td>
+              <td>دورة عمل عامة + تطبيقات التمويل والتجارة الإلكترونية</td>
+              <td>التعلم الآلي كمحرك للابتكار والتحول، الأركان الأربعة لتحسين الأداء، مفهوم <strong>التصنيف</strong>، و<strong>القيمة المتوقعة (<bdi dir="ltr">Expected Value</bdi>)</strong> وأهميتها في التحليل الإحصائي وصنع القرار.</td>
+            </tr>
+            <tr>
+              <td><strong>الوحدة (2)</strong></td>
+              <td>تطبيقات الرعاية الصحية والنقل الذكي والتصنيع</td>
+              <td>أنواع التعلم الآلي (<strong>بالإشراف</strong>، <strong>بدون إشراف</strong>، <strong>التعزيزي</strong>)، <strong>تعلم الجمعيات</strong>، <strong>تعلم فئة من الأمثلة</strong>، مفهوم <strong>مجموعة التدريب (<bdi dir="ltr">Training Set</bdi>)</strong>، و<strong>قدرة التعميم</strong>.</td>
+            </tr>
+            <tr>
+              <td><strong>الوحدة (3)</strong></td>
+              <td>تطبيقات التعليم والأمن السيبراني والأخلاقيات</td>
+              <td><strong>التعرف على الأنماط</strong> وأساليبه والتعرف التلقائي المرن، تطبيقات (<strong>التعرف البصري</strong>، <strong>التعرف على الوجوه</strong>، <strong>التعرف على الصوت</strong>)، <strong>شجرة القرار</strong> وهيكليتها، و<strong>نماذج التوليد</strong>.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ==================== UNIT 1 ==================== -->
+    <main class="tab-panels">
+    <section class="unit-section tab-panel active" id="unit-1" role="tabpanel" aria-labelledby="tab-unit-1" tabindex="0">
+      <div class="dossier-bar">
+        <div class="dossier-bar-group">
+          <span class="dossier-pill">الوحدة التعليمية 01</span>
+          <span class="dossier-meta">الابتكار • التحسين • التصنيف • القيمة المتوقعة</span>
+        </div>
+        <button type="button" class="unit-complete-btn" id="btn-complete-u1" onclick="toggleUnitComplete('u1')">
+          <span>تحديد الوحدة كمكتملة</span>
+        </button>
+      </div>
+
+      <div class="unit-header-block">
         <div>
-          <span class="tag">الوحدة 3 (ص 34 - 37)</span>
-          <h3>التعليم، الأمن السيبراني، اللغات، والتحديات</h3>
-          <p>التعليم المخصص والتقييم الذكي، كشف التسلل والاحتيال السيبراني، معالجة اللغات والرؤية الحاسوبية، والتحديات الأخلاقية والتقنية.</p>
+          <h2 class="section-title" id="u1-title">التعلم الآلي: محرك الابتكار، التصنيف، والقيمة المتوقعة</h2>
+          <p class="section-deck">كيف تتحول البيانات المتزايدة إلى قرارات ذكية، وكيف نقيس أداء النماذج التنبؤية إحصائياً عبر القيمة المتوقعة.</p>
         </div>
       </div>
-    </div>
 
-    <!-- الوحدة الأولى -->
-    <details open>
-      <summary>1) الوحدة (1): مفهوم التعلم الآلي، أنواعه الأربعة، وتطبيقاته في التمويل والتجارة الإلكترونية (ص 26 - 29)</summary>
-      <div class="details-body">
-        <h3>أولاً: مفهوم التعلم الآلي (<span dir="ltr">Machine Learning</span>) ودورة عمله (ص 26)</h3>
-        <ul>
-          <li><b>تعريف التعلم الآلي:</b> هو فرع من فروع الذكاء الاصطناعي يمكّن الأنظمة الحاسوبية من <b>التعلم والتحسن تلقائياً من التجارب والبيانات السابقة دون الحاجة إلى برمجة صريحة لكل مهمة</b>.</li>
-          <li><b>كيف يعمل نظام التعلم الآلي؟ (الخطوات الخمس الأساسية):</b>
-            <ol>
-              <li><b>جمع البيانات (<span dir="ltr">Data Collection</span>):</b> تجميع البيانات الخام من مصادر متنوعة (قواعد بيانات، مستشعرات، سلوك مستخدمين).</li>
-              <li><b>تجهيز ومعالجة البيانات (<span dir="ltr">Data Preprocessing</span>):</b> تنظيف البيانات من الأخطاء والقيم المفقودة وتحويلها لصيغة مناسبةواستخراج الميزات.</li>
-              <li><b>اختيار وتدريب النموذج (<span dir="ltr">Model Training</span>):</b> تغذية الخوارزمية ببيانات التدريب لاكتشاف الأنماط والعلاقات الرياضية الكامنة.</li>
-              <li><b>تقييم النموذج (<span dir="ltr">Model Evaluation</span>):</b> اختبار دقة النموذج على بيانات جديدة للتأكد من قدرته على التعميم.</li>
-              <li><b>التنبؤ والتحسين المستمر (<span dir="ltr">Prediction & Improvement</span>):</b> نشر النموذج لاتخاذ القرارات وتحديثه باستمرار مع تدفق البيانات الجديدة.</li>
-            </ol>
-          </li>
-        </ul>
+      <!-- 1.1 Innovation & 4 Pillars of Performance -->
+      <div class="figure-card">
+        <h3><span class="index-num">1.1</span> التعلم الآلي كمحرك للتحول والابتكار وتحسين الأداء</h3>
+        <p>
+          مع التزايد المستمر في كمية البيانات المتاحة، تستفيد الأنظمة الحاسوبية من التعلم الآلي لتعلم الأنماط وتحسين أدائها تلقائياً من التجارب السابقة <strong>دون الحاجة إلى برمجة صريحة لكل تفاصيل المهمة</strong>. يسهم ذلك في أتمتة المهام الروتينية في الشركات، وتطوير نماذج تحليلية تدعم اتخاذ قرارات ذكية في مجالات مثل: <strong>تعرف الصور، توليد النصوص، تصنيف البيانات، وتشخيص الأمراض</strong>، مما يفتح فرصاً مهنية جديدة ويدفع التحول الرقمي للمؤسسات.
+        </p>
 
-        <div class="exam-alert">
-          <h3>ثانياً: الأنواع الأربعة الرئيسية للتعلم الآلي (ص 26 - 27) - موضع أسئلة مؤكدة:</h3>
-          <ol>
-            <li><b>التعلم الخاضع للإشراف (<span dir="ltr">Supervised Learning</span>):</b>
-              <ul>
-                <li>يتعلم النموذج من <b>بيانات مصنفة وموسومة مسبقاً (<span dir="ltr">Labeled Data</span>)</b> تحتوي على المدخلات والمخرجات الصحيحة المعروفة.</li>
-                <li>يشمل مهمتين أساسيتين: <b>التصنيف (<span dir="ltr">Classification</span>)</b> لتوقع فئة منفصلة (مثل كشف البريد المزعج أو تشخيص مرض)، و<b>الانحدار (<span dir="ltr">Regression</span>)</b> لتوقع قيمة رقمية مستمرة (مثل توقع أسعار العقارات أو درجات الحرارة).</li>
-              </ul>
-            </li>
-            <li><b>التعلم غير الخاضع للإشراف (<span dir="ltr">Unsupervised Learning</span>):</b>
-              <ul>
-                <li>يتعامل مع <b>بيانات غير مصنفة (<span dir="ltr">Unlabeled Data</span>)</b> لا تحتوي على مخرجات مسبقة، فيكتشف النموذج البنية والأنماط الخفية ذاتياً.</li>
-                <li>من أبرز مهامه: <b>التجميع (<span dir="ltr">Clustering</span>)</b> مثل تقسيم العملاء إلى شرائح متشابهة، و<b>تقليل الأبعاد (<span dir="ltr">Dimensionality Reduction</span>)</b>، و<b>قواعد الارتباط (<span dir="ltr">Association Rules</span>)</b>.</li>
-              </ul>
-            </li>
-            <li><b>التعلم شبه الخاضع للإشراف (<span dir="ltr">Semi-Supervised Learning</span>):</b>
-              <ul>
-                <li>يجمع بين النوعين السابقين عبر استخدام <b>كمية صغيرة من البيانات المصنفة مع كمية كبيرة من البيانات غير المصنفة</b> لتقليل تكلفة ووقت التوسيم اليدوي وتحسين دقة التعلم.</li>
-              </ul>
-            </li>
-            <li><b>التعلم المعزز (<span dir="ltr">Reinforcement Learning</span>):</b>
-              <ul>
-                <li>يتعلم فيه <b>الوكيل (<span dir="ltr">Agent</span>)</b> من خلال التفاعل المباشر مع <b>البيئة (<span dir="ltr">Environment</span>)</b> عبر مبدأ التجربة والخطأ، وتلقي <b>المكافآت (<span dir="ltr">Rewards</span>) أو العقوبات (<span dir="ltr">Penalties</span>)</b> لاختيار أفضل سلسلة إجراءات تعظم المكافأة التراكمية (مثل الألعاب الاستراتيجية، الروبوتات، والقيادة الذاتية).</li>
-              </ul>
-            </li>
-          </ol>
+        <div class="pill-row" role="tablist" aria-label="المفاهيم الأربعة لتحسين أداء التعلم الآلي">
+          <button type="button" class="select-pill is-active" onclick="selectPillar('data', this)">1. البيانات (<bdi dir="ltr">Data</bdi>)</button>
+          <button type="button" class="select-pill" onclick="selectPillar('models', this)">2. النماذج والخوارزميات</button>
+          <button type="button" class="select-pill" onclick="selectPillar('tuning', this)">3. الضبط والتحسين</button>
+          <button type="button" class="select-pill" onclick="selectPillar('apps', this)">4. التطبيقات العملية</button>
         </div>
 
-        <h3>ثالثاً: تطبيقات التعلم الآلي في القطاع المالي والمصرفي (ص 28)</h3>
-        <ul>
-          <li><b>1. كشف الاحتيال المالي (<span dir="ltr">Fraud Detection</span>):</b> مراقبة معاملات البطاقات الائتمانية والحسابات البنكية في الوقت الفعلي لرصد الأنماط غير المعتادة وإيقاف العمليات المشبوهة فوراً.</li>
-          <li><b>2. تقييم الجدارة الائتمانية وإدارة المخاطر (<span dir="ltr">Credit Scoring & Risk Management</span>):</b> تحليل التاريخ المالي للمقترضين وسلوك السداد للتنبؤ باحتمالية التعثر واتخاذ قرارات دقيقة لمنح القروض.</li>
-          <li><b>3. التداول الخوارزمي الآلي (<span dir="ltr">Algorithmic Trading</span>):</b> تحليل بيانات الأسواق المالية والأخبار الاقتصادية بسرعة فائقة لاتخاذ قرارات البيع والشراء في أجزاء من الثانية.</li>
-          <li><b>4. خدمة العملاء المؤتمتة والمساعدات المالية:</b> استخدام روبوتات المحادثة الذكية (<span dir="ltr">Chatbots</span>) للرد على استفسارات العملاء وتقديم نصائح مالية واستثمارية مخصصة (<span dir="ltr">Robo-Advisors</span>).</li>
-        </ul>
-
-        <h3>رابعاً: تطبيقات التعلم الآلي في التجارة الإلكترونية والبيع بالتجزئة (ص 29)</h3>
-        <ul>
-          <li><b>1. محركات وأنظمة التوصية (<span dir="ltr">Recommendation Engines</span>):</b> تحليل سجل التصفح والمشتريات لاقتراح منتجات أو أفلام تلائم ذوق كل مستخدم (مثل منصات <b dir="ltr">Amazon</b> و <b dir="ltr">Netflix</b>)، مما يرفع المبيعات ورضا العملاء.</li>
-          <li><b>2. التسعير الديناميكي (<span dir="ltr">Dynamic Pricing</span>):</b> تعديل أسعار المنتجات والخدمات تلقائياً في الوقت الفعلي بناءً على حجم الطلب، أسعار المنافسين، والمواسم (مثل أسعار تذاكر الطيران والفنادق).</li>
-          <li><b>3. التنبؤ بالطلب وإدارة المخزون (<span dir="ltr">Demand Forecasting</span>):</b> توقع الكميات المطلوبة من المنتجات مستقبلاً لتجنب نفاد المخزون أو تكدسه في المستودعات.</li>
-          <li><b>4. تحليل سلوك العملاء وتوقع التسرب (<span dir="ltr">Customer Churn Prediction</span>):</b> تحديد العملاء الذين يوشكون على ترك الخدمة وتقديم عروض مخصصة للاحتفاظ بهم.</li>
-        </ul>
+        <div class="detail-panel" id="pillar-detail">
+          <h4>1. البيانات (<bdi dir="ltr">Data</bdi>) — أساس التعلم</h4>
+          <p>
+            يعتمد التعلم الآلي بشكل أساسي على البيانات؛ إذ يقوم النظام بتحليل مجموعات كبيرة من البيانات لفهم الأنماط والتوجهات الكامنة. كلما كانت البيانات أدق وأشمل، تحسّنت قدرة النظام على استخلاص القواعد وتقليل أخطاء التنبؤ مستقبلاً.
+          </p>
+        </div>
       </div>
-    </details>
 
-    <!-- الوحدة الثانية -->
-    <details open>
-      <summary>2) الوحدة (2): تطبيقات التعلم الآلي في الرعاية الصحية، النقل الذكي، والتصنيع (ص 30 - 33)</summary>
-      <div class="details-body">
-        <h3>أولاً: تطبيقات التعلم الآلي في الرعاية الصحية والطب (ص 30 - 31)</h3>
-        <ul>
-          <li><b>1. التشخيص الطبي المبكر وتحليل الصور الطبية:</b> استخدام خوارزميات الرؤية الحاسوبية والشبكات العميقة لفحص صور الأشعة السينية (<span dir="ltr">X-Rays</span>) والرنين المغناطيسي (<span dir="ltr">MRI</span>) والأشعة المقطعية لاكتشاف الأورام والسرطانات وأمراض الشبكية بدقة عالية ومبكراً.</li>
-          <li><b>2. الطب الشخصي وتخصيص العلاج (<span dir="ltr">Personalized Medicine</span>):</b> تصميم خطط علاجية ودوائية مخصصة لكل مريض بناءً على سجله السريري وتركيبته الجينية واستجابته المتوقعة للعلاج.</li>
-          <li><b>3. اكتشاف وتطوير الأدوية (<span dir="ltr">Drug Discovery</span>):</b> محاكاة التفاعلات الكيميائية والحيوية للتنبؤ بفعالية المركبات الدوائية الجديدة، مما يختصر سنوات من الأبحاث والتجارب المكلفة.</li>
-          <li><b>4. التنبؤ بالأوبئة وإدارة المستشفيات:</b> تتبع انتشار الأمراض المعدية وتوقع بؤر التفشي، وتحسين جدولة المواعيد وإدارة أسرّة المستشفيات وغرف الطوارئ، ومراقبة المؤشرات الحيوية للمرضى عبر الأجهزة القابلة للارتداء.</li>
-        </ul>
+      <!-- 1.2 Classification + Expected Value Lab -->
+      <div class="asymmetric-split">
+        <!-- Classification -->
+        <article class="figure-card">
+          <span class="tag-petrol">مفهوم محوري</span>
+          <h3 style="margin-top: var(--space-sm);"><span class="index-num">1.2</span> مفهوم التصنيف (<bdi dir="ltr">Classification</bdi>)</h3>
+          <p>
+            يشير <strong>التصنيف</strong> في تعلم الآلة إلى عملية <strong>تحديد فئة أو تصنيف لكل عنصر</strong> من مجموعة من البيانات استناداً إلى سمات (<bdi dir="ltr">Features</bdi>) معينة.
+          </p>
+          <ul class="clean-list">
+            <li><strong>التدريب بأمثلة معروفة:</strong> يُدرَّب النموذج على بيانات تحتوي على أمثلة معروفة مسبقاً مع الفئة الصحيحة لكل عنصر.</li>
+            <li><strong>تعلم العلاقة:</strong> يكتشف النموذج العلاقات بين السمات والفئات ليتمكن لاحقاً من تصنيف العناصر الجديدة غير المصنفة.</li>
+            <li><strong>أبرز الخوارزميات:</strong> الشبكات العصبية الاصطناعية، التحليل الإحصائي، التعلم العميق، ومصنف <bdi dir="ltr">Naive Bayes</bdi> (مثل فرز البريد العشوائي مقابل البريد السليم).</li>
+          </ul>
 
-        <div class="exam-alert">
-          <h3>ثانياً: تطبيقات التعلم الآلي في النقل والمركبات ذاتية القيادة (ص 31 - 32) - مهم للاختبار:</h3>
-          <ul>
-            <li><b>1. السيارات ذاتية القيادة (<span dir="ltr">Autonomous Vehicles</span>):</b> تعتمد على دمج بيانات المستشعرات (<span dir="ltr">Sensor Fusion</span>) من الكاميرات، الرادار، ومستشعرات الليزر (<b dir="ltr">LiDAR</b>) مع خوارزميات التعلم العميق والمعزز من أجل:
-              <ul>
-                <li>التعرف اللحظي على المشاة، المركبات الأخرى، اللوحات الإرشادية، وإشارات المرور.</li>
-                <li>توقع حركة الكائنات المحيطة واتخاذ قرارات التوجيه والتسارع والفرملة في الوقت الفعلي.</li>
-              </ul>
-            </li>
-            <li><b>2. إدارة حركة المرور الذكية وتخطيط المسارات:</b> تحليل بيانات GPS وحركة السير الحية للتنبؤ بالاختناقات المرورية واقتراح أسرع المسارات البديلة (مثل <span dir="ltr">Google Maps</span>) وضبط توقيت إشارات المرور ذكياً لتقليل الازدحام والانبعاثات.</li>
-            <li><b>3. الخدمات اللوجستية والنقل التشاركي:</b> تحسين توزيع أساطيل الشحن وتقدير أوقات الوصول والتسعير في تطبيقات النقل التشاركي (مثل <span dir="ltr">Uber</span> و <span dir="ltr">Careem</span>).</li>
+          <div class="aside-box" style="margin-top: var(--space-md); padding: var(--space-md);">
+            <div style="font-weight: 800; margin-bottom: var(--space-xs);">مختبر مصنّف البريد (<bdi dir="ltr">Naive Bayes</bdi>):</div>
+            <div class="control-group" style="margin-bottom: var(--space-sm);">
+              <label for="classifier-sample" style="font-size: 0.88rem; font-weight: 700;">اختر رسالة واردة لفحص سماتها:</label>
+              <select id="classifier-sample" class="styled-select" onchange="runClassificationDemo()">
+                <option value="spam">رسالة تحتوي على: «اربح جائزة فورية + رابط غير معروف + إرسال جماعي»</option>
+                <option value="legit">رسالة تحتوي على: «موعد المحاضرة + مرفق الخطة الدراسية + بريد الجامعة»</option>
+                <option value="promo">رسالة تحتوي على: «خصم 50% + اشتراك نشرة تسويقية + إلغاء اشتراك»</option>
+              </select>
+            </div>
+            <div id="classifier-output" class="detail-panel" style="padding: var(--space-sm) var(--space-md);"></div>
+          </div>
+        </article>
+
+        <!-- Expected Value Interactive Lab -->
+        <article class="figure-card">
+          <span class="tag-amber">تحليلات إحصائية وصنع قرار</span>
+          <h3 style="margin-top: var(--space-sm);"><span class="index-num">1.3</span> القيمة المتوقعة (<bdi dir="ltr">Expected Value</bdi>)</h3>
+          <p>
+            مفهوم إحصائي يُستخدم لتقدير <strong>قيمة متوسطة متوقعة لنتائج محتملة</strong> استناداً إلى احتمالات حدوث هذه النتائج وقيمها المرتبطة:
+            <bdi dir="ltr" style="font-family: var(--font-label); font-weight: 600;">E(X) = Σ P(xᵢ) × xᵢ</bdi>.
+          </p>
+          <p style="font-size: 0.92rem; color: var(--on-surface-variant);">
+            <strong>مثال المنهج (رمي النرد):</strong> إذا رميت النرد، فإن القيمة المتوقعة هي
+            <bdi dir="ltr">(1/6)×1 + (1/6)×2 + ... + (1/6)×6 = 3.5</bdi>؛ أي أن متوسط النتائج على المدى الطويل هو <bdi dir="ltr">3.5</bdi>.
+          </p>
+
+          <div style="border-top: var(--card-border); padding-top: var(--space-md); margin-top: var(--space-md);">
+            <h4 style="margin: 0 0 var(--space-sm) 0; font-size: 0.98rem;">محاكي تقييم دقة النموذج بالقيمة المتوقعة:</h4>
+
+            <div class="control-group">
+              <div class="control-label-row">
+                <label for="ev-prob-easy">احتمال ورود حالات سهلة (دقة <bdi dir="ltr">95%</bdi>):</label>
+                <span class="mono-val" id="ev-prob-easy-val">60%</span>
+              </div>
+              <input type="range" id="ev-prob-easy" min="10" max="80" step="5" value="60" oninput="updateExpectedValue()">
+            </div>
+
+            <div class="control-group">
+              <div class="control-label-row">
+                <label for="ev-acc-hard">دقة النموذج في الحالات المعقدة (النسبة المتبقية):</label>
+                <span class="mono-val" id="ev-acc-hard-val">65%</span>
+              </div>
+              <input type="range" id="ev-acc-hard" min="30" max="95" step="5" value="65" oninput="updateExpectedValue()">
+            </div>
+
+            <div class="kpi-grid">
+              <div class="kpi-box">
+                <div class="kpi-title">القيمة المتوقعة للدقة</div>
+                <div class="kpi-value" id="ev-result-val">83.0%</div>
+                <div class="kpi-note" id="ev-verdict">أداء متوازن لاتخاذ القرار</div>
+              </div>
+              <div class="kpi-box">
+                <div class="kpi-title">قيمة مثال النرد المرجعية</div>
+                <div class="kpi-value">3.50</div>
+                <div class="kpi-note">متوسط نظري لـ 6 أوجه متساوية</div>
+              </div>
+            </div>
+            <p style="font-size: 0.88rem; margin-top: var(--space-sm); color: var(--on-surface-variant);">
+              <strong>الأهمية في التعلم الآلي:</strong> تمكّن الباحثين من تقدير الأداء العام لنماذج التصنيف والتنبؤ عبر سيناريوهات الاختبار المحتملة، واختيار أفضل نموذج أو استراتيجية تدريب قبل الاعتماد الفعلي.
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ==================== UNIT 2 ==================== -->
+    <section class="unit-section tab-panel" id="unit-2" role="tabpanel" aria-labelledby="tab-unit-2" tabindex="0" hidden>
+      <div class="dossier-bar">
+        <div class="dossier-bar-group">
+          <span class="dossier-pill">الوحدة التعليمية 02</span>
+          <span class="dossier-meta">أنواع التعلم • الجمعيات • مجموعة التدريب • قدرة التعميم</span>
+        </div>
+        <button type="button" class="unit-complete-btn" id="btn-complete-u2" onclick="toggleUnitComplete('u2')">
+          <span>تحديد الوحدة كمكتملة</span>
+        </button>
+      </div>
+
+      <div class="unit-header-block">
+        <div>
+          <h2 class="section-title" id="u2-title">أنواع التعلم الآلي، مجموعة التدريب، وقدرة التعميم</h2>
+          <p class="section-deck">الأسس النظرية لأنماط التعلم الرئيسية وكيف نضمن انتقال النموذج من أمثلة التدريب إلى بيانات العالم الحقيقي.</p>
+        </div>
+      </div>
+
+      <!-- 2.1 Learning Types Explorer -->
+      <div class="figure-card">
+        <h3><span class="index-num">2.1</span> أنواع التعلم الآلي ومناهج اكتساب المعرفة</h3>
+        <p>تغطي الوحدة الثانية خمسة محاور مترابطة لكيفية تعلم الأنظمة الذكية من البيانات والتجارب:</p>
+
+        <div class="pill-row" role="tablist" aria-label="أنواع التعلم الآلي">
+          <button type="button" class="select-pill is-active" onclick="selectLearningType('supervised', this)">التعلم بالإشراف (الموجّه)</button>
+          <button type="button" class="select-pill" onclick="selectLearningType('unsupervised', this)">التعلم بدون إشراف</button>
+          <button type="button" class="select-pill" onclick="selectLearningType('reinforcement', this)">التعلم التعزيزي</button>
+          <button type="button" class="select-pill" onclick="selectLearningType('association', this)">تعلم الجمعيات</button>
+          <button type="button" class="select-pill" onclick="selectLearningType('class_examples', this)">تعلم فئة من الأمثلة</button>
+        </div>
+
+        <div class="detail-panel" id="learning-type-detail">
+          <h4>التعلم بالإشراف / الموجه (<bdi dir="ltr">Supervised Learning</bdi>)</h4>
+          <p>
+            يتعلم النموذج العلاقات والأنماط من <strong>بيانات مُعلَّمة ومصنفة</strong> حيث يزوّده المشرف بالإجابات الصحيحة والدقيقة مسبقاً. وينقسم إلى مهمتين أساسيتين:
+          </p>
+          <ul class="clean-list">
+            <li><strong>التصنيف (<bdi dir="ltr">Classification</bdi>):</strong> التنبؤ بصنف كائن معين (مثل تحديد ما إذا كانت الصورة لقطة أم لكلب).</li>
+            <li><strong>الانحدار (<bdi dir="ltr">Regression</bdi>):</strong> التنبؤ بقيمة مستمرة أو نقطة معينة على محور رقمي.</li>
           </ul>
         </div>
-
-        <h3>ثالثاً: تطبيقات التعلم الآلي في التصنيع والصناعة الذكية (ص 32 - 33)</h3>
-        <ul>
-          <li><b>1. الصيانة التنبؤية (<span dir="ltr">Predictive Maintenance</span>):</b> تحليل بيانات مستشعرات الآلات (الحرارة، الاهتزاز، الصوت) للتنبؤ بالأعطال قبل وقوعها، مما يقلل التوقف غير المخطط لخطوط الإنتاج ويخفض تكاليف الصيانة.</li>
-          <li><b>2. مراقبة الجودة الآلية والفحص البصري (<span dir="ltr">Automated Quality Control</span>):</b> استخدام كاميرات عالية الدقة مدعومة بالرؤية الحاسوبية لاكتشاف العيوب الدقيقة في المنتجات على خطوط التجميع بسرعة ودقة تفوق الفحص البشري.</li>
-          <li><b>3. تحسين سلاسل الإمداد والتوريد (<span dir="ltr">Supply Chain Optimization</span>):</b> التنبؤ بتقلبات المواد الخام، تحسين مسارات الشحن والتخزين، وتقليل الهدر التشغيلي.</li>
-          <li><b>4. الروبوتات الصناعية التعاونية:</b> تمكين الروبوتات من التكيف مع مهام التصنيع المتغيرة والعمل بأمان وكفاءة جنباً إلى جنب مع العمال البشر.</li>
-        </ul>
       </div>
-    </details>
 
-    <!-- الوحدة الثالثة -->
-    <details open>
-      <summary>3) الوحدة (3): تطبيقات التعليم، الأمن السيبراني، معالجة اللغات، والتحديات والأخلاقيات (ص 34 - 37)</summary>
-      <div class="details-body">
-        <h3>أولاً: تطبيقات التعلم الآلي في التعليم الذكي (ص 34)</h3>
-        <ul>
-          <li><b>1. التعلم المخصص والتكيفي (<span dir="ltr">Adaptive & Personalized Learning</span>):</b> تحليل مستوى كل طالب وسرعة استيعابه ونقاط قوته وضعفه لتقديم محتوى تعليمي وتمارين تتكيف مع احتياجاته الفردية.</li>
-          <li><b>2. التقييم والتصحيح الآلي (<span dir="ltr">Automated Grading</span>):</b> أتمتة تصحيح الاختبارات والواجبات وتقديم تغذية راجعة فورية للطلاب، مما يخفف العبء الإداري عن المعلمين.</li>
-          <li><b>3. التنبؤ بأداء الطلاب والحد من التسرب:</b> تحليل بيانات الحضور والتفاعل والدرجات لاكتشاف الطلاب المعرضين لخطر التعثر الدراسي مبكراً وتوجيه الدعم الأكاديمي لهم.</li>
-          <li><b>4. أنظمة التدريس الذكية (<span dir="ltr">Intelligent Tutoring Systems</span>):</b> توفير مساعدين تعليميين افتراضيين يجيبون عن أسئلة الطلاب ويشرحون المفاهيم على مدار الساعة.</li>
-        </ul>
+      <!-- 2.2 Training Set & Generalization Capability -->
+      <div class="asymmetric-split">
+        <article class="figure-card">
+          <h3><span class="index-num">2.2</span> مجموعة التدريب (<bdi dir="ltr">Training Set</bdi>)</h3>
+          <p>
+            هي مجموعة البيانات التي تُستخدم لتدريب النموذج في عملية تعلم الآلة، وتتكون من أمثلة تُقدَّم مع <strong>السمات المقابلة لها والنتيجة المستهدفة المعروفة مسبقاً</strong>.
+          </p>
+          <ul class="clean-list">
+            <li><strong>الجودة والكمية والتنوع:</strong> يعتمد أداء النموذج بشدة على جودة وكمية البيانات وتنوعها لتمثيل جميع الفئات والأحداث المحتملة تمثيلاً جيداً.</li>
+            <li><strong>تقسيم البيانات:</strong> تُقسَّم البيانات عادةً إلى <strong>مجموعة تدريب</strong> لبناء النموذج، وجزء آخر منفصل (<strong>مجموعة التحقق أو مجموعة الاختبار</strong>) لقياس قدرته على التعامل مع بيانات لم يسبق له رؤيتها.</li>
+          </ul>
 
-        <h3>ثانياً: تطبيقات التعلم الآلي في الأمن السيبراني ومعالجة اللغات الطبيعية (ص 35 - 36)</h3>
-        <div class="grid">
-          <div class="step-card">
-            <span class="tag">في الأمن السيبراني (ص 35)</span>
-            <ul>
-              <li><b>كشف التسلل والهجمات (<span dir="ltr">IDS</span>):</b> رصد حركة مرور الشبكة غير الطبيعية والتصدي للهجمات السيبرانية فور حدوثها.</li>
-              <li><b>اكتشاف البرمجيات الخبيثة (<span dir="ltr">Malware</span>):</b> التعرف على الفيروسات وبرامج الفدية الجديدة والمتحورة حتى قبل تسجيل توقيعها التقليدي.</li>
-              <li><b>مكافحة التصيد والبريد المزعج (<span dir="ltr">Anti-Phishing & Spam</span>):</b> تصفية الرسائل الاحتيالية والروابط الخبيثة تلقائياً.</li>
-              <li><b>تحليل سلوك المستخدمين (<span dir="ltr">UEBA</span>):</b> كشف اختراق الحسابات من خلال ملاحظة أي انحراف عن السلوك المعتاد للمستخدم.</li>
+          <div style="border-top: var(--card-border); margin-top: var(--space-md); padding-top: var(--space-md);">
+            <h3 style="margin-bottom: var(--space-xs);"><span class="index-num">2.3</span> قدرة التعميم (<bdi dir="ltr">Generalization Capability</bdi>)</h3>
+            <p>
+              تعني قدرة النموذج المدرب على التعامل بفعالية مع <strong>بيانات جديدة غير مشاهدة</strong> أثناء التدريب. وتنجح عملية التعميم بفضل وجود <strong>الانتظامات (<bdi dir="ltr">Regularities</bdi>)</strong> في العالم الحقيقي حيث تتغير الأشياء بشكل سلس.
+            </p>
+            <ul class="clean-list">
+              <li><strong>التنبؤ بالحالات الجديدة:</strong> تمكّن النموذج من توقع النتائج لحالات جديدة وغير معروفة مسبقاً.</li>
+              <li><strong>تجنب الحالات الفردية:</strong> بدلاً من حفظ بيانات التدريب وتفاصيلها الفردية حرفياً، يتعلم النموذج الأنماط والقواعد العامة.</li>
             </ul>
           </div>
-          <div class="step-card">
-            <span class="tag">في معالجة اللغات والرؤية (ص 35-36)</span>
-            <ul>
-              <li><b>الترجمة الآلية الفورية:</b> ترجمة النصوص والكلام بين عشرات اللغات مع مراعاة السياق (مثل <span dir="ltr">Google Translate</span>).</li>
-              <li><b>التعرف على الكلام والمساعدات الصوتية:</b> تحويل الصوت لنص وتنفيذ الأوامر (<span dir="ltr">Siri, Alexa</span>).</li>
-              <li><b>تحليل المشاعر وتلخيص النصوص:</b> استخلاص آراء الجمهور وتلخيص الوثائق الطويلة.</li>
-              <li><b>التعرف على الوجوه والقياسات الحيوية:</b> التحقق الأمني في الهواتف والمطارات والأنظمة الذكية.</li>
-            </ul>
+        </article>
+
+        <!-- Interactive Generalization Visualizer -->
+        <article class="figure-card">
+          <span class="tag-positive">مختبر بصري تفاعلي</span>
+          <h3 style="margin-top: var(--space-sm);">مقارنة الحفظ الحرفي مقابل التعميم السليم</h3>
+          <p style="font-size: 0.92rem; color: var(--on-surface-variant);">
+            اختر سلوك النموذج أثناء التدريب لملاحظة كيف يتعامل مع <strong>نقاط التدريب (الدوائر)</strong> مقابل <strong>البيانات الجديدة غير المشاهدة (المثلثات)</strong>:
+          </p>
+
+          <div class="pill-row" role="group" aria-label="اختر حالة النموذج">
+            <button type="button" class="select-pill" onclick="setGenMode('underfit', this)">تدريب ناقص</button>
+            <button type="button" class="select-pill is-active" onclick="setGenMode('generalize', this)">تعميم مثالي</button>
+            <button type="button" class="select-pill" onclick="setGenMode('overfit', this)">حفظ حرفي (تخصيص مفرط)</button>
           </div>
+
+          <div class="viz-frame" id="gen-viz-container" style="min-height: 250px;">
+            <svg viewBox="0 0 420 220" aria-label="مخطط قدرة التعميم في التعلم الآلي" role="img">
+              <!-- Axes -->
+              <line x1="40" y1="190" x2="395" y2="190" stroke="var(--outline)" stroke-width="1.5" />
+              <line x1="40" y1="20" x2="40" y2="190" stroke="var(--outline)" stroke-width="1.5" />
+              <line x1="40" y1="135" x2="395" y2="135" stroke="var(--outline-variant)" stroke-dasharray="4 4" stroke-width="1" />
+              <line x1="40" y1="80" x2="395" y2="80" stroke="var(--outline-variant)" stroke-dasharray="4 4" stroke-width="1" />
+
+              <!-- True underlying regularity -->
+              <path d="M 55 165 Q 210 125 380 42" fill="none" stroke="var(--data-context)" stroke-width="2" stroke-dasharray="5 4" />
+
+              <!-- Model Curve (dynamic) -->
+              <path id="gen-model-path" d="M 55 162 Q 210 122 380 45" fill="none" stroke="var(--data-1)" stroke-width="3.5" stroke-linecap="round" />
+
+              <!-- Training points (circles) -->
+              <circle cx="70" cy="158" r="5" fill="var(--data-1)" />
+              <circle cx="120" cy="140" r="5" fill="var(--data-1)" />
+              <circle cx="170" cy="138" r="5" fill="var(--data-1)" />
+              <circle cx="220" cy="110" r="5" fill="var(--data-1)" />
+              <circle cx="275" cy="96" r="5" fill="var(--data-1)" />
+              <circle cx="330" cy="62" r="5" fill="var(--data-1)" />
+              <circle cx="370" cy="48" r="5" fill="var(--data-1)" />
+
+              <!-- Unseen Test points (triangles) -->
+              <polygon points="145,134 151,145 139,145" fill="var(--data-2)" />
+              <polygon points="248,96 254,107 242,107" fill="var(--data-2)" />
+              <polygon points="305,72 311,83 299,83" fill="var(--data-2)" />
+
+              <!-- Legend inside SVG -->
+              <circle cx="62" cy="30" r="4.5" fill="var(--data-1)" />
+              <text x="72" y="34" font-size="11" fill="var(--on-surface)" font-family="var(--font-body)">بيانات التدريب</text>
+              <polygon points="160,25 166,35 154,35" fill="var(--data-2)" />
+              <text x="172" y="34" font-size="11" fill="var(--on-surface)" font-family="var(--font-body)">بيانات جديدة غير مشاهدة</text>
+            </svg>
+          </div>
+
+          <div class="detail-panel" id="gen-mode-desc" style="margin-top: var(--space-md);">
+            <h4>تعميم مثالي — التقاط الانتظام العام (<bdi dir="ltr">92%</bdi> دقة اختبار)</h4>
+            <p>يتعلم النموذج القاعدة السلسة الكامنة ويتجاهل التذبذبات العشوائية الفردية، مما يمنحه دقة مرتفعة على البيانات الجديدة غير المشاهدة.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ==================== UNIT 3 ==================== -->
+    <section class="unit-section tab-panel" id="unit-3" role="tabpanel" aria-labelledby="tab-unit-3" tabindex="0" hidden>
+      <div class="dossier-bar">
+        <div class="dossier-bar-group">
+          <span class="dossier-pill">الوحدة التعليمية 03</span>
+          <span class="dossier-meta">التعرف على الأنماط • التطبيقات • شجرة القرار • نماذج التوليد</span>
         </div>
-
-        <div class="exam-alert">
-          <h3>ثالثاً: التحديات والقضايا الأخلاقية في تطبيقات التعلم الآلي (ص 36 - 37) - موضع أسئلة مؤكدة:</h3>
-          <ol>
-            <li><b>جودة البيانات وتوافرها (<span dir="ltr">Data Quality & Availability</span>):</b> تحتاج نماذج التعلم الآلي إلى كميات ضخمة من البيانات النظيفة؛ فالبيانات الناقصة أو المشوشة تؤدي إلى نماذج ضعيفة ونتائج خاطئة.</li>
-            <li><b>التحيز الخوارزمي والعدالة (<span dir="ltr">Algorithmic Bias & Fairness</span>):</b> إذا كانت بيانات التدريب التاريخية تحتوي على تحيزات بشرية أو اجتماعية، فإن النموذج سيتعلم هذا التحيز ويكرره في قراراته (مثل التحيز في التوظيف أو منح القروض).</li>
-            <li><b>الخصوصية وحماية البيانات (<span dir="ltr">Data Privacy</span>):</b> جمع وتحليل البيانات الشخصية والطبية والمالية يثير مخاطر انتهاك خصوصية الأفراد، مما يتطلب تشريعات صارمة وتقنيات حفظ الخصوصية وتشفير البيانات.</li>
-            <li><b>مشكلة الصندوق الأسود وقابلية التفسير (<span dir="ltr">Black Box & Explainability</span>):</b> النماذج المعقدة (خاصة الشبكات العصبية العميقة) قد تصدر تنبؤات دقيقة لكن يصعب فهم وتفسير كيفية وصولها للقرار، وهو تحدٍّ خطير في المجالات الحرجة كالطب والقضاء والتمويل.</li>
-            <li><b>الإفراط في التخصيص وضعف التعميم (<span dir="ltr">Overfitting</span>):</b> حفظ النموذج لبيانات التدريب وتفاصيلها العشوائية وفشله في التعامل مع البيانات الجديدة في الواقع الفعلي.</li>
-            <li><b>المسؤولية القانونية والأثر على الوظائف:</b> تحديد المسؤولية القانونية عند وقوع خطأ من نظام ذكي (مثل حادث سيارة ذاتية القيادة)، والتعامل مع أتمتة الوظائف وتغير متطلبات سوق العمل.</li>
-          </ol>
-        </div>
+        <button type="button" class="unit-complete-btn" id="btn-complete-u3" onclick="toggleUnitComplete('u3')">
+          <span>تحديد الوحدة كمكتملة</span>
+        </button>
       </div>
-    </details>
-  </section>
 
-  <!-- ================= التبويب الثاني: جداول المقارنات ================= -->
-  <section id="tables" class="panel">
-    <div class="card">
-      <h2>1. جدول مقارنة الأنواع الأربعة الرئيسية للتعلم الآلي (ص 26 - 27)</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>نوع التعلم الآلي</th>
-            <th>طبيعة البيانات والمدخلات</th>
-            <th>آلية التعلم والمهام الرئيسية</th>
-            <th>أمثلة تطبيقية بارزة</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><b>1. الخاضع للإشراف<br>(Supervised Learning)</b></td>
-            <td>بيانات <b>مصنفة وموسومة مسبقاً (<span dir="ltr">Labeled Data</span>)</b> لها مخرجات صحيحة معروفة.</td>
-            <td>يتعلم ربط المدخلات بالمخرجات المعروفة، ويشمل: <b>التصنيف (<span dir="ltr">Classification</span>)</b> و<b>الانحدار (<span dir="ltr">Regression</span>)</b>.</td>
-            <td>كشف البريد المزعج، تشخيص الأورام، توقع أسعار العقارات والأسهم.</td>
-          </tr>
-          <tr>
-            <td><b>2. غير الخاضع للإشراف<br>(Unsupervised Learning)</b></td>
-            <td>بيانات <b>غير مصنفة (<span dir="ltr">Unlabeled Data</span>)</b> بدون مخرجات أو تسميات مسبقة.</td>
-            <td>يكتشف الأنماط والهياكل الخفية ذاتياً، ويشمل: <b>التجميع (<span dir="ltr">Clustering</span>)</b>، <b>تقليل الأبعاد</b>، و<b>قواعد الارتباط</b>.</td>
-            <td>تقسيم العملاء إلى شرائح تسويقية، تحليل سلة المشتريات، ضغط البيانات.</td>
-          </tr>
-          <tr>
-            <td><b>3. شبه الخاضع للإشراف<br>(Semi-Supervised)</b></td>
-            <td>مزيج من <b>قليل من البيانات المصنفة</b> مع <b>كثير من البيانات غير المصنفة</b>.</td>
-            <td>يستفيد من البيانات القليلة المصنفة لتوجيه التعلم على البيانات الضخمة غير المصنفة بتكلفة أقل.</td>
-            <td>تصنيف الصور الطبية أو صفحات الويب عندما يكون التوسيم اليدوي مكلفاً.</td>
-          </tr>
-          <tr>
-            <td><b>4. التعلم المعزز<br>(Reinforcement Learning)</b></td>
-            <td>تفاعل مباشر بين <b>الوكيل (<span dir="ltr">Agent</span>) والبيئة (<span dir="ltr">Environment</span>)</b> دون بيانات مصنفة مسبقة.</td>
-            <td>التعلم عبر التجربة والخطأ وتلقي <b>المكافآت والعقوبات</b> لتعظيم المكافأة التراكمية.</td>
-            <td>السيارات ذاتية القيادة، التحكم بالروبوتات، والألعاب الذكية (الشطرنج و Go).</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="card">
-      <h2>2. جدول ملخص تطبيقات التعلم الآلي في القطاعات الاقتصادية والخدمية (ص 28 - 33)</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>القطاع / المجال</th>
-            <th>أبرز تطبيقات التعلم الآلي في الملخص</th>
-            <th>الفائدة والأثر العملي</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><b>القطاع المالي والمصرفي<br>(ص 28)</b></td>
-            <td>• كشف الاحتيال المالي في الوقت الفعلي<br>• تقييم الجدارة الائتمانية ومخاطر القروض<br>• التداول الخوارزمي الآلي والمساعدات المالية</td>
-            <td>حماية الأموال من السرقة، تقليل الديون المتعثرة، وتسريع قرارات التداول والاستثمار.</td>
-          </tr>
-          <tr>
-            <td><b>التجارة الإلكترونية والتجزئة<br>(ص 29)</b></td>
-            <td>• محركات التوصية (<span dir="ltr">Amazon, Netflix</span>)<br>• التسعير الديناميكي المرن<br>• التنبؤ بالطلب وإدارة المخزون وتوقع تسرب العملاء</td>
-            <td>تخصيص تجربة التسوق، زيادة المبيعات والأرباح، ومنع تكدس أو نفاد البضائع.</td>
-          </tr>
-          <tr>
-            <td><b>الرعاية الصحية والطب<br>(ص 30 - 31)</b></td>
-            <td>• تحليل الصور الطبية والأشعة (<span dir="ltr">X-Ray, MRI</span>)<br>• الطب الشخصي وتخصيص العلاج الجيني<br>• اكتشاف وتطوير الأدوية والتنبؤ بالأوبئة</td>
-            <td>الكشف المبكر والدقيق عن الأمراض، رفع فعالية العلاج، وتقليص زمن وتكلفة إنتاج الأدوية.</td>
-          </tr>
-          <tr>
-            <td><b>النقل والقيادة الذاتية<br>(ص 31 - 32)</b></td>
-            <td>• السيارات ذاتية القيادة (دمج الكاميرات والرادار و<span dir="ltr">LiDAR</span>)<br>• إدارة المرور الذكية وتخطيط المسارات<br>• تحسين اللوجستيات والنقل التشاركي</td>
-            <td>تقليل الحوادث البشرية، تخفيف الازدحام المروري، وتقليل استهلاك الوقود والانبعاثات.</td>
-          </tr>
-          <tr>
-            <td><b>التصنيع والصناعة الذكية<br>(ص 32 - 33)</b></td>
-            <td>• الصيانة التنبؤية للمعدات<br>• الفحص البصري الآلي لمراقبة الجودة<br>• تحسين سلاسل الإمداد والروبوتات الصناعية</td>
-            <td>منع التوقف المفاجئ للمصانع، اكتشاف عيوب التصنيع بدقة، وتقليل التكاليف والهدر.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="card">
-      <h2>3. جدول تطبيقات التعلم الآلي في التعليم، الأمن السيبراني، ومعالجة اللغات (ص 34 - 36)</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>المجال</th>
-            <th>التطبيقات الرئيسية</th>
-            <th>آلية عمل الذكاء الاصطناعي وتعلم الآلة فيها</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><b>التعليم الذكي<br>(ص 34)</b></td>
-            <td>1) التعلم المخصص والتكيفي<br>2) التقييم والتصحيح الآلي<br>3) التنبؤ بتعثر الطلاب<br>4) أنظمة التدريس الذكية</td>
-            <td>تحليل أداء وسرعة تعلم كل طالب لتكييف المنهج، والتنبيه المبكر عن الطلاب المعرضين للتعثر الدراسي.</td>
-          </tr>
-          <tr>
-            <td><b>الأمن السيبراني<br>(ص 35)</b></td>
-            <td>1) أنظمة كشف التسلل (<span dir="ltr">IDS</span>)<br>2) كشف البرمجيات الخبيثة والفدية<br>3) مكافحة التصيد (<span dir="ltr">Phishing</span>) و<span dir="ltr">Spam</span><br>4) تحليل سلوك المستخدمين (<span dir="ltr">UEBA</span>)</td>
-            <td>التعرف على الأنماط الشاذة في حركة الشبكة وسلوك المستخدمين لاكتشاف الهجمات الجديدة قبل وقوع الضرر.</td>
-          </tr>
-          <tr>
-            <td><b>معالجة اللغات والرؤية<br>(ص 35 - 36)</b></td>
-            <td>1) الترجمة الآلية الفورية<br>2) المساعدات الصوتية (<span dir="ltr">Siri, Alexa</span>)<br>3) تحليل المشاعر وتلخيص النصوص<br>4) التعرف على الوجوه والقياسات الحيوية</td>
-            <td>تحويل الصوت والنص والصورة إلى تمثيلات رياضية لفهم السياق اللغوي والميزات البصرية بدقة.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="card">
-      <h2>4. جدول تحديات وأخلاقيات التعلم الآلي وكيفية معالجتها (ص 36 - 37)</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>التحدي / القضية الأخلاقية</th>
-            <th>وصف المشكلة ومخاطرها</th>
-            <th>الحلول والمعالجات المتبعة</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><b>1. جودة البيانات وتوافرها</b></td>
-            <td>البيانات الناقصة أو غير النظيفة تؤدي إلى تنبؤات خاطئة ("الدخل السيئ يعطي نتائج سيئة").</td>
-            <td>تنظيف ومعالجة البيانات مسبقاً، والتحقق من موثوقية وتكامل مصادر البيانات.</td>
-          </tr>
-          <tr>
-            <td><b>2. التحيز الخوارزمي (<span dir="ltr">Bias</span>)</b></td>
-            <td>تبنّي النموذج للتحيزات الموجودة في البيانات التاريخية مما يؤدي لقرارات غير عادلة ضد فئات معينة.</td>
-            <td>تدقيق مجموعات البيانات لضمان التنوع والتمثيل المتوازن، واختبار عدالة النموذج قبل نشره.</td>
-          </tr>
-          <tr>
-            <td><b>3. الخصوصية وأمن البيانات</b></td>
-            <td>خطر تسرب البيانات الشخصية أو الطبية أو المالية الحساسة أثناء جمعها وتدريب النماذج عليها.</td>
-            <td>تشفير البيانات، إخفاء الهوية (<span dir="ltr">Anonymization</span>)، والالتزام بلوائح حماية البيانات والخصوصية.</td>
-          </tr>
-          <tr>
-            <td><b>4. مشكلة الصندوق الأسود (<span dir="ltr">Black Box</span>)</b></td>
-            <td>صعوبة تفسير كيفية وصول النماذج العميقة المعقدة لقراراتها في القطاعات الحرجة كالطب والقضاء.</td>
-            <td>تطوير تقنيات الذكاء الاصطناعي القابل للتفسير (<b dir="ltr">Explainable AI - XAI</b>) لتوضيح أسباب القرار.</td>
-          </tr>
-          <tr>
-            <td><b>5. الإفراط في التخصيص (<span dir="ltr">Overfitting</span>)</b></td>
-            <td>حفظ النموذج لبيانات التدريب وفشله في التعميم على البيانات الجديدة.</td>
-            <td>استخدام التحقق المتقاطع، تقنيات التنظيم (<span dir="ltr">Regularization</span>)، وزيادة تنوع بيانات التدريب.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- ================= التبويب الثالث: المصطلحات ================= -->
-  <section id="terms" class="panel">
-    <div class="card">
-      <h2>قاموس المصطلحات والمفاهيم الشامل للفصل الثالث (26 مصطلحاً)</h2>
-      <p class="muted">جميع المفاهيم والأنواع والتطبيقات والتحديات الواردة في الوحدات الثلاث للفصل الثالث مع أرقام صفحاتها:</p>
-      <div id="termsGrid" class="grid"></div>
-    </div>
-  </section>
-
-  <!-- ================= التبويب الرابع: البطاقات التعليمية ================= -->
-  <section id="cards" class="panel">
-    <div class="card">
-      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
-      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
-      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
-        <div class="term" id="flashTerm"></div>
-        <div class="answer" id="flashAnswer" hidden></div>
-        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
-      </div>
-      <div class="row" style="margin-top:14px">
-        <button class="btn" id="prevCard">السابق</button>
-        <span id="cardCount" class="muted"></span>
-        <button class="btn primary" id="nextCard">التالي</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= التبويب الخامس: الاختبار الشامل ================= -->
-  <section id="quiz" class="panel">
-    <div class="card">
-      <div class="row">
+      <div class="unit-header-block">
         <div>
-          <h2>الاختبار الشامل للفصل الثالث (25 سؤالاً)</h2>
-          <p class="muted">يغطي أنواع التعلم الآلي وتطبيقاته في كافة القطاعات وتحدياته وأخلاقياته (ص 26 - 37) مع تصحيح فوري.</p>
+          <h2 class="section-title" id="u3-title">تقنيات التعرف على الأنماط، شجرة القرار، ونماذج التوليد</h2>
+          <p class="section-deck">كيف تستخلص الخوارزميات الأنماط من الصور والوجوه والأصوات، وكيف تتخذ القرار عبر الأشجار الهيكلية أو تولّد بيانات جديدة.</p>
         </div>
-        <div class="score" id="score">النتيجة: 0 / 25</div>
       </div>
-      <div class="progress"><div id="progressBar"></div></div>
-      <div id="quizArea"></div>
-      <div class="row">
-        <button class="btn" id="resetQuiz">إعادة الاختبار</button>
-        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+
+      <!-- 3.1 Pattern Recognition Methods & Flexible Automatic Recognition -->
+      <div class="card-grid">
+        <article class="figure-card">
+          <h3><span class="index-num">3.1</span> أساليب التعرف على الأنماط والتعرف المرن</h3>
+          <p>تُستخدم تقنيات التعرف على الأنماط لاستخراج البنى والسمات المتكررة من البيانات، وتتنوع أساليبها بحسب المشكلة:</p>
+          <ul class="clean-list">
+            <li><strong>التصنيف (<bdi dir="ltr">Classification</bdi>):</strong> تعلم العلاقة بين المتغيرات التنبؤية والمتغير الهدف لوضع كل مدخل في فئة محددة.</li>
+            <li><strong>الاستنتاج (<bdi dir="ltr">Inference</bdi>):</strong> توقع قيمة متغير معين استناداً إلى البيانات المتاحة والنموذج المعتمد.</li>
+            <li><strong>التطابق مع القوالب (<bdi dir="ltr">Template Matching</bdi>):</strong> مطابقة الإشارة أو الصورة المدخلة مع القوالب المخزنة لاختيار الأقرب تطابقاً.</li>
+            <li><strong>التعرف التلقائي المرن:</strong> قدرة النظام على التكيف مع التغيرات الطبيعية في المدخلات (تباين الإضاءة، اختلاف الخطوط، الضوضاء أو اللهجات) دون اشتراط تطابق جامد.</li>
+          </ul>
+        </article>
+
+        <!-- 3.2 Practical Applications Pipeline -->
+        <article class="figure-card">
+          <h3><span class="index-num">3.2</span> التطبيقات العملية للتعرف على الأنماط</h3>
+          <p style="font-size: 0.92rem; color: var(--on-surface-variant);">اختر التطبيق لاستعراض خطوات المعالجة كما وردت في المنهج:</p>
+          <div class="pill-row" role="tablist" aria-label="تطبيقات التعرف على الأنماط">
+            <button type="button" class="select-pill is-active" onclick="selectAppPipeline('speech', this)">التعرف على الصوت</button>
+            <button type="button" class="select-pill" onclick="selectAppPipeline('face', this)">التعرف على الوجوه</button>
+            <button type="button" class="select-pill" onclick="selectAppPipeline('visual', this)">التعرف البصري</button>
+          </div>
+          <div class="detail-panel" id="app-pipeline-detail">
+            <h4>التعرف على الصوت وتحويل الكلام إلى نص</h4>
+            <p>يُحوّل الكلام المنطوق إلى نص مكتوب تلقائياً بمطابقة الإشارات الصوتية مع أنماط الكلمات والجمل المخزنة عبر 3 خطوات:</p>
+            <ol class="clean-list">
+              <li><strong>تقسيم الإشارة الصوتية</strong> إلى وحدات صوتية صغيرة (مثل الفونيمات).</li>
+              <li><strong>استخراج السمات المميزة</strong> لكل وحدة صوتية.</li>
+              <li><strong>المطابقة</strong> مع الأنماط المخزنة في قاعدة البيانات لإخراج النص.</li>
+            </ol>
+          </div>
+        </article>
       </div>
-      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
-    </div>
-  </section>
-</main>
 
-<footer>مبني بالكامل (100%) على محتوى الفصل الثالث من ملخص مقرر تعلم الآلة التطبيقي (صفحات 26 - 37)</footer>
+      <!-- 3.3 Decision Tree Interactive Simulator -->
+      <div class="figure-card">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-sm);">
+          <h3 style="margin: 0;"><span class="index-num">3.3</span> شجرة القرار (<bdi dir="ltr">Decision Tree</bdi>) وهيكليتها التفاعلية</h3>
+          <span class="tag-amber">محاكاة مثال تقييم قرض بنكي</span>
+        </div>
+        <p>
+          خوارزمية تقوم بتقسيم البيانات عبر سلسلة من القرارات الصغرى (أسئلة تُجاب بنعم أو لا) لتصنيف العناصر إلى فئات. تتكون من ثلاثة مكونات رئيسية:
+          <strong>عقدة الجذر (<bdi dir="ltr">Root Node</bdi>)</strong> التي تمثل السمة الأكثر تمييزاً، و<strong>العقد الفرعية</strong> للاختيارات الوسطية، و<strong>أوراق الشجرة (<bdi dir="ltr">Leaf Nodes</bdi>)</strong> التي تمثل الفئات النهائية.
+        </p>
 
-<script>
-const terms = [
-  ["Machine Learning (التعلم الآلي)", "فرع من الذكاء الاصطناعي يمكّن الأنظمة الحاسوبية من التعلم والتحسن تلقائياً من البيانات والتجارب السابقة دون برمجة صريحة لكل مهمة (ص 26)."],
-  ["Supervised Learning (التعلم الخاضع للإشراف)", "نوع من التعلم الآلي يتدرب فيه النموذج على بيانات مصنفة وموسومة مسبقاً (Labeled Data) لها مخرجات صحيحة معروفة، ويشمل التصنيف والانحدار (ص 26)."],
-  ["Unsupervised Learning (التعلم غير الخاضع للإشراف)", "نوع يتعامل مع بيانات غير مصنفة (Unlabeled Data) لاكتشاف الأنماط والهياكل الخفية ذاتياً، ويشمل التجميع وتقليل الأبعاد وقواعد الارتباط (ص 27)."],
-  ["Semi-Supervised Learning (التعلم شبه الخاضع للإشراف)", "يجمع بين كمية صغيرة من البيانات المصنفة وكمية كبيرة من البيانات غير المصنفة لتقليل تكلفة التوسيم اليدوي وتحسين الدقة (ص 27)."],
-  ["Reinforcement Learning (التعلم المعزز)", "يتعلم فيه الوكيل (Agent) عبر التفاعل مع البيئة (Environment) بالتجربة والخطأ وتلقي المكافآت والعقوبات لتعظيم المكافأة التراكمية (ص 27)."],
-  ["Classification vs Regression", "في التعلم الخاضع للإشراف: التصنيف (Classification) يتوقع فئة منفصلة، بينما الانحدار (Regression) يتوقع قيمة رقمية مستمرة (ص 26)."],
-  ["Fraud Detection (كشف الاحتيال المالي)", "مراقبة معاملات البطاقات الائتمانية والحسابات البنكية في الوقت الفعلي لرصد الأنماط الشاذة وإيقاف العمليات الاحتيالية فوراً (ص 28)."],
-  ["Credit Scoring (تقييم الجدارة الائتمانية)", "استخدام التعلم الآلي لتحليل التاريخ المالي للمقترضين والتنبؤ بمخاطر التعثر لاتخاذ قرارات منح القروض (ص 28)."],
-  ["Algorithmic Trading (التداول الخوارزمي)", "تحليل بيانات الأسواق المالية والأخبار الاقتصادية بسرعة فائقة لتنفيذ أوامر البيع والشراء آلياً في أجزاء من الثانية (ص 28)."],
-  ["Recommendation Engines (محركات التوصية)", "أنظمة تحلل سجل التصفح والشراء لاقتراح منتجات أو محتوى مخصص لكل مستخدم كما في Amazon و Netflix (ص 29)."],
-  ["Dynamic Pricing (التسعير الديناميكي)", "تعديل أسعار المنتجات والخدمات تلقائياً في الوقت الفعلي بناءً على العرض والطلب وأسعار المنافسين والمواسم (ص 29)."],
-  ["Customer Churn Prediction (توقع تسرب العملاء)", "تحليل سلوك العملاء لتحديد من يوشكون على ترك الخدمة أو العلامة التجارية وتقديم عروض للاحتفاظ بهم (ص 29)."],
-  ["Medical Imaging Analysis (تحليل الصور الطبية)", "استخدام الرؤية الحاسوبية والشبكات العميقة لفحص الأشعة السينية (X-Ray) والرنين المغناطيسي (MRI) للكشف المبكر عن الأورام (ص 30)."],
-  ["Personalized Medicine (الطب الشخصي)", "تخصيص الخطط العلاجية والدوائية لكل مريض بناءً على بياناته الجينية والسريرية واستجابته المتوقعة (ص 30)."],
-  ["Drug Discovery (اكتشاف الأدوية)", "استخدام نماذج التعلم الآلي لمحاكاة التفاعلات الكيميائية والتنبؤ بفعالية المركبات الدوائية الجديدة لتسريع إنتاج الأدوية (ص 31)."],
-  ["Autonomous Vehicles (السيارات ذاتية القيادة)", "مركبات تعتمد على التعلم العميق والمعزز ودمج المستشعرات للتعرف على الطريق والمشاة والعوائق والقيادة بأمان (ص 31)."],
-  ["Sensor Fusion & LiDAR (دمج المستشعرات والليدار)", "دمج البيانات من الكاميرات والرادار ومستشعرات الليزر (LiDAR) لتكوين رؤية شاملة ودقيقة للبيئة المحيطة بالسيارة ذاتية القيادة (ص 31-32)."],
-  ["Predictive Maintenance (الصيانة التنبؤية)", "تحليل بيانات مستشعرات الآلات الصناعية للتنبؤ بالأعطال قبل وقوعها وتقليل فترات التوقف غير المخطط للإنتاج (ص 32)."],
-  ["Automated Quality Control (مراقبة الجودة الآلية)", "الفحص البصري الآلي للمنتجات على خطوط الإنتاج باستخدام الرؤية الحاسوبية لاكتشاف العيوب الدقيقة فوراً (ص 33)."],
-  ["Adaptive Learning (التعلم المخصص / التكيفي)", "تكييف المناهج والمحتوى التعليمي والتمارين تلقائياً وفقاً لمستوى كل طالب وسرعة تعلمه ونقاط ضعفه (ص 34)."],
-  ["Intrusion Detection Systems (IDS)", "أنظمة كشف التسلل التي تراقب حركة الشبكة بالذكاء الاصطناعي لرصد الأنشطة المشبوهة والهجمات السيبرانية (ص 35)."],
-  ["UEBA (تحليل سلوك المستخدم والكيانات)", "User and Entity Behavior Analytics: رصد الانحرافات عن السلوك المعتاد للمستخدمين لاكتشاف الحسابات المخترقة والتهديدات الداخلية (ص 35)."],
-  ["Algorithmic Bias (التحيز الخوارزمي)", "مشكلة أخلاقية تحدث عندما يتعلم النموذج تحيزات موجودة في بيانات التدريب التاريخية فيصدر قرارات غير عادلة (ص 36)."],
-  ["Black Box Problem (مشكلة الصندوق الأسود)", "صعوبة تفسير وفهم كيفية وصول نماذج التعلم العميق المعقدة إلى قراراتها وتنبؤاتها في المجالات الحساسة (ص 37)."],
-  ["Explainable AI - XAI (الذكاء الاصطناعي القابل للتفسير)", "تقنيات تهدف إلى جعل قرارات نماذج التعلم الآلي واضحة ومفهومة وقابلة للتفسير للبشر لتعزيز الثقة والشفافية (ص 37)."],
-  ["Data Anonymization (إخفاء هوية البيانات)", "إزالة أو تشفير المعلومات التعريفية الشخصية من مجموعات البيانات لحماية خصوصية الأفراد أثناء تدريب النماذج (ص 36-37)."]
-];
+        <div class="tree-interactive-wrap" style="margin-top: var(--space-md);">
+          <!-- Left: Interactive walkthrough -->
+          <div class="tree-question-box" id="tree-walkthrough">
+            <span class="tree-step-badge" id="tree-node-badge">عقدة الجذر (Root Node) — السمة الأكثر تمييزاً</span>
+            <h4 id="tree-question-text" style="margin: 0 0 var(--space-md) 0; font-size: 1.08rem;">هل الدخل الشهري للمتقدم مستقر وكافٍ لتغطية القسط؟</h4>
+            <div style="display: flex; flex-wrap: wrap; gap: var(--space-sm);" id="tree-action-buttons">
+              <button type="button" class="btn-primary" onclick="answerTreeStep('yes')">نعم</button>
+              <button type="button" class="btn-secondary" onclick="answerTreeStep('no')">لا</button>
+            </div>
+            <div id="tree-result-area" style="display: none;"></div>
+            <div style="margin-top: var(--space-md); padding-top: var(--space-sm); border-top: var(--card-border); display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 0.85rem; color: var(--on-surface-variant);" id="tree-path-trace">المسار: البداية</span>
+              <button type="button" class="btn-secondary" style="min-height: 36px; padding: var(--space-xs) var(--space-sm); font-size: 0.82rem;" onclick="resetTreeDemo()">إعادة البدء</button>
+            </div>
+          </div>
 
-const cards = [
-  ["ما هو تعريف التعلم الآلي (Machine Learning)؟", "فرع من فروع الذكاء الاصطناعي يمكّن الأنظمة الحاسوبية من التعلم والتحسن تلقائياً من التجارب والبيانات السابقة دون الحاجة إلى برمجة صريحة لكل مهمة (ص 26)."],
-  ["ما هي الخطوات الخمس الأساسية لدورة عمل نظام التعلم الآلي؟", "1) جمع البيانات، 2) تجهيز ومعالجة البيانات، 3) اختيار وتدريب النموذج، 4) تقييم النموذج، 5) التنبؤ والتحسين المستمر (ص 26)."],
-  ["ما هي الأنواع الأربعة الرئيسية للتعلم الآلي؟", "1) التعلم الخاضع للإشراف (Supervised)، 2) التعلم غير الخاضع للإشراف (Unsupervised)، 3) التعلم شبه الخاضع للإشراف (Semi-Supervised)، 4) التعلم المعزز (Reinforcement) (ص 26-27)."],
-  ["ما الفرق بين التعلم الخاضع للإشراف والتعلم غير الخاضع للإشراف من حيث البيانات والمهام؟", "• الخاضع للإشراف: يتدرب على بيانات مصنفة (Labeled) ويشمل التصنيف والانحدار.\n• غير الخاضع للإشراف: يتعامل مع بيانات غير مصنفة (Unlabeled) لاكتشاف الأنماط ذاتياً ويشمل التجميع وتقليل الأبعاد وقواعد الارتباط (ص 26-27)."],
-  ["متى نستخدم التعلم شبه الخاضع للإشراف (Semi-Supervised Learning)؟", "عندما تتوفر لدينا كمية صغيرة من البيانات المصنفة مع كمية كبيرة جداً من البيانات غير المصنفة، وذلك لتقليل تكلفة ووقت التوسيم اليدوي (ص 27)."],
-  ["كيف يعمل التعلم المعزز (Reinforcement Learning)؟ وأين يُطبق؟", "يتعلم فيه الوكيل (Agent) من خلال التفاعل المباشر مع البيئة (Environment) بالتجربة والخطأ وتلقي المكافآت أو العقوبات لتعظيم المكافأة التراكمية؛ ويُطبق في الروبوتات والألعاب والقيادة الذاتية (ص 27)."],
-  ["اذكري 4 تطبيقات للتعلم الآلي في القطاع المالي والمصرفي (ص 28).", "1) كشف الاحتيال المالي في الوقت الفعلي، 2) تقييم الجدارة الائتمانية وإدارة المخاطر، 3) التداول الخوارزمي الآلي، 4) خدمة العملاء المؤتمتة والمساعدات المالية (Chatbots & Robo-Advisors) (ص 28)."],
-  ["كيف يسهم التعلم الآلي في كشف الاحتيال المالي وتقييم الائتمان في البنوك؟", "• كشف الاحتيال: رصد المعاملات غير المعتادة في البطاقات الائتمانية وإيقافها فوراً.\n• تقييم الائتمان: تحليل السجل المالي للمقترضين للتنبؤ باحتمالية التعثر قبل منح القرض (ص 28)."],
-  ["اذكري 4 تطبيقات للتعلم الآلي في التجارة الإلكترونية والبيع بالتجزئة (ص 29).", "1) محركات التوصية المخصصة (مثل Amazon و Netflix)، 2) التسعير الديناميكي، 3) التنبؤ بالطلب وإدارة المخزون، 4) تحليل سلوك العملاء وتوقع التسرب (Customer Churn) (ص 29)."],
-  ["ما المقصود بالتسعير الديناميكي (Dynamic Pricing) في التجارة الإلكترونية؟", "تعديل أسعار المنتجات والخدمات تلقائياً في الوقت الفعلي بناءً على حجم الطلب، وأسعار المنافسين، والمواسم (كما في تذاكر الطيران والفنادق والمتاجر الكبرى) (ص 29)."],
-  ["ما الهدف من توقع تسرب العملاء (Customer Churn Prediction)؟", "تحليل سلوك العملاء لتحديد العملاء الذين يوشكون على ترك الخدمة أو التوقف عن الشراء، وتقديم عروض ترويجية مخصصة للاحتفاظ بهم (ص 29)."],
-  ["كيف يُستخدم التعلم الآلي في التشخيص الطبي وتحليل الصور الطبية؟", "باستخدام الرؤية الحاسوبية والشبكات العميقة لفحص صور الأشعة السينية (X-Ray) والرنين المغناطيسي (MRI) لاكتشاف الأورام والسرطانات وأمراض الشبكية مبكراً وبدقة عالية (ص 30)."],
-  ["ما المقصود بالطب الشخصي (Personalized Medicine) في تطبيقات التعلم الآلي؟", "تصميم خطط علاجية ودوائية مخصصة لكل مريض على حدة بناءً على سجله السريري وتركيبته الجينية واستجابته المتوقعة للعلاج (ص 30)."],
-  ["كيف يسرّع التعلم الآلي عملية اكتشاف وتطوير الأدوية الجديدة؟", "من خلال محاكاة التفاعلات الكيميائية والحيوية للتنبؤ بفعالية وأمان المركبات الدوائية الجديدة قبل التجارب السريرية، مما يختصر سنوات من البحث والتكلفة (ص 31)."],
-  ["علامَ تعتمد السيارات ذاتية القيادة لإدراك البيئة المحيطة بها واتخاذ القرارات؟", "تعتمد على دمج بيانات المستشعرات (Sensor Fusion) من الكاميرات والرادار ومستشعرات الليزر (LiDAR) مع خوارزميات التعلم العميق والمعزز للتعرف على المشاة والمركبات واللوحات المرورية (ص 31-32)."],
-  ["كيف يسهم التعلم الآلي في إدارة حركة المرور الذكية في المدن؟", "عبر تحليل بيانات GPS وحركة السير الحية للتنبؤ بالاختناقات المرورية، واقتراح المسارات البديلة الأسرع، وضبط توقيت إشارات المرور ذكياً لتقليل الازدحام والانبعاثات (ص 32)."],
-  ["اذكري 4 تطبيقات للتعلم الآلي في التصنيع والصناعة الذكية (ص 32-33).", "1) الصيانة التنبؤية للمعدات، 2) مراقبة الجودة الآلية والفحص البصري، 3) تحسين سلاسل الإمداد والتوريد، 4) الروبوتات الصناعية الذكية والتعاونية (ص 32-33)."],
-  ["ما الفرق بين الصيانة التنبؤية ومراقبة الجودة الآلية في المصانع الذكية؟", "• الصيانة التنبؤية: تحليل بيانات مستشعرات الآلات (الحرارة والاهتزاز) لتوقع الأعطال قبل حدوثها.\n• مراقبة الجودة الآلية: استخدام كاميرات الرؤية الحاسوبية لاكتشاف العيوب البصرية في المنتجات على خطوط الإنتاج (ص 32-33)."],
-  ["اذكري 4 تطبيقات للتعلم الآلي في مجال التعليم الذكي (ص 34).", "1) التعلم المخصص والتكيفي (Adaptive Learning)، 2) التقييم والتصحيح الآلي، 3) التنبؤ بأداء الطلاب واكتشاف المعرضين للتعثر، 4) أنظمة التدريس الذكية (ص 34)."],
-  ["كيف يعمل التعلم المخصص والتكيفي (Adaptive Learning) في المنصات التعليمية؟", "يحلل مستوى كل طالب وسرعة استيعابه ونقاط قوته وضعفه ليقدم له محتوى تعليمياً وتمارين تتكيف تلقائياً مع احتياجاته الفردية (ص 34)."],
-  ["كيف يساعد التعلم الآلي المؤسسات التعليمية في الحد من تعثر وتسرب الطلاب؟", "من خلال تحليل بيانات الحضور والتفاعل والدرجات للتنبؤ بالطلاب المعرضين لخطر التعثر الدراسي مبكراً وتوجيه الإرشاد والدعم الأكاديمي لهم (ص 34)."],
-  ["اذكري 4 تطبيقات للتعلم الآلي في مجال الأمن السيبراني (ص 35).", "1) أنظمة كشف التسلل والهجمات (IDS)، 2) اكتشاف البرمجيات الخبيثة وبرامج الفدية الجديدة، 3) مكافحة التصيد الاحتيالي (Phishing) والبريد المزعج (Spam)، 4) تحليل سلوك المستخدمين والكيانات (UEBA) (ص 35)."],
-  ["كيف تكشف تقنية تحليل سلوك المستخدمين (UEBA) اختراق الحسابات؟", "من خلال تعلم النمط المعتاد لسلوك كل مستخدم على الشبكة، ورصد أي انحراف غير طبيعي عن هذا السلوك فوراً باعتباره مؤشراً على اختراق الحساب أو تهديد داخلي (ص 35)."],
-  ["ما هي أبرز تطبيقات معالجة اللغات الطبيعية (NLP) والرؤية الحاسوبية المذكورة في الفصل الثالث؟", "الترجمة الآلية الفورية، التعرف على الكلام والمساعدات الصوتية (Siri, Alexa)، تحليل المشاعر وتلخيص النصوص، والتعرف على الوجوه والقياسات الحيوية (ص 35-36)."],
-  ["ما هي أبرز التحديات والقضايا الأخلاقية الستة التي تواجه تطبيقات التعلم الآلي (ص 36-37)؟", "1) جودة البيانات وتوافرها، 2) التحيز الخوارزمي والعدالة، 3) الخصوصية وحماية البيانات، 4) مشكلة الصندوق الأسود وقابلية التفسير، 5) الإفراط في التخصيص (Overfitting)، 6) المسؤولية القانونية والأثر على الوظائف (ص 36-37)."],
-  ["ما المقصود بالتحيز الخوارزمي (Algorithmic Bias)؟ وكيف ينشأ؟", "ينشأ عندما تحتوي بيانات التدريب التاريخية على تحيزات بشرية أو اجتماعية مسبقة، فيتعلم النموذج هذا التحيز ويكرره في قراراته (مثل التمييز في التوظيف أو منح القروض) (ص 36)."],
-  ["ما هي مشكلة الصندوق الأسود (Black Box Problem)؟ ولماذا تُعد خطيرة في الطب والقضاء؟", "هي صعوبة فهم وتفسير كيفية وصول النماذج المعقدة (كالشبكات العميقة) إلى قراراتها؛ وتُعد خطيرة في الطب والقضاء لأن القرارات المصيرية تتطلب تبيان الأسباب والشفافية الكاملة (ص 37)."],
-  ["ما هو الحل التقني لمعالجة مشكلة الصندوق الأسود في نماذج الذكاء الاصطناعي؟", "تطوير واستخدام تقنيات الذكاء الاصطناعي القابل للتفسير (Explainable AI - XAI) التي توضح للمستخدمين والمختصين العوامل والأسباب التي استند إليها النموذج في قراره (ص 37)."]
-];
+          <!-- Right: Schematic SVG Tree -->
+          <div class="viz-frame" style="min-height: 250px;">
+            <svg viewBox="0 0 460 240" aria-label="هيكلية شجرة القرار: عقدة الجذر والعقد الفرعية والأوراق" role="img">
+              <!-- Connectors -->
+              <line id="edge-root-yes" x1="230" y1="50" x2="125" y2="115" stroke="var(--data-context)" stroke-width="2.5" />
+              <line id="edge-root-no" x1="230" y1="50" x2="345" y2="115" stroke="var(--data-context)" stroke-width="2.5" />
+              <line id="edge-sub-yes" x1="125" y1="145" x2="70" y2="195" stroke="var(--data-context)" stroke-width="2.5" />
+              <line id="edge-sub-no" x1="125" y1="145" x2="195" y2="195" stroke="var(--data-context)" stroke-width="2.5" />
 
-const questions = [
-  {q:"فرع الذكاء الاصطناعي الذي يمكّن الأنظمة الحاسوبية من التعلم والتحسن تلقائياً من البيانات والتجارب السابقة دون الحاجة لبرمجة صريحة لكل مهمة هو:", o:["التعلم الآلي (Machine Learning)","تصميم الشبكات السلكية التقليدية","البرمجة اليدوية الثابتة","إدارة الأرشيف الورقي"], a:0, e:"التعلم الآلي يمكّن الأنظمة من التعلم والتحسن تلقائياً من البيانات والتجارب السابقة دون برمجة صريحة لكل مهمة (ص 26)."},
-  {q:"أي نوع من أنواع التعلم الآلي يتدرب فيه النموذج على بيانات مصنفة وموسومة مسبقاً (Labeled Data) تحتوي على المدخلات والمخرجات الصحيحة المعروفة؟", o:["التعلم الخاضع للإشراف (Supervised Learning)","التعلم غير الخاضع للإشراف (Unsupervised Learning)","التعلم المعزز (Reinforcement Learning)","التجميع العشوائي"], a:0, e:"في التعلم الخاضع للإشراف يتعلم النموذج من بيانات مصنفة مسبقاً تحتوي على الإجابات الصحيحة، ويشمل التصنيف والانحدار (ص 26)."},
-  {q:"تقسيم العملاء في متجر إلكتروني إلى شرائح ومجموعات متشابهة دون وجود تسميات أو فئات محددة مسبقاً يندرج تحت:", o:["التعلم غير الخاضع للإشراف - التجميع (Unsupervised Learning - Clustering)","التعلم الخاضع للإشراف - الانحدار","التعلم المعزز بالروبوتات","البرمجة الصريحة بالقواعد"], a:0, e:"تقسيم البيانات غير المصنفة إلى شرائح متشابهة هو تجميع (Clustering) ويندرج تحت التعلم غير الخاضع للإشراف (ص 27)."},
-  {q:"عندما نستخدم كمية صغيرة من البيانات المصنفة مع كمية كبيرة جداً من البيانات غير المصنفة لتقليل تكلفة التوسيم اليدوي، فإننا نطبق:", o:["التعلم شبه الخاضع للإشراف (Semi-Supervised Learning)","التعلم المعزز فقط","الانحدار الخطي البسيط","معالجة الصور اليدوية"], a:0, e:"التعلم شبه الخاضع للإشراف يدمج قليلاً من البيانات المصنفة مع كثير من البيانات غير المصنفة لتوفير الوقت والتكلفة (ص 27)."},
-  {q:"أي نوع من التعلم الآلي يعتمد على تفاعل الوكيل (Agent) مع البيئة (Environment) عبر التجربة والخطأ وتلقي المكافآت والعقوبات؟", o:["التعلم المعزز (Reinforcement Learning)","التعلم الخاضع للإشراف","الإحصاء الوصفي","قواعد الارتباط"], a:0, e:"في التعلم المعزز يتفاعل الوكيل مع البيئة ويتعلم عبر المكافآت والعقوبات لتعظيم المكافأة التراكمية (ص 27)."},
-  {q:"في القطاع المالي والمصرفي، كيف يُستخدم التعلم الآلي في (تقييم الجدارة الائتمانية وإدارة المخاطر)؟", o:["عبر تحليل التاريخ المالي للمقترضين وسلوك السداد للتنبؤ باحتمالية التعثر واتخاذ قرارات منح القروض","عبر تصميم شعارات البنوك الإعلانية","عبر طباعة كشوف الحسابات ورقياً","عبر إلغاء التحقق من هوية العميل"], a:0, e:"يُستخدم التعلم الآلي لتحليل السجل المالي للمقترضين وتوقع مخاطر التعثر قبل الموافقة على القروض (ص 28)."},
-  {q:"تحليل بيانات الأسواق المالية والأخبار الاقتصادية بسرعة فائقة لاتخاذ قرارات البيع والشراء آلياً في أجزاء من الثانية يُسمى:", o:["التداول الخوارزمي الآلي (Algorithmic Trading)","التسعير الديناميكي للتذاكر","الصيانة التنبؤية للمصانع","التعلم المخصص للطلاب"], a:0, e:"التداول الخوارزمي الآلي يستخدم نماذج التعلم الآلي لتحليل السوق وتنفيذ صفقات البيع والشراء في أجزاء من الثانية (ص 28)."},
-  {q:"المنصات العالمية مثل (Amazon و Netflix) تستخدم خوارزميات التعلم الآلي لتحليل سجل التصفح والمشتريات واقتراح منتجات أو أفلام مناسبة لكل مستخدم عبر:", o:["محركات وأنظمة التوصية (Recommendation Engines)","أنظمة كشف التسلل السيبراني","أجهزة التصوير بالرنين المغناطيسي","مستشعرات الليدار LiDAR"], a:0, e:"محركات التوصية تحلل سلوك وتفضيلات المستخدمين لتقديم اقتراحات مخصصة تزيد المبيعات ورضا العملاء (ص 29)."},
-  {q:"تعديل أسعار تذاكر الطيران والفنادق والمنتجات تلقائياً في الوقت الفعلي بناءً على حجم الطلب وأسعار المنافسين والمواسم يُعرف بـ:", o:["التسعير الديناميكي (Dynamic Pricing)","التقييم الائتماني الثابت","التصحيح الآلي للاختبارات","تقليل الأبعاد"], a:0, e:"التسعير الديناميكي يضبط الأسعار آلياً في الوقت الفعلي وفقاً لتغيرات العرض والطلب والمنافسين (ص 29)."},
-  {q:"ما الهدف من تطبيق نماذج (توقع تسرب العملاء - Customer Churn Prediction) في الشركات والمتاجر الإلكترونية؟", o:["تحديد العملاء الذين يوشكون على ترك الخدمة مبكراً وتقديم عروض مخصصة للاحتفاظ بهم","حذف حسابات العملاء النشطين","رفع الأسعار على العملاء الدائمين","إيقاف خدمات الدعم الفني"], a:0, e:"يساعد توقع تسرب العملاء الشركات على اكتشاف العملاء غير الراضين الذين قد يتركون الخدمة والعمل على استبقائهم (ص 29)."},
-  {q:"في الرعاية الصحية، تصميم خطط علاجية ودوائية مخصصة لكل مريض بناءً على سجله السريري وتركيبته الجينية يُسمى:", o:["الطب الشخصي (Personalized Medicine)","الفحص البصري لخطوط الإنتاج","التداول المالي الآلي","إدارة حركة المرور الذكية"], a:0, e:"الطب الشخصي يعتمد على التعلم الآلي لتخصيص العلاج والدواء وفق الخصائص الجينية والسريرية لكل مريض (ص 30)."},
-  {q:"كيف يسهم التعلم الآلي في مجال (اكتشاف وتطوير الأدوية - Drug Discovery)؟", o:["عبر محاكاة التفاعلات الكيميائية والحيوية للتنبؤ بفعالية المركبات الدوائية الجديدة واختصار سنوات البحث والتكلفة","عبر بيع الأدوية في المتاجر دون وصفات طبية","عبر الاستغناء التام عن التجارب المخبرية والأطباء","عبر تصنيع الأجهزة الطبية الميكانيكية فقط"], a:0, e:"يسرّع التعلم الآلي اكتشاف الأدوية عبر التنبؤ بفعالية المركبات الكيميائية ومحاكاة تفاعلاتها الحيوية قبل التجارب السريرية (ص 31)."},
-  {q:"تعتمد السيارات ذاتية القيادة (Autonomous Vehicles) لإدراك محيطها واكتشاف المشاة والعوائق على تقنية دمج بيانات المستشعرات (Sensor Fusion) التي تشمل:", o:["الكاميرات، الرادار، ومستشعرات الليزر (LiDAR)","الطابعات الورقية والماسحات الضوئية المكتبية","بروتوكولات البريد الإلكتروني فقط","أجهزة الصراف الآلي"], a:0, e:"تدمج السيارات ذاتية القيادة بيانات الكاميرات والرادار والليدار (LiDAR) مع التعلم العميق والمعزز للقيادة الآمنة (ص 31-32)."},
-  {q:"في التصنيع والصناعة الذكية، استخدام كاميرات عالية الدقة مدعومة بالرؤية الحاسوبية لاكتشاف العيوب الدقيقة في المنتجات على خطوط الإنتاج يُسمى:", o:["مراقبة الجودة الآلية والفحص البصري (Automated Quality Control)","التسعير الديناميكي","التعلم التكيفي","تحليل المشاعر النصي"], a:0, e:"مراقبة الجودة الآلية تستخدم الرؤية الحاسوبية لفحص المنتجات بصرياً على خطوط التجميع واكتشاف العيوب بسرعة ودقة (ص 33)."},
-  {q:"ما الفائدة الرئيسية لتطبيق (الصيانة التنبؤية - Predictive Maintenance) في المصانع؟", o:["تحليل بيانات مستشعرات الآلات للتنبؤ بالأعطال قبل وقوعها وتقليل التوقف غير المخطط لخطوط الإنتاج","إيقاف المصنع عن العمل طوال الأسبوع","انتظار تلف الآلات بالكامل ثم استبدالها","إلغاء جميع أجهزة الاستشعار في المصنع"], a:0, e:"تحلل الصيانة التنبؤية الحرارة والاهتزازات لتوقع الأعطال قبل حدوثها وتجنب التوقف المفاجئ للإنتاج (ص 32)."},
-  {q:"في مجال التعليم الذكي، تحليل مستوى كل طالب وسرعة استيعابه لتقديم محتوى تعليمي وتمارين تتكيف مع احتياجاته الفردية يُعرف بـ:", o:["التعلم المخصص والتكيفي (Adaptive & Personalized Learning)","التداول الخوارزمي","دمج المستشعرات","التجميع غير الموجه"], a:0, e:"التعلم المخصص والتكيفي يطوع المحتوى التعليمي ومستوى التمارين حسب قدرات وسرعة تعلم كل طالب (ص 34)."},
-  {q:"كيف يساعد التعلم الآلي المؤسسات التعليمية والجامعات في الحد من ظاهرة التعثر والتسرب الدراسي؟", o:["عبر تحليل بيانات الحضور والتفاعل والدرجات للتنبؤ بالطلاب المعرضين لخطر التعثر مبكراً وتوجيه الدعم الأكاديمي لهم","عبر إلغاء الاختبارات والتقييمات نهائياً","عبر توحيد طريقة الشرح دون مراعاة الفروق الفردية","عبر إغلاق المنصات التعليمية الإلكترونية"], a:0, e:"تمكّن النماذج التنبؤية المؤسسات التعليمية من اكتشاف الطلاب المعرضين للتعثر في وقت مبكر لمساعدتهم أكاديمياً (ص 34)."},
-  {q:"في الأمن السيبراني، ماذا يُقصد بتقنية تحليل سلوك المستخدمين والكيانات (UEBA)؟", o:["مراقبة النمط المعتاد لسلوك المستخدم على الشبكة ورصد أي انحراف غير طبيعي لاكتشاف الحسابات المخترقة والتهديدات الداخلية","تصميم واجهات مواقع التواصل الاجتماعي","ضغط الملفات الصوتية والمرئية","زيادة سرعة تحميل صفحات الويب"], a:0, e:"تحلل تقنية UEBA سلوك المستخدمين المعتاد وترصد الشذوذ والانحرافات للكشف عن الاختراقات والتهديدات السيبرانية (ص 35)."},
-  {q:"لماذا تتفوق أنظمة كشف البرمجيات الخبيثة المعتمدة على التعلم الآلي على الأنظمة التقليدية؟", o:["لقدرتها على اكتشاف الفيروسات وبرامج الفدية الجديدة والمتحورة من خلال سلوكها وسماتها حتى قبل تسجيل توقيعها التقليدي","لأنها تعمل بدون اتصال بالكهرباء","لأنها تحذف نظام التشغيل بالكامل","لأنها لا تفحص الملفات المرفقة في البريد"], a:0, e:"يتعرف التعلم الآلي على أنماط وسلوك البرمجيات الخبيثة الجديدة والمتحورة التي لم تُسجل في قواعد التوقيعات التقليدية بعد (ص 35)."},
-  {q:"أي مما يلي يُعد من تطبيقات (معالجة اللغات الطبيعية NLP) المذكورة في الفصل الثالث؟", o:["الترجمة الآلية الفورية، المساعدات الصوتية (Siri, Alexa)، تحليل المشاعر، وتلخيص النصوص","قيادة الشاحنات على الطرق السريعة بالرادار","فحص لحام المعادن في المصانع","تحديد مواقع الأبراج الخلوية"], a:0, e:"هذه جميعها من تطبيقات معالجة اللغات الطبيعية وفهم الكلام والنصوص (ص 35-36)."},
-  {q:"عندما تحتوي بيانات التدريب التاريخية على تحيزات بشرية أو اجتماعية مسبقة، فيتعلمها النموذج ويصدر قرارات غير عادلة (مثل التمييز في التوظيف أو الإقراض)، تُسمى هذه المشكلة:", o:["التحيز الخوارزمي (Algorithmic Bias)","مشكلة الصندوق الأبيض","الصيانة التنبؤية","التسعير الديناميكي"], a:0, e:"التحيز الخوارزمي يحدث عندما يرث نموذج التعلم الآلي التحيزات الموجودة في البيانات التاريخية التي تدرب عليها (ص 36)."},
-  {q:"ما المقصود بـ (مشكلة الصندوق الأسود - Black Box Problem) في نماذج التعلم الآلي والعميق؟", o:["صعوبة فهم وتفسير كيفية وصول النماذج المعقدة إلى قراراتها وتنبؤاتها، مما يشكل تحدياً في المجالات الحرجة كالطب والقضاء","انقطاع التيار الكهربائي عن خوادم البيانات","تلوين شاشة الحاسوب باللون الأسود","عدم قدرة النموذج على قراءة الأرقام"], a:0, e:"مشكلة الصندوق الأسود تعني أن النموذج يعطي مخرجات دقيقة لكن آلية استنتاجه الداخلية معقدة وغير مفسرة للبشر (ص 37)."},
-  {q:"ما هو المجال التقني الذي يهدف إلى معالجة مشكلة الصندوق الأسود وجعل قرارات نماذج الذكاء الاصطناعي واضحة ومفهومة للبشر؟", o:["الذكاء الاصطناعي القابل للتفسير (Explainable AI - XAI)","التداول الخوارزمي السريع","التجميع العشوائي للبيانات","إلغاء الشبكات العصبية"], a:0, e:"يسعى الذكاء الاصطناعي القابل للتفسير (XAI) إلى توضيح الأسباب والعوامل التي استند إليها النموذج في اتخاذ قراره (ص 37)."},
-  {q:"لحماية خصوصية الأفراد عند استخدام بياناتهم الطبية أو المالية في تدريب نماذج التعلم الآلي، يتم اللجوء إلى:", o:["تشفير البيانات وإخفاء الهوية (Data Anonymization) والالتزام بلوائح حماية الخصوصية","نشر أسماء وأرقام هواتف المرضى علناً","إلغاء كلمات المرور في قواعد البيانات","بيع البيانات الشخصية لشركات الإعلانات"], a:0, e:"تُحمى الخصوصية عبر التشفير وإخفاء الهوية (Anonymization) وتطبيق سياسات وتشريعات حماية البيانات (ص 36-37)."},
-  {q:"ما المشكلة التي تحدث عندما يحفظ نموذج التعلم الآلي تفاصيل وضوضاء بيانات التدريب بدقة مفرطة ولكنه يفشل في التعميم على البيانات الجديدة في الواقع؟", o:["الإفراط في التخصيص / التجهيز الزائد (Overfitting)","جودة التعميم المثالية","التسعير الديناميكي","دمج المستشعرات"], a:0, e:"الإفراط في التخصيص (Overfitting) يعني نجاح النموذج على بيانات التدريب وفشله في التعميم على البيانات الجديدة غير المرئية (ص 37)."}
-];
+              <!-- Edge Labels -->
+              <text x="160" y="78" font-size="11" font-weight="700" fill="var(--secondary)" font-family="var(--font-body)">نعم</text>
+              <text x="295" y="78" font-size="11" font-weight="700" fill="var(--on-surface-variant)" font-family="var(--font-body)">لا</text>
+              <text x="80" y="172" font-size="11" font-weight="700" fill="var(--positive)" font-family="var(--font-body)">نعم</text>
+              <text x="172" y="172" font-size="11" font-weight="700" fill="var(--error)" font-family="var(--font-body)">لا</text>
 
-// بناء شبكة المصطلحات
-const termsGrid = document.getElementById("termsGrid");
-terms.forEach(([en, ar]) => {
-  const d = document.createElement("div");
-  d.className = "card";
-  d.style.margin = "0";
-  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
-  termsGrid.appendChild(d);
-});
+              <!-- Root Node -->
+              <g id="node-root">
+                <rect x="135" y="14" width="190" height="38" rx="4" fill="var(--primary-container)" stroke="var(--outline)" stroke-width="2" />
+                <text x="230" y="37" text-anchor="middle" font-size="12" font-weight="800" fill="var(--on-primary-container)" font-family="var(--font-body)">عقدة الجذر: استقرار الدخل؟</text>
+              </g>
 
-// إدارة البطاقات التعليمية
-let ci = 0, showAnswer = false;
-function renderCard() {
-  document.getElementById("flashTerm").textContent = cards[ci][0];
-  const ansEl = document.getElementById("flashAnswer");
-  ansEl.innerHTML = cards[ci][1].replace(/\n/g, "<br>");
-  ansEl.hidden = !showAnswer;
-  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
-  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
-}
-document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
-document.getElementById("flashcard").addEventListener("keydown", e => {
-  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
-});
-document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
-document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
-renderCard();
+              <!-- Internal Branch Node -->
+              <g id="node-branch">
+                <rect x="45" y="112" width="160" height="36" rx="4" fill="var(--surface-container-low)" stroke="var(--secondary)" stroke-width="1.5" />
+                <text x="125" y="134" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--on-surface)" font-family="var(--font-body)">عقدة فرعية: سجل سداد جيد؟</text>
+              </g>
 
-// التنقل بين التبويبات
-document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
-  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
-  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
-  window.scrollTo({ top: 0, behavior: "smooth" });
-});
+              <!-- Leaf Node (Reject from Root) -->
+              <g id="node-leaf-reject-root">
+                <rect x="275" y="112" width="145" height="36" rx="4" fill="var(--surface-container)" stroke="var(--outline-variant)" stroke-width="1.5" />
+                <text x="347" y="134" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--on-surface)" font-family="var(--font-body)">ورقة: رفض القرض</text>
+              </g>
 
-// إدارة الاختبار
-let answers = {};
-function renderQuiz() {
-  const area = document.getElementById("quizArea");
-  area.innerHTML = "";
-  const letters = ["أ", "ب", "ج", "د"];
-  questions.forEach((item, i) => {
-    const box = document.createElement("div");
-    box.className = "qbox";
-    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
-    const opts = box.querySelector(".options");
-    item.o.forEach((opt, j) => {
-      const btn = document.createElement("button");
-      btn.className = "option";
-      btn.textContent = `${letters[j]}) ${opt}`;
-      btn.onclick = () => {
-        answers[i] = j;
-        [...opts.children].forEach((x, k) => {
-          x.classList.remove("correct", "wrong");
-          x.disabled = true;
-          if (k === item.a) x.classList.add("correct");
-          if (k === j && j !== item.a) x.classList.add("wrong");
-        });
-        const fb = document.getElementById("fb" + i);
-        fb.hidden = false;
-        fb.className = "feedback " + (j === item.a ? "good" : "bad");
-        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
-        updateScore();
-      };
-      opts.appendChild(btn);
-    });
-    area.appendChild(box);
-  });
-  updateScore();
-}
+              <!-- Leaf Node (Approve) -->
+              <g id="node-leaf-approve">
+                <rect x="15" y="192" width="115" height="36" rx="4" fill="var(--surface-container)" stroke="var(--outline-variant)" stroke-width="1.5" />
+                <text x="72" y="214" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--on-surface)" font-family="var(--font-body)">ورقة: قبول القرض</text>
+              </g>
 
-function updateScore() {
-  let correct = 0;
-  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
-  document.getElementById("score").textContent = `النتيجة: ${correct} / ${questions.length}`;
-  document.getElementById("progressBar").style.width = (Object.keys(answers).length / questions.length * 100) + "%";
-}
+              <!-- Leaf Node (Reject from Branch) -->
+              <g id="node-leaf-reject-branch">
+                <rect x="145" y="192" width="125" height="36" rx="4" fill="var(--surface-container)" stroke="var(--outline-variant)" stroke-width="1.5" />
+                <text x="207" y="214" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--on-surface)" font-family="var(--font-body)">ورقة: مراجعة/رفض</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
 
-document.getElementById("resetQuiz").onclick = () => {
-  answers = {};
-  document.getElementById("finalResult").textContent = "";
-  renderQuiz();
-};
+      <!-- 3.4 Generative Models -->
+      <div class="figure-card">
+        <h3><span class="index-num">3.4</span> نماذج التوليد (<bdi dir="ltr">Generative Models</bdi>)</h3>
+        <div class="asymmetric-split" style="margin-top: var(--space-sm);">
+          <div>
+            <p>
+              على عكس النماذج التمييزية التي تركز فقط على رسم حدود الفصل بين الفئات، تتعلم <strong>نماذج التوليد</strong> التوزيع الإحصائي والخصائص الكامنة للبيانات بأكملها، مما يمكنها من <strong>إنشاء وتوليد أمثلة جديدة</strong> تحاكي البيانات الحقيقية (مثل توليد النصوص، الصور، أو محاكاة بيانات اصطناعية جديدة).
+            </p>
+          </div>
+          <div class="aside-box" style="padding: var(--space-md);">
+            <div style="font-weight: 800; color: var(--secondary); margin-bottom: var(--space-xs);">مقارنة سريعة للحفظ:</div>
+            <div style="font-size: 0.92rem; line-height: 1.65;">
+              <div><strong>• النموذج التصنيفي:</strong> يجيب عن «ما فئة هذا المثال؟»</div>
+              <div><strong>• النموذج التوليدي:</strong> يجيب عن «كيف تتشكل هذه البيانات؟ وهل يمكنني إنتاج مثال جديد يشبهها؟»</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-document.getElementById("finishQuiz").onclick = () => {
-  let correct = 0;
-  Object.keys(answers).forEach(i => { if (answers[i] === questions[Number(i)].a) correct++; });
-  const pct = Math.round(correct / questions.length * 100);
-  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${questions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! أنتِ متقنة تماماً للفصل الثالث، وألف مبروك ختم المقرر بالكامل!" : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
-};
+    <!-- ==================== FLASHCARDS ==================== -->
+    <section class="unit-section tab-panel" id="flashcards-section" role="tabpanel" aria-labelledby="tab-flashcards" tabindex="0" hidden>
+      <div class="dossier-bar">
+        <div class="dossier-bar-group">
+          <span class="dossier-pill">04 • بطاقات الاستذكار</span>
+          <span class="dossier-meta">مراجعة نشطة للمصطلحات المعتمدة</span>
+        </div>
+        <span class="dossier-meta" id="fc-mastery-counter">المُتقنة: 0 / 12</span>
+      </div>
 
-renderQuiz();
-</script>
+      <div class="unit-header-block">
+        <div>
+          <h2 class="section-title" id="fc-title">بطاقات الاستذكار التفاعلية للفصل الثالث</h2>
+          <p class="section-deck">صفّ البطاقات حسب الوحدة، واضغط على البطاقة لقلبها واختبار تذكرك للتعريف المعتمد قبل كشفه.</p>
+        </div>
+      </div>
+
+      <div class="figure-card">
+        <div class="pill-row" role="group" aria-label="تصفية البطاقات حسب الوحدة">
+          <button type="button" class="select-pill is-active" onclick="filterFlashcards('all', this)">جميع الوحدات (12)</button>
+          <button type="button" class="select-pill" onclick="filterFlashcards('u1', this)">الوحدة الأولى (4)</button>
+          <button type="button" class="select-pill" onclick="filterFlashcards('u2', this)">الوحدة الثانية (4)</button>
+          <button type="button" class="select-pill" onclick="filterFlashcards('u3', this)">الوحدة الثالثة (4)</button>
+        </div>
+
+        <div class="flashcard-stage">
+          <button type="button" class="flashcard-btn" id="flashcard-btn" onclick="flipFlashcard()" aria-label="اضغط لقلب البطاقة">
+            <div class="flashcard-inner">
+              <!-- Front -->
+              <div class="flashcard-face">
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: var(--space-sm);">
+                  <span class="tag-petrol" id="fc-unit-badge">الوحدة الأولى</span>
+                  <span class="dossier-meta" id="fc-index-label">1 / 12</span>
+                </div>
+                <div>
+                  <div style="font-size: 0.85rem; color: var(--on-surface-variant); font-weight: 700; margin-bottom: var(--space-xs);">المفهوم أو المصطلح:</div>
+                  <h3 class="flashcard-term" id="fc-front-text">...</h3>
+                </div>
+                <div style="font-size: 0.85rem; color: var(--secondary); font-weight: 700;">اضغط على البطاقة لعرض التعريف والشرح</div>
+              </div>
+              <!-- Back -->
+              <div class="flashcard-face flashcard-back">
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: var(--space-sm);">
+                  <span class="tag-amber">التعريف المعتمد</span>
+                  <span class="dossier-meta" id="fc-back-status">قيد المراجعة</span>
+                </div>
+                <p class="flashcard-def" id="fc-back-text">...</p>
+                <div style="font-size: 0.85rem; color: var(--on-surface-variant); font-weight: 600;">اضغط مرة أخرى للعودة إلى المصطلح</div>
+              </div>
+            </div>
+          </button>
+        </div>
+
+        <div class="flashcard-controls">
+          <div style="display: flex; gap: var(--space-sm);">
+            <button type="button" class="btn-secondary" onclick="prevFlashcard()">السابقة</button>
+            <button type="button" class="btn-secondary" onclick="nextFlashcard()">التالية</button>
+          </div>
+          <div style="display: flex; gap: var(--space-sm); flex-wrap: wrap;">
+            <button type="button" class="btn-secondary" onclick="markFlashcard(false)">تحتاج مراجعة</button>
+            <button type="button" class="btn-primary" onclick="markFlashcard(true)">أعرفها جيداً</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== QUIZ ==================== -->
+    <section class="unit-section tab-panel" id="quiz-section" role="tabpanel" aria-labelledby="tab-quiz" tabindex="0" hidden>
+      <div class="dossier-bar">
+        <div class="dossier-bar-group">
+          <span class="dossier-pill">05 • اختبار الاستيعاب</span>
+          <span class="dossier-meta">12 سؤال اختيار من متعدد • تغذية راجعة فورية</span>
+        </div>
+        <span class="dossier-meta" id="quiz-score-badge">النتيجة: 0 / 12</span>
+      </div>
+
+      <div class="unit-header-block">
+        <div>
+          <h2 class="section-title" id="quiz-title">أسئلة الاختيار من متعدد مع التغذية الراجعة الفورية</h2>
+          <p class="section-deck">اختر الإجابة الصحيحة لكل سؤال لتحصل فوراً على التقييم والتعليل العلمي المرتبط بالوحدة المعتمدة.</p>
+        </div>
+      </div>
+
+      <div id="quiz-container"></div>
+
+      <div class="quiz-summary-bar">
+        <div>
+          <div style="font-weight: 800; font-size: 1.05rem;" id="quiz-summary-title">ملخص الأداء الفوري</div>
+          <div style="color: var(--on-surface-variant); font-size: 0.92rem;" id="quiz-summary-detail">أجب عن الأسئلة أعلاه لحساب درجة استيعابك في الوحدات الثلاث.</div>
+        </div>
+        <button type="button" class="btn-secondary" id="quiz-reset-btn" onclick="resetQuizInline(this)">إعادة ضبط الاختبار</button>
+      </div>
+    </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="source-footer">
+      <span>المصدر: كتاب «تعلم الآلة التطبيقي» — الفصل الثالث (الوحدات التعليمية الأولى والثانية والثالثة).</span>
+      <span>تم بناء الصفحة وفق التقسيم المنهجي المعتمد وتصحيح محتوى الملاحظة السابقة.</span>
+    </footer>
+
+  </div>
+
+  <api-shim></api-shim>
+  <script>
+    // ==================== DATA DEFINITIONS (BACKTICK LITERALS) ====================
+    var PILLARS_DATA = {
+      data: {
+        title: `1. البيانات (Data) — وقود التعلم واكتشاف الأنماط`,
+        body: `يعتمد التعلم الآلي بشكل أساسي على البيانات، حيث يقوم النظام بتحليل كمية كبيرة من البيانات لفهم الأنماط والتوجهات الكامنة دون برمجة صريحة لكل حالة، مما يمكّنه من تحسين النتائج في المستقبل.`
+      },
+      models: {
+        title: `2. النماذج والخوارزميات (Models & Algorithms)`,
+        body: `يستخدم التعلم الآلي نماذج وخوارزميات متنوعة لتحليل البيانات واكتساب المعرفة، من أبرزها: الشبكات العصبية الاصطناعية، التعلم العميق، خوارزميات التصنيف، وخوارزميات التجميع وغيرها.`
+      },
+      tuning: {
+        title: `3. الضبط والتحسين (Tuning & Optimization)`,
+        body: `يتم تحسين أداء النظام بشكل مستمر من خلال تكرارية التجربة وضبط المعلمات الداخلية للنموذج، حتى تصل النماذج الاصطناعية إلى أعلى دقة ممكنة عند التعامل مع المهام الجديدة.`
+      },
+      apps: {
+        title: `4. التطبيقات العملية (Practical Applications)`,
+        body: `تتجلى ثمرة تحسين النماذج في تطبيقات واقعية متعددة مثل: التعرف على الصور والنصوص، توليد النصوص، تشخيص الأمراض، توقع السلوك، وأتمتة المهام الروتينية في المؤسسات.`
+      }
+    };
+
+    var LEARNING_TYPES_DATA = {
+      supervised: {
+        title: `التعلم بالإشراف / الموجه (Supervised Learning)`,
+        html: `<p>يُوفَّر فيه مشرف أو معلم للآلة يزودها بـ <strong>بيانات مُعلَّمة</strong> تحتوي على الإجابات الصحيحة والدقيقة مسبقاً لتتعلم العلاقة بين السمات والنتائج.</p><ul class="clean-list"><li><strong>التصنيف (<bdi dir="ltr">Classification</bdi>):</strong> التنبؤ بصنف أو فئة محددة (مثل صورة قطة أو كلب، أو فرز البريد العشوائي).</li><li><strong>الانحدار (<bdi dir="ltr">Regression</bdi>):</strong> التنبؤ بقيمة متصلة أو نقطة على محور رقمي.</li></ul>`
+      },
+      unsupervised: {
+        title: `التعلم بدون إشراف / غير الموجه (Unsupervised Learning)`,
+        html: `<p>لا يتم توفير مشرف أو إجابات مسبقة للآلة، بل تُترك لوحدها لاكتشاف الأنماط والترتيبات الخفية داخل البيانات غير المصنفة.</p><ul class="clean-list"><li><strong>التجميع (<bdi dir="ltr">Clustering</bdi>):</strong> تقسيم البيانات إلى مجموعات متشابهة بناءً على الخصائص والأنماط المشتركة بينها.</li></ul>`
+      },
+      reinforcement: {
+        title: `التعلم التعزيزي (Reinforcement Learning)`,
+        html: `<p>يتعلم الوكيل عبر التفاعل مع البيئة والسعي لتحقيق <strong>أقصى مكافأة</strong>. ويميز المنهج بين نهجين رئيسيين:</p><ul class="clean-list"><li><strong>نهج قائم على نموذج (<bdi dir="ltr">Model-Based</bdi>):</strong> يتطلب حفظ الخريطة أو البيئة كاملة (غير عملي للسيارات ذاتية القيادة لأنها لا تستطيع حفظ الكوكب بأكمله).</li><li><strong>نهج غير قائم على نموذج / النهج الحر (<bdi dir="ltr">Model-Free</bdi>):</strong> يعمم المواقف ويتصرف بعقلانية لتحقيق أقصى مكافأة دون حفظ كل حركة (مثل خوارزميات ماركوف للتعلم المعزز).</li></ul>`
+      },
+      association: {
+        title: `تعلم الجمعيات (Association Learning)`,
+        html: `<p>يركز على اكتشاف العلاقات والترابطات المتكررة بين العناصر داخل مجموعات البيانات الكبيرة، لفهم الظواهر التي تحدث معاً بصورة منتظمة.</p><ul class="clean-list"><li><strong>أهميته:</strong> يساعد في استخلاص قواعد الارتباط الخفية ودعم اتخاذ القرار الاستراتيجي والتنبؤ بتزامن الأحداث.</li></ul>`
+      },
+      class_examples: {
+        title: `تعلم فئة من الأمثلة (Learning a Class from Examples)`,
+        html: `<p>عملية استخلاص القاعدة أو المفهوم العام الذي يميّز فئة معينة انطلاقاً من مجموعة أمثلة إيجابية تنتمي للفئة وأمثلة أخرى لا تنتمي إليها.</p><ul class="clean-list"><li><strong>الهدف:</strong> رسم حدود دقيقة للفئة بحيث يستطيع النموذج الحكم على أي مثال جديد لاحقاً بدلاً من حفظ الأمثلة التدريبية حرفياً.</li></ul>`
+      }
+    };
+
+    var APP_PIPELINES_DATA = {
+      speech: {
+        title: `التعرف على الصوت وتحويل الكلام إلى نص`,
+        html: `<p>يُستخدم لتحويل الكلام المنطوق إلى نص مكتوب تلقائياً عبر مطابقة الإشارات الصوتية مع أنماط مخزنة:</p><ol class="clean-list"><li><strong>تقسيم الإشارة الصوتية:</strong> تجزئة الصوت المسجل إلى وحدات صغيرة مثل الفونيمات.</li><li><strong>استخراج السمات المميزة:</strong> تحديد الخصائص الصوتية الفارقة لكل وحدة.</li><li><strong>المطابقة مع قاعدة البيانات:</strong> مقارنة السمات بالأنماط المعروفة لإنتاج الكلمات والجمل المكتوبة.</li></ol>`
+      },
+      face: {
+        title: `التعرف على الوجوه (Face Recognition)`,
+        html: `<p>استخدام الحواسيب والخوارزميات لتحليل الصور أو الفيديوهات لتمييز الوجوه البشرية بناءً على السمات الهندسية والفريدة في كل وجه:</p><ol class="clean-list"><li><strong>اكتشاف الوجه</strong> داخل الصورة أو الفيديو.</li><li><strong>استخراج السمات الفريدة</strong> للوجه البشري.</li><li><strong>المقارنة والتمييز</strong> لأغراض الأمن، والمراقبة، والتحقق من الهوية، والتصنيف.</li></ol>`
+      },
+      visual: {
+        title: `التعرف البصري (Visual / Optical Recognition)`,
+        html: `<p>تطبيق تقنيات التعرف على الأنماط على المدخلات المرئية لاستخراج المعلومات وتصنيف المحتوى البصري:</p><ol class="clean-list"><li><strong>التقاط الصورة</strong> وتحويلها إلى تمثيل رقمي.</li><li><strong>استخلاص السمات البصرية</strong> (الحواف، الأشكال، الأنسجة).</li><li><strong>التعرف المرن</strong> على الكائنات أو النصوص رغم اختلاف الزوايا أو الإضاءة.</li></ol>`
+      }
+    };
+
+    var FLASHCARDS_DATA = [
+      { id: `fc1`, unit: `u1`, unitLabel: `الوحدة الأولى`, term: `التعلم الآلي (<bdi dir="ltr">Machine Learning</bdi>)`, def: `مجموعة من التقنيات والأساليب التي تسمح للأنظمة الحاسوبية بتعلم وتحسين أدائها تلقائياً من خلال تحليل البيانات واكتساب الخبرة، دون برمجة صريحة لكل تفاصيل المهمة.` },
+      { id: `fc2`, unit: `u1`, unitLabel: `الوحدة الأولى`, term: `الأركان الأربعة لتحسين أداء التعلم الآلي`, def: `1) البيانات لفهم الأنماط، 2) النماذج والخوارزميات لاكتساب المعرفة، 3) الضبط والتحسين عبر تكرار التجربة وضبط المعلمات، 4) التطبيقات العملية.` },
+      { id: `fc3`, unit: `u1`, unitLabel: `الوحدة الأولى`, term: `التصنيف (<bdi dir="ltr">Classification</bdi>)`, def: `عملية تحديد فئة أو تصنيف لكل عنصر من مجموعة بيانات استناداً إلى سمات معينة، بعد تدريب النموذج على أمثلة معروفة الفئة مسبقاً.` },
+      { id: `fc4`, unit: `u1`, unitLabel: `الوحدة الأولى`, term: `القيمة المتوقعة (<bdi dir="ltr">Expected Value</bdi>)`, def: `تقدير قيمة متوسطة متوقعة لنتائج محتملة بناءً على احتمالات حدوثها وقيمها المرتبطة (مثل 3.5 عند رمي النرد)، وتُستخدم لتقدير أداء النماذج واختيار أفضل استراتيجية تدريب.` },
+      { id: `fc5`, unit: `u2`, unitLabel: `الوحدة الثانية`, term: `التعلم بالإشراف مقابل التعلم بدون إشراف`, def: `في التعلم بالإشراف يتعلم النموذج من بيانات مُعلَّمة وإجابات صحيحة مسبقاً (التصنيف والانحدار)، بينما في التعلم بدون إشراف يكتشف الأنماط والتجمعات ذاتياً دون معلم (التجميع Clustering).` },
+      { id: `fc6`, unit: `u2`, unitLabel: `الوحدة الثانية`, term: `التعلم التعزيزي (قائم على نموذج مقابل الحر)`, def: `يسعى لتعظيم المكافأة؛ النهج القائم على نموذج (Model-Based) يحفظ الخريطة كاملة وهو غير عملي للأنظمة الكبيرة، بينما النهج الحر (Model-Free) يعمم المواقف ويتصرف بعقلانية لتحقيق أقصى مكافأة.` },
+      { id: `fc7`, unit: `u2`, unitLabel: `الوحدة الثانية`, term: `تعلم الجمعيات وتعلم فئة من الأمثلة`, def: `تعلم الجمعيات يكتشف الترابطات المتكررة بين العناصر في البيانات، أما تعلم فئة من الأمثلة فيستخلص القاعدة العامة المميزة لفئة ما من أمثلة إيجابية وسلبية دون حفظها حرفياً.` },
+      { id: `fc8`, unit: `u2`, unitLabel: `الوحدة الثانية`, term: `مجموعة التدريب وقدرة التعميم`, def: `مجموعة التدريب هي الأمثلة المصحوبة بالسمات والنتائج لبناء النموذج (وتُفصل عن مجموعة الاختبار). أما قدرة التعميم فهي نجاح النموذج في التنبؤ ببيانات جديدة غير مشاهدة اعتماداً على انتظامات العالم الحقيقي.` },
+      { id: `fc9`, unit: `u3`, unitLabel: `الوحدة الثالثة`, term: `أساليب التعرف على الأنماط والتعرف المرن`, def: `تشمل التصنيف (وضع البيانات في فئات)، والاستنتاج (توقع قيمة متغير)، والتطابق مع القوالب؛ بينما يتيح التعرف التلقائي المرن التعامل مع التباينات الطبيعية دون تطابق حرفي جامد.` },
+      { id: `fc10`, unit: `u3`, unitLabel: `الوحدة الثالثة`, term: `التعرف على الصوت والوجوه والتعرف البصري`, def: `التعرف على الوجوه يحلل السمات الفريدة للوجه للأمن والهوية، والتعرف على الصوت يقسّم الإشارة لوحدات صغيرة ويستخرج سماتها ويطابقها لتحويل الكلام إلى نص، والتعرف البصري يستخلص الأنماط من الصور.` },
+      { id: `fc11`, unit: `u3`, unitLabel: `الوحدة الثالثة`, term: `شجرة القرار وهيكليتها (<bdi dir="ltr">Decision Tree</bdi>)`, def: `خوارزمية تقسّم البيانات بأسئلة (نعم/لا) وتتكون من: عقدة الجذر (Root Node) التي تمثل السمة الأكثر تمييزاً، وعقد فرعية لاختيارات التقسيم، وأوراق الشجرة (Leaf Nodes) التي تمثل الفئات النهائية.` },
+      { id: `fc12`, unit: `u3`, unitLabel: `الوحدة الثالثة`, term: `نماذج التوليد (<bdi dir="ltr">Generative Models</bdi>)`, def: `نماذج تتعلم البنية والتوزيع الإحصائي الكامن لبيانات التدريب لتتمكن من توليد عينات وبيانات جديدة متسقة تشبه البيانات الحقيقية.` }
+    ];
+
+    var QUIZ_QUESTIONS = [
+      {
+        id: `q1`,
+        unit: `الوحدة الأولى`,
+        text: `أي من الركائز الآتية في التعلم الآلي مسؤول عن تحسين أداء النظام من خلال تكرارية التجربة وضبط المعلمات؟`,
+        options: [
+          `أ. الضبط والتحسين (<bdi dir="ltr">Tuning & Optimization</bdi>)`,
+          `ب. جمع البطاقات المثقوبة`,
+          `ج. البرمجة الصريحة لكل حالة`,
+          `د. التطابق الحرفي مع القوالب`
+        ],
+        correct: 0,
+        explanation: `صحيح؛ يتم تحسين أداء النموذج في التعلم الآلي عبر تكرار التجارب وضبط معلماته الداخلية ضمن ركن الضبط والتحسين.`
+      },
+      {
+        id: `q2`,
+        unit: `الوحدة الأولى`,
+        text: `في تعلم الآلة، يشير _______ إلى عملية تحديد فئة أو تصنيف لكل عنصر من مجموعة من البيانات استناداً إلى سمات معينة:`,
+        options: [
+          `أ. التجميع غير الموجه`,
+          `ب. التصنيف (<bdi dir="ltr">Classification</bdi>)`,
+          `ج. القيمة المتوقعة`,
+          `د. التعلم التعزيزي`
+        ],
+        correct: 1,
+        explanation: `التصنيف (<bdi dir="ltr">Classification</bdi>) هو المهمة التي يتعلم فيها النموذج العلاقة بين السمات والفئات لتحديد فئة كل عنصر.`
+      },
+      {
+        id: `q3`,
+        unit: `الوحدة الأولى`,
+        text: `وفق مثال المنهج، إذا رميتَ حجر النرد مراراً وتكراراً، فما القيمة المتوقعة (<bdi dir="ltr">Expected Value</bdi>) لمتوسط النتائج؟`,
+        options: [
+          `أ. 3.0`,
+          `ب. 4.0`,
+          `ج. 3.5`,
+          `د. 6.0`
+        ],
+        correct: 2,
+        explanation: `القيمة المتوقعة للنرد هي حاصل جمع كل وجه مضروباً في احتماله: (1/6)×1 + ... + (1/6)×6 = 21/6 = 3.5.`
+      },
+      {
+        id: `q4`,
+        unit: `الوحدة الأولى`,
+        text: `ما الأهمية الأساسية لحساب القيمة المتوقعة داخل نماذج تعلم الآلة؟`,
+        options: [
+          `أ. إخفاء الأخطاء البرمجية في البيانات الخام`,
+          `ب. تقدير الأداء العام للنموذج عبر النتائج المحتملة واختيار أفضل استراتيجية تدريب`,
+          `ج. الاستغناء التام عن مجموعة البيانات التدريبية`,
+          `د. تحويل الصور الصوتية إلى فونيمات`
+        ],
+        correct: 1,
+        explanation: `تُستخدم القيمة المتوقعة لتقدير متوسط الدقة أو الأداء عبر احتمالات الاختبار المختلفة مما يدعم اتخاذ قرار استراتيجي لاختيار النموذج الأفضل.`
+      },
+      {
+        id: `q5`,
+        unit: `الوحدة الثانية`,
+        text: `ما الفارق الجوهري بين التعلم بالإشراف والتعلم بدون إشراف؟`,
+        options: [
+          `أ. التعلم بالإشراف يعتمد على بيانات مُعلَّمة بإجابات صحيحة مسبقة، بينما يكتشف التعلم بدون إشراف الأنماط ذاتياً دون معلم`,
+          `ب. التعلم بدون إشراف يعتمد دائماً على شجرة القرار فقط`,
+          `ج. التعلم بالإشراف لا يستخدم مجموعة تدريب`,
+          `د. كلاهما يتطلب إجابات صحيحة مكتوبة يدوياً لكل مثال`
+        ],
+        correct: 0,
+        explanation: `التعلم بالإشراف يُزوَّد بإجابات صحيحة (مثل التصنيف والانحدار)، أما التعلم بدون إشراف فيبحث وحده عن الأنماط المشتركة (مثل التجميع Clustering).`
+      },
+      {
+        id: `q6`,
+        unit: `الوحدة الثانية`,
+        text: `لماذا يُفضَّل النهج غير القائم على نموذج (<bdi dir="ltr">Model-Free</bdi>) في التعلم التعزيزي للسيارات ذاتية القيادة؟`,
+        options: [
+          `أ. لأنه يحفظ خريطة الكوكب بأكمله في الذاكرة`,
+          `ب. لأنه يعمم المواقف ويتصرف بعقلانية لتحقيق أقصى مكافأة دون حفظ كل حركة وخريطة`,
+          `ج. لأنه يمنع السيارة من التفاعل مع البيئة`,
+          `د. لأنه لا يعتمد على مبدأ المكافأة إطلاقاً`
+        ],
+        correct: 1,
+        explanation: `حفظ كامل خريطة الكوكب مستحيل عملياً في النهج القائم على نموذج، لذلك يعمم النهج الحر (<bdi dir="ltr">Model-Free</bdi>) المواقف لتعظيم المكافأة.`
+      },
+      {
+        id: `q7`,
+        unit: `الوحدة الثانية`,
+        text: `لماذا تُقسَّم البيانات عادةً إلى مجموعة تدريب ومجموعة اختبار أو تحقق منفصلة؟`,
+        options: [
+          `أ. لتقليل عدد السمات في كل عنصر`,
+          `ب. لتقييم قدرة النموذج على التعامل مع بيانات جديدة لم يُدرَّب عليها مسبقاً`,
+          `ج. لجعل النموذج يحفظ أمثلة التدريب حرفياً`,
+          `د. لإلغاء الحاجة إلى تنوع البيانات`
+        ],
+        correct: 1,
+        explanation: `فصل مجموعة الاختبار عن مجموعة التدريب ضروري لقياس قدرة النموذج الحقيقية على التعميم عند مواجهة بيانات جديدة غير مشاهدة.`
+      },
+      {
+        id: `q8`,
+        unit: `الوحدة الثانية`,
+        text: `ما الذي يجعل قدرة التعميم (<bdi dir="ltr">Generalization Capability</bdi>) ممكنة في العالم الحقيقي حسب المنهج؟`,
+        options: [
+          `أ. عشوائية الظواهر وانعدام أي نمط ثابت`,
+          `ب. وجود الانتظامات (<bdi dir="ltr">Regularities</bdi>) في العالم الحقيقي حيث تتغير الأشياء بشكل سلس`,
+          `ج. تذكّر كل مثال تدريبي على حدة دون استخلاص قاعدة`,
+          `د. تطابق بيانات الاختبار حرفياً مع بيانات التدريب`
+        ],
+        correct: 1,
+        explanation: `عملية التعلم والتعميم ممكنة بفضل وجود الانتظامات السلسة في العالم الحقيقي وتعلّم القواعد العامة مع تجنب الحفظ الحرفي للحالات الفردية.`
+      },
+      {
+        id: `q9`,
+        unit: `الوحدة الثالثة`,
+        text: `أي من خطوات التعرف على الصوت الآتية يأتي أولاً لتحويل الكلام المنطوق إلى نص مكتوب؟`,
+        options: [
+          `أ. تقسيم الإشارة الصوتية إلى وحدات صغيرة مثل الفونيمات`,
+          `ب. إنشاء شجرة قرار بعقدة جذر`,
+          `ج. توليد صور جديدة للوجه`,
+          `د. حساب القيمة المتوقعة للنرد`
+        ],
+        correct: 0,
+        explanation: `يمر التعرف على الصوت بتقسيم الإشارة الصوتية إلى وحدات صغيرة (فونيمات)، ثم استخراج السمات المميزة، ثم مطابقتها مع قاعدة البيانات.`
+      },
+      {
+        id: `q10`,
+        unit: `الوحدة الثالثة`,
+        text: `تتكون شجرة القرار من عقدة رئيسية في الأعلى تمثل السمة الأكثر تمييزاً في البيانات وتُسمى:`,
+        options: [
+          `أ. العقدة الورقية (<bdi dir="ltr">Leaf Node</bdi>)`,
+          `ب. عقدة الجذر (<bdi dir="ltr">Root Node</bdi>)`,
+          `ج. العقدة الثانوية العشوائية`,
+          `د. عقدة التجميع`
+        ],
+        correct: 1,
+        explanation: `عقدة الجذر (<bdi dir="ltr">Root Node</bdi>) هي نقطة البداية الرئيسية في شجرة القرار وتمثل السمة الأكثر قدرة على تمييز البيانات وتقسيمها.`
+      },
+      {
+        id: `q11`,
+        unit: `الوحدة الثالثة`,
+        text: `ماذا تمثل «أوراق الشجرة» (<bdi dir="ltr">Leaf Nodes</bdi>) في هيكلية شجرة القرار؟`,
+        options: [
+          `أ. الفئات أو القرارات النهائية للتصنيف`,
+          `ب. الأسئلة الأولى التي تسبق عقدة الجذر`,
+          `ج. البيانات غير المعالجة قبل التقسيم`,
+          `د. الإشارات الصوتية المسجلة`
+        ],
+        correct: 0,
+        explanation: `تبدأ شجرة القرار بعقدة الجذر، ثم العقد الفرعية التي تمثل خيارات التقسيم، وتنتهي بأوراق الشجرة التي تمثل الفئات والنتائج النهائية.`
+      },
+      {
+        id: `q12`,
+        unit: `الوحدة الثالثة`,
+        text: `بماذا تتميز «نماذج التوليد» (<bdi dir="ltr">Generative Models</bdi>) عن نماذج التصنيف التقليدية؟`,
+        options: [
+          `أ. تتوقف عن العمل عند رؤية أي بيانات جديدة`,
+          `ب. تتعلم التوزيع الإحصائي والأنماط الكامنة للبيانات لتوليد أمثلة جديدة تشبه البيانات الحقيقية`,
+          `ج. تقتصر فقط على تصفية البريد الإلكتروني العشوائي`,
+          `د. لا تحتاج إلى تحليل أي أنماط في البيانات`
+        ],
+        correct: 1,
+        explanation: `نماذج التوليد تستوعب كيفية تشكّل البيانات وتوزيعها الاحتمالي لتتمكن من إنتاج عينات جديدة متسقة مع البيانات الأصلية.`
+      }
+    ];
+
+    // ==================== STATE ====================
+    var appState = {
+      completedUnits: { u1: false, u2: false, u3: false },
+      fcFilter: 'all',
+      fcIndex: 0,
+      fcFlipped: false,
+      fcMastered: {},
+      quizAnswers: {}
+    };
+
+    var treeStep = 'root';
+
+    // ==================== PERSISTENCE ====================
+    async function saveState() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === 'function') {
+        try {
+          await window.notebookAppApi.setAppState(appState);
+        } catch (err) {
+          // Non-fatal in preview
+        }
+      }
+    }
+
+    async function loadState() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === 'function') {
+        try {
+          var saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === 'object') {
+            if (saved.completedUnits) appState.completedUnits = saved.completedUnits;
+            if (saved.fcFilter) appState.fcFilter = saved.fcFilter;
+            if (typeof saved.fcIndex === 'number') appState.fcIndex = saved.fcIndex;
+            if (saved.fcMastered) appState.fcMastered = saved.fcMastered;
+            if (saved.quizAnswers) appState.quizAnswers = saved.quizAnswers;
+          }
+        } catch (err) {
+          // Start fresh
+        }
+      }
+    }
+
+    // ==================== PROGRESS CALCULATION ====================
+    function updateOverallProgress() {
+      var unitCount = 0;
+      if (appState.completedUnits.u1) unitCount++;
+      if (appState.completedUnits.u2) unitCount++;
+      if (appState.completedUnits.u3) unitCount++;
+
+      var masteredCount = 0;
+      for (var k in appState.fcMastered) {
+        if (Object.prototype.hasOwnProperty.call(appState.fcMastered, k) && appState.fcMastered[k] === true) {
+          masteredCount++;
+        }
+      }
+
+      var answeredCount = Object.keys(appState.quizAnswers).length;
+      var totalPoints = 3 + FLASHCARDS_DATA.length + QUIZ_QUESTIONS.length;
+      var earnedPoints = unitCount + masteredCount + answeredCount;
+      var pct = Math.round((earnedPoints / totalPoints) * 100);
+
+      var pctText = document.getElementById('overall-progress-text');
+      var bar = document.getElementById('overall-progress-bar');
+      var fill = document.getElementById('overall-progress-fill');
+
+      if (pctText) pctText.textContent = pct + '% مكتمل';
+      if (bar) bar.setAttribute('aria-valuenow', String(pct));
+      if (fill) fill.style.width = pct + '%';
+
+      syncUnitButtons();
+    }
+
+    function syncUnitButtons() {
+      var units = ['u1', 'u2', 'u3'];
+      for (var i = 0; i < units.length; i++) {
+        var u = units[i];
+        var btn = document.getElementById('btn-complete-' + u);
+        if (!btn) continue;
+        var done = Boolean(appState.completedUnits[u]);
+        if (done) {
+          btn.classList.add('is-done');
+          btn.innerHTML = '<span>✓ وحدة مكتملة</span>';
+        } else {
+          btn.classList.remove('is-done');
+          btn.innerHTML = '<span>تحديد الوحدة كمكتملة</span>';
+        }
+      }
+    }
+
+    // ==================== UNIT 1 INTERACTIONS ====================
+    function toggleUnitComplete(unitKey) {
+      appState.completedUnits[unitKey] = !appState.completedUnits[unitKey];
+      updateOverallProgress();
+      saveState();
+    }
+
+    function selectPillar(key, btnEl) {
+      var data = PILLARS_DATA[key];
+      var panel = document.getElementById('pillar-detail');
+      if (!data || !panel) return;
+      if (btnEl && btnEl.parentElement) {
+        var btns = btnEl.parentElement.querySelectorAll('.select-pill');
+        for (var i = 0; i < btns.length; i++) btns[i].classList.remove('is-active');
+        btnEl.classList.add('is-active');
+      }
+      panel.innerHTML = '<h4>' + data.title + '</h4><p>' + data.body + '</p>';
+    }
+
+    function runClassificationDemo() {
+      var sel = document.getElementById('classifier-sample');
+      var out = document.getElementById('classifier-output');
+      if (!sel || !out) return;
+      var val = sel.value;
+      if (val === 'spam') {
+        out.innerHTML = '<h4>النتيجة المصنّفة: بريد عشوائي (<bdi dir="ltr">Spam</bdi>)</h4><p style="margin:0;font-size:0.9rem;">السمات المرصودة تطابقت باحتمالية عالية مع فئة البريد العشوائي في بيانات التدريب.</p>';
+      } else if (val === 'legit') {
+        out.innerHTML = '<h4>النتيجة المصنّفة: بريد موثوق (<bdi dir="ltr">Not Spam</bdi>)</h4><p style="margin:0;font-size:0.9rem;">وجود نطاق جامعي وسمات أكاديمية معروفة يصنف الرسالة ضمن البريد السليم.</p>';
+      } else {
+        out.innerHTML = '<h4>النتيجة المصنّفة: نشرة ترويجية (<bdi dir="ltr">Promotions</bdi>)</h4><p style="margin:0;font-size:0.9rem;">سمات الخصم وإلغاء الاشتراك توجه النموذج نحو فئة الرسائل الإعلانية.</p>';
+      }
+    }
+
+    function updateExpectedValue() {
+      var probEasyEl = document.getElementById('ev-prob-easy');
+      var accHardEl = document.getElementById('ev-acc-hard');
+      var probEasyVal = document.getElementById('ev-prob-easy-val');
+      var accHardVal = document.getElementById('ev-acc-hard-val');
+      var resEl = document.getElementById('ev-result-val');
+      var verdictEl = document.getElementById('ev-verdict');
+
+      if (!probEasyEl || !accHardEl) return;
+
+      var pEasy = Number(probEasyEl.value) / 100;
+      var pHard = 1 - pEasy;
+      var accEasy = 95;
+      var accHard = Number(accHardEl.value);
+
+      var ev = (pEasy * accEasy) + (pHard * accHard);
+
+      if (probEasyVal) probEasyVal.textContent = Math.round(pEasy * 100) + '%';
+      if (accHardVal) accHardVal.textContent = accHard + '%';
+      if (resEl) resEl.textContent = ev.toFixed(1) + '%';
+
+      if (verdictEl) {
+        if (ev >= 88) {
+          verdictEl.textContent = 'قيمة متوقعة مرتفعة: نموذج مناسب للاعتماد';
+        } else if (ev >= 75) {
+          verdictEl.textContent = 'قيمة متوقعة متوسطة: يحتاج ضبط معلمات إضافي';
+        } else {
+          verdictEl.textContent = 'قيمة متوقعة منخفضة: راجع بيانات التدريب للنموذج';
+        }
+      }
+    }
+
+    // ==================== UNIT 2 INTERACTIONS ====================
+    function selectLearningType(key, btnEl) {
+      var data = LEARNING_TYPES_DATA[key];
+      var panel = document.getElementById('learning-type-detail');
+      if (!data || !panel) return;
+      if (btnEl && btnEl.parentElement) {
+        var btns = btnEl.parentElement.querySelectorAll('.select-pill');
+        for (var i = 0; i < btns.length; i++) btns[i].classList.remove('is-active');
+        btnEl.classList.add('is-active');
+      }
+      panel.innerHTML = '<h4>' + data.title + '</h4>' + data.html;
+    }
+
+    function setGenMode(mode, btnEl) {
+      var pathEl = document.getElementById('gen-model-path');
+      var descEl = document.getElementById('gen-mode-desc');
+      if (!pathEl || !descEl) return;
+
+      if (btnEl && btnEl.parentElement) {
+        var btns = btnEl.parentElement.querySelectorAll('.select-pill');
+        for (var i = 0; i < btns.length; i++) btns[i].classList.remove('is-active');
+        btnEl.classList.add('is-active');
+      }
+
+      if (mode === 'underfit') {
+        pathEl.setAttribute('d', 'M 55 125 L 380 102');
+        pathEl.setAttribute('stroke', 'var(--data-4)');
+        descEl.innerHTML = '<h4>تدريب ناقص — تجاهل الانتظام (<bdi dir="ltr">58%</bdi> دقة اختبار)</h4><p>النموذج أبسط من اللازم ولم يلتقط العلاقة الأساسية في مجموعة التدريب، فيفشل في التدريب والاختبار معاً.</p>';
+      } else if (mode === 'generalize') {
+        pathEl.setAttribute('d', 'M 55 162 Q 210 122 380 45');
+        pathEl.setAttribute('stroke', 'var(--data-1)');
+        descEl.innerHTML = '<h4>تعميم مثالي — التقاط الانتظام العام (<bdi dir="ltr">92%</bdi> دقة اختبار)</h4><p>يتعلم النموذج القاعدة السلسة الكامنة ويتجاهل التذبذبات العشوائية الفردية، مما يمنحه دقة مرتفعة على البيانات الجديدة غير المشاهدة.</p>';
+      } else {
+        pathEl.setAttribute('d', 'M 55 164 L 70 158 L 95 168 L 120 140 L 145 155 L 170 138 L 195 148 L 220 110 L 248 124 L 275 96 L 302 105 L 330 62 L 350 76 L 370 48');
+        pathEl.setAttribute('stroke', 'var(--data-2)');
+        descEl.innerHTML = '<h4>حفظ حرفي (إفراط في التخصيص) — فشل عند الحالات الجديدة (<bdi dir="ltr">61%</bdi> دقة اختبار)</h4><p>يتتبع النموذج كل نقطة تدريب فردية وضجيجها بدقة، لكنه ينحرف بشدة عن النقاط الجديدة (المثلثات) ويفقد قدرته على التعميم.</p>';
+      }
+    }
+
+    // ==================== UNIT 3 INTERACTIONS ====================
+    function selectAppPipeline(key, btnEl) {
+      var data = APP_PIPELINES_DATA[key];
+      var panel = document.getElementById('app-pipeline-detail');
+      if (!data || !panel) return;
+      if (btnEl && btnEl.parentElement) {
+        var btns = btnEl.parentElement.querySelectorAll('.select-pill');
+        for (var i = 0; i < btns.length; i++) btns[i].classList.remove('is-active');
+        btnEl.classList.add('is-active');
+      }
+      panel.innerHTML = '<h4>' + data.title + '</h4>' + data.html;
+    }
+
+    function highlightTreeEdge(edgeId, active) {
+      var edge = document.getElementById(edgeId);
+      if (!edge) return;
+      edge.setAttribute('stroke', active ? 'var(--secondary)' : 'var(--data-context)');
+      edge.setAttribute('stroke-width', active ? '4' : '2.5');
+    }
+
+    function resetTreeHighlights() {
+      highlightTreeEdge('edge-root-yes', false);
+      highlightTreeEdge('edge-root-no', false);
+      highlightTreeEdge('edge-sub-yes', false);
+      highlightTreeEdge('edge-sub-no', false);
+    }
+
+    function answerTreeStep(choice) {
+      var badge = document.getElementById('tree-node-badge');
+      var question = document.getElementById('tree-question-text');
+      var actions = document.getElementById('tree-action-buttons');
+      var result = document.getElementById('tree-result-area');
+      var trace = document.getElementById('tree-path-trace');
+
+      if (!badge || !question || !actions || !result || !trace) return;
+
+      if (treeStep === 'root') {
+        if (choice === 'yes') {
+          treeStep = 'branch';
+          highlightTreeEdge('edge-root-yes', true);
+          badge.textContent = 'العقدة الفرعية (Branch Node) — تقسيم فرعي';
+          question.textContent = 'هل لدى المتقدم سجل ائتماني وسداد منتظم سابقاً؟';
+          trace.textContent = 'المسار: عقدة الجذر (نعم) ← العقدة الفرعية';
+        } else {
+          treeStep = 'done';
+          highlightTreeEdge('edge-root-no', true);
+          badge.textContent = 'ورقة الشجرة (Leaf Node) — القرار النهائي';
+          question.textContent = 'تم الوصول إلى التصنيف النهائي من عقدة الجذر مباشرة.';
+          actions.style.display = 'none';
+          result.style.display = 'block';
+          result.className = 'tree-result-banner is-rejected';
+          result.textContent = 'النتيجة النهائية: رفض طلب القرض لعدم استقرار الدخل.';
+          trace.textContent = 'المسار: عقدة الجذر (لا) ← ورقة: رفض القرض';
+        }
+      } else if (treeStep === 'branch') {
+        treeStep = 'done';
+        actions.style.display = 'none';
+        result.style.display = 'block';
+        badge.textContent = 'ورقة الشجرة (Leaf Node) — القرار النهائي';
+        question.textContent = 'تم حسم الفئة النهائية عبر أوراق شجرة القرار:';
+        if (choice === 'yes') {
+          highlightTreeEdge('edge-sub-yes', true);
+          result.className = 'tree-result-banner is-approved';
+          result.textContent = 'النتيجة النهائية: قبول ومنح القرض (تحققت شروط الدخل والسجل).';
+          trace.textContent = 'المسار: الجذر (نعم) ← الفرعية (نعم) ← ورقة: قبول القرض';
+        } else {
+          highlightTreeEdge('edge-sub-no', true);
+          result.className = 'tree-result-banner is-rejected';
+          result.textContent = 'النتيجة النهائية: مراجعة إضافية أو رفض (بسبب تعثر السجل الائتماني).';
+          trace.textContent = 'المسار: الجذر (نعم) ← الفرعية (لا) ← ورقة: مراجعة/رفض';
+        }
+      }
+    }
+
+    function resetTreeDemo() {
+      treeStep = 'root';
+      resetTreeHighlights();
+      var badge = document.getElementById('tree-node-badge');
+      var question = document.getElementById('tree-question-text');
+      var actions = document.getElementById('tree-action-buttons');
+      var result = document.getElementById('tree-result-area');
+      var trace = document.getElementById('tree-path-trace');
+
+      if (badge) badge.textContent = 'عقدة الجذر (Root Node) — السمة الأكثر تمييزاً';
+      if (question) question.textContent = 'هل الدخل الشهري للمتقدم مستقر وكافٍ لتغطية القسط؟';
+      if (actions) actions.style.display = 'flex';
+      if (result) result.style.display = 'none';
+      if (trace) trace.textContent = 'المسار: البداية';
+    }
+
+    // ==================== FLASHCARDS ====================
+    function getFilteredFlashcards() {
+      if (appState.fcFilter === 'all') return FLASHCARDS_DATA;
+      var list = [];
+      for (var i = 0; i < FLASHCARDS_DATA.length; i++) {
+        if (FLASHCARDS_DATA[i].unit === appState.fcFilter) list.push(FLASHCARDS_DATA[i]);
+      }
+      return list;
+    }
+
+    function renderFlashcard() {
+      var list = getFilteredFlashcards();
+      if (list.length === 0) return;
+      if (appState.fcIndex >= list.length) appState.fcIndex = 0;
+      if (appState.fcIndex < 0) appState.fcIndex = list.length - 1;
+
+      var card = list[appState.fcIndex];
+      var btn = document.getElementById('flashcard-btn');
+      var unitBadge = document.getElementById('fc-unit-badge');
+      var idxLabel = document.getElementById('fc-index-label');
+      var frontText = document.getElementById('fc-front-text');
+      var backText = document.getElementById('fc-back-text');
+      var backStatus = document.getElementById('fc-back-status');
+      var masteryCounter = document.getElementById('fc-mastery-counter');
+
+      if (btn) {
+        if (appState.fcFlipped) btn.classList.add('is-flipped');
+        else btn.classList.remove('is-flipped');
+      }
+      if (unitBadge) unitBadge.textContent = card.unitLabel;
+      if (idxLabel) idxLabel.textContent = (appState.fcIndex + 1) + ' / ' + list.length;
+      if (frontText) frontText.innerHTML = card.term;
+      if (backText) backText.innerHTML = card.def;
+
+      var status = appState.fcMastered[card.id];
+      if (backStatus) {
+        if (status === true) backStatus.textContent = 'مُتقنة ✓';
+        else if (status === false) backStatus.textContent = 'قيد المراجعة ↻';
+        else backStatus.textContent = 'جديدة';
+      }
+
+      var totalMastered = 0;
+      for (var k in appState.fcMastered) {
+        if (Object.prototype.hasOwnProperty.call(appState.fcMastered, k) && appState.fcMastered[k] === true) {
+          totalMastered++;
+        }
+      }
+      if (masteryCounter) masteryCounter.textContent = 'المُتقنة: ' + totalMastered + ' / ' + FLASHCARDS_DATA.length;
+    }
+
+    function flipFlashcard() {
+      appState.fcFlipped = !appState.fcFlipped;
+      renderFlashcard();
+    }
+
+    function nextFlashcard() {
+      var list = getFilteredFlashcards();
+      appState.fcIndex = (appState.fcIndex + 1) % list.length;
+      appState.fcFlipped = false;
+      renderFlashcard();
+      saveState();
+    }
+
+    function prevFlashcard() {
+      var list = getFilteredFlashcards();
+      appState.fcIndex = (appState.fcIndex - 1 + list.length) % list.length;
+      appState.fcFlipped = false;
+      renderFlashcard();
+      saveState();
+    }
+
+    function filterFlashcards(unitKey, btnEl) {
+      appState.fcFilter = unitKey;
+      appState.fcIndex = 0;
+      appState.fcFlipped = false;
+      if (btnEl && btnEl.parentElement) {
+        var btns = btnEl.parentElement.querySelectorAll('.select-pill');
+        for (var i = 0; i < btns.length; i++) btns[i].classList.remove('is-active');
+        btnEl.classList.add('is-active');
+      }
+      renderFlashcard();
+      saveState();
+    }
+
+    function markFlashcard(known) {
+      var list = getFilteredFlashcards();
+      var card = list[appState.fcIndex];
+      if (!card) return;
+      appState.fcMastered[card.id] = known;
+      appState.fcIndex = (appState.fcIndex + 1) % list.length;
+      appState.fcFlipped = false;
+      renderFlashcard();
+      updateOverallProgress();
+      saveState();
+    }
+
+    // ==================== QUIZ ====================
+    function renderQuiz() {
+      var container = document.getElementById('quiz-container');
+      if (!container) return;
+
+      var html = '';
+      for (var i = 0; i < QUIZ_QUESTIONS.length; i++) {
+        var q = QUIZ_QUESTIONS[i];
+        var chosen = appState.quizAnswers[q.id];
+        var hasAnswered = typeof chosen === 'number';
+
+        html += '<article class="quiz-card" id="card-' + q.id + '">';
+        html += '<div class="quiz-q-header">';
+        html += '<span class="tag-petrol">' + q.unit + '</span>';
+        html += '<span class="dossier-meta">السؤال ' + (i + 1) + ' من ' + QUIZ_QUESTIONS.length + '</span>';
+        html += '</div>';
+        html += '<p class="quiz-q-text">' + q.text + '</p>';
+        html += '<div class="quiz-options">';
+
+        for (var j = 0; j < q.options.length; j++) {
+          var cls = 'quiz-opt-btn';
+          if (hasAnswered) {
+            if (j === q.correct) cls += ' is-correct';
+            else if (j === chosen) cls += ' is-wrong';
+          }
+          var disabledAttr = hasAnswered ? ' disabled' : '';
+          html += '<button type="button" class="' + cls + '" onclick="answerQuestion(\'' + q.id + '\', ' + j + ')"' + disabledAttr + '>';
+          html += '<span>' + q.options[j] + '</span>';
+          html += '</button>';
+        }
+
+        html += '</div>';
+
+        var fbCls = 'quiz-feedback';
+        var fbText = '';
+        if (hasAnswered) {
+          var isRight = chosen === q.correct;
+          fbCls += ' is-visible ' + (isRight ? 'is-correct' : 'is-wrong');
+          fbText = (isRight ? '<strong>إجابة صحيحة!</strong> ' : '<strong>إجابة غير دقيقة.</strong> ') + q.explanation;
+        }
+        html += '<div class="' + fbCls + '" id="fb-' + q.id + '">' + fbText + '</div>';
+        html += '</article>';
+      }
+
+      container.innerHTML = html;
+      updateQuizSummary();
+    }
+
+    function answerQuestion(qId, optionIdx) {
+      if (typeof appState.quizAnswers[qId] === 'number') return;
+      appState.quizAnswers[qId] = optionIdx;
+      renderQuiz();
+      updateOverallProgress();
+      saveState();
+    }
+
+    function updateQuizSummary() {
+      var answered = 0;
+      var correctCount = 0;
+      for (var i = 0; i < QUIZ_QUESTIONS.length; i++) {
+        var q = QUIZ_QUESTIONS[i];
+        var ans = appState.quizAnswers[q.id];
+        if (typeof ans === 'number') {
+          answered++;
+          if (ans === q.correct) correctCount++;
+        }
+      }
+
+      var badge = document.getElementById('quiz-score-badge');
+      var title = document.getElementById('quiz-summary-title');
+      var detail = document.getElementById('quiz-summary-detail');
+
+      if (badge) badge.textContent = 'النتيجة: ' + correctCount + ' / ' + QUIZ_QUESTIONS.length;
+      if (title && detail) {
+        if (answered === 0) {
+          title.textContent = 'ملخص الأداء الفوري';
+          detail.textContent = 'أجب عن الأسئلة أعلاه لحساب درجة استيعابك في الوحدات الثلاث.';
+        } else if (answered < QUIZ_QUESTIONS.length) {
+          title.textContent = 'أكملت ' + answered + ' من ' + QUIZ_QUESTIONS.length + ' أسئلة';
+          detail.textContent = 'رصيدك الحالي: ' + correctCount + ' إجابات صحيحة. واصل الإجابة لاستكمال التقييم الشامل.';
+        } else {
+          var pct = Math.round((correctCount / QUIZ_QUESTIONS.length) * 100);
+          title.textContent = 'اكتمل الاختبار — نتيجتك ' + correctCount + ' من ' + QUIZ_QUESTIONS.length + ' (' + pct + '%)';
+          detail.textContent = pct >= 80
+            ? 'أداء ممتاز! استوعبت مفاهيم الوحدات الثلاث للفصل الثالث بدقة.'
+            : 'أداء جيد؛ يُنصح بمراجعة بطاقات الاستذكار للوحدات التي أخطأت في أسئلتها ثم إعادة المحاولة.';
+        }
+      }
+    }
+
+    function resetQuizInline(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== 'true') {
+        btn.dataset.armed = 'true';
+        btn.textContent = 'اضغط مرة أخرى لتأكيد المسح';
+        return;
+      }
+      btn.dataset.armed = 'false';
+      btn.textContent = 'إعادة ضبط الاختبار';
+      appState.quizAnswers = {};
+      renderQuiz();
+      updateOverallProgress();
+      saveState();
+    }
+
+    function switchTab(panelId, selectedTab) {
+      var tabs = document.querySelectorAll('.quick-nav [role="tab"]');
+      var panels = document.querySelectorAll('.tab-panels .tab-panel');
+
+      for (var i = 0; i < tabs.length; i++) {
+        var isSelected = tabs[i] === selectedTab;
+        tabs[i].setAttribute('aria-selected', String(isSelected));
+        tabs[i].tabIndex = isSelected ? 0 : -1;
+      }
+
+      for (var j = 0; j < panels.length; j++) {
+        var isActive = panels[j].id === panelId;
+        panels[j].hidden = !isActive;
+        panels[j].classList.toggle('active', isActive);
+      }
+    }
+
+    function handleTabKeydown(event) {
+      var tabs = document.querySelectorAll('.quick-nav [role="tab"]');
+      var currentIndex = Array.prototype.indexOf.call(tabs, event.target);
+      var nextIndex;
+
+      if (event.key === 'Home') nextIndex = 0;
+      else if (event.key === 'End') nextIndex = tabs.length - 1;
+      else if (event.key === 'ArrowLeft') nextIndex = (currentIndex + 1) % tabs.length;
+      else if (event.key === 'ArrowRight') nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+      else return;
+
+      event.preventDefault();
+      tabs[nextIndex].focus();
+      tabs[nextIndex].click();
+    }
+
+    // ==================== INITIALIZATION ====================
+    async function initApp() {
+      await loadState();
+      runClassificationDemo();
+      updateExpectedValue();
+      renderFlashcard();
+      renderQuiz();
+      updateOverallProgress();
+
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+      }
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === 'function') {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initApp);
+  </script>
 </body>
 </html>
