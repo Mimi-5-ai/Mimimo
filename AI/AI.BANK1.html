@@ -368,13 +368,20 @@ function shuffleArray(arr) {
 
 function prepareQuestions() {
     const chFilter = document.getElementById('chapterFilter').value;
-    let pool = questionsData.map(q => {
+    const questions = questionsData.filter(Boolean);
+    const correctPositions = shuffleArray(
+        questions.map((q, index) => index % q.options.length)
+    );
+    let questionIndex = 0;
+    let pool = questions.map(q => {
         if (!q._shuffledOptions) {
-            const indexed = q.options.map((text, idx) => ({ text, isCorrect: idx === q.ans }));
-            const shuffled = shuffleArray(indexed);
-            q._shuffledOptions = shuffled.map(o => o.text);
-            q._correctIdx = shuffled.findIndex(o => o.isCorrect);
+            const correctPosition = correctPositions[questionIndex];
+            const incorrectOptions = shuffleArray(q.options.filter((_, idx) => idx !== q.ans));
+            q._shuffledOptions = [...incorrectOptions];
+            q._shuffledOptions.splice(correctPosition, 0, q.options[q.ans]);
+            q._correctIdx = correctPosition;
         }
+        questionIndex++;
         return q;
     });
 
@@ -409,7 +416,7 @@ function applyFilters() {
 function shuffleCurrentQuestions() {
     questionsData.forEach(q => { delete q._shuffledOptions; });
     userAnswers = {};
-    activeQuestions = shuffleArray(questionsData);
+    activeQuestions = shuffleArray(questionsData.filter(Boolean));
     prepareQuestions();
 }
 
