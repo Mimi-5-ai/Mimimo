@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المقارنة الشاملة للخوارزميات الثلاث: SVM و SVR و Naive Bayes</title>
+    <!-- تحميل خط Cairo و Tajawal للوضوح التام باللغة العربية -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- تحميل Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                        tajawal: ['Tajawal', 'sans-serif'],
+                    },
+                    colors: {
+                        mimimo: {
+                            dark: '#251c6b',
+                            primary: '#3b2f96',
+                            light: '#eef0ff',
+                            accent: '#5244c7'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f4f6fb;
+            color: #1e293b;
+            scroll-behavior: smooth;
+        }
+        /* تدرج الهيدر المطابق لهوية Mimimo */
+        .mimimo-hero {
+            background: linear-gradient(135deg, #241b66 0%, #3b2f96 55%, #2c227a 100%);
+        }
+        /* حركات الأكورديون والبطاقات */
+        .accordion-content {
+            transition: max-height 0.35s ease-out, opacity 0.25s ease-out;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+        }
+        .accordion-item.active .accordion-content {
+            max-height: 3500px;
+            opacity: 1;
+        }
+        .accordion-item.active .accordion-arrow {
+            transform: rotate(-90deg);
+        }
+        .accordion-arrow {
+            transition: transform 0.25s ease;
+        }
+        /* تأثير البطاقات التعليمية القابلة للقلب */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+        /* شريط التمرير المخصص للجداول */
+        ::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- الشريط العلوي المصغر -->
+    <div class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 py-2.5 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-mimimo-primary inline-block"></span>
+                <span class="font-extrabold text-mimimo-primary text-sm sm:text-base">Mimimo • ملخص تعلم الآلة التطبيقي</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span id="completionBadge" class="bg-emerald-600 text-white text-xs sm:text-sm font-bold px-3.5 py-1 rounded-full shadow-sm">
+                    مكتمل 100% (فصول 12 - 14)
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- قسم البداية (Hero Header) -->
+    <header class="mimimo-hero text-white py-10 sm:py-14 px-4 shadow-lg">
+        <div class="max-w-6xl mx-auto text-center">
+            <!-- شارة التحديث والصفحات -->
+            <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/20 px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold mb-5 text-indigo-100">
+                <span>نسخة شاملة ومحدثة 100%</span>
+                <span>•</span>
+                <span>صفحات الملخص (484 إلى 602)</span>
+            </div>
+
+            <!-- العنوان الرئيسي -->
+            <h1 class="text-2xl sm:text-4xl md:text-5xl font-black leading-tight mb-4 tracking-tight">
+                المقارنة الشاملة للخوارزميات الثلاث:
+                <span class="block sm:inline text-amber-300 mt-1 sm:mt-0">SVM و SVR و Naive Bayes</span>
+            </h1>
+
+            <!-- الوصف المختصر -->
+            <p class="max-w-3xl mx-auto text-indigo-100 text-sm sm:text-base md:text-lg leading-relaxed mb-8 font-normal">
+                دليل دقيق وشامل للفصول الثلاثة الأخيرة (12 و 13 و 14): متى نستخدم كل خوارزمية، آلية العمل، الفروقات الجوهرية، دوال النواة والخسارة، وكيفية التفريق بينها بدقة في أسئلة الاختبار.
+            </p>
+
+            <!-- أزرار التنقل الرئيسية (Tabs) -->
+            <nav class="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3" role="tablist">
+                <button onclick="switchTab('map')" id="tab-map" class="tab-btn bg-white text-mimimo-primary font-bold px-4 sm:px-5 py-2.5 rounded-full text-xs sm:text-sm shadow-md transition-all hover:scale-105">
+                    خريطة الفصول والشرح المقارن
+                </button>
+                <button onclick="switchTab('tables')" id="tab-tables" class="tab-btn bg-white/15 hover:bg-white/25 text-white border border-white/30 font-bold px-4 sm:px-5 py-2.5 rounded-full text-xs sm:text-sm transition-all">
+                    جداول المقارنات الدقيقة (4)
+                </button>
+                <button onclick="switchTab('diff')" id="tab-diff" class="tab-btn bg-white/15 hover:bg-white/25 text-white border border-white/30 font-bold px-4 sm:px-5 py-2.5 rounded-full text-xs sm:text-sm transition-all">
+                    كيف أفرق بينهم؟ (أداة القرار)
+                </button>
+                <button onclick="switchTab('cards')" id="tab-cards" class="tab-btn bg-white/15 hover:bg-white/25 text-white border border-white/30 font-bold px-4 sm:px-5 py-2.5 rounded-full text-xs sm:text-sm transition-all">
+                    البطاقات التعليمية (18)
+                </button>
+                <button onclick="switchTab('quiz')" id="tab-quiz" class="tab-btn bg-amber-400 hover:bg-amber-300 text-slate-900 font-extrabold px-4 sm:px-5 py-2.5 rounded-full text-xs sm:text-sm shadow-md transition-all">
+                    الاختبار الشامل (18 سؤال)
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- المحتوى الرئيسي -->
+    <main class="flex-grow max-w-6xl w-full mx-auto px-4 py-8 space-y-8">
+
+        <!-- =========================================================
+             القسم 1: خريطة الفصول الثلاثة والشرح المقارن (Accordions)
+             ========================================================= -->
+        <section id="section-map" class="tab-section space-y-6">
+            
+            <!-- بطاقة خريطة الفصول الثلاثة -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-5 sm:p-8">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6 border-b border-slate-100 pb-4">
+                    <h2 class="text-xl sm:text-2xl font-extrabold text-slate-800">
+                        خريطة الفصول الثلاثة الأخيرة (من ص 484 إلى ص 602 في الملخص)
+                    </h2>
+                    <span class="text-xs font-bold text-mimimo-primary bg-mimimo-light px-3 py-1 rounded-full self-start sm:self-auto">
+                        3 فصول • 9 وحدات تعليمية
+                    </span>
+                </div>
+
+                <!-- الأعمدة الثلاثة للفصول -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- الفصل 12: SVM -->
+                    <div class="bg-slate-50/70 hover:bg-indigo-50/40 transition-colors rounded-2xl p-5 border border-slate-200/70 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="bg-indigo-100 text-indigo-800 text-xs font-bold px-3 py-1 rounded-full">
+                                    الفصل 12 (ص 484 - 526)
+                                </span>
+                                <span class="text-xs font-extrabold text-indigo-600">تصنيف هندسي</span>
+                            </div>
+                            <h3 class="text-lg font-extrabold text-mimimo-primary mb-2">
+                                آلة المتجه الداعم (SVM)
+                            </h3>
+                            <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                                <strong>مصنف خطي غير احتمالي</strong> خاضع للإشراف؛ يفصل البيانات إلى فئات عبر إيجاد <strong>المستوى الفائق (Hyperplane)</strong> الذي يعظم <strong>الهامش (Margin)</strong> بالاعتماد على <strong>متجهات الدعم</strong>، ويستخدم <strong>خدعة النواة</strong> للبيانات غير الخطية.
+                            </p>
+                        </div>
+                        <div class="pt-3 border-t border-slate-200/60 flex flex-wrap gap-1.5">
+                            <span class="text-[11px] font-bold bg-white border border-slate-200 px-2.5 py-0.5 rounded-full text-slate-700">Hinge Loss</span>
+                            <span class="text-[11px] font-bold bg-white border border-slate-200 px-2.5 py-0.5 rounded-full text-slate-700">المعلمة C</span>
+                            <span class="text-[11px] font-bold bg-white border border-slate-200 px-2.5 py-0.5 rounded-full text-slate-700">غير احتمالي</span>
+                        </div>
+                    </div>
+
+                    <!-- الفصل 13: SVR -->
+                    <div class="bg-slate-50/70 hover:bg-emerald-50/40 transition-colors rounded-2xl p-5 border border-slate-200/70 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full">
+                                    الفصل 13 (ص 527 - 564)
+                                </span>
+                                <span class="text-xs font-extrabold text-emerald-600">تنبؤ مستمر</span>
+                            </div>
+                            <h3 class="text-lg font-extrabold text-emerald-800 mb-2">
+                                انحدار المتجه الداعم (SVR)
+                            </h3>
+                            <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                                تندرج تحت SVM ولكن لتحليل <strong>الانحدار والتنبؤ بالقيم العددية المستمرة</strong> (كالأسهم والعقارات والطقس). تلائم <strong>الخط المرجعي</strong> ليحتوي الهامش أكبر عدد من النقاط باستخدام <strong>نقاط الاستدلال (القوة)</strong> ومعامل التسامح.
+                            </p>
+                        </div>
+                        <div class="pt-3 border-t border-slate-200/60 flex flex-wrap gap-1.5">
+                            <span class="text-[11px] font-bold bg-white border border-slate-200 px-2.5 py-0.5 rounded-full text-slate-700">Squared Error</span>
+                            <span class="text-[11px] font-bold bg-white border border-slate-200 px-2.5 py-0.5 rounded-full text-slate-700">مقياس MSE</span>
+                            <span class="text-[11px] font-bold bg-white border border-slate-200 px-2.5 py-0.5 rounded-full text-slate-700">قيم مستمرة</span>
+                        </div>
+                    </div>
+
+                    <!-- الفصل 14: Naive Bayes -->
+                    <div class="bg-slate-50/70 hover:bg-purple-50/40 transition-colors rounded-2xl p-5 border border-slate-200/70 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="bg-purple-100 text-purple-800 text-xs font-bold px-3 py-1 rounded-full">
+                                    الفصل 14 (ص 565 - 602)
+                                </span>
+                                <span class="text-xs font-extrabold text-purple-600">تصنيف احتمالي</span>
+                            </div>
+                            <h3 class="text-lg font-extrabold text-purple-800 mb-2">
+                                خوارزمية بايز الساذجة (Naive Bayes)
+                            </h3>
+                            <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                                <strong>مصنف احتمالي</strong> خاضع للإشراف يعتمد على <strong>نظرية بايز والاحتمال الشرطي</strong>، وسُمي "ساذجاً" لافتراضه <strong>استقلالية الميزات</strong> تماماً عن بعضها. يتميز بالسرعة الفائقة في تصنيف النصوص وكشف البريد العشوائي.
+                            </p>
+                        </div>
+                        <div class="pt-3 border-t border-slate-200/60 flex flex-wrap gap-1.5">
+                            <span class="text-[11px] font-bold bg-white border border-slate-200 px-2.5 py-0.5 rounded-full text-slate-700">احتمالي</span>
+                            <span class="text-[11px] font-bold bg-white border border-slate-200 px-2.5 py-0.5 rounded-full text-slate-700">استقلالية الميزات</span>
+                            <span class="text-[11px] font-bold bg-white border border-slate-200 px-2.5 py-0.5 rounded-full text-slate-700">3 أنواع</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- القوائم القابلة للطي (Accordions) مطابقة لتصميم Mimimo -->
+            <div class="space-y-3" id="accordionsContainer">
+                
+                <!-- Accordion 1: SVM -->
+                <div class="accordion-item bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden active">
+                    <button onclick="toggleAccordion(this)" class="w-full px-5 py-4 text-right flex items-center justify-between hover:bg-slate-50 transition-colors">
+                        <span class="font-extrabold text-slate-800 text-sm sm:text-base flex items-center gap-2.5">
+                            <span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
+                            (1) الفصل الثاني عشر: آلة المتجه الداعم SVM — الآلية، السيناريوهات الخمسة، والنوى (ص 484 - 526)
+                        </span>
+                        <span class="accordion-arrow text-slate-500 font-bold text-sm">◀</span>
+                    </button>
+                    <div class="accordion-content border-t border-slate-100 bg-slate-50/40">
+                        <div class="p-5 sm:p-6 space-y-5 text-sm leading-relaxed text-slate-700">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-white p-4 rounded-xl border border-slate-200/80">
+                                    <h4 class="font-extrabold text-indigo-800 mb-2">التعريف والطبيعة الرياضية:</h4>
+                                    <ul class="list-disc list-inside space-y-1.5">
+                                        <li><strong>نوع التعلم:</strong> تعلم آلي خاضع للإشراف (Supervised Learning) يُستخدم في مسائل <strong>التصنيف (Classification)</strong> والتنبؤ (Regression)، ويُستخدم في الغالب في <strong>التصنيف الثنائي المراقب</strong>.</li>
+                                        <li><strong>طبيعة المصنف:</strong> مثال على <strong>منتقي خطي غير احتمالي</strong> (Non-probabilistic linear classifier)؛ لأنه يحدد فئة الكائن بناءً على موقعه ("أعلى" أو "أسفل" المستوى الفاصل) في فضاء الميزات دون الاعتماد على الاحتمالات.</li>
+                                        <li><strong>المستوى الفائق (Hyperplane):</strong> الحد القراري الذي يفصل الفئات (يكون <strong>خطاً مستقيماً</strong> في البعد الثاني ومستوى في الأبعاد الأعلى).</li>
+                                        <li><strong>متجهات الدعم (Support Vectors):</strong> إحداثيات المراقبة الفردية الأقرب للمستوى الفائق، وهي المسؤولة عن تحديده وتعظيم المسافة بين الفئات.</li>
+                                        <li><strong>الهامش (Margin):</strong> المسافة بين المستوى الفائق وأقرب نقطة بيانات من أي مجموعة (ولا توجد أي نقطة بيانات داخل الهامش في الحالة المثالية).</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-white p-4 rounded-xl border border-slate-200/80">
+                                    <h4 class="font-extrabold text-indigo-800 mb-2">ملخص السيناريوهات الخمسة (الوحدة 2 ص 504 - 512):</h4>
+                                    <ul class="space-y-2">
+                                        <li class="bg-slate-50 p-2 rounded-lg border border-slate-100"><strong>قاعدة الإبهام:</strong> اختر المستوى الفائق الذي يفصل بين الفئتين بشكل أفضل ويوفر أكبر هامش ممكن.</li>
+                                        <li class="bg-slate-50 p-2 rounded-lg border border-slate-100"><strong>سيناريو 1 و 2:</strong> نختار الخط الذي يقسم الفئات تماماً أولاً، وإذا تساوت خطوط التقسيم نختار صاحب <strong>الهامش الأكبر</strong> (C) لزيادة القوة وتقليل خطأ التصنيف.</li>
+                                        <li class="bg-slate-50 p-2 rounded-lg border border-slate-100"><strong>سيناريو 3 (قاعدة ذهبية):</strong> خوارزمية SVM تختار المستوى الفائق الذي <strong>يصنف الفئات بدقة أولاً قبل تحقيق أقصى هامش</strong>.</li>
+                                        <li class="bg-slate-50 p-2 rounded-lg border border-slate-100"><strong>سيناريو 4 (القيم المتطرفة):</strong> تتميز SVM بميزة <strong>تجاهل القيم المتطرفة (الشائبة)</strong> والعثور على الحد الأقصى للهامش، لذا تصنيفها قوي ضد القيم المتطرفة.</li>
+                                        <li class="bg-slate-50 p-2 rounded-lg border border-slate-100"><strong>سيناريو 5 (التدرج وخدعة النواة):</strong> عند تداخل البيانات بشكل دائري غير خطي، نرفعها لبعد أعلى مثل $z = x^2 + y^2$ عبر <strong>خدعة النواة (Kernel Trick)</strong> فتصبح قابلة للفصل بمستوى فائق.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="bg-emerald-50/60 p-4 rounded-xl border border-emerald-200/80">
+                                    <h4 class="font-extrabold text-emerald-900 mb-2">إيجابيات SVM (ص 523):</h4>
+                                    <ul class="list-disc list-inside space-y-1 text-xs sm:text-sm">
+                                        <li>فعالة جداً مع البيانات القابلة للفصل الخطي ذات الهامش الواضح.</li>
+                                        <li>دقة عالية عندما يكون عدد المزايا كبيراً أو <strong>أكبر من عدد أمثلة التدريب</strong>.</li>
+                                        <li>كفاءة عالية لاعتمادها على <strong>متجهات الدعم فقط</strong> وليس كامل بيانات التدريب.</li>
+                                        <li>قوية ضد الإفراط في التخصيص (Overfitting) والقيم المتطرفة.</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-rose-50/60 p-4 rounded-xl border border-rose-200/80">
+                                    <h4 class="font-extrabold text-rose-900 mb-2">سلبيات SVM (ص 524):</h4>
+                                    <ul class="list-disc list-inside space-y-1 text-xs sm:text-sm">
+                                        <li>لا تعمل بشكل جيد مع <strong>مجموعات البيانات الكبيرة</strong> لأن زمن تدريبها طويل ومكلف حسابياً.</li>
+                                        <li>تتأثر سلباً عندما تحوي البيانات <strong>ضجيجاً (Noise)</strong> أو أخطاء كثيرة أو تداخلاً كاملاً.</li>
+                                        <li>حساسة جداً لضبط المعلمات الفائقة (مثل المعلمة $C$ ونوع النواة).</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-indigo-50/60 p-4 rounded-xl border border-indigo-200/80">
+                                    <h4 class="font-extrabold text-indigo-900 mb-2">أشهر تطبيقات SVM (ص 525):</h4>
+                                    <ul class="list-disc list-inside space-y-1 text-xs sm:text-sm">
+                                        <li>تصنيف وتجزئة الصور (Image Classification).</li>
+                                        <li>تصنيف النصوص ومعالجة اللغات الطبيعية (NLP) وتحليل الآراء.</li>
+                                        <li>تصنيف البريد الإلكتروني (Spam / Ham).</li>
+                                        <li>المعلوماتية الحيوية والبيولوجيا.</li>
+                                        <li><strong>الأشهر:</strong> التعرف على الأرقام المكتوبة بخط اليد في نظام البريد (Postal Automation).</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accordion 2: SVR -->
+                <div class="accordion-item bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <button onclick="toggleAccordion(this)" class="w-full px-5 py-4 text-right flex items-center justify-between hover:bg-slate-50 transition-colors">
+                        <span class="font-extrabold text-slate-800 text-sm sm:text-base flex items-center gap-2.5">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+                            (2) الفصل الثالث عشر: انحدار المتجه الداعم SVR — المبادئ، نقاط الاستدلال، والفروقات مع SVM (ص 527 - 564)
+                        </span>
+                        <span class="accordion-arrow text-slate-500 font-bold text-sm">◀</span>
+                    </button>
+                    <div class="accordion-content border-t border-slate-100 bg-slate-50/40">
+                        <div class="p-5 sm:p-6 space-y-5 text-sm leading-relaxed text-slate-700">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-white p-4 rounded-xl border border-slate-200/80">
+                                    <h4 class="font-extrabold text-emerald-800 mb-2">مبدأ عمل SVR والمنهجية التطبيقية:</h4>
+                                    <ul class="list-disc list-inside space-y-1.5">
+                                        <li><strong>الهدف الأساسي:</strong> خوارزمية تعلم آلي تندرج تحت SVM وتُستخدم لـ <strong>تحليل الانحدار (Regression) والتنبؤ بالقيم العددية المستمرة</strong> بدلاً من الفئات المنفصلة.</li>
+                                        <li><strong>آلية الهامش (عكس SVM):</strong> يتم تحديد حد علوي وحد سفلي (الهامش) بحيث يتسع ضمنه أكبر عدد ممكن من نقاط البيانات المتوقعة حول <strong>الخط المرجعي (حد الانحدار)</strong> دون زيادة في خطأ التنبؤ.</li>
+                                        <li><strong>معامل التسامح (Tolerance / $\varepsilon$):</strong> يعكس الحساسية للهامش الصغير ويمكّن النموذج من التكيف مع التباين في البيانات وتوفير توقعات دقيقة.</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-white p-4 rounded-xl border border-slate-200/80">
+                                    <h4 class="font-extrabold text-emerald-800 mb-2">تصنيف النقاط وأنواع SVR (الوحدة 2 ص 542 - 549):</h4>
+                                    <ul class="list-disc list-inside space-y-1.5">
+                                        <li><strong>نقاط الاستدلال / نقاط القوة (Support Vectors):</strong> النقاط التي تقع على الهامش أو بالقرب منه، وتلعب دوراً حاسماً في تحديد الحد الفاصل وبناء النموذج النهائي للتنبؤ.</li>
+                                        <li><strong>النقاط الضعيفة:</strong> النقاط التي لا تؤثر بشكل كبير على تحديد الحدود الفاصلة وقد تكون عرضة للضوضاء.</li>
+                                        <li><strong>أنواع SVR الخمسة حسب النواة:</strong> (1) النواة الخطية، (2) متعددة الحدود، (3) دالة الأساس الشعاعي <strong>RBF (الأكثر شيوعاً)</strong>، (4) دالة سيجمويد Sigmoid، (5) <strong>نواة الشبكة العصبية ANN</strong>.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="bg-white p-4 rounded-xl border border-slate-200/80">
+                                <h4 class="font-extrabold text-emerald-800 mb-2">التطبيقات الخمسة الرئيسية لخوارزمية SVR (ص 561 - 563):</h4>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 text-xs">
+                                    <div class="bg-emerald-50/70 p-3 rounded-xl border border-emerald-100">
+                                        <strong class="block text-emerald-900 mb-1">1. أسعار العقارات</strong>
+                                        التنبؤ بسعر العقار بناءً على الموقع والحجم والبيانات التاريخية.
+                                    </div>
+                                    <div class="bg-emerald-50/70 p-3 rounded-xl border border-emerald-100">
+                                        <strong class="block text-emerald-900 mb-1">2. مبيعات المنتجات</strong>
+                                        توقع مستويات المبيعات بناءً على الإعلانات والأسعار والظروف الاقتصادية.
+                                    </div>
+                                    <div class="bg-emerald-50/70 p-3 rounded-xl border border-emerald-100">
+                                        <strong class="block text-emerald-900 mb-1">3. الطلب على الطاقة</strong>
+                                        تنبؤ الاستهلاك المستقبلي للطاقة في فترات زمنية محددة.
+                                    </div>
+                                    <div class="bg-emerald-50/70 p-3 rounded-xl border border-emerald-100">
+                                        <strong class="block text-emerald-900 mb-1">4. الأسهم والأسواق المالية</strong>
+                                        توقع أسعار الأسهم وتحركات السوق والأداء التاريخي.
+                                    </div>
+                                    <div class="bg-emerald-50/70 p-3 rounded-xl border border-emerald-100">
+                                        <strong class="block text-emerald-900 mb-1">5. السياسات الحكومية</strong>
+                                        تقدير تأثير السياسات على التضخم والبطالة والنمو الاقتصادي.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accordion 3: Naive Bayes -->
+                <div class="accordion-item bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <button onclick="toggleAccordion(this)" class="w-full px-5 py-4 text-right flex items-center justify-between hover:bg-slate-50 transition-colors">
+                        <span class="font-extrabold text-slate-800 text-sm sm:text-base flex items-center gap-2.5">
+                            <span class="w-2.5 h-2.5 rounded-full bg-purple-600"></span>
+                            (3) الفصل الرابع عشر: خوارزمية بايز الساذجة Naive Bayes — القانون، الأنواع الثلاثة، والمثال العملي (ص 565 - 602)
+                        </span>
+                        <span class="accordion-arrow text-slate-500 font-bold text-sm">◀</span>
+                    </button>
+                    <div class="accordion-content border-t border-slate-100 bg-slate-50/40">
+                        <div class="p-5 sm:p-6 space-y-5 text-sm leading-relaxed text-slate-700">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-white p-4 rounded-xl border border-slate-200/80">
+                                    <h4 class="font-extrabold text-purple-800 mb-2">المفهوم وسبب التسمية (ص 569 - 574):</h4>
+                                    <ul class="list-disc list-inside space-y-1.5">
+                                        <li><strong>الهوية:</strong> تعلم آلي خاضع للإشراف لمهام التصنيف، ويُعرف باسم <strong>مصنف الاحتمالية (Probabilistic Classifier)</strong>.</li>
+                                        <li><strong>لماذا سُمي Naive (ساذجاً)؟</strong> لأنه يفترض <strong>استقلالية الخصائص (Independence Assumptions)</strong> تماماً عن بعضها البعض بغض النظر عن السياق أو الارتباط (مثل افتراض أن اللون الأحمر والشكل الكروي والطعم الحلو في التفاحة صفات مستقلة لا علاقة بينها).</li>
+                                        <li><strong>لماذا سُمي Bayes؟</strong> نسبة إلى نظرية العالم توماس بايز لحساب الاحتمال الشرطي.</li>
+                                        <li><strong>مكتبة بايثون:</strong> يُنفذ عبر الوحدة <code class="bg-slate-100 px-1.5 py-0.5 rounded text-purple-700 font-mono text-xs">sklearn.naive_bayes</code>.</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-white p-4 rounded-xl border border-slate-200/80">
+                                    <h4 class="font-extrabold text-purple-800 mb-2">قانون بايز ومكوناته الأربعة (ص 580 - 593):</h4>
+                                    <div class="bg-purple-50 border border-purple-200 rounded-xl p-3 text-center font-mono text-sm sm:text-base font-bold text-purple-900 mb-3" dir="ltr">
+                                        Posterior: P(A|B) = [ P(B|A) × P(A) ] / P(B)
+                                    </div>
+                                    <ul class="space-y-1 text-xs sm:text-sm">
+                                        <li><strong>Prior $P(A)$:</strong> الاحتمال الأساسي / القبلي (احتمال الفئة قبل رؤية الدليل).</li>
+                                        <li><strong>Likelihood $P(B|A)$:</strong> الاحتمال الشرطي (احتمال ظهور الميزة/الدليل بشرط تحقق الفئة).</li>
+                                        <li><strong>Evidence $P(B)$:</strong> الاحتمال الأدنى / الدليل (ويشترط ألا يساوي صفراً $P(B) \neq 0$).</li>
+                                        <li><strong>Posterior $P(A|B)$:</strong> الاحتمال الخلفي / المشروط (النتيجة النهائية للتصنيف بعد النظر للأدلة).</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- ملخص المثال العملي (براء) -->
+                            <div class="bg-white p-4 rounded-xl border border-purple-200/80 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                                <div>
+                                    <h4 class="font-extrabold text-purple-900 mb-1">ملخص المثال العملي بالملف (تحديد جنس الاسم "براء" ص 594 - 600):</h4>
+                                    <p class="text-xs sm:text-sm text-slate-600">
+                                        من قاعدة بيانات مكونة من <strong>8 أشخاص</strong> (3 ذكور منهم 1 براء، و5 إناث منهن 2 براء):
+                                        الاحتمال القبلي للذكر $3/8$ وللأنثى $5/8$، والدليل $P(\text{براء}) = 3/8$.
+                                    </p>
+                                </div>
+                                <div class="flex flex-wrap gap-2 shrink-0">
+                                    <span class="bg-blue-50 text-blue-800 border border-blue-200 px-3 py-1.5 rounded-xl text-xs font-bold">
+                                        P(ذكر | براء) = 1/3 ≈ 33.3%
+                                    </span>
+                                    <span class="bg-pink-50 text-pink-800 border border-pink-200 px-3 py-1.5 rounded-xl text-xs font-bold">
+                                        P(أنثى | براء) = 2/3 ≈ 66.7% (الأرجح)
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accordion 4: متى نستخدم كل خوارزمية؟ (الخلاصة الذهبية) -->
+                <div class="accordion-item bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <button onclick="toggleAccordion(this)" class="w-full px-5 py-4 text-right flex items-center justify-between hover:bg-slate-50 transition-colors">
+                        <span class="font-extrabold text-slate-800 text-sm sm:text-base flex items-center gap-2.5">
+                            <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                            (4) الخلاصة الذهبية للاختبار: متى نختار SVM ومتى SVR ومتى Naive Bayes؟
+                        </span>
+                        <span class="accordion-arrow text-slate-500 font-bold text-sm">◀</span>
+                    </button>
+                    <div class="accordion-content border-t border-slate-100 bg-slate-50/40">
+                        <div class="p-5 sm:p-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                            <div class="bg-white p-4 rounded-xl border-r-4 border-indigo-600 shadow-sm">
+                                <h4 class="font-extrabold text-indigo-800 mb-2">اختر SVM إذا وجدت في السؤال:</h4>
+                                <ul class="list-disc list-inside space-y-1 text-xs sm:text-sm text-slate-700">
+                                    <li>تصنيف ثنائي أو متعدد الفئات (نعم/لا، بريد مزعج/حقيقي، تصنيف صور).</li>
+                                    <li>ميزات مترابطة ومعقدة (حيث يفشل Naive Bayes).</li>
+                                    <li>بيانات غير خطية تحتاج تحويل لبعد أعلى (خدعة النواة Kernel).</li>
+                                    <li>عدد المزايا كبير جداً مقارنة بعدد العينات، وحجم البيانات ليس ضخماً جداً.</li>
+                                    <li>يذكر: مستوى فائق، هامش أعظم، متجهات دعم، أو Hinge Loss.</li>
+                                </ul>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl border-r-4 border-emerald-600 shadow-sm">
+                                <h4 class="font-extrabold text-emerald-800 mb-2">اختر SVR إذا وجدت في السؤال:</h4>
+                                <ul class="list-disc list-inside space-y-1 text-xs sm:text-sm text-slate-700">
+                                    <li><strong>التنبؤ بقيمة عددية مستمرة</strong> (سعر عقار، سعر سهم، درجة حرارة، حجم مبيعات، استهلاك طاقة).</li>
+                                    <li>وجود علاقة غير خطية أو قيم متطرفة في بيانات الانحدار.</li>
+                                    <li>ملاءمة خط انحدار (خط مرجعي) ليحتوي الهامش أكبر عدد من النقاط.</li>
+                                    <li>يذكر: نقاط الاستدلال/القوة، معامل التسامح، MSE، أو Squared Error Loss.</li>
+                                </ul>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl border-r-4 border-purple-600 shadow-sm">
+                                <h4 class="font-extrabold text-purple-800 mb-2">اختر Naive Bayes إذا وجدت في السؤال:</h4>
+                                <ul class="list-disc list-inside space-y-1 text-xs sm:text-sm text-slate-700">
+                                    <li>تصنيف يعتمد على <strong>الاحتمالات الشرطية</strong> ونظرية بايز.</li>
+                                    <li>افتراض <strong>استقلالية الميزات</strong> عن بعضها البعض.</li>
+                                    <li>الحاجة لسرعة تدريب وتنبؤ فائقة في <strong>الوقت الفعلي (Real-time)</strong>.</li>
+                                    <li>تصنيف النصوص والوثائق (رياضة/سياسة) وتحليل المشاعر ونظم التوصية.</li>
+                                    <li>مجموعة تدريب صغيرة أو بيانات عالية الأبعاد بتكلفة حسابية منخفضة.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- =========================================================
+             القسم 2: جداول المقارنات الدقيقة (4 جداول شاملة)
+             ========================================================= -->
+        <section id="section-tables" class="tab-section hidden space-y-8">
+            
+            <!-- الجدول 1: المقارنة الشاملة بين الخوارزميات الثلاث -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <span class="text-xs font-bold text-mimimo-primary bg-mimimo-light px-3 py-1 rounded-full">جدول 1</span>
+                        <h2 class="text-lg sm:text-xl font-extrabold text-slate-800 mt-2">
+                            المقارنة الشاملة بين الخوارزميات الثلاث (SVM vs SVR vs Naive Bayes)
+                        </h2>
+                    </div>
+                    <input type="text" id="tableSearch" onkeyup="filterMainTable()" placeholder="ابحث في الجدول (مثلاً: خسارة، خطية، صور...)" class="border border-slate-300 rounded-xl px-3.5 py-2 text-xs sm:text-sm focus:outline-none focus:border-mimimo-primary w-full sm:w-64">
+                </div>
+                <div class="overflow-x-auto">
+                    <table id="mainComparisonTable" class="w-full text-right border-collapse text-xs sm:text-sm">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-800 border-b border-slate-200">
+                                <th class="p-3.5 font-extrabold w-1/6">وجه المقارنة</th>
+                                <th class="p-3.5 font-extrabold text-indigo-900 bg-indigo-50/70 w-1/4">SVM (الفصل 12)</th>
+                                <th class="p-3.5 font-extrabold text-emerald-900 bg-emerald-50/70 w-1/4">SVR (الفصل 13)</th>
+                                <th class="p-3.5 font-extrabold text-purple-900 bg-purple-50/70 w-1/3">Naive Bayes (الفصل 14)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200">
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3.5 font-bold text-slate-800 bg-slate-50/50">الاسم بالعربية</td>
+                                <td class="p-3.5">آلة المتجه الداعم (Support Vector Machine)</td>
+                                <td class="p-3.5">انحدار المتجه الداعم (Support Vector Regression)</td>
+                                <td class="p-3.5">خوارزمية بايز الساذجة (Naive Bayes)</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3.5 font-bold text-slate-800 bg-slate-50/50">نوع التعلم</td>
+                                <td class="p-3.5">تعلم آلي خاضع للإشراف (Supervised)</td>
+                                <td class="p-3.5">تعلم آلي خاضع للإشراف (Supervised)</td>
+                                <td class="p-3.5">تعلم آلي خاضع للإشراف (Supervised)</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3.5 font-bold text-slate-800 bg-slate-50/50">المهمة الأساسية والمخرجات</td>
+                                <td class="p-3.5"><strong>التصنيف (Classification)</strong> غالباً (فئتين أو أكثر) ويمكن استخدامها للتنبؤ</td>
+                                <td class="p-3.5"><strong>الانحدار (Regression)</strong> حصراً: التنبؤ بالقيم العددية المستمرة</td>
+                                <td class="p-3.5"><strong>التصنيف (Classification)</strong>: تحديد الفئة الأعلى احتمالاً</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3.5 font-bold text-slate-800 bg-slate-50/50">طبيعة النموذج</td>
+                                <td class="p-3.5"><strong>منتقي خطي غير احتمالي</strong> (هندسي يعتمد على موقع النقطة بالنسبة للمستوى الفائق)</td>
+                                <td class="p-3.5">نموذج انحدار هندسي يعتمد على الهامش والخط المرجعي</td>
+                                <td class="p-3.5"><strong>مصنف احتمالي</strong> (يعتمد على نظرية بايز والاحتمال الشرطي)</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3.5 font-bold text-slate-800 bg-slate-50/50">الافتراض الجوهري</td>
+                                <td class="p-3.5">وجود مستوى فائق (Hyperplane) يفصل الفئات بأكبر هامش ممكن</td>
+                                <td class="p-3.5">توسيع الهامش ليشمل أكبر عدد من نقاط القيم المستمرة المتوقعة</td>
+                                <td class="p-3.5"><strong>استقلالية الخصائص (Independence)</strong> تماماً عن بعضها</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3.5 font-bold text-slate-800 bg-slate-50/50">النقاط المؤثرة</td>
+                                <td class="p-3.5"><strong>متجهات الدعم (Support Vectors):</strong> أقرب النقاط للمستوى الفائق</td>
+                                <td class="p-3.5"><strong>نقاط الاستدلال / نقاط القوة:</strong> الواقعة على الهامش أو قربه</td>
+                                <td class="p-3.5">جميع بيانات التدريب لحساب التكرارات والاحتمالات القبلية والشرطية</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3.5 font-bold text-slate-800 bg-slate-50/50">البيانات غير الخطية</td>
+                                <td class="p-3.5">يعالجها بكفاءة عبر <strong>خدعة النواة (Kernel Trick)</strong> بالرفع لبعد أعلى</td>
+                                <td class="p-3.5">يعالجها بكفاءة عبر دوال النواة (RBF, Poly, Sigmoid, ANN)</td>
+                                <td class="p-3.5">لا يتعلم العلاقات المعقدة أو التفاعلات غير الخطية بين الميزات</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3.5 font-bold text-slate-800 bg-slate-50/50">السرعة وحجم البيانات</td>
+                                <td class="p-3.5">بطيء ومكلف حسابياً مع <strong>مجموعات البيانات الكبيرة</strong>؛ ممتاز عندما المزايا > الأمثلة</td>
+                                <td class="p-3.5">قادر على التعامل مع البيانات الكبيرة وعالية التباين بمرونة</td>
+                                <td class="p-3.5"><strong>سريع جداً ومنخفض التكلفة</strong>؛ يعمل بكفاءة مع البيانات الصغيرة والكبيرة وفي الوقت الفعلي</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3.5 font-bold text-slate-800 bg-slate-50/50">التأثر بالضجيج والقيم المتطرفة</td>
+                                <td class="p-3.5">قوي ضد القيم المتطرفة الشائبة، لكنه يضعف مع <strong>الضجيج الكثير والتداخل الكامل</strong></td>
+                                <td class="p-3.5">يتعامل بفعالية مع القيم المتطرفة والتباين العالي بفضل الهامش</td>
+                                <td class="p-3.5">متين ولا يتأثر بالميزات غير ذات الصلة (Irrelevant features)</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3.5 font-bold text-slate-800 bg-slate-50/50">أشهر التطبيقات</td>
+                                <td class="p-3.5">تصنيف الصور، أرقام البريد المكتوبة بخط اليد، كشف الاحتيال، Spam، المعلوماتية الحيوية</td>
+                                <td class="p-3.5">أسعار العقارات، الأسهم، مبيعات المنتجات، الطلب على الطاقة، الطقس، السياسات الحكومية</td>
+                                <td class="p-3.5">كشف البريد العشوائي، تصنيف الوثائق والأخبار، تحليل المشاعر، نظم التوصية، التشخيص الطبي</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- الجدول 2: المقارنة الرسمية بين SVM و SVR من الفصل 13 (الوحدة 3 ص 556-560) -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="p-5 sm:p-6 border-b border-slate-100">
+                    <span class="text-xs font-bold text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">جدول 2 • نصي من الفصل 13 (ص 556 - 560)</span>
+                    <h2 class="text-lg sm:text-xl font-extrabold text-slate-800 mt-2">
+                        الفروق الخمسة الرسمية بين SVM و SVR (موضع أسئلة اختبار مؤكدة)
+                    </h2>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-right border-collapse text-xs sm:text-sm">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-800 border-b border-slate-200">
+                                <th class="p-3.5 font-extrabold w-1/5">معيار الاختلاف</th>
+                                <th class="p-3.5 font-extrabold text-indigo-900 bg-indigo-50/70 w-2/5">خوارزمية SVM</th>
+                                <th class="p-3.5 font-extrabold text-emerald-900 bg-emerald-50/70 w-2/5">خوارزمية SVR</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200">
+                            <tr>
+                                <td class="p-3.5 font-bold bg-slate-50/50">1. نوع المخرجات</td>
+                                <td class="p-3.5">تُستخدم لمسائل <strong>التصنيف</strong> (توجيه المخرجات إلى فئتين أو أكثر).</td>
+                                <td class="p-3.5">تُستخدم لمسائل <strong>الانحدار</strong> (توقع قيمة عددية مستمرة).</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3.5 font-bold bg-slate-50/50">2. دالة الخسارة (Loss Function)</td>
+                                <td class="p-3.5"><strong>دالة الخسارة المفقودة (Hinge Loss)</strong> لتحقيق فصل أمثل بين فئتين.</td>
+                                <td class="p-3.5"><strong>خطأ المربعات الصغيرة (Squared Error Loss)</strong> لتقييم الفرق بين القيم التنبؤية والفعلية.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3.5 font-bold bg-slate-50/50">3. التطبيقات</td>
+                                <td class="p-3.5">التصنيف النصي، تحليل الصور، وتحديد الأعمال الاحتيالية.</td>
+                                <td class="p-3.5">التوقعات الاقتصادية، التنبؤ بالطاقة والطقس، أسعار العقارات والأسهم.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3.5 font-bold bg-slate-50/50">4. مقياس الخطأ (Error Metric)</td>
+                                <td class="p-3.5"><strong>دقة التصنيف (Accuracy)</strong> ومعدل الخطأ.</td>
+                                <td class="p-3.5"><strong>الخطأ المتوسط المربعي (Mean Squared Error - MSE)</strong> أو الانحراف المعياري.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3.5 font-bold bg-slate-50/50">5. تحديد المعلمات</td>
+                                <td class="p-3.5">ضبط قيمة الهامش وتأثير <strong>المعلمة C</strong> على التصنيف.</td>
+                                <td class="p-3.5">ضبط قيمة الهامش وتأثير المعلمات (مثل معامل التسامح) على جودة التنبؤ.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- الجدول 3 و 4 جنباً إلى جنب: أنواع Naive Bayes + أنواع دوال النواة -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                
+                <!-- الجدول 3: أنواع Naive Bayes الثلاثة -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-5 border-b border-slate-100">
+                        <span class="text-xs font-bold text-purple-800 bg-purple-100 px-3 py-1 rounded-full">جدول 3 • الفصل 14 (ص 582 - 583)</span>
+                        <h3 class="text-lg font-extrabold text-slate-800 mt-2">
+                            الأنواع الثلاثة لمصنف Naive Bayes
+                        </h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-right border-collapse text-xs sm:text-sm">
+                            <thead>
+                                <tr class="bg-purple-50 text-purple-950 border-b border-purple-100">
+                                    <th class="p-3 font-extrabold">النوع</th>
+                                    <th class="p-3 font-extrabold">نوع البيانات / الميزات</th>
+                                    <th class="p-3 font-extrabold">الاستخدام الأبرز</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200">
+                                <tr>
+                                    <td class="p-3 font-bold text-purple-800">1. متعدد الحدود<br><span class="text-xs font-normal text-slate-500">Multinomial</span></td>
+                                    <td class="p-3"><strong>تكرار الكلمات وعددها</strong> في المستند (قيم منفصلة تعدّ التكرار).</td>
+                                    <td class="p-3">تصنيف المستندات إلى فئات (رياضة، سياسة، تكنولوجيا).</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold text-purple-800">2. برنولي<br><span class="text-xs font-normal text-slate-500">Bernoulli</span></td>
+                                    <td class="p-3">تنبؤات منطقية ثنائية: <strong>وجود الكلمة أم لا (نعم / لا)</strong>.</td>
+                                    <td class="p-3">تصنيف المستندات والنصوص بناءً على غياب أو حضور الكلمة.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold text-purple-800">3. غاوسي<br><span class="text-xs font-normal text-slate-500">Gaussian</span></td>
+                                    <td class="p-3"><strong>القيم المستمرة</strong> (وليس المنفصلة) عبر التوزيع الطبيعي ($\mu$ والتباين).</td>
+                                    <td class="p-3">البيانات الرقمية المستمرة التي تتبع التوزيع الطبيعي.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- الجدول 4: دوال النواة في SVM و SVR -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-5 border-b border-slate-100">
+                        <span class="text-xs font-bold text-indigo-800 bg-indigo-100 px-3 py-1 rounded-full">جدول 4 • الفصل 12 و 13 (ص 519 و 548)</span>
+                        <h3 class="text-lg font-extrabold text-slate-800 mt-2">
+                            أنواع دوال النواة (Kernels) في SVM و SVR
+                        </h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-right border-collapse text-xs sm:text-sm">
+                            <thead>
+                                <tr class="bg-indigo-50 text-indigo-950 border-b border-indigo-100">
+                                    <th class="p-3 font-extrabold">دالة النواة</th>
+                                    <th class="p-3 font-extrabold">طبيعة العلاقة</th>
+                                    <th class="p-3 font-extrabold">ملاحظات هامة للاختبار</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200">
+                                <tr>
+                                    <td class="p-3 font-bold text-indigo-800">الخطية (Linear)</td>
+                                    <td class="p-3">خطية</td>
+                                    <td class="p-3">تُستخدم عندما تكون البيانات قابلة للفصل بخط مستقيم أو مستوى فائق.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold text-indigo-800">متعددة الحدود (Polynomial)</td>
+                                    <td class="p-3">غير خطية</td>
+                                    <td class="p-3">لنمذجة العلاقات غير الخطية بين المتغيرات.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold text-indigo-800">الشعاعية (RBF)</td>
+                                    <td class="p-3">غير خطية</td>
+                                    <td class="p-3"><strong>الأكثر استخداماً وشيوعاً</strong>؛ تمتاز بالاستجابة المحلية والمحدودة وتكلفة حسابية ضئيلة.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold text-indigo-800">السينية (Sigmoid)</td>
+                                    <td class="p-3">غير خطية</td>
+                                    <td class="p-3">نواة غير خطية مستخدمة في كل من SVM و SVR.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold text-emerald-800">الشبكة العصبية (ANN)</td>
+                                    <td class="p-3">غير خطية</td>
+                                    <td class="p-3">ذُكرت ضمن أنواع <strong>SVR</strong> لنمذجة العلاقة باستخدام الشبكات العصبية.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- =========================================================
+             القسم 3: كيف أفرق بينهم؟ (أداة اتخاذ القرار التفاعلية)
+             ========================================================= -->
+        <section id="section-diff" class="tab-section hidden space-y-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+                <div class="max-w-3xl mb-6">
+                    <span class="text-xs font-bold text-amber-800 bg-amber-100 px-3 py-1 rounded-full">أداة التفريق الذكية</span>
+                    <h2 class="text-xl sm:text-2xl font-extrabold text-slate-800 mt-2">
+                        كيف أفرق بينهم في الاختبار؟ (مساعد اختيار الخوارزمية)
+                    </h2>
+                    <p class="text-slate-600 text-sm mt-1">
+                        اختاري خصائص المسألة أو المصطلحات المذكورة في السؤال، وسيرشدك النظام فوراً للخوارزمية الصحيحة مع تعليل من الملخص:
+                    </p>
+                </div>
+
+                <!-- أسئلة التصفية التفاعلية -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-4 bg-slate-50 p-5 rounded-2xl border border-slate-200">
+                        <div>
+                            <label class="block text-sm font-extrabold text-slate-800 mb-2">1. ما هو نوع المخرج المطلوب في المسألة؟</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="setDecision('task', 'classification')" id="btn-task-classification" class="dec-btn p-3 rounded-xl border-2 border-mimimo-primary bg-mimimo-light text-mimimo-primary font-bold text-xs sm:text-sm text-center transition-all">
+                                    تصنيف فئات (مزعج/حقيقي، فئة أ/ب)
+                                </button>
+                                <button onclick="setDecision('task', 'regression')" id="btn-task-regression" class="dec-btn p-3 rounded-xl border border-slate-300 bg-white text-slate-700 font-bold text-xs sm:text-sm text-center transition-all">
+                                    تنبؤ بقيمة مستمرة (سعر، طقس، أسهم)
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="subQuestionWrapper">
+                            <label class="block text-sm font-extrabold text-slate-800 mb-2">2. ما هي طبيعة الحسابات والخصائص؟</label>
+                            <div class="space-y-2">
+                                <button onclick="setDecision('nature', 'prob')" id="btn-nature-prob" class="dec-btn w-full p-3 rounded-xl border border-slate-300 bg-white text-slate-700 font-bold text-xs sm:text-sm text-right transition-all">
+                                    يعتمد على الاحتمالات الشرطية + يفترض استقلالية الميزات + سريع جداً
+                                </button>
+                                <button onclick="setDecision('nature', 'geom')" id="btn-nature-geom" class="dec-btn w-full p-3 rounded-xl border-2 border-mimimo-primary bg-mimimo-light text-mimimo-primary font-bold text-xs sm:text-sm text-right transition-all">
+                                    هندسي غير احتمالي + مستوى فائق وهامش + ميزات مترابطة أو غير خطية (نواة)
+                                </button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-extrabold text-slate-800 mb-2">3. أو اختاري حالة اختبارية جاهزة لمعرفة الحل:</label>
+                            <select id="presetScenario" onchange="applyPresetScenario()" class="w-full p-3 rounded-xl border border-slate-300 bg-white text-slate-800 font-bold text-xs sm:text-sm focus:outline-none focus:border-mimimo-primary">
+                                <option value="">-- اختاري مثالاً من الملخص --</option>
+                                <option value="spam_nb">تصفية البريد العشوائي بسرعة في الوقت الفعلي بناءً على تكرار الكلمات</option>
+                                <option value="handwriting_svm">التعرف على الأرقام المكتوبة بخط اليد في نظام البريد (Postal Automation)</option>
+                                <option value="stocks_svr">التنبؤ بأسعار العقارات أو الأسهم أو الطلب على الطاقة</option>
+                                <option value="apple_nb">تصنيف تفاحة بافتراض أن اللون الأحمر والشكل الكروي مستقلان تماماً</option>
+                                <option value="hinge_svm">نموذج يستخدم دالة الخسارة Hinge Loss والمعلمة C</option>
+                                <option value="mse_svr">نموذج يُقاس أداؤه بمقياس الخطأ المتوسط المربعي MSE</option>
+                                <option value="gaussian_nb">مصنف بايز الساذج لكن البيانات رقمية مستمرة تتبع التوزيع الطبيعي</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- بطاقة النتيجة الفورية -->
+                    <div id="decisionResultBox" class="bg-gradient-to-br from-indigo-50 to-white p-6 rounded-2xl border-2 border-indigo-200 flex flex-col justify-between shadow-sm">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span id="resChapter" class="bg-indigo-600 text-white text-xs font-extrabold px-3 py-1 rounded-full">الفصل الثاني عشر</span>
+                                <span id="resTag" class="text-xs font-bold text-indigo-700">تصنيف هندسي غير احتمالي</span>
+                            </div>
+                            <h3 id="resTitle" class="text-2xl font-black text-indigo-950 mb-3">
+                                خوارزمية آلة المتجه الداعم (SVM)
+                            </h3>
+                            <p id="resDesc" class="text-slate-700 text-sm leading-relaxed mb-4">
+                                لأن المشكلة هي <strong>تصنيف فئات</strong> وتعتمد على إيجاد <strong>المستوى الفائق (Hyperplane)</strong> الذي يعظم الهامش في فضاء الميزات دون الاعتماد على الاحتمالات، وتتعامل مع العلاقات المعقدة وغير الخطية باستخدام دوال النواة (مثل RBF).
+                            </p>
+                            <div class="bg-white/90 p-3.5 rounded-xl border border-indigo-100 space-y-1 text-xs">
+                                <div class="font-extrabold text-indigo-900">مؤشرات التأكيد في السؤال:</div>
+                                <div id="resClues" class="text-slate-600">• دالة الخسارة: Hinge Loss | مقياس الأداء: دقة التصنيف | المعلمة: C | النقاط المؤثرة: متجهات الدعم.</div>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-indigo-100 text-xs text-slate-500 font-semibold">
+                            💡 تذكري: إذا تحولت المهمة من تصنيف فئات إلى توقع رقم مستمر، ننتقل مباشرة إلى SVR.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========================================================
+             القسم 4: البطاقات التعليمية التفاعلية (Flashcards)
+             ========================================================= -->
+        <section id="section-cards" class="tab-section hidden space-y-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <span class="text-xs font-bold text-mimimo-primary bg-mimimo-light px-3 py-1 rounded-full">مراجعة سريعة</span>
+                        <h2 class="text-xl sm:text-2xl font-extrabold text-slate-800 mt-2">
+                            البطاقات التعليمية للمفاهيم والقوانين (اضغطي على البطاقة لقلبها)
+                        </h2>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="filterFlashcards('all')" class="fc-filter bg-mimimo-primary text-white text-xs font-bold px-3.5 py-2 rounded-full">الكل (18)</button>
+                        <button onclick="filterFlashcards('SVM')" class="fc-filter bg-slate-100 text-slate-700 hover:bg-indigo-100 text-xs font-bold px-3.5 py-2 rounded-full">SVM</button>
+                        <button onclick="filterFlashcards('SVR')" class="fc-filter bg-slate-100 text-slate-700 hover:bg-emerald-100 text-xs font-bold px-3.5 py-2 rounded-full">SVR</button>
+                        <button onclick="filterFlashcards('NB')" class="fc-filter bg-slate-100 text-slate-700 hover:bg-purple-100 text-xs font-bold px-3.5 py-2 rounded-full">Naive Bayes</button>
+                    </div>
+                </div>
+
+                <div id="flashcardsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                    <!-- يتم توليد البطاقات عبر JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- =========================================================
+             القسم 5: الاختبار الشامل (أسئلة التقييم الذاتي + المقارنة)
+             ========================================================= -->
+        <section id="section-quiz" class="tab-section hidden space-y-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5 mb-6">
+                    <div>
+                        <span class="text-xs font-bold text-amber-900 bg-amber-100 px-3 py-1 rounded-full">تدريب الاختبار النهائي</span>
+                        <h2 class="text-xl sm:text-2xl font-extrabold text-slate-800 mt-2">
+                            الاختبار الشامل للفصول الثلاثة (أسئلة التقييم الذاتي بالملف + أسئلة التفريق)
+                        </h2>
+                    </div>
+                    <div class="flex items-center gap-3 bg-slate-50 px-4 py-2.5 rounded-2xl border border-slate-200">
+                        <div class="text-center">
+                            <span class="block text-xs text-slate-500 font-bold">النتيجة الحالية</span>
+                            <span id="quizScoreDisplay" class="text-lg font-black text-mimimo-primary">0 / 18</span>
+                        </div>
+                        <button onclick="resetQuiz()" class="bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold px-3 py-2 rounded-xl transition-colors">
+                            إعادة الاختبار
+                        </button>
+                    </div>
+                </div>
+
+                <div id="quizContainer" class="space-y-5">
+                    <!-- يتم توليد الأسئلة عبر JavaScript -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- تذييل الصفحة المطابق لـ Mimimo -->
+    <footer class="bg-white border-t border-slate-200 py-6 px-4 mt-10 text-center">
+        <p class="text-xs sm:text-sm text-slate-500 font-semibold">
+            مبني بالكامل (100%) على محتوى الفصول الثلاثة الأخيرة من ملخص مقرر تعلم الآلة التطبيقي (صفحات 484 - 602)
+        </p>
+    </footer>
+
+    <script>
+        // ==========================================
+        // 1. إدارة التبويبات (Tabs Navigation)
+        // ==========================================
+        function switchTab(tabName) {
+            // إخفاء جميع الأقسام
+            document.querySelectorAll('.tab-section').forEach(sec => sec.classList.add('hidden'));
+            // إظهار القسم المطلوب
+            document.getElementById('section-' + tabName).classList.remove('hidden');
+
+            // تحديث تنسيق الأزرار
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                if (btn.id === 'tab-quiz') {
+                    btn.className = 'tab-btn bg-amber-400 hover:bg-amber-300 text-slate-900 font-extrabold px-4 sm:px-5 py-2.5 rounded-full text-xs sm:text-sm shadow-md transition-all';
+                } else {
+                    btn.className = 'tab-btn bg-white/15 hover:bg-white/25 text-white border border-white/30 font-bold px-4 sm:px-5 py-2.5 rounded-full text-xs sm:text-sm transition-all';
+                }
+            });
+
+            const activeBtn = document.getElementById('tab-' + tabName);
+            if (tabName === 'quiz') {
+                activeBtn.className = 'tab-btn bg-white text-mimimo-primary font-black px-4 sm:px-5 py-2.5 rounded-full text-xs sm:text-sm shadow-md ring-2 ring-amber-300 transition-all';
+            } else {
+                activeBtn.className = 'tab-btn bg-white text-mimimo-primary font-bold px-4 sm:px-5 py-2.5 rounded-full text-xs sm:text-sm shadow-md transition-all';
+            }
+        }
+
+        // ==========================================
+        // 2. إدارة الأكورديون (Accordions)
+        // ==========================================
+        function toggleAccordion(btn) {
+            const item = btn.closest('.accordion-item');
+            item.classList.toggle('active');
+        }
+
+        // ==========================================
+        // 3. فلتر البحث في الجدول الشامل
+        // ==========================================
+        function filterMainTable() {
+            const input = document.getElementById('tableSearch').value.toLowerCase();
+            const rows = document.querySelectorAll('#mainComparisonTable tbody tr');
+            rows.forEach(row => {
+                const text = row.innerText.toLowerCase();
+                row.style.display = text.includes(input) ? '' : 'none';
+            });
+        }
+
+        // ==========================================
+        // 4. أداة التفريق التفاعلية (Decision Helper)
+        // ==========================================
+        let decisionState = { task: 'classification', nature: 'geom' };
+
+        function setDecision(key, val) {
+            decisionState[key] = val;
+            document.getElementById('presetScenario').value = '';
+            updateDecisionUI();
+        }
+
+        function updateDecisionUI() {
+            const { task, nature } = decisionState;
+            const subWrapper = document.getElementById('subQuestionWrapper');
+
+            // تحديث أزرار السؤال 1
+            document.getElementById('btn-task-classification').className = task === 'classification'
+                ? 'dec-btn p-3 rounded-xl border-2 border-mimimo-primary bg-mimimo-light text-mimimo-primary font-bold text-xs sm:text-sm text-center transition-all'
+                : 'dec-btn p-3 rounded-xl border border-slate-300 bg-white text-slate-700 font-bold text-xs sm:text-sm text-center transition-all';
+
+            document.getElementById('btn-task-regression').className = task === 'regression'
+                ? 'dec-btn p-3 rounded-xl border-2 border-emerald-600 bg-emerald-50 text-emerald-800 font-bold text-xs sm:text-sm text-center transition-all'
+                : 'dec-btn p-3 rounded-xl border border-slate-300 bg-white text-slate-700 font-bold text-xs sm:text-sm text-center transition-all';
+
+            if (task === 'regression') {
+                subWrapper.style.opacity = '0.45';
+                subWrapper.style.pointerEvents = 'none';
+                renderDecisionBox(
+                    'الفصل الثالث عشر',
+                    'انحدار وتنبؤ بقيم مستمرة',
+                    'خوارزمية انحدار المتجه الداعم (SVR)',
+                    'بما أن الهدف هو <strong>التنبؤ بقيمة عددية مستمرة</strong> (مثل أسعار العقارات، الأسهم، الطقس، أو الطلب على الطاقة)، فإن SVR هي الخيار المخصص لذلك؛ حيث تلائم الخط المرجعي ليتسع الهامش لأكبر عدد من النقاط المتوقعة.',
+                    '• دالة الخسارة: Squared Error Loss | مقياس الخطأ: MSE أو الانحراف المعياري | النقاط المؤثرة: نقاط الاستدلال (القوة).',
+                    'emerald'
+                );
+            } else {
+                subWrapper.style.opacity = '1';
+                subWrapper.style.pointerEvents = 'auto';
+
+                document.getElementById('btn-nature-prob').className = nature === 'prob'
+                    ? 'dec-btn w-full p-3 rounded-xl border-2 border-purple-600 bg-purple-50 text-purple-900 font-bold text-xs sm:text-sm text-right transition-all'
+                    : 'dec-btn w-full p-3 rounded-xl border border-slate-300 bg-white text-slate-700 font-bold text-xs sm:text-sm text-right transition-all';
+
+                document.getElementById('btn-nature-geom').className = nature === 'geom'
+                    ? 'dec-btn w-full p-3 rounded-xl border-2 border-mimimo-primary bg-mimimo-light text-mimimo-primary font-bold text-xs sm:text-sm text-right transition-all'
+                    : 'dec-btn w-full p-3 rounded-xl border border-slate-300 bg-white text-slate-700 font-bold text-xs sm:text-sm text-right transition-all';
+
+                if (nature === 'prob') {
+                    renderDecisionBox(
+                        'الفصل الرابع عشر',
+                        'مصنف احتمالي سريع',
+                        'خوارزمية بايز الساذجة (Naive Bayes)',
+                        'لأن التصنيف يعتمد على <strong>نظرية بايز والاحتمال الشرطي</strong> ويفترض <strong>استقلالية الخصائص</strong> تماماً عن بعضها. تتميز بالسرعة الفائقة وانخفاض التكلفة الحسابية والتنبؤ في الوقت الفعلي.',
+                        '• القانون: P(A|B) = [P(B|A)×P(A)] / P(B) | الأنواع: Multinomial (تكرار)، Bernoulli (نعم/لا)، Gaussian (مستمر).',
+                        'purple'
+                    );
+                } else {
+                    renderDecisionBox(
+                        'الفصل الثاني عشر',
+                        'تصنيف هندسي غير احتمالي',
+                        'خوارزمية آلة المتجه الداعم (SVM)',
+                        'لأن المشكلة هي <strong>تصنيف فئات</strong> وتعتمد على إيجاد <strong>المستوى الفائق (Hyperplane)</strong> الذي يعظم الهامش في فضاء الميزات دون الاعتماد على الاحتمالات، وتتعامل مع العلاقات المعقدة وغير الخطية باستخدام دوال النواة (مثل RBF).',
+                        '• دالة الخسارة: Hinge Loss | مقياس الأداء: دقة التصنيف | المعلمة: C | النقاط المؤثرة: متجهات الدعم.',
+                        'indigo'
+                    );
+                }
+            }
+        }
+
+        function applyPresetScenario() {
+            const val = document.getElementById('presetScenario').value;
+            if (!val) return;
+            const presets = {
+                spam_nb: ['الفصل الرابع عشر', 'تصنيف نصوص سريع', 'Naive Bayes (متعدد الحدود / برنولي)', 'تُعد تصفية البريد العشوائي في الوقت الفعلي وتصنيف الوثائق بناءً على تكرار الكلمات أو وجودها التطبيق الأشهر لخوارزمية Naive Bayes.', '• يستخدم Multinomial لتكرار الكلمات، و Bernoulli لوجود الكلمة (نعم/لا).', 'purple'],
+                handwriting_svm: ['الفصل الثاني عشر', 'التطبيق الأشهر لـ SVM', 'خوارزمية آلة المتجه الداعم (SVM)', 'ورد نصياً في صفحة 525 أن التطبيق الأشهر لـ SVM هو التعرف على الأرقام المكتوبة بخط اليد في نظام البريد (Postal Automation Services).', '• يتميز بقدرته العالية على تصنيف الصور والبيانات عالية الأبعاد.', 'indigo'],
+                stocks_svr: ['الفصل الثالث عشر', 'تنبؤ بقيم مستمرة', 'خوارزمية انحدار المتجه الداعم (SVR)', 'التنبؤ بأسعار العقارات والأسهم والطلب على الطاقة ومبيعات المنتجات كلها قيم عددية مستمرة يعالجها SVR بدقة عالية.', '• يعتمد على الخط المرجعي والهامش ونقاط الاستدلال.', 'emerald'],
+                apple_nb: ['الفصل الرابع عشر', 'سبب التسمية بـ Naive', 'خوارزمية بايز الساذجة (Naive Bayes)', 'مثال التفاحة (اللون الأحمر + الشكل الكروي + الطعم الحلو) يوضح أن الخوارزمية تعتبر هذه الميزات مستقلة تماماً رغم ارتباطها في الواقع، ولهذا سُميت "ساذجة".', '• مبدأ استقلالية الخصائص (Independence Assumptions).', 'purple'],
+                hinge_svm: ['الفصل الثاني عشر', 'دالة الخسارة والمعلمات', 'خوارزمية آلة المتجه الداعم (SVM)', 'تستخدم SVM دالة الخسارة المفقودة (Hinge Loss) لتحقيق فصل أمثل بين الفئتين، وتتطلب ضبط قيمة الهامش وتأثير المعلمة C.', '• في المقابل، SVR تستخدم Squared Error Loss.', 'indigo'],
+                mse_svr: ['الفصل الثالث عشر', 'مقياس الخطأ', 'خوارزمية انحدار المتجه الداعم (SVR)', 'يُقاس أداء SVR بواسطة مقياس الخطأ المتوسط المربعي (Mean Squared Error - MSE) أو الانحراف المعياري بين القيم التنبؤية والفعلية.', '• في المقابل، SVM يُقاس بدقة التصنيف ومعدل الخطأ.', 'emerald'],
+                gaussian_nb: ['الفصل الرابع عشر', 'نوع خاص من بايز', 'غاوسي نايف بايز (Gaussian Naive Bayes)', 'يُستخدم مصنف غاوسي نايف بايز في حالة القيم المستمرة (وليس المنفصلة) ويحسب الاحتمالات باستخدام التوزيع الطبيعي (المتوسط μ والتباين).', '• انتبهي: هو الوحيد بين أنواع بايز الذي يتعامل مع القيم المستمرة.', 'purple']
+            };
+            renderDecisionBox(...presets[val]);
+        }
+
+        function renderDecisionBox(chap, tag, title, desc, clues, color) {
+            const box = document.getElementById('decisionResultBox');
+            const colorMap = {
+                indigo: { bg: 'from-indigo-50 to-white border-indigo-200', badge: 'bg-indigo-600', tag: 'text-indigo-700', title: 'text-indigo-950' },
+                emerald: { bg: 'from-emerald-50 to-white border-emerald-200', badge: 'bg-emerald-600', tag: 'text-emerald-700', title: 'text-emerald-950' },
+                purple: { bg: 'from-purple-50 to-white border-purple-200', badge: 'bg-purple-600', tag: 'text-purple-700', title: 'text-purple-950' }
+            };
+            const c = colorMap[color];
+            box.className = `bg-gradient-to-br ${c.bg} p-6 rounded-2xl border-2 flex flex-col justify-between shadow-sm transition-all`;
+            document.getElementById('resChapter').className = `${c.badge} text-white text-xs font-extrabold px-3 py-1 rounded-full`;
+            document.getElementById('resChapter').textContent = chap;
+            document.getElementById('resTag').className = `text-xs font-bold ${c.tag}`;
+            document.getElementById('resTag').textContent = tag;
+            document.getElementById('resTitle').className = `text-2xl font-black ${c.title} mb-3`;
+            document.getElementById('resTitle').textContent = title;
+            document.getElementById('resDesc').innerHTML = desc;
+            document.getElementById('resClues').textContent = clues;
+        }
+
+        // ==========================================
+        // 5. البطاقات التعليمية (18 Flashcards)
+        // ==========================================
+        const flashcardsData = [
+            { cat: 'SVM', q: 'ما هي "متجهات الدعم" (Support Vectors) في SVM؟', a: 'هي إحداثيات المراقبة الفردية الأقرب إلى المستوى الفائق، وتساهم في تعظيم الهامش بين الفئات.' },
+            { cat: 'SVM', q: 'لماذا يُعتبر SVM منتقياً خطياً "غير احتمالي"؟', a: 'لأن الميزات في الكائنات الجديدة تحدد موقعها بدقة ("أعلى" أو "أسفل" المستوى الفاصل) ولا يوجد عنصر معتمد على الاحتمال.' },
+            { cat: 'SVM', q: 'ما هي قاعدة الإبهام (Rule of Thumb) في SVM؟', a: 'اختر المستوى الفائق الذي يفصل بين الفئتين بشكل أفضل وبأكبر هامش ممكن، مع أولوية التصنيف الصحيح أولاً.' },
+            { cat: 'SVM', q: 'كيف تتعامل SVM مع القيم المتطرفة (Outliers) في سيناريو 4؟', a: 'تتجاهل القيم المتطرفة الشائبة وتجد المستوى الفائق ذو الحد الأقصى للهامش، لذا تصنيفها قوي ضد القيم المتطرفة.' },
+            { cat: 'SVM', q: 'ما هي خدعة النواة (Kernel Trick) ومتى تُستخدم؟', a: 'تحويل البيانات غير القابلة للفصل خطياً من مساحة ذات بعد منخفض إلى مساحة ذات بعد أعلى (مثل z = x² + y²) لتصبح قابلة للفصل خطياً.' },
+            { cat: 'SVM', q: 'ما هي دالة النواة الأكثر استخداماً في SVM و SVR؟', a: 'دالة الأساس الشعاعي (RBF)؛ لأنها تمتاز بالاستجابة المحلية والمحدودة وتكلفة حسابية ضئيلة.' },
+            { cat: 'SVR', q: 'ما الفرق الأساسي في المخرجات بين SVM و SVR؟', a: 'SVM للتصنيف (فئتين أو أكثر)، بينما SVR للانحدار والتنبؤ بالقيم العددية المستمرة.' },
+            { cat: 'SVR', q: 'قارني بين دالة الخسارة (Loss Function) في SVM و SVR؟', a: 'SVM يستخدم دالة الخسارة المفقودة (Hinge Loss)، بينما SVR يستخدم خطأ المربعات الصغيرة (Squared Error Loss).' },
+            { cat: 'SVR', q: 'قارني بين مقياس الخطأ (Error Metric) في SVM و SVR؟', a: 'SVM يُقاس بدقة التصنيف ومعدل الخطأ، بينما SVR يُقاس بالخطأ المتوسط المربعي (MSE) أو الانحراف المعياري.' },
+            { cat: 'SVR', q: 'ما الفرق بين "نقاط القوة" و"النقاط الضعيفة" في SVR؟', a: 'نقاط القوة (الاستدلال) تقع على حدود الفاصل وتحدد النموذج النهائي، أما النقاط الضعيفة فلا تؤثر كثيراً وقد تتأثر بالضوضاء.' },
+            { cat: 'SVR', q: 'ما وظيفة "معامل التسامح" في SVR؟', a: 'يعكس الحساسية للهامش الصغير ويمكّن النموذج من التكيف مع التباين في البيانات وتوفير توقعات دقيقة للقيم المستمرة.' },
+            { cat: 'SVR', q: 'اذكري 5 تطبيقات عملية لخوارزمية SVR وردت في الفصل 13؟', a: '1) أسعار العقارات، 2) مبيعات المنتجات، 3) الطلب على الطاقة، 4) الأسهم والأسواق المالية، 5) تأثير السياسات الحكومية.' },
+            { cat: 'NB', q: 'لماذا سُميت خوارزمية Naive Bayes بـ "الساذجة" (Naive)؟', a: 'لأنها تفترض استقلالية الخصائص (Independence Assumptions) تماماً عن بعضها البعض بغض النظر عن السياق أو العلاقات بينها.' },
+            { cat: 'NB', q: 'ما هي صيغة قانون بايز ومكوناته الأربعة؟', a: 'P(A|B) = [P(B|A) × P(A)] / P(B). المكونات: Prior (أساسي)، Likelihood (شرطي)، Evidence (أدنى ≠ 0)، Posterior (خلفي).' },
+            { cat: 'NB', q: 'متى نستخدم بايز متعدد الحدود (Multinomial) مقابل برنولي (Bernoulli)؟', a: 'Multinomial يعمل مع تكرار الكلمات وعددها، أما Bernoulli فيستخدم تنبؤات منطقية ثنائية (وجود الكلمة أم لا: نعم/لا).' },
+            { cat: 'NB', q: 'متى نستخدم غاوسي نايف بايز (Gaussian Naive Bayes)؟', a: 'يُستخدم في حالة القيم المستمرة (وليس المنفصلة) ويحسب الاحتمالات باستخدام التوزيع الطبيعي (المتوسط μ والتباين).' },
+            { cat: 'NB', q: 'ما هو أكبر عيب في Naive Bayes وكيف نتغلب عليه؟', a: 'افتراض استقلالية الميزات غير واقعي ولا يتعلم العلاقات المعقدة؛ ونتغلب عليه باستخدام SVM أو أشجار القرار أو الغابات العشوائية.' },
+            { cat: 'NB', q: 'ما هي الوحدة البرمجية لتنفيذ Naive Bayes في بايثون؟', a: 'الوحدة sklearn.naive_bayes ضمن مكتبة Scikit-learn.' }
+        ];
+
+        function renderFlashcards(filter = 'all') {
+            const grid = document.getElementById('flashcardsGrid');
+            grid.innerHTML = '';
+            const filtered = filter === 'all' ? flashcardsData : flashcardsData.filter(c => c.cat === filter);
+
+            const badgeColors = {
+                SVM: 'bg-indigo-100 text-indigo-800',
+                SVR: 'bg-emerald-100 text-emerald-800',
+                NB: 'bg-purple-100 text-purple-800'
+            };
+
+            filtered.forEach((card, idx) => {
+                const el = document.createElement('div');
+                el.className = 'flip-card perspective-1000 h-52 cursor-pointer';
+                el.onclick = () => el.classList.toggle('flipped');
+                el.innerHTML = `
+                    <div class="flip-card-inner relative w-full h-full">
+                        <!-- الوجه الأمامي -->
+                        <div class="flip-card-front absolute inset-0 bg-slate-50 border border-slate-200 rounded-2xl p-5 flex flex-col justify-between shadow-sm hover:border-mimimo-primary transition-colors">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-extrabold px-2.5 py-0.5 rounded-full ${badgeColors[card.cat]}">${card.cat}</span>
+                                <span class="text-xs text-slate-400 font-bold">اضغطي للإجابة ↻</span>
+                            </div>
+                            <p class="font-extrabold text-slate-800 text-sm sm:text-base text-center leading-relaxed">
+                                ${card.q}
+                            </p>
+                            <div class="text-center text-[11px] text-slate-400">بطاقة #${idx + 1}</div>
+                        </div>
+                        <!-- الوجه الخلفي -->
+                        <div class="flip-card-back absolute inset-0 bg-mimimo-primary text-white rounded-2xl p-5 flex flex-col justify-between shadow-md">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold bg-white/20 px-2.5 py-0.5 rounded-full">الإجابة الدقيقة</span>
+                                <span class="text-xs text-indigo-200">↻</span>
+                            </div>
+                            <p class="font-semibold text-xs sm:text-sm text-center leading-relaxed">
+                                ${card.a}
+                            </p>
+                            <div class="text-center text-[11px] text-indigo-200">ملخص تعلم الآلة</div>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(el);
+            });
+        }
+
+        function filterFlashcards(cat) {
+            document.querySelectorAll('.fc-filter').forEach(btn => {
+                btn.className = 'fc-filter bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs font-bold px-3.5 py-2 rounded-full transition-colors';
+            });
+            event.target.className = 'fc-filter bg-mimimo-primary text-white text-xs font-bold px-3.5 py-2 rounded-full shadow-sm';
+            renderFlashcards(cat);
+        }
+
+        // ==========================================
+        // 6. الاختبار الشامل (18 سؤالاً من التقييم الذاتي + المقارنة)
+        // ==========================================
+        const quizQuestions = [
+            {
+                q: '1. أي من الخوارزميات التالية تستخدم في مسائل التصنيف والتنبؤ (وتعتمد على المستوى الفائق)؟ (تقييم ذاتي ص 496)',
+                options: ['خوارزمية التجميع الذاتي KMeans', 'خوارزمية الشبكات العصبونية', 'خوارزمية آلة المتجه الداعم SVM', 'خوارزمية الانحدار الخطي'],
+                correct: 2,
+                exp: 'خوارزمية SVM هي خوارزمية تعلم خاضع للإشراف تستخدم في مسائل التصنيف والتنبؤ (وغالباً التصنيف).'
+            },
+            {
+                q: '2. "إحداثيات المراقبة الفردية" الأقرب للمستوى الفائق تُستخدم لوصف: (تقييم ذاتي ص 496)',
+                options: ['المتجهات الداعمة (Support Vectors)', 'المستوى الفائق', 'الخطوط الفاصلة', 'الشكل الهندسي'],
+                correct: 0,
+                exp: 'المتجهات الداعمة (Support Vectors) هي ببساطة إحداثيات المراقبة الفردية الأقرب للحد الفاصل.'
+            },
+            {
+                q: '3. التقنية التي تستخدمها خوارزمية SVM لتحسين فصل البيانات في حال عدم توفر مستوى فائق خطي بين الفئتين: (تقييم ذاتي ص 515)',
+                options: ['خوارزمية الفصل المتعدد الأبعاد', 'خدعة النواة (Kernel Trick)', 'زيادة الفصل الأفقي', 'التحويل البعدي'],
+                correct: 1,
+                exp: 'خدعة النواة (Kernel Trick) تحول مساحة الإدخال ذات البعد المنخفض إلى مساحة ذات بعد أعلى ليصبح الفصل الخطي ممكناً.'
+            },
+            {
+                q: '4. ما هي المسافة التي تُعرف بين المستوى الفائق وأقرب نقطة بيانات من أي مجموعة؟ (تقييم ذاتي ص 515)',
+                options: ['الهامش (Margin)', 'الفجوة', 'المسافة الإقليدية', 'الفجوة السالبة'],
+                correct: 0,
+                exp: 'الهامش (Margin) هو المسافة بين المستوى الفائق وأقرب نقطة بيانات من أي فئة، وتسعى SVM لتعظيمه.'
+            },
+            {
+                q: '5. "تعمل بشكل فعال مع البيانات ذات الهامش الواضح للفصل الخطي" تُعتبر من: (تقييم ذاتي ص 526)',
+                options: ['سلبيات SVM', 'إيجابيات SVM', 'سلبيات SVR', 'إيجابيات SVR'],
+                correct: 1,
+                exp: 'من أبرز إيجابيات SVM كفاءتها العالية مع البيانات القابلة للفصل الخطي ذات الهامش الواضح.'
+            },
+            {
+                q: '6. أي من الخوارزميات التالية تُستخدم لتحليل الانحدار والتنبؤ بالقيم العددية المستمرة؟ (تقييم ذاتي ص 538)',
+                options: ['خوارزمية القرار', 'الشبكات العصبونية الاصطناعية', 'التجميع العشوائي', 'خوارزمية انحدار متجه الدعم SVR'],
+                correct: 3,
+                exp: 'تندرج SVR تحت SVM وتُستخدم خصيصاً لتحليل الانحدار والتنبؤ بالقيم العددية المستمرة.'
+            },
+            {
+                q: '7. النقاط التي تقع على الهامش أو بالقرب منه في SVR وتُستخدم في تحديد الحد الفاصل تُسمى: (تقييم ذاتي ص 550)',
+                options: ['نقاط الاستدلال (أو نقاط القوة)', 'النقاط الحرة', 'نقاط متوسطة', 'نقاط التحكم'],
+                correct: 0,
+                exp: 'تُسمى نقاط الاستدلال (Support Vectors) أو نقاط القوة؛ لأنها تحدد الحد الفاصل والنموذج النهائي.'
+            },
+            {
+                q: '8. في تحديد المعلمات، يتطلب SVM عادة ضبط معلمات مثل قيمة الهامش وتأثير قيمة المعلمة C على: (تقييم ذاتي ص 564)',
+                options: ['التصنيف', 'التصنيف والتنبؤ', 'جودة التنبؤ', 'التحليل العاملي'],
+                correct: 0,
+                exp: 'في SVM يتم ضبط قيمة الهامش وتأثير المعلمة C على التصنيف (ص 560).'
+            },
+            {
+                q: '9. ما هي دالة الخسارة (Loss Function) المستخدمة في SVM مقابل SVR؟ (مقارنة ص 557)',
+                options: ['SVM: Squared Error | SVR: Hinge Loss', 'SVM: Hinge Loss | SVR: Squared Error Loss', 'كلاهما يستخدم Hinge Loss', 'كلاهما يستخدم MSE'],
+                correct: 1,
+                exp: 'تستخدم SVM دالة الخسارة المفقودة (Hinge Loss)، بينما تستخدم SVR خطأ المربعات الصغيرة (Squared Error Loss).'
+            },
+            {
+                q: '10. كيف يُقاس الخطأ والأداء في SVR مقارنة بـ SVM؟ (مقارنة ص 559)',
+                options: ['SVR بدقة التصنيف و SVM بـ MSE', 'SVR بالخطأ المتوسط المربعي (MSE) و SVM بدقة التصنيف ومعدل الخطأ', 'كلاهما بدقة التصنيف فقط', 'كلاهما بالانحراف المعياري فقط'],
+                correct: 1,
+                exp: 'في SVM يُقاس الأداء بدقة التصنيف ومعدل الخطأ، أما في SVR فيُقاس بـ Mean Squared Error (MSE) أو الانحراف المعياري.'
+            },
+            {
+                q: '11. أي من الآتي يُعد من أنواع خوارزمية SVR حسب النواة ولم يُذكر في أنواع SVM الأساسية؟ (ص 549)',
+                options: ['النواة الخطية', 'نواة الشبكة العصبية ANN', 'نواة RBF', 'نواة متعددة الحدود'],
+                correct: 1,
+                exp: 'ذُكرت نواة الشبكة العصبية ANN كنوع خامس ضمن أنواع SVR لنمذجة العلاقة غير الخطية.'
+            },
+            {
+                q: '12. بماذا يُعرف مصنف Naive Bayes Classifier؟ (تقييم ذاتي ص 575)',
+                options: ['مصنف الشبكات العصبية', 'مصنف الاحتمالية (Probabilistic Classifier)', 'مصنف التجميع', 'مصنف التراجع الخطي'],
+                correct: 1,
+                exp: 'نظراً لاعتماده على نظرية بايز والاحتمال الشرطي، يُعرف باسم مصنف الاحتمالية (عكس SVM غير الاحتمالي).'
+            },
+            {
+                q: '13. ما هو مصنف Naive Bayes المستخدم لتصنيف المستندات بناءً على تكرار الكلمات وعددها؟ (تقييم ذاتي ص 589)',
+                options: ['مصنف التجميع', 'مصنف الشبكات العصبية', 'مصنف برنولي', 'مصنف Naive Bayes متعدد الحدود (Multinomial)'],
+                correct: 3,
+                exp: 'Multinomial يعمل مع تكرار الكلمات وعددها، بينما Bernoulli يعمل على وجود الكلمة أم لا (نعم/لا).'
+            },
+            {
+                q: '14. يتم استخدام المصنف غاوسي نايف بايز (Gaussian Naive Bayes) في حالة: (تقييم ذاتي ص 589)',
+                options: ['القيمة الحرجة', 'القيمة المنفصلة', 'القيمة القصوى', 'القيمة المستمرة'],
+                correct: 3,
+                exp: 'يُستخدم Gaussian Naive Bayes في حالة القيم المستمرة (وليس المنفصلة) ويعتمد على التوزيع الطبيعي (المتوسط والتباين).'
+            },
+            {
+                q: '15. أحد أكبر عيوب خوارزميات بايز الساذجة (Naive Bayes): (تقييم ذاتي ص 602)',
+                options: ['بطيئة جداً في التنفيذ', 'تفترض استقلالية الميزات عن بعضها البعض', 'صعبة الفهم والتطبيق', 'تتطلب الكثير من البيانات للتدريب'],
+                correct: 1,
+                exp: 'تفترض استقلالية الميزات (وهو افتراض نادر الصحة في الواقع)، لذا لا تتعلم العلاقات المعقدة بين الميزات.'
+            },
+            {
+                q: '16. للتغلب على عيب عدم قدرة Naive Bayes على تعلم العلاقات المعقدة بين الميزات، نستخدم: (ص 586 و 601)',
+                options: ['SVM أو أشجار القرار أو الغابات العشوائية', 'الانحدار الخطي البسيط فقط', 'K-Means للتجميع', 'برنولي نايف بايز'],
+                correct: 0,
+                exp: 'نص الملخص على استخدام SVM أو أشجار القرار (Decision Tree) أو الغابات العشوائية (Random Forest) للتغلب على هذا العيب.'
+            },
+            {
+                q: '17. في قانون بايز P(A|B) = (P(B|A) * P(A)) / P(B)، ما الشرط الواجب توفره في الاحتمال الأدنى Evidence P(B)؟ (ص 580)',
+                options: ['أن يساوي 1', 'ألا يساوي صفراً P(B) ≠ 0', 'أن يكون سالباً', 'أن يكون أكبر من P(A)'],
+                correct: 1,
+                exp: 'يجب ألا يكون P(B) صفراً لتجنب القسمة على صفر.'
+            },
+            {
+                q: '18. في المثال العملي لتحديد جنس الاسم "براء" باستخدام Naive Bayes، ما كانت النتيجة النهائية؟ (ص 600)',
+                options: ['ذكر بنسبة 66.7%', 'أنثى بنسبة 66.7% (مقابل 33.3% ذكر)', 'تساوي الاحتمالين 50%', 'أنثى بنسبة 37.5%'],
+                correct: 1,
+                exp: 'بلغت احتمالية أن يكون "براء" أنثى 2/3 (66.7%) مقابل 1/3 (33.3%) للذكر، لذا صُنف كـ أنثى.'
+            }
+        ];
+
+        let userAnswers = {};
+
+        function renderQuiz() {
+            const container = document.getElementById('quizContainer');
+            container.innerHTML = '';
+            quizQuestions.forEach((item, qIdx) => {
+                const qCard = document.createElement('div');
+                qCard.className = 'bg-slate-50/70 border border-slate-200 rounded-2xl p-5 space-y-3';
+                
+                let optionsHTML = '';
+                item.options.forEach((opt, oIdx) => {
+                    const isAnswered = userAnswers[qIdx] !== undefined;
+                    let btnStyle = 'bg-white border-slate-200 hover:border-mimimo-primary text-slate-700';
+                    if (isAnswered) {
+                        if (oIdx === item.correct) {
+                            btnStyle = 'bg-emerald-50 border-emerald-500 text-emerald-900 font-extrabold';
+                        } else if (oIdx === userAnswers[qIdx] && oIdx !== item.correct) {
+                            btnStyle = 'bg-rose-50 border-rose-500 text-rose-900 font-bold';
+                        } else {
+                            btnStyle = 'bg-white/60 border-slate-200 text-slate-400';
+                        }
+                    }
+
+                    optionsHTML += `
+                        <button onclick="selectAnswer(${qIdx}, ${oIdx})" ${isAnswered ? 'disabled' : ''} class="w-full text-right p-3 rounded-xl border-2 text-xs sm:text-sm transition-all ${btnStyle}">
+                            ${opt}
+                        </button>
+                    `;
+                });
+
+                const explanationHTML = userAnswers[qIdx] !== undefined ? `
+                    <div class="mt-3 p-3 rounded-xl text-xs sm:text-sm font-semibold ${userAnswers[qIdx] === item.correct ? 'bg-emerald-100/70 text-emerald-900' : 'bg-amber-100/70 text-amber-950'}">
+                        ${userAnswers[qIdx] === item.correct ? '✅ إجابة صحيحة! ' : '❌ إجابة خاطئة. '} ${item.exp}
+                    </div>
+                ` : '';
+
+                qCard.innerHTML = `
+                    <h4 class="font-extrabold text-slate-800 text-sm sm:text-base">${item.q}</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        ${optionsHTML}
+                    </div>
+                    ${explanationHTML}
+                `;
+                container.appendChild(qCard);
+            });
+
+            // تحديث النتيجة
+            let score = 0;
+            Object.keys(userAnswers).forEach(k => {
+                if (userAnswers[k] === quizQuestions[k].correct) score++;
+            });
+            document.getElementById('quizScoreDisplay').textContent = `${score} / ${quizQuestions.length}`;
+        }
+
+        function selectAnswer(qIdx, oIdx) {
+            userAnswers[qIdx] = oIdx;
+            renderQuiz();
+        }
+
+        function resetQuiz() {
+            userAnswers = {};
+            renderQuiz();
+        }
+
+        // تهيئة العناصر عند تحميل الصفحة
+        window.onload = function () {
+            renderFlashcards('all');
+            renderQuiz();
+        };
+    </script>
+</body>
+</html>
