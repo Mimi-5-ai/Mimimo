@@ -1,0 +1,2230 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="briefing">
+  <title>المحاضرة المباشرة الثانية — خوارزميات البحث والوكيل المنطقي | مقرر الذكاء الاصطناعي</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Source+Serif+4:wght@600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces: warm stone-white paper (Briefing style) */
+      --background: #faf9f5;
+      --surface-container-low: #ffffff;
+      --surface-container: #f1efe8;
+      --surface-container-high: #e6e2d6;
+
+      /* Ink */
+      --on-surface: #17181a;
+      --on-surface-variant: #56585c;
+
+      /* Rules */
+      --outline: #17181a;
+      --outline-variant: #dedad0;
+      --border-strong: #c8c4b8;
+
+      /* Accents */
+      --primary: #17181a;
+      --on-primary: #faf9f5;
+      --primary-container: #f2b705;
+      --on-primary-container: #17181a;
+      --secondary: #1f4e5f;
+      --on-secondary: #ffffff;
+      --tertiary: #785008;
+      --error: #b42318;
+      --on-error: #ffffff;
+
+      /* Soft surface tints (named tokens) */
+      --secondary-tint: #ebf3f5;
+      --gold-tint: #fbf3d5;
+      --pine-tint: #ebf4ef;
+      --error-tint: #fceceb;
+
+      /* Data series */
+      --data-1: #1f4e5f;
+      --data-2: #d99000;
+      --data-3: #2b6e52;
+      --data-4: #b84a39;
+      --data-context: #c4bfb2;
+
+      /* Semantic */
+      --positive: #2b6e52;
+      --warning: #785008;
+      --focus: #1f4e5f;
+
+      /* Fonts (Arabic-first with Geist Mono for technical tokens) */
+      --font-headline: 'IBM Plex Sans Arabic', 'Source Serif 4', sans-serif;
+      --font-body: 'IBM Plex Sans Arabic', sans-serif;
+      --font-label: 'IBM Plex Sans Arabic', 'Geist Mono', monospace;
+      --font-mono: 'Geist Mono', monospace;
+
+      /* Shape */
+      --rounded: 0.25rem;
+      --rounded-lg: 0.375rem;
+      --rounded-full: 0.25rem;
+      --badge-radius: 2px;
+
+      /* Style effects */
+      --section-rule: 1.5px solid var(--outline);
+      --card-border: 1px solid var(--outline-variant);
+      --heading-tracking: 0;
+      --label-tracking: 0;
+
+      /* Type scale (Narrative) */
+      --display-size: clamp(2rem, 1.4rem + 2.4vw, 3.25rem);
+      --headline-size: clamp(1.5rem, 1.15rem + 1.3vw, 2.15rem);
+      --subhead-size: clamp(1.15rem, 1.05rem + 0.45vw, 1.375rem);
+      --body-size: clamp(1.02rem, 0.98rem + 0.2vw, 1.125rem);
+      --label-size: clamp(0.78rem, 0.75rem + 0.12vw, 0.85rem);
+
+      /* Spacing scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 5.5rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.65;
+      scroll-behavior: smooth;
+    }
+    header { position: static !important; }
+
+    button, input, select, textarea {
+      font-family: inherit;
+      font-size: inherit;
+    }
+
+    :focus-visible {
+      outline: 2.5px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .mono-code {
+      font-family: var(--font-mono);
+      direction: ltr;
+      unicode-bidi: isolate;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .page-grid {
+      display: grid;
+      gap: var(--space-2xl);
+      padding: var(--space-lg) var(--space-lg) var(--space-3xl);
+      max-width: 1180px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Briefing Dossier Header & Section Bar */
+    .dossier-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      border-bottom: var(--section-rule);
+      padding-bottom: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+    .dossier-bar-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .dossier-pill {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 0.8125rem;
+      padding: 0.22rem 0.65rem;
+      border-radius: var(--badge-radius);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .dossier-meta {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      font-weight: 500;
+    }
+    .index-num {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: var(--secondary);
+      background: var(--surface-container);
+      padding: 0.15rem 0.45rem;
+      border-radius: var(--badge-radius);
+      direction: ltr;
+      unicode-bidi: isolate;
+    }
+
+    /* Typography */
+    .title {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: var(--display-size);
+      line-height: 1.18;
+      color: var(--on-surface);
+      margin: 0;
+    }
+    .standfirst {
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: var(--subhead-size);
+      color: var(--secondary);
+      margin-top: var(--space-sm);
+      margin-bottom: 0;
+      max-width: 68ch;
+      line-height: 1.55;
+    }
+    .section-heading {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: var(--headline-size);
+      line-height: 1.25;
+      margin: 0 0 var(--space-xs) 0;
+      color: var(--on-surface);
+    }
+    .section-lead {
+      color: var(--secondary);
+      font-weight: 600;
+      font-size: var(--subhead-size);
+      margin: 0 0 var(--space-lg) 0;
+      max-width: 65ch;
+      line-height: 1.5;
+    }
+    .prose {
+      max-width: 65ch;
+      margin: 0 0 var(--space-md) 0;
+      color: var(--on-surface);
+    }
+
+    /* Navigation Overview Cards */
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+      gap: var(--space-md);
+      margin-top: var(--space-lg);
+    }
+    .toc-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      transition: transform var(--dur-short) var(--ease-out), border-color var(--dur-short) var(--ease-out), background-color var(--dur-short) var(--ease-out);
+      cursor: pointer;
+    }
+    .toc-card:hover {
+      background: var(--surface-container);
+      border-color: var(--outline);
+      transform: translateY(-2px);
+    }
+    .toc-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+    .toc-card-title {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--on-surface);
+      margin: var(--space-xs) 0 0 0;
+    }
+    .toc-card-desc {
+      font-size: 0.9rem;
+      color: var(--on-surface-variant);
+      margin: 0;
+      line-height: 1.45;
+    }
+
+    /* Crisp white figure cards & warm stone asides */
+    .figure-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+    }
+    .aside-box {
+      background: var(--surface-container);
+      border-top: var(--section-rule);
+      padding: var(--space-md) var(--space-lg);
+      border-radius: 0 0 var(--rounded-lg) var(--rounded-lg);
+    }
+    .aside-box-gold {
+      background: var(--gold-tint);
+      border-top: 3px solid var(--primary-container);
+      border-right: 1px solid var(--outline-variant);
+      border-bottom: 1px solid var(--outline-variant);
+      border-left: 1px solid var(--outline-variant);
+      padding: var(--space-md) var(--space-lg);
+      border-radius: var(--rounded-lg);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      min-height: 44px;
+      padding: 0.5rem 1rem;
+      border-radius: var(--rounded);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out), transform var(--dur-micro) var(--ease-out);
+    }
+    .btn:active:not(:disabled) {
+      transform: translateY(1px);
+    }
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+    .btn-primary:hover:not(:disabled) {
+      background: var(--secondary);
+      border-color: var(--secondary);
+    }
+    .btn-secondary {
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      border-color: var(--border-strong);
+    }
+    .btn-secondary:hover:not(:disabled) {
+      background: var(--surface-container);
+      border-color: var(--outline);
+    }
+    .btn-tab {
+      background: var(--surface-container);
+      color: var(--on-surface-variant);
+      border-color: var(--outline-variant);
+    }
+    .btn-tab.is-active {
+      background: var(--secondary);
+      color: var(--on-secondary);
+      border-color: var(--secondary);
+    }
+    .btn-tab-gold.is-active {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      border-color: var(--outline);
+    }
+
+    /* Tag chips */
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      padding: 0.2rem 0.55rem;
+      border-radius: var(--rounded);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      background: var(--gold-tint);
+      color: var(--tertiary);
+    }
+    .chip-slate {
+      background: var(--secondary-tint);
+      color: var(--secondary);
+    }
+    .chip-pine {
+      background: var(--pine-tint);
+      color: var(--positive);
+    }
+    .chip-error {
+      background: var(--error-tint);
+      color: var(--error);
+    }
+
+    /* Section 01: BFS vs DFS Interactive Simulator */
+    .sim-controls-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: end;
+      justify-content: space-between;
+      gap: var(--space-md);
+      padding-bottom: var(--space-md);
+      border-bottom: 1px solid var(--outline-variant);
+      margin-bottom: var(--space-lg);
+    }
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .control-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--on-surface);
+    }
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    .select-input {
+      min-height: 44px;
+      padding: 0.45rem 0.85rem;
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--rounded);
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .sim-workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+    .svg-stage {
+      background: var(--background);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-sm);
+      min-height: 360px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .svg-stage svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .legend-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      padding: var(--space-sm) var(--space-sm) 0;
+      border-top: 1px solid var(--outline-variant);
+      margin-top: var(--space-xs);
+      font-size: 0.82rem;
+      color: var(--on-surface-variant);
+    }
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .legend-swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 1.5px solid var(--outline);
+      display: inline-block;
+    }
+    .swatch-current { background: var(--primary-container); }
+    .swatch-visited { background: var(--secondary); border-color: var(--secondary); }
+    .swatch-frontier { background: var(--pine-tint); border-color: var(--positive); }
+    .swatch-goal { background: var(--surface-container-low); border-color: var(--data-4); border-width: 2.5px; }
+
+    .ds-panel {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .ds-box {
+      background: var(--surface-container);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+    }
+    .ds-box-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-sm);
+    }
+    .ds-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--on-surface);
+      margin: 0;
+    }
+    .ds-items-queue {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-xs);
+      min-height: 52px;
+      padding: var(--space-sm);
+      background: var(--surface-container-low);
+      border: 1px dashed var(--border-strong);
+      border-radius: var(--rounded);
+    }
+    .ds-items-stack {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      min-height: 130px;
+      max-height: 210px;
+      overflow-y: auto;
+      padding: var(--space-sm);
+      background: var(--surface-container-low);
+      border: 1px dashed var(--border-strong);
+      border-radius: var(--rounded);
+    }
+    .ds-token {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 38px;
+      height: 36px;
+      padding: 0 0.6rem;
+      background: var(--secondary);
+      color: var(--on-secondary);
+      font-family: var(--font-mono);
+      font-weight: 600;
+      font-size: 0.9rem;
+      border-radius: var(--rounded);
+      transition: transform var(--dur-micro) var(--ease-out);
+    }
+    .ds-token.is-head {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      border: 1.5px solid var(--outline);
+    }
+    .ds-hint {
+      font-size: 0.82rem;
+      color: var(--on-surface-variant);
+      margin: var(--space-xs) 0 0 0;
+    }
+    .narration-box {
+      background: var(--surface-container-low);
+      border-right: 4px solid var(--secondary);
+      border-top: 1px solid var(--outline-variant);
+      border-bottom: 1px solid var(--outline-variant);
+      border-left: 1px solid var(--outline-variant);
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+    }
+    .visited-trail {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      margin-top: var(--space-xs);
+    }
+    .trail-pill {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.1rem 0.45rem;
+      background: var(--surface-container);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--badge-radius);
+    }
+
+    /* Comparison Table */
+    .table-wrap {
+      overflow-x: auto;
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+    }
+    .briefing-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: right;
+    }
+    .briefing-table th {
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 0.85rem 1rem;
+      border-bottom: var(--section-rule);
+      background: var(--surface-container);
+      color: var(--on-surface);
+    }
+    .briefing-table td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--outline-variant);
+      font-size: 0.95rem;
+      vertical-align: top;
+    }
+    .briefing-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Section 02: Informed Search */
+    .analogy-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(290px, 100%), 1fr));
+      gap: var(--space-md);
+      margin-bottom: var(--space-xl);
+    }
+    .analogy-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .analogy-card.is-informed {
+      border-top: 3px solid var(--secondary);
+    }
+    .analogy-card.is-uninformed {
+      border-top: 3px solid var(--data-context);
+    }
+
+    .sub-block {
+      margin-top: var(--space-xl);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .sub-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+      border-bottom: 1px solid var(--outline-variant);
+      padding-bottom: var(--space-sm);
+    }
+    .sub-title {
+      font-size: var(--subhead-size);
+      font-weight: 700;
+      margin: 0;
+      color: var(--on-surface);
+    }
+
+    .split-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+    .formula-banner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      background: var(--surface-container);
+      border: 1px solid var(--outline-variant);
+      border-right: 4px solid var(--primary-container);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+    }
+    .formula-eq {
+      font-family: var(--font-mono);
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--on-surface);
+      direction: ltr;
+      unicode-bidi: isolate;
+    }
+    .formula-parts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .formula-part-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+    }
+    .formula-part-card .mono-code {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--secondary);
+    }
+
+    /* Section 03: Logical Agent */
+    .agent-loop {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+      gap: var(--space-md);
+      margin-bottom: var(--space-lg);
+    }
+    .agent-stage {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+      position: relative;
+    }
+    .agent-stage-num {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--secondary);
+      margin-bottom: var(--space-xs);
+    }
+    .apps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .app-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+      text-align: right;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      transition: border-color var(--dur-short) var(--ease-out), background-color var(--dur-short) var(--ease-out);
+    }
+    .app-card:hover {
+      border-color: var(--secondary);
+      background: var(--surface-container);
+    }
+    .app-card.is-selected {
+      border-color: var(--outline);
+      border-width: 1.5px;
+      background: var(--gold-tint);
+    }
+    .app-detail-panel {
+      background: var(--surface-container-low);
+      border: 1.5px solid var(--outline);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      margin-top: var(--space-md);
+    }
+
+    /* Section 04: Exam Alerts & Quiz */
+    .alerts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+      gap: var(--space-md);
+      margin-bottom: var(--space-xl);
+    }
+    .alert-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-right: 4px solid var(--primary-container);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .alert-card.is-critical {
+      border-right-color: var(--data-4);
+    }
+    .alert-card.is-tech {
+      border-right-color: var(--secondary);
+    }
+
+    .quiz-container {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+    }
+    .quiz-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      border-bottom: 1px solid var(--outline-variant);
+      padding-bottom: var(--space-md);
+      margin-bottom: var(--space-lg);
+    }
+    .quiz-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+    .quiz-item {
+      padding-bottom: var(--space-lg);
+      border-bottom: 1px solid var(--outline-variant);
+    }
+    .quiz-item:last-child {
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+    .quiz-q {
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin: 0 0 var(--space-sm) 0;
+    }
+    .quiz-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+      gap: var(--space-sm);
+    }
+    .quiz-opt {
+      text-align: right;
+      min-height: 44px;
+      padding: 0.6rem 0.9rem;
+      background: var(--background);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--rounded);
+      cursor: pointer;
+      color: var(--on-surface);
+      font-weight: 500;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .quiz-opt:hover:not(:disabled) {
+      background: var(--surface-container);
+      border-color: var(--outline);
+    }
+    .quiz-opt.is-correct {
+      background: var(--pine-tint);
+      border-color: var(--positive);
+      color: var(--on-surface);
+      font-weight: 700;
+    }
+    .quiz-opt.is-wrong {
+      background: var(--error-tint);
+      border-color: var(--error);
+      color: var(--error);
+    }
+    .quiz-feedback {
+      margin-top: var(--space-sm);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      font-size: 0.92rem;
+      display: none;
+    }
+    .quiz-feedback.is-visible {
+      display: block;
+    }
+    .quiz-feedback.is-ok {
+      background: var(--pine-tint);
+      color: var(--on-surface);
+      border-right: 3px solid var(--positive);
+    }
+    .quiz-feedback.is-err {
+      background: var(--error-tint);
+      color: var(--on-surface);
+      border-right: 3px solid var(--error);
+    }
+
+    .footer-note {
+      border-top: var(--section-rule);
+      padding-top: var(--space-md);
+      font-size: 0.9rem;
+      color: var(--on-surface-variant);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+
+    @media (max-width: 860px) {
+      .sim-workspace, .split-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-md) var(--space-sm) var(--space-2xl);
+        gap: var(--space-xl);
+      }
+      .figure-card, .quiz-container {
+        padding: var(--space-md);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page-grid">
+
+    <!-- HEADER / MASTHEAD -->
+    <header>
+      <div class="dossier-bar">
+        <div class="dossier-bar-group">
+          <span class="dossier-pill">المحاضرة المباشرة الثانية</span>
+          <span class="dossier-meta">مقرر الذكاء الاصطناعي — ملف مرجعي تفاعلي</span>
+        </div>
+        <span class="dossier-meta">نطاق الحصر: محتوى المحاضرة الثانية فقط</span>
+      </div>
+
+      <h1 class="title">خوارزميات البحث والوكيل المنطقي</h1>
+      <p class="standfirst">
+        شرح تفاعلي مفصّل لمحاور المحاضرة المباشرة الثانية: البحث غير المستنير (<bdi dir="ltr">BFS</bdi> و <bdi dir="ltr">DFS</bdi>)، البحث المستنير (<bdi dir="ltr">Best-First</bdi>، <bdi dir="ltr">Hill Climbing</bdi>، و <bdi dir="ltr">A*</bdi>)، الوكيل المنطقي وتطبيقاته السبعة، وكافة تنبيهات الاختبار النهائي التي شدّد عليها أستاذ المقرر.
+      </p>
+
+      <nav class="toc-grid" aria-label="أقسام المحاضرة الثانية">
+        <a href="#sec-uninformed" class="toc-card">
+          <div class="toc-card-head">
+            <span class="index-num">01</span>
+            <span class="chip chip-slate"><bdi dir="ltr">Queue vs Stack</bdi></span>
+          </div>
+          <h2 class="toc-card-title">البحث غير المستنير</h2>
+          <p class="toc-card-desc">مقارنة <bdi dir="ltr">BFS</bdi> و <bdi dir="ltr">DFS</bdi> ومحاكاة حية لشجرة المحاضرة (<bdi dir="ltr">A → P</bdi>).</p>
+        </a>
+
+        <a href="#sec-informed" class="toc-card">
+          <div class="toc-card-head">
+            <span class="index-num">02</span>
+            <span class="chip"><bdi dir="ltr">f(n) = g(n) + h(n)</bdi></span>
+          </div>
+          <h2 class="toc-card-title">البحث المستنير</h2>
+          <p class="toc-card-desc"><bdi dir="ltr">Best-First</bdi>، فخ <bdi dir="ltr">Hill Climbing</bdi>، ومعادلة خوارزمية <bdi dir="ltr">A*</bdi>.</p>
+        </a>
+
+        <a href="#sec-logical-agent" class="toc-card">
+          <div class="toc-card-head">
+            <span class="index-num">03</span>
+            <span class="chip chip-pine">7 تطبيقات عملية</span>
+          </div>
+          <h2 class="toc-card-title">الوكيل المنطقي</h2>
+          <p class="toc-card-desc">كيف يدرك البيئة ويستدل ويتخذ القرار عبر 7 مجالات حيوية.</p>
+        </a>
+
+        <a href="#sec-exam" class="toc-card">
+          <div class="toc-card-head">
+            <span class="index-num">04</span>
+            <span class="chip chip-error">تركيز الاختبار</span>
+          </div>
+          <h2 class="toc-card-title">تنبيهات الاختبار والاختبار الذاتي</h2>
+          <p class="toc-card-desc">كل ما شدّد عليه الدكتور للاختبار النهائي + 6 أسئلة تطبيقية.</p>
+        </a>
+      </nav>
+    </header>
+
+    <!-- SECTION 01: UNINFORMED SEARCH -->
+    <section id="sec-uninformed" aria-labelledby="h-uninformed">
+      <div class="dossier-bar">
+        <div class="dossier-bar-group">
+          <span class="index-num">01</span>
+          <span class="dossier-pill">البحث غير المستنير</span>
+          <span class="dossier-meta"><bdi dir="ltr">Uninformed Search Algorithms</bdi></span>
+        </div>
+        <span class="dossier-meta">الأولوية: المستوى مقابل العمق</span>
+      </div>
+
+      <h2 id="h-uninformed" class="section-heading">البحث الأعمى في الشجرة: الطابور للاتساع والمكدس للعمق</h2>
+      <p class="section-lead">
+        في الذكاء الاصطناعي تُحل المشكلات عبر البحث في شجرة الحلول؛ وعندما لا تملك الخوارزمية أي معلومات استدلالية عن بُعد الهدف أو تكلفته، تُسمى «غير مستنيرة» وتفحص الشجرة منهجياً حتى تعثر على الهدف.
+      </p>
+
+      <p class="prose">
+        في المحاضرة المباشرة الثانية، شَرح الدكتور خوارزميتين أساسيتين على شجرة بحث جذرها <bdi dir="ltr">A</bdi> وتمتد على أربعة مستويات وصولاً إلى العقد <bdi dir="ltr">J</bdi> حتى <bdi dir="ltr">P</bdi>. الفارق البرمجي والحاسم بينهما لا يكمن في شكل الشجرة، بل في <strong>هيكل البيانات (<bdi dir="ltr">Data Structure</bdi>)</strong> الذي يتحكم في ترتيب الفحص: هل نُنهي الأشقاء في كل مستوى أولاً، أم نتعمق نحو الأبناء حتى نهاية الفرع؟
+      </p>
+
+      <!-- Interactive BFS / DFS Tree Simulator -->
+      <div class="figure-card">
+        <div class="sim-controls-bar">
+          <div class="control-group">
+            <span class="control-label">اختر الخوارزمية:</span>
+            <div class="btn-row">
+              <button type="button" id="btn-mode-bfs" class="btn btn-tab is-active" onclick="setSearchAlgo('bfs')">
+                <i data-lucide="layers" aria-hidden="true" style="width:16px;height:16px;"></i>
+                <span>BFS — الاتساع (<bdi dir="ltr">Queue</bdi>)</span>
+              </button>
+              <button type="button" id="btn-mode-dfs" class="btn btn-tab" onclick="setSearchAlgo('dfs')">
+                <i data-lucide="arrow-down-to-line" aria-hidden="true" style="width:16px;height:16px;"></i>
+                <span>DFS — العمق (<bdi dir="ltr">Stack</bdi>)</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label for="goal-select" class="control-label">العقدة الهدف (<bdi dir="ltr">Goal</bdi>):</label>
+            <select id="goal-select" class="select-input" onchange="changeSearchGoal(this.value)">
+              <option value="G">G (المستوى 3 — ابن C)</option>
+              <option value="L" selected>L (المستوى 4 — ابن G)</option>
+              <option value="K">K (المستوى 4 — ابن E)</option>
+              <option value="F">F (المستوى 3 — ابن B)</option>
+              <option value="I">I (المستوى 3 — ابن D)</option>
+            </select>
+          </div>
+
+          <div class="control-group">
+            <span class="control-label">التحكم بالتنفيذ:</span>
+            <div class="btn-row">
+              <button type="button" id="btn-step" class="btn btn-primary" onclick="stepSearch()">
+                <i data-lucide="step-forward" aria-hidden="true" style="width:16px;height:16px;"></i>
+                <span>الخطوة التالية</span>
+              </button>
+              <button type="button" id="btn-play" class="btn btn-secondary" onclick="togglePlaySearch()">
+                <i data-lucide="play" aria-hidden="true" style="width:16px;height:16px;"></i>
+                <span id="play-label">تشغيل تلقائي</span>
+              </button>
+              <button type="button" class="btn btn-secondary" onclick="resetSearch()">
+                <i data-lucide="rotate-ccw" aria-hidden="true" style="width:16px;height:16px;"></i>
+                <span>إعادة</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="sim-workspace">
+          <!-- Interactive SVG Tree -->
+          <div class="svg-stage">
+            <svg id="tree-svg" viewBox="0 0 680 330" role="img" aria-label="شجرة البحث التفاعلية للمحاضرة الثانية من العقدة A إلى P">
+              <!-- Level guides -->
+              <text x="665" y="34" font-size="11" fill="var(--on-surface-variant)" text-anchor="end">المستوى 1 (الجذر)</text>
+              <text x="665" y="106" font-size="11" fill="var(--on-surface-variant)" text-anchor="end">المستوى 2</text>
+              <text x="665" y="190" font-size="11" fill="var(--on-surface-variant)" text-anchor="end">المستوى 3</text>
+              <text x="665" y="280" font-size="11" fill="var(--on-surface-variant)" text-anchor="end">المستوى 4</text>
+              <g id="tree-edges"></g>
+              <g id="tree-nodes"></g>
+            </svg>
+            <div class="legend-row">
+              <span class="legend-item"><span class="legend-swatch swatch-current"></span> العقدة المفحوصة حالياً</span>
+              <span class="legend-item"><span class="legend-swatch swatch-visited"></span> تمت زيارتها</span>
+              <span class="legend-item"><span class="legend-swatch swatch-frontier"></span> في الطابور / المكدس</span>
+              <span class="legend-item"><span class="legend-swatch swatch-goal"></span> الهدف المطلوب</span>
+            </div>
+          </div>
+
+          <!-- Live Data Structure + Narration -->
+          <div class="ds-panel">
+            <div class="ds-box">
+              <div class="ds-box-header">
+                <h3 id="ds-heading" class="ds-title">هيكل البيانات: الطابور (<bdi dir="ltr">Queue — FIFO</bdi>)</h3>
+                <span id="step-counter" class="index-num">خطوة 0</span>
+              </div>
+              <div id="ds-visual" class="ds-items-queue" aria-live="polite"></div>
+              <p id="ds-rule-hint" class="ds-hint">
+                القاعدة: يُفحص العنصر الموجود في <strong>رأس الطابور</strong> (باللون الذهبي)، وتُضاف أبناؤه في <strong>نهاية الطابور</strong>.
+              </p>
+            </div>
+
+            <div class="narration-box" aria-live="polite">
+              <strong id="narration-title">جاهز للبدء من الجذر <bdi dir="ltr">A</bdi></strong>
+              <p id="narration-text" style="margin: var(--space-xs) 0 0 0; font-size: 0.94rem;">
+                اضغط «الخطوة التالية» لمتابعة كيف يزور <bdi dir="ltr">BFS</bdi> العقد مستوىً تلو الآخر، أو بدّل إلى <bdi dir="ltr">DFS</bdi> لمشاهدة التعمق في الأبناء.
+              </p>
+            </div>
+
+            <div class="ds-box" style="padding: var(--space-sm) var(--space-md);">
+              <span class="control-label" style="font-size:0.84rem;">ترتيب الزيارة الفعلي حتى الآن:</span>
+              <div id="visited-trail" class="visited-trail"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comparison Table BFS vs DFS -->
+      <div class="sub-block">
+        <div class="sub-header">
+          <span class="index-num">1.1</span>
+          <h3 class="sub-title">المقارنة المباشرة بين <bdi dir="ltr">BFS</bdi> و <bdi dir="ltr">DFS</bdi> (ملخص السبورة)</h3>
+        </div>
+        <div class="table-wrap">
+          <table class="briefing-table">
+            <thead>
+              <tr>
+                <th>وجه المقارنة</th>
+                <th>البحث بأولوية الاتساع (<bdi dir="ltr">BFS — Breadth-First Search</bdi>)</th>
+                <th>البحث بأولوية العمق (<bdi dir="ltr">DFS — Depth-First Search</bdi>)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>آلية التنقل في الشجرة</strong></td>
+                <td>يمشي <strong>مستوىً تلو الآخر بالاتجاه الأفقي</strong>؛ يبدأ بالجذر <bdi dir="ltr">A</bdi> ثم <bdi dir="ltr">B, C, D</bdi> ثم <bdi dir="ltr">E, F, G, H, I</bdi>.</td>
+                <td><strong>يتعمق</strong> في الفرع نزولاً حتى آخر عقدة مقطوعة فيه (<bdi dir="ltr">A → B → E → J</bdi>) قبل الانتقال للأشقاء.</td>
+              </tr>
+              <tr>
+                <td><strong>هيكل البيانات المستخدم</strong></td>
+                <td><strong>الطابور (<bdi dir="ltr">Queue</bdi>)</strong>: يدخل العنصر الجديد في آخر الصف، وتُقدم الخدمة لمن في رأس الطابور أولاً (<bdi dir="ltr">FIFO</bdi>).</td>
+                <td><strong>المكدس (<bdi dir="ltr">Stack</bdi>)</strong>: الإضافة دائماً في الأعلى والسحب دائماً من الأعلى (<bdi dir="ltr">LIFO</bdi>)، كالأنبوب أو الكيس.</td>
+              </tr>
+              <tr>
+                <td><strong>الأولوية في الفحص</strong></td>
+                <td><strong>فحص الأشقاء أولاً</strong> (<bdi dir="ltr">Siblings First</bdi>) في نفس المستوى قبل النزول لمستوى جديد.</td>
+                <td><strong>فحص الأبناء أولاً</strong> (<bdi dir="ltr">Children First</bdi>) بالانتقال من الأب إلى ابنه مباشرة.</td>
+              </tr>
+              <tr>
+                <td><strong>متى تكون الخوارزمية أسرع وأكفأ؟</strong></td>
+                <td>عندما تكون شجرة البحث <strong>واسعة</strong> وتمتد أفقياً على مستويات عريضة.</td>
+                <td>عندما تكون شجرة البحث <strong>عميقة</strong> وتمتد رأسياً إلى الأسفل.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 02: INFORMED SEARCH -->
+    <section id="sec-informed" aria-labelledby="h-informed">
+      <div class="dossier-bar">
+        <div class="dossier-bar-group">
+          <span class="index-num">02</span>
+          <span class="dossier-pill">البحث المستنير</span>
+          <span class="dossier-meta"><bdi dir="ltr">Informed (Heuristic) Search</bdi></span>
+        </div>
+        <span class="dossier-meta">استخدام المعلومات الاستدلالية لاختيار الطريق</span>
+      </div>
+
+      <h2 id="h-informed" class="section-heading">نهاية البحث الأعمى: كيف تنير المعلومة الطريق نحو الهدف؟</h2>
+      <p class="section-lead">
+        بدلاً من فحص الشجرة بأكملها، يزوّدنا البحث المستنير بمعلومات مسبقة على المسارات أو العقد (تكلفة، مسافة، وقت، أو سعة) تُرشد الخوارزمية مباشرة إلى الخيار الأوفر.
+      </p>
+
+      <!-- Doctor's Al-Ahsa to Riyadh Analogy -->
+      <div class="analogy-grid">
+        <div class="analogy-card is-uninformed">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <strong>تشبيه المحاضرة: بدون معلومات (غير مستنير)</strong>
+            <span class="chip chip-slate">تجربة عمياء</span>
+          </div>
+          <p class="prose" style="margin:0; font-size:0.95rem;">
+            تريد السفر من <strong>الأحساء إلى الرياض</strong> ولا تملك أي بيانات عن الطرق: قد تجرّب الذهاب عبر الدمام ثم الخط السريع، أو تخرج مباشرة عبر طريق خريص؛ دون معلومة مسبقة تضطر للتجربة وفحص الخيارات كلها.
+          </p>
+        </div>
+
+        <div class="analogy-card is-informed">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <strong>تشبيه المحاضرة: بمعلومات استدلالية (مستنير)</strong>
+            <span class="chip">معلومة تنير الطريق</span>
+          </div>
+          <p class="prose" style="margin:0; font-size:0.95rem;">
+            تعلم مسبقاً أن طريق الدمام يضيف عليك مسافة <bdi dir="ltr">180 كم</bdi> واستهلاك بنزين أكثر وتأخير <strong>ساعة إضافية</strong>؛ هذه المعلومات تدلك فوراً على أن طريق خريص هو الأوفر والأسرع.
+          </p>
+        </div>
+      </div>
+
+      <!-- 2A: Best-First Search & Priority Queue -->
+      <div class="sub-block">
+        <div class="sub-header">
+          <span class="index-num">2.1</span>
+          <h3 class="sub-title">خوارزمية البحث بالأفضل أولاً (<bdi dir="ltr">Best-First Search</bdi>) وطابور الأولويات (<bdi dir="ltr">Priority Queue</bdi>)</h3>
+        </div>
+
+        <div class="split-grid">
+          <div>
+            <p class="prose">
+              تعتمد هذه الخوارزمية (إلى جانب خوارزميات مستنيرة أخرى مثل <bdi dir="ltr">Dijkstra</bdi>) على هيكل بيانات خاص يُسمى <strong>طابور الأولويات (<bdi dir="ltr">Priority Queue</bdi>)</strong>. شرحه الدكتور بأنه «طابور لكنه ليس عادلاً كالطوابير العادية»: فإذا وصل إلى الطابور شخص من ذوي الإعاقة أو كبير سن («اختيار») له أولوية، يتقدم ليصف في البداية!
+            </p>
+            <p class="prose">
+              برمجياً، تُرتّب العقد في طابور الأولويات بناءً على <strong>التكلفة الأقل أو المسافة الأقصر</strong> المرسومة على الممرات. في مثال الشريحة: للخروج من الجذر <bdi dir="ltr">A</bdi> أمامنا ثلاث تكاليف: <bdi dir="ltr">6</bdi> نحو <bdi dir="ltr">B</bdi>، و <bdi dir="ltr">8</bdi> نحو <bdi dir="ltr">C</bdi>، و <bdi dir="ltr">9</bdi> نحو <bdi dir="ltr">D</bdi>؛ فتختار الخوارزمية فوراً المسار <bdi dir="ltr">6</bdi> إلى <bdi dir="ltr">B</bdi>، ثم تقارن عند <bdi dir="ltr">B</bdi> بين التكلفة <bdi dir="ltr">2</bdi> والتكلفة <bdi dir="ltr">10</bdi> فتسلك المسار <bdi dir="ltr">2</bdi>.
+            </p>
+          </div>
+
+          <div class="figure-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--space-sm);">
+              <strong>مثال المحاضرة بالأرقام (<bdi dir="ltr">Best-First</bdi>)</strong>
+              <div class="btn-row">
+                <button type="button" class="btn btn-primary" style="min-height:36px; padding:0.25rem 0.7rem; font-size:0.85rem;" onclick="stepBestFirst()">خطوة تالية</button>
+                <button type="button" class="btn btn-secondary" style="min-height:36px; padding:0.25rem 0.7rem; font-size:0.85rem;" onclick="resetBestFirst()">إعادة</button>
+              </div>
+            </div>
+
+            <svg id="bf-svg" viewBox="0 0 420 220" role="img" aria-label="شجرة تكاليف Best-First Search من المحاضرة الثانية" style="width:100%; height:auto; background:var(--background); border:1px solid var(--outline-variant); border-radius:var(--rounded);"></svg>
+
+            <div id="bf-status" class="aside-box" style="margin-top:var(--space-sm); padding:var(--space-sm) var(--space-md); font-size:0.9rem;">
+              البداية عند <strong><bdi dir="ltr">A</bdi></strong> (قيمتها 7): الأولوية للانتقال الأقل تكلفة. اضغط «خطوة تالية».
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2B: Hill Climbing & No Backtracking -->
+      <div class="sub-block">
+        <div class="sub-header">
+          <span class="index-num">2.2</span>
+          <h3 class="sub-title">خوارزمية تسلق التل (<bdi dir="ltr">Hill Climbing</bdi>) وخاصية عدم الرجوع للخلف (<bdi dir="ltr">No Backtracking</bdi>)</h3>
+        </div>
+
+        <div class="split-grid">
+          <div class="figure-card">
+            <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:var(--space-sm); margin-bottom:var(--space-sm);">
+              <strong>محاكاة مثال الأرقام (<bdi dir="ltr">5 → 4 → 3 → 2</bdi>)</strong>
+              <div class="btn-row">
+                <button type="button" class="btn btn-primary" style="min-height:36px; padding:0.25rem 0.7rem; font-size:0.85rem;" onclick="stepHill()">انتقل للخطوة التالية</button>
+                <button type="button" class="btn btn-secondary" style="min-height:36px; padding:0.25rem 0.7rem; font-size:0.85rem;" onclick="resetHill()">إعادة</button>
+              </div>
+            </div>
+
+            <svg id="hill-svg" viewBox="0 0 440 245" role="img" aria-label="مخطط خوارزمية تسلق التل Hill Climbing بالقيم 5، 6، 7، 4، 3، 1، 2" style="width:100%; height:auto; background:var(--background); border:1px solid var(--outline-variant); border-radius:var(--rounded);"></svg>
+
+            <div id="hill-status" class="narration-box" style="margin-top:var(--space-sm); padding:var(--space-sm) var(--space-md); font-size:0.92rem;">
+              الموضع الحالي: العقدة ذات القيمة <strong>5</strong>. الخيارات المجاورة أمامنا: 6، 7، 4.
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:var(--space-md);">
+            <p class="prose" style="margin:0;">
+              تستلهم الخوارزمية فكرتها من <strong>متسلق الجبل</strong> الذي يثبت قدمه في موضع معين وينظر حوله باحثاً عن <strong>أقرب خطوة آمنة وأفضل</strong> للأعلى دون أن يقفز قفزة خطرة قد تُوقِعه، ودون أن يرجع للخلف أبداً (<bdi dir="ltr">No Backtracking</bdi>).
+            </p>
+
+            <div class="aside-box-gold">
+              <strong style="display:block; margin-bottom:var(--space-xs); color:var(--on-primary-container);">نقطة اختبارية خطيرة شرحها الدكتور بالتفصيل:</strong>
+              <p style="margin:0; font-size:0.95rem;">
+                عندما نصل إلى العقدة <strong>4</strong>، يكون أمامنا خياران: العقدة <strong>3</strong> والعقدة <strong>1</strong>. لماذا لا تذهب الخوارزمية إلى <strong>1</strong> رغم أنه أصغر؟ لأن قاعدة <bdi dir="ltr">Hill Climbing</bdi> التي أكدها الدكتور هي: <strong>«البحث عن أول وضع أفضل من الوضع الحالي»</strong>؛ وبما أن <bdi dir="ltr">3</bdi> أفضل من <bdi dir="ltr">4</bdi> وتقع أمامنا أولاً (كخطوة آمنة بدون مجازفة القفز)، تنتقل الخوارزمية إلى <bdi dir="ltr">3</bdi> مباشرة! وعند <bdi dir="ltr">3</bdi> (<bdi dir="ltr">H</bdi>) ترفض <bdi dir="ltr">4</bdi> وتنتقل إلى <bdi dir="ltr">2</bdi>.
+              </p>
+            </div>
+
+            <div class="aside-box">
+              <strong>خصائص <bdi dir="ltr">Hill Climbing</bdi>:</strong>
+              <ul style="margin:var(--space-xs) 0 0 0; padding-right:1.25rem; font-size:0.94rem;">
+                <li>لا تفحص كل الأبناء ولا تمشي بالمستويات، بل تفحص <strong>الجيران المباشرين فقط</strong>.</li>
+                <li>تختار <strong>أول وضع أفضل</strong> من الوضع الحالي.</li>
+                <li><strong>عدم الرجوع للخلف (<bdi dir="ltr">No Backtracking</bdi>)</strong>: ما تم تجاوزه لا نعود إليه.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2C: A* Algorithm -->
+      <div class="sub-block">
+        <div class="sub-header">
+          <span class="index-num">2.3</span>
+          <h3 class="sub-title">خوارزمية البحث بأولوية الأفضل <bdi dir="ltr">A*</bdi> ودالة التكلفة</h3>
+        </div>
+
+        <div class="formula-banner">
+          <div>
+            <strong style="display:block;">معادلة التكلفة الكلية في خوارزمية <bdi dir="ltr">A*</bdi></strong>
+            <span style="font-size:0.92rem; color:var(--on-surface-variant);">تجمع بين التكلفة الفعلية للطريق والقيمة الافتراضية المعطاة في جدول السؤال</span>
+          </div>
+          <div class="formula-eq">f(n) = g(n) + h(n)</div>
+        </div>
+
+        <div class="formula-parts">
+          <div class="formula-part-card">
+            <span class="mono-code">g(n)</span>
+            <h4 style="margin:var(--space-xs) 0;">تكلفة المسار الفعلية</h4>
+            <p style="margin:0; font-size:0.92rem; color:var(--on-surface-variant);">
+              مجموع تكاليف الانتقال المرسومة على أضلاع الشجرة من عقدة البداية (<bdi dir="ltr">S</bdi>) وصولاً إلى العقدة الحالية <bdi dir="ltr">n</bdi>.
+            </p>
+          </div>
+
+          <div class="formula-part-card">
+            <span class="mono-code">h(n)</span>
+            <h4 style="margin:var(--space-xs) 0;">القيمة التجريبية الافتراضية</h4>
+            <p style="margin:0; font-size:0.92rem; color:var(--on-surface-variant);">
+              دالة استدلالية تُعطى جاهزة للطلبة في <strong>جدول مرفق بالسؤال</strong> (كما في مثال الدكتور: <bdi dir="ltr">S = 7</bdi>، <bdi dir="ltr">A = 6</bdi>، <bdi dir="ltr">B = 4</bdi>...).
+            </p>
+          </div>
+
+          <div class="formula-part-card">
+            <span class="mono-code">f(n)</span>
+            <h4 style="margin:var(--space-xs) 0;">التكلفة الكلية المُقدّرة</h4>
+            <p style="margin:0; font-size:0.92rem; color:var(--on-surface-variant);">
+              تختار <bdi dir="ltr">A*</bdi> في كل خطوة المسار صاحب <strong>أقل قيمة <bdi dir="ltr">f(n)</bdi></strong> حتى تصل للهدف <bdi dir="ltr">G</bdi> بأقل تكلفة.
+            </p>
+          </div>
+        </div>
+
+        <!-- Interactive A* Calculator & Graph -->
+        <div class="figure-card">
+          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:var(--space-sm); margin-bottom:var(--space-md);">
+            <div>
+              <strong style="font-size:1.05rem;">تطبيق تفاعلي لحساب <bdi dir="ltr">f(n) = g(n) + h(n)</bdi> خطوة بخطوة</strong>
+              <p style="margin:0; font-size:0.88rem; color:var(--on-surface-variant);">مثال توضيحي على نمط السبورة يبدأ بقيم المحاضرة (<bdi dir="ltr">h(S)=7, h(A)=6</bdi>) لتدريبك على طريقة الحساب</p>
+            </div>
+            <div class="btn-row">
+              <button type="button" class="btn btn-primary" onclick="stepAStar()">الخطوة التالية في <bdi dir="ltr">A*</bdi></button>
+              <button type="button" class="btn btn-secondary" onclick="resetAStar()">إعادة الحساب</button>
+            </div>
+          </div>
+
+          <div class="split-grid">
+            <svg id="astar-svg" viewBox="0 0 460 230" role="img" aria-label="جراف تفاعلي لحساب خوارزمية A* من S إلى G" style="width:100%; height:auto; background:var(--background); border:1px solid var(--outline-variant); border-radius:var(--rounded);"></svg>
+
+            <div style="display:flex; flex-direction:column; gap:var(--space-sm);">
+              <div class="table-wrap">
+                <table class="briefing-table" aria-label="جدول قيم h(n) وحساب f(n)">
+                  <thead>
+                    <tr>
+                      <th>العقدة / المسار</th>
+                      <th><bdi dir="ltr">g(n)</bdi></th>
+                      <th><bdi dir="ltr">h(n)</bdi></th>
+                      <th><bdi dir="ltr">f(n) = g + h</bdi></th>
+                      <th>الحالة</th>
+                    </tr>
+                  </thead>
+                  <tbody id="astar-table-body"></tbody>
+                </table>
+              </div>
+              <div id="astar-narration" class="narration-box" style="font-size:0.92rem;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 03: LOGICAL AGENT -->
+    <section id="sec-logical-agent" aria-labelledby="h-agent">
+      <div class="dossier-bar">
+        <div class="dossier-bar-group">
+          <span class="index-num">03</span>
+          <span class="dossier-pill">الوكيل المنطقي</span>
+          <span class="dossier-meta"><bdi dir="ltr">Logical Agent</bdi></span>
+        </div>
+        <span class="dossier-meta">من الإدراك إلى الاستدلال والقرار</span>
+      </div>
+
+      <h2 id="h-agent" class="section-heading">الوكيل المنطقي: كيف تُحوّل التطبيقات المعاصرة إدراك البيئة إلى قرار؟</h2>
+      <p class="section-lead">
+        الوكيل المنطقي هو العمود الفقري لمعظم تطبيقات الذكاء الاصطناعي الحالية؛ فهو يلتقط البيانات من بيئته المحيطة، ويبني عليها استدلالات منطقية، ثم يتخذ القرار الصحيح.
+      </p>
+
+      <!-- 3-Stage Mechanism -->
+      <div class="agent-loop">
+        <div class="agent-stage">
+          <div class="agent-stage-num">المرحلة 01 — الإدراك (<bdi dir="ltr">Perception</bdi>)</div>
+          <strong style="display:block; margin-bottom:var(--space-xs);">استقبال بيانات البيئة المحيطة</strong>
+          <p style="margin:0; font-size:0.93rem; color:var(--on-surface-variant);">
+            يأخذ الوكيل مدخلاته من النص المكتوب (ترجمة)، أو مستشعرات الطريق (سيارة ذاتية القيادة)، أو صورة أشعة <bdi dir="ltr">X-Ray</bdi>، أو محيط الروبوت.
+          </p>
+        </div>
+
+        <div class="agent-stage">
+          <div class="agent-stage-num">المرحلة 02 — المنطق والاستدلال (<bdi dir="ltr">Inference</bdi>)</div>
+          <strong style="display:block; margin-bottom:var(--space-xs);">تحليل الحقائق وبناء الاستنتاج</strong>
+          <p style="margin:0; font-size:0.93rem; color:var(--on-surface-variant);">
+            يحوّل البيانات المستخرجة إلى قواعد ومعارف، ثم يطبّق عليها استدلالات منطقية لتفسير الحالة (مثل تشخيص علامة مرضية في صورة الأشعة).
+          </p>
+        </div>
+
+        <div class="agent-stage" style="border-top:3px solid var(--secondary);">
+          <div class="agent-stage-num">المرحلة 03 — القرار والفعل (<bdi dir="ltr">Action</bdi>)</div>
+          <strong style="display:block; margin-bottom:var(--space-xs);">اتخاذ القرار المناسب</strong>
+          <p style="margin:0; font-size:0.93rem; color:var(--on-surface-variant);">
+            ينفذ القرار الناتج عن الاستدلال بدقة في البيئة: إيقاف السيارة، إصدار تقرير التشخيص الطبي، الرد في المحادثة، أو تنفيذ خطة العمل.
+          </p>
+        </div>
+      </div>
+
+      <!-- 7 Applications Grid -->
+      <div class="sub-block" style="margin-top:var(--space-lg);">
+        <div class="sub-header">
+          <span class="index-num">3.1</span>
+          <h3 class="sub-title">التطبيقات السبعة للوكيل المنطقي (اضغط على أي تطبيق لاستعراض مثاله من المحاضرة)</h3>
+        </div>
+
+        <div class="apps-grid" id="apps-grid">
+          <button type="button" class="app-card is-selected" onclick="selectAgentApp(0)">
+            <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+              <span class="index-num">01</span>
+              <span class="chip chip-slate">قواعد البيانات</span>
+            </div>
+            <strong>نظم إدارة قواعد البيانات</strong>
+            <span style="font-size:0.88rem; color:var(--on-surface-variant);">استخلاص الحقائق وإدارة الاستعلامات المنطقية</span>
+          </button>
+
+          <button type="button" class="app-card" onclick="selectAgentApp(1)">
+            <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+              <span class="index-num">02</span>
+              <span class="chip chip-pine">الطب والصحة</span>
+            </div>
+            <strong>التشخيص الطبي</strong>
+            <span style="font-size:0.88rem; color:var(--on-surface-variant);">قراءة صور الأشعة (<bdi dir="ltr">X-Ray</bdi>) وتشخيص الحالات</span>
+          </button>
+
+          <button type="button" class="app-card" onclick="selectAgentApp(2)">
+            <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+              <span class="index-num">03</span>
+              <span class="chip">الخبرة</span>
+            </div>
+            <strong>الأنظمة الخبيرة (<bdi dir="ltr">Expert Systems</bdi>)</strong>
+            <span style="font-size:0.88rem; color:var(--on-surface-variant);">محاكاة قرارات الخبراء البشريين بقواعد المعرفة</span>
+          </button>
+
+          <button type="button" class="app-card" onclick="selectAgentApp(3)">
+            <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+              <span class="index-num">04</span>
+              <span class="chip chip-slate">الأتمتة الفيزيائية</span>
+            </div>
+            <strong>الروبوتات الذكية والسيارات ذاتية القيادة</strong>
+            <span style="font-size:0.88rem; color:var(--on-surface-variant);">الإدراك اللحظي للبيئة واتخاذ قرار الحركة</span>
+          </button>
+
+          <button type="button" class="app-card" onclick="selectAgentApp(4)">
+            <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+              <span class="index-num">05</span>
+              <span class="chip">الاستراتيجية</span>
+            </div>
+            <strong>ألعاب الفيديو والتخطيط الآلي</strong>
+            <span style="font-size:0.88rem; color:var(--on-surface-variant);">بناء خطط التحرك الذكي وتوقع استجابات البيئة</span>
+          </button>
+
+          <button type="button" class="app-card" onclick="selectAgentApp(5)">
+            <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+              <span class="index-num">06</span>
+              <span class="chip chip-error">الحماية</span>
+            </div>
+            <strong>أنظمة الأمن السيبراني الذكية</strong>
+            <span style="font-size:0.88rem; color:var(--on-surface-variant);">رصد المؤشرات المشبوهة واتخاذ إجراءات الحماية</span>
+          </button>
+
+          <button type="button" class="app-card" onclick="selectAgentApp(6)">
+            <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+              <span class="index-num">07</span>
+              <span class="chip chip-pine">اللغة والتجارة</span>
+            </div>
+            <strong>معالجة اللغات، الترجمة، <bdi dir="ltr">Chatbots</bdi> والتجارة الإلكترونية</strong>
+            <span style="font-size:0.88rem; color:var(--on-surface-variant);">فهم النصوص والأسئلة وتوليد الردود والتوصيات</span>
+          </button>
+        </div>
+
+        <div id="agent-app-detail" class="app-detail-panel" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- SECTION 04: EXAM ALERTS & SELF-CHECK QUIZ -->
+    <section id="sec-exam" aria-labelledby="h-exam">
+      <div class="dossier-bar">
+        <div class="dossier-bar-group">
+          <span class="index-num">04</span>
+          <span class="dossier-pill">تنبيهات الاختبار النهائي</span>
+          <span class="dossier-meta">توجيهات الدكتور في المحاضرة الثانية</span>
+        </div>
+        <span class="dossier-meta">جاهزية الاختبار</span>
+      </div>
+
+      <h2 id="h-exam" class="section-heading">ما الذي شدّد عليه الدكتور للاختبار النهائي في المحاضرة الثانية؟</h2>
+      <p class="section-lead">
+        رصْد دقيق لكافة التنبيهات العلمية والمنهجية والتقنية التي أكد عليها أستاذ المقرر خلال المحاضرة المباشرة الثانية لضمان الاستعداد الكامل.
+      </p>
+
+      <div class="alerts-grid">
+        <div class="alert-card is-critical">
+          <span class="chip chip-error" style="align-self:flex-start;">تنبيه 01 — الشمولية في الاختبار</span>
+          <strong>جميع الخوارزميات المشروحة معكم في الاختبار</strong>
+          <p style="margin:0; font-size:0.93rem; color:var(--on-surface-variant);">
+            أكد الدكتور صراحةً عند حديثه عن <bdi dir="ltr">Hill Climbing</bdi> و <bdi dir="ltr">A*</bdi> و <bdi dir="ltr">BFS/DFS</bdi>: «طبعا معكم بالاختبار أكيد معكم بالاختبار»، وشدد على ضرورة استيعاب طريقة السير في الشجرة وحساب القيم.
+          </p>
+        </div>
+
+        <div class="alert-card is-critical">
+          <span class="chip chip-error" style="align-self:flex-start;">تنبيه 02 — الرجوع للسبورة في المسجلات</span>
+          <strong>مراجعة شرح الجراف لخوارزمية <bdi dir="ltr">A*</bdi> على السبورة</strong>
+          <p style="margin:0; font-size:0.93rem; color:var(--on-surface-variant);">
+            نبّه الدكتور إلى أن حساب <bdi dir="ltr">f(n) = g(n) + h(n)</bdi> وتطبيق الجدول (<bdi dir="ltr">h(n)</bdi>) مشروح بالتفصيل الكامل على السبورة في المحاضرات المسجلة؛ والجدول يُعطى جاهزاً في ورقة السؤال.
+          </p>
+        </div>
+
+        <div class="alert-card">
+          <span class="chip" style="align-self:flex-start;">تنبيه 03 — فخ المقارنة والأولويات</span>
+          <strong>لا تخلط بين هياكل البيانات وقاعدة <bdi dir="ltr">Hill Climbing</bdi></strong>
+          <p style="margin:0; font-size:0.93rem; color:var(--on-surface-variant);">
+            ركّز على الفروق: <bdi dir="ltr">BFS</bdi> ← طابور/أشقاء/واسعة، <bdi dir="ltr">DFS</bdi> ← مكدس/أبناء/عميقة، <bdi dir="ltr">Best-First</bdi> ← طابور أولويات، <bdi dir="ltr">Hill Climbing</bdi> ← أول وضع أفضل بلا رجوع للخلف (<bdi dir="ltr">3</bdi> قبل <bdi dir="ltr">1</bdi>).
+          </p>
+        </div>
+
+        <div class="alert-card is-tech">
+          <span class="chip chip-slate" style="align-self:flex-start;">تنبيه 04 — إرشادات الحضور والمنصة</span>
+          <strong>الشرائح والسبورة والرقم الجامعي والواتساب</strong>
+          <p style="margin:0; font-size:0.93rem; color:var(--on-surface-variant);">
+            الدخول بالرقم الجامعي؛ لإظهار الشرائح اضغط الأيقونة أسفل يسار الشاشة؛ ولتكبير السبورة اضغط (<bdi dir="ltr">Click</bdi>) عليها مباشرة. وللاستفسارات يتاح رقما الواتساب على النظام.
+          </p>
+        </div>
+      </div>
+
+      <!-- Interactive Self-Check Quiz -->
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <div>
+            <h3 style="margin:0; font-size:1.2rem;">اختبار ذاتي سريع على محتوى المحاضرة الثانية</h3>
+            <p style="margin:var(--space-xs) 0 0 0; font-size:0.92rem; color:var(--on-surface-variant);">
+              6 أسئلة تطبيقية مبنية حصرياً على أمثلة وتنبيهات المحاضرة المباشرة الثانية
+            </p>
+          </div>
+          <div style="display:flex; align-items:center; gap:var(--space-sm);">
+            <span id="quiz-score-badge" class="dossier-pill">النتيجة: 0 / 6</span>
+            <button type="button" class="btn btn-secondary" style="min-height:38px; padding:0.3rem 0.75rem;" onclick="resetQuiz()">إعادة الاختبار</button>
+          </div>
+        </div>
+
+        <div id="quiz-list" class="quiz-list"></div>
+      </div>
+    </section>
+
+    <footer class="footer-note">
+      <span>المصدر: التفريغ الكامل للمحاضرة الإفتراضية المباشرة الثانية — مقرر الذكاء الاصطناعي.</span>
+      <span>صُمم هذا الدليل التفاعلي للمراجعة المنهجية المركّزة على المحاضرة الثانية فقط.</span>
+    </footer>
+
+  </main>
+
+  <script>
+    // =========================================================================
+    // 1. UNINFORMED SEARCH SIMULATOR (BFS vs DFS on Lecture 2 Tree A..P)
+    // =========================================================================
+    const TREE_NODES = {
+      A: { x: 300, y: 32,  children: [`B`, `C`, `D`] },
+      B: { x: 120, y: 105, children: [`E`, `F`] },
+      C: { x: 300, y: 105, children: [`G`] },
+      D: { x: 480, y: 105, children: [`H`, `I`] },
+      E: { x: 75,  y: 188, children: [`J`, `K`] },
+      F: { x: 180, y: 188, children: [`M`] },
+      G: { x: 300, y: 188, children: [`L`] },
+      H: { x: 430, y: 188, children: [`N`, `O`] },
+      I: { x: 540, y: 188, children: [`P`] },
+      J: { x: 45,  y: 278, children: [] },
+      K: { x: 108, y: 278, children: [] },
+      M: { x: 180, y: 278, children: [] },
+      L: { x: 300, y: 278, children: [] },
+      N: { x: 400, y: 278, children: [] },
+      O: { x: 462, y: 278, children: [] },
+      P: { x: 540, y: 278, children: [] }
+    };
+
+    let searchState = {
+      algo: `bfs`,
+      goal: `L`,
+      frontier: [`A`],
+      visited: [],
+      current: null,
+      done: false,
+      stepCount: 0,
+      timer: null
+    };
+
+    function drawSearchTree() {
+      const edgesEl = document.getElementById(`tree-edges`);
+      const nodesEl = document.getElementById(`tree-nodes`);
+      if (!edgesEl || !nodesEl) return;
+
+      let edgesHtml = ``;
+      Object.keys(TREE_NODES).forEach(function (parentId) {
+        const p = TREE_NODES[parentId];
+        p.children.forEach(function (childId) {
+          const c = TREE_NODES[childId];
+          const isTraversed = searchState.visited.includes(parentId) &&
+            (searchState.visited.includes(childId) || searchState.current === childId);
+          const strokeColor = isTraversed ? `var(--secondary)` : `var(--data-context)`;
+          const strokeWidth = isTraversed ? `2.4` : `1.5`;
+          edgesHtml += `<line x1="${p.x}" y1="${p.y}" x2="${c.x}" y2="${c.y}" stroke="${strokeColor}" stroke-width="${strokeWidth}" />`;
+        });
+      });
+      edgesEl.innerHTML = edgesHtml;
+
+      let nodesHtml = ``;
+      Object.keys(TREE_NODES).forEach(function (id) {
+        const n = TREE_NODES[id];
+        const isCurrent = searchState.current === id;
+        const isVisited = searchState.visited.includes(id);
+        const isFrontier = searchState.frontier.includes(id);
+        const isGoal = searchState.goal === id;
+
+        let fill = `var(--surface-container-low)`;
+        let textFill = `var(--on-surface)`;
+        let stroke = `var(--outline-variant)`;
+        let strokeW = `1.5`;
+
+        if (isFrontier) {
+          fill = `var(--pine-tint)`;
+          stroke = `var(--positive)`;
+          strokeW = `2`;
+        }
+        if (isVisited) {
+          fill = `var(--secondary)`;
+          textFill = `var(--on-secondary)`;
+          stroke = `var(--secondary)`;
+          strokeW = `2`;
+        }
+        if (isCurrent) {
+          fill = `var(--primary-container)`;
+          textFill = `var(--on-primary-container)`;
+          stroke = `var(--outline)`;
+          strokeW = `2.5`;
+        }
+        if (isGoal && !isCurrent && !isVisited) {
+          stroke = `var(--data-4)`;
+          strokeW = `2.8`;
+        }
+
+        nodesHtml += `<g>`;
+        if (isGoal) {
+          nodesHtml += `<circle cx="${n.x}" cy="${n.y}" r="22" fill="none" stroke="var(--data-4)" stroke-width="1.5" stroke-dasharray="3 2" />`;
+        }
+        nodesHtml += `<circle cx="${n.x}" cy="${n.y}" r="17" fill="${fill}" stroke="${stroke}" stroke-width="${strokeW}" />`;
+        nodesHtml += `<text x="${n.x}" y="${n.y + 5}" text-anchor="middle" font-family="Geist Mono, monospace" font-size="13" font-weight="600" fill="${textFill}">${id}</text>`;
+        nodesHtml += `</g>`;
+      });
+      nodesEl.innerHTML = nodesHtml;
+    }
+
+    function renderDataStructure() {
+      const dsHeading = document.getElementById(`ds-heading`);
+      const dsVisual = document.getElementById(`ds-visual`);
+      const dsRuleHint = document.getElementById(`ds-rule-hint`);
+      const stepCounter = document.getElementById(`step-counter`);
+      const trailEl = document.getElementById(`visited-trail`);
+      if (!dsHeading || !dsVisual || !dsRuleHint || !stepCounter || !trailEl) return;
+
+      stepCounter.textContent = `خطوة ` + searchState.stepCount;
+
+      if (searchState.algo === `bfs`) {
+        dsHeading.innerHTML = `هيكل البيانات: الطابور (<bdi dir="ltr">Queue — FIFO</bdi>)`;
+        dsVisual.className = `ds-items-queue`;
+        dsRuleHint.innerHTML = `القاعدة: يُفحص العنصر الموجود في <strong>رأس الطابور</strong> (يمين الصف)، وتُضاف الأبناء في <strong>نهايته</strong> (يسار الصف).`;
+      } else {
+        dsHeading.innerHTML = `هيكل البيانات: المكدس (<bdi dir="ltr">Stack — LIFO</bdi>)`;
+        dsVisual.className = `ds-items-stack`;
+        dsRuleHint.innerHTML = `القاعدة: يُضاف الأبناء في <strong>أعلى المكدس</strong>، ويُسحب العنصر التالي دائماً من <strong>الأعلى</strong> (التعمق بالأبناء).`;
+      }
+
+      if (searchState.frontier.length === 0) {
+        dsVisual.innerHTML = `<span style="color:var(--on-surface-variant); font-size:0.88rem;">فارغ — انتهت عملية البحث</span>`;
+      } else if (searchState.algo === `bfs`) {
+        dsVisual.innerHTML = searchState.frontier.map(function (id, idx) {
+          const cls = idx === 0 ? `ds-token is-head` : `ds-token`;
+          const tag = idx === 0 ? ` (الرأس)` : ``;
+          return `<span class="${cls}">${id}${tag}</span>`;
+        }).join(``);
+      } else {
+        // Show Stack with top element visually at the top
+        const reversed = searchState.frontier.slice().reverse();
+        dsVisual.innerHTML = reversed.map(function (id, idx) {
+          const cls = idx === 0 ? `ds-token is-head` : `ds-token`;
+          const tag = idx === 0 ? ` — قمة المكدس (الأعلى)` : ``;
+          return `<div style="display:flex; align-items:center; gap:0.5rem;"><span class="${cls}">${id}</span><span style="font-size:0.8rem; color:var(--on-surface-variant);">${tag}</span></div>`;
+        }).join(``);
+      }
+
+      if (searchState.visited.length === 0) {
+        trailEl.innerHTML = `<span style="font-size:0.82rem; color:var(--on-surface-variant);">لم تتم زيارة أي عقدة بعد.</span>`;
+      } else {
+        trailEl.innerHTML = searchState.visited.map(function (id) {
+          return `<span class="trail-pill">${id}</span>`;
+        }).join(``);
+      }
+    }
+
+    function stepSearch() {
+      if (searchState.done) return;
+
+      const titleEl = document.getElementById(`narration-title`);
+      const textEl = document.getElementById(`narration-text`);
+      const btnStep = document.getElementById(`btn-step`);
+
+      if (searchState.frontier.length === 0) {
+        searchState.done = true;
+        stopPlaySearch();
+        if (btnStep) btnStep.disabled = true;
+        return;
+      }
+
+      searchState.stepCount += 1;
+      let nodeId;
+      if (searchState.algo === `bfs`) {
+        nodeId = searchState.frontier.shift();
+      } else {
+        nodeId = searchState.frontier.pop();
+      }
+
+      searchState.current = nodeId;
+      searchState.visited.push(nodeId);
+
+      if (nodeId === searchState.goal) {
+        searchState.done = true;
+        stopPlaySearch();
+        if (btnStep) btnStep.disabled = true;
+        if (titleEl) titleEl.innerHTML = `تم العثور على الهدف <bdi dir="ltr">${nodeId}</bdi>!`;
+        if (textEl) {
+          const methodTxt = searchState.algo === `bfs` ? `مسح المستويات أفقياً عبر الطابور` : `التعمق في الفروع عبر المكدس`;
+          textEl.innerHTML = `وصلت الخوارزمية إلى العقدة الهدف <strong><bdi dir="ltr">${nodeId}</bdi></strong> بعد فحص <strong>${searchState.visited.length}</strong> عقد عبر ${methodTxt}.`;
+        }
+      } else {
+        const children = TREE_NODES[nodeId].children;
+        if (searchState.algo === `bfs`) {
+          children.forEach(function (c) { searchState.frontier.push(c); });
+          if (titleEl) titleEl.innerHTML = `فحص العقدة <bdi dir="ltr">${nodeId}</bdi> (ليست الهدف)`;
+          if (textEl) {
+            if (children.length > 0) {
+              textEl.innerHTML = `تخرج <bdi dir="ltr">${nodeId}</bdi> من رأس الطابور، وتُضاف أبناؤها (<strong><bdi dir="ltr">${children.join(`, `)}</bdi></strong>) في نهاية الطابور للحفاظ على ترتيب المستوى.`;
+            } else {
+              textEl.innerHTML = `العقدة <bdi dir="ltr">${nodeId}</bdi> ورقة مقطوعة بدون أبناء؛ ننتقل للعنصر التالي في رأس الطابور.`;
+            }
+          }
+        } else {
+          // Push children in reverse order so leftmost child sits at top of Stack
+          for (let i = children.length - 1; i >= 0; i--) {
+            searchState.frontier.push(children[i]);
+          }
+          if (titleEl) titleEl.innerHTML = `فحص العقدة <bdi dir="ltr">${nodeId}</bdi> من أعلى المكدس`;
+          if (textEl) {
+            if (children.length > 0) {
+              textEl.innerHTML = `نُسقط <bdi dir="ltr">${nodeId}</bdi> من القمة ونضع أبناءها فوق المكدس بحيث يكون الابن الأيسر <strong><bdi dir="ltr">${children[0]}</bdi></strong> في الأعلى لنتعمق به أولاً.`;
+            } else {
+              textEl.innerHTML = `وصلنا إلى نهاية الفرع عند <bdi dir="ltr">${nodeId}</bdi> (لا أبناء لها)، فنزيلها من القمة ونرجع لأقرب ابن متبقٍ في أعلى المكدس.`;
+            }
+          }
+        }
+      }
+
+      drawSearchTree();
+      renderDataStructure();
+    }
+
+    function stopPlaySearch() {
+      if (searchState.timer) {
+        clearInterval(searchState.timer);
+        searchState.timer = null;
+      }
+      const lbl = document.getElementById(`play-label`);
+      if (lbl) lbl.textContent = `تشغيل تلقائي`;
+    }
+
+    function togglePlaySearch() {
+      if (searchState.done) resetSearch();
+      if (searchState.timer) {
+        stopPlaySearch();
+      } else {
+        const lbl = document.getElementById(`play-label`);
+        if (lbl) lbl.textContent = `إيقاف مؤقت`;
+        stepSearch();
+        searchState.timer = setInterval(function () {
+          if (searchState.done) {
+            stopPlaySearch();
+          } else {
+            stepSearch();
+          }
+        }, 900);
+      }
+    }
+
+    function resetSearch() {
+      stopPlaySearch();
+      searchState.frontier = [`A`];
+      searchState.visited = [];
+      searchState.current = null;
+      searchState.done = false;
+      searchState.stepCount = 0;
+
+      const btnStep = document.getElementById(`btn-step`);
+      if (btnStep) btnStep.disabled = false;
+
+      const titleEl = document.getElementById(`narration-title`);
+      const textEl = document.getElementById(`narration-text`);
+      if (titleEl) titleEl.innerHTML = `جاهز للبدء من الجذر <bdi dir="ltr">A</bdi>`;
+      if (textEl) {
+        textEl.innerHTML = searchState.algo === `bfs`
+          ? `تم وضع <bdi dir="ltr">A</bdi> في الطابور. اضغط «الخطوة التالية» لتتبع المسح الأفقي مستوىً تلو الآخر.`
+          : `تم وضع <bdi dir="ltr">A</bdi> في المكدس. اضغط «الخطوة التالية» لتتبع التعمق نحو الأبناء أولاً.`;
+      }
+
+      drawSearchTree();
+      renderDataStructure();
+    }
+
+    function setSearchAlgo(algo) {
+      searchState.algo = algo;
+      const bfsBtn = document.getElementById(`btn-mode-bfs`);
+      const dfsBtn = document.getElementById(`btn-mode-dfs`);
+      if (bfsBtn) bfsBtn.classList.toggle(`is-active`, algo === `bfs`);
+      if (dfsBtn) dfsBtn.classList.toggle(`is-active`, algo === `dfs`);
+      resetSearch();
+    }
+
+    function changeSearchGoal(goalId) {
+      searchState.goal = goalId;
+      resetSearch();
+    }
+
+    // =========================================================================
+    // 2. BEST-FIRST SEARCH INTERACTIVE DIAGRAM
+    // =========================================================================
+    let bfStep = 0;
+    const BF_STEPS = [
+      { active: `A`, edges: [], msg: `البداية عند <strong><bdi dir="ltr">A</bdi></strong> (قيمتها 7): نُدخل أبناءها في طابور الأولويات: <bdi dir="ltr">[B(6), C(8), D(9)]</bdi>.` },
+      { active: `B`, edges: [`AB`], msg: `يختار طابور الأولويات العقدة <strong><bdi dir="ltr">B</bdi></strong> لأن تكلفتها <strong>6</strong> هي الأقل مقارنةً بـ <bdi dir="ltr">C(8)</bdi> و <bdi dir="ltr">D(9)</bdi>.` },
+      { active: `E`, edges: [`AB`, `BE`], msg: `من <strong><bdi dir="ltr">B</bdi></strong> تظهر التكاليف <strong>2</strong> و <strong>10</strong>؛ فترتب الأولوية المسار الأقل (<strong>2</strong>) للانتقال نحو الهدف.` }
+    ];
+
+    function renderBestFirst() {
+      const svg = document.getElementById(`bf-svg`);
+      const status = document.getElementById(`bf-status`);
+      if (!svg || !status) return;
+      const s = BF_STEPS[bfStep];
+
+      const nodes = {
+        A: { x: 210, y: 36, lbl: `A (7)` },
+        B: { x: 95,  y: 112, lbl: `B` },
+        C: { x: 210, y: 112, lbl: `C` },
+        D: { x: 325, y: 112, lbl: `D` },
+        E: { x: 55,  y: 185, lbl: `G1` },
+        F: { x: 145, y: 185, lbl: `F` }
+      };
+      const edges = [
+        { id: `AB`, u: `A`, v: `B`, w: `6`, wx: 138, wy: 68 },
+        { id: `AC`, u: `A`, v: `C`, w: `8`, wx: 222, wy: 76 },
+        { id: `AD`, u: `A`, v: `D`, w: `9`, wx: 282, wy: 68 },
+        { id: `BE`, u: `B`, v: `E`, w: `2`, wx: 62, wy: 148 },
+        { id: `BF`, u: `B`, v: `F`, w: `10`, wx: 135, wy: 148 }
+      ];
+
+      let html = ``;
+      edges.forEach(function (e) {
+        const u = nodes[e.u], v = nodes[e.v];
+        const chosen = s.edges.includes(e.id);
+        html += `<line x1="${u.x}" y1="${u.y}" x2="${v.x}" y2="${v.y}" stroke="${chosen ? `var(--secondary)` : `var(--data-context)`}" stroke-width="${chosen ? `3` : `1.6`}" />`;
+        html += `<rect x="${e.wx - 13}" y="${e.wy - 10}" width="26" height="19" rx="3" fill="${chosen ? `var(--primary-container)` : `var(--surface-container-low)`}" stroke="${chosen ? `var(--outline)` : `var(--outline-variant)`}" />`;
+        html += `<text x="${e.wx}" y="${e.wy + 4}" text-anchor="middle" font-family="Geist Mono, monospace" font-size="11" font-weight="700" fill="var(--on-surface)">${e.w}</text>`;
+      });
+
+      Object.keys(nodes).forEach(function (k) {
+        const n = nodes[k];
+        const isAct = s.active === k;
+        const fill = isAct ? `var(--primary-container)` : `var(--surface-container-low)`;
+        const stroke = isAct ? `var(--outline)` : `var(--secondary)`;
+        html += `<circle cx="${n.x}" cy="${n.y}" r="20" fill="${fill}" stroke="${stroke}" stroke-width="${isAct ? `2.5` : `1.6`}" />`;
+        html += `<text x="${n.x}" y="${n.y + 4}" text-anchor="middle" font-family="Geist Mono, monospace" font-size="11" font-weight="700" fill="var(--on-surface)">${n.lbl}</text>`;
+      });
+
+      svg.innerHTML = html;
+      status.innerHTML = s.msg;
+    }
+
+    function stepBestFirst() {
+      if (bfStep < BF_STEPS.length - 1) {
+        bfStep += 1;
+        renderBestFirst();
+      }
+    }
+
+    function resetBestFirst() {
+      bfStep = 0;
+      renderBestFirst();
+    }
+
+    // =========================================================================
+    // 3. HILL CLIMBING INTERACTIVE SIMULATOR (Lecture 2: 5 -> 4 -> 3 -> 2)
+    // =========================================================================
+    let hillStep = 0;
+    const HILL_STEPS = [
+      { cur: `N5`, path: [`N5`], rejected: [], msg: `البداية عند <strong>5</strong>: الجيران المباشرون هم (<strong>6</strong>، <strong>7</strong>، <strong>4</strong>). نبحث عن وضع أفضل (أقل) من 5.` },
+      { cur: `N4`, path: [`N5`, `N4`], rejected: [`N6`, `N7`], msg: `<strong>4</strong> أفضل من 5، فينتقل المتسلق إلى <strong>4</strong> ولا ينظر للخلف (<strong>No Backtracking</strong>).` },
+      { cur: `N3`, path: [`N5`, `N4`, `N3`], rejected: [`N6`, `N7`, `N1`], msg: `<strong>نقطة اختبارية:</strong> عند 4 يوجد <strong>3</strong> و <strong>1</strong>! تختار الخوارزمية <strong>3</strong> لأنه <em>أول وضع أفضل</em> يواجهها مباشرة دون قفز لـ 1.` },
+      { cur: `N2`, path: [`N5`, `N4`, `N3`, `N2`], rejected: [`N6`, `N7`, `N1`, `N4b`], msg: `عند <strong>3 (H)</strong> أمامها <strong>4</strong> (أسوأ، ترفضه) و <strong>2</strong> (أفضل)، فتنتقل إلى <strong>2</strong>.` }
+    ];
+
+    function renderHill() {
+      const svg = document.getElementById(`hill-svg`);
+      const status = document.getElementById(`hill-status`);
+      if (!svg || !status) return;
+      const s = HILL_STEPS[hillStep];
+
+      const nodes = {
+        N5:  { x: 220, y: 34,  val: `5` },
+        N6:  { x: 85,  y: 108, val: `6` },
+        N7:  { x: 185, y: 108, val: `7` },
+        N4:  { x: 315, y: 108, val: `4` },
+        N3:  { x: 245, y: 175, val: `3 (H)` },
+        N1:  { x: 385, y: 175, val: `1` },
+        N4b: { x: 170, y: 222, val: `4` },
+        N2:  { x: 300, y: 222, val: `2` }
+      };
+      const edges = [
+        [`N5`, `N6`], [`N5`, `N7`], [`N5`, `N4`],
+        [`N4`, `N3`], [`N4`, `N1`],
+        [`N3`, `N4b`], [`N3`, `N2`]
+      ];
+
+      let html = ``;
+      edges.forEach(function (pair) {
+        const u = nodes[pair[0]], v = nodes[pair[1]];
+        const onPath = s.path.includes(pair[0]) && s.path.includes(pair[1]);
+        html += `<line x1="${u.x}" y1="${u.y}" x2="${v.x}" y2="${v.y}" stroke="${onPath ? `var(--secondary)` : `var(--data-context)`}" stroke-width="${onPath ? `3` : `1.5`}" />`;
+      });
+
+      Object.keys(nodes).forEach(function (k) {
+        const n = nodes[k];
+        const isCur = s.cur === k;
+        const onPath = s.path.includes(k);
+        const isRej = s.rejected.includes(k);
+
+        let fill = `var(--surface-container-low)`;
+        let stroke = `var(--outline-variant)`;
+        let textFill = `var(--on-surface)`;
+        if (isRej) {
+          fill = `var(--surface-container)`;
+          textFill = `var(--on-surface-variant)`;
+        }
+        if (onPath && !isCur) {
+          fill = `var(--secondary)`;
+          stroke = `var(--secondary)`;
+          textFill = `var(--on-secondary)`;
+        }
+        if (isCur) {
+          fill = `var(--primary-container)`;
+          stroke = `var(--outline)`;
+          textFill = `var(--on-primary-container)`;
+        }
+        const rx = k === `N3` ? 24 : 18;
+        html += `<ellipse cx="${n.x}" cy="${n.y}" rx="${rx}" ry="16" fill="${fill}" stroke="${stroke}" stroke-width="${isCur ? `2.5` : `1.6`}" />`;
+        html += `<text x="${n.x}" y="${n.y + 4}" text-anchor="middle" font-family="Geist Mono, monospace" font-size="11.5" font-weight="700" fill="${textFill}">${n.val}</text>`;
+      });
+
+      svg.innerHTML = html;
+      status.innerHTML = s.msg;
+    }
+
+    function stepHill() {
+      if (hillStep < HILL_STEPS.length - 1) {
+        hillStep += 1;
+        renderHill();
+      }
+    }
+
+    function resetHill() {
+      hillStep = 0;
+      renderHill();
+    }
+
+    // =========================================================================
+    // 4. A* INTERACTIVE COST CALCULATOR (f(n) = g(n) + h(n))
+    // =========================================================================
+    let astarStep = 0;
+    const ASTAR_STEPS = [
+      {
+        cur: `S`,
+        visited: [`S`],
+        rows: [
+          { path: `S (البداية)`, g: 0, h: 7, f: 7, status: `نقطة الانطلاق` }
+        ],
+        note: `نبدأ من <strong><bdi dir="ltr">S</bdi></strong> حيث التكلفة الفعلية <bdi dir="ltr">g(S)=0</bdi> والقيمة الافتراضية المعطاة بالجدول <bdi dir="ltr">h(S)=7</bdi>، إذن <bdi dir="ltr">f(S)=7</bdi>.`
+      },
+      {
+        cur: `A`,
+        visited: [`S`, `A`],
+        rows: [
+          { path: `S → A`, g: 2, h: 6, f: 8, status: `أقل f(n) — مُختارة` },
+          { path: `S → B`, g: 5, h: 4, f: 9, status: `مؤجلة في الطابور` }
+        ],
+        note: `نحسب البديلين: <bdi dir="ltr">S→A: 2 + 6 = 8</bdi> مقابل <bdi dir="ltr">S→B: 5 + 4 = 9</bdi>. نختار <strong><bdi dir="ltr">A</bdi></strong> لأن <bdi dir="ltr">f(A)=8</bdi> أقل من <bdi dir="ltr">9</bdi>.`
+      },
+      {
+        cur: `C`,
+        visited: [`S`, `A`, `C`],
+        rows: [
+          { path: `S → A → C`, g: 4, h: 2, f: 6, status: `أقل f(n) — مُختارة` },
+          { path: `S → B`, g: 5, h: 4, f: 9, status: `لا تزال أعلى` }
+        ],
+        note: `من <strong><bdi dir="ltr">A</bdi></strong> نتقدم إلى <strong><bdi dir="ltr">C</bdi></strong>: التكلفة الفعلية التراكمية <bdi dir="ltr">g(C)=2+2=4</bdi> و <bdi dir="ltr">h(C)=2</bdi>، إذن <bdi dir="ltr">f(C)=6</bdi> (أقل من <bdi dir="ltr">9</bdi>).`
+      },
+      {
+        cur: `G`,
+        visited: [`S`, `A`, `C`, `G`],
+        rows: [
+          { path: `S → A → C → G`, g: 7, h: 0, f: 7, status: `الهدف الأمثل` },
+          { path: `S → B`, g: 5, h: 4, f: 9, status: `لم نحتج لفحصها` }
+        ],
+        note: `نصل للهدف <strong><bdi dir="ltr">G</bdi></strong> بتكلفة فعلية <strong>7</strong> (<bdi dir="ltr">2+2+3</bdi>) و <bdi dir="ltr">h(G)=0</bdi> فتكون <bdi dir="ltr">f(G)=7</bdi>؛ وهو أقل من <bdi dir="ltr">S→B (9)</bdi>، فيتوقف البحث بالحل الأمثل!`
+      }
+    ];
+
+    function renderAStar() {
+      const svg = document.getElementById(`astar-svg`);
+      const tbody = document.getElementById(`astar-table-body`);
+      const note = document.getElementById(`astar-narration`);
+      if (!svg || !tbody || !note) return;
+
+      const s = ASTAR_STEPS[astarStep];
+      const nodes = {
+        S: { x: 65,  y: 115, h: 7 },
+        A: { x: 185, y: 55,  h: 6 },
+        B: { x: 185, y: 175, h: 4 },
+        C: { x: 310, y: 55,  h: 2 },
+        G: { x: 405, y: 115, h: 0 }
+      };
+      const edges = [
+        { u: `S`, v: `A`, w: 2, wx: 118, wy: 72 },
+        { u: `S`, v: `B`, w: 5, wx: 118, wy: 162 },
+        { u: `A`, v: `C`, w: 2, wx: 248, wy: 43 },
+        { u: `B`, v: `G`, w: 6, wx: 305, wy: 162 },
+        { u: `C`, v: `G`, w: 3, wx: 372, wy: 72 }
+      ];
+
+      let html = ``;
+      edges.forEach(function (e) {
+        const u = nodes[e.u], v = nodes[e.v];
+        const active = s.visited.includes(e.u) && s.visited.includes(e.v);
+        html += `<line x1="${u.x}" y1="${u.y}" x2="${v.x}" y2="${v.y}" stroke="${active ? `var(--secondary)` : `var(--data-context)`}" stroke-width="${active ? `3` : `1.6`}" />`;
+        html += `<rect x="${e.wx - 15}" y="${e.wy - 10}" width="30" height="18" rx="3" fill="var(--surface-container-low)" stroke="var(--outline-variant)" />`;
+        html += `<text x="${e.wx}" y="${e.wy + 3}" text-anchor="middle" font-family="Geist Mono, monospace" font-size="10.5" font-weight="600" fill="var(--on-surface)">g=${e.w}</text>`;
+      });
+
+      Object.keys(nodes).forEach(function (k) {
+        const n = nodes[k];
+        const isCur = s.cur === k;
+        const isVis = s.visited.includes(k);
+        const fill = isCur ? `var(--primary-container)` : (isVis ? `var(--secondary)` : `var(--surface-container-low)`);
+        const textFill = isCur ? `var(--on-primary-container)` : (isVis ? `var(--on-secondary)` : `var(--on-surface)`);
+        const stroke = isCur ? `var(--outline)` : `var(--secondary)`;
+        html += `<circle cx="${n.x}" cy="${n.y}" r="19" fill="${fill}" stroke="${stroke}" stroke-width="${isCur ? `2.5` : `1.6`}" />`;
+        html += `<text x="${n.x}" y="${n.y + 4}" text-anchor="middle" font-family="Geist Mono, monospace" font-size="12" font-weight="700" fill="${textFill}">${k}</text>`;
+        html += `<text x="${n.x}" y="${n.y + 32}" text-anchor="middle" font-family="Geist Mono, monospace" font-size="10.5" font-weight="600" fill="var(--tertiary)">h=${n.h}</text>`;
+      });
+      svg.innerHTML = html;
+
+      tbody.innerHTML = s.rows.map(function (r, idx) {
+        const chipCls = idx === 0 ? `chip chip-pine` : `chip chip-slate`;
+        return `<tr>
+          <td><bdi dir="ltr" class="mono-code">${r.path}</bdi></td>
+          <td class="mono-code">${r.g}</td>
+          <td class="mono-code">${r.h}</td>
+          <td><strong class="mono-code">${r.f}</strong></td>
+          <td><span class="${chipCls}">${r.status}</span></td>
+        </tr>`;
+      }).join(``);
+
+      note.innerHTML = s.note;
+    }
+
+    function stepAStar() {
+      if (astarStep < ASTAR_STEPS.length - 1) {
+        astarStep += 1;
+        renderAStar();
+      }
+    }
+
+    function resetAStar() {
+      astarStep = 0;
+      renderAStar();
+    }
+
+    // =========================================================================
+    // 5. LOGICAL AGENT 7 APPLICATIONS
+    // =========================================================================
+    const AGENT_APPS = [
+      {
+        num: `01`,
+        title: `نظم إدارة قواعد البيانات`,
+        detail: `تُستخدم الوكلاء المنطقيون في استنتاج الحقائق غير المخزنة صراحةً داخل قواعد البيانات عبر تطبيق قواعد الاستدلال المنطقي على السجلات القائمة واتخاذ قرار الاستعلام المناسب.`
+      },
+      {
+        num: `02`,
+        title: `التشخيص الطبي (مثال صور الأشعة X-Ray)`,
+        detail: `كما أوضح الدكتور في المحاضرة: يلتقط النظام الذكي صورة إشعاعية (X-Ray)، ويستخرج منها البيانات والمؤشرات، ثم يبني منطقاً واستدلالات ليصل إلى قرار تشخيصي دقيق يساعد الطبيب.`
+      },
+      {
+        num: `03`,
+        title: `الأنظمة الخبيرة (Expert Systems)`,
+        detail: `أنظمة تحاكي قدرة الخبير البشري في مجال تخصصي محدد من خلال قاعدة معرفية (Knowledge Base) ومحرك استدلال منطقي يربط الأعراض أو المعطيات بالقرار النهائي.`
+      },
+      {
+        num: `04`,
+        title: `الروبوتات الذكية والسيارات ذاتية القيادة`,
+        detail: `تعتمد الروبوتات والسيارات ذاتية القيادة على استقبال إشارات لحظية من البيئة المحيطة (المشاة، المسارات، العوائق) واستنتاج القرار الآمن للتوجيه أو التوقف فوراً.`
+      },
+      {
+        num: `05`,
+        title: `ألعاب الفيديو والتخطيط الآلي (Automated Planning)`,
+        detail: `تُبنى خصوم الذكاء الاصطناعي في الألعاب ونظم التخطيط الآلي كوكلاء منطقيين يقيّمون حالة اللعبة أو خطة المهام ثم يختارون سلسلة الإجراءات المؤدية للهدف.`
+      },
+      {
+        num: `06`,
+        title: `أنظمة الأمن السيبراني الذكية`,
+        detail: `تراقب أنظمة الأمن السيبراني حركة الشبكة (البيئة المحيطة) وتستدل منطقياً على الأنماط غير الطبيعية أو محاولات الاختراق لاتخاذ قرار العزل والحماية.`
+      },
+      {
+        num: `07`,
+        title: `معالجة اللغات الطبيعية، الترجمة، المحادثات والتجارة الإلكترونية`,
+        detail: `شمل الدكتور في المحاضرة تطبيقات اللغة الحديثة: الترجمة الآلية، معالجة اللغات الطبيعية وتوليد النصوص، روبوتات المحادثة والإجابة عن الأسئلة (Chatbots & Question Answering)، ونظم التجارة الإلكترونية.`
+      }
+    ];
+
+    function selectAgentApp(idx) {
+      const cards = document.querySelectorAll(`.app-card`);
+      cards.forEach(function (card, i) {
+        card.classList.toggle(`is-selected`, i === idx);
+      });
+      const detailEl = document.getElementById(`agent-app-detail`);
+      if (!detailEl) return;
+      const app = AGENT_APPS[idx];
+      detailEl.innerHTML = `
+        <div style="display:flex; align-items:center; gap:var(--space-sm); margin-bottom:var(--space-xs);">
+          <span class="index-num">${app.num}</span>
+          <strong style="font-size:1.08rem;">${app.title}</strong>
+        </div>
+        <p style="margin:0; color:var(--on-surface); font-size:0.97rem;">${app.detail}</p>
+      `;
+    }
+
+    // =========================================================================
+    // 6. SELF-CHECK QUIZ (6 Grounded Lecture 2 Questions)
+    // =========================================================================
+    const QUIZ_DATA = [
+      {
+        q: `1. ما هيكل البيانات الذي تعتمد عليه خوارزمية البحث بأولوية الاتساع (BFS)؟`,
+        opts: [
+          `المكدس (Stack — LIFO)`,
+          `الطابور (Queue — FIFO)`,
+          `طابور الأولويات (Priority Queue)`,
+          `القائمة المترابطة العكسية`
+        ],
+        correct: 1,
+        explain: `تستخدم BFS هيكل الطابور (Queue) بحيث يُفحص من في رأس الطابور أولاً وتُضاف الأبناء في نهايته، لتفحص الشجرة مستوىً تلو الآخر.`
+      },
+      {
+        q: `2. في خوارزمية البحث بأولوية العمق (DFS)، أي العقد لها الأولوية في الفحص؟`,
+        opts: [
+          `فحص الأشقاء أولاً في نفس المستوى`,
+          `فحص العقدة الأقل تكلفة في الجدول`,
+          `فحص الأبناء أولاً بالتعمق لأسفل الفرع`,
+          `فحص أوراق المستوى الرابع عشوائياً`
+        ],
+        correct: 2,
+        explain: `على عكس BFS التي تفحص الأشقاء أولاً، تقوم DFS بفحص الأبناء أولاً وتتعمق حتى آخر عقدة بالفرع مستخدمةً المكدس (Stack).`
+      },
+      {
+        q: `3. متى تكون خوارزمية BFS أكثر فاعلية وسرعة مقارنةً بـ DFS كما ورد في المحاضرة؟`,
+        opts: [
+          `عندما تكون شجرة البحث واسعة وتمتد أفقياً`,
+          `عندما تكون شجرة البحث عميقة جداً رأسياً`,
+          `عندما تحتوي الممرات على قيم تكلفة عالية`,
+          `عند استخدام خاصية عدم الرجوع للخلف`
+        ],
+        correct: 0,
+        explain: `تكون BFS فعالة وسريعة في الأشجار الواسعة أفقياً لأنها تمسح المستويات العرضية، بينما DFS أنسب للأشجار العميقة.`
+      },
+      {
+        q: `4. في مثال Hill Climbing بالمحاضرة: وقفنا عند القيمة 4 وأمامنا الخياران (3) و (1). أيهما تختار الخوارزمية ولماذا؟`,
+        opts: [
+          `تختار 1 لأنه أصغر قيمة في الشجرة كلها`,
+          `ترجع إلى 5 للبحث عن مسار بديل`,
+          `تختار 3 لأنه أول وضع أفضل من الوضع الحالي (4)`,
+          `تختار 4 مرة أخرى لأنها لا تتحرك`
+        ],
+        correct: 2,
+        explain: `شدد الدكتور على أن Hill Climbing تختار أول وضع أفضل من الوضع الحالي (3 أفضل من 4 ويقع أمامنا مباشرة)، مع تطبيق قاعدة عدم الرجوع للخلف No Backtracking.`
+      },
+      {
+        q: `5. كيف تحسب خوارزمية A* التكلفة الكلية f(n) عند أي عقدة n؟`,
+        opts: [
+          `بطرح القيمة الافتراضية من تكلفة المسار: g(n) - h(n)`,
+          `بجمع تكلفة المسار الفعلية مع القيمة الافتراضية: g(n) + h(n)`,
+          `بالاعتماد على القيمة الافتراضية h(n) وحدها فقط`,
+          `بضرب عدد المستويات في التكلفة`
+        ],
+        correct: 1,
+        explain: `تحسب خوارزمية A* التكلفة بجمع القيمتين معاً: f(n) = g(n) + h(n)، وتُعطى قيم h(n) جاهزة في جدول مرفق بسؤال الاختبار.`
+      },
+      {
+        q: `6. أي مما يلي يصف آلية عمل الوكيل المنطقي (Logical Agent) بدقة؟`,
+        opts: [
+          `يتخذ قراراته بناءً على إدراك البيئة المحيطة وبناء استدلالات منطقية`,
+          `يمسح شجرة البحث أفقياً دون أي معلومات عن البيئة`,
+          `يُستخدم في ألعاب الفيديو فقط ولا يدخل في الطب أو الأمن السيبراني`,
+          `يرتب عناصر المكدس دون فحص البيئة`
+        ],
+        correct: 0,
+        explain: `الوكيل المنطقي يدرك البيئة المحيطة (كصور الأشعة أو بيانات السيارة ذاتية القيادة)، ويبني منطقاً واستدلالات ليتخذ القرار المناسب عبر 7 مجالات تطبيقية.`
+      }
+    ];
+
+    let quizAnswers = new Array(QUIZ_DATA.length).fill(null);
+
+    function renderQuiz() {
+      const list = document.getElementById(`quiz-list`);
+      const badge = document.getElementById(`quiz-score-badge`);
+      if (!list || !badge) return;
+
+      let score = 0;
+      quizAnswers.forEach(function (ans, i) {
+        if (ans === QUIZ_DATA[i].correct) score += 1;
+      });
+      badge.textContent = `النتيجة: ` + score + ` / ` + QUIZ_DATA.length;
+
+      list.innerHTML = QUIZ_DATA.map(function (item, qIdx) {
+        const chosen = quizAnswers[qIdx];
+        const answered = chosen !== null;
+
+        const optsHtml = item.opts.map(function (opt, oIdx) {
+          let cls = `quiz-opt`;
+          if (answered) {
+            if (oIdx === item.correct) cls += ` is-correct`;
+            else if (oIdx === chosen) cls += ` is-wrong`;
+          }
+          return `<button type="button" class="${cls}" ${answered ? `disabled` : ``} onclick="answerQuiz(${qIdx}, ${oIdx})">${opt}</button>`;
+        }).join(``);
+
+        let fbHtml = ``;
+        if (answered) {
+          const isOk = chosen === item.correct;
+          fbHtml = `<div class="quiz-feedback is-visible ${isOk ? `is-ok` : `is-err`}">
+            <strong>${isOk ? `إجابة صحيحة:` : `توضيح الإجابة:`}</strong> ${item.explain}
+          </div>`;
+        }
+
+        return `<div class="quiz-item">
+          <p class="quiz-q">${item.q}</p>
+          <div class="quiz-options">${optsHtml}</div>
+          ${fbHtml}
+        </div>`;
+      }).join(``);
+    }
+
+    function answerQuiz(qIdx, oIdx) {
+      if (quizAnswers[qIdx] !== null) return;
+      quizAnswers[qIdx] = oIdx;
+      renderQuiz();
+    }
+
+    function resetQuiz() {
+      quizAnswers = new Array(QUIZ_DATA.length).fill(null);
+      renderQuiz();
+    }
+
+    // =========================================================================
+    // INIT
+    // =========================================================================
+    document.addEventListener(`DOMContentLoaded`, function () {
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+      resetSearch();
+      renderBestFirst();
+      renderHill();
+      renderAStar();
+      selectAgentApp(0);
+      renderQuiz();
+    });
+  </script>
+</body>
+</html>

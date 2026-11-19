@@ -1,0 +1,3857 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="dashboard">
+  <meta name="design-style" content="vitals">
+  <title>بنك الأسئلة الشامل — موضوعات مختارة في علوم البيانات</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Figtree:wght@300..900&family=Noto+Sans+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces (Vitals) */
+      --background: #ffffff;
+      --surface-container-low: #f1f7f8;
+      --surface-container: #e3f1f3;
+      --surface-container-high: #d5e9ec;
+
+      /* Text */
+      --on-surface: #1b2b33;
+      --on-surface-variant: #46585f;
+
+      /* Rules */
+      --outline: #7b9198;
+      --outline-variant: #d5e3e5;
+
+      /* Accents */
+      --primary: #0f7c8a;
+      --primary-hover: #0b636e;
+      --on-primary: #ffffff;
+      --primary-container: #e3f1f3;
+      --on-primary-container: #0a5560;
+      --secondary: #1d5e3a;
+      --tertiary: #2e7d4f;
+      --tertiary-container: #e7f4ec;
+      --error: #b3261e;
+      --error-container: #fbeae9;
+      --on-error: #ffffff;
+
+      /* Data series */
+      --data-1: #0f7c8a;
+      --data-2: #2e7d4f;
+      --data-3: #b86e00;
+      --data-4: #5c5fb0;
+      --data-context: #b8c7ca;
+
+      /* Fonts (Arabic first + Vitals pairing) */
+      --font-headline: 'Noto Sans Arabic', 'Figtree', sans-serif;
+      --font-body: 'Noto Sans Arabic', 'Atkinson Hyperlegible', sans-serif;
+      --font-label: 'Noto Sans Arabic', 'Figtree', sans-serif;
+
+      /* Shape */
+      --rounded: 0.625rem;
+      --rounded-lg: 0.875rem;
+      --rounded-full: 9999px;
+
+      /* Style effects */
+      --top-bar: 6px solid var(--primary);
+      --status-bar-width: 4px;
+      --card-border: 1px solid var(--outline-variant);
+      --card-lift: 0 1px 2px rgb(27 43 51 / 0.05), 0 6px 16px rgb(27 43 51 / 0.05);
+      --focus-ring-shadow: 0 0 0 3px var(--primary-container);
+
+      /* Shared semantic & layout tokens */
+      --positive: var(--tertiary);
+      --warning: var(--data-3);
+      --focus: var(--primary);
+
+      /* Type scale (Dashboard) */
+      --display-size: clamp(1.65rem, 1.35rem + 1.1vw, 2.25rem);
+      --headline-size: clamp(1.2rem, 1.08rem + 0.45vw, 1.45rem);
+      --subhead-size: clamp(1.05rem, 1rem + 0.25vw, 1.1875rem);
+      --body-size: clamp(0.95rem, 0.92rem + 0.15vw, 1.03rem);
+      --label-size: 0.8125rem;
+
+      /* Spacing scale */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--surface-container-low);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.65;
+      letter-spacing: 0;
+    }
+
+    header {
+      position: static !important;
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    .page-shell {
+      border-top: var(--top-bar);
+      min-height: 100vh;
+    }
+
+    .page-grid {
+      display: grid;
+      gap: var(--space-lg);
+      padding: var(--space-lg);
+      max-width: 1220px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+
+    .page-grid * {
+      min-width: 0;
+    }
+
+    /* Hero Header */
+    .hero-card {
+      background: var(--background);
+      border: var(--card-border);
+      border-inline-start: var(--status-bar-width) solid var(--primary);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg) var(--space-xl);
+      box-shadow: var(--card-lift);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-lg);
+    }
+
+    .hero-text {
+      flex: 1 1 560px;
+    }
+
+    .hero-kicker-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-sm);
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      font-family: var(--font-label);
+      font-weight: 600;
+      font-size: var(--label-size);
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--rounded-full);
+      background: var(--tertiary-container);
+      color: var(--secondary);
+      line-height: 1.3;
+    }
+
+    .chip[data-status="info"] {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+
+    .chip[data-status="alert"] {
+      background: var(--error-container);
+      color: var(--error);
+    }
+
+    .chip[data-status="neutral"] {
+      background: var(--surface-container-low);
+      color: var(--on-surface-variant);
+      border: 1px solid var(--outline-variant);
+    }
+
+    .hero-title {
+      margin: 0;
+      font-family: var(--font-headline);
+      font-weight: 800;
+      font-size: var(--display-size);
+      line-height: 1.2;
+      color: var(--on-surface);
+    }
+
+    .hero-subtitle {
+      margin: var(--space-sm) 0 0;
+      font-size: 1.02rem;
+      line-height: 1.65;
+      color: var(--on-surface-variant);
+      max-width: 68ch;
+    }
+
+    .hero-meta-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: var(--space-sm);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      font-family: var(--font-label);
+      font-weight: 600;
+      font-size: 0.9375rem;
+      cursor: pointer;
+      border: 1px solid var(--outline-variant);
+      background: var(--background);
+      color: var(--on-surface);
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  color var(--dur-micro) var(--ease-out),
+                  box-shadow var(--dur-micro) var(--ease-out),
+                  transform var(--dur-micro) var(--ease-out);
+    }
+
+    .btn:hover:not(:disabled) {
+      background: var(--surface-container);
+    }
+
+    .btn:active:not(:disabled) {
+      transform: translateY(1px);
+    }
+
+    .btn:focus-visible,
+    select:focus-visible,
+    input:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+      box-shadow: var(--focus-ring-shadow);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--primary-hover);
+      border-color: var(--primary-hover);
+    }
+
+    .btn-outline-primary {
+      background: var(--background);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .btn-outline-primary:hover:not(:disabled) {
+      background: var(--surface-container-low);
+    }
+
+    .btn-danger-outline {
+      background: var(--background);
+      color: var(--error);
+      border-color: var(--error);
+    }
+
+    .btn-danger-outline:hover:not(:disabled) {
+      background: var(--error-container);
+    }
+
+    .btn-danger-armed {
+      background: var(--error);
+      color: var(--on-error);
+      border-color: var(--error);
+    }
+
+    .btn-danger-armed:hover:not(:disabled) {
+      background: var(--error);
+      opacity: 0.92;
+    }
+
+    .btn-mode {
+      background: var(--background);
+      color: var(--on-surface);
+      border: 1px solid var(--outline-variant);
+    }
+
+    .btn-mode[aria-pressed="true"] {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+      box-shadow: var(--card-lift);
+    }
+
+    .btn-mode[aria-pressed="true"]:hover:not(:disabled) {
+      background: var(--primary-hover);
+    }
+
+    .mode-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.1rem 0.48rem;
+      border-radius: var(--rounded-full);
+      font-size: 0.78rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      background: var(--surface-container-low);
+      color: var(--on-surface-variant);
+    }
+
+    .btn-mode[aria-pressed="true"] .mode-count {
+      background: var(--on-primary-container);
+      color: var(--on-primary);
+    }
+
+    /* Controls Panel */
+    .controls-panel {
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      display: grid;
+      gap: var(--space-md);
+    }
+
+    .modes-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .filters-grid {
+      display: grid;
+      grid-template-columns: minmax(260px, 1.4fr) minmax(200px, 1fr) minmax(180px, 0.8fr) auto;
+      gap: var(--space-md);
+      align-items: end;
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--outline-variant);
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+
+    .field-label {
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: var(--label-size);
+      color: var(--on-surface);
+    }
+
+    .field-control {
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      border: 1px solid var(--outline);
+      border-radius: var(--rounded);
+      background: var(--background);
+      color: var(--on-surface);
+      font-size: 0.9375rem;
+      width: 100%;
+    }
+
+    select.field-control {
+      padding-inline-end: 2.25rem;
+      cursor: pointer;
+    }
+
+    .field-control:focus {
+      border-color: var(--primary);
+    }
+
+    /* Stats Dashboard */
+    .stats-section {
+      display: grid;
+      gap: var(--space-md);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(190px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+
+    .status-card {
+      background: var(--background);
+      border: var(--card-border);
+      border-inline-start: var(--status-bar-width) solid var(--primary);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+    }
+
+    .status-card[data-status="ok"] {
+      border-inline-start-color: var(--tertiary);
+    }
+
+    .status-card[data-status="alert"] {
+      border-inline-start-color: var(--error);
+    }
+
+    .status-card[data-status="warn"] {
+      border-inline-start-color: var(--warning);
+    }
+
+    .stat-label {
+      font-family: var(--font-label);
+      font-weight: 600;
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      margin-bottom: var(--space-xs);
+    }
+
+    .stat-value {
+      font-family: var(--font-headline);
+      font-weight: 800;
+      font-size: clamp(1.5rem, 1.3rem + 0.7vw, 2rem);
+      line-height: 1.15;
+      color: var(--on-surface);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stat-caption {
+      font-size: 0.8125rem;
+      color: var(--on-surface-variant);
+      margin-top: var(--space-xs);
+    }
+
+    .status-card[data-status="ok"] .stat-caption {
+      color: var(--secondary);
+      font-weight: 600;
+    }
+
+    .status-card[data-status="alert"] .stat-caption {
+      color: var(--error);
+      font-weight: 600;
+    }
+
+    /* Progress Bar Card */
+    .progress-card {
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      display: grid;
+      gap: var(--space-sm);
+    }
+
+    .progress-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .progress-title {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--on-surface);
+    }
+
+    .progress-track {
+      height: 12px;
+      width: 100%;
+      background: var(--surface-container);
+      border-radius: var(--rounded-full);
+      overflow: hidden;
+      display: flex;
+    }
+
+    .progress-seg-correct {
+      height: 100%;
+      background: var(--tertiary);
+      transition: width var(--dur-short) var(--ease-out);
+    }
+
+    .progress-seg-wrong {
+      height: 100%;
+      background: var(--error);
+      transition: width var(--dur-short) var(--ease-out);
+    }
+
+    .progress-legend {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      font-size: 0.84rem;
+      color: var(--on-surface-variant);
+    }
+
+    .legend-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: var(--rounded-full);
+      display: inline-block;
+    }
+
+    .dot-correct { background: var(--tertiary); }
+    .dot-wrong { background: var(--error); }
+    .dot-pending { background: var(--surface-container-high); }
+
+    /* Exam Banner */
+    .exam-banner {
+      background: var(--primary-container);
+      border: var(--card-border);
+      border-inline-start: var(--status-bar-width) solid var(--primary);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-md);
+      color: var(--on-primary-container);
+    }
+
+    .exam-banner[hidden] {
+      display: none;
+    }
+
+    .exam-banner-info {
+      display: grid;
+      gap: var(--space-xs);
+    }
+
+    .exam-banner-title {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+
+    .exam-banner-desc {
+      font-size: 0.9rem;
+    }
+
+    .exam-banner-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    /* Questions Stream */
+    .questions-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .questions-heading {
+      margin: 0;
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: var(--headline-size);
+      color: var(--on-surface);
+    }
+
+    .questions-list {
+      display: grid;
+      gap: var(--space-md);
+    }
+
+    .question-card {
+      background: var(--background);
+      border: var(--card-border);
+      border-inline-start: var(--status-bar-width) solid var(--primary);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      display: grid;
+      gap: var(--space-md);
+      transition: box-shadow var(--dur-short) var(--ease-out);
+    }
+
+    .question-card:hover {
+      box-shadow: var(--card-lift);
+    }
+
+    .question-card[data-state="correct"] {
+      border-inline-start-color: var(--tertiary);
+    }
+
+    .question-card[data-state="wrong"] {
+      border-inline-start-color: var(--error);
+    }
+
+    .question-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .question-tags {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .q-number-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--rounded);
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline-variant);
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: var(--label-size);
+      color: var(--on-surface);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .question-text {
+      margin: 0;
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: var(--subhead-size);
+      line-height: 1.55;
+      color: var(--on-surface);
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+      gap: var(--space-sm);
+    }
+
+    .option-btn {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      width: 100%;
+      min-height: 48px;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      border: 1px solid var(--outline-variant);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      text-align: right;
+      font-size: 0.96rem;
+      line-height: 1.5;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  box-shadow var(--dur-micro) var(--ease-out),
+                  transform var(--dur-micro) var(--ease-out);
+    }
+
+    .option-btn:hover:not(:disabled) {
+      background: var(--surface-container);
+      box-shadow: inset 0 0 0 1px var(--primary);
+    }
+
+    .option-btn:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+      box-shadow: var(--focus-ring-shadow);
+    }
+
+    .option-btn:disabled {
+      cursor: default;
+    }
+
+    .option-letter {
+      flex: 0 0 auto;
+      width: 28px;
+      height: 28px;
+      border-radius: var(--rounded-full);
+      background: var(--background);
+      border: 1px solid var(--outline-variant);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--on-surface-variant);
+    }
+
+    .option-text {
+      flex: 1 1 auto;
+      font-weight: 500;
+    }
+
+    .option-marker {
+      flex: 0 0 auto;
+      font-weight: 800;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    .option-btn[data-result="correct"] {
+      background: var(--tertiary-container);
+      border-color: var(--tertiary);
+      box-shadow: inset 0 0 0 1px var(--tertiary);
+      color: var(--secondary);
+    }
+
+    .option-btn[data-result="correct"] .option-letter {
+      background: var(--tertiary);
+      border-color: var(--tertiary);
+      color: var(--on-primary);
+    }
+
+    .option-btn[data-result="wrong"] {
+      background: var(--error-container);
+      border-color: var(--error);
+      box-shadow: inset 0 0 0 1px var(--error);
+      color: var(--error);
+    }
+
+    .option-btn[data-result="wrong"] .option-letter {
+      background: var(--error);
+      border-color: var(--error);
+      color: var(--on-error);
+    }
+
+    .option-btn[data-result="muted"] {
+      opacity: 0.72;
+    }
+
+    .question-footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      padding-top: var(--space-sm);
+      border-top: 1px solid var(--outline-variant);
+    }
+
+    .feedback-msg {
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    .feedback-msg[data-status="ok"] {
+      color: var(--secondary);
+    }
+
+    .feedback-msg[data-status="alert"] {
+      color: var(--error);
+    }
+
+    .retry-btn {
+      min-height: 36px;
+      padding: var(--space-xs) var(--space-sm);
+      font-size: 0.84rem;
+    }
+
+    /* Empty State */
+    .empty-state {
+      background: var(--background);
+      border: var(--card-border);
+      border-inline-start: var(--status-bar-width) solid var(--primary);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-xl);
+      text-align: center;
+      display: grid;
+      justify-items: center;
+      gap: var(--space-sm);
+    }
+
+    .empty-state-title {
+      margin: 0;
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: var(--headline-size);
+      color: var(--on-surface);
+    }
+
+    .empty-state-desc {
+      margin: 0;
+      color: var(--on-surface-variant);
+      max-width: 52ch;
+    }
+
+    /* Footer */
+    .page-footer {
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      color: var(--on-surface-variant);
+      font-size: 0.85rem;
+    }
+
+    .inline-status-note {
+      font-size: 0.82rem;
+      color: var(--on-surface-variant);
+    }
+
+    .svg-icon {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 900px) {
+      .filters-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-sm);
+        gap: var(--space-md);
+      }
+      .hero-card {
+        padding: var(--space-md);
+      }
+      .hero-actions {
+        width: 100%;
+        align-items: stretch;
+      }
+      .filters-grid {
+        grid-template-columns: 1fr;
+      }
+      .options-grid {
+        grid-template-columns: 1fr;
+      }
+      .question-card {
+        padding: var(--space-md);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <main class="page-grid">
+
+      <!-- Header -->
+      <header class="hero-card">
+        <div class="hero-text">
+          <div class="hero-kicker-row">
+            <span class="chip" data-status="info">جامعة الملك فيصل • التعليم عن بعد</span>
+            <span class="chip" data-status="neutral">المستوى الثالث • علوم الحاسب وتحليلات البيانات</span>
+          </div>
+          <h1 class="hero-title">بنك الأسئلة الشامل — موضوعات مختارة في علوم البيانات</h1>
+          <p class="hero-subtitle">
+            منصة تفاعلية للمراجعة والاختبار الذاتي تغطي كامل بنك الأسئلة المعتمد (151 سؤالاً): الواجبات (10)، التقييم الذاتي للمتعلم (15)، وأسئلة نهاية الفصول الـ 14 (126)، مع تصحيح فوري وإحصائيات مباشرة.
+          </p>
+          <div class="hero-meta-badges">
+            <span class="chip" data-status="neutral">أستاذ المقرر: د. بدر المري</span>
+            <span class="chip" id="saved-status-chip" data-status="info">حالة التقدم محفوظة تلقائياً</span>
+          </div>
+        </div>
+        <div class="hero-actions">
+          <button type="button" id="reset-progress-btn" class="btn btn-danger-outline" onclick="handleResetProgress(this)">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+              <path d="M3 3v5h5"/>
+            </svg>
+            <span>إعادة تعيين التقدم</span>
+          </button>
+          <span class="inline-status-note" id="reset-helper-note">اضغط مرتين لتأكيد مسح الإجابات المحفوظة</span>
+        </div>
+      </header>
+
+      <!-- Controls & Modes -->
+      <section class="controls-panel" aria-label="أوضاع المراجعة والتصفية">
+        <div class="modes-row" role="group" aria-label="أوضاع المراجعة والاختبار">
+          <button type="button" class="btn btn-mode" id="mode-all" aria-pressed="true" onclick="setMode('all')">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect width="7" height="7" x="3" y="3" rx="1"/>
+              <rect width="7" height="7" x="14" y="3" rx="1"/>
+              <rect width="7" height="7" x="14" y="14" rx="1"/>
+              <rect width="7" height="7" x="3" y="14" rx="1"/>
+            </svg>
+            <span>البنك الشامل</span>
+            <span class="mode-count" id="count-mode-all">151</span>
+          </button>
+
+          <button type="button" class="btn btn-mode" id="mode-exam" aria-pressed="false" onclick="setMode('exam')">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <span>محاكي الاختبار</span>
+            <span class="mode-count" id="count-mode-exam">30</span>
+          </button>
+
+          <button type="button" class="btn btn-mode" id="mode-assignments" aria-pressed="false" onclick="setMode('assignments')">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9 11l3 3L22 4"/>
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+            </svg>
+            <span>الواجبات والتقييم الذاتي</span>
+            <span class="mode-count" id="count-mode-assignments">25</span>
+          </button>
+
+          <button type="button" class="btn btn-mode" id="mode-mistakes" aria-pressed="false" onclick="setMode('mistakes')">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="15" y1="9" x2="9" y2="15"/>
+              <line x1="9" y1="9" x2="15" y2="15"/>
+            </svg>
+            <span>مراجعة الأخطاء فقط</span>
+            <span class="mode-count" id="count-mode-mistakes">0</span>
+          </button>
+
+          <button type="button" class="btn btn-outline-primary" id="shuffle-btn" onclick="shuffleQuestionsAndOptions()">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="16 3 21 3 21 8"/>
+              <line x1="4" y1="20" x2="21" y2="3"/>
+              <polyline points="21 16 21 21 16 21"/>
+              <line x1="15" y1="15" x2="21" y2="21"/>
+              <line x1="4" y1="4" x2="9" y2="9"/>
+            </svg>
+            <span>إعادة خلط الأسئلة والخيارات</span>
+          </button>
+        </div>
+
+        <div class="filters-grid">
+          <div class="field-group">
+            <label class="field-label" for="section-filter">تصفية حسب القسم أو الفصل</label>
+            <select id="section-filter" class="field-control" onchange="handleSectionChange(this.value)">
+              <option value="all">جميع الأقسام والفصول (151 سؤالاً)</option>
+              <option value="hw1">الواجب الأول (3 أسئلة)</option>
+              <option value="hw2">الواجب الثاني (3 أسئلة)</option>
+              <option value="hw3">الواجب الثالث (4 أسئلة)</option>
+              <option value="self">التقييم الذاتي للمتعلم (15 سؤالاً)</option>
+              <option value="ch1">الفصل الأول: علم البيانات — تمهيد (9 أسئلة)</option>
+              <option value="ch2">الفصل الثاني: المفاهيم الأساسية لعلم البيانات (9 أسئلة)</option>
+              <option value="ch3">الفصل الثالث: البيانات الضخمة (9 أسئلة)</option>
+              <option value="ch4">الفصل الرابع: إدارة البيانات وحوكمتها (9 أسئلة)</option>
+              <option value="ch5">الفصل الخامس: جودة البيانات (9 أسئلة)</option>
+              <option value="ch6">الفصل السادس: مقدمة عن الذكاء الاصطناعي (9 أسئلة)</option>
+              <option value="ch7">الفصل السابع: تعلم الآلة — 1 (9 أسئلة)</option>
+              <option value="ch8">الفصل الثامن: تعلم الآلة — 2 (9 أسئلة)</option>
+              <option value="ch9">الفصل التاسع: تعلم الآلة — 3 (9 أسئلة)</option>
+              <option value="ch10">الفصل العاشر: المفاهيم الأساسية للتعلم العميق (9 أسئلة)</option>
+              <option value="ch11">الفصل الحادي عشر: المكونات الأساسية لبناء نماذج التعلم العميق (9 أسئلة)</option>
+              <option value="ch12">الفصل الثاني عشر: أنواع الشبكات العصبية (9 أسئلة)</option>
+              <option value="ch13">الفصل الثالث عشر: أطر التعلم العميق (9 أسئلة)</option>
+              <option value="ch14">الفصل الرابع عشر: آخر التطورات بالذكاء الاصطناعي وعلم البيانات (9 أسئلة)</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="search-input">بحث في نص السؤال أو الخيارات</label>
+            <input id="search-input" type="search" class="field-control" placeholder="مثال: Softmax، مستودع البيانات، CNN..." oninput="handleSearchChange(this.value)">
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="status-filter">حالة الإجابة</label>
+            <select id="status-filter" class="field-control" onchange="handleStatusFilterChange(this.value)">
+              <option value="all">عرض الكل</option>
+              <option value="unanswered">لم يُجب عنها بعد</option>
+              <option value="correct">الإجابات الصحيحة</option>
+              <option value="wrong">الإجابات الخاطئة</option>
+            </select>
+          </div>
+
+          <button type="button" class="btn" id="restore-order-btn" onclick="restoreDefaultOrder()">
+            <span>استعادة الترتيب الأصلي</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Live Stats & Progress -->
+      <section class="stats-section" aria-label="لوحة الإحصائيات الفورية">
+        <div class="stats-grid">
+          <div class="status-card">
+            <div class="stat-label">إجمالي المعروض</div>
+            <div class="stat-value" id="stat-total">151</div>
+            <div class="stat-caption" id="stat-total-caption">من أصل 151 سؤالاً</div>
+          </div>
+
+          <div class="status-card">
+            <div class="stat-label">تمت الإجابة</div>
+            <div class="stat-value" id="stat-answered">0</div>
+            <div class="stat-caption" id="stat-remaining-caption">متبقٍ 151 سؤالاً</div>
+          </div>
+
+          <div class="status-card" data-status="ok">
+            <div class="stat-label">إجابات صحيحة</div>
+            <div class="stat-value" id="stat-correct">0</div>
+            <div class="stat-caption">إجابات مطابقة للمفتاح المعتمد</div>
+          </div>
+
+          <div class="status-card" data-status="alert">
+            <div class="stat-label">إجابات خاطئة</div>
+            <div class="stat-value" id="stat-wrong">0</div>
+            <div class="stat-caption">متاحة للمراجعة الفورية</div>
+          </div>
+
+          <div class="status-card" id="accuracy-card" data-status="warn">
+            <div class="stat-label">النسبة المئوية</div>
+            <div class="stat-value" id="stat-percent">0%</div>
+            <div class="stat-caption" id="stat-percent-caption">دقة الإجابات المجاب عنها</div>
+          </div>
+        </div>
+
+        <div class="progress-card">
+          <div class="progress-header">
+            <span class="progress-title">شريط التقدم والإتقان للمجموعة المعروضة</span>
+            <span class="chip" id="mastery-chip" data-status="info">لم يبدأ الحل بعد</span>
+          </div>
+          <div class="progress-track" role="progressbar" aria-label="نسبة الإجابات الصحيحة والخاطئة" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-bar-wrap">
+            <div class="progress-seg-correct" id="progress-correct" style="width: 0%;"></div>
+            <div class="progress-seg-wrong" id="progress-wrong" style="width: 0%;"></div>
+          </div>
+          <div class="progress-legend">
+            <div class="legend-items">
+              <span class="legend-item"><span class="legend-dot dot-correct"></span> صحيح (<span id="legend-correct">0</span>)</span>
+              <span class="legend-item"><span class="legend-dot dot-wrong"></span> خطأ (<span id="legend-wrong">0</span>)</span>
+              <span class="legend-item"><span class="legend-dot dot-pending"></span> متبقٍ (<span id="legend-pending">151</span>)</span>
+            </div>
+            <span id="global-progress-text">الإنجاز الكلي في البنك: 0 من 151</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Exam Simulator Banner -->
+      <section class="exam-banner" id="exam-banner" hidden>
+        <div class="exam-banner-info">
+          <div class="exam-banner-title" id="exam-banner-title">وضع محاكي الاختبار التجريبي (30 سؤالاً عشوائياً)</div>
+          <div class="exam-banner-desc" id="exam-banner-desc">يتم اختيار عينة عشوائية من الأسئلة لاختبار جاهزيتك. يمكنك توليد نموذج اختبار جديد أو تغيير عدد الأسئلة في أي وقت.</div>
+        </div>
+        <div class="exam-banner-controls">
+          <label class="field-label" for="exam-size-select">عدد أسئلة الاختبار:</label>
+          <select id="exam-size-select" class="field-control" style="width: auto;" onchange="changeExamSize(this.value)">
+            <option value="15">15 سؤالاً</option>
+            <option value="30" selected>30 سؤالاً</option>
+            <option value="50">50 سؤالاً</option>
+          </select>
+          <button type="button" class="btn btn-primary" onclick="generateNewExam(true)">
+            <span>توليد اختبار جديد</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Questions Toolbar -->
+      <section class="questions-toolbar">
+        <h2 class="questions-heading" id="view-heading">الأسئلة المعروضة (151)</h2>
+        <span class="chip" id="shuffle-indicator" data-status="neutral">الترتيب: التسلسل الأصلي للمقرر</span>
+      </section>
+
+      <!-- Questions Container -->
+      <section class="questions-list" id="questions-container" aria-live="polite"></section>
+
+      <!-- Footer -->
+      <footer class="page-footer">
+        <span>بنك الأسئلة الشامل لمقرر موضوعات مختارة في علوم البيانات — جامعة الملك فيصل (151 سؤالاً معتمداً)</span>
+        <span>المصدر: الواجبات (1–3)، التقييم الذاتي للمتعلم (1–3)، وأسئلة نهاية الفصول (1–14)</span>
+      </footer>
+
+    </main>
+  </div>
+
+  <api-shim></api-shim>
+  <script>
+    const QUESTION_BANK = [
+      // ================= أولاً: الواجبات (10 أسئلة) =================
+      // الواجب الأول
+      {
+        id: 1,
+        sectionKey: `hw1`,
+        sectionLabel: `الواجب الأول`,
+        unitLabel: `الواجب الأول • السؤال 1`,
+        question: `لتقليل مخاطر الأخطاء البشرية عند التعامل مع البيانات كضمان الجودة إدارة البيانات، يتم .`,
+        options: [
+          `معالجة البيانات`,
+          `أتمتة العمليات`,
+          `تخزين آلي للبيانات`,
+          `توزيع البيانات`
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 2,
+        sectionKey: `hw1`,
+        sectionLabel: `الواجب الأول`,
+        unitLabel: `الواجب الأول • السؤال 2`,
+        question: `البيانات المهيكلة والعلائقية معاً هي بطبيعتها`,
+        options: [
+          `من نوع SQL`,
+          `غير مهيكلة`,
+          `دائماً حجمها صغير`,
+          `بيانات رقمية`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 3,
+        sectionKey: `hw1`,
+        sectionLabel: `الواجب الأول`,
+        unitLabel: `الواجب الأول • السؤال 3`,
+        question: `يتم تقييم النموذج المبني على البيانات للتأكد من أنه قابل .`,
+        options: [
+          `للسرعة`,
+          `للعرض`,
+          `للتخزين`,
+          `للتعميم`
+        ],
+        correctIndex: 3
+      },
+
+      // الواجب الثاني
+      {
+        id: 4,
+        sectionKey: `hw2`,
+        sectionLabel: `الواجب الثاني`,
+        unitLabel: `الواجب الثاني • السؤال 1`,
+        question: `أي من الآتي يعتبر تطبيقاً للذكاء الاصطناعي؟`,
+        options: [
+          `معالجة النصوص`,
+          `التعرف على الصوت وتحويله إلى نص`,
+          `تخزين البيانات على الحاسوب`,
+          `إرسال رسائل البريد الإلكتروني`
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 5,
+        sectionKey: `hw2`,
+        sectionLabel: `الواجب الثاني`,
+        unitLabel: `الواجب الثاني • السؤال 2`,
+        question: `ماذا تمثل مصفوفة الارتباك (Confusion Matrix)؟`,
+        options: [
+          `تمثيل بياني لعلاقة المتغيرات ببعض`,
+          `طريقة لتحديد أعداد القيم الحقيقية وأعداد القيم المتوقعة الصحيحة والخاطئة`,
+          `طريقة لتقييم أداء نموذج الانحدار Regression`,
+          `مقياس لعدد الفئات Classes في التصنيف`
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 6,
+        sectionKey: `hw2`,
+        sectionLabel: `الواجب الثاني`,
+        unitLabel: `الواجب الثاني • السؤال 3`,
+        question: `أي من الخيارات التالية ليس نوعاً من تعلم الآلة؟`,
+        options: [
+          `Supervised Learning (التعلم الخاضع للإشراف)`,
+          `Unsupervised Learning (التعلم غير الخاضع للإشراف)`,
+          `Reinforcement Learning (التعلم المعزز)`,
+          `Automated Learning (التعلم الآلي)`
+        ],
+        correctIndex: 3
+      },
+
+      // الواجب الثالث
+      {
+        id: 7,
+        sectionKey: `hw3`,
+        sectionLabel: `الواجب الثالث`,
+        unitLabel: `الواجب الثالث • السؤال 1`,
+        question: `أي من الآتي مكون رئيسي في شبكة GAN (Generative Adversarial Network)؟`,
+        options: [
+          `Generator (مولد)`,
+          `Classifier (مصنف)`,
+          `Regression (انحدار)`,
+          `Data Augmentation (زيادة البيانات)`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 8,
+        sectionKey: `hw3`,
+        sectionLabel: `الواجب الثالث`,
+        unitLabel: `الواجب الثالث • السؤال 2`,
+        question: `ما هي طبقة "Softmax" في الشبكات العصبية؟`,
+        options: [
+          `طبقة تعمل على تحسين سرعة الشبكة`,
+          `طبقة تستخدم في مشاكل التصنيف لتحويل المخرجات إلى احتمالات`,
+          `طبقة تستخدم فقط في تحليل النصوص`,
+          `طبقة مسؤولة عن تقليل الضوضاء في البيانات`
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 9,
+        sectionKey: `hw3`,
+        sectionLabel: `الواجب الثالث`,
+        unitLabel: `الواجب الثالث • السؤال 3`,
+        question: `ما هو (التعلم العميق)`,
+        options: [
+          `طريقة لتحليل البيانات المالية`,
+          `فرع من تعلم الآلة يعتمد على الشبكات العصبية متعددة الطبقات`,
+          `خوارزمية لتسريع العمليات الحسابية`,
+          `طريقة لتنظيم البيانات في قواعد البيانات`
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 10,
+        sectionKey: `hw3`,
+        sectionLabel: `الواجب الثالث`,
+        unitLabel: `الواجب الثالث • السؤال 4`,
+        question: `ما هو التدرج المتلاشي (Vanishing Gradient)؟`,
+        options: [
+          `مشكلة تحدث عند تدني قيمة التدرجات في الطبقات العميقة جداً`,
+          `مشكلة تحدث عندما تكون البيانات غير منسقة`,
+          `زيادة غير طبيعية في التدرجات`,
+          `تحسين أداء النموذج`
+        ],
+        correctIndex: 0
+      },
+
+      // ================= ثانياً: التقييم الذاتي للمتعلم (15 سؤالاً) =================
+      {
+        id: 11,
+        sectionKey: `self`,
+        sectionLabel: `التقييم الذاتي للمتعلم`,
+        unitLabel: `التقييم الذاتي للمتعلم • السؤال 1`,
+        question: `ما هو الهدف من خوارزمية "Adam" في التعلم العميق؟`,
+        options: [
+          `تحسين عملية تحسين المعلمات (Optimization)`,
+          `تحسين جودة البيانات`,
+          `زيادة عدد الوحدات العصبية`,
+          `تقليل حجم النموذج`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 12,
+        sectionKey: `self`,
+        sectionLabel: `التقييم الذاتي للمتعلم`,
+        unitLabel: `التقييم الذاتي للمتعلم • السؤال 2`,
+        question: `أي من الخيارات التالية يمثل الشبكة العصبية الاصطناعية التي تستخدم في التعلم العميق؟`,
+        options: [
+          `Decision Tree (شجرة القرار)`,
+          `Convolutional Neural Network (CNN)`,
+          `Support Vector Machine (SVM)`,
+          `K-Nearest Neighbors (KNN)`
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 13,
+        sectionKey: `self`,
+        sectionLabel: `التقييم الذاتي للمتعلم`,
+        unitLabel: `التقييم الذاتي للمتعلم • السؤال 3`,
+        question: `ما هي المشكلة التي تعالجها خوارزمية "Dropout" في التعلم العميق؟`,
+        options: [
+          `تحسين سرعة التدريب`,
+          `تقليل الإفراط في التجهيز (Over fitting)`,
+          `زيادة حجم البيانات`,
+          `معالجة البيانات المفقودة`
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 14,
+        sectionKey: `self`,
+        sectionLabel: `التقييم الذاتي للمتعلم`,
+        unitLabel: `التقييم الذاتي للمتعلم • السؤال 4`,
+        question: `أي من الآتي يمثل الشبكة العصبية المستخدمة بشكل أساسي في معالجة التسلسلات الزمنية والبيانات النصية؟`,
+        options: [
+          `Recurrent Neural Network (RNN)`,
+          `Convolutional Neural Network (CNN)`,
+          `Auto encoder`,
+          `Generative Adversarial Network (GAN)`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 15,
+        sectionKey: `self`,
+        sectionLabel: `التقييم الذاتي للمتعلم`,
+        unitLabel: `التقييم الذاتي للمتعلم • السؤال 5`,
+        question: `في خوارزمية "K-Nearest Neighbors"، ما هو معنى "K"؟`,
+        options: [
+          `عدد الجيران الأقرب الذين يتم النظر إليهم لتصنيف نقطة جديدة`,
+          `عدد الفئات الممكنة في مجموعة البيانات`,
+          `عدد المرات التي يتم فيها تدريب النموذج`,
+          `عدد النقاط المستخدمة لاختبار النموذج`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 16,
+        sectionKey: `self`,
+        sectionLabel: `التقييم الذاتي للمتعلم`,
+        unitLabel: `التقييم الذاتي للمتعلم • السؤال 6`,
+        question: `أي من المقاييس التالية يستخدم لتقييم أداء نماذج الانحدار (Regression)؟`,
+        options: [
+          `متوسط مربع الخطأ Mean Squared Error (MSE)`,
+          `Precision`,
+          `Confusion Matrix (مصفوفة الارتباك)`,
+          `F1-Score`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 17,
+        sectionKey: `self`,
+        sectionLabel: `التقييم الذاتي للمتعلم`,
+        unitLabel: `التقييم الذاتي للمتعلم • السؤال 7`,
+        question: `ما المقصود بجودة البيانات؟`,
+        options: [
+          `قدرة البيانات على شغل مساحة أقل في التخزين`,
+          `مدى دقة واكتمال البيانات ومدى توافقها مع الاستخدام المطلوب`,
+          `سرعة معالجة البيانات في الأنظمة`,
+          `عدد مرات تحديث البيانات خلال فترة معينة`
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 18,
+        sectionKey: `self`,
+        sectionLabel: `التقييم الذاتي للمتعلم`,
+        unitLabel: `التقييم الذاتي للمتعلم • السؤال 8`,
+        question: `ما هو الغرض الرئيسي من تقسيم البيانات إلى مجموعة تدريب (Training Set) ومجموعة اختبار (Test Set)؟`,
+        options: [
+          `لتقييم أداء النموذج على بيانات غير مألوفة`,
+          `لتقليل حجم البيانات التي يتعين على النموذج التعامل معها`,
+          `لتحسين دقة النموذج على البيانات المتاحة`,
+          `لزيادة حجم البيانات المتاحة`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 19,
+        sectionKey: `self`,
+        sectionLabel: `التقييم الذاتي للمتعلم`,
+        unitLabel: `التقييم الذاتي للمتعلم • السؤال 9`,
+        question: `ما هو "التعلم الخاضع للإشراف" (Supervised Learning)؟`,
+        options: [
+          `نموذج يتم تدريبه باستخدام أمثلة من البيانات المصنفة (Labeled Data)`,
+          `نموذج يتم تدريبه باستخدام بيانات غير مصنفة (Unlabeled Data)`,
+          `نموذج يقوم بتحليل البيانات بدون تدخل بشري`,
+          `نموذج يتم تدريبه على مجموعة بيانات تحتوي على أمثلة من جميع الفئات الممكنة`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 20,
+        sectionKey: `self`,
+        sectionLabel: `التقييم الذاتي للمتعلم`,
+        unitLabel: `التقييم الذاتي للمتعلم • السؤال 10`,
+        question: `ما هو الفرق بين "التعلم الآلي" و"الذكاء الاصطناعي"؟`,
+        options: [
+          `التعلم الآلي هو نوع من الذكاء الاصطناعي يمكنه اتخاذ القرارات بدون بيانات`,
+          `التعلم الآلي هو طريقة ضمن الذكاء الاصطناعي يستخدم لتعليم الأنظمة كيفية التعلم من البيانات`,
+          `الذكاء الاصطناعي يعتمد فقط على التعليمات البرمجية، بينما التعلم الآلي يعتمد على البشر`,
+          `لا يوجد فرق بينهما؛ المصطلحين متطابقين`
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 21,
+        sectionKey: `self`,
+        sectionLabel: `التقييم الذاتي للمتعلم`,
+        unitLabel: `التقييم الذاتي للمتعلم • السؤال 11`,
+        question: `في حوكمة البيانات، ما هو المستوى المسؤول عن إدارة المبادرات؟`,
+        options: [
+          `المستوى التنفيذي`,
+          `المستوى الاستراتيجي`,
+          `المستوى التكتيكي`,
+          `المستوى الداعم`
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 22,
+        sectionKey: `self`,
+        sectionLabel: `التقييم الذاتي للمتعلم`,
+        unitLabel: `التقييم الذاتي للمتعلم • السؤال 12`,
+        question: `من أمثلة معالجة اللغة الطبيعية والذي يعد مجالاً خصباً في الذكاء الاصطناعي .`,
+        options: [
+          `كشف مشاعر الكلام المكتوب`,
+          `كشف الأورام في الصور الطبية`,
+          `كشف إشارات التجسس`,
+          `كشف محيط السيارات ذاتية القيادة`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 23,
+        sectionKey: `self`,
+        sectionLabel: `التقييم الذاتي للمتعلم`,
+        unitLabel: `التقييم الذاتي للمتعلم • السؤال 13`,
+        question: `من عيوب مخطط النجمة عدم التطبيع مما يسبب .`,
+        options: [
+          `عدم الاتساق`,
+          `عدم التكرار`,
+          `كثرة الوصلات`,
+          `تركيبة معقدة`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 24,
+        sectionKey: `self`,
+        sectionLabel: `التقييم الذاتي للمتعلم`,
+        unitLabel: `التقييم الذاتي للمتعلم • السؤال 14`,
+        question: `المرحلة الأولى في دورة حياة علم البيانات هي .`,
+        options: [
+          `التقييم`,
+          `النمذجة`,
+          `تحديد وتعريف المشكلة`,
+          `جمع البيانات وتجهيزها`
+        ],
+        correctIndex: 2
+      },
+      {
+        id: 25,
+        sectionKey: `self`,
+        sectionLabel: `التقييم الذاتي للمتعلم`,
+        unitLabel: `التقييم الذاتي للمتعلم • السؤال 15`,
+        question: `يساعد ............... على إعطاء تصورات واضحة عن البيانات.`,
+        options: [
+          `تحليل البيانات الاستكشافي`,
+          `تقييم النموذج`,
+          `جمع البيانات وتجهيزها`,
+          `التمثيل المرئي`
+        ],
+        correctIndex: 0
+      },
+
+      // ================= ثالثاً: أسئلة نهاية الفصول (126 سؤالاً) =================
+      // الفصل الأول: علم البيانات (تمهيد)
+      {
+        id: 26,
+        sectionKey: `ch1`,
+        sectionLabel: `الفصل الأول: علم البيانات (تمهيد)`,
+        unitLabel: `الفصل الأول • الوحدة (1)`,
+        question: `للتعرف على الأنماط في البيانات بطريقة آلية، نستخدم.............`,
+        options: [
+          `تجهيز البيانات.`,
+          `تعلم الآلة.`,
+          `جمع البيانات.`,
+          `تقييم النموذج الآلي.`
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 27,
+        sectionKey: `ch1`,
+        sectionLabel: `الفصل الأول: علم البيانات (تمهيد)`,
+        unitLabel: `الفصل الأول • الوحدة (1)`,
+        question: `تتمثل الخطوة الأولى في دورة حياة علم البيانات في .....`,
+        options: [
+          `عمليات التشغيل.`,
+          `تحليل البيانات.`,
+          `جمع البيانات وتجهيزها.`,
+          `تحديد المشكلة وتعريفها.`
+        ],
+        correctIndex: 3
+      },
+      {
+        id: 28,
+        sectionKey: `ch1`,
+        sectionLabel: `الفصل الأول: علم البيانات (تمهيد)`,
+        unitLabel: `الفصل الأول • الوحدة (1)`,
+        question: `الهدف من تقييم النموذج الآلي هو التأكد من..............`,
+        options: [
+          `جاهزية البيانات.`,
+          `اكتمال النموذج.`,
+          `عمومية النموذج`,
+          `عرض النتائج.`
+        ],
+        correctIndex: 2
+      },
+      {
+        id: 29,
+        sectionKey: `ch1`,
+        sectionLabel: `الفصل الأول: علم البيانات (تمهيد)`,
+        unitLabel: `الفصل الأول • الوحدة (2)`,
+        question: `من الأساليب الإحصائية المستخدمة في علم البيانات`,
+        options: [
+          `تعلم الآلة.`,
+          `التعلم العميق.`,
+          `التوزيع البياني`,
+          `البرمجة الحاسوبية.`
+        ],
+        correctIndex: 2
+      },
+      {
+        id: 30,
+        sectionKey: `ch1`,
+        sectionLabel: `الفصل الأول: علم البيانات (تمهيد)`,
+        unitLabel: `الفصل الأول • الوحدة (2)`,
+        question: `من أهم السمات التي تساعد عالم البيانات لاستخلاص أكبر قدر من أهداف ودوافع أصحاب المصلحة:`,
+        options: [
+          `التفكير النقدي.`,
+          `الابتكار.`,
+          `المهارات الكمية.`,
+          `التواصل الفعال.`
+        ],
+        correctIndex: 3
+      },
+      {
+        id: 31,
+        sectionKey: `ch1`,
+        sectionLabel: `الفصل الأول: علم البيانات (تمهيد)`,
+        unitLabel: `الفصل الأول • الوحدة (2)`,
+        question: `من أهم المصادر الحاسوبية الحديثة والتي تساعد عمليات التخزين والوصول للبيانات عن بعد :`,
+        options: [
+          `الحوسبة الشخصية.`,
+          `الحوسبة السحابية.`,
+          `الحوسبة المتنقلة.`,
+          `الحوسبة المتوازية.`
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 32,
+        sectionKey: `ch1`,
+        sectionLabel: `الفصل الأول: علم البيانات (تمهيد)`,
+        unitLabel: `الفصل الأول • الوحدة (3)`,
+        question: `البيانات التي لها مستوى معين من التنظيم، ولكن ليس بقدر البيانات المنظمة وتتضمن الأمثلة ملفات XML، JSON`,
+        options: [
+          `البيانات المنظمة.`,
+          `البيانات شبه المنظمة.`,
+          `البيانات غير المنظمة.`,
+          `البيانات غير المهيكلة.`
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 33,
+        sectionKey: `ch1`,
+        sectionLabel: `الفصل الأول: علم البيانات (تمهيد)`,
+        unitLabel: `الفصل الأول • الوحدة (3)`,
+        question: `أي أسلوب من الأساليب التالية ليس من الأساليب التي يمكن استخدامها لاستكشاف البيانات:`,
+        options: [
+          `الاستطلاع`,
+          `إحصاءات موجزة`,
+          `الارتباط والانحدار`,
+          `التمثيل المرئي`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 34,
+        sectionKey: `ch1`,
+        sectionLabel: `الفصل الأول: علم البيانات (تمهيد)`,
+        unitLabel: `الفصل الأول • الوحدة (3)`,
+        question: `من مجالات استخدام علم البيانات لتحليل الصور ومقاطع الفيديو`,
+        options: [
+          `كشف الاحتيال.`,
+          `رؤية الحاسوب.`,
+          `معالجة اللغة الطبيعية.`,
+          `ذكاء الأعمال.`
+        ],
+        correctIndex: 1
+      },
+
+      // الفصل الثاني: المفاهيم الأساسية لعلم البيانات
+      {
+        id: 35,
+        sectionKey: `ch2`,
+        sectionLabel: `الفصل الثاني: المفاهيم الأساسية لعلم البيانات`,
+        unitLabel: `الفصل الثاني • الوحدة (1)`,
+        question: `لغة الاستعلام المهيكل SQL تستخدم للاستعلام في قواعد البيانات............`,
+        options: [
+          `المهيكلة والغير علائقية.`,
+          `المهيكلة والعلائقية.`,
+          `الغير مهيكلة والغير علائقية.`,
+          `الغير مهيكلة والعلائقية.`
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 36,
+        sectionKey: `ch2`,
+        sectionLabel: `الفصل الثاني: المفاهيم الأساسية لعلم البيانات`,
+        unitLabel: `الفصل الثاني • الوحدة (1)`,
+        question: `تعتبر (...............) منظمة بأزواج مفتاح قيمة (key-value).`,
+        options: [
+          `Tables`,
+          `SQL`,
+          `JSON`,
+          `Non-relational`
+        ],
+        correctIndex: 2
+      },
+      {
+        id: 37,
+        sectionKey: `ch2`,
+        sectionLabel: `الفصل الثاني: المفاهيم الأساسية لعلم البيانات`,
+        unitLabel: `الفصل الثاني • الوحدة (1)`,
+        question: `تتميز قواعد البيانات الغير علائقية والمعتمدة على NoSQL بأنها ............`,
+        options: [
+          `مهيكلة.`,
+          `تعتمد على علاقات مفتاحية.`,
+          `قابلة للتوسع.`,
+          `غير معقدة.`
+        ],
+        correctIndex: 2
+      },
+      {
+        id: 38,
+        sectionKey: `ch2`,
+        sectionLabel: `الفصل الثاني: المفاهيم الأساسية لعلم البيانات`,
+        unitLabel: `الفصل الثاني • الوحدة (2)`,
+        question: `من سلبيات مخطط ندفة الثلج ................`,
+        options: [
+          `انخفاض التكرار.`,
+          `التطبيع.`,
+          `أكثر تعقيد.`,
+          `حاجة إلى عدد قليل من الصلات.`
+        ],
+        correctIndex: 2
+      },
+      {
+        id: 39,
+        sectionKey: `ch2`,
+        sectionLabel: `الفصل الثاني: المفاهيم الأساسية لعلم البيانات`,
+        unitLabel: `الفصل الثاني • الوحدة (2)`,
+        question: `مخطط........... هو أبسط نوع من مخططات مستودع البيانات.`,
+        options: [
+          `النجمة`,
+          `ندفة الثلج.`,
+          `كوكبة.`,
+          `الهرم.`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 40,
+        sectionKey: `ch2`,
+        sectionLabel: `الفصل الثاني: المفاهيم الأساسية لعلم البيانات`,
+        unitLabel: `الفصل الثاني • الوحدة (2)`,
+        question: `أي من التالي ليس أحد الحلول التجارية مفتوحة المصدر لقواعد البيانات؟`,
+        options: [
+          `ORACLE`,
+          `mongo DB`,
+          `Microsoft`,
+          `dropbox.`
+        ],
+        correctIndex: 3
+      },
+      {
+        id: 41,
+        sectionKey: `ch2`,
+        sectionLabel: `الفصل الثاني: المفاهيم الأساسية لعلم البيانات`,
+        unitLabel: `الفصل الثاني • الوحدة (3)`,
+        question: `.......... عبارة عن مجموعة بيانات موجهة نحو الموضوع ومتكاملة ومتغيرة زمنياً وغير متطايرة تستخدم بشكل أساسي في صنع القرار التنظيمي.`,
+        options: [
+          `مستودع البيانات.`,
+          `بحيرة البيانات.`,
+          `أسواق البيانات.`,
+          `نظام البيانات.`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 42,
+        sectionKey: `ch2`,
+        sectionLabel: `الفصل الثاني: المفاهيم الأساسية لعلم البيانات`,
+        unitLabel: `الفصل الثاني • الوحدة (3)`,
+        question: `من قواعد البيانات المخصصة التي تحتوي بالغالب على بيانات وملفات متنوعة ويتم فيها جمع البيانات من عدة مصادر مختلفة.`,
+        options: [
+          `مستودع البيانات.`,
+          `بحيرة البيانات.`,
+          `أسواق البيانات.`,
+          `نظام البيانات.`
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 43,
+        sectionKey: `ch2`,
+        sectionLabel: `الفصل الثاني: المفاهيم الأساسية لعلم البيانات`,
+        unitLabel: `الفصل الثاني • الوحدة (3)`,
+        question: `نظراً لأن أسواق البيانات تعطي الأولوية لسهولة الاستخدام، فإنها غالباً تتبع مخطط.............`,
+        options: [
+          `ندفة الثلج.`,
+          `النجمة.`,
+          `الكوكبة.`,
+          `الهرم.`
+        ],
+        correctIndex: 1
+      },
+
+      // الفصل الثالث: البيانات الضخمة
+      {
+        id: 44,
+        sectionKey: `ch3`,
+        sectionLabel: `الفصل الثالث: البيانات الضخمة`,
+        unitLabel: `الفصل الثالث • الوحدة (1)`,
+        question: `مثال على الأنشطة التي يقدمها مقدم خدمة البيانات الضخمة.`,
+        options: [
+          `دمج البيانات.`,
+          `استخدام المخرجات.`,
+          `إنشاء البيانات.`,
+          `توفير بيان الخدمات.`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 45,
+        sectionKey: `ch3`,
+        sectionLabel: `الفصل الثالث: البيانات الضخمة`,
+        unitLabel: `الفصل الثالث • الوحدة (1)`,
+        question: `أي من خصائص البيانات الضخمة التالية تهتم بدقة المعلومات لاتخاذ القرارات صحيحة.`,
+        options: [
+          `الحجم`,
+          `السرعة.`,
+          `المصداقية.`,
+          `التنوع.`
+        ],
+        correctIndex: 2
+      },
+      {
+        id: 46,
+        sectionKey: `ch3`,
+        sectionLabel: `الفصل الثالث: البيانات الضخمة`,
+        unitLabel: `الفصل الثالث • الوحدة (1)`,
+        question: `السجلات الصحية الإلكترونية (EHR) ومستودعات البيانات السريرية (CDRs) هي إحدى مصادر البيانات الضخمة التابعة..................`,
+        options: [
+          `الرعاية الصحية.`,
+          `وسائل التواصل الاجتماعي.`,
+          `التجارة الإلكترونية.`,
+          `أجهزة إنترنت الأشياء.`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 47,
+        sectionKey: `ch3`,
+        sectionLabel: `الفصل الثالث: البيانات الضخمة`,
+        unitLabel: `الفصل الثالث • الوحدة (2)`,
+        question: `أي من التالي ليست من ضمن إطار Spark`,
+        options: [
+          `SQL`,
+          `MLlib / Lib`,
+          `Graphx`,
+          `PHP`
+        ],
+        correctIndex: 3
+      },
+      {
+        id: 48,
+        sectionKey: `ch3`,
+        sectionLabel: `الفصل الثالث: البيانات الضخمة`,
+        unitLabel: `الفصل الثالث • الوحدة (2)`,
+        question: `Hadoop هو إطار عمل مفتوح المصدر مكتوب بلغة.............`,
+        options: [
+          `البايثون.`,
+          `الجافا.`,
+          `Scala`,
+          `باسكال.`
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 49,
+        sectionKey: `ch3`,
+        sectionLabel: `الفصل الثالث: البيانات الضخمة`,
+        unitLabel: `الفصل الثالث • الوحدة (2)`,
+        question: `هي مكتبة بايثون مفتوحة المصدر للتعلم الآلي وتدعم أحدث ما توصلت إليه التكنولوجيا`,
+        options: [
+          `Scikit-Learn`,
+          `Redshift`,
+          `BigQuery`,
+          `NoSQL`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 50,
+        sectionKey: `ch3`,
+        sectionLabel: `الفصل الثالث: البيانات الضخمة`,
+        unitLabel: `الفصل الثالث • الوحدة (3)`,
+        question: `تطوير المناهج أحد تطبيقات البيانات الضخمة في مجال .............`,
+        options: [
+          `الأمن.`,
+          `التعليم.`,
+          `الزراعة.`,
+          `الترفيه.`
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 51,
+        sectionKey: `ch3`,
+        sectionLabel: `الفصل الثالث: البيانات الضخمة`,
+        unitLabel: `الفصل الثالث • الوحدة (3)`,
+        question: `إحدى تطبيقات البيانات الضخمة في مجال الزراعة`,
+        options: [
+          `إدارة الموارد`,
+          `إدارة الأسطول`,
+          `إدارة المخزون`,
+          `إدارة الشبكات`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 52,
+        sectionKey: `ch3`,
+        sectionLabel: `الفصل الثالث: البيانات الضخمة`,
+        unitLabel: `الفصل الثالث • الوحدة (3)`,
+        question: `أي من التالي لا يعتبر من أهمية دراسة البيانات الضخمة.............`,
+        options: [
+          `تعزيز المنافسة.`,
+          `التنبؤ بالمستقبل.`,
+          `الابتكار والتطوير`,
+          `رؤية الحاسوب`
+        ],
+        correctIndex: 3
+      },
+
+      // الفصل الرابع: إدارة البيانات وحوكمتها
+      {
+        id: 53,
+        sectionKey: `ch4`,
+        sectionLabel: `الفصل الرابع: إدارة البيانات وحوكمتها`,
+        unitLabel: `الفصل الرابع • الوحدة (1)`,
+        question: `تعرف ......... بأنها عملية جمع البيانات وحفظها واستخدامها بأمان وكفاءة وفعالية من حيث التكلفة.`,
+        options: [
+          `إدارة البيانات.`,
+          `هيكلة البيانات.`,
+          `نمذجة البيانات.`,
+          `استخراج البيانات.`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 54,
+        sectionKey: `ch4`,
+        sectionLabel: `الفصل الرابع: إدارة البيانات وحوكمتها`,
+        unitLabel: `الفصل الرابع • الوحدة (1)`,
+        question: `أي من التالي لا يعتبر من تحديات إدارة البيانات؟`,
+        options: [
+          `حجم النطاق والأداء.`,
+          `تدريب الموظفين.`,
+          `تغير المتطلبات.`,
+          `التنوع في البيانات.`
+        ],
+        correctIndex: 3
+      },
+      {
+        id: 55,
+        sectionKey: `ch4`,
+        sectionLabel: `الفصل الرابع: إدارة البيانات وحوكمتها`,
+        unitLabel: `الفصل الرابع • الوحدة (1)`,
+        question: `أي من التالي ليست من المساعدات التي تقدمها AWS؟`,
+        options: [
+          `تحقيق الأداء على نطاق واسع.`,
+          `تشغيل قواعد البيانات المدارة بالكامل.`,
+          `الاعتماد على التوافر العالي والأمان.`,
+          `توفر جميع قواعد البيانات بشكل مجاني.`
+        ],
+        correctIndex: 3
+      },
+      {
+        id: 56,
+        sectionKey: `ch4`,
+        sectionLabel: `الفصل الرابع: إدارة البيانات وحوكمتها`,
+        unitLabel: `الفصل الرابع • الوحدة (2)`,
+        question: `أي من التالي ليس من مقاييس حوكمة البيانات`,
+        options: [
+          `الضبط.`,
+          `الاستكمال.`,
+          `الدقة في التوقيت.`,
+          `الحجم.`
+        ],
+        correctIndex: 3
+      },
+      {
+        id: 57,
+        sectionKey: `ch4`,
+        sectionLabel: `الفصل الرابع: إدارة البيانات وحوكمتها`,
+        unitLabel: `الفصل الرابع • الوحدة (2)`,
+        question: `أي من التالي ليس من مهام اللجنة التوجيهية في المستوى التنفيذي؟`,
+        options: [
+          `الإشراف.`,
+          `الدعم والتمويل لعمليات حوكمة البيانات.`,
+          `تعريف أعضاء المستوى الاستراتيجي.`,
+          `إدارة مبادرات.`
+        ],
+        correctIndex: 3
+      },
+      {
+        id: 58,
+        sectionKey: `ch4`,
+        sectionLabel: `الفصل الرابع: إدارة البيانات وحوكمتها`,
+        unitLabel: `الفصل الرابع • الوحدة (2)`,
+        question: `مسؤول عن تيسير وتنسيق جهود إدارة البيانات والإشراف عليها`,
+        options: [
+          `مشرفو البيانات.`,
+          `مكتب إدارة البيانات.`,
+          `منسقو إشراف البيانات.`,
+          `مشرفو مجالات البيانات.`
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 59,
+        sectionKey: `ch4`,
+        sectionLabel: `الفصل الرابع: إدارة البيانات وحوكمتها`,
+        unitLabel: `الفصل الرابع • الوحدة (3)`,
+        question: `........... هي حاجة المؤسسات إلى التأكد من حماية البيانات الشخصية وعدم استخدامها بطرق قد تضر الأفراد أو المجموعات`,
+        options: [
+          `الأمان.`,
+          `الشفافية.`,
+          `الخصوصية.`,
+          `العدالة.`
+        ],
+        correctIndex: 2
+      },
+      {
+        id: 60,
+        sectionKey: `ch4`,
+        sectionLabel: `الفصل الرابع: إدارة البيانات وحوكمتها`,
+        unitLabel: `الفصل الرابع • الوحدة (3)`,
+        question: `أي من التالي ليست من ضمن الشفافية في التعامل مع البيانات واستخدامها :`,
+        options: [
+          `تخزين البيانات وأمنها`,
+          `فتح قنوات الاتصال`,
+          `آليات الاشتراك والانسحاب`,
+          `معالجة التحيز الخوارزمي`
+        ],
+        correctIndex: 3
+      },
+      {
+        id: 61,
+        sectionKey: `ch4`,
+        sectionLabel: `الفصل الرابع: إدارة البيانات وحوكمتها`,
+        unitLabel: `الفصل الرابع • الوحدة (3)`,
+        question: `في التنقل في المشهد الأخلاقي في أخلاقيات البيانات يتم مقارنة المسؤولية مع............`,
+        options: [
+          `المساءلة.`,
+          `المشاركة.`,
+          `الإنصاف.`,
+          `المنفعة.`
+        ],
+        correctIndex: 0
+      },
+
+      // الفصل الخامس: جودة البيانات
+      {
+        id: 62,
+        sectionKey: `ch5`,
+        sectionLabel: `الفصل الخامس: جودة البيانات`,
+        unitLabel: `الفصل الخامس • الوحدة (1)`,
+        question: `أي من التالي ليست من معايير قياس جودة البيانات؟`,
+        options: [
+          `دقة.`,
+          `توقيت.`,
+          `موثوقية.`,
+          `سعة.`
+        ],
+        correctIndex: 3
+      },
+      {
+        id: 63,
+        sectionKey: `ch5`,
+        sectionLabel: `الفصل الخامس: جودة البيانات`,
+        unitLabel: `الفصل الخامس • الوحدة (1)`,
+        question: `أي من التالي لا تشملها عملية تحسين جودة البيانات؟`,
+        options: [
+          `تجديد البيانات.`,
+          `توحيد البيانات.`,
+          `إزالة التكرار.`,
+          `التحقق من الصلاحية.`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 64,
+        sectionKey: `ch5`,
+        sectionLabel: `الفصل الخامس: جودة البيانات`,
+        unitLabel: `الفصل الخامس • الوحدة (1)`,
+        question: `إدارة جودة البيانات لا تشمل:`,
+        options: [
+          `التخطيط.`,
+          `التنفيذ.`,
+          `التفتيش.`,
+          `المراقبة.`
+        ],
+        correctIndex: 2
+      },
+      {
+        id: 65,
+        sectionKey: `ch5`,
+        sectionLabel: `الفصل الخامس: جودة البيانات`,
+        unitLabel: `الفصل الخامس • الوحدة (2)`,
+        question: `أي من التالي ليست من عمليات تجويد البيانات؟`,
+        options: [
+          `تطوير قواعد جودة البيانات.`,
+          `مراقبة جودة البيانات.`,
+          `حل مشكلات جودة البيانات.`,
+          `ترتيب أولويات جودة البيانات.`
+        ],
+        correctIndex: 3
+      },
+      {
+        id: 66,
+        sectionKey: `ch5`,
+        sectionLabel: `الفصل الخامس: جودة البيانات`,
+        unitLabel: `الفصل الخامس • الوحدة (2)`,
+        question: `أي من التالي ليس من ضوابط مجال جودة البيانات؟`,
+        options: [
+          `عمليات تجويد البيانات.`,
+          `إدارة الأداء.`,
+          `التخطيط لجودة البيانات.`,
+          `إدارة الموازنة.`
+        ],
+        correctIndex: 3
+      },
+      {
+        id: 67,
+        sectionKey: `ch5`,
+        sectionLabel: `الفصل الخامس: جودة البيانات`,
+        unitLabel: `الفصل الخامس • الوحدة (2)`,
+        question: `أي من التالي لا يتضمنها ضابط إدارة دورة حياة البيانات`,
+        options: [
+          `نقاط التحقق من جودة البيانات.`,
+          `دعم جودة البيانات.`,
+          `إدارة البيانات الوصفية.`,
+          `تطوير قواعد جودة البيانات.`
+        ],
+        correctIndex: 3
+      },
+      {
+        id: 68,
+        sectionKey: `ch5`,
+        sectionLabel: `الفصل الخامس: جودة البيانات`,
+        unitLabel: `الفصل الخامس • الوحدة (3)`,
+        question: `من المشكلات التي تنشأ عن ضعف الحوكمة ونقص الوعي مشاكل في عمليات إدخال البيانات، مما يمكن أن يؤدي إلى الأخطاء وعدم الاتساق.`,
+        options: [
+          `ضعف القيادة.`,
+          `إدخال البيانات.`,
+          `معالجة البيانات.`,
+          `تصميم النظام.`
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 69,
+        sectionKey: `ch5`,
+        sectionLabel: `الفصل الخامس: جودة البيانات`,
+        unitLabel: `الفصل الخامس • الوحدة (3)`,
+        question: `في المعيار الدولي لجودة البيانات يتعلق الجزء............... بناء جمل البيانات التشفير الدلالي، والتوافق مع مواصفات البيانات الرئيسية.`,
+        options: [
+          `110`,
+          `100`,
+          `120`,
+          `101`
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 70,
+        sectionKey: `ch5`,
+        sectionLabel: `الفصل الخامس: جودة البيانات`,
+        unitLabel: `الفصل الخامس • الوحدة (3)`,
+        question: `تساعد هذه الأدوات في تحديد المشكلات المحتملة وتوفير الرؤى حول الأسباب الجذرية لمشاكل البيانات.`,
+        options: [
+          `قوالب قواعد جودة البيانات.`,
+          `أداة إدارة مشاكل جودة البيانات`,
+          `أدوات استعلام البيانات.`,
+          `أدوات فحص البيانات.`
+        ],
+        correctIndex: 0
+      },
+
+      // الفصل السادس: مقدمة عن الذكاء الاصطناعي
+      {
+        id: 71,
+        sectionKey: `ch6`,
+        sectionLabel: `الفصل السادس: مقدمة عن الذكاء الاصطناعي`,
+        unitLabel: `الفصل السادس • الوحدة (1)`,
+        question: `يشير الذكاء............ إلى القدرة على الحساب والقياس والاستدلال والتلخيص والتصنيف بشكل فعال`,
+        options: [
+          `البصري.`,
+          `اللفظي`,
+          `المنطقي.`,
+          `الحركي.`
+        ],
+        correctIndex: 2
+      },
+      {
+        id: 72,
+        sectionKey: `ch6`,
+        sectionLabel: `الفصل السادس: مقدمة عن الذكاء الاصطناعي`,
+        unitLabel: `الفصل السادس • الوحدة (1)`,
+        question: `يعتبر الذكاء الاصطناعي موضوعاً متعدد التخصصات، أي من التالي ليس من ضمن هذه التخصصات؟`,
+        options: [
+          `تنقيب البيانات.`,
+          `تعلم الآلة.`,
+          `الإحصاء.`,
+          `علم النفس.`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 73,
+        sectionKey: `ch6`,
+        sectionLabel: `الفصل السادس: مقدمة عن الذكاء الاصطناعي`,
+        unitLabel: `الفصل السادس • الوحدة (1)`,
+        question: `بالنسبة للأشخاص الذين يتمتعون بذكاء لغوي قوي، إحدى الخيارات التالية ليست من ضمن المهنية المثالية لهم :`,
+        options: [
+          `مهندس.`,
+          `محامي.`,
+          `محرر.`,
+          `ناشط سياسي.`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 74,
+        sectionKey: `ch6`,
+        sectionLabel: `الفصل السادس: مقدمة عن الذكاء الاصطناعي`,
+        unitLabel: `الفصل السادس • الوحدة (2)`,
+        question: `التعلم العميق هو تمثيل لنظرية....`,
+        options: [
+          `الرمزية.`,
+          `الارتباطية.`,
+          `السلوكية.`,
+          `التوجيهية.`
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 75,
+        sectionKey: `ch6`,
+        sectionLabel: `الفصل السادس: مقدمة عن الذكاء الاصطناعي`,
+        unitLabel: `الفصل السادس • الوحدة (2)`,
+        question: `أي من التالي ليس من ضمن المستويات الأساسية لتقنية للذكاء الاصطناعي؟`,
+        options: [
+          `العمليات.`,
+          `الخوارزميات.`,
+          `التطبيقات.`,
+          `البيانات.`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 76,
+        sectionKey: `ch6`,
+        sectionLabel: `الفصل السادس: مقدمة عن الذكاء الاصطناعي`,
+        unitLabel: `الفصل السادس • الوحدة (2)`,
+        question: `أي من التالي يعد مثالاً على روبوت التفكير بعقلانية؟`,
+        options: [
+          `IRobot`,
+          `Atlas`,
+          `Alpha Go`,
+          `ما زال لا يوجد`
+        ],
+        correctIndex: 3
+      },
+      {
+        id: 77,
+        sectionKey: `ch6`,
+        sectionLabel: `الفصل السادس: مقدمة عن الذكاء الاصطناعي`,
+        unitLabel: `الفصل السادس • الوحدة (3)`,
+        question: `في العناصر الأربعة الرئيسية لتكنولوجيا الذكاء الاصطناعي تعد ...... هي الأكثر اعتماداً على معالج الذكاء الاصطناعي.`,
+        options: [
+          `قوة الحوسبة.`,
+          `الخوارزميات.`,
+          `البيانات.`,
+          `السيناريوهات.`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 78,
+        sectionKey: `ch6`,
+        sectionLabel: `الفصل السادس: مقدمة عن الذكاء الاصطناعي`,
+        unitLabel: `الفصل السادس • الوحدة (3)`,
+        question: `أي من التالي ليس من أسماء وحدة معالجة الرسومات GPU؟`,
+        options: [
+          `نواة العرض (DC)`,
+          `ووحدة المعالجة المرئية (VPU)`,
+          `شريحة العرض`,
+          `ASIC`
+        ],
+        correctIndex: 3
+      },
+      {
+        id: 79,
+        sectionKey: `ch6`,
+        sectionLabel: `الفصل السادس: مقدمة عن الذكاء الاصطناعي`,
+        unitLabel: `الفصل السادس • الوحدة (3)`,
+        question: `تشمل الموضوعات التي تتعامل معها الرؤية الحاسوبية بشكل أساسي....`,
+        options: [
+          `تصنيف الصور.`,
+          `تحليل المشاعر`,
+          `الترجمة الآلية.`,
+          `التعرف على الكلام.`
+        ],
+        correctIndex: 0
+      },
+
+      // الفصل السابع: تعلم الآلة (1)
+      {
+        id: 80,
+        sectionKey: `ch7`,
+        sectionLabel: `الفصل السابع: تعلم الآلة (1)`,
+        unitLabel: `الفصل السابع • الوحدة (1)`,
+        question: `أي من التالي لا ينتمي لتعلم الآلة؟`,
+        options: [
+          `تستخدم البرمجة الصريحة لحل المشكلات.`,
+          `قواعد اتخاذ القرار معقدة أو يصعب وصفها.`,
+          `تُستخدم العينات للتدريب.`,
+          `تتعلم الآلات القواعد تلقائياً.`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 81,
+        sectionKey: `ch7`,
+        sectionLabel: `الفصل السابع: تعلم الآلة (1)`,
+        unitLabel: `الفصل السابع • الوحدة (1)`,
+        question: `يتم تنفيذ خوارزميات تعلم الآلة في حال كان حجم المشكلة.... وكانت المشكلة.....`,
+        options: [
+          `صغير، بسيطة.`,
+          `كبير، بسيطة.`,
+          `صغير، معقدة.`,
+          `كبير، معقدة.`
+        ],
+        correctIndex: 3
+      },
+      {
+        id: 82,
+        sectionKey: `ch7`,
+        sectionLabel: `الفصل السابع: تعلم الآلة (1)`,
+        unitLabel: `الفصل السابع • الوحدة (1)`,
+        question: `في مشاكل.......... يحتاج برنامج الكمبيوتر إلى تحديد أي من الفئات K ينتمي إليها بعض المدخلات.`,
+        options: [
+          `التصنيف.`,
+          `التجميع.`,
+          `الانحدار.`,
+          `التعلم العميق.`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 83,
+        sectionKey: `ch7`,
+        sectionLabel: `الفصل السابع: تعلم الآلة (1)`,
+        unitLabel: `الفصل السابع • الوحدة (2)`,
+        question: `الانحدار Regression هو مثال على:`,
+        options: [
+          `التعلم الخاضع للإشراف.`,
+          `التعلم غير الخاضع للإشراف.`,
+          `التعلم شبه الخاضع للإشراف.`,
+          `التعلم التعزيزي`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 84,
+        sectionKey: `ch7`,
+        sectionLabel: `الفصل السابع: تعلم الآلة (1)`,
+        unitLabel: `الفصل السابع • الوحدة (2)`,
+        question: `ما هي الجماهير التي تحب مشاهدة الأفلام التي تتناول نفس الموضوع هو مثال على:`,
+        options: [
+          `التعلم الخاضع للإشراف.`,
+          `التعلم غير الخاضع للإشراف.`,
+          `التعلم شبه الخاضع للإشراف.`,
+          `التعلم التعزيزي`
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 85,
+        sectionKey: `ch7`,
+        sectionLabel: `الفصل السابع: تعلم الآلة (1)`,
+        unitLabel: `الفصل السابع • الوحدة (2)`,
+        question: `يبحث دائماً عن أفضل السلوكيات ويستهدف التعلم التعزيزي الآلات أو الروبوتات.`,
+        options: [
+          `التعلم الخاضع للإشراف.`,
+          `التعلم غير الخاضع للإشراف.`,
+          `التعلم شبه الخاضع للإشراف.`,
+          `التعلم التعزيزي`
+        ],
+        correctIndex: 3
+      },
+      {
+        id: 86,
+        sectionKey: `ch7`,
+        sectionLabel: `الفصل السابع: تعلم الآلة (1)`,
+        unitLabel: `الفصل السابع • الوحدة (3)`,
+        question: `أي من التالي ليست من ضمن العمليات المسبقة للبيانات؟`,
+        options: [
+          `تعقيم البيانات.`,
+          `تقليل حجم البيانات.`,
+          `تطبيع البيانات.`,
+          `تجميع البيانات.`
+        ],
+        correctIndex: 3
+      },
+      {
+        id: 87,
+        sectionKey: `ch7`,
+        sectionLabel: `الفصل السابع: تعلم الآلة (1)`,
+        unitLabel: `الفصل السابع • الوحدة (3)`,
+        question: `حجم العمل في تعقيم البيانات بالنسبة لعمل علماء البيانات في مجال التعلم الآلي تتمثل ب؟`,
+        options: [
+          `100%`,
+          `90%`,
+          `10%`,
+          `60%`
+        ],
+        correctIndex: 3
+      },
+      {
+        id: 88,
+        sectionKey: `ch7`,
+        sectionLabel: `الفصل السابع: تعلم الآلة (1)`,
+        unitLabel: `الفصل السابع • الوحدة (3)`,
+        question: `أي من التالي ليس من أشكال البيانات غير النظيفة؟ (ملاحظة في الأصل: جميع الإجابات خاطئة)`,
+        options: [
+          `أخطاء إملائية`,
+          `تكرار البيانات.`,
+          `بيانات غير صالحة.`,
+          `بيانات مفقودة.`,
+          `جميع الإجابات خاطئة`
+        ],
+        correctIndex: 4
+      },
+
+      // الفصل الثامن: تعلم الآلة (2)
+      {
+        id: 89,
+        sectionKey: `ch8`,
+        sectionLabel: `الفصل الثامن: تعلم الآلة (2)`,
+        unitLabel: `الفصل الثامن • الوحدة (1)`,
+        question: `أي من التالي ليس من جوانب الضرورية في اختيار الميزة؟`,
+        options: [
+          `زيادة وقت التدريب.`,
+          `تبسيط النماذج.`,
+          `تحسين تعميم النموذج`,
+          `تجنب انفجار الأبعاد`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 90,
+        sectionKey: `ch8`,
+        sectionLabel: `الفصل الثامن: تعلم الآلة (2)`,
+        unitLabel: `الفصل الثامن • الوحدة (1)`,
+        question: `تتضمن طرق التنظيم Regularization الشائعة....`,
+        options: [
+          `الانحدار التلالي`,
+          `الانحدار السريع.`,
+          `الانحدار الشامل`,
+          `الانحدار البطيء.`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 91,
+        sectionKey: `ch8`,
+        sectionLabel: `الفصل الثامن: تعلم الآلة (2)`,
+        unitLabel: `الفصل الثامن • الوحدة (1)`,
+        question: `تعتبر طرق........ مستقلة عن النموذج أثناء اختيار الميزة.`,
+        options: [
+          `التصفية.`,
+          `التغليف.`,
+          `التضمين.`,
+          `التنظيم.`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 92,
+        sectionKey: `ch8`,
+        sectionLabel: `الفصل الثامن: تعلم الآلة (2)`,
+        unitLabel: `الفصل الثامن • الوحدة (2)`,
+        question: `«هل نتيجة التنبؤ سهلة التفسير؟» سؤال لقياس`,
+        options: [
+          `قابلية التفسير.`,
+          `سرعة التنبؤ.`,
+          `قابلية التطبيق.`,
+          `القدرة على التعميم.`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 93,
+        sectionKey: `ch8`,
+        sectionLabel: `الفصل الثامن: تعلم الآلة (2)`,
+        unitLabel: `الفصل الثامن • الوحدة (2)`,
+        question: `يحدث عندما يكون خطأ تدريب النموذج الذي تم الحصول عليه بعد التعلم صغيراً ولكن خطأ التعميم كبير`,
+        options: [
+          `Over fitting`,
+          `Under fitting.`,
+          `Good fitting`,
+          `Fitting`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 94,
+        sectionKey: `ch8`,
+        sectionLabel: `الفصل الثامن: تعلم الآلة (2)`,
+        unitLabel: `الفصل الثامن • الوحدة (2)`,
+        question: `النموذج الجيد يتكون من انحياز............................. وتباين.............................`,
+        options: [
+          `منخفض، منخفض.`,
+          `منخفض، مرتفع.`,
+          `مرتفع، منخفض.`,
+          `مرتفع، مرتفع.`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 95,
+        sectionKey: `ch8`,
+        sectionLabel: `الفصل الثامن: تعلم الآلة (2)`,
+        unitLabel: `الفصل الثامن • الوحدة (3)`,
+        question: `يدل على عدد الحالات السلبية التي تم تصنيفها بشكل صحيح من قبل النموذج.`,
+        options: [
+          `TP`,
+          `TN`,
+          `FP`,
+          `FN`
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 96,
+        sectionKey: `ch8`,
+        sectionLabel: `الفصل الثامن: تعلم الآلة (2)`,
+        unitLabel: `الفصل الثامن • الوحدة (3)`,
+        question: `في تقييم الانحدار كلما اقترب متوسط الخطأ المطلق من.... كلما كان النموذج أكثر ملائمة لبيانات التدريب.`,
+        options: [
+          `0`,
+          `100`,
+          `1`,
+          `-1`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 97,
+        sectionKey: `ch8`,
+        sectionLabel: `الفصل الثامن: تعلم الآلة (2)`,
+        unitLabel: `الفصل الثامن • الوحدة (3)`,
+        question: `True negative rate تكافئ تقييم التصنيف التالي...`,
+        options: [
+          `Precision`,
+          `Recall`,
+          `Accuracy`,
+          `Specificity`
+        ],
+        correctIndex: 3
+      },
+
+      // الفصل التاسع: تعلم الآلة (3)
+      {
+        id: 98,
+        sectionKey: `ch9`,
+        sectionLabel: `الفصل التاسع: تعلم الآلة (3)`,
+        unitLabel: `الفصل التاسع • الوحدة (1)`,
+        question: `..... يقوم بتحديد عينة عشوائياً في مجموعة بيانات لتحديث محددة الوزن بناءً على قيمة التدرج عند النقطة الحالية.`,
+        options: [
+          `BGD`,
+          `MGD`,
+          `SGD`,
+          `RGD`
+        ],
+        correctIndex: 2
+      },
+      {
+        id: 99,
+        sectionKey: `ch9`,
+        sectionLabel: `الفصل التاسع: تعلم الآلة (3)`,
+        unitLabel: `الفصل التاسع • الوحدة (1)`,
+        question: `أي من التالي ليس من خوارزميات البحث؟`,
+        options: [
+          `البحث الشبكي.`,
+          `البحث العشوائي.`,
+          `البحث الذكي الاستدلالي`,
+          `البحث الهادف.`
+        ],
+        correctIndex: 3
+      },
+      {
+        id: 100,
+        sectionKey: `ch9`,
+        sectionLabel: `الفصل التاسع: تعلم الآلة (3)`,
+        unitLabel: `الفصل التاسع • الوحدة (1)`,
+        question: `أي من التالي ليس مثالاً على المعلمات الفائقة؟`,
+        options: [
+          `C و σ في آلات المتجهات الداعمة (SVM).`,
+          `عدد الأشجار في غابة عشوائية.`,
+          `K في أقرب جار (KNN).`,
+          `W معلم الوزن.`
+        ],
+        correctIndex: 3
+      },
+      {
+        id: 101,
+        sectionKey: `ch9`,
+        sectionLabel: `الفصل التاسع: تعلم الآلة (3)`,
+        unitLabel: `الفصل التاسع • الوحدة (2)`,
+        question: `الانحدار الخطي هو نوع من التعلم .....`,
+        options: [
+          `الخاضع للإشراف.`,
+          `غير الخاضع للإشراف.`,
+          `شبه الخاضع للإشراف.`,
+          `التعزيزي`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 102,
+        sectionKey: `ch9`,
+        sectionLabel: `الفصل التاسع: تعلم الآلة (3)`,
+        unitLabel: `الفصل التاسع • الوحدة (2)`,
+        question: `يعين Softmax احتمالاً لكل فئة في مسألة متعددة الفئات. يجب أن يكون مجموع هذه الاحتمالات:`,
+        options: [
+          `يساوي 1`,
+          `أكبر من 1.`,
+          `أصغر من 1`,
+          `أكبر من 0.`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 103,
+        sectionKey: `ch9`,
+        sectionLabel: `الفصل التاسع: تعلم الآلة (3)`,
+        unitLabel: `الفصل التاسع • الوحدة (2)`,
+        question: `تعميم للانحدار اللوجستي يمكننا استخدامه لتصنيف فئة K؟`,
+        options: [
+          `Sigmoid`,
+          `Soft max.`,
+          `Lasso`,
+          `Ridge`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 104,
+        sectionKey: `ch9`,
+        sectionLabel: `الفصل التاسع: تعلم الآلة (3)`,
+        unitLabel: `الفصل التاسع • الوحدة (3)`,
+        question: `أي من التالي ليست من الخوارزميات الشائعة لشجرة القرار؟`,
+        options: [
+          `ID3`,
+          `C4.5`,
+          `CART`,
+          `XG`
+        ],
+        correctIndex: 3
+      },
+      {
+        id: 105,
+        sectionKey: `ch9`,
+        sectionLabel: `الفصل التاسع: تعلم الآلة (3)`,
+        unitLabel: `الفصل التاسع • الوحدة (3)`,
+        question: `أي من التالي ليس من أنواع التعلم الجماعي؟`,
+        options: [
+          `Random Forest`,
+          `Adaboost`,
+          `GBDT`,
+          `SVM`
+        ],
+        correctIndex: 3
+      },
+      {
+        id: 106,
+        sectionKey: `ch9`,
+        sectionLabel: `الفصل التاسع: تعلم الآلة (3)`,
+        unitLabel: `الفصل التاسع • الوحدة (3)`,
+        question: `من أبسط خوارزميات التعلم الآلي.....`,
+        options: [
+          `Naïve Bayes`,
+          `K-NN.`,
+          `SVM`,
+          `DT`
+        ],
+        correctIndex: 1
+      },
+
+      // الفصل العاشر: المفاهيم الأساسية للتعلم العميق
+      {
+        id: 107,
+        sectionKey: `ch10`,
+        sectionLabel: `الفصل العاشر: المفاهيم الأساسية للتعلم العميق`,
+        unitLabel: `الفصل العاشر • الوحدة (1)`,
+        question: `من خصائص التعلم العميق.`,
+        options: [
+          `تقسيم المشكلة مستوى بمستوى.`,
+          `اختيار الميزة يدوياً.`,
+          `ميزات سهلة الشرح.`,
+          `متطلبات أجهزة أعلى على الكمبيوتر`
+        ],
+        correctIndex: 3
+      },
+      {
+        id: 108,
+        sectionKey: `ch10`,
+        sectionLabel: `الفصل العاشر: المفاهيم الأساسية للتعلم العميق`,
+        unitLabel: `الفصل العاشر • الوحدة (1)`,
+        question: `أي من التالي ليس من مكونات الشبكات العصبية العميقة؟`,
+        options: [
+          `طبقة المدخلات.`,
+          `الطبقات المخفية.`,
+          `طبقة المخرجات.`,
+          `طبقات المعالجة.`
+        ],
+        correctIndex: 3
+      },
+      {
+        id: 109,
+        sectionKey: `ch10`,
+        sectionLabel: `الفصل العاشر: المفاهيم الأساسية للتعلم العميق`,
+        unitLabel: `الفصل العاشر • الوحدة (1)`,
+        question: `نظام معالجة معلومات مصمم لتقليد بنية الدماغ البشري ووظائفه بناءً على مصدره وميزاته وتفسيراته`,
+        options: [
+          `الشبكة العصبية.`,
+          `التعلم التقليدي.`,
+          `تعلم الآلة.`,
+          `دوال التنشيط.`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 110,
+        sectionKey: `ch10`,
+        sectionLabel: `الفصل العاشر: المفاهيم الأساسية للتعلم العميق`,
+        unitLabel: `الفصل العاشر • الوحدة (2)`,
+        question: `بشكل عام، يتم استخدام دالة............ لحل مشكلة التصنيف.`,
+        options: [
+          `MSE.`,
+          `MAE`,
+          `Cross entropy error`,
+          `Quadratic cost function`
+        ],
+        correctIndex: 2
+      },
+      {
+        id: 111,
+        sectionKey: `ch10`,
+        sectionLabel: `الفصل العاشر: المفاهيم الأساسية للتعلم العميق`,
+        unitLabel: `الفصل العاشر • الوحدة (2)`,
+        question: `تعكس الخطأ بين المخرجات المستهدفة والمخرجات الفعلية للإدراك الحسي.`,
+        options: [
+          `دالة التنشيط`,
+          `دالة الخسارة`,
+          `دالة الربح`,
+          `دالة التربيع`
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 112,
+        sectionKey: `ch10`,
+        sectionLabel: `الفصل العاشر: المفاهيم الأساسية للتعلم العميق`,
+        unitLabel: `الفصل العاشر • الوحدة (2)`,
+        question: `في خوارزمية الانتشار العكسي يتم نشر الأخطاء باتجاه ..........`,
+        options: [
+          `الأمام.`,
+          `الخلف.`,
+          `قطري.`,
+          `مخفي.`
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 113,
+        sectionKey: `ch10`,
+        sectionLabel: `الفصل العاشر: المفاهيم الأساسية للتعلم العميق`,
+        unitLabel: `الفصل العاشر • الوحدة (3)`,
+        question: `أي من الدوال التالية لا تتسبب في مشكلة التدرج المتلاشي؟`,
+        options: [
+          `Sigmoid`,
+          `Tanh`,
+          `ReLU`,
+          `Soft sign`
+        ],
+        correctIndex: 2
+      },
+      {
+        id: 114,
+        sectionKey: `ch10`,
+        sectionLabel: `الفصل العاشر: المفاهيم الأساسية للتعلم العميق`,
+        unitLabel: `الفصل العاشر • الوحدة (3)`,
+        question: `أي من الدوال التالية ليس لها نطاق (0, ∞) Range`,
+        options: [
+          `Sigmoid`,
+          `Soft sign`,
+          `ReLU`,
+          `Soft pulse`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 115,
+        sectionKey: `ch10`,
+        sectionLabel: `الفصل العاشر: المفاهيم الأساسية للتعلم العميق`,
+        unitLabel: `الفصل العاشر • الوحدة (3)`,
+        question: `غالباً ما تستخدم دالة............. كطبقة مخرجات للتصنيف المتعدد.`,
+        options: [
+          `Softmax`,
+          `Tanh`,
+          `ReLU`,
+          `Sigmoid`
+        ],
+        correctIndex: 0
+      },
+
+      // الفصل الحادي عشر: المكونات الأساسية لبناء نماذج التعلم العميق
+      {
+        id: 116,
+        sectionKey: `ch11`,
+        sectionLabel: `الفصل الحادي عشر: المكونات الأساسية لبناء نماذج التعلم العميق`,
+        unitLabel: `الفصل الحادي عشر • الوحدة (1)`,
+        question: `تزداد العقوبة في التنظيم بزيادة.`,
+        options: [
+          `α`,
+          `θ`,
+          `Ω`,
+          `J`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 117,
+        sectionKey: `ch11`,
+        sectionLabel: `الفصل الحادي عشر: المكونات الأساسية لبناء نماذج التعلم العميق`,
+        unitLabel: `الفصل الحادي عشر • الوحدة (1)`,
+        question: `تنظيم L2، تتوافق قيمة المحددة مع قاعدة التوزيع.....`,
+        options: [
+          `Gaussian`,
+          `Laplace`,
+          `Normal`,
+          `Standard`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 118,
+        sectionKey: `ch11`,
+        sectionLabel: `الفصل الحادي عشر: المكونات الأساسية لبناء نماذج التعلم العميق`,
+        unitLabel: `الفصل الحادي عشر • الوحدة (1)`,
+        question: `الطريقة الأكثر فعالية لمنع الإفراط في الملاءمة والتجهيز over fitting هي:`,
+        options: [
+          `زيادة مجموعة تدريب.`,
+          `التوقف المبكر.`,
+          `التسريب dropout`,
+          `إضافة قيود على المحددات.`
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 119,
+        sectionKey: `ch11`,
+        sectionLabel: `الفصل الحادي عشر: المكونات الأساسية لبناء نماذج التعلم العميق`,
+        unitLabel: `الفصل الحادي عشر • الوحدة (2)`,
+        question: `عملية تغليف خوارزميات الانحدار التدريجي المختلفة يسمى....`,
+        options: [
+          `المحسنات.`,
+          `دوال التنشيط.`,
+          `دوال الخطأ.`,
+          `المحددات.`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 120,
+        sectionKey: `ch11`,
+        sectionLabel: `الفصل الحادي عشر: المكونات الأساسية لبناء نماذج التعلم العميق`,
+        unitLabel: `الفصل الحادي عشر • الوحدة (2)`,
+        question: `في محسن AdaGrad يتم ضبط المعامل ويتم ضبطه على حوالي ........ لتحقيق الاستقرار العددي`,
+        options: [
+          `10⁷ (107)`,
+          `10⁻⁷ (7-10)`,
+          `10⁻¹ (1-10)`,
+          `10`
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 121,
+        sectionKey: `ch11`,
+        sectionLabel: `الفصل الحادي عشر: المكونات الأساسية لبناء نماذج التعلم العميق`,
+        unitLabel: `الفصل الحادي عشر • الوحدة (2)`,
+        question: `من عيوب محسن الزخم أنه....`,
+        options: [
+          `يجب ضبط معدل التعلم والزخم يدوياً.`,
+          `يجب ضبط معدل التعلم والزخم تلقائياً.`,
+          `يجب عدم ضبط معدل التعلم والزخم.`,
+          `يجب ضبط معدل التعلم يدوياً والزخم تلقائياً`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 122,
+        sectionKey: `ch11`,
+        sectionLabel: `الفصل الحادي عشر: المكونات الأساسية لبناء نماذج التعلم العميق`,
+        unitLabel: `الفصل الحادي عشر • الوحدة (3)`,
+        question: `يطلق على وجود مشكلة في مجموعة بيانات مهام التصنيف حيث لا يكون عدد العينات في كل فئة متساوياً .....`,
+        options: [
+          `التجهيز الزائد`,
+          `انفجار التدرج`,
+          `اختفاء التدرج.`,
+          `خلل في توازن البيانات.`
+        ],
+        correctIndex: 3
+      },
+      {
+        id: 123,
+        sectionKey: `ch11`,
+        sectionLabel: `الفصل الحادي عشر: المكونات الأساسية لبناء نماذج التعلم العميق`,
+        unitLabel: `الفصل الحادي عشر • الوحدة (3)`,
+        question: `تحدث مشكلة التدرج المتفجر عندما يكون وزن الشبكة |w| .........`,
+        options: [
+          `أكبر من 1`,
+          `أصغر من 1`,
+          `يساوي 1`,
+          `لا يساوي 1`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 124,
+        sectionKey: `ch11`,
+        sectionLabel: `الفصل الحادي عشر: المكونات الأساسية لبناء نماذج التعلم العميق`,
+        unitLabel: `الفصل الحادي عشر • الوحدة (3)`,
+        question: `أي من التالي ليس من طرق حل مشكلة التجهيز الزائد over fitting؟`,
+        options: [
+          `التوقف المبكر.`,
+          `التنظيم.`,
+          `تقليل البيانات.`,
+          `التسرب.`
+        ],
+        correctIndex: 2
+      },
+
+      // الفصل الثاني عشر: أنواع الشبكات العصبية
+      {
+        id: 125,
+        sectionKey: `ch12`,
+        sectionLabel: `الفصل الثاني عشر: أنواع الشبكات العصبية`,
+        unitLabel: `الفصل الثاني عشر • الوحدة (1)`,
+        question: `أي من التالي ليس من طبقات CNN؟`,
+        options: [
+          `طبقة تلافيفية`,
+          `طبقة التجميع.`,
+          `طبقة متصلة بالكامل.`,
+          `طبقة التكرار.`
+        ],
+        correctIndex: 3
+      },
+      {
+        id: 126,
+        sectionKey: `ch12`,
+        sectionLabel: `الفصل الثاني عشر: أنواع الشبكات العصبية`,
+        unitLabel: `الفصل الثاني عشر • الوحدة (1)`,
+        question: `تتفوق CNN في معالجة....`,
+        options: [
+          `الصور.`,
+          `النصوص.`,
+          `الأصوات.`,
+          `الإشارات.`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 127,
+        sectionKey: `ch12`,
+        sectionLabel: `الفصل الثاني عشر: أنواع الشبكات العصبية`,
+        unitLabel: `الفصل الثاني عشر • الوحدة (1)`,
+        question: `من التجمعات الشائعة التي يتم استخدامها في طبقة التجمع`,
+        options: [
+          `الحد الأدنى.`,
+          `الحد الأقصى.`,
+          `الحد المتساوي.`,
+          `الحد المتغير.`
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 128,
+        sectionKey: `ch12`,
+        sectionLabel: `الفصل الثاني عشر: أنواع الشبكات العصبية`,
+        unitLabel: `الفصل الثاني عشر • الوحدة (2)`,
+        question: `شبكة عصبية تلتقط المعلومات الديناميكية في البيانات المتسلسلة من خلال الاتصالات الدورية لعقد الطبقة المخفية.`,
+        options: [
+          `RNN`,
+          `CNN`,
+          `GAN`,
+          `FCN`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 129,
+        sectionKey: `ch12`,
+        sectionLabel: `الفصل الثاني عشر: أنواع الشبكات العصبية`,
+        unitLabel: `الفصل الثاني عشر • الوحدة (2)`,
+        question: `أي من التالي ليست من أنواع الشبكات العصبية المتكررة؟`,
+        options: [
+          `واحد لواحد.`,
+          `واحد لكثير`,
+          `كثير لواحد.`,
+          `واحد لصفر.`
+        ],
+        correctIndex: 3
+      },
+      {
+        id: 130,
+        sectionKey: `ch12`,
+        sectionLabel: `الفصل الثاني عشر: أنواع الشبكات العصبية`,
+        unitLabel: `الفصل الثاني عشر • الوحدة (2)`,
+        question: `في معادلة الشبكة العصبية المتكررة، تتمثل وحدة الذاكرة للتسلسل في الوقت (t) والتي تقوم بتخزين المعلومات السابقة مؤقتاً.`,
+        options: [
+          `Ot`,
+          `Xt`,
+          `St`,
+          `Nt`
+        ],
+        correctIndex: 2
+      },
+      {
+        id: 131,
+        sectionKey: `ch12`,
+        sectionLabel: `الفصل الثاني عشر: أنواع الشبكات العصبية`,
+        unitLabel: `الفصل الثاني عشر • الوحدة (3)`,
+        question: `يمكن تطبيق GAN على السيناريوهات التالية ما عدا؟`,
+        options: [
+          `إنشاء الصور.`,
+          `إنشاء النص`,
+          `تصنيف البيانات إلى فئتين.`,
+          `تحسين الكلام.`
+        ],
+        correctIndex: 2
+      },
+      {
+        id: 132,
+        sectionKey: `ch12`,
+        sectionLabel: `الفصل الثاني عشر: أنواع الشبكات العصبية`,
+        unitLabel: `الفصل الثاني عشر • الوحدة (3)`,
+        question: `أي من التالي يحدد ما إذا كانت بيانات العينة حقيقية؟`,
+        options: [
+          `الشبكة التوليدية.`,
+          `شبكة التمييز.`,
+          `شبكة التحديد.`,
+          `الشبكة الإنشائية.`
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 133,
+        sectionKey: `ch12`,
+        sectionLabel: `الفصل الثاني عشر: أنواع الشبكات العصبية`,
+        unitLabel: `الفصل الثاني عشر • الوحدة (3)`,
+        question: `يعتمد المولد هيكلية شبكة .`,
+        options: [
+          `RNN`,
+          `CNN`,
+          `GAN`,
+          `MLP`
+        ],
+        correctIndex: 3
+      },
+
+      // الفصل الثالث عشر: أطر التعلم العميق
+      {
+        id: 134,
+        sectionKey: `ch13`,
+        sectionLabel: `الفصل الثالث عشر: أطر التعلم العميق`,
+        unitLabel: `الفصل الثالث عشر • الوحدة (1)`,
+        question: `PyTorch هو إطار عمل حاسوبي قائم على لغة....`,
+        options: [
+          `البايثون`,
+          `الجافا.`,
+          `Lua`,
+          `C++`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 135,
+        sectionKey: `ch13`,
+        sectionLabel: `الفصل الثالث عشر: أطر التعلم العميق`,
+        unitLabel: `الفصل الثالث عشر • الوحدة (1)`,
+        question: `TensorFlow هي مكتبة برمجيات مفتوحة المصدر من الجيل الثاني من... للحوسبة الرقمية.`,
+        options: [
+          `Facebook`,
+          `Google`,
+          `GitHub`,
+          `GMU`
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 136,
+        sectionKey: `ch13`,
+        sectionLabel: `الفصل الثالث عشر: أطر التعلم العميق`,
+        unitLabel: `الفصل الثالث عشر • الوحدة (1)`,
+        question: `أي من التالي ليس من ضمن أطر التعلم العميق الموزعة الأصلية المدعومة؟`,
+        options: [
+          `TensorFlow`,
+          `CNTK`,
+          `MXNet`,
+          `PyTorch`
+        ],
+        correctIndex: 3
+      },
+      {
+        id: 137,
+        sectionKey: `ch13`,
+        sectionLabel: `الفصل الثالث عشر: أطر التعلم العميق`,
+        unitLabel: `الفصل الثالث عشر • الوحدة (2)`,
+        question: `المصفوفة هي Tensor من الرتبة....`,
+        options: [
+          `0`,
+          `1`,
+          `2`,
+          `3`
+        ],
+        correctIndex: 2
+      },
+      {
+        id: 138,
+        sectionKey: `ch13`,
+        sectionLabel: `الفصل الثالث عشر: أطر التعلم العميق`,
+        unitLabel: `الفصل الثالث عشر • الوحدة (2)`,
+        question: `من العمليات التي تنفذ توزيعات إحصائية متنوعة في tf؟`,
+        options: [
+          `tf.distributions`,
+          `tf.data.`,
+          `tf.error`,
+          `tf.io.gfile.`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 139,
+        sectionKey: `ch13`,
+        sectionLabel: `الفصل الثالث عشر: أطر التعلم العميق`,
+        unitLabel: `الفصل الثالث عشر • الوحدة (2)`,
+        question: `أي من التالي ليس من مميزات Keras؟`,
+        options: [
+          `سهلة الاستخدام.`,
+          `سهلة التوسيع.`,
+          `قابلية للتكوين والتركيب.`,
+          `توفر RBM`
+        ],
+        correctIndex: 3
+      },
+      {
+        id: 140,
+        sectionKey: `ch13`,
+        sectionLabel: `الفصل الثالث عشر: أطر التعلم العميق`,
+        unitLabel: `الفصل الثالث عشر • الوحدة (3)`,
+        question: `تندرج تحديد وظائف الخسارة، واختيار المحسنات تحت عملية؟`,
+        options: [
+          `تدريب النموذج والتحقق منه.`,
+          `حفظ النموذج.`,
+          `بناء الشبكة.`,
+          `تجهيز البيانات.`
+        ],
+        correctIndex: 2
+      },
+      {
+        id: 141,
+        sectionKey: `ch13`,
+        sectionLabel: `الفصل الثالث عشر: أطر التعلم العميق`,
+        unitLabel: `الفصل الثالث عشر • الوحدة (3)`,
+        question: `تسمى دالة سوفت ماكس أيضاً بالدلالة.....`,
+        options: [
+          `الأسية الطبيعية`,
+          `اللوغاريتم`,
+          `الهندسية`,
+          `النهائية`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 142,
+        sectionKey: `ch13`,
+        sectionLabel: `الفصل الثالث عشر: أطر التعلم العميق`,
+        unitLabel: `الفصل الثالث عشر • الوحدة (3)`,
+        question: `يشير.... إلى عدد تكرارات التدريب.`,
+        options: [
+          `epoch`,
+          `دالة التنشيط`,
+          `pooling`,
+          `Layers`
+        ],
+        correctIndex: 0
+      },
+
+      // الفصل الرابع عشر: آخر التطورات بالذكاء الاصطناعي وعلم البيانات
+      {
+        id: 143,
+        sectionKey: `ch14`,
+        sectionLabel: `الفصل الرابع عشر: آخر التطورات بالذكاء الاصطناعي وعلم البيانات`,
+        unitLabel: `الفصل الرابع عشر • الوحدة (1)`,
+        question: `أي من التالي مجال تطورها في الألعاب يركز على التعلم التعزيزي؟`,
+        options: [
+          `BERT`,
+          `XLNET`,
+          `ChatGPT`,
+          `AlphaStart`
+        ],
+        correctIndex: 3
+      },
+      {
+        id: 144,
+        sectionKey: `ch14`,
+        sectionLabel: `الفصل الرابع عشر: آخر التطورات بالذكاء الاصطناعي وعلم البيانات`,
+        unitLabel: `الفصل الرابع عشر • الوحدة (1)`,
+        question: `تطبيق شرائح الذكاء الاصطناعي على السحابة والأجهزة الحافة والمحطات الطرفية المحمولة، مما يحل مشكلة....`,
+        options: [
+          `أمن البيانات.`,
+          `اختيار النماذج.`,
+          `قوة الحوسبة.`,
+          `تقييم النظام.`
+        ],
+        correctIndex: 2
+      },
+      {
+        id: 145,
+        sectionKey: `ch14`,
+        sectionLabel: `الفصل الرابع عشر: آخر التطورات بالذكاء الاصطناعي وعلم البيانات`,
+        unitLabel: `الفصل الرابع عشر • الوحدة (1)`,
+        question: `على أساس ضمان خصوصية البيانات وأمانها يستخدم.... مصادر بيانات مختلفة لتدريب النماذج بشكل تعاوني`,
+        options: [
+          `التعلم الفيدرالي`,
+          `التعلم التقليدي.`,
+          `تعلم الآلة.`,
+          `التعلم العميق.`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 146,
+        sectionKey: `ch14`,
+        sectionLabel: `الفصل الرابع عشر: آخر التطورات بالذكاء الاصطناعي وعلم البيانات`,
+        unitLabel: `الفصل الرابع عشر • الوحدة (2)`,
+        question: `يتوقع في عام 2023 أن يتمتع 58% من سكان العالم بخدمات الجيل....`,
+        options: [
+          `الثاني.`,
+          `الخامس.`,
+          `العاشر.`,
+          `الرابع.`
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 147,
+        sectionKey: `ch14`,
+        sectionLabel: `الفصل الرابع عشر: آخر التطورات بالذكاء الاصطناعي وعلم البيانات`,
+        unitLabel: `الفصل الرابع عشر • الوحدة (2)`,
+        question: `من المتوقع في 2025 أن تصل كمية بيانات التخزين العالمية المنتجة سنوياً إلى 180.`,
+        options: [
+          `زيتا بايت.`,
+          `ميجابايت.`,
+          `جيجابايت.`,
+          `تيرابايت.`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 148,
+        sectionKey: `ch14`,
+        sectionLabel: `الفصل الرابع عشر: آخر التطورات بالذكاء الاصطناعي وعلم البيانات`,
+        unitLabel: `الفصل الرابع عشر • الوحدة (2)`,
+        question: `بالمستقبل سيتم إكمال المهام الخطرة عالية الدقة وعالية الكثافة بواسطة.. بشكل مستقل.`,
+        options: [
+          `الإنسان.`,
+          `تقنية الواقع الافتراضي.`,
+          `الروبوتات الصناعية.`,
+          `مساعد شخصي ذكي`
+        ],
+        correctIndex: 2
+      },
+      {
+        id: 149,
+        sectionKey: `ch14`,
+        sectionLabel: `الفصل الرابع عشر: آخر التطورات بالذكاء الاصطناعي وعلم البيانات`,
+        unitLabel: `الفصل الرابع عشر • الوحدة (3)`,
+        question: `.... يؤدي إلى نتائج غير عادلة وغير أخلاقية، مما يؤثر بشكل كبير على المجتمعات المهمشة.`,
+        options: [
+          `التحيز في النماذج.`,
+          `التركيز على الأخلاقيات`,
+          `تتبع المسؤوليات.`,
+          `الاعتماد المفرط.`
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 150,
+        sectionKey: `ch14`,
+        sectionLabel: `الفصل الرابع عشر: آخر التطورات بالذكاء الاصطناعي وعلم البيانات`,
+        unitLabel: `الفصل الرابع عشر • الوحدة (3)`,
+        question: `الحفاظ على توازن بين استخدام الذكاء الاصطناعي والإشراف البشري هو حل لمشكلة:`,
+        options: [
+          `التحيز في النماذج`,
+          `التنظيم القانوني`,
+          `الاستدامة البيئية`,
+          `الاعتماد المفرط.`
+        ],
+        correctIndex: 3
+      },
+      {
+        id: 151,
+        sectionKey: `ch14`,
+        sectionLabel: `الفصل الرابع عشر: آخر التطورات بالذكاء الاصطناعي وعلم البيانات`,
+        unitLabel: `الفصل الرابع عشر • الوحدة (3)`,
+        question: `الذكاء الاصطناعي.... يمثل تحدياً تقنياً كبيراً لأنه يستلزم أن يكون الذكاء الاصطناعي قادراً على القيام بمهام متعددة كما يفعل البشر`,
+        options: [
+          `الخاص.`,
+          `العام`,
+          `المنظم.`,
+          `الحديث.`
+        ],
+        correctIndex: 1
+      }
+    ];
+
+    const ARABIC_LETTERS = [`أ`, `ب`, `ج`, `د`, `هـ`];
+
+    const appState = {
+      mode: `all`,              // 'all' | 'exam' | 'assignments' | 'mistakes'
+      sectionFilter: `all`,
+      statusFilter: `all`,
+      searchQuery: ``,
+      isShuffled: false,
+      examSize: 30,
+      examQuestionIds: [],
+      questionOrder: QUESTION_BANK.map(function (q) { return q.id; }),
+      optionOrders: {},         // { [qId]: [0, 1, 2, 3] }
+      answers: {}               // { [qId]: originalOptionIndex }
+    };
+
+    const questionById = {};
+    QUESTION_BANK.forEach(function (q) {
+      questionById[q.id] = q;
+      appState.optionOrders[q.id] = q.options.map(function (_, idx) { return idx; });
+    });
+
+    function shuffleArray(arr) {
+      const copy = arr.slice();
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const tmp = copy[i];
+        copy[i] = copy[j];
+        copy[j] = tmp;
+      }
+      return copy;
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, `&amp;`)
+        .replace(/</g, `&lt;`)
+        .replace(/>/g, `&gt;`)
+        .replace(/"/g, `&quot;`)
+        .replace(/'/g, `&#39;`);
+    }
+
+    function formatBdiText(text) {
+      const escaped = escapeHtml(text);
+      return escaped.replace(/([A-Za-z][A-Za-z0-9\s\-\.\+\/\(\),:_]{2,})/g, function (match) {
+        return `<bdi dir="ltr">${match}</bdi>`;
+      });
+    }
+
+    function buildExamSet(size) {
+      const pool = appState.sectionFilter === `all`
+        ? QUESTION_BANK.map(function (q) { return q.id; })
+        : QUESTION_BANK.filter(function (q) { return q.sectionKey === appState.sectionFilter; }).map(function (q) { return q.id; });
+      const shuffled = shuffleArray(pool);
+      return shuffled.slice(0, Math.min(size, shuffled.length));
+    }
+
+    function persistState() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === `function`) {
+        window.notebookAppApi.setAppState({
+          mode: appState.mode,
+          sectionFilter: appState.sectionFilter,
+          statusFilter: appState.statusFilter,
+          isShuffled: appState.isShuffled,
+          examSize: appState.examSize,
+          examQuestionIds: appState.examQuestionIds,
+          questionOrder: appState.questionOrder,
+          optionOrders: appState.optionOrders,
+          answers: appState.answers
+        }).catch(function () {});
+      }
+    }
+
+    function getFilteredQuestions() {
+      let baseIds = appState.questionOrder.slice();
+
+      if (appState.mode === `exam`) {
+        if (!appState.examQuestionIds || appState.examQuestionIds.length === 0) {
+          appState.examQuestionIds = buildExamSet(appState.examSize);
+        }
+        const examSet = {};
+        appState.examQuestionIds.forEach(function (id) { examSet[id] = true; });
+        baseIds = appState.examQuestionIds.slice();
+        if (appState.isShuffled) {
+          baseIds = baseIds.filter(function (id) { return examSet[id]; });
+        }
+      } else if (appState.mode === `assignments`) {
+        baseIds = baseIds.filter(function (id) {
+          const q = questionById[id];
+          return q && (q.sectionKey === `hw1` || q.sectionKey === `hw2` || q.sectionKey === `hw3` || q.sectionKey === `self`);
+        });
+      } else if (appState.mode === `mistakes`) {
+        baseIds = baseIds.filter(function (id) {
+          const q = questionById[id];
+          const chosen = appState.answers[id];
+          return q && typeof chosen === `number` && chosen !== q.correctIndex;
+        });
+      }
+
+      if (appState.sectionFilter !== `all` && appState.mode !== `exam`) {
+        baseIds = baseIds.filter(function (id) {
+          const q = questionById[id];
+          return q && q.sectionKey === appState.sectionFilter;
+        });
+      }
+
+      if (appState.statusFilter !== `all`) {
+        baseIds = baseIds.filter(function (id) {
+          const q = questionById[id];
+          const chosen = appState.answers[id];
+          const hasAnswer = typeof chosen === `number`;
+          if (appState.statusFilter === `unanswered`) return !hasAnswer;
+          if (appState.statusFilter === `correct`) return hasAnswer && chosen === q.correctIndex;
+          if (appState.statusFilter === `wrong`) return hasAnswer && chosen !== q.correctIndex;
+          return true;
+        });
+      }
+
+      const query = appState.searchQuery.trim().toLowerCase();
+      if (query) {
+        baseIds = baseIds.filter(function (id) {
+          const q = questionById[id];
+          if (!q) return false;
+          if (q.question.toLowerCase().indexOf(query) !== -1) return true;
+          if (q.unitLabel.toLowerCase().indexOf(query) !== -1) return true;
+          for (let i = 0; i < q.options.length; i++) {
+            if (q.options[i].toLowerCase().indexOf(query) !== -1) return true;
+          }
+          return false;
+        });
+      }
+
+      return baseIds.map(function (id) { return questionById[id]; }).filter(Boolean);
+    }
+
+    function updateModeButtonsUI() {
+      const modeIds = [`all`, `exam`, `assignments`, `mistakes`];
+      modeIds.forEach(function (m) {
+        const btn = document.getElementById(`mode-` + m);
+        if (btn) {
+          btn.setAttribute(`aria-pressed`, appState.mode === m ? `true` : `false`);
+        }
+      });
+
+      let totalMistakes = 0;
+      QUESTION_BANK.forEach(function (q) {
+        const chosen = appState.answers[q.id];
+        if (typeof chosen === `number` && chosen !== q.correctIndex) {
+          totalMistakes++;
+        }
+      });
+
+      const mistakesCountEl = document.getElementById(`count-mode-mistakes`);
+      if (mistakesCountEl) mistakesCountEl.textContent = String(totalMistakes);
+
+      const examCountEl = document.getElementById(`count-mode-exam`);
+      if (examCountEl) {
+        examCountEl.textContent = String(appState.examQuestionIds.length || appState.examSize);
+      }
+
+      const examBanner = document.getElementById(`exam-banner`);
+      if (examBanner) {
+        examBanner.hidden = appState.mode !== `exam`;
+      }
+
+      const examTitle = document.getElementById(`exam-banner-title`);
+      if (examTitle) {
+        const count = appState.examQuestionIds.length || appState.examSize;
+        examTitle.textContent = `وضع محاكي الاختبار التجريبي (` + count + ` سؤالاً عشوائياً)`;
+      }
+
+      const shuffleIndicator = document.getElementById(`shuffle-indicator`);
+      if (shuffleIndicator) {
+        shuffleIndicator.textContent = appState.isShuffled
+          ? `الترتيب: مخلوط عشوائياً (الأسئلة والخيارات)`
+          : `الترتيب: التسلسل الأصلي للمقرر`;
+        shuffleIndicator.setAttribute(`data-status`, appState.isShuffled ? `info` : `neutral`);
+      }
+    }
+
+    function updateStatsUI(visibleQuestions) {
+      const total = visibleQuestions.length;
+      let answered = 0;
+      let correct = 0;
+      let wrong = 0;
+
+      visibleQuestions.forEach(function (q) {
+        const chosen = appState.answers[q.id];
+        if (typeof chosen === `number`) {
+          answered++;
+          if (chosen === q.correctIndex) {
+            correct++;
+          } else {
+            wrong++;
+          }
+        }
+      });
+
+      const remaining = total - answered;
+      const accuracy = answered > 0 ? Math.round((correct / answered) * 100) : 0;
+
+      let globalAnswered = 0;
+      QUESTION_BANK.forEach(function (q) {
+        if (typeof appState.answers[q.id] === `number`) globalAnswered++;
+      });
+
+      const statTotal = document.getElementById(`stat-total`);
+      const statTotalCap = document.getElementById(`stat-total-caption`);
+      const statAnswered = document.getElementById(`stat-answered`);
+      const statRemainingCap = document.getElementById(`stat-remaining-caption`);
+      const statCorrect = document.getElementById(`stat-correct`);
+      const statWrong = document.getElementById(`stat-wrong`);
+      const statPercent = document.getElementById(`stat-percent`);
+      const accuracyCard = document.getElementById(`accuracy-card`);
+
+      if (statTotal) statTotal.textContent = String(total);
+      if (statTotalCap) statTotalCap.textContent = `من أصل 151 سؤالاً`;
+      if (statAnswered) statAnswered.textContent = String(answered);
+      if (statRemainingCap) statRemainingCap.textContent = `متبقٍ ` + remaining + ` سؤالاً`;
+      if (statCorrect) statCorrect.textContent = String(correct);
+      if (statWrong) statWrong.textContent = String(wrong);
+      if (statPercent) statPercent.textContent = accuracy + `%`;
+
+      if (accuracyCard) {
+        if (answered === 0) {
+          accuracyCard.setAttribute(`data-status`, `warn`);
+        } else if (accuracy >= 75) {
+          accuracyCard.setAttribute(`data-status`, `ok`);
+        } else if (accuracy < 50) {
+          accuracyCard.setAttribute(`data-status`, `alert`);
+        } else {
+          accuracyCard.setAttribute(`data-status`, `warn`);
+        }
+      }
+
+      const correctPct = total > 0 ? (correct / total) * 100 : 0;
+      const wrongPct = total > 0 ? (wrong / total) * 100 : 0;
+      const progressCorrect = document.getElementById(`progress-correct`);
+      const progressWrong = document.getElementById(`progress-wrong`);
+      const progressWrap = document.getElementById(`progress-bar-wrap`);
+
+      if (progressCorrect) progressCorrect.style.width = correctPct.toFixed(2) + `%`;
+      if (progressWrong) progressWrong.style.width = wrongPct.toFixed(2) + `%`;
+      if (progressWrap) progressWrap.setAttribute(`aria-valuenow`, String(Math.round(correctPct + wrongPct)));
+
+      const legCorrect = document.getElementById(`legend-correct`);
+      const legWrong = document.getElementById(`legend-wrong`);
+      const legPending = document.getElementById(`legend-pending`);
+      const globalText = document.getElementById(`global-progress-text`);
+      const masteryChip = document.getElementById(`mastery-chip`);
+
+      if (legCorrect) legCorrect.textContent = String(correct);
+      if (legWrong) legWrong.textContent = String(wrong);
+      if (legPending) legPending.textContent = String(remaining);
+      if (globalText) globalText.textContent = `الإنجاز الكلي في البنك: ` + globalAnswered + ` من 151`;
+
+      if (masteryChip) {
+        if (answered === 0) {
+          masteryChip.textContent = `ابدأ بالإجابة لاحتساب التقدم`;
+          masteryChip.setAttribute(`data-status`, `info`);
+        } else if (accuracy >= 85) {
+          masteryChip.textContent = `أداء ممتاز (` + accuracy + `%)`;
+          masteryChip.setAttribute(`data-status`, `ok`);
+        } else if (accuracy >= 60) {
+          masteryChip.textContent = `تقدم جيد (` + accuracy + `%)`;
+          masteryChip.setAttribute(`data-status`, `info`);
+        } else {
+          masteryChip.textContent = `يحتاج لمزيد من المراجعة (` + accuracy + `%)`;
+          masteryChip.setAttribute(`data-status`, `alert`);
+        }
+      }
+    }
+
+    function renderQuestions() {
+      const container = document.getElementById(`questions-container`);
+      const viewHeading = document.getElementById(`view-heading`);
+      if (!container) return;
+
+      const visibleQuestions = getFilteredQuestions();
+      updateModeButtonsUI();
+      updateStatsUI(visibleQuestions);
+
+      if (viewHeading) {
+        viewHeading.textContent = `الأسئلة المعروضة (` + visibleQuestions.length + `)`;
+      }
+
+      if (visibleQuestions.length === 0) {
+        let emptyTitle = `لا توجد أسئلة مطابقة للتصفية الحالية`;
+        let emptyDesc = `جرّب تغيير القسم المحدد أو مسح عبارة البحث أو تبديل وضع العرض للعودة إلى الأسئلة.`;
+        let actionLabel = `عرض البنك الشامل (151)`;
+        let actionHandler = `resetFiltersToAll()`;
+
+        if (appState.mode === `mistakes`) {
+          emptyTitle = `لا توجد أخطاء مسجلة للمراجعة`;
+          emptyDesc = `لم تقع في أي خطأ حتى الآن، أو أنك صححت جميع الأخطاء المسجلة. استمر في الحل أو انتقل إلى محاكي الاختبار.`;
+        }
+
+        container.innerHTML = `
+          <div class="empty-state">
+            <h3 class="empty-state-title">` + escapeHtml(emptyTitle) + `</h3>
+            <p class="empty-state-desc">` + escapeHtml(emptyDesc) + `</p>
+            <button type="button" class="btn btn-primary" onclick="` + actionHandler + `">` + escapeHtml(actionLabel) + `</button>
+          </div>
+        `;
+        return;
+      }
+
+      const cardsHtml = visibleQuestions.map(function (q, displayIdx) {
+        const chosenOrigIdx = appState.answers[q.id];
+        const hasAnswered = typeof chosenOrigIdx === `number`;
+        const isCorrect = hasAnswered && chosenOrigIdx === q.correctIndex;
+        const cardState = !hasAnswered ? `unanswered` : (isCorrect ? `correct` : `wrong`);
+        const optOrder = appState.optionOrders[q.id] || q.options.map(function (_, idx) { return idx; });
+
+        const statusBadgeHtml = !hasAnswered
+          ? ``
+          : (isCorrect
+            ? `<span class="chip" data-status="ok">إجابة صحيحة ✓</span>`
+            : `<span class="chip" data-status="alert">إجابة خاطئة ✕</span>`);
+
+        const optionsHtml = optOrder.map(function (origIdx, posIdx) {
+          const letter = ARABIC_LETTERS[posIdx] || String(posIdx + 1);
+          const optText = q.options[origIdx];
+          let resultAttr = ``;
+          let markerHtml = ``;
+
+          if (hasAnswered) {
+            if (origIdx === q.correctIndex) {
+              resultAttr = ` data-result="correct"`;
+              markerHtml = `<span class="option-marker">✓</span>`;
+            } else if (origIdx === chosenOrigIdx) {
+              resultAttr = ` data-result="wrong"`;
+              markerHtml = `<span class="option-marker">✕</span>`;
+            } else {
+              resultAttr = ` data-result="muted"`;
+            }
+          }
+
+          return `
+            <button
+              type="button"
+              class="option-btn"` + resultAttr +
+              (hasAnswered ? ` disabled` : ``) +
+              ` onclick="selectOption(` + q.id + `, ` + origIdx + `)"
+            >
+              <span class="option-letter">` + escapeHtml(letter) + `</span>
+              <span class="option-text">` + formatBdiText(optText) + `</span>
+              ` + markerHtml + `
+            </button>
+          `;
+        }).join(``);
+
+        let footerHtml = ``;
+        if (hasAnswered) {
+          const correctPos = optOrder.indexOf(q.correctIndex);
+          const correctLetter = ARABIC_LETTERS[correctPos] || ``;
+          const correctText = q.options[q.correctIndex];
+          const feedbackHtml = isCorrect
+            ? `<span class="feedback-msg" data-status="ok">أحسنت! إجابة صحيحة ومطابقة للمفتاح المعتمد.</span>`
+            : `<span class="feedback-msg" data-status="alert">الإجابة الصحيحة هي: (` + escapeHtml(correctLetter) + `) ` + formatBdiText(correctText) + `</span>`;
+
+          footerHtml = `
+            <div class="question-footer">
+              ` + feedbackHtml + `
+              <button type="button" class="btn retry-btn" onclick="retryQuestion(` + q.id + `)">إعادة محاولة السؤال</button>
+            </div>
+          `;
+        }
+
+        const displayNumText = appState.mode === `all` && !appState.isShuffled && appState.sectionFilter === `all` && appState.statusFilter === `all` && !appState.searchQuery.trim()
+          ? `السؤال ` + q.id + ` من 151`
+          : `سؤال #` + q.id + ` (معروض ` + (displayIdx + 1) + `)`;
+
+        return `
+          <article class="question-card" id="q-card-` + q.id + `" data-state="` + cardState + `">
+            <div class="question-header">
+              <div class="question-tags">
+                <span class="chip" data-status="info">` + escapeHtml(q.unitLabel) + `</span>
+                <span class="q-number-badge">` + escapeHtml(displayNumText) + `</span>
+              </div>
+              ` + statusBadgeHtml + `
+            </div>
+            <h3 class="question-text">` + formatBdiText(q.question) + `</h3>
+            <div class="options-grid">
+              ` + optionsHtml + `
+            </div>
+            ` + footerHtml + `
+          </article>
+        `;
+      }).join(``);
+
+      container.innerHTML = cardsHtml;
+    }
+
+    // ============== Hoisted Interactive Handlers ==============
+    function selectOption(questionId, origOptionIdx) {
+      if (typeof appState.answers[questionId] === `number`) return;
+      appState.answers[questionId] = origOptionIdx;
+      persistState();
+      renderQuestions();
+    }
+
+    function retryQuestion(questionId) {
+      delete appState.answers[questionId];
+      persistState();
+      renderQuestions();
+    }
+
+    function setMode(mode) {
+      appState.mode = mode;
+      if (mode === `exam` && (!appState.examQuestionIds || appState.examQuestionIds.length === 0)) {
+        appState.examQuestionIds = buildExamSet(appState.examSize);
+      }
+      persistState();
+      renderQuestions();
+    }
+
+    function generateNewExam(clearExamAnswers) {
+      if (clearExamAnswers && appState.examQuestionIds) {
+        appState.examQuestionIds.forEach(function (id) {
+          delete appState.answers[id];
+        });
+      }
+      appState.examQuestionIds = buildExamSet(appState.examSize);
+      appState.mode = `exam`;
+      persistState();
+      renderQuestions();
+    }
+
+    function changeExamSize(val) {
+      const parsed = parseInt(val, 10);
+      appState.examSize = isNaN(parsed) ? 30 : parsed;
+      appState.examQuestionIds = buildExamSet(appState.examSize);
+      persistState();
+      renderQuestions();
+    }
+
+    function handleSectionChange(val) {
+      appState.sectionFilter = val;
+      if (appState.mode === `mistakes` || appState.mode === `exam`) {
+        appState.mode = `all`;
+      }
+      persistState();
+      renderQuestions();
+    }
+
+    function handleStatusFilterChange(val) {
+      appState.statusFilter = val;
+      persistState();
+      renderQuestions();
+    }
+
+    function handleSearchChange(val) {
+      appState.searchQuery = val || ``;
+      renderQuestions();
+    }
+
+    function shuffleQuestionsAndOptions() {
+      appState.questionOrder = shuffleArray(appState.questionOrder);
+      QUESTION_BANK.forEach(function (q) {
+        const indices = q.options.map(function (_, idx) { return idx; });
+        appState.optionOrders[q.id] = shuffleArray(indices);
+      });
+      if (appState.mode === `exam` && appState.examQuestionIds.length > 0) {
+        appState.examQuestionIds = shuffleArray(appState.examQuestionIds);
+      }
+      appState.isShuffled = true;
+      persistState();
+      renderQuestions();
+    }
+
+    function restoreDefaultOrder() {
+      appState.questionOrder = QUESTION_BANK.map(function (q) { return q.id; });
+      QUESTION_BANK.forEach(function (q) {
+        appState.optionOrders[q.id] = q.options.map(function (_, idx) { return idx; });
+      });
+      appState.isShuffled = false;
+      persistState();
+      renderQuestions();
+    }
+
+    function resetFiltersToAll() {
+      appState.mode = `all`;
+      appState.sectionFilter = `all`;
+      appState.statusFilter = `all`;
+      appState.searchQuery = ``;
+      const sectionEl = document.getElementById(`section-filter`);
+      const statusEl = document.getElementById(`status-filter`);
+      const searchEl = document.getElementById(`search-input`);
+      if (sectionEl) sectionEl.value = `all`;
+      if (statusEl) statusEl.value = `all`;
+      if (searchEl) searchEl.value = ``;
+      persistState();
+      renderQuestions();
+    }
+
+    function handleResetProgress(btn) {
+      const noteEl = document.getElementById(`reset-helper-note`);
+      if (btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.classList.remove(`btn-danger-outline`);
+        btn.classList.add(`btn-danger-armed`);
+        const span = btn.querySelector(`span`);
+        if (span) span.textContent = `تأكيد مسح جميع الإجابات؟`;
+        if (noteEl) noteEl.textContent = `اضغط مرة أخرى الآن للتأكيد النهائي`;
+        return;
+      }
+
+      btn.dataset.armed = `false`;
+      btn.classList.remove(`btn-danger-armed`);
+      btn.classList.add(`btn-danger-outline`);
+      const span = btn.querySelector(`span`);
+      if (span) span.textContent = `إعادة تعيين التقدم`;
+      if (noteEl) noteEl.textContent = `تمت إعادة تعيين جميع الإجابات بنجاح`;
+
+      appState.answers = {};
+      if (appState.mode === `mistakes`) {
+        appState.mode = `all`;
+      }
+      persistState();
+      renderQuestions();
+    }
+
+    function restoreFromSavedState(saved) {
+      if (!saved || typeof saved !== `object`) return;
+      if (typeof saved.mode === `string`) appState.mode = saved.mode;
+      if (typeof saved.sectionFilter === `string`) appState.sectionFilter = saved.sectionFilter;
+      if (typeof saved.statusFilter === `string`) appState.statusFilter = saved.statusFilter;
+      if (typeof saved.isShuffled === `boolean`) appState.isShuffled = saved.isShuffled;
+      if (typeof saved.examSize === `number`) appState.examSize = saved.examSize;
+      if (Array.isArray(saved.examQuestionIds)) appState.examQuestionIds = saved.examQuestionIds;
+      if (Array.isArray(saved.questionOrder) && saved.questionOrder.length === QUESTION_BANK.length) {
+        appState.questionOrder = saved.questionOrder;
+      }
+      if (saved.optionOrders && typeof saved.optionOrders === `object`) {
+        Object.keys(saved.optionOrders).forEach(function (k) {
+          if (Array.isArray(saved.optionOrders[k])) {
+            appState.optionOrders[k] = saved.optionOrders[k];
+          }
+        });
+      }
+      if (saved.answers && typeof saved.answers === `object`) {
+        appState.answers = saved.answers;
+      }
+
+      const sectionEl = document.getElementById(`section-filter`);
+      const statusEl = document.getElementById(`status-filter`);
+      const examSizeEl = document.getElementById(`exam-size-select`);
+      if (sectionEl) sectionEl.value = appState.sectionFilter;
+      if (statusEl) statusEl.value = appState.statusFilter;
+      if (examSizeEl) examSizeEl.value = String(appState.examSize);
+    }
+
+    async function initApp() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === `function`) {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved) {
+            restoreFromSavedState(saved);
+          }
+        }
+      } catch (err) {
+        // Fallback cleanly to default initial state
+      }
+
+      renderQuestions();
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    if (document.readyState === `loading`) {
+      document.addEventListener(`DOMContentLoaded`, initApp);
+    } else {
+      initApp();
+    }
+  </script>
+</body>
+</html>

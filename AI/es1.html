@@ -1,0 +1,2212 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="briefing">
+  <title>الدليل التفاعلي لمقرر الذكاء الاصطناعي — خلاصة المحاضرة المباشرة واستراتيجية الاختبار</title>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces: warm stone-white paper */
+      --background: #faf9f5;
+      --surface-container-low: #ffffff;
+      --surface-container: #f1efe8;
+      --surface-container-high: #e6e2d6;
+
+      /* Ink */
+      --on-surface: #17181a;
+      --on-surface-variant: #56585c;
+
+      /* Rules */
+      --outline: #17181a;
+      --outline-variant: #dedad0;
+
+      /* Accents */
+      --primary: #17181a;
+      --on-primary: #faf9f5;
+      --primary-container: #f2b705;
+      --on-primary-container: #17181a;
+      --secondary: #1f4e5f;
+      --tertiary: #785008;
+      --error: #b42318;
+      --on-error: #ffffff;
+
+      /* Tag and soft accent fills */
+      --tag-bg: #f5e6c4;
+      --secondary-soft: #e6eff2;
+      --positive-soft: #e6f2ec;
+      --error-soft: #fbeae8;
+      --border-muted: #c8c4b8;
+
+      /* Data series */
+      --data-1: #1f4e5f;
+      --data-2: #d99000;
+      --data-3: #2b6e52;
+      --data-4: #b84a39;
+      --data-context: #c4bfb2;
+
+      /* Fonts (Arabic first, then Briefing Latin/Mono stack) */
+      --font-headline: 'Amiri', 'Source Serif 4', serif;
+      --font-body: 'IBM Plex Sans Arabic', 'Plus Jakarta Sans', sans-serif;
+      --font-label: 'IBM Plex Sans Arabic', 'Geist Mono', monospace;
+      --font-mono: 'Geist Mono', monospace;
+
+      /* Shape */
+      --rounded: 0.25rem;
+      --rounded-lg: 0.375rem;
+      --rounded-full: 0.25rem;
+
+      /* Style effects */
+      --section-rule: 1.5px solid var(--outline);
+      --card-border: 1px solid var(--outline-variant);
+      --badge-radius: 2px;
+      --heading-tracking: 0;
+      --label-tracking: 0;
+
+      /* Shared semantic tokens */
+      --positive: #1f6b49;
+      --warning: #9a5b00;
+      --focus: #1f4e5f;
+
+      /* Type scale (Narrative) */
+      --display-size: clamp(2.15rem, 1.4rem + 2.8vw, 3.35rem);
+      --headline-size: clamp(1.55rem, 1.15rem + 1.5vw, 2.2rem);
+      --subhead-size: clamp(1.15rem, 1.05rem + 0.45vw, 1.375rem);
+      --body-size: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+      --label-size: clamp(0.75rem, 0.72rem + 0.12vw, 0.8125rem);
+
+      /* Spacing scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 5.5rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.65;
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+    }
+    header { position: static !important; }
+    button, input, select, textarea {
+      font-family: inherit;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-xl);
+      padding: var(--space-lg);
+      max-width: 1120px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Briefing Dossier Header & Section Bars */
+    .dossier-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      border-bottom: var(--section-rule);
+      padding-bottom: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+    .dossier-bar-start {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .dossier-pill {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 0.78rem;
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--badge-radius);
+      display: inline-block;
+    }
+    .dossier-meta {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      font-weight: 500;
+    }
+    .index-num {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      font-size: var(--label-size);
+      color: var(--secondary);
+      font-variant-numeric: tabular-nums;
+      direction: ltr;
+      display: inline-block;
+    }
+
+    .hero-header {
+      padding-top: var(--space-md);
+      padding-bottom: var(--space-lg);
+      border-bottom: var(--card-border);
+    }
+    .hero-title {
+      font-family: var(--font-headline);
+      font-size: var(--display-size);
+      font-weight: 700;
+      line-height: 1.18;
+      margin: 0 0 var(--space-sm) 0;
+      color: var(--on-surface);
+    }
+    .standfirst {
+      font-family: var(--font-body);
+      font-size: var(--subhead-size);
+      font-weight: 600;
+      color: var(--secondary);
+      margin: 0 0 var(--space-lg) 0;
+      max-width: 65ch;
+      line-height: 1.5;
+    }
+
+    /* Quick Stats Strip in Hero */
+    .hero-metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr));
+      gap: var(--space-md);
+      margin-bottom: var(--space-lg);
+    }
+    .figure-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+    }
+    .figure-card .label {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      font-weight: 600;
+      margin-bottom: var(--space-xs);
+    }
+    .figure-card .value {
+      font-family: var(--font-headline);
+      font-size: 1.85rem;
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--on-surface);
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    .figure-card .note {
+      font-size: var(--label-size);
+      color: var(--secondary);
+      margin-top: var(--space-xs);
+      font-weight: 500;
+    }
+
+    /* Section Jump Nav & Progress Bar */
+    .toc-strip {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      background: var(--surface-container);
+      border-top: var(--section-rule);
+      padding: var(--space-md);
+      border-radius: var(--rounded);
+    }
+    .toc-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    .toc-link {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-sm);
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded);
+      color: var(--on-surface);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 600;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .toc-link:hover {
+      background: var(--surface-container-high);
+      border-color: var(--outline);
+    }
+    .progress-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--secondary);
+    }
+    .progress-track {
+      width: 110px;
+      height: 8px;
+      background: var(--outline-variant);
+      border-radius: var(--rounded);
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--secondary);
+      transition: width var(--dur-short) var(--ease-out);
+    }
+
+    /* Narrative Sections */
+    .narrative-section {
+      padding-top: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+    .section-title {
+      font-family: var(--font-headline);
+      font-size: var(--headline-size);
+      font-weight: 700;
+      line-height: 1.22;
+      margin: 0;
+      color: var(--on-surface);
+    }
+    .section-lead {
+      font-size: var(--body-size);
+      color: var(--on-surface-variant);
+      margin: var(--space-xs) 0 0 0;
+      max-width: 65ch;
+    }
+    .prose-block {
+      max-width: 65ch;
+      margin: 0;
+    }
+
+    /* Asymmetric Layouts */
+    .split-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+    .split-grid-equal {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-lg);
+      align-items: start;
+    }
+
+    .aside-box {
+      background: var(--surface-container);
+      border-top: var(--section-rule);
+      padding: var(--space-md) var(--space-lg);
+      border-radius: var(--rounded);
+    }
+    .aside-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--on-surface);
+      margin: 0 0 var(--space-sm) 0;
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .tag-chip {
+      display: inline-block;
+      background: var(--tag-bg);
+      color: var(--tertiary);
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--rounded);
+    }
+    .tag-chip--exam {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    .tag-chip--slate {
+      background: var(--secondary-soft);
+      color: var(--secondary);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--primary);
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+    .btn-primary:hover {
+      background: var(--secondary);
+      border-color: var(--secondary);
+    }
+    .btn-secondary {
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      border-color: var(--border-muted);
+    }
+    .btn-secondary:hover {
+      background: var(--surface-container-high);
+      border-color: var(--outline);
+    }
+    .btn-secondary[aria-pressed="true"],
+    .btn-secondary.is-active {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* 7 AI Properties Interactive Pills */
+    .props-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+    .prop-detail-box {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-right: 4px solid var(--secondary);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+    }
+
+    /* Sciences Explorer */
+    .science-tabs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(155px, 100%), 1fr));
+      gap: var(--space-sm);
+    }
+    .science-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: right;
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded-lg);
+      cursor: pointer;
+      color: var(--on-surface);
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .science-btn:hover {
+      background: var(--surface-container);
+      border-color: var(--outline);
+    }
+    .science-btn[aria-selected="true"] {
+      background: var(--secondary);
+      color: var(--on-primary);
+      border-color: var(--secondary);
+    }
+    .science-btn[aria-selected="true"] .index-num {
+      color: var(--primary-container);
+    }
+    .science-panel {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+    }
+
+    /* Concentric AI > ML > DL Interactive Diagram */
+    .hierarchy-wrapper {
+      container-type: inline-size;
+    }
+    .hierarchy-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+      gap: var(--space-lg);
+      align-items: center;
+    }
+    .svg-box {
+      width: 100%;
+      max-width: 420px;
+      margin: 0 auto;
+      display: block;
+    }
+    .ring-group {
+      cursor: pointer;
+      transition: opacity var(--dur-short) var(--ease-out);
+    }
+    .ring-group:hover { opacity: 0.92; }
+
+    /* Domains Grid */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .domain-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .domain-card h3 {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--on-surface);
+    }
+    .domain-card p {
+      margin: 0;
+      font-size: 0.9375rem;
+      color: var(--on-surface-variant);
+    }
+
+    /* Human Baseline Chart */
+    .chart-bars {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+      margin-top: var(--space-md);
+    }
+    .bar-row {
+      display: grid;
+      grid-template-columns: minmax(0, 180px) minmax(0, 1fr);
+      gap: var(--space-md);
+      align-items: center;
+    }
+    .bar-track {
+      position: relative;
+      height: 28px;
+      background: var(--surface-container);
+      border-radius: var(--rounded);
+      border: 1px solid var(--outline-variant);
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 0 var(--space-sm);
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--on-primary);
+    }
+    .bar-fill--above { background: var(--data-3); width: 92%; }
+    .bar-fill--mid { background: var(--data-2); color: var(--on-primary-container); width: 68%; }
+    .bar-fill--below { background: var(--data-4); width: 44%; }
+    .baseline-marker {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 72%;
+      width: 2px;
+      background: var(--outline);
+    }
+
+    /* PEAS Interactive Lab */
+    .peas-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+    .peas-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .peas-cell {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-top: 3px solid var(--secondary);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+    }
+    .peas-letter {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: var(--secondary);
+      direction: ltr;
+      display: inline-block;
+    }
+
+    /* 6 Agents Comparator */
+    .agent-selector-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(170px, 100%), 1fr));
+      gap: var(--space-sm);
+    }
+    .agent-tab {
+      min-height: 48px;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded-lg);
+      text-align: right;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      color: var(--on-surface);
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .agent-tab:hover {
+      background: var(--surface-container);
+      border-color: var(--outline);
+    }
+    .agent-tab[aria-selected="true"] {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+    .agent-tab[aria-selected="true"] .agent-en {
+      color: var(--primary-container);
+    }
+    .agent-en {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--secondary);
+      direction: ltr;
+      text-align: right;
+    }
+    .compare-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      gap: var(--space-md);
+      margin-top: var(--space-md);
+      padding: var(--space-md);
+      background: var(--surface-container);
+      border-radius: var(--rounded-lg);
+    }
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      min-width: 210px;
+      flex: 1;
+    }
+    .field-label {
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--on-surface);
+    }
+    .select-input, .text-input {
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--surface-container-low);
+      border: 1px solid var(--border-muted);
+      border-radius: var(--rounded);
+      color: var(--on-surface);
+      font-size: 0.9375rem;
+    }
+
+    /* Data Table (Briefing style) */
+    .table-wrap {
+      overflow-x: auto;
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+    }
+    table.briefing-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: right;
+      font-size: 0.9375rem;
+    }
+    table.briefing-table thead th {
+      background: var(--surface-container);
+      border-bottom: var(--section-rule);
+      padding: var(--space-sm) var(--space-md);
+      font-weight: 700;
+      color: var(--on-surface);
+      white-space: nowrap;
+    }
+    table.briefing-table tbody td {
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: 1px solid var(--outline-variant);
+      vertical-align: top;
+    }
+    table.briefing-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Glossary & Exam Prep */
+    .glossary-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      gap: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+    .glossary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+      gap: var(--space-sm);
+    }
+    .glossary-item {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      padding: var(--space-sm) var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .glossary-en {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--secondary);
+      direction: ltr;
+      text-align: right;
+    }
+    .glossary-en.is-masked {
+      background: var(--surface-container-high);
+      color: transparent;
+      border-radius: var(--rounded);
+      user-select: none;
+    }
+
+    /* Checklist */
+    .checklist {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      padding: var(--space-sm) var(--space-md);
+      cursor: pointer;
+    }
+    .check-item input[type="checkbox"] {
+      width: 22px;
+      height: 22px;
+      margin-top: 2px;
+      accent-color: var(--secondary);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .check-item.is-done {
+      background: var(--positive-soft);
+      border-color: var(--positive);
+    }
+
+    /* Quiz Module */
+    .quiz-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+    }
+    .quiz-options {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-sm);
+      margin: var(--space-md) 0;
+    }
+    .quiz-option {
+      min-height: 48px;
+      padding: var(--space-sm) var(--space-md);
+      text-align: right;
+      background: var(--background);
+      border: 1px solid var(--border-muted);
+      border-radius: var(--rounded);
+      cursor: pointer;
+      font-size: 0.96rem;
+      font-weight: 500;
+      color: var(--on-surface);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .quiz-option:hover:not(:disabled) {
+      background: var(--surface-container);
+      border-color: var(--outline);
+    }
+    .quiz-option.is-correct {
+      background: var(--positive-soft);
+      border-color: var(--positive);
+      color: var(--on-surface);
+      font-weight: 700;
+    }
+    .quiz-option.is-wrong {
+      background: var(--error-soft);
+      border-color: var(--error);
+      color: var(--on-surface);
+    }
+    .quiz-feedback {
+      padding: var(--space-md);
+      border-radius: var(--rounded);
+      margin-top: var(--space-sm);
+      font-size: 0.9375rem;
+    }
+    .quiz-feedback--ok {
+      background: var(--positive-soft);
+      border-right: 4px solid var(--positive);
+    }
+    .quiz-feedback--err {
+      background: var(--error-soft);
+      border-right: 4px solid var(--error);
+    }
+    .quiz-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--outline-variant);
+    }
+
+    /* Footer */
+    .dossier-footer {
+      border-top: var(--section-rule);
+      padding: var(--space-lg) 0 var(--space-xl) 0;
+      font-size: 0.875rem;
+      color: var(--on-surface-variant);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+
+    /* Container Queries & Responsive Rules */
+    @container (max-width: 680px) {
+      .hierarchy-layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+    @media (max-width: 780px) {
+      .split-grid, .split-grid-equal {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .bar-row {
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--space-xs);
+      }
+    }
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-md);
+        gap: var(--space-lg);
+      }
+      .figure-card {
+        padding: var(--space-md);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page-grid">
+    <!-- HEADER / MASTHEAD -->
+    <header class="hero-header">
+      <div class="dossier-bar">
+        <div class="dossier-bar-start">
+          <span class="dossier-pill">ملخص المراجعة الشاملة</span>
+          <span class="dossier-meta">مقرر الذكاء الاصطناعي · <bdi dir="ltr">APP-3271</bdi> · المحاضرة المباشرة الأولى</span>
+        </div>
+        <span class="dossier-meta">دليل المذاكرة والاختبار</span>
+      </div>
+
+      <h1 class="hero-title">مراجعة الذكاء الاصطناعي: من المفهوم والعلوم المتداخلة إلى هندسة الوكلاء الأذكياء</h1>
+      <p class="standfirst">تغطية شاملة لكل ما شرحه الدكتور في المحاضرة المباشرة الأولى — مركّزة على الفهم المفاهيمي، والتمييز الدقيق بين أنواع الوكلاء الأذكياء، واستراتيجية الاستعداد للاختبار.</p>
+
+      <div class="hero-metrics">
+        <div class="figure-card">
+          <div class="label">أنواع الوكلاء الأذكياء</div>
+          <div class="value">6 تصنيفات</div>
+          <div class="note">المطلوب: فهم الفرق لا حفظ المخطط</div>
+        </div>
+        <div class="figure-card">
+          <div class="label">العلوم المرتبطة بالمقرر</div>
+          <div class="value">5 علوم رئيسية</div>
+          <div class="note">الحاسوب، الرياضيات، النفس، الأحياء، اللغويات</div>
+        </div>
+        <div class="figure-card">
+          <div class="label">مصادر المذاكرة الإلزامية</div>
+          <div class="value">3 مصادر فقط</div>
+          <div class="note">الشرائح + المسجلة + التقييمات (لا كتب)</div>
+        </div>
+        <div class="figure-card">
+          <div class="label">طبيعة أسئلة الاختبار</div>
+          <div class="value">مفاهيم ومنطق</div>
+          <div class="note">بلا كتابة أكواد برمجية وبلا آلة حاسبة</div>
+        </div>
+      </div>
+
+      <nav class="toc-strip" aria-label="أقسام المراجعة">
+        <div class="toc-links">
+          <a class="toc-link" href="#sec-foundations"><span class="index-num">01</span> المفهوم والخصائص</a>
+          <a class="toc-link" href="#sec-sciences"><span class="index-num">02</span> ارتباطه بالعلوم</a>
+          <a class="toc-link" href="#sec-domains"><span class="index-num">03</span> المجالات والتعلم العميق</a>
+          <a class="toc-link" href="#sec-peas"><span class="index-num">04</span> الوكيل الذكي وPEAS</a>
+          <a class="toc-link" href="#sec-agents"><span class="index-num">05</span> أنواع الوكلاء الستة</a>
+          <a class="toc-link" href="#sec-exam"><span class="index-num">06</span> الاختبار والمصادر</a>
+        </div>
+        <div class="progress-pill" aria-live="polite">
+          <span id="study-progress-text">جاهزية المذاكرة: 0%</span>
+          <div class="progress-track" aria-hidden="true">
+            <div class="progress-fill" id="study-progress-fill"></div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <!-- SECTION 01: CONCEPT, EVOLUTION & 7 PROPERTIES -->
+    <section id="sec-foundations" class="narrative-section">
+      <div class="dossier-bar">
+        <div class="dossier-bar-start">
+          <span class="index-num">01</span>
+          <span class="dossier-pill">الأساس النظري</span>
+        </div>
+        <span class="dossier-meta">التعريف · الطفرة التقنية · الخصائص السبع</span>
+      </div>
+
+      <div>
+        <h2 class="section-title">الذكاء الاصطناعي هو محاكاة للسلوك البشري داخل بيئة محيطة عبر خوارزميات ومنطق</h2>
+        <p class="section-lead">افتتح الدكتور المراجعة بتحديد المقصود الدقيق بالذكاء الاصطناعي، وكيف انتقل من نتائج بطيئة وغير مقنعة قديماً إلى تطبيقات عالية الكفاءة اليوم.</p>
+      </div>
+
+      <div class="split-grid">
+        <div class="figure-card">
+          <span class="tag-chip tag-chip--slate">المفهوم الأساسي في المحاضرة</span>
+          <p class="prose-block" style="margin-top: var(--space-sm);">
+            الذكاء الاصطناعي مجال من مجالات الحاسب الآلي هدفه تطوير برمجيات وتطبيقات وأدوات <strong>تحاكي السلوك البشري وقدراته المعرفية والعقلية</strong>. الجوهر هنا هو بناء محاكاة (<bdi dir="ltr">Simulation</bdi>) تجعل التطبيقات تتفاعل مع البيئة المحيطة كما يتفاعل الإنسان ويتصرف، استناداً إلى علاقات منطقية وخوارزميات وعمليات حسابية.
+          </p>
+          <p class="prose-block" style="margin-top: var(--space-sm);">
+            وبصياغة مختصرة ذكرها الدكتور: هو <strong>«قدرة الآلة على التصرف كالبشر»</strong>، أو بناء برمجيات قادرة على أداء سلوكيات توصف بالذكاء، بحيث تستقبل المدخلات من البيئة المحيطة وتستجيب لها كما يتصرف العقل البشري.
+          </p>
+        </div>
+
+        <aside class="aside-box">
+          <h3 class="aside-title">لماذا تطور الذكاء الاصطناعي الآن تحديداً؟</h3>
+          <p style="margin: 0 0 var(--space-sm) 0; font-size: 0.9375rem; color: var(--on-surface-variant);">
+            سابقاً كان الحصول على النتائج بطيئاً وكانت المخرجات غير مقنعة (<bdi dir="ltr">Not Satisfied</bdi>). حدثت القفزة الحالية لتوفر ثلاثة عوامل مجتمعة:
+          </p>
+          <ul style="margin: 0; padding-right: var(--space-lg); font-size: 0.9375rem;">
+            <li><strong>البنية التحتية التقنية</strong> المتطورة.</li>
+            <li><strong>المعالجات القوية</strong> القادرة على معالجة كم هائل من العمليات.</li>
+            <li><strong>البيانات الضخمة (<bdi dir="ltr">Big Data</bdi>)</strong> المتوفرة من مصادر مختلفة.</li>
+          </ul>
+        </aside>
+      </div>
+
+      <div class="figure-card">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-sm);">
+          <h3 style="margin: 0; font-size: 1.15rem;">متى نقول أن هناك ذكاءً اصطناعياً؟ — استكشف الخصائص السبع</h3>
+          <span class="tag-chip tag-chip--exam">نقطة اختبار مهمة</span>
+        </div>
+        <p style="margin: 0 0 var(--space-md) 0; font-size: 0.9375rem; color: var(--on-surface-variant);">اختر أي خاصية من الخصائص التي حددها الدكتور لقراءة توصيفها الدقيق:</p>
+
+        <div class="props-grid" role="tablist" aria-label="خصائص الذكاء الاصطناعي السبع">
+          <button type="button" class="btn btn-secondary is-active" role="tab" aria-selected="true" onclick="selectProperty(0, this)">1. التفكير والإدراك</button>
+          <button type="button" class="btn btn-secondary" role="tab" aria-selected="false" onclick="selectProperty(1, this)">2. اكتساب المعرفة والتعلم</button>
+          <button type="button" class="btn btn-secondary" role="tab" aria-selected="false" onclick="selectProperty(2, this)">3. استخدام الخبرات السابقة</button>
+          <button type="button" class="btn btn-secondary" role="tab" aria-selected="false" onclick="selectProperty(3, this)">4. التعامل مع المواقف الغامضة</button>
+          <button type="button" class="btn btn-secondary" role="tab" aria-selected="false" onclick="selectProperty(4, this)">5. التنبؤ</button>
+          <button type="button" class="btn btn-secondary" role="tab" aria-selected="false" onclick="selectProperty(5, this)">6. الإبداع</button>
+          <button type="button" class="btn btn-secondary" role="tab" aria-selected="false" onclick="selectProperty(6, this)">7. الفهم والإدراك المرئي</button>
+        </div>
+
+        <div class="prop-detail-box" id="property-detail" aria-live="polite">
+          <strong style="color: var(--secondary); display: block; margin-bottom: var(--space-xs);">1. التفكير والإدراك</strong>
+          <p style="margin: 0;">لا يقتصر النظام على تنفيذ أوامر جامدة، بل يُبنى على آليات استدلال وإدراك للمعطيات المحيطة تمكنه من تحليل الموقف قبل التصرف.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 02: INTERDISCIPLINARY SCIENCES -->
+    <section id="sec-sciences" class="narrative-section">
+      <div class="dossier-bar">
+        <div class="dossier-bar-start">
+          <span class="index-num">02</span>
+          <span class="dossier-pill">التكامل المعرفي</span>
+        </div>
+        <span class="dossier-meta">علاقة الذكاء الاصطناعي بالعلوم الخمسة</span>
+      </div>
+
+      <div>
+        <h2 class="section-title">الذكاء الاصطناعي لا يعمل بمعزل: خمسة علوم تغذّي خوارزمياته وسلوكه</h2>
+        <p class="section-lead">لأن الهدف هو محاكاة العقل والسلوك البشري، يرتبط الذكاء الاصطناعي ارتباطاً مباشراً بخمسة علوم أساسية فصلها الدكتور في المحاضرة.</p>
+      </div>
+
+      <div class="science-tabs" role="tablist" aria-label="العلوم المرتبطة بالذكاء الاصطناعي">
+        <button type="button" class="science-btn" role="tab" aria-selected="true" onclick="selectScience(0, this)">
+          <span class="index-num">01</span>
+          <strong>علم الحاسوب والهندسة</strong>
+        </button>
+        <button type="button" class="science-btn" role="tab" aria-selected="false" onclick="selectScience(1, this)">
+          <span class="index-num">02</span>
+          <strong>علم الرياضيات</strong>
+        </button>
+        <button type="button" class="science-btn" role="tab" aria-selected="false" onclick="selectScience(2, this)">
+          <span class="index-num">03</span>
+          <strong>علم النفس</strong>
+        </button>
+        <button type="button" class="science-btn" role="tab" aria-selected="false" onclick="selectScience(3, this)">
+          <span class="index-num">04</span>
+          <strong>علم الأحياء</strong>
+        </button>
+        <button type="button" class="science-btn" role="tab" aria-selected="false" onclick="selectScience(4, this)">
+          <span class="index-num">05</span>
+          <strong>علم اللغويات</strong>
+        </button>
+      </div>
+
+      <div class="science-panel" id="science-panel" aria-live="polite">
+        <div class="split-grid">
+          <div>
+            <span class="tag-chip" id="science-tag">علاقة تأسيسية لا نقاش فيها</span>
+            <h3 id="science-title" style="margin: var(--space-sm) 0; font-size: 1.35rem;">علم الحاسوب والهندسة</h3>
+            <p id="science-desc" style="margin: 0 0 var(--space-md) 0;">يمدّ الذكاء الاصطناعي بالبنية التنفيذية اللازمة للتعامل مع المعطيات البيئية وبناء الأنظمة الفعلية.</p>
+            <div style="font-weight: 700; font-size: 0.9rem; color: var(--secondary); margin-bottom: var(--space-xs);">الركائز التي ذكرها الدكتور:</div>
+            <ul id="science-points" style="margin: 0; padding-right: var(--space-lg);">
+              <li>المعطيات البيئية والنمذجة (<bdi dir="ltr">Modeling</bdi>).</li>
+              <li>الروبوتات وأنظمة التحكم (<bdi dir="ltr">Robotics & Control</bdi>).</li>
+              <li>بناء وتصميم الخوارزميات (<bdi dir="ltr">Algorithms</bdi>).</li>
+            </ul>
+          </div>
+          <div class="aside-box">
+            <h4 style="margin: 0 0 var(--space-xs) 0; font-size: 0.95rem; color: var(--secondary);">زاوية الاختبار السريعة</h4>
+            <p id="science-exam-tip" style="margin: 0; font-size: 0.92rem;">إذا سُئلت عن العلم المسؤول عن بناء النمذجة والتحكم والروبوتات والخوارزميات التنفيذية، فالإجابة هي علم الحاسوب والهندسة.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 03: DOMAINS, HIERARCHY & HUMAN BASELINE -->
+    <section id="sec-domains" class="narrative-section">
+      <div class="dossier-bar">
+        <div class="dossier-bar-start">
+          <span class="index-num">03</span>
+          <span class="dossier-pill">الخريطة التطبيقية</span>
+        </div>
+        <span class="dossier-meta">المجالات · التسلسل الهرمي للتعلم · خط الأساس البشري</span>
+      </div>
+
+      <div>
+        <h2 class="section-title">كيف يندرج التعلم العميق تحت التعلم الآلي والذكاء الاصطناعي؟</h2>
+        <p class="section-lead">فرّق الدكتور بوضوح بين المظلة الكبرى للذكاء الاصطناعي وبين التعلم الآلي والتعلم العميق القائم على الشبكات العصبية.</p>
+      </div>
+
+      <div class="figure-card hierarchy-wrapper">
+        <div class="hierarchy-layout">
+          <div>
+            <svg class="svg-box" viewBox="0 0 380 300" role="img" aria-label="مخطط تفاعلي يوضح احتواء الذكاء الاصطناعي للتعلم الآلي واحتواء التعلم الآلي للتعلم العميق">
+              <!-- Outer: AI -->
+              <g class="ring-group" onclick="selectLayer('ai')" tabindex="0" role="button" aria-label="الذكاء الاصطناعي AI" onkeydown="handleSvgKey(event, 'ai')">
+                <rect x="10" y="10" width="360" height="280" rx="14" fill="var(--surface-container)" stroke="var(--outline)" stroke-width="2"></rect>
+                <text x="190" y="42" text-anchor="middle" font-family="var(--font-body)" font-size="16" font-weight="700" fill="var(--on-surface)">الذكاء الاصطناعي (AI)</text>
+              </g>
+              <!-- Middle: ML -->
+              <g class="ring-group" onclick="selectLayer('ml')" tabindex="0" role="button" aria-label="التعلم الآلي Machine Learning" onkeydown="handleSvgKey(event, 'ml')">
+                <rect x="44" y="66" width="292" height="202" rx="12" fill="var(--secondary-soft)" stroke="var(--secondary)" stroke-width="2"></rect>
+                <text x="190" y="98" text-anchor="middle" font-family="var(--font-body)" font-size="15" font-weight="700" fill="var(--secondary)">التعلم الآلي (Machine Learning)</text>
+              </g>
+              <!-- Inner: DL -->
+              <g class="ring-group" onclick="selectLayer('dl')" tabindex="0" role="button" aria-label="التعلم العميق Deep Learning" onkeydown="handleSvgKey(event, 'dl')">
+                <rect x="82" y="124" width="216" height="122" rx="10" fill="var(--primary-container)" stroke="var(--outline)" stroke-width="2"></rect>
+                <text x="190" y="168" text-anchor="middle" font-family="var(--font-body)" font-size="15" font-weight="700" fill="var(--on-primary-container)">التعلم العميق</text>
+                <text x="190" y="192" text-anchor="middle" font-family="var(--font-mono)" font-size="12" font-weight="600" fill="var(--on-primary-container)">Deep Learning</text>
+                <text x="190" y="216" text-anchor="middle" font-family="var(--font-body)" font-size="12" fill="var(--on-primary-container)">Perceptron &amp; Neural Networks</text>
+              </g>
+            </svg>
+            <p style="text-align: center; font-size: 0.85rem; color: var(--on-surface-variant); margin: var(--space-sm) 0 0 0;">اضغط على أي طبقة في الرسمة لعرض تفاصيلها</p>
+          </div>
+
+          <div id="layer-detail" aria-live="polite">
+            <span class="tag-chip tag-chip--exam" id="layer-badge">المستوى الأعمق</span>
+            <h3 id="layer-title" style="margin: var(--space-sm) 0; font-size: 1.35rem;">التعلم العميق (<bdi dir="ltr">Deep Learning</bdi>)</h3>
+            <p id="layer-desc" style="margin: 0 0 var(--space-md) 0;">فرع متخصص من التعلم الآلي يعتمد على خوارزميات معقدة بمستويات متعددة من الفهم، تحاكي القشرة الدماغية وتركيب النيورونات في المخ البشري.</p>
+            <div class="aside-box">
+              <strong style="display: block; margin-bottom: var(--space-xs); font-size: 0.9rem;">الآلية التقنية المذكورة بالمحاضرة:</strong>
+              <span id="layer-tech" style="font-size: 0.92rem;">إنشاء شبكات البيرسبترون (<bdi dir="ltr">Perceptron</bdi>) القائمة على توظيف الشبكات العصبية الاصطناعية (<bdi dir="ltr">Neural Networks</bdi>) لمعالجة البيانات والتأقلم مع عملية التعلم.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7 Domains + Modern Trends -->
+      <div>
+        <h3 style="margin: 0 0 var(--space-md) 0; font-size: 1.25rem;">مجالات الذكاء الاصطناعي السبعة والتطورات الحديثة</h3>
+        <div class="card-grid">
+          <div class="domain-card">
+            <span class="index-num">01</span>
+            <h3>التعلم الآلي والتنبؤ (<bdi dir="ltr">Machine Learning</bdi>)</h3>
+            <p>بناء خوارزميات تتعلم من الخبرات السابقة وتتنبأ بالنتائج، ويشمل التعلم العميق والتعلم التعزيزي (<bdi dir="ltr">Reinforcement Learning</bdi>).</p>
+          </div>
+          <div class="domain-card">
+            <span class="index-num">02</span>
+            <h3>معالجة اللغات الطبيعية (<bdi dir="ltr">NLP</bdi>)</h3>
+            <p>فهم اللغة وتحليلها وتفسيرها عبر: الترجمة (<bdi dir="ltr">Translation</bdi>)، استخلاص المعلومات (<bdi dir="ltr">Extraction</bdi>)، التلخيص (<bdi dir="ltr">Summarization</bdi>)، وتوليد النصوص.</p>
+          </div>
+          <div class="domain-card">
+            <span class="index-num">03</span>
+            <h3>النطق والكلام (<bdi dir="ltr">Speech</bdi>)</h3>
+            <p>تحويل اللغة المنطوقة إلى نص مكتوب (<bdi dir="ltr">Speech-to-Text</bdi>)، وتحويل النص المكتوب إلى لغة منطوقة (<bdi dir="ltr">Text-to-Speech</bdi>).</p>
+          </div>
+          <div class="domain-card">
+            <span class="index-num">04</span>
+            <h3>النظم الخبيرة (<bdi dir="ltr">Expert Systems</bdi>)</h3>
+            <p>أنظمة تحاكي قرارات الخبراء البشريين في مجالات محددة بالاعتماد على قواعد المعرفة والاستدلال.</p>
+          </div>
+          <div class="domain-card">
+            <span class="index-num">05</span>
+            <h3>التحسين والجدولة (<bdi dir="ltr">Optimization &amp; Scheduling</bdi>)</h3>
+            <p>إيجاد الحلول المثلى وتوزيع الموارد وجدولة المهام بأعلى كفاءة ممكنة.</p>
+          </div>
+          <div class="domain-card">
+            <span class="index-num">06</span>
+            <h3>الروبوتات (<bdi dir="ltr">Robotics</bdi>)</h3>
+            <p>أنظمة فيزيائية ذكية تتفاعل مع البيئة عبر مستشعرات ومشغلات (مثل روبوتات المصانع والمكنسة الروبوتية).</p>
+          </div>
+          <div class="domain-card">
+            <span class="index-num">07</span>
+            <h3>الرؤية الحاسوبية (<bdi dir="ltr">Vision &amp; Image Processing</bdi>)</h3>
+            <p>معالجة وتحليل الصور، وتوليد الصور والفيديوهات والوسائط المتعددة (<bdi dir="ltr">Multimedia</bdi>).</p>
+          </div>
+          <div class="domain-card" style="background: var(--surface-container);">
+            <span class="tag-chip tag-chip--exam">التطورات والمستقبل</span>
+            <h3>النماذج الحديثة وإنترنت الأشياء</h3>
+            <p>الذكاء التوليدي (<bdi dir="ltr">Generative AI</bdi>)، النماذج اللغوية الكبيرة (<bdi dir="ltr">LLMs</bdi>)، الذكاء متعدد الوسائط (<bdi dir="ltr">Multimodal AI</bdi>)، الذكاء المفسّر (<bdi dir="ltr">Explainable AI</bdi>)، والتكامل مع إنترنت الأشياء (<bdi dir="ltr">IoT</bdi>). ومن أمثلة الوكلاء الشائعة: <bdi dir="ltr">ChatGPT, Gemini, Meta, Qwen</bdi> و«علّام» (<bdi dir="ltr">ALLaM</bdi>).</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Human Baseline Comparison -->
+      <div class="figure-card">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-sm);">
+          <h3 style="margin: 0; font-size: 1.15rem;">الذكاء الاصطناعي مقابل خط الأساس البشري (<bdi dir="ltr">Human Baseline</bdi>)</h3>
+          <span class="dossier-meta">وفق الرسمة المشروحة في المحاضرة</span>
+        </div>
+        <p style="margin: var(--space-xs) 0 0 0; font-size: 0.9375rem; color: var(--on-surface-variant);">
+          أوضح الدكتور أن كفاءة الذكاء الاصطناعي ليست متساوية في كل المهام؛ فقد تجاوز البشر في مجالات محددة بينما لا يزال دون المستوى البشري في جوانب أخرى:
+        </p>
+        <div class="chart-bars">
+          <div class="bar-row">
+            <strong>تصنيف وتحليل الصور<br><small style="color: var(--on-surface-variant);"><bdi dir="ltr">Image Classification</bdi></small></strong>
+            <div class="bar-track" aria-label="تصنيف الصور: تفوق على خط الأساس البشري">
+              <div class="bar-fill bar-fill--above">تفوق على خط الأساس البشري</div>
+              <div class="baseline-marker" title="خط الأساس البشري"></div>
+            </div>
+          </div>
+          <div class="bar-row">
+            <strong>المهام الوسيطة والمتنامية<br><small style="color: var(--on-surface-variant);">فهم اللغة والسياق</small></strong>
+            <div class="bar-track" aria-label="فهم اللغة: يقترب من المستوى البشري">
+              <div class="bar-fill bar-fill--mid">يقترب من خط الأساس البشري</div>
+              <div class="baseline-marker" title="خط الأساس البشري"></div>
+            </div>
+          </div>
+          <div class="bar-row">
+            <strong>الحساب والرياضيات<br><small style="color: var(--on-surface-variant);"><bdi dir="ltr">Computation &amp; Mathematics</bdi> (اللون الأحمر)</small></strong>
+            <div class="bar-track" aria-label="الحساب والرياضيات: لا يزال تحت مستوى البشر في الرسمة">
+              <div class="bar-fill bar-fill--below">تحت مستوى الذكاء البشري</div>
+              <div class="baseline-marker" title="خط الأساس البشري"></div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top: var(--space-sm); font-size: 0.85rem; color: var(--on-surface-variant);">
+          الخط الأسود العمودي يمثل <strong><bdi dir="ltr">Human Baseline</bdi></strong> (خط الأساس البشري) كما ورد في شرح الرسمة بالمحاضرة.
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 04: INTELLIGENT AGENT, RATIONALITY & PEAS LAB -->
+    <section id="sec-peas" class="narrative-section">
+      <div class="dossier-bar">
+        <div class="dossier-bar-start">
+          <span class="index-num">04</span>
+          <span class="dossier-pill">محور المقرر</span>
+        </div>
+        <span class="dossier-meta">الوكيل الذكي · العقلانية · نموذج <bdi dir="ltr">PEAS</bdi></span>
+      </div>
+
+      <div>
+        <h2 class="section-title">كيف يدرك الوكيل الذكي بيئته ويتخذ قراراته بعقلانية؟</h2>
+        <p class="section-lead">الوكيل الذكي (<bdi dir="ltr">Intelligent Agent</bdi>) كيان يتفاعل مع بيئته (نصية كانت أو مادية كالروبوتات) ضمن حلقة مغلقة من الإدراك والمعالجة والتنفيذ.</p>
+      </div>
+
+      <div class="split-grid">
+        <div class="figure-card">
+          <h3 style="margin: 0 0 var(--space-sm) 0; font-size: 1.15rem;">دورة عمل الوكيل في البيئة المحيطة</h3>
+          <svg viewBox="0 0 520 190" style="width: 100%; height: auto; display: block;" role="img" aria-label="مخطط تفاعل الوكيل الذكي مع البيئة عبر المستشعرات والمشغلات">
+            <!-- Environment -->
+            <rect x="20" y="35" width="150" height="120" rx="8" fill="var(--surface-container)" stroke="var(--outline)" stroke-width="1.5"></rect>
+            <text x="95" y="88" text-anchor="middle" font-family="var(--font-body)" font-size="15" font-weight="700" fill="var(--on-surface)">البيئة المحيطة</text>
+            <text x="95" y="112" text-anchor="middle" font-family="var(--font-mono)" font-size="12" fill="var(--secondary)">Environment</text>
+
+            <!-- Agent -->
+            <rect x="310" y="25" width="190" height="140" rx="8" fill="var(--secondary-soft)" stroke="var(--secondary)" stroke-width="2"></rect>
+            <text x="405" y="60" text-anchor="middle" font-family="var(--font-body)" font-size="15" font-weight="700" fill="var(--on-surface)">الوكيل الذكي (Agent)</text>
+            <rect x="330" y="76" width="150" height="72" rx="6" fill="var(--surface-container-low)" stroke="var(--outline-variant)" stroke-width="1"></rect>
+            <text x="405" y="103" text-anchor="middle" font-family="var(--font-body)" font-size="13" font-weight="600" fill="var(--secondary)">البرامج والخوارزميات</text>
+            <text x="405" y="128" text-anchor="middle" font-family="var(--font-body)" font-size="13" fill="var(--on-surface-variant)">وقواعد المعرفة</text>
+
+            <!-- Top Arrow: Sensors / Perception (Env -> Agent) -->
+            <line x1="175" y1="62" x2="300" y2="62" stroke="var(--data-1)" stroke-width="2.5"></line>
+            <polygon points="306,62 296,56 296,68" fill="var(--data-1)"></polygon>
+            <text x="240" y="42" text-anchor="middle" font-family="var(--font-body)" font-size="12" font-weight="700" fill="var(--data-1)">الإدراك (Perception)</text>
+            <text x="240" y="80" text-anchor="middle" font-family="var(--font-mono)" font-size="11" fill="var(--on-surface-variant)">Sensors المستشعرات</text>
+
+            <!-- Bottom Arrow: Actuators / Actions (Agent -> Env) -->
+            <line x1="305" y1="132" x2="180" y2="132" stroke="var(--data-2)" stroke-width="2.5"></line>
+            <polygon points="174,132 184,126 184,138" fill="var(--data-2)"></polygon>
+            <text x="240" y="122" text-anchor="middle" font-family="var(--font-body)" font-size="12" font-weight="700" fill="var(--tertiary)">الأفعال (Actions)</text>
+            <text x="240" y="152" text-anchor="middle" font-family="var(--font-mono)" font-size="11" fill="var(--on-surface-variant)">Actuators آليات التنفيذ</text>
+          </svg>
+        </div>
+
+        <aside class="aside-box">
+          <span class="tag-chip tag-chip--exam">سؤال متوقع</span>
+          <h3 class="aside-title" style="margin-top: var(--space-sm);">متى نصف الوكيل بأنه «عقلاني» (<bdi dir="ltr">Rational Agent</bdi>)?</h3>
+          <p style="margin: 0 0 var(--space-sm) 0; font-size: 0.9375rem;">لا يكون كل وكيل عقلانياً إلا إذا توفرت فيه هذه القدرات:</p>
+          <ol style="margin: 0; padding-right: var(--space-lg); font-size: 0.9375rem;">
+            <li>يبني استدلالاً وخوارزميات وقدرة على التفكير.</li>
+            <li>يتعلم من الخبرات السابقة ويكيف نفسه بناءً عليها.</li>
+            <li>يحلل المعلومات ويحسّن نفسه بنفسه.</li>
+            <li>يدرك بيئته ويتخذ قرارات تمنح استجابة <strong>بأعلى أداء وكفاءة</strong>.</li>
+          </ol>
+        </aside>
+      </div>
+
+      <!-- Interactive PEAS Lab -->
+      <div class="figure-card">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-xs);">
+          <h3 style="margin: 0; font-size: 1.2rem;">مختبر توصيف البيئة (<bdi dir="ltr">PEAS</bdi>) على أمثلة الدكتور الثلاثة</h3>
+          <span class="dossier-meta"><bdi dir="ltr">Performance · Environment · Actuators · Sensors</bdi></span>
+        </div>
+        <p style="margin: 0 0 var(--space-md) 0; font-size: 0.9375rem; color: var(--on-surface-variant);">اختر أحد الأمثلة التي شرحها الدكتور باستفاضة في المحاضرة لاستعراض عناصر <bdi dir="ltr">PEAS</bdi> الأربعة الخاصة به:</p>
+
+        <div class="peas-controls" role="tablist" aria-label="أمثلة نموذج PEAS">
+          <button type="button" class="btn btn-secondary is-active" role="tab" aria-selected="true" onclick="selectPeas(0, this)">السيارة ذاتية القيادة</button>
+          <button type="button" class="btn btn-secondary" role="tab" aria-selected="false" onclick="selectPeas(1, this)">روبوت التقاط القطع (<bdi dir="ltr">Part-picking Robot</bdi>)</button>
+          <button type="button" class="btn btn-secondary" role="tab" aria-selected="false" onclick="selectPeas(2, this)">المكنسة الروبوتية</button>
+        </div>
+
+        <div class="peas-grid" id="peas-grid" aria-live="polite">
+          <!-- Populated dynamically by selectPeas -->
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 05: THE 6 TYPES OF AI AGENTS & COMPARATOR -->
+    <section id="sec-agents" class="narrative-section">
+      <div class="dossier-bar">
+        <div class="dossier-bar-start">
+          <span class="index-num">05</span>
+          <span class="dossier-pill">أهم قسم للاختبار</span>
+        </div>
+        <span class="dossier-meta">مقارنة أنواع الوكلاء الستة</span>
+      </div>
+
+      <div>
+        <h2 class="section-title">الأنواع الستة للوكلاء الأذكياء — وكيف تميّز بينها في الاختبار؟</h2>
+        <p class="section-lead">أكّد الدكتور بوضوح: <strong>«لا تحفظ مخططات الوكلاء كاملة، بل افهم الفكرة العامة والفرق بين كل وكيل وآخر»</strong> (خاصة الفرق بين الوكيل القائم على الهدف والوكيل القائم على المنفعة، وبين البسيط والقائم على النموذج).</p>
+      </div>
+
+      <div class="agent-selector-grid" role="tablist" aria-label="أنواع الوكلاء الأذكياء">
+        <button type="button" class="agent-tab" role="tab" aria-selected="true" onclick="selectAgent(0, this)">
+          <strong>1. الوكيل البسيط</strong>
+          <span class="agent-en">Simple Reflex Agent</span>
+        </button>
+        <button type="button" class="agent-tab" role="tab" aria-selected="false" onclick="selectAgent(1, this)">
+          <strong>2. القائم على النموذج</strong>
+          <span class="agent-en">Model-Based Agent</span>
+        </button>
+        <button type="button" class="agent-tab" role="tab" aria-selected="false" onclick="selectAgent(2, this)">
+          <strong>3. القائم على الهدف</strong>
+          <span class="agent-en">Goal-Based Agent</span>
+        </button>
+        <button type="button" class="agent-tab" role="tab" aria-selected="false" onclick="selectAgent(3, this)">
+          <strong>4. القائم على المنفعة</strong>
+          <span class="agent-en">Utility-Based Agent</span>
+        </button>
+        <button type="button" class="agent-tab" role="tab" aria-selected="false" onclick="selectAgent(4, this)">
+          <strong>5. الوكيل المتعلّم</strong>
+          <span class="agent-en">Learning Agent</span>
+        </button>
+        <button type="button" class="agent-tab" role="tab" aria-selected="false" onclick="selectAgent(5, this)">
+          <strong>6. متعدد الوكلاء</strong>
+          <span class="agent-en">Multi-Agent System</span>
+        </button>
+      </div>
+
+      <div class="figure-card" id="agent-detail-card" aria-live="polite">
+        <!-- Populated dynamically -->
+      </div>
+
+      <!-- Side-by-Side Comparison Tool -->
+      <div class="figure-card">
+        <h3 style="margin: 0 0 var(--space-xs) 0; font-size: 1.15rem;">أداة المقارنة السريعة بين نوعين من الوكلاء</h3>
+        <p style="margin: 0; font-size: 0.9375rem; color: var(--on-surface-variant);">اختر وكيلين للمقارنة جنباً إلى جنب (مفيد جداً لأسئلة التمييز في الاختبار):</p>
+
+        <div class="compare-controls">
+          <div class="field-group">
+            <label class="field-label" for="compare-a">الوكيل الأول</label>
+            <select id="compare-a" class="select-input" onchange="renderAgentComparison()">
+              <option value="0">1. الوكيل البسيط (Simple Reflex)</option>
+              <option value="1">2. القائم على النموذج (Model-Based)</option>
+              <option value="2" selected>3. القائم على الهدف (Goal-Based)</option>
+              <option value="3">4. القائم على المنفعة (Utility-Based)</option>
+              <option value="4">5. الوكيل المتعلّم (Learning)</option>
+              <option value="5">6. متعدد الوكلاء (Multi-Agent)</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="compare-b">الوكيل الثاني</label>
+            <select id="compare-b" class="select-input" onchange="renderAgentComparison()">
+              <option value="0">1. الوكيل البسيط (Simple Reflex)</option>
+              <option value="1">2. القائم على النموذج (Model-Based)</option>
+              <option value="2">3. القائم على الهدف (Goal-Based)</option>
+              <option value="3" selected>4. القائم على المنفعة (Utility-Based)</option>
+              <option value="4">5. الوكيل المتعلّم (Learning)</option>
+              <option value="5">6. متعدد الوكلاء (Multi-Agent)</option>
+            </select>
+          </div>
+          <button type="button" class="btn btn-secondary" onclick="presetCompare(0, 1)">بسيط مقابل نموذج</button>
+          <button type="button" class="btn btn-secondary" onclick="presetCompare(2, 3)">هدف مقابل منفعة</button>
+        </div>
+
+        <div class="table-wrap" style="margin-top: var(--space-md);">
+          <table class="briefing-table">
+            <thead>
+              <tr>
+                <th>معيار المقارنة</th>
+                <th id="comp-head-a">القائم على الهدف</th>
+                <th id="comp-head-b">القائم على المنفعة</th>
+              </tr>
+            </thead>
+            <tbody id="comp-body">
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 06: EXAM STRATEGY, GLOSSARY, CHECKLIST & QUIZ -->
+    <section id="sec-exam" class="narrative-section">
+      <div class="dossier-bar">
+        <div class="dossier-bar-start">
+          <span class="index-num">06</span>
+          <span class="dossier-pill">استراتيجية الاختبار</span>
+        </div>
+        <span class="dossier-meta">نمط الأسئلة · المصطلحات · مصادر المذاكرة · اختبار تدريبي</span>
+      </div>
+
+      <div>
+        <h2 class="section-title">كل ما قاله الدكتور عن الاختبار، ومصادر المذاكرة الثلاثة، والتقييم الذاتي</h2>
+        <p class="section-lead">جمعنا في هذا القسم كل إرشادات الدكتور الخاصة بالامتحان النهائي، وقائمة المراجعة العملية، ومحاكياً لأسئلة التقييمات.</p>
+      </div>
+
+      <!-- Exam Rules & Study Sources -->
+      <div class="split-grid-equal">
+        <div class="figure-card">
+          <span class="tag-chip tag-chip--exam">قواعد الاختبار من كلام الدكتور</span>
+          <h3 style="margin: var(--space-sm) 0; font-size: 1.2rem;">ماذا سيأتي في الاختبار؟ وما الذي لن يأتي؟</h3>
+          <ul style="margin: 0; padding-right: var(--space-lg); display: flex; flex-direction: column; gap: var(--space-xs);">
+            <li><strong>نمط الأسئلة:</strong> مشابه تماماً لنمط <strong>التقييمات</strong> الموجودة على النظام.</li>
+            <li><strong>المحتوى النظري:</strong> يركز على فهم المفاهيم، كيف يتعامل الذكاء الاصطناعي مع حل المشكلات، بناء الخوارزميات، طرق البحث، المنطق (<bdi dir="ltr">Logic</bdi>)، والرسومات المشروحة في الشرائح.</li>
+            <li><strong>لا توجد برمجة:</strong> لن يُطلب منك كتابة كود برمجي ولا التطبيق العملي على أدوات مثل <bdi dir="ltr">OpenAI</bdi>.</li>
+            <li><strong>لا تحتاج آلة حاسبة:</strong> الأسئلة لا تتطلب آلة حاسبة.</li>
+            <li><strong>المصطلحات الإنجليزية:</strong> تأتي بعض المصطلحات الأساسية بالإنجليزية أو بالعربي والإنجليزي معاً (مثل: الوكلاء القائمون على الهدف — <bdi dir="ltr">Goal-based Agent</bdi>).</li>
+            <li><strong>ملاحظة المنهج:</strong> موضوع أخلاقيات الذكاء الاصطناعي وثقة الشركات سيُدرس في نهاية الفصل الدراسي.</li>
+          </ul>
+        </div>
+
+        <div class="figure-card">
+          <span class="tag-chip tag-chip--slate">خطة المذاكرة المحفوظة تلقائياً</span>
+          <h3 style="margin: var(--space-sm) 0; font-size: 1.2rem;">المصادر الثلاثة الإلزامية (المباشرة لا تكفي!)</h3>
+          <p style="margin: 0 0 var(--space-sm) 0; font-size: 0.9rem; color: var(--on-surface-variant);">
+            أكد الدكتور: «لا حاجة لكتب خارجية، فقط اعتمدوا على المصادر الثلاثة التالية ولا تأخذوا الشرائح دون سماع المحاضرة المسجلة»:
+          </p>
+          <ul class="checklist" id="study-checklist">
+            <li>
+              <label class="check-item">
+                <input type="checkbox" data-check-id="slides" onchange="toggleChecklist('slides', this.checked)">
+                <span><strong>1. شرائح العرض (السلايدات):</strong> المرجع الأساسي المعتمد لجميع المفاهيم والرسومات.</span>
+              </label>
+            </li>
+            <li>
+              <label class="check-item">
+                <input type="checkbox" data-check-id="recorded" onchange="toggleChecklist('recorded', this.checked)">
+                <span><strong>2. المحاضرات المسجلة:</strong> ضرورية لفهم شرح الدكتور التفصيلي على <strong>السبورة</strong> (الشرائح وحدها لا تكفي).</span>
+              </label>
+            </li>
+            <li>
+              <label class="check-item">
+                <input type="checkbox" data-check-id="assessments" onchange="toggleChecklist('assessments', this.checked)">
+                <span><strong>3. التقييمات على النظام:</strong> للتدرب على صيغة الأسئلة المشابهة تماماً للاختبار.</span>
+              </label>
+            </li>
+            <li>
+              <label class="check-item">
+                <input type="checkbox" data-check-id="agents-diff" onchange="toggleChecklist('agents-diff', this.checked)">
+                <span><strong>4. التمييز بين الوكلاء الستة:</strong> فهم الفروق الجوهرية دون حفظ المخططات كاملة.</span>
+              </label>
+            </li>
+            <li>
+              <label class="check-item">
+                <input type="checkbox" data-check-id="contact" onchange="toggleChecklist('contact', this.checked)">
+                <span><strong>5. المتابعة والتواصل:</strong> مراجعة رقم الواتساب في نظام البلاك بورد («معلومات اتصل بنا») وحضور المحاضرة المباشرة القادمة والاستفادة من الساعات المكتبية.</span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Bilingual Terminology Trainer -->
+      <div class="figure-card">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-sm);">
+          <h3 style="margin: 0; font-size: 1.2rem;">قاموس المصطلحات ثنائي اللغة (عربي ⇄ إنجليزي)</h3>
+          <span class="dossier-meta">تدريب حفظ المصطلحات للاختبار</span>
+        </div>
+
+        <div class="glossary-toolbar">
+          <div class="field-group">
+            <label class="field-label" for="glossary-search">ابحث عن مصطلح بالعربية أو الإنجليزية</label>
+            <input id="glossary-search" type="text" class="text-input" placeholder="مثال: المنفعة، PEAS، الإدراك، NLP" oninput="filterGlossary()">
+          </div>
+          <button type="button" class="btn btn-secondary" id="toggle-mask-btn" aria-pressed="false" onclick="toggleMaskEnglish()">إخفاء المصطلحات الإنجليزية للاختبار الذاتي</button>
+        </div>
+
+        <div class="glossary-grid" id="glossary-grid" aria-live="polite">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- Interactive Practice Quiz -->
+      <div class="quiz-card">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-sm);">
+          <div>
+            <span class="tag-chip tag-chip--exam">محاكي التقييمات والاختبار</span>
+            <h3 style="margin: var(--space-xs) 0 0 0; font-size: 1.25rem;">اختبر فهمك للمحاضرة المباشرة (10 أسئلة بنمط التقييمات)</h3>
+          </div>
+          <div class="dossier-meta" id="quiz-score-badge" aria-live="polite">النتيجة: 0 / 10</div>
+        </div>
+
+        <div id="quiz-container" aria-live="polite">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </section>
+
+    <footer class="dossier-footer">
+      <div>المصدر: التفريغ الكامل للمحاضرة الافتراضية المباشرة الأولى لمقرر الذكاء الاصطناعي (<bdi dir="ltr">APP-3271</bdi>).</div>
+      <div>للتواصل الأكاديمي مع أستاذ المقرر: نظام البلاك بورد ← معلومات اتصل بنا (رقم الواتساب والساعات المكتبية).</div>
+    </footer>
+  </main>
+
+  <api-shim></api-shim>
+  <script>
+    const propertiesData = [
+      {
+        title: `1. التفكير والإدراك`,
+        desc: `يقوم الذكاء الاصطناعي على محاكاة القدرات المعرفية والعقلية للإنسان؛ أي أنه لا ينفذ أوامر جامدة فحسب، بل يدرك معطيات البيئة المحيطة ويبني استدلالاً قبل اتخاذ القرار.`
+      },
+      {
+        title: `2. اكتساب المعرفة والتعلم`,
+        desc: `القدرة على استيعاب المعارف الجديدة وتعديل سلوك النظام وخوارزمياته تلقائياً بناءً على البيانات التي يتعرض لها.`
+      },
+      {
+        title: `3. استخدام الخبرات السابقة وحل مشاكل جديدة`,
+        desc: `تتعلم التطبيقات الذكية من التجارب والخبرات السابقة وتوظفها في مواجهة مواقف ومشكلات لم تُبرمج عليها حرفياً من قبل.`
+      },
+      {
+        title: `4. التعامل مع المواقف الغامضة`,
+        desc: `القدرة على استخلاص قرارات منطقية واحتمالية حتى عندما تكون المعلومات الواردة من البيئة غير مكتملة أو غامضة.`
+      },
+      {
+        title: `5. التنبؤ`,
+        desc: `توظيف الخوارزميات والنماذج الإحصائية والاحتمالية لتوقع النتائج والمستقبل بناءً على الأنماط المستخلصة من البيانات.`
+      },
+      {
+        title: `6. الإبداع`,
+        desc: `توليد حلول أو نصوص أو صور ومحتوى مبتكر، وهو ما تجلى بوضوح في تطورات الذكاء الاصطناعي التوليدي الحديثة.`
+      },
+      {
+        title: `7. الفهم والإدراك المرئي للأمور`,
+        desc: `قدرة الأنظمة على رؤية الصور والمشاهد وتحليلها وإدراك محتواها، مثل تطبيقات الرؤية الحاسوبية وتصنيف الصور.`
+      }
+    ];
+
+    const sciencesData = [
+      {
+        tag: `علاقة تأسيسية لا نقاش فيها`,
+        title: `علم الحاسوب والهندسة`,
+        desc: `يمثل الحاضنة التقنية التي تحوّل أفكار الذكاء الاصطناعي إلى برمجيات وأنظمة فعلية تتفاعل مع البيئة المحيطة.`,
+        points: [
+          `معالجة المعطيات البيئية وبناء النمذجة (<bdi dir="ltr">Modeling</bdi>).`,
+          `بناء الروبوتات وأنظمة التحكم (<bdi dir="ltr">Robotics & Control</bdi>).`,
+          `تصميم وتطوير الخوارزميات (<bdi dir="ltr">Algorithms</bdi>).`
+        ],
+        tip: `إذا ذكر السؤال النمذجة، التحكم، الروبوتات، أو الخوارزميات التنفيذية، فالعلم المرتبط هو علم الحاسوب والهندسة.`
+      },
+      {
+        tag: `البنية الحسابية والاستدلالية`,
+        title: `علم الرياضيات`,
+        desc: `يوفر الأدوات الصورية والكمية التي تقوم عليها نماذج الاستنتاج والتنبؤ ومعالجة البيانات الضخمة.`,
+        points: [
+          `المنطق (<bdi dir="ltr">Logic</bdi>) لبناء القواعد والاستدلال.`,
+          `الاحتمالات (<bdi dir="ltr">Probabilities</bdi>) للتعامل مع المواقف الغامضة والتنبؤ.`,
+          `تحليل البيانات (<bdi dir="ltr">Data Analysis</bdi>) والعمليات الحسابية.`
+        ],
+        tip: `تذكّر أن المنطق (<bdi dir="ltr">Logic</bdi>) والاحتمالات وتحليل البيانات هي محاور العلاقة مع علم الرياضيات.`
+      },
+      {
+        tag: `محاكاة العقل والسلوك`,
+        title: `علم النفس`,
+        desc: `لا بد للذكاء الاصطناعي أن يفهم كيفية عمل العقل البشري حتى يتمكن من محاكاة تفكيره وتحليله وتصرفاته.`,
+        points: [
+          `فهم طريقة تفكير البشر وآليات الإدراك والاستدلال.`,
+          `محاكاة التفكير البشري والتحليل العقلي.`,
+          `بناء التصرف السلوكي بناءً على البيئة المحيطة.`
+        ],
+        tip: `أي إشارة إلى فهم طريقة التفكير البشري والإدراك والاستدلال النفسي ترتبط مباشرة بعلم النفس.`
+      },
+      {
+        tag: `الأساس الإلهامي للشبكات العصبية`,
+        title: `علم الأحياء`,
+        desc: `تستلهم الخوارزميات المتقدمة، وخاصة في التعلم العميق، بنيتها من التركيب الحيوي للدماغ البشري والكائنات الحية.`,
+        points: [
+          `محاكاة النيورونات العصبية والشبكات العصبية في المخ (<bdi dir="ltr">Neural Networks</bdi>).`,
+          `دراسة تصرف الأعصاب والجينات والحواس البشرية.`,
+          `توظيف هذه المفاهيم في التعلم الآلي والتعلم العميق (<bdi dir="ltr">Deep Learning</bdi>).`
+        ],
+        tip: `ركز الدكتور على ربط علم الأحياء بالتعلم العميق، الشبكات العصبية في المخ، الأعصاب، والجينات.`
+      },
+      {
+        tag: `محرك تطبيقات النصوص والكلام`,
+        title: `علم اللغويات (علم اللغة)`,
+        desc: `تعتمد تطبيقات معالجة اللغات الطبيعية على فهم دقيق لبنية اللغة البشرية وكيفية نطقها وتفسيرها في السياق.`,
+        points: [
+          `فهم النحو والصرف والسمات اللغوية وبناء الكلمات والسياق.`,
+          `تحليل اللغة، تفسيرها، ترجمتها، وتلخيصها.`,
+          `توليد اللغة الطبيعية (<bdi dir="ltr">Natural Language Generation</bdi>).`
+        ],
+        tip: `تطبيقات الترجمة والتلخيص واستخلاص المعلومات وتوليد النصوص تستند إلى علم اللغويات.`
+      }
+    ];
+
+    const layersData = {
+      ai: {
+        badge: `المظلة الكبرى`,
+        title: `الذكاء الاصطناعي (<bdi dir="ltr">Artificial Intelligence</bdi>)`,
+        desc: `المجال الواسع والشامل الذي يضم جميع التقنيات والبرمجيات القادرة على محاكاة السلوك البشري والقدرات المعرفية والتفاعل مع البيئة (ويشمل النظم الخبيرة، المنطق، البحث، الروبوتات، والتعلم الآلي).`,
+        tech: `يشمل البرمجيات المبنية على قواعد المعرفة والخوارزميات المنطقية والحسابية لإظهار سلوك يوصف بالذكاء.`
+      },
+      ml: {
+        badge: `مجال فرعي من الذكاء الاصطناعي`,
+        title: `التعلم الآلي (<bdi dir="ltr">Machine Learning</bdi>)`,
+        desc: `أحد أهم مجالات الذكاء الاصطناعي؛ يركز على بناء خوارزميات نُعلّم من خلالها الآلة بعض الأمور فتستطيع التعلم بنفسها من الخبرات السابقة دون إعادة برمجتها لكل حالة.`,
+        tech: `يعتمد على تدريب الخوارزميات بالبيانات والخبرات السابقة لأداء مهام التنبؤ والتصنيف واتخاذ القرار.`
+      },
+      dl: {
+        badge: `المستوى الأعمق (فرع من التعلم الآلي)`,
+        title: `التعلم العميق (<bdi dir="ltr">Deep Learning</bdi>)`,
+        desc: `فرع متخصص من التعلم الآلي يستخدم خوارزميات أكثر تعقيداً ومستويات متعددة من الفهم، محاكياً القشرة الدماغية وتركيب النيورونات في المخ البشري.`,
+        tech: `إنشاء شبكات البيرسبترون (<bdi dir="ltr">Perceptron</bdi>) القائمة على توظيف الشبكات العصبية الاصطناعية (<bdi dir="ltr">Neural Networks</bdi>) لمعالجة البيانات والتأقلم مع عملية التعلم.`
+      }
+    };
+
+    const peasData = [
+      {
+        name: `السيارة ذاتية القيادة`,
+        P: `الوصول الآمن إلى الوجهة، تجنب الحوادث، احترام قوانين وإشارات المرور، والالتزام بالمسار وبأعلى كفاءة.`,
+        E: `الطرق والشوارع، السيارات الأخرى أماماً وخلفاً، المشاة، الإشارات الضوئية، الأحوال الجوية والإضاءة.`,
+        A: `عجلة القيادة (التوجيه)، دواسة الوقود/التسارع، الفرامل، الإضاءة، وإشارات التنبيه.`,
+        S: `الكاميرات، الرادار (لمراقبة السيارات الأمامية والخلفية)، مستشعرات المسافة، ونظام تحديد المواقع (<bdi dir="ltr">GPS</bdi>).`
+      },
+      {
+        name: `روبوت التقاط القطع بالمصانع (Part-picking Robot)`,
+        P: `نسبة القطع الملتقطة والمفرزة بشكل صحيح وسليم، وسرعة الإنجاز على خط الإنتاج دون إتلاف القطع.`,
+        E: `حزام النقل (<bdi dir="ltr">Conveyor Belt</bdi>)، القطع والأجزاء المتنوعة، وصناديق الفرز داخل المصنع.`,
+        A: `الذراع المفصلية الروبوتية، ومقبض الالتقاط (<bdi dir="ltr">Gripper</bdi>) لتحريك القطع ووضعها في المكان المحدد.`,
+        S: `الكاميرات (الرؤية الحاسوبية للتعرف على شكل القطعة وموقعها) ومستشعرات اللمس والضغط.`
+      },
+      {
+        name: `المكنسة الروبوتية`,
+        P: `درجة نظافة الأرضية، تغطية كامل المساحة، استهلاك الطاقة بفاعلية، وتجنب الاصطدام بالعوائق.`,
+        E: `أرضيات الغرف والممرات، الأثاث، الجدران، العتبات، والأوساخ والغبار المتناثر.`,
+        A: `العجلات (الحركة يميناً ويساراً وللأمام)، المحرك، الفرش الدوارة، ونظام الشفط وجمع القمامة.`,
+        S: `مستشعرات الاصطدام والقرب، مستشعرات الغبار والأوساخ، وكاشف المنحدرات/الدرج.`
+      }
+    ];
+
+    const agentsData = [
+      {
+        name: `1. الوكيل البسيط`,
+        en: `Simple Reflex Agent`,
+        summary: `أبسط أنواع الوكلاء؛ يتفاعل مع الموقف الحالي مباشرة وفق قواعد شرطية جاهزة، وتكون استجابته فورية دون الاحتفاظ بتاريخ طويل أو تصور داخلي للبيئة.`,
+        keyDiff: `يستجيب بشكل فوري بناءً على الإدراك اللحظي للموقف فقط، ولا يبني نموذجاً داخلياً لبيئة متغيرة.`,
+        example: `حساس يرى عائقاً أمامه فيتوقف فوراً، أو منظم حرارة يعمل فور انخفاض الدرجة.`
+      },
+      {
+        name: `2. الوكيل القائم على النموذج`,
+        en: `Model-Based Agent`,
+        summary: `يجمع البيانات عبر المستشعرات ويبني تصوراً جديداً (نموذجاً داخلياً) عن البيئة المحيطة؛ لذا يتعامل مع مواقف أكثر تعقيداً وبيئات ليست ثابتة.`,
+        keyDiff: `بخلاف البسيط، يمتلك «نموذجاً داخلياً» يتتبع به أجزاء البيئة التي لا يراها في اللحظة الراهنة ويُحدّث تصوره باستمرار.`,
+        example: `تتبع حركة الأجسام في بيئة متغيرة حيث يقدّر الوكيل حالة البيئة بناءً على القراءات السابقة والحالية.`
+      },
+      {
+        name: `3. الوكيل القائم على الهدف`,
+        en: `Goal-Based Agent`,
+        summary: `يركز على النتيجة والمسار المستقبلي؛ فعند اتخاذ أي فعل (<bdi dir="ltr">Action</bdi>) يختار الفعل الذي يوصله أو يقرّبه من تحقيق هدفه المحدد.`,
+        keyDiff: `لا يكتفي برد الفعل أو وصف الحالة، بل يسأل: «أي مسار أو فعل يقربني من الوصول إلى الهدف المطلوب؟».`,
+        example: `تحديد مسار الانتقال للوصول إلى نقطة جغرافية محددة عند مفترق طرق.`
+      },
+      {
+        name: `4. الوكيل القائم على المنفعة`,
+        en: `Utility-Based Agent`,
+        summary: `يركز على الجودة والكفاءة وليس مجرد الوصول للهدف؛ إذا توفر أكثر من حل يوصله إلى الهدف، يختار الحل الذي يحقق الهدف بأعلى كفاءة ومنفعة.`,
+        keyDiff: `الفرق الدقيق عن القائم على الهدف: القائم على الهدف يهمه الوصول فقط، أما القائم على المنفعة فيفاضل بين الحلول ليختار الأعلى كفاءة (أقل وقت، أقل تكلفة، أكثر أماناً).`,
+        example: `اختيار الطريق الأسرع والأقل ازدحاماً والأكثر أماناً من بين عدة طرق كلها توصل لنفس الوجهة.`
+      },
+      {
+        name: `5. الوكيل المتعلّم / المتكيّف`,
+        en: `Learning Agent`,
+        summary: `وكيل يتعلم من التجارب السابقة ويتكيف مع البيئة المتواجد فيها، ويضيف تحسينات مستمرة على أدائه ومعرفته بناءً على التغذية الراجعة.`,
+        keyDiff: `لا يظل أداؤه ثابتاً؛ بل يطوّر معرفته وخوارزمياته تلقائياً مع تراكم الخبرة.`,
+        example: `روبوت أو نظام توصية يحسّن دقة قراراته كلما زاد تفاعله مع البيئة والمستخدمين.`
+      },
+      {
+        name: `6. الأنظمة متعددة الوكلاء`,
+        en: `Multi-Agent Systems`,
+        summary: `منظومة يعمل فيها عدة وكلاء ذكاء اصطناعي معاً بالتنسيق والتعاون لتنفيذ مهام متعددة في بيئات مختلفة واتخاذ قرارات متكاملة.`,
+        keyDiff: `ليس وكيلاً واحداً منفرداً، بل مجموعة وكلاء متخصصين يتبادلون المعطيات ضمن منظومة واحدة.`,
+        example: `السيارة ذاتية القيادة كما شرحها الدكتور: تضم وكيلاً للإضاءة، وكيلاً للبيئة المحيطة، وكيلاً للإشارات الضوئية، ووكيل رادار للسيارات أمامها وخلفها.`
+      }
+    ];
+
+    const glossaryData = [
+      { ar: `الذكاء الاصطناعي`, en: `Artificial Intelligence (AI)` },
+      { ar: `المحاكاة`, en: `Simulation` },
+      { ar: `البيانات الضخمة`, en: `Big Data` },
+      { ar: `التعلم الآلي`, en: `Machine Learning (ML)` },
+      { ar: `التعلم العميق`, en: `Deep Learning (DL)` },
+      { ar: `الشبكات العصبية`, en: `Neural Networks` },
+      { ar: `شبكة البيرسبترون`, en: `Perceptron` },
+      { ar: `التعلم التعزيزي`, en: `Reinforcement Learning` },
+      { ar: `معالجة اللغات الطبيعية`, en: `Natural Language Processing (NLP)` },
+      { ar: `استخلاص المعلومات`, en: `Information Extraction` },
+      { ar: `التلخيص`, en: `Summarization` },
+      { ar: `النظم الخبيرة`, en: `Expert Systems` },
+      { ar: `النماذج اللغوية الكبيرة`, en: `Large Language Models (LLMs)` },
+      { ar: `الذكاء الاصطناعي التوليدي`, en: `Generative AI` },
+      { ar: `الذكاء متعدد الوسائط`, en: `Multimodal AI` },
+      { ar: `الذكاء الاصطناعي المفسّر`, en: `Explainable AI` },
+      { ar: `خط الأساس البشري`, en: `Human Baseline` },
+      { ar: `تصنيف الصور`, en: `Image Classification` },
+      { ar: `الوكيل الذكي`, en: `Intelligent Agent` },
+      { ar: `الوكيل العقلاني`, en: `Rational Agent` },
+      { ar: `الإدراك`, en: `Perception` },
+      { ar: `المستشعرات`, en: `Sensors` },
+      { ar: `آليات التنفيذ / المشغلات`, en: `Actuators` },
+      { ar: `الأفعال / ردود الفعل`, en: `Actions` },
+      { ar: `نموذج توصيف البيئة`, en: `PEAS (Performance, Environment, Actuators, Sensors)` },
+      { ar: `الوكيل البسيط`, en: `Simple Reflex Agent` },
+      { ar: `الوكيل القائم على النموذج`, en: `Model-Based Agent` },
+      { ar: `الوكيل القائم على الهدف`, en: `Goal-Based Agent` },
+      { ar: `الوكيل القائم على المنفعة`, en: `Utility-Based Agent` },
+      { ar: `الوكيل المتعلّم`, en: `Learning Agent` },
+      { ar: `الأنظمة متعددة الوكلاء`, en: `Multi-Agent Systems` },
+      { ar: `المنطق`, en: `Logic` }
+    ];
+
+    const quizQuestions = [
+      {
+        q: `1. ما السبب الرئيسي الذي أدى إلى تطور الذكاء الاصطناعي حالياً مقارنة بالماضي الذي اتسم ببطء النتائج وعدم إقناعها؟`,
+        options: [
+          `توفر البنية التحتية التقنية والمعالجات القوية والبيانات الضخمة (Big Data)`,
+          `الاعتماد الكلي على الكتب الورقية دون الحاجة إلى خوارزميات`,
+          `استبدال علم الرياضيات بعلم اللغويات بشكل كامل`,
+          `توقف الحاجة إلى المستشعرات في البيئات المادية`
+        ],
+        answer: 0,
+        explain: `أوضح الدكتور أن القفزة الحالية جاءت نتيجة اجتماع البنية التحتية التقنية، والمعالجات القوية، وتوفر البيانات الضخمة من مصادر مختلفة.`
+      },
+      {
+        q: `2. أي علم من العلوم التالية يستند إليه الذكاء الاصطناعي بشكل خاص في بناء الشبكات العصبية والتعلم العميق (Deep Learning)؟`,
+        options: [
+          `علم اللغويات`,
+          `علم الأحياء`,
+          `علم الاقتصاد`,
+          `علم الجغرافيا`
+        ],
+        answer: 1,
+        explain: `يرتبط علم الأحياء بالتعلم العميق عبر محاكاة النيورونات العصبية والشبكات العصبية في المخ وتصرف الأعصاب والجينات والحواس.`
+      },
+      {
+        q: `3. أي العبارات التالية تصف العلاقة الهرمية الصحيحة بين المفاهيم الثلاثة وفق ما شرحه الدكتور؟`,
+        options: [
+          `التعلم الآلي أعم وأشمل من الذكاء الاصطناعي`,
+          `الذكاء الاصطناعي فرع من التعلم العميق`,
+          `التعلم العميق فرع من التعلم الآلي، والتعلم الآلي مجال من مجالات الذكاء الاصطناعي`,
+          `المفاهيم الثلاثة منفصلة ولا يتفرع أي منها عن الآخر`
+        ],
+        answer: 2,
+        explain: `الذكاء الاصطناعي (AI) هو المجال الأوسع، والتعلم الآلي (ML) مجال منه، والتعلم العميق (DL) فرع من التعلم الآلي يعتمد على الشبكات العصبية.`
+      },
+      {
+        q: `4. في مقارنة أداء الذكاء الاصطناعي بخط الأساس البشري (Human Baseline) التي شرحها الدكتور، في أي مجال لا يزال الذكاء الاصطناعي دون مستوى البشر في الرسمة التوضيحية؟`,
+        options: [
+          `تصنيف الصور (Image Classification)`,
+          `الحساب والرياضيات (Computation & Mathematics)`,
+          `توليد الصور البسيطة`,
+          `التعرف الآلي على النصوص الممسوحة`
+        ],
+        answer: 1,
+        explain: `أشار الدكتور إلى أن تصنيف الصور تفوق على البشر، بينما في الحساب والرياضيات (المشار إليه باللون الأحمر في الرسمة) لا يزال تحت مستوى البشر.`
+      },
+      {
+        q: `5. في نموذج PEAS للوكيل الذكي، ما العنصر المسؤول عن جمع المدخلات من البيئة المحيطة وإدراكها (Perception)؟`,
+        options: [
+          `Performance (مقياس الأداء)`,
+          `Actuators (آليات التنفيذ)`,
+          `Sensors (المستشعرات)`,
+          `Environment (البيئة)`
+        ],
+        answer: 2,
+        explain: `يجمع الوكيل الذكي بيانات البيئة ويدركها عبر المستشعرات (Sensors)، بينما ينفذ ردود الفعل عبر آليات التنفيذ (Actuators).`
+      },
+      {
+        q: `6. إذا توفرت عدة مسارات وحلول كلها توصل الوكيل إلى وجهته، واختار الوكيل الحل الذي يحقق الوصول بأعلى كفاءة ممكنة، فما نوع هذا الوكيل؟`,
+        options: [
+          `الوكيل البسيط (Simple Reflex Agent)`,
+          `الوكيل القائم على الهدف (Goal-Based Agent)`,
+          `الوكيل القائم على المنفعة (Utility-Based Agent)`,
+          `الوكيل الجامد`
+        ],
+        answer: 2,
+        explain: `الوكيل القائم على الهدف يركز على الوصول للهدف، أما القائم على المنفعة (Utility-Based) فيختار من بين الحلول الحل الذي يوصل للهدف بأكبر كفاءة ومنفعة.`
+      },
+      {
+        q: `7. ما السمة المميزة للوكيل القائم على النموذج (Model-Based Agent) مقارنة بالوكيل البسيط (Simple Reflex Agent)؟`,
+        options: [
+          `لا يستخدم المستشعرات إطلاقاً`,
+          `يبني تصوراً داخلياً جديداً للبيئة المتغيرة ويتعامل مع مواقف أكثر تعقيداً`,
+          `يستجيب بشكل فوري للحظة الراهنة دون أي تصور للبيئة`,
+          `يقتصر عمله على المهام النصية فقط`
+        ],
+        answer: 1,
+        explain: `الوكيل القائم على النموذج يجمع البيانات ويبني تصوراً جديداً لبيئة غير ثابتة، بينما البسيط يستجيب فوراً لمواقف محددة.`
+      },
+      {
+        q: `8. ضرب الدكتور مثالاً للأنظمة متعددة الوكلاء (Multi-Agent Systems) بالسيارة ذاتية القيادة؛ أي مما يلي يوضح هذا المفهوم؟`,
+        options: [
+          `وجود وكيل واحد فقط مسؤول عن كل شيء`,
+          `تعاون وكلاء متخصصين معاً: وكيل للإضاءة، وآخر للإشارات الضوئية، ورادار للسيارات أماماً وخلفاً`,
+          `اعتماد السيارة على السائق البشري في كل قرار`,
+          `إلغاء المستشعرات والاكتفاء بالخرائط الثابتة`
+        ],
+        answer: 1,
+        explain: `السيارة ذاتية القيادة تضم عدة وكلاء يعملون معاً في منظومة واحدة لاتخاذ قرارات منسقة.`
+      },
+      {
+        q: `9. بخصوص مخططات الوكلاء في الشرائح، ما التوجيه الصريح الذي قدمه الدكتور للطلبة استعداداً للاختبار؟`,
+        options: [
+          `حفظ المخططات كاملة بكل تفاصيلها الرسومية حرفياً`,
+          `تجاهل موضوع الوكلاء لأنه خارج الاختبار`,
+          `فهم الفكرة العامة والتمييز بين أنواع الوكلاء دون حفظ المخطط كاملاً`,
+          `برمجة الوكلاء بلغة بايثون داخل قاعة الاختبار`
+        ],
+        answer: 2,
+        explain: `قال الدكتور نصاً: «مخططات الوكلاء لا تحفظها، بس افهم الفكرة العامة والفرق بين الوكلاء».`
+      },
+      {
+        q: `10. ما المصادر الثلاثة التي حذر الدكتور من أن المحاضرة المباشرة وحدها لا تغني عنها، ويجب دراستها جميعاً للاختبار؟`,
+        options: [
+          `شرائح العرض + المحاضرات المسجلة (للشرح على السبورة) + التقييمات`,
+          `ثلاثة كتب مرجعية مطبوعة + مواقع إنترنت خارجية`,
+          `المحاضرة المباشرة فقط دون أي مصادر أخرى`,
+          `ملخصات خارجية + استخدام الآلة الحاسبة + تطبيق OpenAI`
+        ],
+        answer: 0,
+        explain: `أكد الدكتور على ثلاثة مصادر فقط: شرائح العرض، والمحاضرات المسجلة (لأن الشرح فيها على السبورة)، والتقييمات (المشابهة لنمط الاختبار).`
+      }
+    ];
+
+    /* Persistent application state */
+    let appState = {
+      checklist: {},
+      quizAnswers: {},
+      currentQuestion: 0,
+      maskEnglish: false
+    };
+
+    function selectProperty(idx, btn) {
+      const item = propertiesData[idx];
+      const detail = document.getElementById('property-detail');
+      if (!item || !detail) return;
+
+      const siblings = document.querySelectorAll('.props-grid button');
+      siblings.forEach(function (el) {
+        el.classList.remove('is-active');
+        el.setAttribute('aria-selected', 'false');
+      });
+      if (btn) {
+        btn.classList.add('is-active');
+        btn.setAttribute('aria-selected', 'true');
+      }
+
+      detail.innerHTML = `<strong style="color: var(--secondary); display: block; margin-bottom: var(--space-xs);">${item.title}</strong><p style="margin: 0;">${item.desc}</p>`;
+    }
+
+    function selectScience(idx, btn) {
+      const item = sciencesData[idx];
+      if (!item) return;
+
+      const tabs = document.querySelectorAll('.science-tabs .science-btn');
+      tabs.forEach(function (el) {
+        el.setAttribute('aria-selected', 'false');
+      });
+      if (btn) btn.setAttribute('aria-selected', 'true');
+
+      const tagEl = document.getElementById('science-tag');
+      const titleEl = document.getElementById('science-title');
+      const descEl = document.getElementById('science-desc');
+      const pointsEl = document.getElementById('science-points');
+      const tipEl = document.getElementById('science-exam-tip');
+
+      if (tagEl) tagEl.textContent = item.tag;
+      if (titleEl) titleEl.textContent = item.title;
+      if (descEl) descEl.textContent = item.desc;
+      if (pointsEl) {
+        pointsEl.innerHTML = item.points.map(function (p) { return `<li>${p}</li>`; }).join('');
+      }
+      if (tipEl) tipEl.innerHTML = item.tip;
+    }
+
+    function selectLayer(key) {
+      const layer = layersData[key];
+      if (!layer) return;
+      const badgeEl = document.getElementById('layer-badge');
+      const titleEl = document.getElementById('layer-title');
+      const descEl = document.getElementById('layer-desc');
+      const techEl = document.getElementById('layer-tech');
+
+      if (badgeEl) badgeEl.textContent = layer.badge;
+      if (titleEl) titleEl.innerHTML = layer.title;
+      if (descEl) descEl.innerHTML = layer.desc;
+      if (techEl) techEl.innerHTML = layer.tech;
+    }
+
+    function handleSvgKey(event, key) {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        selectLayer(key);
+      }
+    }
+
+    function selectPeas(idx, btn) {
+      const item = peasData[idx];
+      const grid = document.getElementById('peas-grid');
+      if (!item || !grid) return;
+
+      const buttons = document.querySelectorAll('.peas-controls button');
+      buttons.forEach(function (el) {
+        el.classList.remove('is-active');
+        el.setAttribute('aria-selected', 'false');
+      });
+      if (btn) {
+        btn.classList.add('is-active');
+        btn.setAttribute('aria-selected', 'true');
+      }
+
+      grid.innerHTML = `
+        <div class="peas-cell">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-xs);">
+            <strong>مقياس الأداء</strong>
+            <span class="peas-letter">P · Performance</span>
+          </div>
+          <p style="margin: 0; font-size: 0.9375rem; color: var(--on-surface-variant);">${item.P}</p>
+        </div>
+        <div class="peas-cell">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-xs);">
+            <strong>البيئة المحيطة</strong>
+            <span class="peas-letter">E · Environment</span>
+          </div>
+          <p style="margin: 0; font-size: 0.9375rem; color: var(--on-surface-variant);">${item.E}</p>
+        </div>
+        <div class="peas-cell">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-xs);">
+            <strong>آليات التنفيذ</strong>
+            <span class="peas-letter">A · Actuators</span>
+          </div>
+          <p style="margin: 0; font-size: 0.9375rem; color: var(--on-surface-variant);">${item.A}</p>
+        </div>
+        <div class="peas-cell">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-xs);">
+            <strong>المستشعرات</strong>
+            <span class="peas-letter">S · Sensors</span>
+          </div>
+          <p style="margin: 0; font-size: 0.9375rem; color: var(--on-surface-variant);">${item.S}</p>
+        </div>
+      `;
+    }
+
+    function selectAgent(idx, btn) {
+      const agent = agentsData[idx];
+      const card = document.getElementById('agent-detail-card');
+      if (!agent || !card) return;
+
+      const tabs = document.querySelectorAll('.agent-selector-grid .agent-tab');
+      tabs.forEach(function (el) {
+        el.setAttribute('aria-selected', 'false');
+      });
+      if (btn) btn.setAttribute('aria-selected', 'true');
+
+      card.innerHTML = `
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-sm);">
+          <h3 style="margin: 0; font-size: 1.35rem;">${agent.name} — <bdi dir="ltr" style="color: var(--secondary); font-family: var(--font-mono); font-size: 1rem;">${agent.en}</bdi></h3>
+          <span class="tag-chip tag-chip--exam">مطلوب التمييز في الاختبار</span>
+        </div>
+        <p style="margin: 0 0 var(--space-md) 0;">${agent.summary}</p>
+        <div class="split-grid-equal">
+          <div class="aside-box">
+            <strong style="display: block; margin-bottom: var(--space-xs); color: var(--secondary);">نقطة التمييز الجوهرية:</strong>
+            <p style="margin: 0; font-size: 0.9375rem;">${agent.keyDiff}</p>
+          </div>
+          <div class="aside-box">
+            <strong style="display: block; margin-bottom: var(--space-xs); color: var(--secondary);">مثال تطبيقي:</strong>
+            <p style="margin: 0; font-size: 0.9375rem;">${agent.example}</p>
+          </div>
+        </div>
+      `;
+    }
+
+    function presetCompare(idxA, idxB) {
+      const selA = document.getElementById('compare-a');
+      const selB = document.getElementById('compare-b');
+      if (selA) selA.value = String(idxA);
+      if (selB) selB.value = String(idxB);
+      renderAgentComparison();
+    }
+
+    function renderAgentComparison() {
+      const selA = document.getElementById('compare-a');
+      const selB = document.getElementById('compare-b');
+      const headA = document.getElementById('comp-head-a');
+      const headB = document.getElementById('comp-head-b');
+      const body = document.getElementById('comp-body');
+      if (!selA || !selB || !headA || !headB || !body) return;
+
+      const a = agentsData[Number(selA.value)] || agentsData[2];
+      const b = agentsData[Number(selB.value)] || agentsData[3];
+
+      headA.innerHTML = `${a.name} (<bdi dir="ltr">${a.en}</bdi>)`;
+      headB.innerHTML = `${b.name} (<bdi dir="ltr">${b.en}</bdi>)`;
+
+      body.innerHTML = `
+        <tr>
+          <td><strong>الآلية الأساسية</strong></td>
+          <td>${a.summary}</td>
+          <td>${b.summary}</td>
+        </tr>
+        <tr>
+          <td><strong>الفرق الجوهري للاختبار</strong></td>
+          <td>${a.keyDiff}</td>
+          <td>${b.keyDiff}</td>
+        </tr>
+        <tr>
+          <td><strong>المثال التطبيقي</strong></td>
+          <td>${a.example}</td>
+          <td>${b.example}</td>
+        </tr>
+      `;
+    }
+
+    function renderGlossary() {
+      const grid = document.getElementById('glossary-grid');
+      const searchEl = document.getElementById('glossary-search');
+      if (!grid) return;
+
+      const q = searchEl ? searchEl.value.trim().toLowerCase() : '';
+      const filtered = glossaryData.filter(function (item) {
+        if (!q) return true;
+        return item.ar.toLowerCase().includes(q) || item.en.toLowerCase().includes(q);
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div style="grid-column: 1 / -1; padding: var(--space-md); background: var(--surface-container); border-radius: var(--rounded);">لا توجد مصطلحات مطابقة لبحثك. جرّب مسح حقل البحث لعرض جميع المصطلحات (${glossaryData.length}).</div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(function (item) {
+        const maskedClass = appState.maskEnglish ? 'glossary-en is-masked' : 'glossary-en';
+        return `
+          <div class="glossary-item">
+            <strong>${item.ar}</strong>
+            <span class="${maskedClass}"><bdi dir="ltr">${item.en}</bdi></span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function filterGlossary() {
+      renderGlossary();
+    }
+
+    async function toggleMaskEnglish() {
+      appState.maskEnglish = !appState.maskEnglish;
+      const btn = document.getElementById('toggle-mask-btn');
+      if (btn) {
+        btn.setAttribute('aria-pressed', appState.maskEnglish ? 'true' : 'false');
+        btn.textContent = appState.maskEnglish ? `إظهار المصطلحات الإنجليزية` : `إخفاء المصطلحات الإنجليزية للاختبار الذاتي`;
+      }
+      renderGlossary();
+      await saveState();
+    }
+
+    async function toggleChecklist(id, isChecked) {
+      appState.checklist[id] = Boolean(isChecked);
+      syncChecklistUI();
+      updateStudyProgress();
+      await saveState();
+    }
+
+    function syncChecklistUI() {
+      const inputs = document.querySelectorAll('#study-checklist input[type="checkbox"]');
+      inputs.forEach(function (inp) {
+        const id = inp.getAttribute('data-check-id');
+        const checked = Boolean(appState.checklist[id]);
+        inp.checked = checked;
+        const label = inp.closest('.check-item');
+        if (label) {
+          if (checked) label.classList.add('is-done');
+          else label.classList.remove('is-done');
+        }
+      });
+    }
+
+    function updateStudyProgress() {
+      const totalChecks = 5;
+      const doneChecks = Object.keys(appState.checklist).filter(function (k) { return appState.checklist[k]; }).length;
+      const answeredQuiz = Object.keys(appState.quizAnswers).length;
+      const pct = Math.round(((doneChecks + (answeredQuiz / quizQuestions.length) * 5) / 10) * 100);
+
+      const textEl = document.getElementById('study-progress-text');
+      const fillEl = document.getElementById('study-progress-fill');
+      if (textEl) textEl.textContent = `جاهزية المذاكرة: ${pct}%`;
+      if (fillEl) fillEl.style.width = `${pct}%`;
+    }
+
+    function renderQuiz() {
+      const container = document.getElementById('quiz-container');
+      const scoreBadge = document.getElementById('quiz-score-badge');
+      if (!container) return;
+
+      const total = quizQuestions.length;
+      let score = 0;
+      quizQuestions.forEach(function (item, idx) {
+        if (appState.quizAnswers[idx] === item.answer) score += 1;
+      });
+      if (scoreBadge) scoreBadge.textContent = `النتيجة: ${score} / ${total}`;
+
+      const idx = Math.max(0, Math.min(total - 1, appState.currentQuestion || 0));
+      const current = quizQuestions[idx];
+      const chosen = appState.quizAnswers[idx];
+      const hasAnswered = typeof chosen === 'number';
+
+      const optionsHtml = current.options.map(function (opt, oIdx) {
+        let cls = 'quiz-option';
+        if (hasAnswered) {
+          if (oIdx === current.answer) cls += ' is-correct';
+          else if (oIdx === chosen) cls += ' is-wrong';
+        }
+        const statusLabel = hasAnswered && oIdx === current.answer ? `<span>صحيحة</span>` : (hasAnswered && oIdx === chosen ? `<span>اختيارك</span>` : ``);
+        return `
+          <button type="button" class="${cls}" ${hasAnswered ? 'disabled' : ''} onclick="answerQuestion(${idx}, ${oIdx})">
+            <span>${opt}</span>
+            ${statusLabel}
+          </button>
+        `;
+      }).join('');
+
+      let feedbackHtml = '';
+      if (hasAnswered) {
+        const isOk = chosen === current.answer;
+        feedbackHtml = `
+          <div class="quiz-feedback ${isOk ? 'quiz-feedback--ok' : 'quiz-feedback--err'}">
+            <strong>${isOk ? 'إجابة صحيحة!' : 'إجابة غير دقيقة — راجع التفسير:'}</strong>
+            <p style="margin: var(--space-xs) 0 0 0;">${current.explain}</p>
+          </div>
+        `;
+      }
+
+      const answeredCount = Object.keys(appState.quizAnswers).length;
+      const summaryHtml = answeredCount === total
+        ? `<div class="aside-box" style="margin-top: var(--space-md);"><strong>ملخص أدائك:</strong> أجبت عن جميع الأسئلة العشرة وحصلت على <strong>${score} من ${total}</strong>. يمكنك الضغط على «إعادة تعيين الاختبار» للمحاولة مجدداً.</div>`
+        : '';
+
+      container.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-xs);">
+          <span class="index-num">سؤال ${idx + 1} / ${total}</span>
+          <span class="dossier-meta">المجاب عليها: ${answeredCount} من ${total}</span>
+        </div>
+        <h4 style="margin: 0; font-size: 1.1rem; line-height: 1.5;">${current.q}</h4>
+        <div class="quiz-options">${optionsHtml}</div>
+        ${feedbackHtml}
+        ${summaryHtml}
+        <div class="quiz-actions">
+          <div style="display: flex; gap: var(--space-sm); flex-wrap: wrap;">
+            <button type="button" class="btn btn-secondary" ${idx === 0 ? 'disabled' : ''} onclick="goQuestion(${idx - 1})">السؤال السابق</button>
+            <button type="button" class="btn btn-primary" ${idx === total - 1 ? 'disabled' : ''} onclick="goQuestion(${idx + 1})">السؤال التالي</button>
+          </div>
+          <button type="button" class="btn btn-secondary" id="reset-quiz-btn" data-armed="false" onclick="resetQuiz(this)">إعادة تعيين الاختبار</button>
+        </div>
+      `;
+    }
+
+    async function answerQuestion(qIdx, optIdx) {
+      if (typeof appState.quizAnswers[qIdx] === 'number') return;
+      appState.quizAnswers[qIdx] = optIdx;
+      renderQuiz();
+      updateStudyProgress();
+      await saveState();
+    }
+
+    async function goQuestion(newIdx) {
+      appState.currentQuestion = Math.max(0, Math.min(quizQuestions.length - 1, newIdx));
+      renderQuiz();
+      await saveState();
+    }
+
+    async function resetQuiz(btn) {
+      if (btn && btn.dataset.armed !== 'true') {
+        btn.dataset.armed = 'true';
+        btn.textContent = `اضغط مرة أخرى لتأكيد إعادة التعيين`;
+        return;
+      }
+      appState.quizAnswers = {};
+      appState.currentQuestion = 0;
+      renderQuiz();
+      updateStudyProgress();
+      await saveState();
+    }
+
+    async function saveState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === 'function') {
+          await window.notebookAppApi.setAppState(appState);
+        }
+      } catch (e) {
+        /* Safe fallback if running outside host */
+      }
+    }
+
+    async function initApp() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === 'function') {
+          const loaded = await window.notebookAppApi.getAppState();
+          if (loaded && typeof loaded === 'object') {
+            appState = {
+              checklist: loaded.checklist || {},
+              quizAnswers: loaded.quizAnswers || {},
+              currentQuestion: typeof loaded.currentQuestion === 'number' ? loaded.currentQuestion : 0,
+              maskEnglish: Boolean(loaded.maskEnglish)
+            };
+          }
+        }
+      } catch (e) {
+        /* Proceed with default empty state */
+      }
+
+      /* Render initial views */
+      selectPeas(0, document.querySelector('.peas-controls button'));
+      selectAgent(0, document.querySelector('.agent-selector-grid .agent-tab'));
+      renderAgentComparison();
+      syncChecklistUI();
+      const maskBtn = document.getElementById('toggle-mask-btn');
+      if (maskBtn) {
+        maskBtn.setAttribute('aria-pressed', appState.maskEnglish ? 'true' : 'false');
+        maskBtn.textContent = appState.maskEnglish ? `إظهار المصطلحات الإنجليزية` : `إخفاء المصطلحات الإنجليزية للاختبار الذاتي`;
+      }
+      renderGlossary();
+      renderQuiz();
+      updateStudyProgress();
+
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === 'function') {
+          window.notebookAppApi.notifyAppReady();
+        }
+      } catch (e) {
+        /* Ignore outside host */
+      }
+    }
+
+    initApp();
+  </script>
+</body>
+</html>
