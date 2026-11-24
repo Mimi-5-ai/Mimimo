@@ -1,0 +1,2499 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="artifact-type" content="dashboard">
+<meta name="design-style" content="carbon">
+<title>المرجع التفاعلي الشامل: تمثيل البيانات بلغة بايثون (الفصول 4 – 6)</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Sans:wght@300;400;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  color-scheme: light;
+  /* Carbon Surfaces & Ink */
+  --background: #ffffff;
+  --surface-container-low: #f4f4f4;
+  --surface-container: #f4f4f4;
+  --surface-container-high: #e0e0e0;
+  --on-surface: #161616;
+  --on-surface-variant: #525252;
+  --outline: #8d8d8d;
+  --outline-variant: #e0e0e0;
+
+  /* Carbon Accents */
+  --primary: #0f62fe;
+  --on-primary: #ffffff;
+  --primary-container: #d0e2ff;
+  --on-primary-container: #161616;
+  --secondary: #6f6f6f;
+  --tertiary: #198038;
+  --error: #da1e28;
+  --on-error: #ffffff;
+  --positive: #198038;
+  --warning: #b28600;
+  --focus: #0f62fe;
+
+  /* Data Series */
+  --data-1: #0f62fe;
+  --data-2: #6929c4;
+  --data-3: #005d5d;
+  --data-4: #9f1853;
+  --data-5: #e8590c;
+  --data-context: #8d8d8d;
+  --code-bg: #161616;
+  --code-fg: #f4f4f4;
+  --code-accent: #78a9ff;
+
+  /* Typography */
+  --font-headline: 'IBM Plex Sans Arabic', 'IBM Plex Sans', sans-serif;
+  --font-body: 'IBM Plex Sans Arabic', 'IBM Plex Sans', sans-serif;
+  --font-label: 'IBM Plex Mono', 'IBM Plex Sans Arabic', monospace;
+
+  /* Type Scale */
+  --display-size: clamp(1.65rem, 1.35rem + 1.1vw, 2.25rem);
+  --headline-size: clamp(1.2rem, 1.05rem + 0.5vw, 1.45rem);
+  --subhead-size: clamp(1.02rem, 0.96rem + 0.25vw, 1.15rem);
+  --body-size: 0.95rem;
+  --label-size: 0.75rem;
+
+  /* Shape & Effects */
+  --rounded: 0.125rem;
+  --rounded-lg: 0.25rem;
+  --rounded-full: 0.75rem;
+  --shadow-1: 0 2px 6px rgb(0 0 0 / 0.1);
+  --rule: 1px solid var(--outline-variant);
+  --field-rule: 1px solid var(--outline);
+  --indicator: 3px solid var(--primary);
+
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2.25rem;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-micro: 120ms;
+  --dur-short: 220ms;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body {
+  overflow-x: clip;
+  margin: 0;
+  padding: 0;
+  background: var(--background);
+  color: var(--on-surface);
+  font-family: var(--font-body);
+  font-size: var(--body-size);
+  line-height: 1.65;
+}
+header { position: static !important; }
+button, input, select, textarea { font-family: inherit; }
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.app-shell {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: var(--space-lg);
+  display: grid;
+  gap: var(--space-lg);
+}
+.app-shell * { min-width: 0; }
+
+/* Masthead */
+.masthead {
+  border-bottom: var(--rule);
+  padding-bottom: var(--space-lg);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-lg);
+  align-items: end;
+}
+.kicker {
+  font-family: var(--font-label);
+  font-size: var(--label-size);
+  color: var(--primary);
+  font-weight: 500;
+  margin-bottom: var(--space-xs);
+}
+.masthead h1 {
+  margin: 0;
+  font-family: var(--font-headline);
+  font-size: var(--display-size);
+  font-weight: 300;
+  line-height: 1.25;
+}
+.masthead h1 strong { font-weight: 700; }
+.masthead-desc {
+  margin: var(--space-xs) 0 0;
+  color: var(--on-surface-variant);
+  max-width: 68ch;
+}
+.kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(110px, 1fr));
+  gap: var(--space-sm);
+}
+.kpi-tile {
+  background: var(--surface-container);
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 2px solid var(--primary);
+}
+.kpi-label {
+  font-family: var(--font-label);
+  font-size: var(--label-size);
+  color: var(--on-surface-variant);
+}
+.kpi-val {
+  font-family: var(--font-label);
+  font-size: 1.35rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  margin-top: var(--space-xs);
+}
+
+/* Workspace Layout */
+.workspace {
+  display: grid;
+  grid-template-columns: 290px minmax(0, 1fr);
+  gap: var(--space-lg);
+  align-items: start;
+}
+
+/* Sidebar Navigation */
+.side-nav {
+  background: var(--surface-container);
+  border: var(--rule);
+}
+.nav-group-head {
+  padding: var(--space-sm) var(--space-md);
+  background: var(--surface-container-high);
+  font-family: var(--font-label);
+  font-size: var(--label-size);
+  font-weight: 600;
+  color: var(--on-surface);
+  border-bottom: var(--rule);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.nav-btn {
+  width: 100%;
+  text-align: right;
+  background: transparent;
+  border: 0;
+  border-bottom: var(--rule);
+  padding: var(--space-sm) var(--space-md);
+  min-height: 44px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-sm);
+  color: var(--on-surface);
+  transition: background-color var(--dur-micro) var(--ease-out);
+}
+.nav-btn:hover { background: var(--surface-container-high); }
+.nav-btn.is-active {
+  background: var(--background);
+  border-right: var(--indicator);
+  font-weight: 600;
+  color: var(--primary);
+}
+.nav-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+}
+.unit-badge {
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  background: var(--surface-container-high);
+  color: var(--on-surface-variant);
+  padding: 2px 6px;
+  border-radius: var(--rounded);
+}
+.unit-badge.done {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+}
+
+/* Main Content Area */
+.main-panel {
+  display: grid;
+  gap: var(--space-lg);
+}
+.unit-panel { display: none; gap: var(--space-lg); }
+.unit-panel.is-active { display: grid; }
+
+.unit-header {
+  border-bottom: var(--rule);
+  padding-bottom: var(--space-md);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--space-md);
+}
+.unit-header h2 {
+  margin: 0;
+  font-size: var(--headline-size);
+  font-weight: 600;
+}
+.unit-chapter-tag {
+  display: inline-block;
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+  padding: 2px 10px;
+  border-radius: var(--rounded-full);
+  font-size: var(--label-size);
+  font-weight: 500;
+  margin-bottom: var(--space-xs);
+}
+
+/* Buttons */
+.btn {
+  min-height: 40px;
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--rounded);
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  transition: background-color var(--dur-micro) var(--ease-out);
+}
+.btn-primary { background: var(--primary); color: var(--on-primary); }
+.btn-primary:hover { background: color-mix(in srgb, var(--primary), var(--on-surface) 20%); }
+.btn-secondary { background: var(--background); color: var(--primary); border-color: var(--primary); }
+.btn-secondary:hover { background: var(--primary-container); color: var(--on-primary-container); }
+.btn-ghost { background: var(--surface-container); color: var(--on-surface); border-color: var(--outline-variant); }
+.btn-ghost:hover { background: var(--surface-container-high); }
+.btn-done { background: var(--tertiary); color: var(--on-primary); }
+
+/* Layers & Cards */
+.layer-card {
+  background: var(--surface-container);
+  padding: var(--space-lg);
+  border-top: 2px solid var(--outline-variant);
+}
+.layer-card h3 {
+  margin: 0 0 var(--space-sm);
+  font-size: var(--subhead-size);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+.concept-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap: var(--space-md);
+}
+.concept-box {
+  background: var(--background);
+  border: var(--rule);
+  padding: var(--space-md);
+}
+.concept-box h4 {
+  margin: 0 0 var(--space-xs);
+  color: var(--primary);
+  font-size: 0.98rem;
+}
+.concept-box p, .concept-box ul { margin: 0; color: var(--on-surface-variant); font-size: 0.9rem; }
+.concept-box ul { padding-right: 1.2rem; margin-top: var(--space-xs); }
+
+/* Tables */
+.table-wrap { overflow-x: auto; background: var(--background); border: var(--rule); }
+table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+th, td { padding: var(--space-sm) var(--space-md); text-align: right; border-bottom: var(--rule); vertical-align: top; }
+th { background: var(--surface-container-high); font-weight: 600; color: var(--on-surface); }
+tr:nth-child(even) td { background: var(--surface-container-low); }
+.code-param {
+  font-family: var(--font-label);
+  direction: ltr;
+  unicode-bidi: isolate;
+  display: inline-block;
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+  padding: 1px 6px;
+  border-radius: var(--rounded);
+  font-size: 0.82rem;
+}
+
+/* Code Blocks */
+.code-block-wrap {
+  background: var(--code-bg);
+  color: var(--code-fg);
+  border-radius: var(--rounded);
+  overflow: hidden;
+  border: 1px solid var(--on-surface);
+}
+.code-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-xs) var(--space-md);
+  background: var(--on-surface);
+  border-bottom: 1px solid var(--secondary);
+  font-family: var(--font-label);
+  font-size: var(--label-size);
+}
+.copy-btn {
+  background: var(--surface-container-high);
+  color: var(--on-surface);
+  border: 0;
+  border-radius: var(--rounded);
+  padding: 4px 10px;
+  cursor: pointer;
+  font-size: 0.78rem;
+  min-height: 32px;
+}
+.copy-btn:hover { background: var(--primary-container); }
+pre.code-pre {
+  margin: 0;
+  padding: var(--space-md);
+  direction: ltr;
+  text-align: left;
+  overflow-x: auto;
+  font-family: var(--font-label);
+  font-size: 0.82rem;
+  line-height: 1.55;
+  white-space: pre;
+}
+
+/* Interactive Playground */
+.playground {
+  background: var(--background);
+  border: 1px solid var(--outline);
+  padding: var(--space-md);
+  display: grid;
+  gap: var(--space-md);
+}
+.controls-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  align-items: end;
+  padding-bottom: var(--space-sm);
+  border-bottom: var(--rule);
+}
+.control-field {
+  display: grid;
+  gap: var(--space-xs);
+  min-width: 140px;
+}
+.control-field label {
+  font-size: var(--label-size);
+  font-weight: 600;
+  color: var(--on-surface-variant);
+}
+.control-field select,
+.control-field input[type="number"] {
+  height: 38px;
+  padding: 0 var(--space-sm);
+  background: var(--surface-container-low);
+  border: 0;
+  border-bottom: var(--field-rule);
+  color: var(--on-surface);
+}
+.control-field input[type="range"] {
+  accent-color: var(--primary);
+  min-height: 32px;
+}
+.viz-stage {
+  min-height: 290px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-container-low);
+  padding: var(--space-md);
+  position: relative;
+}
+.viz-stage svg { max-width: 100%; height: auto; display: block; }
+.viz-caption {
+  font-family: var(--font-label);
+  font-size: var(--label-size);
+  color: var(--on-surface-variant);
+  margin-top: var(--space-xs);
+  text-align: center;
+}
+
+/* Bokeh Interactive Tooltip & Legend */
+.bokeh-wrapper {
+  width: 100%;
+  background: var(--background);
+  border: var(--rule);
+  padding: var(--space-sm);
+  display: grid;
+  gap: var(--space-xs);
+}
+.bokeh-toolbar {
+  display: flex;
+  gap: var(--space-xs);
+  padding: 4px 8px;
+  background: var(--surface-container);
+  border: var(--rule);
+  align-items: center;
+  flex-wrap: wrap;
+}
+.bokeh-tool-pill {
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  padding: 3px 8px;
+  background: var(--background);
+  border: 1px solid var(--outline);
+  cursor: pointer;
+}
+.bokeh-tool-pill.active { background: var(--primary-container); border-color: var(--primary); font-weight: 600; }
+.bokeh-tooltip {
+  background: var(--background);
+  border: 1px solid var(--on-surface);
+  box-shadow: var(--shadow-1);
+  padding: var(--space-xs) var(--space-sm);
+  font-size: 0.78rem;
+  font-family: var(--font-label);
+  direction: ltr;
+  text-align: left;
+  min-height: 36px;
+}
+
+/* Unit Review & Quiz */
+.quiz-card {
+  background: var(--background);
+  border: var(--rule);
+  padding: var(--space-md);
+  display: grid;
+  gap: var(--space-sm);
+}
+.quiz-q { font-weight: 600; margin: 0; }
+.quiz-opts {
+  display: grid;
+  gap: var(--space-xs);
+}
+.quiz-opt {
+  text-align: right;
+  padding: var(--space-sm) var(--space-md);
+  min-height: 44px;
+  background: var(--surface-container-low);
+  border: 1px solid var(--outline-variant);
+  cursor: pointer;
+  color: var(--on-surface);
+  transition: background-color var(--dur-micro) var(--ease-out);
+}
+.quiz-opt:hover:not(:disabled) { background: var(--surface-container-high); }
+.quiz-opt.correct { background: color-mix(in srgb, var(--tertiary) 16%, var(--background)); border-color: var(--tertiary); font-weight: 600; }
+.quiz-opt.wrong { background: color-mix(in srgb, var(--error) 14%, var(--background)); border-color: var(--error); }
+.quiz-feedback {
+  font-size: 0.86rem;
+  padding: var(--space-xs) var(--space-sm);
+  border-right: 3px solid var(--primary);
+  background: var(--surface-container);
+  display: none;
+}
+.quiz-feedback.show { display: block; }
+
+.glyph-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+  gap: var(--space-sm);
+}
+.glyph-item {
+  background: var(--background);
+  border: var(--rule);
+  padding: var(--space-sm);
+  display: grid;
+  gap: var(--space-xs);
+}
+
+.callout-note {
+  background: var(--background);
+  border-right: 4px solid var(--primary);
+  padding: var(--space-sm) var(--space-md);
+  font-size: 0.9rem;
+}
+
+.unit-footer-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: var(--rule);
+}
+
+@media (max-width: 900px) {
+  .workspace { grid-template-columns: 1fr; }
+  .masthead { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .app-shell { padding: var(--space-sm); }
+  .kpi-strip { grid-template-columns: 1fr; }
+  .layer-card { padding: var(--space-md); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <header class="masthead">
+    <div>
+      <div class="kicker">DATA ANALYSIS &amp; VISUALIZATION // CHAPTERS 04 – 06</div>
+      <h1>الدليل التفاعلي الشامل: <strong>تمثيل البيانات في بايثون</strong></h1>
+      <p class="masthead-desc">
+        مرجع دراسي تفاعلي متكامل يغطي الفصول الرابع (Matplotlib)، والخامس (Seaborn وPandas)، والسادس (Bokeh) عبر تسع وحدات مستقلة تماماً مع معاينات حية، وأكواد قابلة للنسخ، ودليل مقارن، واختبار شامل.
+      </p>
+    </div>
+    <div class="kpi-strip">
+      <div class="kpi-tile">
+        <div class="kpi-label">الوحدات المنجزة</div>
+        <div class="kpi-val" id="kpi-units">0 / 9</div>
+      </div>
+      <div class="kpi-tile">
+        <div class="kpi-label">نتيجة الاختبار الشامل</div>
+        <div class="kpi-val" id="kpi-quiz">0 / 18</div>
+      </div>
+      <div class="kpi-tile">
+        <div class="kpi-label">القسم النشط</div>
+        <div class="kpi-val" id="kpi-active">ف4 · و1</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="workspace">
+    <nav class="side-nav" aria-label="فهرس الفصول والوحدات">
+      <div class="nav-group-head"><span>الفصل الرابع: Matplotlib</span><span class="unit-badge">3 وحدات</span></div>
+      <button class="nav-btn is-active" data-tab="u4-1" onclick="switchTab('u4-1')">
+        <span>الوحدة 1: مفهوم التمثيل وبناء الرسم</span>
+        <span class="nav-meta"><span class="unit-badge" id="badge-u4-1">جديد</span></span>
+      </button>
+      <button class="nav-btn" data-tab="u4-2" onclick="switchTab('u4-2')">
+        <span>الوحدة 2: المخطط الشريطي والمدرج</span>
+        <span class="nav-meta"><span class="unit-badge" id="badge-u4-2">جديد</span></span>
+      </button>
+      <button class="nav-btn" data-tab="u4-3" onclick="switchTab('u4-3')">
+        <span>الوحدة 3: الدائري والخطي والصندوق</span>
+        <span class="nav-meta"><span class="unit-badge" id="badge-u4-3">جديد</span></span>
+      </button>
+
+      <div class="nav-group-head"><span>الفصل الخامس: Seaborn وPandas</span><span class="unit-badge">3 وحدات</span></div>
+      <button class="nav-btn" data-tab="u5-1" onclick="switchTab('u5-1')">
+        <span>الوحدة 1: المخطط النقطي وتخصيصه</span>
+        <span class="nav-meta"><span class="unit-badge" id="badge-u5-1">جديد</span></span>
+      </button>
+      <button class="nav-btn" data-tab="u5-2" onclick="switchTab('u5-2')">
+        <span>الوحدة 2: الجداول والارتباط والحرارة</span>
+        <span class="nav-meta"><span class="unit-badge" id="badge-u5-2">جديد</span></span>
+      </button>
+      <button class="nav-btn" data-tab="u5-3" onclick="switchTab('u5-3')">
+        <span>الوحدة 3: الرسم المدمج في Pandas</span>
+        <span class="nav-meta"><span class="unit-badge" id="badge-u5-3">جديد</span></span>
+      </button>
+
+      <div class="nav-group-head"><span>الفصل السادس: مكتبة Bokeh</span><span class="unit-badge">3 وحدات</span></div>
+      <button class="nav-btn" data-tab="u6-1" onclick="switchTab('u6-1')">
+        <span>الوحدة 1: أساسيات Bokeh والـ Glyphs</span>
+        <span class="nav-meta"><span class="unit-badge" id="badge-u6-1">جديد</span></span>
+      </button>
+      <button class="nav-btn" data-tab="u6-2" onclick="switchTab('u6-2')">
+        <span>الوحدة 2: تخطيطات العرض Layouts</span>
+        <span class="nav-meta"><span class="unit-badge" id="badge-u6-2">جديد</span></span>
+      </button>
+      <button class="nav-btn" data-tab="u6-3" onclick="switchTab('u6-3')">
+        <span>الوحدة 3: الأدوات والتلميحات والمفتاح</span>
+        <span class="nav-meta"><span class="unit-badge" id="badge-u6-3">جديد</span></span>
+      </button>
+
+      <div class="nav-group-head"><span>المراجعة والمقارنة</span><span class="unit-badge">شامل</span></div>
+      <button class="nav-btn" data-tab="compare" onclick="switchTab('compare')">
+        <span>الدليل المقارن بين المكتبات الأربع</span>
+        <span class="nav-meta"><span class="unit-badge">جدول</span></span>
+      </button>
+      <button class="nav-btn" data-tab="final-quiz" onclick="switchTab('final-quiz')">
+        <span>الاختبار التفاعلي الشامل (18 سؤالاً)</span>
+        <span class="nav-meta"><span class="unit-badge" id="badge-quiz">0/18</span></span>
+      </button>
+    </nav>
+
+    <main class="main-panel" id="main-content">
+
+      <!-- ==================== CHAPTER 4 UNIT 1 ==================== -->
+      <section class="unit-panel is-active" id="panel-u4-1">
+        <div class="unit-header">
+          <div>
+            <span class="unit-chapter-tag">الفصل الرابع · الوحدة (1) · Matplotlib</span>
+            <h2>مفهوم التمثيل الرسومي وبناء الرسم الأول</h2>
+          </div>
+          <button class="btn btn-secondary" id="done-btn-u4-1" onclick="toggleUnitDone('u4-1')">تحديد الوحدة كمكتملة</button>
+        </div>
+
+        <div class="layer-card">
+          <h3>1. مفهوم التمثيل الرسومي وتصنيف الرسوم والمكتبات</h3>
+          <div class="concept-grid">
+            <div class="concept-box">
+              <h4>المفهوم الرئيسي</h4>
+              <p>يُقصد بتمثيل البيانات تحويل البيانات من شكلها الخام إلى رسوم بيانية ورسوم تفاعلية يسهل على البشر فهمها لرؤية الاتجاهات والقيم المتطرفة والأنماط.</p>
+            </div>
+            <div class="concept-box">
+              <h4>تصنيف الرسوم حسب عدد المتغيرات</h4>
+              <ul>
+                <li><strong>Univariate:</strong> تمثيل متغير واحد فقط.</li>
+                <li><strong>Bivariate:</strong> تمثيل متغيرين معاً.</li>
+                <li><strong>Multivariate:</strong> تمثيل عدة متغيرات معاً.</li>
+              </ul>
+            </div>
+            <div class="concept-box">
+              <h4>أهم مكتبات البايثون للتمثيل الرسومي</h4>
+              <ul>
+                <li><strong>Matplotlib:</strong> المكتبة الأساسية لإنشاء الرسوم البيانية والرسوم المتحركة.</li>
+                <li><strong>Seaborn:</strong> مبنية على Matplotlib وتنتج رسوماً إحصائية عالية الجودة.</li>
+                <li><strong>Bokeh:</strong> لإنشاء رسوم تفاعلية ولوحات معلومات تُعرض في المتصفح.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="layer-card">
+          <h3>2. التثبيت والاستدعاء ومكونات الحاوية (Figure)</h3>
+          <div class="concept-grid">
+            <div class="concept-box">
+              <h4>التثبيت والاستدعاء</h4>
+              <p>تأتي <bdi dir="ltr">Matplotlib</bdi> مثبتة تلقائياً في Anaconda، وللتثبيت اليدوي نكتب <span class="code-param">pip install matplotlib</span>، ثم نستدعيها بـ <span class="code-param">import matplotlib.pyplot as plt</span>.</p>
+            </div>
+            <div class="concept-box">
+              <h4>ملحقات الحاوية الرئيسية (Figure)</h4>
+              <p>يمثل <bdi dir="ltr">Figure</bdi> الحاوية الرئيسية للرسم وتضم: <strong>Plots</strong> (الرسوم)، <strong>Subplots</strong> (الرسوم الفرعية)، <strong>Axes</strong> (المحاور)، <strong>Titles</strong> (العناوين)، و<strong>Legend</strong> (مفتاح الرسم).</p>
+            </div>
+          </div>
+          <div style="margin-top: var(--space-md);" class="table-wrap">
+            <table>
+              <thead><tr><th>الدالة / العنصر</th><th>الوظيفة</th><th>مثال الاستخدام</th></tr></thead>
+              <tbody>
+                <tr><td><span class="code-param">np.linspace(start, stop, num)</span></td><td>إنشاء مجموعة نقاط متساوية المسافات على خط مستقيم</td><td><span class="code-param">x = np.linspace(0, 10, 100)</span></td></tr>
+                <tr><td><span class="code-param">plt.plot(x, y, label, color)</span></td><td>رسم خط يربط نقاط x و y مع إمكانية إضافة أكثر من منحنى بنفس الشكل</td><td><span class="code-param">plt.plot(x, y1, label='sin', color='blue')</span></td></tr>
+                <tr><td><span class="code-param">plt.legend()</span></td><td>إظهار مفتاح الرسم البياني لتوضيح عنوان كل مجموعة بيانات</td><td><span class="code-param">plt.legend()</span></td></tr>
+                <tr><td><span class="code-param">plt.xlabel() / plt.ylabel()</span></td><td>إضافة تسميات للمحور الأفقي (x) والمحور الرأسي (y)</td><td><span class="code-param">plt.xlabel('x-axis')</span></td></tr>
+                <tr><td><span class="code-param">plt.title() / plt.show()</span></td><td>تعيين عنوان رئيسي أعلى الرسم ثم عرض الشكل النهائي</td><td><span class="code-param">plt.title('Trigonometric Curves'); plt.show()</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="layer-card">
+          <h3>3. كود بايثون كامل (تطبيق متعدد المنحنيات)</h3>
+          <div class="code-block-wrap">
+            <div class="code-head"><span>Python · Matplotlib Basics</span><button class="copy-btn" onclick="copyCode('code-u4-1', this)">نسخ الكود</button></div>
+            <pre class="code-pre" id="code-u4-1">import matplotlib.pyplot as plt
+import numpy as np
+
+x = np.linspace(0, 10, 100)
+y1 = np.sin(x)
+y2 = np.cos(x)
+
+# إضافة أكثر من plot لنفس الرسم البياني مع عنوان ولون لكل مجموعة
+plt.plot(x, y1, label='sin(x)', color='blue')
+plt.plot(x, y2, label='cos(x)', color='orange')
+
+# إظهار مفتاح الرسم وعناوين المحاور والعنوان الرئيسي
+plt.legend()
+plt.xlabel('X Values')
+plt.ylabel('Amplitude')
+plt.title('Comparing sin(x) and cos(x) with Matplotlib')
+plt.show()</pre>
+          </div>
+        </div>
+
+        <div class="layer-card">
+          <h3>4. معاينة تفاعلية: بناء حاوية Figure خطوة بخطوة</h3>
+          <div class="playground">
+            <div class="controls-row">
+              <div class="control-field">
+                <label for="u41-series">المنحنيات المعروضة</label>
+                <select id="u41-series" onchange="renderU41()">
+                  <option value="both">منحنيان: sin(x) و cos(x)</option>
+                  <option value="sin">منحنى واحد: sin(x) فقط</option>
+                </select>
+              </div>
+              <div class="control-field">
+                <label for="u41-legend">plt.legend()</label>
+                <select id="u41-legend" onchange="renderU41()">
+                  <option value="1">مفعّل (إظهار المفتاح)</option>
+                  <option value="0">معطّل (إخفاء المفتاح)</option>
+                </select>
+              </div>
+              <div class="control-field">
+                <label for="u41-labels">xlabel / ylabel / title</label>
+                <select id="u41-labels" onchange="renderU41()">
+                  <option value="1">مفعّلة (عرض العناوين)</option>
+                  <option value="0">معطّلة</option>
+                </select>
+              </div>
+            </div>
+            <div class="viz-stage" id="viz-u4-1"></div>
+          </div>
+        </div>
+
+        <div class="layer-card">
+          <h3>5. أسئلة مراجعة الوحدة (1)</h3>
+          <div id="review-u4-1" class="concept-grid"></div>
+        </div>
+      </section>
+
+      <!-- ==================== CHAPTER 4 UNIT 2 ==================== -->
+      <section class="unit-panel" id="panel-u4-2">
+        <div class="unit-header">
+          <div>
+            <span class="unit-chapter-tag">الفصل الرابع · الوحدة (2) · Matplotlib</span>
+            <h2>المخطط الشريطي (Bar Plot) والمدرج التكراري (Histogram)</h2>
+          </div>
+          <button class="btn btn-secondary" id="done-btn-u4-2" onclick="toggleUnitDone('u4-2')">تحديد الوحدة كمكتملة</button>
+        </div>
+
+        <div class="layer-card">
+          <h3>1. المقارنة النظرية وشرح المعاملات</h3>
+          <div class="concept-grid">
+            <div class="concept-box">
+              <h4>المخطط الشريطي (plt.bar)</h4>
+              <p>يُستخدم لمقارنة قيم المجموعات المختلفة (أفقياً أو رأسياً)، ويلائم <strong>البيانات النوعية</strong> (مثل تقييمات الأفلام Bad و Good) أو الكمية ذات القيم المحدودة القليلة.</p>
+              <ul>
+                <li><span class="code-param">x</span>: الفئات المعروضة على المحور الأفقي مثل <bdi dir="ltr">movie_ratings</bdi>.</li>
+                <li><span class="code-param">height</span>: القيم العددية المقابلة لكل فئة مثل <bdi dir="ltr">rating_counts</bdi>.</li>
+                <li><span class="code-param">color</span>: لون الأعمدة (مثل <bdi dir="ltr">'blue'</bdi>).</li>
+              </ul>
+            </div>
+            <div class="concept-box">
+              <h4>المدرج التكراري (plt.hist)</h4>
+              <p>يمثل <strong>توزيع متغير رقمي</strong> عن طريق تقسيم القيم إلى فترات وحساب التكرارات داخل كل فترة (مثل فترات 20~30، أو توزيع درجات 100 طالب من 0 إلى 100).</p>
+              <ul>
+                <li><span class="code-param">x</span>: مصفوفة القيم الرقمية المستمرة.</li>
+                <li><span class="code-param">bins</span>: عدد الفترات (أو قائمة حدود الفترات) التي تُجمع فيها التكرارات، مثل <bdi dir="ltr">bins=10</bdi>.</li>
+                <li><span class="code-param">edgecolor</span>: لون حدود الأعمدة لتوضيح الفواصل بين الفترات.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="layer-card">
+          <h3>2. أكواد بايثون كاملة (Bar &amp; Histogram)</h3>
+          <div class="concept-grid">
+            <div class="code-block-wrap">
+              <div class="code-head"><span>Python · plt.bar()</span><button class="copy-btn" onclick="copyCode('code-u4-2a', this)">نسخ الكود</button></div>
+              <pre class="code-pre" id="code-u4-2a">import matplotlib.pyplot as plt
+
+movie_ratings = ['Bad', 'Good']
+rating_counts = [42, 68]
+
+plt.bar(movie_ratings, rating_counts, color='blue')
+plt.xlabel('Movie Rating')
+plt.ylabel('Count')
+plt.title('Count of Bad vs Good Ratings')
+plt.show()</pre>
+            </div>
+            <div class="code-block-wrap">
+              <div class="code-head"><span>Python · plt.hist() with bins</span><button class="copy-btn" onclick="copyCode('code-u4-2b', this)">نسخ الكود</button></div>
+              <pre class="code-pre" id="code-u4-2b">import matplotlib.pyplot as plt
+import numpy as np
+
+# توليد درجات 100 طالب عشوائياً من 0 إلى 100
+scores = np.random.randint(0, 101, size=100)
+
+plt.hist(scores, bins=10, color='steelblue', edgecolor='black')
+plt.xlabel('Score Intervals')
+plt.ylabel('Frequency')
+plt.title('Distribution of 100 Student Scores (10 Bins)')
+plt.show()</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="layer-card">
+          <h3>3. معاينة تفاعلية: مقارنة plt.bar وتأثير معامل bins في plt.hist</h3>
+          <div class="playground">
+            <div class="controls-row">
+              <div class="control-field">
+                <label for="u42-mode">نوع المخطط</label>
+                <select id="u42-mode" onchange="renderU42()">
+                  <option value="hist">المدرج التكراري (plt.hist)</option>
+                  <option value="bar">المخطط الشريطي (plt.bar)</option>
+                </select>
+              </div>
+              <div class="control-field">
+                <label for="u42-bins">عدد الفترات (bins): <span id="u42-bins-lbl">10</span></label>
+                <input type="range" id="u42-bins" min="4" max="20" step="2" value="10" oninput="syncU42Bins(this.value)">
+              </div>
+              <div class="control-field">
+                <label for="u42-color">لون الأعمدة (color)</label>
+                <select id="u42-color" onchange="renderU42()">
+                  <option value="#0f62fe">أزرق (blue)</option>
+                  <option value="#005d5d">أخضر بترولي (teal)</option>
+                  <option value="#6929c4">بنفسجي (purple)</option>
+                </select>
+              </div>
+            </div>
+            <div class="viz-stage" id="viz-u4-2"></div>
+          </div>
+        </div>
+
+        <div class="layer-card">
+          <h3>4. أسئلة مراجعة الوحدة (2)</h3>
+          <div id="review-u4-2" class="concept-grid"></div>
+        </div>
+      </section>
+
+      <!-- ==================== CHAPTER 4 UNIT 3 ==================== -->
+      <section class="unit-panel" id="panel-u4-3">
+        <div class="unit-header">
+          <div>
+            <span class="unit-chapter-tag">الفصل الرابع · الوحدة (3) · Matplotlib</span>
+            <h2>المخطط الدائري والخطي ومخطط الصندوق</h2>
+          </div>
+          <button class="btn btn-secondary" id="done-btn-u4-3" onclick="toggleUnitDone('u4-3')">تحديد الوحدة كمكتملة</button>
+        </div>
+
+        <div class="layer-card">
+          <h3>1. المفاهيم والمعاملات الأساسية</h3>
+          <div class="concept-grid">
+            <div class="concept-box">
+              <h4>المخطط الدائري (plt.pie)</h4>
+              <p>يعرض نسب الأجزاء إلى الكل (تُحسب نسبة الجزء بقسمة قيمته على المجموع، مثل <bdi dir="ltr">85 / 296 = 28.7%</bdi> لمادة الرياضيات).</p>
+              <ul>
+                <li><span class="code-param">colors</span>: قائمة ألوان بعدد الشرائح.</li>
+                <li><span class="code-param">startangle</span>: زاوية بداية أول شريحة (مثل <bdi dir="ltr">90</bdi>).</li>
+                <li><span class="code-param">autopct</span>: تنسيق النسبة المئوية مثل <bdi dir="ltr">'%0.1f%%'</bdi>.</li>
+                <li><span class="code-param">explode</span>: قائمة إزاحة لإبراز شريحة معينة عن المركز.</li>
+                <li><span class="code-param">shadow</span>: إضافة ظل ثلاثي الأبعاد (<bdi dir="ltr">True/False</bdi>).</li>
+              </ul>
+            </div>
+            <div class="concept-box">
+              <h4>المخطط الخطي (plt.plot - Line Plot)</h4>
+              <p>يُستخدم لعرض تغير البيانات بمرور الوقت (أو عبر متغير بفترات ثابتة)، ويتكون من خط يربط نقاط البيانات على المحورين x و y لإبراز الاتجاه الزمني.</p>
+            </div>
+            <div class="concept-box">
+              <h4>مخطط الصندوق (plt.boxplot)</h4>
+              <p>يلخص توزيع البيانات الرقمية: الخط الأوسط يمثل <strong>الوسيط (Median)</strong>، وحدود الصندوق تمثل الربعين الأول والثالث، والدوائر تمثل <strong>القيم المتطرفة (Outliers)</strong>.</p>
+              <ul>
+                <li><span class="code-param">vert</span>: أفقي عند <bdi dir="ltr">False</bdi> ورأسي عند <bdi dir="ltr">True</bdi>.</li>
+                <li><span class="code-param">widths</span>: عرض الصندوق كنسبة من الشكل.</li>
+                <li><span class="code-param">meanline</span>: عرض خط المتوسط الحسابي.</li>
+                <li><span class="code-param">showfliers</span>: إظهار أو إخفاء القيم المتطرفة.</li>
+                <li><span class="code-param">patch_artist</span>: تفعيل تعبئة الصندوق بلون خلفية.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="layer-card">
+          <h3>2. أكواد بايثون كاملة (Pie, Line, Boxplot)</h3>
+          <div class="concept-grid">
+            <div class="code-block-wrap">
+              <div class="code-head"><span>Python · plt.pie()</span><button class="copy-btn" onclick="copyCode('code-u4-3a', this)">نسخ الكود</button></div>
+              <pre class="code-pre" id="code-u4-3a">import matplotlib.pyplot as plt
+
+subjects = ['Mathematics', 'Physics', 'Chemistry', 'Biology']
+scores = [85, 72, 69, 70]  # المجموع = 296 -> 85/296 = 28.7%
+colors = ['r', 'g', 'b', 'y']
+explode = [0.1, 0, 0, 0]
+
+plt.pie(scores, labels=subjects, colors=colors,
+        startangle=90, explode=explode,
+        shadow=True, autopct='%0.1f%%')
+plt.title('Student Scores Breakdown')
+plt.show()</pre>
+            </div>
+            <div class="code-block-wrap">
+              <div class="code-head"><span>Python · plt.boxplot() &amp; Line Plot</span><button class="copy-btn" onclick="copyCode('code-u4-3b', this)">نسخ الكود</button></div>
+              <pre class="code-pre" id="code-u4-3b">import matplotlib.pyplot as plt
+
+data = [18, 22, 25, 27, 29, 31, 33, 35, 38, 62]
+plt.boxplot(data, vert=True, widths=0.4,
+            meanline=True, showfliers=True, patch_artist=True)
+plt.title('Box Plot with Median &amp; Outliers')
+plt.show()
+
+# مثال Line Plot للتغير الزمني
+months = ['Jan', 'Feb', 'Mar', 'Apr', 'May']
+sales = [120, 145, 138, 170, 195]
+plt.plot(months, sales, marker='o')
+plt.title('Monthly Sales Trend')
+plt.show()</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="layer-card">
+          <h3>3. مختبر تفاعلي: تجربة معاملات Pie و Boxplot</h3>
+          <div class="playground">
+            <div class="controls-row">
+              <div class="control-field">
+                <label for="u43-type">المخطط المعروض</label>
+                <select id="u43-type" onchange="renderU43()">
+                  <option value="pie">المخطط الدائري (plt.pie)</option>
+                  <option value="box">مخطط الصندوق (plt.boxplot)</option>
+                  <option value="line">المخطط الخطي (Line Plot)</option>
+                </select>
+              </div>
+              <div class="control-field">
+                <label for="u43-explode">explode (للدائري)</label>
+                <select id="u43-explode" onchange="renderU43()">
+                  <option value="0.1">إبراز الرياضيات (0.1)</option>
+                  <option value="0">بدون إزاحة (0)</option>
+                </select>
+              </div>
+              <div class="control-field">
+                <label for="u43-angle">startangle: <span id="u43-angle-lbl">90</span>°</label>
+                <input type="range" id="u43-angle" min="0" max="270" step="45" value="90" oninput="syncU43Angle(this.value)">
+              </div>
+              <div class="control-field">
+                <label for="u43-vert">vert (للصندوق)</label>
+                <select id="u43-vert" onchange="renderU43()">
+                  <option value="true">True (رأسي)</option>
+                  <option value="false">False (أفقي)</option>
+                </select>
+              </div>
+              <div class="control-field">
+                <label for="u43-fliers">showfliers (للمتطرفة)</label>
+                <select id="u43-fliers" onchange="renderU43()">
+                  <option value="true">True (إظهار)</option>
+                  <option value="false">False (إخفاء)</option>
+                </select>
+              </div>
+            </div>
+            <div class="viz-stage" id="viz-u4-3"></div>
+          </div>
+        </div>
+
+        <div class="layer-card">
+          <h3>4. أسئلة مراجعة الوحدة (3)</h3>
+          <div id="review-u4-3" class="concept-grid"></div>
+        </div>
+      </section>
+
+      <!-- ==================== CHAPTER 5 UNIT 1 ==================== -->
+      <section class="unit-panel" id="panel-u5-1">
+        <div class="unit-header">
+          <div>
+            <span class="unit-chapter-tag">الفصل الخامس · الوحدة (1) · Seaborn &amp; Matplotlib</span>
+            <h2>المخطط النقطي (Scatter Plot) والمقارنة مع Seaborn</h2>
+          </div>
+          <button class="btn btn-secondary" id="done-btn-u5-1" onclick="toggleUnitDone('u5-1')">تحديد الوحدة كمكتملة</button>
+        </div>
+
+        <div class="layer-card">
+          <h3>1. تمثيل العلاقة في بيانات البطريق (Penguins Dataset)</h3>
+          <div class="concept-grid">
+            <div class="concept-box">
+              <h4>المخطط النقطي في Matplotlib</h4>
+              <p>يمثل العلاقة بين متغيرين رقميين مثل <bdi dir="ltr">culmen_length_mm</bdi> و <bdi dir="ltr">body_mass_g</bdi> عبر نقاط على الإحداثيين x و y (تظهر علاقة طردية واضحة).</p>
+              <ul>
+                <li><span class="code-param">s</span>: التحكم بحجم النقاط (مثل متغير <bdi dir="ltr">psize</bdi>: 10 للذكور و 100 للإناث).</li>
+                <li><span class="code-param">c / color</span>: تخصيص اللون عبر قاموس <bdi dir="ltr">colors</bdi> وحلقة تكرار لكل فئة.</li>
+                <li><span class="code-param">marker</span>: شكل النقطة (مثل <bdi dir="ltr">'o'</bdi> و <bdi dir="ltr">'^'</bdi>) بناءً على عمود <bdi dir="ltr">sex</bdi>.</li>
+              </ul>
+            </div>
+            <div class="concept-box">
+              <h4>الاختصار الاحترافي عبر Seaborn</h4>
+              <p>تغني دالة <span class="code-param">sns.scatterplot()</span> عن كتابة حلقات التكرار اليدوية والقاموس، إذ تتيح الترميز اللوني والشكلي مباشرة عبر اسم العمود:</p>
+              <ul>
+                <li><span class="code-param">hue='sex'</span>: تلوين النقاط تلقائياً حسب الفئة.</li>
+                <li><span class="code-param">palette</span>: تحديد لوحة الألوان (مثل <bdi dir="ltr">'Set1'</bdi> أو قاموس ألوان).</li>
+                <li><span class="code-param">style='sex'</span>: تغيير شكل النقطة تلقائياً حسب الفئة.</li>
+                <li><span class="code-param">markers</span>: تحديد قاموس الأشكال مثل <bdi dir="ltr">{'MALE':'s', 'FEMALE':'o'}</bdi>.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="layer-card">
+          <h3>2. مقارنة الكود: Matplotlib اليدوي مقابل Seaborn المختصر</h3>
+          <div class="concept-grid">
+            <div class="code-block-wrap">
+              <div class="code-head"><span>Python · plt.scatter() + Loop</span><button class="copy-btn" onclick="copyCode('code-u5-1a', this)">نسخ الكود</button></div>
+              <pre class="code-pre" id="code-u5-1a">import matplotlib.pyplot as plt
+import pandas as pd
+
+df = pd.read_csv('penguins.csv').dropna()
+colors = {'MALE': 'blue', 'FEMALE': 'red'}
+markers = {'MALE': 's', 'FEMALE': 'o'}
+sizes = {'MALE': 10, 'FEMALE': 100}
+
+for sex_val in ['MALE', 'FEMALE']:
+    sub = df[df['sex'] == sex_val]
+    plt.scatter(sub['culmen_length_mm'], sub['body_mass_g'],
+                s=sizes[sex_val], c=colors[sex_val],
+                marker=markers[sex_val], label=sex_val)
+
+plt.xlabel('culmen_length_mm')
+plt.ylabel('body_mass_g')
+plt.title('Penguins Scatter (Matplotlib)')
+plt.legend()
+plt.show()</pre>
+            </div>
+            <div class="code-block-wrap">
+              <div class="code-head"><span>Python · sns.scatterplot()</span><button class="copy-btn" onclick="copyCode('code-u5-1b', this)">نسخ الكود</button></div>
+              <pre class="code-pre" id="code-u5-1b">import seaborn as sns
+import matplotlib.pyplot as plt
+
+sns.scatterplot(
+    data=df,
+    x='culmen_length_mm',
+    y='body_mass_g',
+    hue='sex',
+    palette={'MALE': 'blue', 'FEMALE': 'red'},
+    style='sex',
+    markers={'MALE': 's', 'FEMALE': 'o'},
+    size='sex',
+    sizes=(30, 110)
+)
+plt.title('Penguins Scatter (Seaborn)')
+plt.show()</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="layer-card">
+          <h3>3. معاينة تفاعلية: ترميز الحجم واللون والشكل في بيانات البطريق</h3>
+          <div class="playground">
+            <div class="controls-row">
+              <div class="control-field">
+                <label for="u51-hue">تفعيل hue (التلوين حسب sex)</label>
+                <select id="u51-hue" onchange="renderU51()">
+                  <option value="1">مفعّل (أزرق للذكور، أحمر للإناث)</option>
+                  <option value="0">لون موحد</option>
+                </select>
+              </div>
+              <div class="control-field">
+                <label for="u51-style">تفعيل style / markers</label>
+                <select id="u51-style" onchange="renderU51()">
+                  <option value="1">مفعّل (مربع للذكور، دائرة للإناث)</option>
+                  <option value="0">دوائر فقط</option>
+                </select>
+              </div>
+              <div class="control-field">
+                <label for="u51-size">تفعيل s (الحجم: ذكور 10 / إناث 100)</label>
+                <select id="u51-size" onchange="renderU51()">
+                  <option value="1">مفعّل (إبراز حجم الإناث)</option>
+                  <option value="0">حجم موحد</option>
+                </select>
+              </div>
+            </div>
+            <div class="viz-stage" id="viz-u5-1"></div>
+          </div>
+        </div>
+
+        <div class="layer-card">
+          <h3>4. أسئلة مراجعة الوحدة (1)</h3>
+          <div id="review-u5-1" class="concept-grid"></div>
+        </div>
+      </section>
+
+      <!-- ==================== CHAPTER 5 UNIT 2 ==================== -->
+      <section class="unit-panel" id="panel-u5-2">
+        <div class="unit-header">
+          <div>
+            <span class="unit-chapter-tag">الفصل الخامس · الوحدة (2) · Pandas &amp; Seaborn</span>
+            <h2>جداول التقاطع والمحورية، ورسوم المتغيرين، والارتباط الحراري</h2>
+          </div>
+          <button class="btn btn-secondary" id="done-btn-u5-2" onclick="toggleUnitDone('u5-2')">تحديد الوحدة كمكتملة</button>
+        </div>
+
+        <div class="layer-card">
+          <h3>1. الجداول الإحصائية والرسوم الثنائية ومعامل الارتباط</h3>
+          <div class="concept-grid">
+            <div class="concept-box">
+              <h4>جدول التقاطع (pd.crosstab)</h4>
+              <p>يعرض العلاقة بين <strong>متغيرين نوعيين</strong> على شكل مصفوفة تكرارات (مثل أعداد الذكور والإناث في كل فصيلة بطريق: Adelie 73/73، Chinstrap 34/34، Gentoo 58/62).</p>
+            </div>
+            <div class="concept-box">
+              <h4>الجدول المحوري (pd.pivot_table)</h4>
+              <p>يمثل متغيرين أو أكثر (أحدهما نوعي في <span class="code-param">index</span> والباقي كمي في <span class="code-param">values</span>) مع دوال تجميع في <span class="code-param">aggfunc</span> مثل <bdi dir="ltr">['mean', 'sum']</bdi>.</p>
+            </div>
+            <div class="concept-box">
+              <h4>رسوم متغيرين في Seaborn</h4>
+              <ul>
+                <li><span class="code-param">sns.barplot</span>: المحور x فئات نوعية (species) والمحور y قيمة إحصائية (مثل الوسيط لـ culmen_length_mm).</li>
+                <li><span class="code-param">sns.boxplot</span>: المحور x فئات نوعية والمحور y توزيع كل فئة.</li>
+              </ul>
+            </div>
+            <div class="concept-box">
+              <h4>الارتباط (Correlation) والخريطة الحرارية</h4>
+              <p>يتراوح معامل الارتباط ضمن <bdi dir="ltr">[-1, +1]</bdi>: قيمة <bdi dir="ltr">+1</bdi> ارتباط طردي مثالي، <bdi dir="ltr">-1</bdi> عكسي مثالي، <bdi dir="ltr">0</bdi> لا ارتباط (مثلاً <bdi dir="ltr">0.589</bdi> علاقة طردية قوية). يُحسب بـ <span class="code-param">.corr()</span> أو <span class="code-param">.corr(numeric_only=True)</span> ويُرسم بـ <span class="code-param">sns.heatmap</span>.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="layer-card">
+          <h3>2. أكواد بايثون كاملة (Crosstab, Pivot, Correlation, Heatmap)</h3>
+          <div class="concept-grid">
+            <div class="code-block-wrap">
+              <div class="code-head"><span>Python · crosstab, pivot_table &amp; Bivariate Plots</span><button class="copy-btn" onclick="copyCode('code-u5-2a', this)">نسخ الكود</button></div>
+              <pre class="code-pre" id="code-u5-2a">import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# 1) جدول التقاطع لمتغيرين نوعيين
+ct = pd.crosstab(df['species'], df['sex'])
+
+# 2) الجدول المحوري
+pt = pd.pivot_table(
+    df,
+    index='species',
+    values=['culmen_length_mm', 'body_mass_g'],
+    aggfunc=['mean', 'sum']
+)
+
+# 3) barplot و boxplot لمتغيرين
+sns.barplot(data=df, x='species', y='culmen_length_mm', estimator='median')
+plt.show()
+sns.boxplot(data=df, x='species', y='culmen_length_mm')
+plt.show()</pre>
+            </div>
+            <div class="code-block-wrap">
+              <div class="code-head"><span>Python · .corr() &amp; sns.heatmap()</span><button class="copy-btn" onclick="copyCode('code-u5-2b', this)">نسخ الكود</button></div>
+              <pre class="code-pre" id="code-u5-2b">import seaborn as sns
+import matplotlib.pyplot as plt
+
+# الارتباط بين متغيرين محددين (الناتج ~ 0.589)
+r = df['culmen_length_mm'].corr(df['body_mass_g'])
+
+# مصفوفة الارتباط لجميع الأعمدة الرقمية
+corr_matrix = df.corr(numeric_only=True)
+
+# عرض مصفوفة الارتباط عبر الخريطة الحرارية
+sns.heatmap(corr_matrix, vmin=-1, vmax=1, annot=True, fmt='0.2f', cmap='coolwarm')
+plt.title('Correlation Heatmap')
+plt.show()</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="layer-card">
+          <h3>3. معاينة تفاعلية: خريطة الارتباط الحرارية (sns.heatmap) ومعاملاتها</h3>
+          <div class="playground">
+            <div class="controls-row">
+              <div class="control-field">
+                <label for="u52-annot">معامل annot</label>
+                <select id="u52-annot" onchange="renderU52()">
+                  <option value="1">True (إظهار الأرقام على الخلايا)</option>
+                  <option value="0">False (ألوان فقط)</option>
+                </select>
+              </div>
+              <div class="control-field">
+                <label for="u52-fmt">معامل fmt (التقريب)</label>
+                <select id="u52-fmt" onchange="renderU52()">
+                  <option value="2">'0.2f' (رقمان عشريان)</option>
+                  <option value="1">'0.1f' (رقم عشري واحد)</option>
+                </select>
+              </div>
+              <div class="control-field">
+                <label for="u52-range">نطاق الألوان (vmin / vmax)</label>
+                <select id="u52-range" onchange="renderU52()">
+                  <option value="full">vmin=-1, vmax=1 (قياسي)</option>
+                  <option value="pos">vmin=0, vmax=1 (الموجب فقط)</option>
+                </select>
+              </div>
+            </div>
+            <div class="viz-stage" id="viz-u5-2"></div>
+          </div>
+        </div>
+
+        <div class="layer-card">
+          <h3>4. أسئلة مراجعة الوحدة (2)</h3>
+          <div id="review-u5-2" class="concept-grid"></div>
+        </div>
+      </section>
+
+      <!-- ==================== CHAPTER 5 UNIT 3 ==================== -->
+      <section class="unit-panel" id="panel-u5-3">
+        <div class="unit-header">
+          <div>
+            <span class="unit-chapter-tag">الفصل الخامس · الوحدة (3) · Pandas Built-in Plot</span>
+            <h2>الرسم المدمج في Pandas عبر دالة df.plot()</h2>
+          </div>
+          <button class="btn btn-secondary" id="done-btn-u5-3" onclick="toggleUnitDone('u5-3')">تحديد الوحدة كمكتملة</button>
+        </div>
+
+        <div class="layer-card">
+          <h3>1. جميع معاملات دالة df.plot() الـ 13</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>المعامل</th><th>النوع / القيم</th><th>الوظيفة</th></tr></thead>
+              <tbody>
+                <tr><td><span class="code-param">kind</span></td><td>نص (مثل <bdi dir="ltr">'scatter'</bdi>, <bdi dir="ltr">'hexbin'</bdi>, <bdi dir="ltr">'hist'</bdi>, <bdi dir="ltr">'box'</bdi>)</td><td>تحديد نوع الرسم البياني المطلوب إنشاؤه مباشرة من الـ DataFrame</td></tr>
+                <tr><td><span class="code-param">x / y</span></td><td>أسماء الأعمدة</td><td>تحديد العمود الممثل على المحور الأفقي x والمحور الرأسي y</td></tr>
+                <tr><td><span class="code-param">subplots</span></td><td><bdi dir="ltr">True / False</bdi></td><td>تحديد ما إذا كان سيتم فصل كل عمود في رسم فرعي مستقل</td></tr>
+                <tr><td><span class="code-param">layout</span></td><td><bdi dir="ltr">(row, column)</bdi></td><td>تحديد ترتيب الصفوف والأعمدة عند تفعيل الرسوم الفرعية</td></tr>
+                <tr><td><span class="code-param">figsize</span></td><td><bdi dir="ltr">(width, height)</bdi></td><td>التحكم في الحجم الكلي للرسم البياني بالبوصة</td></tr>
+                <tr><td><span class="code-param">title</span></td><td>نص</td><td>تعيين عنوان رئيسي أعلى الرسم البياني</td></tr>
+                <tr><td><span class="code-param">legend</span></td><td><bdi dir="ltr">True / False</bdi></td><td>إظهار أو إخفاء مفتاح الرسم البياني</td></tr>
+                <tr><td><span class="code-param">label</span></td><td>نص</td><td>تسمية السلسلة التي تظهر داخل الـ legend</td></tr>
+                <tr><td><span class="code-param">xticks / yticks</span></td><td>قائمة قيم</td><td>تعيين مواضع العلامات التدريجية على المحورين x و y</td></tr>
+                <tr><td><span class="code-param">xlim / ylim</span></td><td><bdi dir="ltr">(min, max)</bdi></td><td>تحديد الحد الأدنى والأعلى لنطاق عرض المحورين x و y</td></tr>
+                <tr><td><span class="code-param">rot</span></td><td>رقم صحيح (زاوية)</td><td>تدوير تسميات علامات المحاور (مثل <bdi dir="ltr">rot=45</bdi>)</td></tr>
+                <tr><td><span class="code-param">fontsize</span></td><td>رقم صحيح</td><td>تحديد حجم الخط لعلامات المحاور</td></tr>
+                <tr><td><span class="code-param">grid</span></td><td><bdi dir="ltr">True / False</bdi></td><td>إظهار أو إخفاء خطوط الشبكة الخلفية على الرسم</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="layer-card">
+          <h3>2. أكواد بايثون للرسوم الأربعة في Pandas</h3>
+          <div class="code-block-wrap">
+            <div class="code-head"><span>Python · df.plot() (scatter, hexbin, hist, box)</span><button class="copy-btn" onclick="copyCode('code-u5-3', this)">نسخ الكود</button></div>
+            <pre class="code-pre" id="code-u5-3"># 1) Scatter plot عبر Pandas
+df.plot(kind='scatter', x='culmen_length_mm', y='body_mass_g',
+        figsize=(8, 4), title='Scatter via Pandas', grid=True, rot=0, fontsize=11)
+
+# 2) Hexbin plot لتكثيف النقاط السداسي
+df.plot(kind='hexbin', x='culmen_length_mm', y='body_mass_g', gridsize=15, title='Hexbin Plot')
+
+# 3) Histogram لتوزيع عمود أو أعمدة
+df['culmen_length_mm'].plot(kind='hist', bins=12, grid=True, title='Histogram via Pandas')
+
+# 4) Box plot لعمود أو أكثر مع subplots و layout
+df[['culmen_length_mm', 'culmen_depth_mm']].plot(
+    kind='box', subplots=True, layout=(1, 2), figsize=(9, 4), legend=False
+)</pre>
+          </div>
+        </div>
+
+        <div class="layer-card">
+          <h3>3. معاينة تفاعلية: تجربة معاملات df.plot()</h3>
+          <div class="playground">
+            <div class="controls-row">
+              <div class="control-field">
+                <label for="u53-kind">معامل kind</label>
+                <select id="u53-kind" onchange="renderU53()">
+                  <option value="scatter">'scatter'</option>
+                  <option value="hexbin">'hexbin'</option>
+                  <option value="hist">'hist'</option>
+                  <option value="box">'box'</option>
+                </select>
+              </div>
+              <div class="control-field">
+                <label for="u53-grid">معامل grid</label>
+                <select id="u53-grid" onchange="renderU53()">
+                  <option value="1">True (إظهار الشبكة)</option>
+                  <option value="0">False (إخفاء الشبكة)</option>
+                </select>
+              </div>
+              <div class="control-field">
+                <label for="u53-rot">معامل rot (تدوير المحور X)</label>
+                <select id="u53-rot" onchange="renderU53()">
+                  <option value="0">0° (أفقي)</option>
+                  <option value="45">45° (مائل)</option>
+                </select>
+              </div>
+            </div>
+            <div class="viz-stage" id="viz-u5-3"></div>
+          </div>
+        </div>
+
+        <div class="layer-card">
+          <h3>4. أسئلة مراجعة الوحدة (3)</h3>
+          <div id="review-u5-3" class="concept-grid"></div>
+        </div>
+      </section>
+
+      <!-- ==================== CHAPTER 6 UNIT 1 ==================== -->
+      <section class="unit-panel" id="panel-u6-1">
+        <div class="unit-header">
+          <div>
+            <span class="unit-chapter-tag">الفصل السادس · الوحدة (1) · Bokeh</span>
+            <h2>مقدمة Bokeh وأنواع الرسوم ومفهوم Glyphs</h2>
+          </div>
+          <button class="btn btn-secondary" id="done-btn-u6-1" onclick="toggleUnitDone('u6-1')">تحديد الوحدة كمكتملة</button>
+        </div>
+
+        <div class="layer-card">
+          <h3>1. مكتبة Bokeh وتهيئة العرض وأنواع الرسوم</h3>
+          <div class="concept-grid">
+            <div class="concept-box">
+              <h4>ما هي Bokeh ومخرجاتها؟</h4>
+              <p>مكتبة تمثيل رسومي تفاعلي وعالي الجودة تركز على البيانات الضخمة والمتدفقة، وتنتج لوحات معلومات للويب. يمكن توجيه مخرجاتها إلى <strong>Notebook</strong> عبر <span class="code-param">output_notebook()</span>، أو ملف <strong>HTML</strong> عبر <span class="code-param">output_file()</span>، أو <strong>الخادم</strong>.</p>
+            </div>
+            <div class="concept-box">
+              <h4>الرسوم المدعومة و HighContrast3</h4>
+              <ul>
+                <li><span class="code-param">p.line() / p.multi_line()</span>: رسم خط واحد أو عدة خطوط متداخلة.</li>
+                <li><span class="code-param">p.scatter()</span>: مخطط نقطي مع دعم دمج أشكال الـ markers عبر <bdi dir="ltr">_</bdi> مثل <bdi dir="ltr">circle_x</bdi>.</li>
+                <li><span class="code-param">p.vbar_stack() / p.hbar_stack()</span>: أشرطة مكدسة رأسية أو أفقية مع لوحة <span class="code-param">HighContrast3</span>.</li>
+              </ul>
+            </div>
+            <div class="concept-box">
+              <h4>تلوين الفئات بـ CategoricalColorMapper</h4>
+              <p>كائن يربط بين قائمة الفئات النصية (<span class="code-param">factors=['setosa','versicolor','virginica']</span>) وقائمة ألوان (<span class="code-param">palette</span>) لتلوين النقاط في <bdi dir="ltr">scatter</bdi> تلقائياً.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="layer-card">
+          <h3>2. مفهوم Glyphs وأنواعه الثمانية الأساسية</h3>
+          <p style="margin-top:0;color:var(--on-surface-variant);">تُبنى رسوم Bokeh من كائنات رسومية أساسية تُسمى <strong>Glyphs</strong> (الأشكال الهندسية المربوطة بالبيانات):</p>
+          <div class="glyph-grid" id="bokeh-glyphs-grid"></div>
+        </div>
+
+        <div class="layer-card">
+          <h3>3. أكواد بايثون كاملة (Bokeh Stack, Scatter &amp; ColorMapper)</h3>
+          <div class="concept-grid">
+            <div class="code-block-wrap">
+              <div class="code-head"><span>Python · output_notebook &amp; vbar_stack (HighContrast3)</span><button class="copy-btn" onclick="copyCode('code-u6-1a', this)">نسخ الكود</button></div>
+              <pre class="code-pre" id="code-u6-1a">from bokeh.plotting import figure, show
+from bokeh.io import output_notebook
+from bokeh.palettes import HighContrast3
+
+output_notebook()
+years = ['2022', '2023', '2024']
+products = ['A', 'B', 'C']
+data = {'years': years, 'A': [10, 15, 20], 'B': [12, 18, 14], 'C': [8, 11, 16]}
+
+p = figure(x_range=years, title='Stacked Sales (HighContrast3)')
+p.vbar_stack(products, x='years', width=0.6, color=HighContrast3, source=data, legend_label=products)
+show(p)</pre>
+            </div>
+            <div class="code-block-wrap">
+              <div class="code-head"><span>Python · CategoricalColorMapper &amp; Marker</span><button class="copy-btn" onclick="copyCode('code-u6-1b', this)">نسخ الكود</button></div>
+              <pre class="code-pre" id="code-u6-1b">from bokeh.plotting import figure, show
+from bokeh.models import CategoricalColorMapper, ColumnDataSource
+from bokeh.palettes import Category10
+
+mapper = CategoricalColorMapper(
+    factors=['setosa', 'versicolor', 'virginica'],
+    palette=Category10[3]
+)
+p = figure(title='Iris Sepal vs Petal')
+p.scatter('sepal_length', 'petal_length', source=source,
+          marker='circle_x', size=10,
+          color={'field': 'species', 'transform': mapper})
+show(p)</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="layer-card">
+          <h3>4. معاينة تفاعلية: أشكال الـ Markers المدمجة و vbar_stack</h3>
+          <div class="playground">
+            <div class="controls-row">
+              <div class="control-field">
+                <label for="u61-view">نوع الرسم في Bokeh</label>
+                <select id="u61-view" onchange="renderU61()">
+                  <option value="scatter">scatter + CategoricalColorMapper</option>
+                  <option value="vstack">vbar_stack + HighContrast3</option>
+                  <option value="hstack">hbar_stack + HighContrast3</option>
+                </select>
+              </div>
+              <div class="control-field">
+                <label for="u61-marker">شكل النقطة (marker)</label>
+                <select id="u61-marker" onchange="renderU61()">
+                  <option value="circle_x">circle_x (دائرة + X)</option>
+                  <option value="square_cross">square_cross (مربع + +)</option>
+                  <option value="triangle">triangle (مثلث)</option>
+                  <option value="diamond">diamond (معين)</option>
+                </select>
+              </div>
+            </div>
+            <div class="viz-stage" id="viz-u6-1"></div>
+          </div>
+        </div>
+
+        <div class="layer-card">
+          <h3>5. أسئلة مراجعة الوحدة (1)</h3>
+          <div id="review-u6-1" class="concept-grid"></div>
+        </div>
+      </section>
+
+      <!-- ==================== CHAPTER 6 UNIT 2 ==================== -->
+      <section class="unit-panel" id="panel-u6-2">
+        <div class="unit-header">
+          <div>
+            <span class="unit-chapter-tag">الفصل السادس · الوحدة (2) · Bokeh Layouts</span>
+            <h2>تخطيطات العرض في Bokeh: row() و column() و gridplot()</h2>
+          </div>
+          <button class="btn btn-secondary" id="done-btn-u6-2" onclick="toggleUnitDone('u6-2')">تحديد الوحدة كمكتملة</button>
+        </div>
+
+        <div class="layer-card">
+          <h3>1. دوال التخطيط وترتيب الرسوم المتعددة</h3>
+          <div class="concept-grid">
+            <div class="concept-box">
+              <h4>row(p1, p2, ...)</h4>
+              <p>ترتب عدة رسوم بيانية جنباً إلى جنب في <strong>صف أفقي واحد</strong>، وهي مثالية للمقارنة السريعة بين مخططين لهما نفس المقياس الرأسي.</p>
+            </div>
+            <div class="concept-box">
+              <h4>column(p1, p2, ...)</h4>
+              <p>ترتب الرسوم البيانية فوق بعضها في <strong>عمود رأسي واحد</strong>، وتناسب السلاسل الزمنية التي تشترك في نفس المحور الأفقي x.</p>
+            </div>
+            <div class="concept-box">
+              <h4>gridplot([[p1, p2], [p3, None]])</h4>
+              <p>تنشئ <strong>شبكة ثنائية الأبعاد</strong> (صفوف وأعمدة) من الرسوم مع توحيد شريط الأدوات في موضع واحد (مثل أعلى الشبكة)، ويمكن ترك خلية فارغة باستخدام <span class="code-param">None</span>.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="layer-card">
+          <h3>2. كود بايثون كامل لتخطيطات Bokeh</h3>
+          <div class="code-block-wrap">
+            <div class="code-head"><span>Python · bokeh.layouts (row, column, gridplot)</span><button class="copy-btn" onclick="copyCode('code-u6-2', this)">نسخ الكود</button></div>
+            <pre class="code-pre" id="code-u6-2">from bokeh.plotting import figure, show
+from bokeh.layouts import row, column, gridplot
+
+p1 = figure(width=300, height=250, title='Plot 1')
+p1.line([1, 2, 3], [4, 7, 5])
+
+p2 = figure(width=300, height=250, title='Plot 2')
+p2.vbar(x=[1, 2, 3], top=[3, 6, 8], width=0.5)
+
+p3 = figure(width=300, height=250, title='Plot 3')
+p3.scatter([1, 2, 3], [9, 4, 6], size=10)
+
+# 1) تخطيط أفقي | 2) تخطيط عمودي | 3) تخطيط شبكي
+layout_row = row(p1, p2)
+layout_col = column(p1, p2)
+layout_grid = gridplot([[p1, p2], [p3, None]], toolbar_location='above')
+
+show(layout_grid)</pre>
+          </div>
+        </div>
+
+        <div class="layer-card">
+          <h3>3. معاينة تفاعلية: التبديل المباشر بين row و column و gridplot</h3>
+          <div class="playground">
+            <div class="controls-row">
+              <div class="control-field">
+                <label for="u62-layout">دالة التخطيط (bokeh.layouts)</label>
+                <select id="u62-layout" onchange="renderU62()">
+                  <option value="row">row(p1, p2, p3)</option>
+                  <option value="column">column(p1, p2, p3)</option>
+                  <option value="grid">gridplot([[p1, p2], [p3, None]])</option>
+                </select>
+              </div>
+            </div>
+            <div class="viz-stage" id="viz-u6-2"></div>
+          </div>
+        </div>
+
+        <div class="layer-card">
+          <h3>4. أسئلة مراجعة الوحدة (2)</h3>
+          <div id="review-u6-2" class="concept-grid"></div>
+        </div>
+      </section>
+
+      <!-- ==================== CHAPTER 6 UNIT 3 ==================== -->
+      <section class="unit-panel" id="panel-u6-3">
+        <div class="unit-header">
+          <div>
+            <span class="unit-chapter-tag">الفصل السادس · الوحدة (3) · Bokeh Interactivity</span>
+            <h2>شريط الأدوات والتلميحات التفاعلية ومفتاح الخريطة</h2>
+          </div>
+          <button class="btn btn-secondary" id="done-btn-u6-3" onclick="toggleUnitDone('u6-3')">تحديد الوحدة كمكتملة</button>
+        </div>
+
+        <div class="layer-card">
+          <h3>1. التحكم بالتفاعل في Bokeh</h3>
+          <div class="concept-grid">
+            <div class="concept-box">
+              <h4>موضع وتخصيص شريط الأدوات</h4>
+              <ul>
+                <li><span class="code-param">toolbar_location</span>: يقبل <bdi dir="ltr">'above'</bdi>, <bdi dir="ltr">'below'</bdi>, <bdi dir="ltr">'left'</bdi>, <bdi dir="ltr">'right'</bdi> أو <bdi dir="ltr">None</bdi> لإخفائه.</li>
+                <li><span class="code-param">tools</span> و <span class="code-param">add_tools()</span>: لتحديد أو إضافة أدوات مثل <bdi dir="ltr">FullscreenTool</bdi> و <bdi dir="ltr">BoxZoomTool</bdi> و <bdi dir="ltr">ResetTool</bdi>.</li>
+              </ul>
+            </div>
+            <div class="concept-box">
+              <h4>التلميحات التفاعلية (HoverTool / Tooltips)</h4>
+              <p>تعرض بيانات النقطة عند تمرير المؤشر عبر قائمة <span class="code-param">tooltips</span>:</p>
+              <ul>
+                <li><span class="code-param">@field</span>: يعرض قيمة العمود من المصدر.</li>
+                <li><span class="code-param">$color[hex]:fill_color</span>: يعرض اللون بالنظام السداسي عشري.</li>
+                <li><span class="code-param">$color[swatch]:fill_color</span>: يعرض مربعاً ملوناً باللون الفعلي للنقطة.</li>
+              </ul>
+            </div>
+            <div class="concept-box">
+              <h4>مفتاح الخريطة التفاعلي (Legend Click)</h4>
+              <p>يتيح إخفاء السلاسل أو تخفيتها عند النقر على اسمها في الـ legend عبر تعيين <span class="code-param">p.legend.click_policy = 'hide'</span> أو <span class="code-param">'mute'</span>.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="layer-card">
+          <h3>2. كود بايثون كامل (Toolbar, HoverTool &amp; Click Policy)</h3>
+          <div class="code-block-wrap">
+            <div class="code-head"><span>Python · HoverTool, add_tools &amp; click_policy</span><button class="copy-btn" onclick="copyCode('code-u6-3', this)">نسخ الكود</button></div>
+            <pre class="code-pre" id="code-u6-3">from bokeh.plotting import figure, show
+from bokeh.models import HoverTool, FullscreenTool, BoxZoomTool, ResetTool
+
+# 1) تحديد موضع شريط الأدوات والأدوات المبدئية
+p = figure(title='Interactive Bokeh Plot',
+           toolbar_location='above',
+           tools='pan,wheel_zoom')
+
+# 2) إضافة أدوات مخصصة عبر add_tools
+p.add_tools(BoxZoomTool(), ResetTool(), FullscreenTool())
+
+# 3) إضافة التلميحات التفاعلية HoverTool
+hover = HoverTool(tooltips=[
+    ('Species', '@species'),
+    ('Sepal', '@sepal_length'),
+    ('Color Hex', '$color[hex]:fill_color'),
+    ('Swatch', '$color[swatch]:fill_color')
+])
+p.add_tools(hover)
+
+# 4) تفعيل إخفاء أو تخفيت الخطوط بالنقر على الـ legend
+p.line([1, 2, 3, 4], [10, 14, 12, 18], legend_label='Series A', line_width=3, color='blue')
+p.line([1, 2, 3, 4], [15, 11, 16, 13], legend_label='Series B', line_width=3, color='orange')
+p.legend.click_policy = 'hide'  # أو 'mute'
+show(p)</pre>
+          </div>
+        </div>
+
+        <div class="layer-card">
+          <h3>3. مختبر تفاعلي حي: جرب شريط الأدوات والتلميحات والنقر على Legend</h3>
+          <div class="playground">
+            <div class="controls-row">
+              <div class="control-field">
+                <label for="u63-loc">toolbar_location</label>
+                <select id="u63-loc" onchange="renderU63()">
+                  <option value="above">'above' (أعلى)</option>
+                  <option value="below">'below' (أسفل)</option>
+                  <option value="left">'left' (يسار)</option>
+                  <option value="right">'right' (يمين)</option>
+                  <option value="none">None (مخفي)</option>
+                </select>
+              </div>
+              <div class="control-field">
+                <label for="u63-policy">legend.click_policy</label>
+                <select id="u63-policy" onchange="renderU63()">
+                  <option value="hide">'hide' (إخفاء كلي)</option>
+                  <option value="mute">'mute' (تخفيت الشفافية)</option>
+                </select>
+              </div>
+            </div>
+            <div class="viz-stage" id="viz-u6-3"></div>
+            <div id="bokeh-hover-readout" class="bokeh-tooltip">مرر المؤشر أو انقر على إحدى النقاط الدائرية لمعاينة HoverTool، أو انقر على Series A/B في الـ Legend.</div>
+          </div>
+        </div>
+
+        <div class="layer-card">
+          <h3>4. أسئلة مراجعة الوحدة (3)</h3>
+          <div id="review-u6-3" class="concept-grid"></div>
+        </div>
+      </section>
+
+      <!-- ==================== COMPARISON GUIDE ==================== -->
+      <section class="unit-panel" id="panel-compare">
+        <div class="unit-header">
+          <div>
+            <span class="unit-chapter-tag">دليل مرجعي مقارن · الفصول 4 – 6</span>
+            <h2>الدليل المقارن بين المكتبات الأربع</h2>
+          </div>
+        </div>
+
+        <div class="layer-card">
+          <h3>مقارنة شاملة: Matplotlib vs Seaborn vs Pandas Plot vs Bokeh</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>وجه المقارنة</th>
+                  <th>Matplotlib (ف4)</th>
+                  <th>Seaborn (ف5)</th>
+                  <th>Pandas .plot() (ف5)</th>
+                  <th>Bokeh (ف6)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>الدور الأساسي</strong></td>
+                  <td>المكتبة التأسيسية للرسوم الثابتة والمتحركة</td>
+                  <td>مكتبة إحصائية عالية المستوى مبنية على Matplotlib</td>
+                  <td>واجهة مدمجة في DataFrame/Series للرسم السريع</td>
+                  <td>تمثيل تفاعلي للويب والبيانات الضخمة والمتدفقة</td>
+                </tr>
+                <tr>
+                  <td><strong>طبيعة المخرجات</strong></td>
+                  <td>رسوم ثابتة (Static Figures)</td>
+                  <td>رسوم إحصائية ثابتة منسّقة تلقائياً</td>
+                  <td>رسوم ثابتة تعتمد داخلياً على Matplotlib</td>
+                  <td>رسوم تفاعلية HTML / Notebook / خادم</td>
+                </tr>
+                <tr>
+                  <td><strong>أشهر الدوال الواردة بالمنهج</strong></td>
+                  <td><span class="code-param">plot, bar, hist, pie, boxplot, scatter</span></td>
+                  <td><span class="code-param">scatterplot, barplot, boxplot, heatmap</span></td>
+                  <td><span class="code-param">df.plot(kind='scatter'|'hexbin'|'hist'|'box')</span></td>
+                  <td><span class="code-param">line, multi_line, scatter, vbar_stack, hbar_stack</span></td>
+                </tr>
+                <tr>
+                  <td><strong>تلوين وتمييز الفئات</strong></td>
+                  <td>يدوي عبر حلقة تكرار وقاموس ألوان</td>
+                  <td>تلقائي عبر <span class="code-param">hue, palette, style, markers</span></td>
+                  <td>مباشر عبر الأعمدة و <span class="code-param">subplots, legend</span></td>
+                  <td>عبر <span class="code-param">CategoricalColorMapper</span></td>
+                </tr>
+                <tr>
+                  <td><strong>أدوات التفاعل المدمجة</strong></td>
+                  <td>غير مدمجة افتراضياً في المخرجات الثابتة</td>
+                  <td>غير مدمجة افتراضياً</td>
+                  <td>غير مدمجة افتراضياً</td>
+                  <td>تكبير، تحريك، <span class="code-param">HoverTool</span>، ونقر <span class="code-param">legend</span></td>
+                </tr>
+                <tr>
+                  <td><strong>متى تختارها؟</strong></td>
+                  <td>لتحكم كامل بكل تفصيل أو عند التعلم الأساسي</td>
+                  <td>لتحليل الارتباط والمقارنات الإحصائية بسرعة</td>
+                  <td>لاستكشاف أعمدة DataFrame فوراً بسطر واحد</td>
+                  <td>لللوحات التفاعلية ومشاركة الرسوم بالمتصفح</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="layer-card">
+          <h3>مستكشف اختيار المكتبة والمخطط المناسب</h3>
+          <div class="playground">
+            <div class="controls-row">
+              <div class="control-field">
+                <label for="cmp-goal">ما هدفك التحليلي؟</label>
+                <select id="cmp-goal" onchange="renderCompareAdvisor()">
+                  <option value="dist">توزيع متغير رقمي واحد (تكرارات أو أرباع)</option>
+                  <option value="rel">علاقة بين متغيرين رقميين وفئة ثالثة</option>
+                  <option value="corr">قياس وعرض مصفوفة الارتباط لجميع الأعمدة</option>
+                  <option value="cat">مقارنة نسب أجزاء أو فئات نوعية</option>
+                  <option value="web">لوحة معلومات تفاعلية بتلميحات وتكبير للمتصفح</option>
+                </select>
+              </div>
+            </div>
+            <div id="cmp-result" class="callout-note"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== COMPREHENSIVE QUIZ ==================== -->
+      <section class="unit-panel" id="panel-final-quiz">
+        <div class="unit-header">
+          <div>
+            <span class="unit-chapter-tag">التقييم الشامل · 18 سؤالاً</span>
+            <h2>الاختبار التفاعلي الشامل للوحدات التسع</h2>
+          </div>
+          <div style="display:flex;gap:var(--space-sm);flex-wrap:wrap;align-items:end;">
+            <div class="control-field">
+              <label for="quiz-filter">تصفية الأسئلة حسب الفصل</label>
+              <select id="quiz-filter" onchange="renderFinalQuiz()">
+                <option value="all">جميع الوحدات (18 سؤالاً)</option>
+                <option value="4">الفصل الرابع فقط (Matplotlib)</option>
+                <option value="5">الفصل الخامس فقط (Seaborn &amp; Pandas)</option>
+                <option value="6">الفصل السادس فقط (Bokeh)</option>
+              </select>
+            </div>
+            <button class="btn btn-ghost" onclick="resetFinalQuiz(this)">إعادة ضبط الاختبار</button>
+          </div>
+        </div>
+
+        <div class="layer-card">
+          <div id="quiz-score-banner" class="callout-note" style="margin-bottom:var(--space-md);"></div>
+          <div id="final-quiz-list" style="display:grid;gap:var(--space-md);"></div>
+        </div>
+      </section>
+
+      <div class="unit-footer-nav">
+        <button class="btn btn-ghost" id="prev-tab-btn" onclick="stepTab(-1)">القسم السابق</button>
+        <button class="btn btn-primary" id="next-tab-btn" onclick="stepTab(1)">القسم التالي</button>
+      </div>
+    </main>
+  </div>
+</div>
+
+<api-shim></api-shim>
+<script>
+const TAB_ORDER = [
+  'u4-1', 'u4-2', 'u4-3',
+  'u5-1', 'u5-2', 'u5-3',
+  'u6-1', 'u6-2', 'u6-3',
+  'compare', 'final-quiz'
+];
+
+const TAB_CODES = {
+  'u4-1': 'ف4 · و1', 'u4-2': 'ف4 · و2', 'u4-3': 'ف4 · و3',
+  'u5-1': 'ف5 · و1', 'u5-2': 'ف5 · و2', 'u5-3': 'ف5 · و3',
+  'u6-1': 'ف6 · و1', 'u6-2': 'ف6 · و2', 'u6-3': 'ف6 · و3',
+  'compare': 'مقارنة', 'final-quiz': 'اختبار'
+};
+
+const BOKEH_GLYPHS = [
+  { name: '1. Line', fn: 'p.line()', desc: 'خط مستمر يربط نقاط البيانات المتسلسلة', svg: `<line x1="10" y1="36" x2="45" y2="18" stroke="#0f62fe" stroke-width="2.5"/><line x1="45" y1="18" x2="80" y2="26" stroke="#0f62fe" stroke-width="2.5"/><line x1="80" y1="26" x2="110" y2="8" stroke="#0f62fe" stroke-width="2.5"/>` },
+  { name: '2. Circle / Scatter', fn: 'p.scatter()', desc: 'نقاط فردية بأشكال circle أو square أو triangle', svg: `<circle cx="22" cy="30" r="5" fill="#0f62fe"/><circle cx="52" cy="18" r="5" fill="#6929c4"/><circle cx="85" cy="24" r="5" fill="#005d5d"/><circle cx="102" cy="12" r="5" fill="#9f1853"/>` },
+  { name: '3. Bar (vbar / hbar)', fn: 'p.vbar() / p.hbar()', desc: 'أشرطة رأسية أو أفقية للمقارنة والتكديس', svg: `<rect x="14" y="18" width="16" height="24" fill="#0f62fe"/><rect x="42" y="10" width="16" height="32" fill="#005d5d"/><rect x="70" y="24" width="16" height="18" fill="#6929c4"/><rect x="98" y="14" width="16" height="28" fill="#9f1853"/>` },
+  { name: '4. Wedge / Annular', fn: 'p.wedge()', desc: 'قطاعات دائرية أو حلقية لتمثيل الحصص', svg: `<path d="M60,24 L60,4 A20,20 0 0,1 79,30 Z" fill="#0f62fe"/><path d="M60,24 L79,30 A20,20 0 1,1 60,4 Z" fill="#e0e0e0" stroke="#161616" stroke-width="1"/>` },
+  { name: '5. Patch / Patches', fn: 'p.patches()', desc: 'مضلعات مغلقة للخرائط والمناطق الجغرافية', svg: `<polygon points="15,36 36,10 68,14 58,38" fill="#d0e2ff" stroke="#0f62fe" stroke-width="2"/><polygon points="72,14 105,8 108,35 74,38" fill="#e0e0e0" stroke="#161616" stroke-width="1.5"/>` },
+  { name: '6. Area (varea / harea)', fn: 'p.varea()', desc: 'مناطق مظللة أسفل أو بين المنحنيات', svg: `<polygon points="10,40 10,28 45,14 80,22 110,8 110,40" fill="#d0e2ff"/><polyline points="10,28 45,14 80,22 110,8" fill="none" stroke="#0f62fe" stroke-width="2"/>` },
+  { name: '7. HexTile', fn: 'p.hex_tile()', desc: 'خلايا سداسية لكثافة النقاط في البيانات الضخمة', svg: `<polygon points="30,10 42,10 48,20 42,30 30,30 24,20" fill="#0f62fe"/><polygon points="48,20 60,20 66,30 60,40 48,40 42,30" fill="#6929c4"/><polygon points="66,10 78,10 84,20 78,30 66,30 60,20" fill="#005d5d"/>` },
+  { name: '8. MultiLine / Segment', fn: 'p.multi_line()', desc: 'عدة خطوط أو قطع مستقيمة متعددة في استدعاء واحد', svg: `<path d="M10,34 L60,18 L110,24" fill="none" stroke="#0f62fe" stroke-width="2"/><path d="M10,14 L55,30 L110,10" fill="none" stroke="#9f1853" stroke-width="2"/>` }
+];
+
+const QUIZ_BANK = [
+  { id: 'q1', ch: 4, unit: 'u4-1', q: `في مكتبة Matplotlib، ما الدالة المستخدمة لإظهار مفتاح الرسم الذي يميز عدة منحنيات في نفس الشكل؟`, opts: [`plt.legend()`, `plt.title()`, `plt.show()`, `plt.xlabel()`], ans: 0, exp: `تُستخدم plt.legend() لإظهار العناوين المعرّفة في معامل label لكل منحنى.` },
+  { id: 'q2', ch: 4, unit: 'u4-1', q: `أي تصنيف من الرسوم البيانية يُستخدم لتمثيل متغيرين معاً في نفس الرسم؟`, opts: [`Univariate`, `Bivariate`, `Multivariate`, `Hexagonal`], ans: 1, exp: `Univariate لمتغير واحد، وBivariate لمتغيرين معاً، وMultivariate لعدة متغيرات.` },
+  { id: 'q3', ch: 4, unit: 'u4-2', q: `ما وظيفة معامل bins في دالة plt.hist()؟`, opts: [`تغيير لون الأعمدة`, `تحديد عدد الفترات التي تُحسب التكرارات داخلها`, `تدوير تسميات المحور الأفقي`, `تحديد زاوية البداية`], ans: 1, exp: `يقوم bins بتقسيم نطاق المتغير الرقمي إلى فترات متساوية وحساب عدد التكرارات داخل كل فترة.` },
+  { id: 'q4', ch: 4, unit: 'u4-2', q: `أي رسم يُفضّل استخدامه لمقارنة تكرار فئتين نوعيتين مثل Bad و Good؟`, opts: [`plt.hist()`, `plt.bar()`, `plt.boxplot()`, `plt.pie() فقط`], ans: 1, exp: `يُستخدم plt.bar() لمقارنة قيم الفئات النوعية أو الكمية ذات القيم القليلة المحدودة.` },
+  { id: 'q5', ch: 4, unit: 'u4-3', q: `في دالة plt.pie()، أي معامل يتحكم في إبراز شريحة معينة بفصلها عن المركز؟`, opts: [`startangle`, `autopct`, `explode`, `shadow`], ans: 2, exp: `معامل explode يستقبل قائمة أرقام تحدد مقدار إزاحة كل شريحة عن مركز الدائرة.` },
+  { id: 'q6', ch: 4, unit: 'u4-3', q: `في دالة plt.boxplot()، ماذا يحدث عند تمرير vert=False؟`, opts: [`يُخفي القيم المتطرفة`, `يُرسم الصندوق بشكل أفقي`, `يُلغي خط الوسيط`, `يُضيف ألواناً تلقائية`], ans: 1, exp: `عند ضبط vert=False يُرسم مخطط الصندوق أفقياً بدلاً من الوضع الرأسي الافتراضي.` },
+  { id: 'q7', ch: 5, unit: 'u5-1', q: `في دالة sns.scatterplot()، أي معامل يقوم بتلوين النقاط تلقائياً حسب فئة عمود نوعي مثل sex؟`, opts: [`style`, `hue`, `s`, `markers`], ans: 1, exp: `معامل hue يربط لون النقاط بقيم عمود فئوي، بينما style يغير شكل النقطة.` },
+  { id: 'q8', ch: 5, unit: 'u5-1', q: `في مثال بيانات البطريق باستخدام plt.scatter()، ما المعامل الذي استُخدم لتمرير متغير psize للتحكم بحجم النقاط؟`, opts: [`size`, `s`, `widths`, `scale`], ans: 1, exp: `في Matplotlib تستخدم plt.scatter() المعامل s لتحديد حجم كل نقطة.` },
+  { id: 'q9', ch: 5, unit: 'u5-2', q: `ما الدالة المناسبة لإنشاء مصفوفة تكرارات بين متغيرين نوعيين فقط مثل species و sex؟`, opts: [`pd.crosstab()`, `pd.pivot_table()`, `df.corr()`, `sns.heatmap()`], ans: 0, exp: `تُستخدم pd.crosstab() لعرض العلاقة التكرارية بين متغيرين نوعيين.` },
+  { id: 'q10', ch: 5, unit: 'u5-2', q: `عند رسم خريطة الارتباط الحرارية sns.heatmap()، ما الغرض من vmin=-1 و vmax=1؟`, opts: [`تقريب الأرقام إلى منزلتين`, `إخفاء القيم داخل الخلايا`, `تثبيت نطاق التدرج اللوني ليتطابق مع حدود الارتباط [-1, +1]`, `حساب الارتباط للأعمدة الرقمية فقط`], ans: 2, exp: `تحديد vmin=-1 و vmax=1 يضمن أن يتطابق التدرج اللوني تماماً مع كامل النطاق الرياضي للارتباط.` },
+  { id: 'q11', ch: 5, unit: 'u5-3', q: `في دالة df.plot() داخل Pandas، أي معامل يفصل الأعمدة إلى رسومات فرعية مستقلة؟`, opts: [`layout`, `subplots=True`, `grid=True`, `rot`], ans: 1, exp: `subplots=True ينشئ رسماً فرعياً لكل عمود، بينما layout يحدد عدد الصفوف والأعمدة لترتيبها.` },
+  { id: 'q12', ch: 5, unit: 'u5-3', q: `ما القيمة الصحيحة لمعامل kind في df.plot() لإنشاء مخطط التجميع السداسي؟`, opts: [`kind='hexbin'`, `kind='box'`, `kind='hist'`, `kind='scatter'`], ans: 0, exp: `تُستخدم kind='hexbin' لإنشاء مخطط Hexbins داخل Pandas.` },
+  { id: 'q13', ch: 6, unit: 'u6-1', q: `أي دالة تُستدعى في Bokeh لعرض الرسوم التفاعلية مباشرة داخل دفتر Jupyter Notebook؟`, opts: [`output_notebook()`, `plt.show()`, `sns.set()`, `df.plot()`], ans: 0, exp: `تُهيئ output_notebook() بيئة Jupyter لعرض مخرجات Bokeh التفاعلية.` },
+  { id: 'q14', ch: 6, unit: 'u6-1', q: `كيف تُدمج أشكال الـ markers في دالة p.scatter() في Bokeh وما المثال الصحيح؟`, opts: [`بالفاصلة مثل circle,x`, `بالشرطة السفلية مثل circle_x`, `بالنقطة مثل circle.x`, `بالجمع مثل circle+x`], ans: 1, exp: `تُدمج أسماء الـ markers في Bokeh باستخدام الشرطة السفلية _ مثل circle_x.` },
+  { id: 'q15', ch: 6, unit: 'u6-2', q: `أي دالة تخطيط في bokeh.layouts توحّد شريط الأدوات لعدة رسوم مرتبة في مصفوفة صفوف وأعمدة؟`, opts: [`row()`, `column()`, `gridplot()`, `subplots()`], ans: 2, exp: `تُرتب gridplot() الرسوم في شبكة ثنائية الأبعاد مع شريط أدوات موحد.` },
+  { id: 'q16', ch: 6, unit: 'u6-2', q: `ماذا نضع في مصفوفة gridplot() لترك خلية فارغة داخل الشبكة؟`, opts: [`0`, `''`, `None`, `False`], ans: 2, exp: `نضع None في الموضع المطلوب داخل القائمة المتداخلة لترك الخلية فارغة.` },
+  { id: 'q17', ch: 6, unit: 'u6-3', q: `في تلميحات HoverTool في Bokeh، ما الصيغة التي تعرض مربعاً ملوناً باللون الفعلي للنقطة؟`, opts: [`$color[hex]:fill_color`, `$color[swatch]:fill_color`, `@fill_color`, `#color:swatch`], ans: 1, exp: `يعرض [swatch] مربعاً لونياً، بينما يعرض [hex] الكود السداسي عشري للون.` },
+  { id: 'q18', ch: 6, unit: 'u6-3', q: `أي خاصية تُستخدم في Bokeh لجعل النقر على عنصر في legend يخفي السلسلة المقابلة؟`, opts: [`p.legend.click_policy = 'hide'`, `p.legend.visible = False`, `p.toolbar_location = None`, `p.add_tools('hide')`], ans: 0, exp: `ضبط p.legend.click_policy على 'hide' أو 'mute' يجعل مفتاح الخريطة تفاعلياً.` }
+];
+
+let appState = {
+  activeTab: 'u4-1',
+  completedUnits: [],
+  quizAnswers: {},
+  bokehHidden: { A: false, B: false },
+  bokehLocation: 'above',
+  bokehPolicy: 'hide'
+};
+
+function switchTab(tabId) {
+  appState.activeTab = tabId;
+  document.querySelectorAll('.unit-panel').forEach(p => p.classList.remove('is-active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('is-active'));
+  const target = document.getElementById('panel-' + tabId);
+  const btn = document.querySelector(`.nav-btn[data-tab="${tabId}"]`);
+  if (target) target.classList.add('is-active');
+  if (btn) btn.classList.add('is-active');
+  const kpiAct = document.getElementById('kpi-active');
+  if (kpiAct) kpiAct.textContent = TAB_CODES[tabId] || tabId;
+  updateFooterButtons();
+  saveAppState();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function stepTab(dir) {
+  const idx = TAB_ORDER.indexOf(appState.activeTab);
+  const next = idx + dir;
+  if (next >= 0 && next < TAB_ORDER.length) switchTab(TAB_ORDER[next]);
+}
+
+function updateFooterButtons() {
+  const idx = TAB_ORDER.indexOf(appState.activeTab);
+  const prevBtn = document.getElementById('prev-tab-btn');
+  const nextBtn = document.getElementById('next-tab-btn');
+  if (prevBtn) prevBtn.disabled = idx <= 0;
+  if (nextBtn) nextBtn.disabled = idx >= TAB_ORDER.length - 1;
+}
+
+function toggleUnitDone(unitId) {
+  const i = appState.completedUnits.indexOf(unitId);
+  if (i === -1) appState.completedUnits.push(unitId);
+  else appState.completedUnits.splice(i, 1);
+  syncProgressUI();
+  saveAppState();
+}
+
+function syncProgressUI() {
+  const unitIds = ['u4-1','u4-2','u4-3','u5-1','u5-2','u5-3','u6-1','u6-2','u6-3'];
+  unitIds.forEach(uid => {
+    const isDone = appState.completedUnits.includes(uid);
+    const badge = document.getElementById('badge-' + uid);
+    const btn = document.getElementById('done-btn-' + uid);
+    if (badge) {
+      badge.textContent = isDone ? 'مكتملة' : 'جديد';
+      badge.classList.toggle('done', isDone);
+    }
+    if (btn) {
+      btn.textContent = isDone ? 'تم إكمال الوحدة ✓' : 'تحديد الوحدة كمكتملة';
+      btn.className = isDone ? 'btn btn-done' : 'btn btn-secondary';
+    }
+  });
+  const kpiU = document.getElementById('kpi-units');
+  if (kpiU) kpiU.textContent = `${appState.completedUnits.length} / 9`;
+}
+
+function copyCode(preId, btn) {
+  const pre = document.getElementById(preId);
+  if (!pre) return;
+  const text = pre.textContent;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => showCopied(btn)).catch(() => fallbackCopy(text, btn));
+  } else {
+    fallbackCopy(text, btn);
+  }
+}
+function fallbackCopy(text, btn) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); } catch (e) {}
+  document.body.removeChild(ta);
+  showCopied(btn);
+}
+function showCopied(btn) {
+  if (!btn) return;
+  const orig = btn.textContent;
+  btn.textContent = 'تم النسخ ✓';
+  setTimeout(() => { btn.textContent = orig; }, 1500);
+}
+
+/* ---------- INTERACTIVE CHARTS ---------- */
+function renderU41() {
+  const el = document.getElementById('viz-u4-1');
+  if (!el) return;
+  const showCos = document.getElementById('u41-series').value === 'both';
+  const showLeg = document.getElementById('u41-legend').value === '1';
+  const showLbl = document.getElementById('u41-labels').value === '1';
+
+  let sinPts = '', cosPts = '';
+  for (let i = 0; i <= 40; i++) {
+    const xVal = (i / 40) * 10;
+    const px = 60 + (i / 40) * 440;
+    const pySin = 130 - Math.sin(xVal) * 75;
+    const pyCos = 130 - Math.cos(xVal) * 75;
+    sinPts += `${px.toFixed(1)},${pySin.toFixed(1)} `;
+    cosPts += `${px.toFixed(1)},${pyCos.toFixed(1)} `;
+  }
+
+  el.innerHTML = `
+  <svg viewBox="0 0 540 255" width="540" aria-label="Matplotlib Plot Preview">
+    <rect x="0" y="0" width="540" height="255" fill="#ffffff" stroke="#e0e0e0"/>
+    ${showLbl ? `<text x="280" y="24" text-anchor="middle" font-family="IBM Plex Sans" font-size="14" font-weight="600" fill="#161616">Comparing sin(x) and cos(x) with Matplotlib</text>` : ''}
+    <line x1="60" y1="45" x2="60" y2="210" stroke="#161616" stroke-width="1.2"/>
+    <line x1="60" y1="210" x2="505" y2="210" stroke="#161616" stroke-width="1.2"/>
+    <line x1="60" y1="130" x2="505" y2="130" stroke="#e0e0e0" stroke-dasharray="3 3"/>
+    <polyline points="${sinPts}" fill="none" stroke="#0f62fe" stroke-width="2.5"/>
+    ${showCos ? `<polyline points="${cosPts}" fill="none" stroke="#e8590c" stroke-width="2.5"/>` : ''}
+    ${showLbl ? `
+      <text x="282" y="240" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#525252">X Values (np.linspace(0, 10, 100))</text>
+      <text x="20" y="130" text-anchor="middle" transform="rotate(-90 20 130)" font-family="IBM Plex Mono" font-size="11" fill="#525252">Amplitude</text>
+    ` : ''}
+    ${showLeg ? `
+      <rect x="405" y="42" width="95" height="${showCos ? 44 : 26}" fill="#ffffff" stroke="#8d8d8d"/>
+      <line x1="414" y1="55" x2="434" y2="55" stroke="#0f62fe" stroke-width="2.5"/>
+      <text x="440" y="59" font-family="IBM Plex Mono" font-size="11" fill="#161616">sin(x)</text>
+      ${showCos ? `<line x1="414" y1="73" x2="434" y2="73" stroke="#e8590c" stroke-width="2.5"/><text x="440" y="77" font-family="IBM Plex Mono" font-size="11" fill="#161616">cos(x)</text>` : ''}
+    ` : ''}
+  </svg>
+  <div class="viz-caption">حاوية Figure: جرّب تبديل plt.legend() وعناوين المحاور لمشاهدة أثر كل سطر برمجي.</div>`;
+}
+
+function syncU42Bins(val) {
+  const lbl = document.getElementById('u42-bins-lbl');
+  if (lbl) lbl.textContent = val;
+  renderU42();
+}
+const STUDENT_SCORES = [12,18,22,25,29,31,34,37,39,41,44,45,48,49,51,52,53,55,56,58,60,61,62,63,64,65,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,84,85,86,88,89,91,94,97,23,33,47,54,59,66,74,83,90,42,57,63,68,72,76,81,87,92,36,46,52,61,69,75,79,84,88,95,28,38,49,55,64,70,73,77,82,85,93,98,15,27,43,58,62,67,71,78,86,91];
+function renderU42() {
+  const el = document.getElementById('viz-u4-2');
+  if (!el) return;
+  const mode = document.getElementById('u42-mode').value;
+  const bins = parseInt(document.getElementById('u42-bins').value, 10) || 10;
+  const col = document.getElementById('u42-color').value;
+
+  if (mode === 'bar') {
+    const cats = [{ l: 'Bad', v: 42 }, { l: 'Good', v: 68 }];
+    const bars = cats.map((c, idx) => {
+      const x = 150 + idx * 170;
+      const h = (c.v / 80) * 150;
+      const y = 200 - h;
+      return `<rect x="${x}" y="${y}" width="80" height="${h}" fill="${col}" stroke="#161616"/>
+              <text x="${x + 40}" y="${y - 6}" text-anchor="middle" font-family="IBM Plex Mono" font-size="12" fill="#161616">${c.v}</text>
+              <text x="${x + 40}" y="220" text-anchor="middle" font-family="IBM Plex Mono" font-size="12" fill="#161616">${c.l}</text>`;
+    }).join('');
+    el.innerHTML = `
+      <svg viewBox="0 0 540 245" width="540">
+        <rect x="0" y="0" width="540" height="245" fill="#ffffff" stroke="#e0e0e0"/>
+        <text x="270" y="24" text-anchor="middle" font-family="IBM Plex Sans" font-size="14" font-weight="600" fill="#161616">plt.bar(movie_ratings, rating_counts)</text>
+        <line x1="80" y1="45" x2="80" y2="200" stroke="#161616"/><line x1="80" y1="200" x2="480" y2="200" stroke="#161616"/>
+        ${bars}
+      </svg>
+      <div class="viz-caption">المخطط الشريطي يقارن الفئات النوعية: Bad (42) مقابل Good (68).</div>`;
+  } else {
+    const counts = new Array(bins).fill(0);
+    const step = 100 / bins;
+    STUDENT_SCORES.forEach(s => {
+      const idx = Math.min(bins - 1, Math.floor(s / step));
+      counts[idx]++;
+    });
+    const maxC = Math.max(...counts, 1);
+    const plotW = 410;
+    const bw = plotW / bins;
+    const rects = counts.map((c, i) => {
+      const h = (c / maxC) * 145;
+      const x = 75 + i * bw;
+      const y = 200 - h;
+      return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" fill="${col}" stroke="#161616" stroke-width="1"/>
+              <text x="${(x + bw/2).toFixed(1)}" y="${(y - 4).toFixed(1)}" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="#161616">${c}</text>`;
+    }).join('');
+    el.innerHTML = `
+      <svg viewBox="0 0 540 245" width="540">
+        <rect x="0" y="0" width="540" height="245" fill="#ffffff" stroke="#e0e0e0"/>
+        <text x="270" y="24" text-anchor="middle" font-family="IBM Plex Sans" font-size="14" font-weight="600" fill="#161616">plt.hist(scores, bins=${bins}) — توزيع 100 طالب</text>
+        <line x1="75" y1="45" x2="75" y2="200" stroke="#161616"/><line x1="75" y1="200" x2="495" y2="200" stroke="#161616"/>
+        ${rects}
+        <text x="75" y="220" font-family="IBM Plex Mono" font-size="11" fill="#525252">0</text>
+        <text x="280" y="220" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#525252">عرض كل فترة = ${(100/bins).toFixed(1)}</text>
+        <text x="485" y="220" text-anchor="end" font-family="IBM Plex Mono" font-size="11" fill="#525252">100</text>
+      </svg>
+      <div class="viz-caption">تغيير bins إلى ${bins} يعيد تجميع الـ 100 درجة في ${bins} فترة بعرض ${(100/bins).toFixed(1)} لكل فترة.</div>`;
+  }
+}
+
+function syncU43Angle(val) {
+  const lbl = document.getElementById('u43-angle-lbl');
+  if (lbl) lbl.textContent = val;
+  renderU43();
+}
+function renderU43() {
+  const el = document.getElementById('viz-u4-3');
+  if (!el) return;
+  const type = document.getElementById('u43-type').value;
+
+  if (type === 'pie') {
+    const exp = parseFloat(document.getElementById('u43-explode').value);
+    const startDeg = parseFloat(document.getElementById('u43-angle').value);
+    const items = [
+      { l: 'Math (85)', v: 85, c: '#da1e28' },
+      { l: 'Physics (72)', v: 72, c: '#198038' },
+      { l: 'Chem (69)', v: 69, c: '#0f62fe' },
+      { l: 'Bio (70)', v: 70, c: '#f1c21b' }
+    ];
+    const total = 296;
+    let cur = -startDeg * Math.PI / 180;
+    const cx = 200, cy = 128, r = 78;
+    let slices = '', legend = '';
+    items.forEach((it, idx) => {
+      const ang = (it.v / total) * Math.PI * 2;
+      const mid = cur + ang / 2;
+      const off = idx === 0 ? exp * 110 : 0;
+      const ox = Math.cos(mid) * off;
+      const oy = Math.sin(mid) * off;
+      const x1 = cx + ox + r * Math.cos(cur);
+      const y1 = cy + oy + r * Math.sin(cur);
+      const x2 = cx + ox + r * Math.cos(cur + ang);
+      const y2 = cy + oy + r * Math.sin(cur + ang);
+      const large = ang > Math.PI ? 1 : 0;
+      const tx = cx + ox + (r * 0.6) * Math.cos(mid);
+      const ty = cy + oy + (r * 0.6) * Math.sin(mid);
+      const pct = ((it.v / total) * 100).toFixed(1);
+      slices += `<path d="M${(cx+ox).toFixed(1)},${(cy+oy).toFixed(1)} L${x1.toFixed(1)},${y1.toFixed(1)} A${r},${r} 0 ${large},1 ${x2.toFixed(1)},${y2.toFixed(1)} Z" fill="${it.c}" stroke="#ffffff" stroke-width="1.5"/>
+                 <text x="${tx.toFixed(1)}" y="${ty.toFixed(1)}" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" font-weight="600" fill="${idx===3 ? '#161616' : '#ffffff'}">${pct}%</text>`;
+      legend += `<rect x="350" y="${68 + idx*28}" width="14" height="14" fill="${it.c}"/><text x="372" y="${79 + idx*28}" font-family="IBM Plex Mono" font-size="12" fill="#161616">${it.l} — ${pct}%</text>`;
+      cur += ang;
+    });
+    el.innerHTML = `<svg viewBox="0 0 540 240" width="540">
+      <rect x="0" y="0" width="540" height="240" fill="#ffffff" stroke="#e0e0e0"/>
+      <text x="270" y="22" text-anchor="middle" font-family="IBM Plex Sans" font-size="13" font-weight="600" fill="#161616">plt.pie(scores, startangle=${startDeg}, explode=[${exp},0,0,0], autopct='%0.1f%%')</text>
+      ${slices}${legend}
+    </svg><div class="viz-caption">نسبة الرياضيات: 85 / 296 = 28.7% مع تدوير البداية إلى ${startDeg}°.</div>`;
+  } else if (type === 'box') {
+    const vert = document.getElementById('u43-vert').value === 'true';
+    const fliers = document.getElementById('u43-fliers').value === 'true';
+    el.innerHTML = vert ? `
+      <svg viewBox="0 0 540 240" width="540">
+        <rect x="0" y="0" width="540" height="240" fill="#ffffff" stroke="#e0e0e0"/>
+        <text x="270" y="22" text-anchor="middle" font-family="IBM Plex Sans" font-size="13" font-weight="600" fill="#161616">plt.boxplot(data, vert=True, showfliers=${fliers}, patch_artist=True)</text>
+        <line x1="120" y1="45" x2="120" y2="210" stroke="#161616"/>
+        <line x1="270" y1="90" x2="270" y2="195" stroke="#161616" stroke-width="1.5"/>
+        <line x1="245" y1="90" x2="295" y2="90" stroke="#161616"/><line x1="245" y1="195" x2="295" y2="195" stroke="#161616"/>
+        <rect x="230" y="115" width="80" height="55" fill="#d0e2ff" stroke="#161616" stroke-width="1.5"/>
+        <line x1="230" y1="142" x2="310" y2="142" stroke="#e8590c" stroke-width="3"/>
+        <text x="322" y="146" font-family="IBM Plex Mono" font-size="11" fill="#e8590c">Median (الوسيط)</text>
+        ${fliers ? `<circle cx="270" cy="58" r="5" fill="none" stroke="#da1e28" stroke-width="2"/><text x="284" y="62" font-family="IBM Plex Mono" font-size="11" fill="#da1e28">Outlier (62)</text>` : ''}
+      </svg><div class="viz-caption">الخط البرتقالي يمثل الوسيط، والدائرة الحمراء تمثل القيمة المتطرفة (Outlier).</div>`
+    : `<svg viewBox="0 0 540 240" width="540">
+        <rect x="0" y="0" width="540" height="240" fill="#ffffff" stroke="#e0e0e0"/>
+        <text x="270" y="22" text-anchor="middle" font-family="IBM Plex Sans" font-size="13" font-weight="600" fill="#161616">plt.boxplot(data, vert=False, showfliers=${fliers}, patch_artist=True)</text>
+        <line x1="70" y1="195" x2="480" y2="195" stroke="#161616"/>
+        <line x1="110" y1="125" x2="340" y2="125" stroke="#161616" stroke-width="1.5"/>
+        <line x1="110" y1="105" x2="110" y2="145" stroke="#161616"/><line x1="340" y1="105" x2="340" y2="145" stroke="#161616"/>
+        <rect x="170" y="95" width="110" height="60" fill="#d0e2ff" stroke="#161616" stroke-width="1.5"/>
+        <line x1="225" y1="95" x2="225" y2="155" stroke="#e8590c" stroke-width="3"/>
+        <text x="225" y="82" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#e8590c">Median</text>
+        ${fliers ? `<circle cx="430" cy="125" r="5" fill="none" stroke="#da1e28" stroke-width="2"/><text x="430" y="106" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#da1e28">Outlier (62)</text>` : ''}
+      </svg><div class="viz-caption">الوضع الأفقي vert=False مناسب عند مقارنة فئات ذات أسماء طويلة.</div>`;
+  } else {
+    const pts = [[90,175],[180,145],[270,152],[360,108],[450,70]];
+    const ms = ['Jan','Feb','Mar','Apr','May'];
+    el.innerHTML = `<svg viewBox="0 0 540 240" width="540">
+      <rect x="0" y="0" width="540" height="240" fill="#ffffff" stroke="#e0e0e0"/>
+      <text x="270" y="24" text-anchor="middle" font-family="IBM Plex Sans" font-size="14" font-weight="600" fill="#161616">Line Plot: Monthly Sales Trend</text>
+      <line x1="65" y1="45" x2="65" y2="195" stroke="#161616"/><line x1="65" y1="195" x2="485" y2="195" stroke="#161616"/>
+      <polyline points="${pts.map(p=>p.join(',')).join(' ')}" fill="none" stroke="#0f62fe" stroke-width="2.5"/>
+      ${pts.map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="4.5" fill="#0f62fe"/><text x="${p[0]}" y="215" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#525252">${ms[i]}</text>`).join('')}
+    </svg><div class="viz-caption">المخطط الخطي يربط نقاط البيانات على المحورين لعرض التغير بمرور الوقت.</div>`;
+  }
+}
+
+const PENGUIN_SAMPLE = [
+  { x: 38.9, y: 3650, sex: 'FEMALE' }, { x: 39.5, y: 3800, sex: 'FEMALE' },
+  { x: 40.6, y: 3750, sex: 'FEMALE' }, { x: 41.1, y: 3500, sex: 'FEMALE' },
+  { x: 42.9, y: 4150, sex: 'FEMALE' }, { x: 45.2, y: 4450, sex: 'FEMALE' },
+  { x: 46.5, y: 4700, sex: 'FEMALE' }, { x: 47.2, y: 4950, sex: 'FEMALE' },
+  { x: 39.1, y: 3900, sex: 'MALE' },   { x: 42.0, y: 4250, sex: 'MALE' },
+  { x: 44.1, y: 4600, sex: 'MALE' },   { x: 46.8, y: 4900, sex: 'MALE' },
+  { x: 48.5, y: 5250, sex: 'MALE' },   { x: 50.1, y: 5550, sex: 'MALE' },
+  { x: 51.3, y: 5750, sex: 'MALE' },   { x: 53.0, y: 5900, sex: 'MALE' }
+];
+function renderU51() {
+  const el = document.getElementById('viz-u5-1');
+  if (!el) return;
+  const useHue = document.getElementById('u51-hue').value === '1';
+  const useStyle = document.getElementById('u51-style').value === '1';
+  const useSize = document.getElementById('u51-size').value === '1';
+
+  const marks = PENGUIN_SAMPLE.map(p => {
+    const px = 70 + ((p.x - 36) / 20) * 410;
+    const py = 195 - ((p.y - 3200) / 3000) * 140;
+    const fill = useHue ? (p.sex === 'MALE' ? '#0f62fe' : '#da1e28') : '#525252';
+    const r = useSize ? (p.sex === 'FEMALE' ? 8 : 4) : 5.5;
+    if (useStyle && p.sex === 'MALE') {
+      const side = r * 1.8;
+      return `<rect x="${(px - side/2).toFixed(1)}" y="${(py - side/2).toFixed(1)}" width="${side.toFixed(1)}" height="${side.toFixed(1)}" fill="${fill}" opacity="0.88"/>`;
+    }
+    return `<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="${r}" fill="${fill}" opacity="0.88"/>`;
+  }).join('');
+
+  el.innerHTML = `<svg viewBox="0 0 540 240" width="540">
+    <rect x="0" y="0" width="540" height="240" fill="#ffffff" stroke="#e0e0e0"/>
+    <text x="270" y="22" text-anchor="middle" font-family="IBM Plex Sans" font-size="13" font-weight="600" fill="#161616">Penguins: culmen_length_mm vs body_mass_g</text>
+    <line x1="70" y1="45" x2="70" y2="195" stroke="#161616"/><line x1="70" y1="195" x2="495" y2="195" stroke="#161616"/>
+    ${marks}
+    <text x="280" y="222" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#525252">culmen_length_mm</text>
+    <text x="24" y="120" text-anchor="middle" transform="rotate(-90 24 120)" font-family="IBM Plex Mono" font-size="11" fill="#525252">body_mass_g</text>
+    <rect x="90" y="42" width="125" height="44" fill="#f4f4f4" stroke="#e0e0e0"/>
+    <circle cx="105" cy="56" r="${useSize ? 6 : 5}" fill="${useHue ? '#da1e28' : '#525252'}"/>
+    <text x="118" y="60" font-family="IBM Plex Mono" font-size="11" fill="#161616">FEMALE (s=100)</text>
+    ${useStyle ? `<rect x="100" y="70" width="9" height="9" fill="${useHue ? '#0f62fe' : '#525252'}"/>` : `<circle cx="105" cy="74" r="${useSize ? 3.5 : 5}" fill="${useHue ? '#0f62fe' : '#525252'}"/>`}
+    <text x="118" y="78" font-family="IBM Plex Mono" font-size="11" fill="#161616">MALE (s=10)</text>
+  </svg><div class="viz-caption">العلاقة الطردية واضحة: كلما زاد culmen_length_mm زاد body_mass_g.</div>`;
+}
+
+function renderU52() {
+  const el = document.getElementById('viz-u5-2');
+  if (!el) return;
+  const annot = document.getElementById('u52-annot').value === '1';
+  const dec = parseInt(document.getElementById('u52-fmt').value, 10);
+  const posOnly = document.getElementById('u52-range').value === 'pos';
+  const vars = ['culmen_len', 'culmen_dep', 'flipper_len', 'body_mass'];
+  const mat = [
+    [1.00, -0.23, 0.65, 0.59],
+    [-0.23, 1.00, -0.58, -0.47],
+    [0.65, -0.58, 1.00, 0.87],
+    [0.59, -0.47, 0.87, 1.00]
+  ];
+  function cellColor(v) {
+    if (posOnly && v < 0) return '#d0e2ff';
+    if (v >= 0.8) return '#0f62fe';
+    if (v >= 0.5) return '#78a9ff';
+    if (v >= 0) return '#edf5ff';
+    if (v <= -0.5) return '#da1e28';
+    return '#ffd7d9';
+  }
+  let cells = '';
+  for (let r = 0; r < 4; r++) {
+    cells += `<text x="98" y="${68 + r*36}" text-anchor="end" font-family="IBM Plex Mono" font-size="11" fill="#161616">${vars[r]}</text>`;
+    cells += `<text x="${145 + r*82}" y="205" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#161616">${vars[r]}</text>`;
+    for (let c = 0; c < 4; c++) {
+      const val = mat[r][c];
+      const bg = cellColor(val);
+      const fg = (val >= 0.8 || val <= -0.5) ? '#ffffff' : '#161616';
+      cells += `<rect x="${104 + c*82}" y="${44 + r*36}" width="80" height="34" fill="${bg}" stroke="#ffffff"/>`;
+      if (annot) {
+        cells += `<text x="${144 + c*82}" y="${65 + r*36}" text-anchor="middle" font-family="IBM Plex Mono" font-size="12" font-weight="600" fill="${fg}">${val.toFixed(dec)}</text>`;
+      }
+    }
+  }
+  el.innerHTML = `<svg viewBox="0 0 540 230" width="540">
+    <rect x="0" y="0" width="540" height="230" fill="#ffffff" stroke="#e0e0e0"/>
+    <text x="270" y="24" text-anchor="middle" font-family="IBM Plex Sans" font-size="13" font-weight="600" fill="#161616">sns.heatmap(corr, vmin=${posOnly?0:-1}, vmax=1, annot=${annot?'True':'False'}, fmt='0.${dec}f')</text>
+    ${cells}
+    <rect x="455" y="44" width="16" height="142" fill="#d0e2ff" stroke="#8d8d8d"/>
+    <text x="478" y="54" font-family="IBM Plex Mono" font-size="10" fill="#161616">+1.0</text>
+    <text x="478" y="118" font-family="IBM Plex Mono" font-size="10" fill="#161616">${posOnly?'+0.5':'0.0'}</text>
+    <text x="478" y="184" font-family="IBM Plex Mono" font-size="10" fill="#161616">${posOnly?'0.0':'-1.0'}</text>
+  </svg><div class="viz-caption">الارتباط بين culmen_length_mm و body_mass_g يساوي 0.59 (علاقة طردية قوية).</div>`;
+}
+
+function renderU53() {
+  const el = document.getElementById('viz-u5-3');
+  if (!el) return;
+  const kind = document.getElementById('u53-kind').value;
+  const grid = document.getElementById('u53-grid').value === '1';
+  const rot = document.getElementById('u53-rot').value;
+  const gridSvg = grid ? `<g stroke="#e0e0e0" stroke-dasharray="3 3">
+    <line x1="70" y1="80" x2="480" y2="80"/><line x1="70" y1="120" x2="480" y2="120"/><line x1="70" y1="160" x2="480" y2="160"/>
+    <line x1="170" y1="45" x2="170" y2="195"/><line x1="270" y1="45" x2="270" y2="195"/><line x1="370" y1="45" x2="370" y2="195"/>
+  </g>` : '';
+
+  let body = '';
+  if (kind === 'scatter') {
+    body = PENGUIN_SAMPLE.map(p => {
+      const px = 80 + ((p.x - 36)/20)*380;
+      const py = 185 - ((p.y - 3200)/3000)*130;
+      return `<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="4.5" fill="#0f62fe"/>`;
+    }).join('');
+  } else if (kind === 'hexbin') {
+    const hexes = [
+      {x:160,y:155,c:'#d0e2ff'},{x:195,y:140,c:'#78a9ff'},{x:230,y:125,c:'#0f62fe'},
+      {x:265,y:110,c:'#0f62fe'},{x:300,y:95,c:'#78a9ff'},{x:335,y:85,c:'#0043ce'},{x:370,y:72,c:'#d0e2ff'}
+    ];
+    body = hexes.map(h => `<polygon points="${h.x-16},${h.y} ${h.x-8},${h.y-14} ${h.x+8},${h.y-14} ${h.x+16},${h.y} ${h.x+8},${h.y+14} ${h.x-8},${h.y+14}" fill="${h.c}" stroke="#161616"/>`).join('');
+  } else if (kind === 'hist') {
+    const bars = [12,24,38,52,44,30,18];
+    body = bars.map((v,i)=>`<rect x="${95 + i*50}" y="${195 - v*2.4}" width="46" height="${v*2.4}" fill="#0f62fe" stroke="#ffffff"/>`).join('');
+  } else {
+    body = `<line x1="180" y1="70" x2="180" y2="175" stroke="#161616"/><rect x="150" y="95" width="60" height="55" fill="#d0e2ff" stroke="#0f62fe" stroke-width="2"/><line x1="150" y1="122" x2="210" y2="122" stroke="#198038" stroke-width="2.5"/>
+            <line x1="350" y1="60" x2="350" y2="180" stroke="#161616"/><rect x="320" y="88" width="60" height="62" fill="#d0e2ff" stroke="#0f62fe" stroke-width="2"/><line x1="320" y1="115" x2="380" y2="115" stroke="#198038" stroke-width="2.5"/>`;
+  }
+  const ticks = ['38', '42', '46', '50', '54'].map((t, i) =>
+    `<text x="${100 + i*90}" y="213" text-anchor="middle" transform="rotate(${rot} ${100 + i*90} 213)" font-family="IBM Plex Mono" font-size="11" fill="#525252">${t}</text>`
+  ).join('');
+  el.innerHTML = `<svg viewBox="0 0 540 238" width="540">
+    <rect x="0" y="0" width="540" height="238" fill="#ffffff" stroke="#e0e0e0"/>
+    <text x="270" y="24" text-anchor="middle" font-family="IBM Plex Sans" font-size="13" font-weight="600" fill="#161616">df.plot(kind='${kind}', grid=${grid?'True':'False'}, rot=${rot})</text>
+    ${gridSvg}
+    <line x1="70" y1="45" x2="70" y2="195" stroke="#161616"/><line x1="70" y1="195" x2="480" y2="195" stroke="#161616"/>
+    ${body}${ticks}
+  </svg><div class="viz-caption">واجهة Pandas تنشئ المخطط المطلوب بتمرير قيمة kind فقط.</div>`;
+}
+
+function renderBokehGlyphs() {
+  const el = document.getElementById('bokeh-glyphs-grid');
+  if (!el) return;
+  el.innerHTML = BOKEH_GLYPHS.map(g => `
+    <div class="glyph-item">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <strong style="font-size:0.9rem;">${g.name}</strong>
+        <span class="code-param">${g.fn}</span>
+      </div>
+      <svg viewBox="0 0 120 46" width="120" height="46" aria-hidden="true">${g.svg}</svg>
+      <span style="font-size:0.8rem;color:var(--on-surface-variant);">${g.desc}</span>
+    </div>
+  `).join('');
+}
+
+function renderU61() {
+  const el = document.getElementById('viz-u6-1');
+  if (!el) return;
+  const view = document.getElementById('u61-view').value;
+  const marker = document.getElementById('u61-marker').value;
+  const hc3 = ['#0072B2', '#E69F00', '#009E73'];
+
+  if (view === 'scatter') {
+    const pts = [
+      { x: 110, y: 155, sp: 'setosa', c: '#0f62fe' }, { x: 140, y: 148, sp: 'setosa', c: '#0f62fe' },
+      { x: 245, y: 112, sp: 'versicolor', c: '#e8590c' }, { x: 280, y: 102, sp: 'versicolor', c: '#e8590c' },
+      { x: 390, y: 68, sp: 'virginica', c: '#198038' }, { x: 430, y: 58, sp: 'virginica', c: '#198038' }
+    ];
+    const shapes = pts.map(p => {
+      if (marker === 'circle_x') return `<circle cx="${p.x}" cy="${p.y}" r="8" fill="${p.c}" fill-opacity="0.35" stroke="${p.c}" stroke-width="2"/><path d="M${p.x-4},${p.y-4} L${p.x+4},${p.y+4} M${p.x+4},${p.y-4} L${p.x-4},${p.y+4}" stroke="${p.c}" stroke-width="1.8"/>`;
+      if (marker === 'square_cross') return `<rect x="${p.x-7}" y="${p.y-7}" width="14" height="14" fill="${p.c}" fill-opacity="0.35" stroke="${p.c}" stroke-width="2"/><path d="M${p.x},${p.y-5} L${p.x},${p.y+5} M${p.x-5},${p.y} L${p.x+5},${p.y}" stroke="${p.c}" stroke-width="1.8"/>`;
+      if (marker === 'triangle') return `<polygon points="${p.x},${p.y-8} ${p.x+8},${p.y+7} ${p.x-8},${p.y+7}" fill="${p.c}" stroke="#161616"/>`;
+      return `<polygon points="${p.x},${p.y-9} ${p.x+8},${p.y} ${p.x},${p.y+9} ${p.x-8},${p.y}" fill="${p.c}" stroke="#161616"/>`;
+    }).join('');
+    el.innerHTML = `<svg viewBox="0 0 540 230" width="540">
+      <rect x="0" y="0" width="540" height="230" fill="#ffffff" stroke="#e0e0e0"/>
+      <text x="270" y="24" text-anchor="middle" font-family="IBM Plex Sans" font-size="13" font-weight="600" fill="#161616">Bokeh scatter(marker='${marker}') + CategoricalColorMapper</text>
+      <line x1="65" y1="45" x2="65" y2="190" stroke="#161616"/><line x1="65" y1="190" x2="495" y2="190" stroke="#161616"/>
+      ${shapes}
+      <text x="125" y="212" font-family="IBM Plex Mono" font-size="11" fill="#0f62fe">setosa</text>
+      <text x="260" y="212" font-family="IBM Plex Mono" font-size="11" fill="#e8590c">versicolor</text>
+      <text x="410" y="212" font-family="IBM Plex Mono" font-size="11" fill="#198038">virginica</text>
+    </svg><div class="viz-caption">دمج الرموز بالشرطة السفلية (_) مثل circle_x وتلوين الفئات بـ CategoricalColorMapper.</div>`;
+  } else if (view === 'vstack') {
+    const yrs = ['2022', '2023', '2024'];
+    const vals = [[40, 45, 30], [55, 60, 38], [65, 50, 52]];
+    const bars = yrs.map((yr, i) => {
+      let yCur = 190;
+      const x = 130 + i * 115;
+      return vals[i].map((v, j) => {
+        yCur -= v;
+        return `<rect x="${x}" y="${yCur}" width="56" height="${v}" fill="${hc3[j]}" stroke="#ffffff"/>`;
+      }).join('') + `<text x="${x+28}" y="210" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#161616">${yr}</text>`;
+    }).join('');
+    el.innerHTML = `<svg viewBox="0 0 540 230" width="540">
+      <rect x="0" y="0" width="540" height="230" fill="#ffffff" stroke="#e0e0e0"/>
+      <text x="270" y="24" text-anchor="middle" font-family="IBM Plex Sans" font-size="13" font-weight="600" fill="#161616">p.vbar_stack(products, color=HighContrast3)</text>
+      <line x1="75" y1="45" x2="75" y2="190" stroke="#161616"/><line x1="75" y1="190" x2="480" y2="190" stroke="#161616"/>
+      ${bars}
+    </svg><div class="viz-caption">vbar_stack يكدّس الفئات عمودياً باستخدام لوحة HighContrast3 عالية التباين.</div>`;
+  } else {
+    const yrs = ['2022', '2023', '2024'];
+    const vals = [[85, 95, 70], [110, 120, 80], [130, 100, 110]];
+    const bars = yrs.map((yr, i) => {
+      let xCur = 95;
+      const y = 60 + i * 44;
+      return vals[i].map((v, j) => {
+        const seg = `<rect x="${xCur}" y="${y}" width="${v}" height="28" fill="${hc3[j]}" stroke="#ffffff"/>`;
+        xCur += v;
+        return seg;
+      }).join('') + `<text x="85" y="${y+18}" text-anchor="end" font-family="IBM Plex Mono" font-size="11" fill="#161616">${yr}</text>`;
+    }).join('');
+    el.innerHTML = `<svg viewBox="0 0 540 230" width="540">
+      <rect x="0" y="0" width="540" height="230" fill="#ffffff" stroke="#e0e0e0"/>
+      <text x="270" y="24" text-anchor="middle" font-family="IBM Plex Sans" font-size="13" font-weight="600" fill="#161616">p.hbar_stack(products, color=HighContrast3)</text>
+      <line x1="95" y1="45" x2="95" y2="195" stroke="#161616"/><line x1="95" y1="195" x2="495" y2="195" stroke="#161616"/>
+      ${bars}
+    </svg><div class="viz-caption">hbar_stack يكدّس الفئات أفقياً بنفس آلية التكديس ولوحة HighContrast3.</div>`;
+  }
+}
+
+function renderU62() {
+  const el = document.getElementById('viz-u6-2');
+  if (!el) return;
+  const mode = document.getElementById('u62-layout').value;
+  const mini1 = `<div style="background:#fff;border:1px solid #8d8d8d;padding:8px;"><div style="font-family:IBM Plex Mono;font-size:11px;margin-bottom:4px;">Plot 1 (line)</div><svg viewBox="0 0 140 70" width="140"><polyline points="10,55 50,20 90,38 130,12" fill="none" stroke="#0f62fe" stroke-width="2.5"/></svg></div>`;
+  const mini2 = `<div style="background:#fff;border:1px solid #8d8d8d;padding:8px;"><div style="font-family:IBM Plex Mono;font-size:11px;margin-bottom:4px;">Plot 2 (vbar)</div><svg viewBox="0 0 140 70" width="140"><rect x="18" y="34" width="22" height="30" fill="#005d5d"/><rect x="58" y="16" width="22" height="48" fill="#005d5d"/><rect x="98" y="24" width="22" height="40" fill="#005d5d"/></svg></div>`;
+  const mini3 = `<div style="background:#fff;border:1px solid #8d8d8d;padding:8px;"><div style="font-family:IBM Plex Mono;font-size:11px;margin-bottom:4px;">Plot 3 (scatter)</div><svg viewBox="0 0 140 70" width="140"><circle cx="25" cy="50" r="5" fill="#6929c4"/><circle cx="70" cy="22" r="5" fill="#6929c4"/><circle cx="115" cy="36" r="5" fill="#6929c4"/></svg></div>`;
+
+  if (mode === 'row') {
+    el.innerHTML = `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:520px;direction:ltr;">${mini1}${mini2}${mini3}</div>
+      <div class="viz-caption">row(p1, p2, p3): ترتيب أفقي في صف واحد.</div>`;
+  } else if (mode === 'column') {
+    el.innerHTML = `<div style="display:grid;grid-template-columns:1fr;gap:8px;width:220px;direction:ltr;">${mini1}${mini2}${mini3}</div>
+      <div class="viz-caption">column(p1, p2, p3): ترتيب عمودي في عمود واحد.</div>`;
+  } else {
+    el.innerHTML = `<div style="border:1px solid #8d8d8d;padding:8px;background:#fff;width:100%;max-width:380px;direction:ltr;">
+      <div style="background:#f4f4f4;padding:4px 8px;font-family:IBM Plex Mono;font-size:10px;margin-bottom:8px;border:1px solid #e0e0e0;">Unified GridToolbar: [Pan] [BoxZoom] [Reset] [Save]</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        ${mini1}${mini2}${mini3}<div style="border:1px dashed #8d8d8d;display:flex;align-items:center;justify-content:center;font-family:IBM Plex Mono;font-size:11px;color:#525252;">None (خلية فارغة)</div>
+      </div>
+    </div><div class="viz-caption">gridplot([[p1, p2], [p3, None]]): شبكة ثنائية مع شريط أدوات موحد.</div>`;
+  }
+}
+
+function toggleBokehSeries(series) {
+  appState.bokehHidden[series] = !appState.bokehHidden[series];
+  renderU63();
+}
+function showBokehHover(species, val, hex) {
+  const tip = document.getElementById('bokeh-hover-readout');
+  if (!tip) return;
+  tip.innerHTML = `<strong>HoverTool:</strong> @species = ${species} | @val = ${val} | $color[hex] = ${hex} | $color[swatch] = <span style="display:inline-block;width:12px;height:12px;background:${hex};border:1px solid #161616;vertical-align:middle;"></span>`;
+}
+function renderU63() {
+  const el = document.getElementById('viz-u6-3');
+  if (!el) return;
+  const loc = document.getElementById('u63-loc').value;
+  const policy = document.getElementById('u63-policy').value;
+  const hideA = appState.bokehHidden.A;
+  const hideB = appState.bokehHidden.B;
+  const opA = hideA ? (policy === 'hide' ? 0 : 0.15) : 1;
+  const opB = hideB ? (policy === 'hide' ? 0 : 0.15) : 1;
+
+  const toolbarHtml = loc === 'none' ? '' : `<div class="bokeh-toolbar" style="justify-content:space-between;">
+    <span style="font-family:IBM Plex Mono;font-size:11px;">toolbar_location='${loc}'</span>
+    <div style="display:flex;gap:4px;flex-wrap:wrap;">
+      <span class="bokeh-tool-pill active">HoverTool</span>
+      <span class="bokeh-tool-pill">BoxZoomTool</span>
+      <span class="bokeh-tool-pill">FullscreenTool</span>
+      <span class="bokeh-tool-pill">ResetTool</span>
+    </div>
+  </div>`;
+
+  const svgHtml = `<div style="position:relative;display:grid;gap:6px;">
+    <svg viewBox="0 0 500 185" width="500" style="background:#ffffff;border:1px solid #e0e0e0;">
+      <line x1="50" y1="20" x2="50" y2="155" stroke="#161616"/><line x1="50" y1="155" x2="470" y2="155" stroke="#161616"/>
+      <polyline points="70,130 180,90 290,105 420,45" fill="none" stroke="#0f62fe" stroke-width="3" opacity="${opA}"/>
+      <polyline points="70,80 180,115 290,65 420,95" fill="none" stroke="#e8590c" stroke-width="3" opacity="${opB}"/>
+      <circle cx="180" cy="90" r="7" fill="#0f62fe" opacity="${opA}" style="cursor:pointer;" tabindex="0" onmouseover="showBokehHover('Adelie','14.2','#0f62fe')" onclick="showBokehHover('Adelie','14.2','#0f62fe')"/>
+      <circle cx="290" cy="65" r="7" fill="#e8590c" opacity="${opB}" style="cursor:pointer;" tabindex="0" onmouseover="showBokehHover('Gentoo','16.8','#e8590c')" onclick="showBokehHover('Gentoo','16.8','#e8590c')"/>
+      <circle cx="420" cy="45" r="7" fill="#0f62fe" opacity="${opA}" style="cursor:pointer;" tabindex="0" onmouseover="showBokehHover('Chinstrap','18.1','#0f62fe')" onclick="showBokehHover('Chinstrap','18.1','#0f62fe')"/>
+      <g transform="translate(335,16)" style="cursor:pointer;" onclick="toggleBokehSeries('A')">
+        <rect x="0" y="0" width="120" height="22" fill="#f4f4f4" stroke="#8d8d8d"/>
+        <line x1="8" y1="11" x2="26" y2="11" stroke="#0f62fe" stroke-width="3" opacity="${hideA?0.3:1}"/>
+        <text x="34" y="15" font-family="IBM Plex Mono" font-size="11" fill="#161616" opacity="${hideA?0.45:1}">Series A (انقر)</text>
+      </g>
+      <g transform="translate(335,40)" style="cursor:pointer;" onclick="toggleBokehSeries('B')">
+        <rect x="0" y="0" width="120" height="22" fill="#f4f4f4" stroke="#8d8d8d"/>
+        <line x1="8" y1="11" x2="26" y2="11" stroke="#e8590c" stroke-width="3" opacity="${hideB?0.3:1}"/>
+        <text x="34" y="15" font-family="IBM Plex Mono" font-size="11" fill="#161616" opacity="${hideB?0.45:1}">Series B (انقر)</text>
+      </g>
+    </svg>
+  </div>`;
+
+  let bodyHtml = '';
+  if (loc === 'above') bodyHtml = toolbarHtml + svgHtml;
+  else if (loc === 'below') bodyHtml = svgHtml + toolbarHtml;
+  else if (loc === 'left' || loc === 'right') {
+    bodyHtml = `<div style="display:grid;grid-template-columns:${loc==='left'?'160px 1fr':'1fr 160px'};gap:8px;align-items:start;">
+      ${loc === 'left' ? toolbarHtml + svgHtml : svgHtml + toolbarHtml}
+    </div>`;
+  } else bodyHtml = svgHtml;
+
+  el.innerHTML = `<div class="bokeh-wrapper">${bodyHtml}</div>`;
+}
+
+function renderCompareAdvisor() {
+  const el = document.getElementById('cmp-result');
+  const val = document.getElementById('cmp-goal').value;
+  const map = {
+    dist: `<strong>التوصية:</strong> استخدم <span class="code-param">plt.hist(bins=10)</span> أو <span class="code-param">plt.boxplot()</span> في Matplotlib، أو <span class="code-param">df.plot(kind='hist'|'box')</span> لاستكشاف سريع من الـ DataFrame.`,
+    rel: `<strong>التوصية:</strong> استخدم <span class="code-param">sns.scatterplot(hue=..., style=...)</span> في Seaborn لأنها تختصر الترميز اللوني والشكلي مقارنةً بحلقة التكرار في <span class="code-param">plt.scatter()</span>.`,
+    corr: `<strong>التوصية:</strong> احسب المصفوفة بـ <span class="code-param">df.corr(numeric_only=True)</span> ثم اعرضها عبر <span class="code-param">sns.heatmap(corr, vmin=-1, vmax=1, annot=True, fmt='0.2f')</span>.`,
+    cat: `<strong>التوصية:</strong> للنسب استخدم <span class="code-param">plt.pie()</span>، ولتكرار الفئات استخدم <span class="code-param">plt.bar()</span> أو <span class="code-param">pd.crosstab()</span>، ولتجميعات الإحصائيات <span class="code-param">pd.pivot_table()</span> و <span class="code-param">sns.barplot()</span>.`,
+    web: `<strong>التوصية:</strong> استخدم <strong>Bokeh</strong> مع <span class="code-param">output_notebook()</span> و <span class="code-param">HoverTool</span> و <span class="code-param">gridplot()</span> و <span class="code-param">legend.click_policy='hide'</span>.`
+  };
+  if (el) el.innerHTML = map[val] || '';
+}
+
+/* ---------- UNIT REVIEWS & FINAL QUIZ ---------- */
+function renderUnitReviews() {
+  const units = ['u4-1','u4-2','u4-3','u5-1','u5-2','u5-3','u6-1','u6-2','u6-3'];
+  units.forEach(uid => {
+    const container = document.getElementById('review-' + uid);
+    if (!container) return;
+    const qs = QUIZ_BANK.filter(q => q.unit === uid);
+    container.innerHTML = qs.map((q, idx) => buildQuestionHTML(q, `rev-${q.id}`, idx + 1)).join('');
+  });
+}
+
+function buildQuestionHTML(q, domPrefix, num) {
+  const chosen = appState.quizAnswers[q.id];
+  const isFinal = domPrefix.startsWith('fin-');
+  const optsHtml = q.opts.map((opt, i) => {
+    let cls = 'quiz-opt';
+    if (isFinal && chosen !== undefined) {
+      if (i === q.ans) cls += ' correct';
+      else if (i === chosen) cls += ' wrong';
+    }
+    return `<button class="${cls}" ${isFinal && chosen !== undefined ? 'disabled' : ''} onclick="answerQuestion('${q.id}', ${i}, '${domPrefix}')">${opt}</button>`;
+  }).join('');
+  const showFb = isFinal && chosen !== undefined;
+  return `<div class="quiz-card" id="card-${domPrefix}">
+    <p class="quiz-q">${num}. ${q.q}</p>
+    <div class="quiz-opts">${optsHtml}</div>
+    <div class="quiz-feedback ${showFb ? 'show' : ''}" id="fb-${domPrefix}">${showFb ? q.exp : ''}</div>
+  </div>`;
+}
+
+function answerQuestion(qid, optIdx, domPrefix) {
+  const q = QUIZ_BANK.find(item => item.id === qid);
+  if (!q) return;
+  if (domPrefix.startsWith('fin-')) {
+    appState.quizAnswers[qid] = optIdx;
+    renderFinalQuiz();
+    saveAppState();
+  } else {
+    const card = document.getElementById('card-' + domPrefix);
+    const fb = document.getElementById('fb-' + domPrefix);
+    if (!card || !fb) return;
+    const btns = card.querySelectorAll('.quiz-opt');
+    btns.forEach((b, i) => {
+      b.disabled = true;
+      if (i === q.ans) b.classList.add('correct');
+      else if (i === optIdx) b.classList.add('wrong');
+    });
+    fb.textContent = (optIdx === q.ans ? 'إجابة صحيحة! ' : 'إجابة غير دقيقة. ') + q.exp;
+    fb.classList.add('show');
+  }
+}
+
+function renderFinalQuiz() {
+  const filter = document.getElementById('quiz-filter').value;
+  const list = document.getElementById('final-quiz-list');
+  if (!list) return;
+  const filtered = filter === 'all' ? QUIZ_BANK : QUIZ_BANK.filter(q => String(q.ch) === filter);
+  list.innerHTML = filtered.map((q, idx) => buildQuestionHTML(q, `fin-${q.id}`, idx + 1)).join('');
+
+  let correctCount = 0;
+  let answeredCount = 0;
+  QUIZ_BANK.forEach(q => {
+    if (appState.quizAnswers[q.id] !== undefined) {
+      answeredCount++;
+      if (appState.quizAnswers[q.id] === q.ans) correctCount++;
+    }
+  });
+  const banner = document.getElementById('quiz-score-banner');
+  if (banner) {
+    banner.innerHTML = `<strong>التقدم الحالي:</strong> أجبت على ${answeredCount} من أصل 18 سؤالاً · <strong>الإجابات الصحيحة:</strong> ${correctCount} / 18`;
+  }
+  const kpiQ = document.getElementById('kpi-quiz');
+  const badgeQ = document.getElementById('badge-quiz');
+  if (kpiQ) kpiQ.textContent = `${correctCount} / 18`;
+  if (badgeQ) badgeQ.textContent = `${correctCount}/18`;
+}
+
+function resetFinalQuiz(btn) {
+  if (btn.dataset.armed !== 'true') {
+    btn.dataset.armed = 'true';
+    btn.textContent = 'انقر مرة أخرى للتأكيد';
+    setTimeout(() => {
+      btn.dataset.armed = 'false';
+      btn.textContent = 'إعادة ضبط الاختبار';
+    }, 3000);
+    return;
+  }
+  btn.dataset.armed = 'false';
+  btn.textContent = 'إعادة ضبط الاختبار';
+  appState.quizAnswers = {};
+  renderFinalQuiz();
+  saveAppState();
+}
+
+/* ---------- STATE PERSISTENCE ---------- */
+async function saveAppState() {
+  if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === 'function') {
+    try { await window.notebookAppApi.setAppState(appState); } catch (e) {}
+  }
+}
+
+async function initApp() {
+  if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === 'function') {
+    try {
+      const saved = await window.notebookAppApi.getAppState();
+      if (saved && typeof saved === 'object') {
+        appState = Object.assign(appState, saved);
+      }
+    } catch (e) {}
+  }
+
+  renderBokehGlyphs();
+  renderUnitReviews();
+  renderU41();
+  renderU42();
+  renderU43();
+  renderU51();
+  renderU52();
+  renderU53();
+  renderU61();
+  renderU62();
+  renderU63();
+  renderCompareAdvisor();
+  renderFinalQuiz();
+  syncProgressUI();
+  switchTab(TAB_ORDER.includes(appState.activeTab) ? appState.activeTab : 'u4-1');
+
+  if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === 'function') {
+    window.notebookAppApi.notifyAppReady();
+  }
+}
+
+initApp();
+</script>
+</body>
+</html>

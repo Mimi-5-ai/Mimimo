@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="tool">
+  <meta name="design-style" content="carbon">
+  <title>بنك أسئلة موضوعات مختارة في علوم البيانات — 300 سؤال تفاعلي</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --background: #ffffff;
+      --surface-container-low: #f4f4f4;
+      --surface-container: #f4f4f4;
+      --surface-container-high: #e0e0e0;
+      --on-surface: #161616;
+      --on-surface-variant: #525252;
+      --outline: #8d8d8d;
+      --outline-variant: #e0e0e0;
+      --primary: #0f62fe;
+      --primary-hover: #0353e9;
+      --on-primary: #ffffff;
+      --primary-container: #d0e2ff;
+      --on-primary-container: #161616;
+      --secondary: #6f6f6f;
+      --tertiary: #198038;
+      --tertiary-container: #defbe6;
+      --error: #da1e28;
+      --error-container: #fff1f1;
+      --on-error: #ffffff;
+      --positive: #198038;
+      --warning: #b28600;
+      --warning-container: #fcf4d6;
+      --focus: #0f62fe;
+
+      --font-headline: 'IBM Plex Sans Arabic', 'IBM Plex Sans', sans-serif;
+      --font-body: 'IBM Plex Sans Arabic', 'IBM Plex Sans', sans-serif;
+      --font-label: 'IBM Plex Mono', 'IBM Plex Sans Arabic', monospace;
+
+      --display-size: clamp(1.75rem, 1.4rem + 1.1vw, 2.25rem);
+      --headline-size: clamp(1.25rem, 1.08rem + 0.45vw, 1.5rem);
+      --subhead-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+      --body-size: clamp(0.9375rem, 0.9rem + 0.15vw, 1rem);
+      --label-size: 0.75rem;
+
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+
+      --rounded: 0.125rem;
+      --rounded-lg: 0.25rem;
+      --rounded-full: 0.75rem;
+
+      --shadow-1: 0 2px 6px rgb(0 0 0 / 0.1);
+      --rule: 1px solid var(--outline-variant);
+      --field-rule: 1px solid var(--outline);
+      --indicator: 2px solid var(--primary);
+
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    header { position: static !important; }
+    button, input, select, textarea { font-family: inherit; }
+
+    :focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .app-shell {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: var(--space-lg);
+      display: grid;
+      gap: var(--space-lg);
+    }
+    .app-shell * { min-width: 0; }
+
+    /* Header */
+    .masthead {
+      border-bottom: var(--rule);
+      padding-bottom: var(--space-lg);
+      display: grid;
+      gap: var(--space-md);
+    }
+    .masthead-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: var(--space-md);
+    }
+    .kicker {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      letter-spacing: 0;
+      margin-bottom: var(--space-xs);
+    }
+    .main-title {
+      font-family: var(--font-headline);
+      font-size: var(--display-size);
+      font-weight: 300;
+      line-height: 1.25;
+      margin: 0;
+      letter-spacing: 0;
+    }
+    .main-title strong { font-weight: 700; }
+    .subtitle {
+      margin: var(--space-xs) 0 0;
+      color: var(--on-surface-variant);
+      max-width: 65ch;
+      font-size: var(--body-size);
+    }
+    .masthead-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: center;
+    }
+
+    /* Buttons */
+    .btn {
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-lg);
+      border-radius: 0;
+      border: 1px solid transparent;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+    .btn-primary:hover:not(:disabled) { background: var(--primary-hover); }
+    .btn-secondary {
+      background: var(--background);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+    .btn-secondary:hover:not(:disabled) { background: var(--primary-container); color: var(--on-primary-container); }
+    .btn-ghost {
+      background: var(--surface-container);
+      color: var(--on-surface);
+      border-color: var(--outline-variant);
+    }
+    .btn-ghost:hover:not(:disabled) { background: var(--surface-container-high); }
+    .btn-danger-armed {
+      background: var(--error);
+      color: var(--on-error);
+      border-color: var(--error);
+    }
+
+    /* KPI Strip */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .kpi-tile {
+      background: var(--surface-container);
+      padding: var(--space-md);
+      display: grid;
+      gap: var(--space-xs);
+      border-bottom: 2px solid transparent;
+    }
+    .kpi-tile.key-tile { border-bottom: var(--indicator); }
+    .kpi-label {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      font-weight: 600;
+    }
+    .kpi-value {
+      font-family: var(--font-label);
+      font-size: 1.75rem;
+      font-weight: 300;
+      line-height: 1.15;
+      direction: ltr;
+      text-align: right;
+      unicode-bidi: isolate;
+    }
+    .kpi-meta {
+      font-size: 0.8125rem;
+      color: var(--on-surface-variant);
+    }
+
+    /* Progress Bar */
+    .progress-panel {
+      background: var(--surface-container);
+      padding: var(--space-md);
+      display: grid;
+      gap: var(--space-sm);
+    }
+    .progress-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: var(--surface-container-high);
+      overflow: hidden;
+      display: flex;
+    }
+    .progress-fill-correct {
+      height: 100%;
+      background: var(--tertiary);
+      transition: width var(--dur-short) var(--ease-out);
+    }
+    .progress-fill-wrong {
+      height: 100%;
+      background: var(--error);
+      transition: width var(--dur-short) var(--ease-out);
+    }
+
+    /* Workspace Layout */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+
+    /* Chapter Sidebar */
+    .chapter-sidebar {
+      background: var(--surface-container);
+      padding: var(--space-md);
+      display: grid;
+      gap: var(--space-xs);
+    }
+    .sidebar-title {
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--on-surface-variant);
+      padding-bottom: var(--space-sm);
+      border-bottom: var(--rule);
+      margin-bottom: var(--space-xs);
+    }
+    .chapter-btn {
+      width: 100%;
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      background: transparent;
+      border: none;
+      border-right: 3px solid transparent;
+      text-align: right;
+      cursor: pointer;
+      display: grid;
+      gap: 2px;
+      color: var(--on-surface);
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .chapter-btn:hover { background: var(--surface-container-high); }
+    .chapter-btn.is-active {
+      background: var(--background);
+      border-right: 3px solid var(--primary);
+      font-weight: 600;
+    }
+    .chapter-btn-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      font-size: 0.875rem;
+    }
+    .chapter-btn-sub {
+      font-size: 0.75rem;
+      color: var(--on-surface-variant);
+      display: flex;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+    .mono-num {
+      font-family: var(--font-label);
+      direction: ltr;
+      unicode-bidi: isolate;
+      font-size: 0.75rem;
+    }
+
+    /* Mobile chapter select */
+    .mobile-chapter-wrap { display: none; }
+
+    /* Main Content Column */
+    .main-column {
+      display: grid;
+      gap: var(--space-lg);
+    }
+
+    /* Toolbar & Filters */
+    .toolbar {
+      background: var(--surface-container);
+      padding: var(--space-md);
+      display: grid;
+      gap: var(--space-md);
+    }
+    .toolbar-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      align-items: end;
+      justify-content: space-between;
+    }
+    .field-group {
+      display: grid;
+      gap: var(--space-xs);
+      flex: 1 1 220px;
+    }
+    .field-label {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      font-weight: 600;
+    }
+    .input-control, .select-control {
+      height: 44px;
+      padding: 0 var(--space-md);
+      background: var(--background);
+      border: none;
+      border-bottom: var(--field-rule);
+      color: var(--on-surface);
+      font-size: 0.9375rem;
+      border-radius: var(--rounded);
+      width: 100%;
+    }
+    .select-control { padding-left: var(--space-xl); }
+    .filter-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+      border-bottom: var(--rule);
+      padding-bottom: var(--space-sm);
+    }
+    .tab-btn {
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--on-surface-variant);
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: color var(--dur-micro) var(--ease-out), background-color var(--dur-micro) var(--ease-out);
+    }
+    .tab-btn:hover { background: var(--surface-container-high); color: var(--on-surface); }
+    .tab-btn.is-active {
+      color: var(--on-surface);
+      font-weight: 600;
+      border-bottom: var(--indicator);
+    }
+
+    /* Chapter Summary Banner */
+    .chapter-banner {
+      border-bottom: var(--rule);
+      padding-bottom: var(--space-md);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: var(--space-md);
+    }
+    .chapter-heading {
+      margin: 0;
+      font-size: var(--headline-size);
+      font-weight: 600;
+      line-height: 1.3;
+    }
+    .chapter-desc {
+      margin: var(--space-xs) 0 0;
+      color: var(--on-surface-variant);
+      font-size: 0.9375rem;
+      max-width: 65ch;
+    }
+    .chapter-stats-pill {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: center;
+    }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      height: 28px;
+      padding: 0 var(--space-md);
+      border-radius: var(--rounded-full);
+      font-size: 0.75rem;
+      font-weight: 500;
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    .tag-success { background: var(--tertiary-container); color: var(--tertiary); }
+    .tag-error { background: var(--error-container); color: var(--error); }
+    .tag-neutral { background: var(--surface-container-high); color: var(--on-surface); }
+
+    /* Quick Navigator Strip */
+    .q-nav-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      padding: var(--space-sm);
+      background: var(--surface-container);
+    }
+    .q-dot {
+      width: 30px;
+      height: 30px;
+      border: 1px solid var(--outline-variant);
+      background: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+    .q-dot:hover { background: var(--surface-container-high); }
+    .q-dot.is-correct { background: var(--tertiary); color: var(--on-primary); border-color: var(--tertiary); }
+    .q-dot.is-wrong { background: var(--error); color: var(--on-error); border-color: var(--error); }
+    .q-dot.is-bookmarked { box-shadow: inset 0 -3px 0 var(--warning); }
+
+    /* Question Cards */
+    .questions-list {
+      display: grid;
+      gap: var(--space-md);
+    }
+    .q-card {
+      background: var(--surface-container);
+      padding: var(--space-lg);
+      display: grid;
+      gap: var(--space-md);
+      border-right: 3px solid transparent;
+    }
+    .q-card.state-correct { border-right-color: var(--tertiary); }
+    .q-card.state-wrong { border-right-color: var(--error); }
+    .q-card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      border-bottom: var(--rule);
+      padding-bottom: var(--space-sm);
+    }
+    .q-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+      font-size: 0.75rem;
+      color: var(--on-surface-variant);
+    }
+    .q-num {
+      font-family: var(--font-label);
+      font-weight: 600;
+      color: var(--primary);
+      background: var(--primary-container);
+      padding: 2px 8px;
+      border-radius: var(--rounded);
+    }
+    .bookmark-btn {
+      min-height: 36px;
+      padding: 4px 10px;
+      background: var(--background);
+      border: 1px solid var(--outline-variant);
+      color: var(--on-surface-variant);
+      cursor: pointer;
+      font-size: 0.75rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .bookmark-btn.is-active {
+      background: var(--warning-container);
+      color: var(--on-surface);
+      border-color: var(--warning);
+      font-weight: 600;
+    }
+    .q-text {
+      margin: 0;
+      font-size: var(--subhead-size);
+      font-weight: 600;
+      line-height: 1.55;
+      color: var(--on-surface);
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+      gap: var(--space-sm);
+    }
+    .option-btn {
+      min-height: 48px;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--background);
+      border: 1px solid var(--outline-variant);
+      color: var(--on-surface);
+      text-align: right;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      font-size: 0.9375rem;
+      line-height: 1.5;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .option-btn:hover:not(:disabled) {
+      background: var(--surface-container-high);
+      border-color: var(--outline);
+    }
+    .option-btn:disabled { cursor: default; }
+    .option-letter {
+      font-family: var(--font-label);
+      font-weight: 600;
+      font-size: 0.8125rem;
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface-container);
+      color: var(--on-surface-variant);
+      margin-top: 2px;
+    }
+    .option-btn.opt-correct {
+      background: var(--tertiary-container);
+      border-color: var(--tertiary);
+      color: var(--on-surface);
+      font-weight: 600;
+    }
+    .option-btn.opt-correct .option-letter {
+      background: var(--tertiary);
+      color: var(--on-primary);
+    }
+    .option-btn.opt-wrong {
+      background: var(--error-container);
+      border-color: var(--error);
+      color: var(--on-surface);
+    }
+    .option-btn.opt-wrong .option-letter {
+      background: var(--error);
+      color: var(--on-error);
+    }
+    .option-btn.opt-dim { opacity: 0.65; }
+
+    /* Explanation Box */
+    .explanation-box {
+      background: var(--background);
+      padding: var(--space-md);
+      border-right: 3px solid var(--primary);
+      display: grid;
+      gap: var(--space-xs);
+    }
+    .explanation-box.exp-correct { border-right-color: var(--tertiary); }
+    .explanation-box.exp-wrong { border-right-color: var(--error); }
+    .exp-title {
+      font-size: 0.8125rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .exp-title.is-correct { color: var(--tertiary); }
+    .exp-title.is-wrong { color: var(--error); }
+    .exp-body {
+      margin: 0;
+      font-size: 0.9375rem;
+      color: var(--on-surface);
+      line-height: 1.65;
+    }
+
+    /* Empty & Status messages */
+    .empty-state {
+      background: var(--surface-container);
+      padding: var(--space-xl);
+      text-align: center;
+      display: grid;
+      gap: var(--space-sm);
+      justify-items: center;
+    }
+    .status-note {
+      background: var(--surface-container);
+      border-right: 3px solid var(--primary);
+      padding: var(--space-sm) var(--space-md);
+      font-size: 0.875rem;
+      color: var(--on-surface);
+    }
+
+    /* Footer */
+    .site-footer {
+      border-top: var(--rule);
+      padding-top: var(--space-md);
+      color: var(--on-surface-variant);
+      font-size: 0.8125rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+
+    @media (max-width: 900px) {
+      .workspace-grid { grid-template-columns: 1fr; }
+      .chapter-sidebar { display: none; }
+      .mobile-chapter-wrap { display: grid; gap: var(--space-xs); }
+    }
+    @media (max-width: 640px) {
+      .app-shell { padding: var(--space-md); }
+      .options-grid { grid-template-columns: 1fr; }
+      .q-card { padding: var(--space-md); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="masthead">
+      <div class="masthead-top">
+        <div>
+          <div class="kicker">مقرر علوم الحاسب وتحليل البيانات — بنك الأسئلة المرجعي الشامل</div>
+          <h1 class="main-title">بنك أسئلة <strong>موضوعات مختارة في علوم البيانات</strong></h1>
+          <p class="subtitle">300 سؤال اختيار من متعدد موزعة على 10 وحدات وفصول دراسية، مصممة لقياس الفروق المفاهيمية الدقيقة وما بين السطور مع تصحيح فوري وشرح تفصيلي لكل إجابة.</p>
+        </div>
+        <div class="masthead-actions">
+          <button type="button" class="btn btn-secondary" onclick="exportReport()">تصدير تقرير الأداء (CSV)</button>
+          <button type="button" class="btn btn-ghost" id="reset-chapter-btn" onclick="resetCurrentChapter(this)">إعادة تعيين الفصل</button>
+          <button type="button" class="btn btn-ghost" id="reset-all-btn" onclick="resetAllProgress(this)">تصفير البنك كاملاً</button>
+        </div>
+      </div>
+
+      <div class="kpi-grid" id="kpi-grid">
+        <div class="kpi-tile key-tile">
+          <span class="kpi-label">إجمالي الإجابات الصحيحة</span>
+          <span class="kpi-value" id="kpi-correct">0 / 300</span>
+          <span class="kpi-meta" id="kpi-accuracy">الدقة الإجمالية: 0%</span>
+        </div>
+        <div class="kpi-tile">
+          <span class="kpi-label">نسبة الإنجاز الكلية</span>
+          <span class="kpi-value" id="kpi-answered">0 / 300</span>
+          <span class="kpi-meta" id="kpi-remaining">المتبقي: 300 سؤال</span>
+        </div>
+        <div class="kpi-tile">
+          <span class="kpi-label">نتيجة الفصل الحالي</span>
+          <span class="kpi-value" id="kpi-chapter-score">0 / 30</span>
+          <span class="kpi-meta" id="kpi-chapter-meta">تمت الإجابة على 0 من 30</span>
+        </div>
+        <div class="kpi-tile">
+          <span class="kpi-label">الأسئلة المحفوظة للمراجعة</span>
+          <span class="kpi-value" id="kpi-bookmarks">0</span>
+          <span class="kpi-meta">اضغط «حفظ للمراجعة» عند أي سؤال</span>
+        </div>
+      </div>
+
+      <div class="progress-panel">
+        <div class="progress-head">
+          <span class="kpi-label">شريط التقدم الإجمالي عبر الفصول العشرة</span>
+          <span class="mono-num" id="progress-label">0% مكتمل (0 صح · 0 خطأ)</span>
+        </div>
+        <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="300" aria-valuenow="0" id="progress-bar">
+          <div class="progress-fill-correct" id="bar-correct" style="width: 0%;"></div>
+          <div class="progress-fill-wrong" id="bar-wrong" style="width: 0%;"></div>
+        </div>
+      </div>
+    </header>
+
+    <div class="mobile-chapter-wrap">
+      <label class="field-label" for="mobile-chapter-select">اختر الفصل الدراسي</label>
+      <select class="select-control" id="mobile-chapter-select" onchange="selectChapter(Number(this.value))"></select>
+    </div>
+
+    <div class="workspace-grid">
+      <aside class="chapter-sidebar" aria-label="قائمة الفصول">
+        <div class="sidebar-title">فهرس الفصول (30 سؤالاً / فصل)</div>
+        <div id="chapter-list"></div>
+      </aside>
+
+      <main class="main-column">
+        <section class="toolbar" aria-label="أدوات التصفية والبحث">
+          <div class="toolbar-row">
+            <div class="field-group">
+              <label class="field-label" for="search-input">بحث داخل أسئلة الفصل (مفهوم، مصطلح، كود)</label>
+              <input class="input-control" id="search-input" type="search" placeholder="مثال: Sigmoid أو MAR أو DBSCAN أو DGC..." oninput="onSearchChange(this.value)">
+            </div>
+            <div class="field-group" style="max-width: 240px;">
+              <label class="field-label" for="view-mode-select">وضع العرض</label>
+              <select class="select-control" id="view-mode-select" onchange="onViewModeChange(this.value)">
+                <option value="all">عرض جميع الأسئلة المصفاة</option>
+                <option value="single">سؤال واحد في كل شاشة (وضع الاختبار)</option>
+              </select>
+            </div>
+          </div>
+          <div class="filter-tabs" role="tablist" aria-label="تصفية حسب الحالة">
+            <button type="button" class="tab-btn is-active" data-filter="all" onclick="setStatusFilter('all')">الكل (<span class="mono-num" id="cnt-all">30</span>)</button>
+            <button type="button" class="tab-btn" data-filter="unanswered" onclick="setStatusFilter('unanswered')">غير مجاب (<span class="mono-num" id="cnt-unanswered">30</span>)</button>
+            <button type="button" class="tab-btn" data-filter="wrong" onclick="setStatusFilter('wrong')">أخطاء للمراجعة (<span class="mono-num" id="cnt-wrong">0</span>)</button>
+            <button type="button" class="tab-btn" data-filter="correct" onclick="setStatusFilter('correct')">إجابات صحيحة (<span class="mono-num" id="cnt-correct">0</span>)</button>
+            <button type="button" class="tab-btn" data-filter="bookmarked" onclick="setStatusFilter('bookmarked')">محفوظة (<span class="mono-num" id="cnt-bookmarked">0</span>)</button>
+          </div>
+        </section>
+
+        <div id="status-message" class="status-note" hidden></div>
+
+        <section class="chapter-banner" id="chapter-banner">
+          <div>
+            <h2 class="chapter-heading" id="chapter-title">الفصل الأول</h2>
+            <p class="chapter-desc" id="chapter-desc"></p>
+          </div>
+          <div class="chapter-stats-pill" id="chapter-pills"></div>
+        </section>
+
+        <nav class="q-nav-strip" id="q-nav-strip" aria-label="الانتقال السريع بين أسئلة الفصل"></nav>
+
+        <section class="questions-list" id="questions-list"></section>
+
+        <div id="single-nav-controls" style="display: none; justify-content: space-between; gap: var(--space-sm);">
+          <button type="button" class="btn btn-ghost" id="prev-q-btn" onclick="stepSingleQuestion(-1)">السؤال السابق</button>
+          <span class="mono-num" id="single-counter" style="align-self: center;">1 / 30</span>
+          <button type="button" class="btn btn-primary" id="next-q-btn" onclick="stepSingleQuestion(1)">السؤال التالي</button>
+        </div>
+      </main>
+    </div>
+
+    <footer class="site-footer">
+      <span>مصمم وفق منهجية «موضوعات مختارة في علوم البيانات» — التحقق من الفهم المفاهيمي الدقيق.</span>
+      <span class="mono-num">300 MCQs · 10 Chapters</span>
+    </footer>
+  </div>
+
+  <api-shim></api-shim>
+  <script>
+    const CHAPTERS = [
+      { id: 1, short: `الفصل 01`, title: `الفصل الأول: مقدمة علم البيانات ودورة حياته`, desc: `التعريفات الجوهرية، تقاطع المهارات الثلاث، التحليل الاستكشافي EDA، النمذجة والتقييم والتعميم، والتشغيل ومراقبة الانحراف.` },
+      { id: 2, short: `الفصل 02`, title: `الفصل الثاني: أنواع البيانات وقواعدها ومخططاتها`, desc: `البيانات المهيكلة وشبه المهيكلة وغير المهيكلة، قواعد SQL وNoSQL، المفاتيح، ومخططات Star وSnowflake وFact Constellation، ومقاييس المتغيرات.` },
+      { id: 3, short: `الفصل 03`, title: `الفصل الثالث: البيانات الضخمة وأدوات التحليل والمعالجة`, desc: `أبعاد 5Vs، قيود Hadoop MapReduce مقابل Apache Spark، مستودعات Amazon Redshift وGoogle BigQuery، ومكتبات TensorFlow وScikit-Learn.` },
+      { id: 4, short: `الفصل 04`, title: `الفصل الرابع: حوكمة البيانات والأخلاقيات والخصوصية`, desc: `القواعد والعمليات والمسؤوليات، المبادئ الجوهرية، المستويات التنفيذية والاستراتيجية والتكتيكية والتشغيلية والداعمة، مكتب إدارة البيانات والخصوصية.` },
+      { id: 5, short: `الفصل 05`, title: `الفصل الخامس: جودة البيانات والفحص الشامل والأدوات`, desc: `أبعاد الجودة (الاكتمال، الاتساق، التشوش، الدقة)، خطوات الفحص الشامل Data Profiling، خريطة الترابط، ترتيب الأولويات، ومستودعات البيانات الوصفية.` },
+      { id: 6, short: `الفصل 06`, title: `الفصل السادس: الذكاء الاصطناعي والوكلاء والمدارس الفكرية`, desc: `الذكاء الضيق والقوي، الوكيل العقلاني ومكونات PEAS، البيئات المتغيرة والثابتة، خوارزميات البحث الأعمى والمستنير، والمدارس الفكرية الثلاث.` },
+      { id: 7, short: `الفصل 07`, title: `الفصل السابع: تعلم الآلة والتصنيف والانحدار والتعلم الجماعي`, desc: `أنواع التعلم الموجه وغير الموجه والتعزيزي، الانحدار اللوجستي وSVM وأشجار القرار، مقارنة Bagging وBoosting، ومعالجة النصوص وتحليل المشاعر.` },
+      { id: 8, short: `الفصل 08`, title: `الفصل الثامن: اختيار الميزات وفرط التجهيز والمعالجة والتطبيع`, desc: `طرق Filter وWrapper وEmbedded، معالجة فرط التجهيز والتعميم، قياس التحجيم Min-Max وZ-Score وRobust، تقليص الأبعاد PCA، وأنواع البيانات المفقودة.` },
+      { id: 9, short: `الفصل 09`, title: `الفصل التاسع: خوارزميات التجميع وأساليب التقييم والتحقق`, desc: `خوارزميات K-means والتجميع الهرمي وDBSCAN (Eps وMinPts)، طريقة المرفق Elbow Method، التحقق المتقاطع K-Fold، ومقاييس الأداء والخسارة.` },
+      { id: 10, short: `الفصل 10+`, title: `الفصل العاشر والحادي عشر وما بعده: التعلم العميق والمعماريات والمحسنات`, desc: `الشبكات العصبية العميقة، دوال التنشيط (Sigmoid, ReLU, Softmax, Softplus)، معماريات CNN وRNN وLSTM وGRU وGAN، والمحسنات SGD وAdam وRMSProp.` }
+    ];
+
+    // Format: [chapterId, questionText, [opt0, opt1, opt2, opt3], correctIdx, explanation]
+    const QUESTIONS = [
+      // ==================== الفصل الأول (30 سؤالاً) ====================
+      [1, `أي من المراحل التالية في دورة حياة علم البيانات تُعد الركن الأساسي الذي يركز على تصميم وتمكين الخوارزميات لفهم العلاقة بين أنماط وعناصر البيانات وبناء نماذج تنبؤية؟`, [`مرحلة التحليل الاستكشافي (EDA)`, `مرحلة النمذجة (Modeling)`, `مرحلة تقييم العمومية (Generalization)`, `مرحلة التشغيل والمتابعة (Operations)`], 1, `مرحلة النمذجة هي الركن الأساسي في علوم البيانات التي تُطبق فيها تقنيات وخوارزميات مختلفة على البيانات الجاهزة لبناء نماذج تنبؤية أو تحديد الأنماط الكامنة، بينما يسبقها EDA وتليها مرحلة التقييم ثم التشغيل.`],
+      [1, `في مخطط تقاطع علم البيانات (Data Science Venn Diagram)، ماذا ينتج عن تقاطع «علوم الحاسب وتعلم الآلة» مع «الرياضيات والتقصي الإحصائي» دون توفر «الخبرة في المجال المستهدف»؟`, [`علم البيانات المتكامل`, `البحث التقليدي الأكاديمي`, `تطوير برمجيات تعلم الآلة المجردة من سياق الأعمال`, `ذكاء الأعمال الوصفي فقط`], 2, `غياب الخبرة في المجال المستهدف (Domain Expertise) يترك عالم البيانات قادراً على بناء نماذج رياضية وبرمجية متقدمة، لكنه يفتقد القدرة على فهم جذور المشكلة التجارية أو تفسير الفرص الواقعية داخل القطاع.`],
+      [1, `أي من التالي يُعد الهدف الأدق لمرحلة التحليل الاستكشافي للبيانات <bdi dir="ltr">(EDA)</bdi> قبل البدء في بناء النموذج؟`, [`نشر النموذج في بيئة الإنتاج ومراقبة تشتت البيانات`, `إثبات الفرضيات أو رفضها واكتشاف القيم المتطرفة والتحقق من غياب الانحياز`, `تحويل جميع النصوص إلى متجهات رقمية باستخدام BERT`, `حساب مصفوفة الارتباك وقياس مقياس F1-score`], 1, `تُسهم عملية EDA في إعطاء انطباع أولي عن البيانات، واكتشاف القيم المتطرفة والشاذة وغير المنطقية، وإثبات الفرضيات أو رفضها، والتأكد من عدم وجود انحياز في التحليلات المعمول بها.`],
+      [1, `ما الفرق الجوهري بين مرحلة «النمذجة» ومرحلة «التقييم» في دورة حياة علم البيانات؟`, [`النمذجة تستخدم بيانات غير مهيكلة والتقييم يستخدم بيانات مهيكلة فقط`, `النمذجة تصمم الخوارزميات لاكتشاف الأنماط، بينما التقييم يختبر عمومية النموذج (Generalization) على نطاق أوسع`, `التقييم يسبق النمذجة لتحديد المتغيرات المستقلة`, `النمذجة تركز على حماية الخصوصية والتقييم يركز على تقليص التخزين`], 1, `وفقاً لمنهجية دورة الحياة، تركز النمذجة على تمكين الخوارزميات لفهم أنماط البيانات، بينما يهدف التقييم إلى التأكد من صلاحية النموذج بشكل عام أو ما يُعرف بـ «عمومية النموذج» عبر تمريره على معايير شاملة تختلف باختلاف نوع النموذج.`],
+      [1, `يُستخدم نوع من تحليل البيانات لاقتراح أفضل استراتيجيات التسويق التي تضمن زيادة المبيعات المستقبلية بناءً على النتائج المتوقعة؛ ما هذا النوع؟`, [`التحليل الوصفي (Descriptive)`, `التحليل التشخيصي (Diagnostic)`, `التحليل التنبؤي (Predictive)`, `التحليل التوجيهي (Prescriptive)`], 3, `التحليل التوجيهي يتجاوز توقع ما سيحدث (التنبؤي) ليقترح الإجراء أو الاستراتيجية المثلى التي تعظم النتائج المستقبلية أو تقلل المخاطر.`],
+      [1, `لماذا لا تنتهي دورة حياة علوم البيانات بمجرد الحصول على نتيجة النموذج التنبؤي أو الإحصائي وتصديره؟`, [`لأن البيانات الجديدة قد تعاني من التشتت (Data Drift) مما يفرض المراقبة والتحديث المستمر للنموذج`, `لأن مرحلة EDA تتوقف عن العمل في بيئة التشغيل`, `لأن معايير التقييم تتغير من رقمية إلى فئوية بعد النشر`, `لأن النموذج يحذف البيانات التاريخية تلقائياً بعد أول تنبؤ`], 0, `في مرحلة التشغيل والمتابعة، تستمر مراقبة أداء النموذج لاكتشاف أي تشتت في البيانات الجديدة المدخلة وقياس تأثيره، وتحديث النموذج وترقيته، وضمان استمرار معايير الخصوصية والحماية.`],
+      [1, `أي من المهارات الثلاث في تكوين عالم البيانات مسؤولة تحديداً عن «فهم جذور المشاكل والفرص التي تواجه بيئة العمل وتحويلها إلى أسئلة تحليلية»؟`, [`المهارات الحاسوبية والبرمجية`, `الأساليب الرياضية والإحصائية`, `الخبرة الشاملة والعميقة في المجال المستهدف`, `إدارة قواعد البيانات الموزعة`], 2, `الخبرة في المجال المستهدف (Domain Expertise) هي التي تمكّن عالم البيانات من فهم سياق البيانات وجذور المشاكل والفرص داخل قطاع الأعمال المستهدف دون الاكتفاء بالمعادلات المجردة.`],
+      [1, `عند مقارنة التحليل الوصفي بالتحليل التشخيصي، أي عبارة تصف الفرق بينهما بدقة؟`, [`الوصفي يحدد «لماذا حدث» والتشخيصي يحدد «ماذا سيحدث»`, `الوصفي يلخص «ماذا حدث» عبر المتوسطات والتوزيعات، بينما التشخيصي يبحث عن الأسباب الكامنة وراء حدوثه`, `كلاهما يعتمد حصراً على الشبكات العصبية العميقة`, `التشخيصي هو مرحلة لاحقة للتحليل التوجيهي`], 1, `التحليل الوصفي يجيب عن «ماذا حدث؟» بتلخيص البيانات الحالية والتاريخية، بينما يغوص التحليل التشخيصي في العلاقات والارتباطات للإجابة عن «لماذا حدث؟».`],
+      [1, `من أهم السمات غير التقنية التي تساعد عالم البيانات على استخلاص أكبر قدر من أهداف ودوافع أصحاب المصلحة هي:`, [`إتقان لغة SQL المتقدمة`, `التواصل الفعال`, `ضغط البيانات العمودية`, `تطبيق التحويل اللوغاريتمي`], 1, `التواصل الفعال هو حلقة الوصل التي تمكّن عالم البيانات من ترجمة احتياجات أصحاب المصلحة الغامضة إلى أهداف نمذجة واضحة وقابلة للقياس.`],
+      [1, `ماذا نعني بمصطلح «تشتت البيانات» <bdi dir="ltr">(Data Drift)</bdi> أثناء مرحلة التشغيل والمتابعة؟`, [`تكرار الصفوف في ملف CSV أثناء مرحلة الاستكشاف`, `تغيّر التوزيع الإحصائي للبيانات المدخلة في الواقع الفعلي مقارنة ببيانات التدريب الأصلية`, `حذف الأعمدة التي تحتوي على قيم مفقودة في DataFrame`, `زيادة عدد طبقات الشبكة العصبية أثناء التدريب`], 1, `أثناء التشغيل، قد تتغير خصائص العالم الحقيقي (سلوك العملاء، الأسعار، الظروف الموسمية)، فيحدث تشتت في البيانات الجديدة المدخلة مما يضعف دقة النموذج القديم ويستلزم تحديثه.`],
+      [1, `أثناء مرحلة التقييم في دورة حياة علم البيانات، ما الذي يحدد اختيار «معايير التقييم» المستخدمة؟`, [`حجم ذاكرة الوصول العشوائي في الخادم فقط`, `نوع النموذج والمشكلة (تصنيف، انحدار، تجميع)`, `اللغة البرمجية المستخدمة في كتابة الكود`, `عدد أصحاب المصلحة في المشروع`], 1, `تتنوع معايير التقييم اعتماداً على نوع النموذج؛ فنماذج التصنيف تُقاس بالدقة وF1-score، بينما نماذج الانحدار تُقاس بمقاييس مثل MSE وRMSE.`],
+      [1, `كيف تُسهم البيانات الجديدة التي يتم جمعها في مرحلة التشغيل في تحسين النموذج الأولي؟`, [`تُستخدم لتقليل حجم مستودع البيانات عبر حذف البيانات القديمة`, `تُستخدم لإعادة التدريب وتحسين دقة النموذج الأولي في التعرف على الأنماط`, `تُحوَّل تلقائياً إلى تقارير ثابتة غير قابلة للتحديث`, `تُمنع من الدخول إلى النموذج حفاظاً على عموميته`], 1, `البيانات الجديدة في مرحلة التشغيل لا تُستعمل للتنبؤ فقط، بل يُعاد توظيفها في حلقة تغذية راجعة لتحسين النموذج الأولي ورفع دقته.`],
+      [1, `ما هي الخطوة التي تتوسط مباشرة بين «فهم المشكلة وجمع البيانات» وبين «بناء النماذج التنبؤية» وتكشف القيم غير المنطقية؟`, [`نشر واجهة برمجة التطبيقات (API)`, `التحليل الاستكشافي للبيانات (EDA)`, `التقارير الديناميكية للوحة المعلومات`, `حوكمة البيانات على المستوى التنفيذي`], 1, `EDA هي الجسر التحليلي بين البيانات الخام والنمذجة؛ فمن دون استكشاف الشذوذ والانحياز أولاً، ستنتج النماذج مخرجات مضللة.`],
+      [1, `أي من الأسئلة التالية يمثل تطبيقاً مباشراً للتحليل التنبؤي وليس التوجيهي؟`, [`ما هو أفضل خصم سعري يجب منحه لكل شريحة عملاء لتعظيم صافي الربح؟`, `كم بلغ إجمالي مبيعات الربع الثالث مقارنة بالعام الماضي؟`, `ما هو احتمال تعثر عميل معين عن سداد القرض خلال الأشهر الستة القادمة؟`, `ما السبب الرئيسي لانخفاض المبيعات في المنطقة الشرقية الشهر الماضي؟`], 2, `تقدير احتمال وقوع حدث مستقبلي (التعثر) هو تحليل تنبؤي، أما تحديد أفضل خصم (الإجراء الأمثل) فهو توجيهي، وإجمالي المبيعات وصفي، ومعرفة السبب تشخيصي.`],
+      [1, `ماذا يقصد بـ «التقصي الإحصائي» ضمن مكونات تكوين علم البيانات وفق نموذج بالمر <bdi dir="ltr">(Palmer, 2015)</bdi>؟`, [`كتابة استعلامات SQL المعقدة لدمج الجداول`, `توظيف الأساليب الرياضية والاحتمالية للاستنتاج واختبار الفرضيات من البيانات`, `تأمين الخوادم السحابية ضد الاختراقات`, `إنشاء لوحات معلومات تفاعلية للمديرين التنفيذيين`], 1, `التقصي الإحصائي يركز على الأساس الرياضي والإحصائي (التوزيعات، الاختبارات الإحصائية، الاستدلال) لفهم الظاهرة وإثبات الفرضيات.`],
+      [1, `في دورة حياة علم البيانات، ما الغرض من التأكد من عدم وجود «انحياز» أثناء مرحلة التحليل الاستكشافي <bdi dir="ltr">(EDA)</bdi>؟`, [`تقليل زمن تشغيل المعالج أثناء التدريب`, `منع تسلل تحيزات العينة أو الفرضيات المسبقة إلى النموذج التنبؤي وتضليل قراراته`, `توحيد أسماء الأعمدة قبل دمجها بـ merge`, `تحويل المتغيرات النسبية إلى متغيرات مطلقة`], 1, `إذا كانت البيانات المستكشفة منحازة لفئة دون أخرى أو صيغت الفرضيات بانحياز، فإن أي نموذج يُبنى عليها سيعيد إنتاج نفس التحيز في النتائج.`],
+      [1, `أي عبارة تصف العلاقة بين «علم البيانات» و«تعلم الآلة» بشكل أدق؟`, [`تعلم الآلة هو المجال الأوسع وعلم البيانات جزء صغير منه`, `تعلم الآلة أداة وركيزة تقنية ضمن مظلة علم البيانات الأوسع التي تشمل الاستكشاف والإحصاء وفهم الأعمال والتشغيل`, `علم البيانات يقتصر على البيانات المهيكلة وتعلم الآلة على غير المهيكلة`, `لا توجد علاقة بينهما؛ تعلم الآلة يتبع الهندسة فقط`], 1, `علم البيانات نظام متعدد التخصصات يجمع بين الإحصاء، علوم الحاسب وتعلم الآلة، وفهم الأعمال، مع دورة حياة تبدأ بفهم المشكلة وتنتهي بالتشغيل والمراقبة.`],
+      [1, `تقرير لوحة المعلومات <bdi dir="ltr">(Dashboard)</bdi> يتميز عن التقارير الورقية التقليدية بكونه:`, [`يُكتب بلغة الآلة فقط ولا يعرض رسوماً بيانية`, `أداة تحليل تفاعلية تُستخدم لتتبع ومراقبة أداء الاستراتيجيات لحظياً أو دورياً`, `يعتمد على البيانات غير المهيكلة حصراً`, `لا يرتبط بأي مصادر بيانات أساسية`], 1, `تقرير لوحة المعلومات هو أداة تحليل تفاعلية تمكّن المؤسسات من مراقبة مؤشرات الأداء وتتبع الاستراتيجيات بصورة بصرية مرنة.`],
+      [1, `ما نوع التقارير الذي يقوم بإنشاء المخرجات أو تحديثها تلقائياً بناءً على التغييرات التي تطرأ على مصادر البيانات الأساسية؟`, [`التقارير الساكنة (Static Reports)`, `التقارير الديناميكية (Dynamic Reports)`, `تقارير التدقيق السنوي`, `تقارير الفحص اليدوي`], 1, `التقارير الديناميكية مرتبطة مباشرة بمصادر البيانات، فتتحدث مخرجاتها ومؤشراتها تلقائياً فور حدوث أي تعديل في البيانات الأساسية.`],
+      [1, `في كود <bdi dir="ltr">pandas</bdi> التالي: <bdi dir="ltr">data.dropna(axis=1)</bdi>، ما النتيجة الدقيقة للتنفيذ؟`, [`حذف جميع الصفوف التي تحتوي على قيم مفقودة`, `حذف جميع الأعمدة التي تحتوي على أي قيمة مفقودة (فراغات)`, `استبدال القيم المفقودة بالمتوسط الحسابي`, `إرجاع ملخص إحصائي للأعمدة الرقمية`], 1, `المعامل axis=1 يشير إلى الأعمدة (بينما axis=0 يشير إلى الصفوف)، لذا فإن dropna(axis=1) يحذف كل عمود يحتوي على قيمة NaN واحدة على الأقل.`],
+      [1, `ما الغرض الدقيق من تمرير المعامل <bdi dir="ltr">inplace=True</bdi> عند تنفيذ عمليات التعديل على <bdi dir="ltr">DataFrame</bdi>؟`, [`إرجاع نسخة جديدة معدلة دون المساس بالبيانات الأصلية`, `تطبيق التعديلات مباشرة على الكائن الأصلي DataFrame دون إرجاع نسخة منفصلة`, `تثبيت ترتيب الفهرس ومنع حذفه`, `حفظ الملف تلقائياً على القرص الصلب بصيغة CSV`], 1, `افتراضياً تكون inplace=False فتُنشأ نسخة جديدة؛ أما inplace=True فتفرض تعديل الـ DataFrame الأصلي في الذاكرة مباشرة.`],
+      [1, `عند تنفيذ الدالة <bdi dir="ltr">df.describe()</bdi> على إطار بيانات في <bdi dir="ltr">pandas</bdi>، ماذا تقدم افتراضياً؟`, [`حذف القيم الشاذة من الإطار`, `وصفاً إحصائياً شاملاً يشمل العدد والمتوسط والانحراف المعياري والحدين الأدنى والأعلى والربيعات`, `رسم مخطط الصندوق (Boxplot) مباشرة`, `تحويل الأعمدة النصية إلى أرقام عشوائية`], 1, `تُنتج الدالة describe() ملخصاً إحصائياً وصفياً شاملاً للأعمدة العددية (count, mean, std, min, 25%, 50%, 75%, max) وهو جزء أساسي من EDA.`],
+      [1, `ما النتيجة المتوقعة عند تنفيذ الكود: <bdi dir="ltr">frame2['is_adult'] = frame2['age'] >= 18</bdi>؟`, [`حذف جميع الصفوف التي يقل عمرها عن 18`, `إنشاء عمود جديد باسم is_adult يحتوي على قيم منطقية True و False بناءً على تحقق الشرط`, `تعديل قيم عمود age لتصبح 18 كحد أدنى`, `حساب المتوسط الحسابي للأعمار فوق 18`], 1, `التعبير الشرطي على عمود age يُنتج سلسلة منطقية (Boolean Series) من True وFalse، وتُخزن في عمود جديد باسم is_adult.`],
+      [1, `عند استخدام <bdi dir="ltr">matplotlib</bdi> أو مكتبات الرسم المشابهة، ما الوظيفة الأساسية للدالة <bdi dir="ltr">show()</bdi>؟`, [`حفظ الرسم كملف PDF عالي الدقة`, `عرض الرسم البياني المُنشأ وإظهاره للمستخدم على الشاشة`, `تغيير ألوان الفئات في الرسم`, `تقسيم نافذة الرسم إلى شبكة 2×2`], 1, `تقوم الدالة show() بتصيير وعرض الشكل البياني النهائي بعد الانتهاء من إضافة المحاور والعناوين والسلاسل.`],
+      [1, `إذا أردنا تتبع تغيّر قيمة متغير كمي مع مرور الزمن (مثل درجة الحرارة اليومية أو سعر السهم)، أي مخطط هو الأنسب؟`, [`مخطط الصندوق (Boxplot)`, `الرسم الخطي (Line Plot)`, `المخطط الدائري (Pie Chart)`, `مخطط التشتت الفئوي`], 1, `الرسم الخطي (Line Plot) هو الخيار القياسي لتمثيل السلاسل الزمنية وإظهار اتجاه تغيّر القيم عبر الزمن المتصل.`],
+      [1, `ماذا يمثل الصندوق نفسه في مخطط الصندوق <bdi dir="ltr">(Boxplot)</bdi> وماذا يمثل الخط الذي يتوسطه؟`, [`الصندوق يمثل الحدين الأدنى والأقصى، والخط يمثل المتوسط الحسابي`, `الصندوق يمثل المدى بين الربع الأول (Q1) والربع الثالث (Q3)، والخط الأوسط يمثل الوسيط (Median)`, `الصندوق يمثل الانحراف المعياري، والخط يمثل المنوال`, `الصندوق يمثل القيم المتطرفة، والخط يمثل الصفر المطلق`], 1, `يمتد الصندوق في Boxplot من Q1 (الربع الأول 25%) إلى Q3 (الربع الثالث 75%) أي المدى الربعي IQR، ويمثل الخط داخله الربع الثاني أي الوسيط (Median).`],
+      [1, `إذا كان معامل الارتباط <bdi dir="ltr">(Correlation)</bdi> بين متغيرين يساوي <bdi dir="ltr">-0.9</bdi>، فماذا يعني ذلك إحصائياً؟`, [`لا توجد أي علاقة خطية بين المتغيرين`, `علاقة طردية ضعيفة جداً`, `علاقة خطية عكسية قوية جداً؛ كلما زاد أحدهما نقص الآخر بانتظام`, `خطأ في الحساب لأن معامل الارتباط يجب أن يكون موجباً`], 2, `يتراوح معامل الارتباط بين -1 و+1؛ القيمة -0.9 قريبة جداً من -1 مما يدل على ارتباط خطي عكسي قوي جداً.`],
+      [1, `ماذا يعني وصف توزيع البيانات بأن له «تحدباً زائداً» <bdi dir="ltr">(High Kurtosis / Leptokurtic)</bdi>؟`, [`توزيع مسطح تماماً دون أي قيم متطرفة`, `أن لتوزيع البيانات قمة حادة مرتفعة وذيولاً طويلة وسميكة مع احتمال أعلى لوجود قيم متطرفة`, `أن المتوسط يساوي الوسيط تماماً وبدون انحراف`, `أن التوزيع يقتصر على القيم السالبة فقط`], 1, `التحدب الزائد يعني تركزاً حاداً للبيانات عند المركز مع ذيول أثقل وأطول من التوزيع الطبيعي، مما يرفع احتمالية ظهور قيم متطرفة.`],
+      [1, `ما وظيفة الأداة <bdi dir="ltr">CategoricalColorMapper</bdi> في مكتبات التصوير البياني التفاعلية؟`, [`تحويل الصور الملونة إلى تدرج رمادي`, `ربط قيم فئات محددة بألوان معينة لتمييزها بصرياً داخل الرسم`, `حساب التباين بين الأعمدة العددية`, `حذف الألوان المتكررة من جدول البيانات`], 1, `تُستخدم CategoricalColorMapper لتعيين خريطة لونية تربط كل قيمة فئوية (Category) بلون محدد يسهل تمييز المجموعات.`],
+      [1, `في مرحلة المتابعة والتشغيل، أي مما يلي لا يُعد من أهداف المراقبة المستمرة للنموذج المنشور؟`, [`مراقبة أداء النموذج واكتشاف تشتت البيانات المدخلة`, `إعادة كتابة مشكلة العمل الأساسية من الصفر كل أسبوع`, `تحديث وترقية النموذج عند هبوط دقته`, `التأكد من استمرار توفر معايير الخصوصية والحماية على البيانات والنماذج`], 1, `مرحلة التشغيل تركز على مراقبة الأداء، رصد تشتت البيانات، الترقية، وضمان الخصوصية والحماية، وليس إعادة صياغة مشكلة البحث الأصلية دون مبرر.`],
+
+      // ==================== الفصل الثاني (30 سؤالاً) ====================
+      [2, `أي من العبارات التالية تصف الفرق بدقة بين «المتغير الكمي المطلق (Ratio)» و«المتغير الكمي النسبي/الفتري (Interval)»؟`, [`المتغير المطلق له بداية طبيعية حيث الصفر يعني انعدام الصفة، بينما النسبي الصفر فيه نقطة اعتبارية لا تعني غياب الصفة`, `المتغير النسبي يحتوي على أعداد صحيحة فقط والمطلق على كسور فقط`, `المتغير المطلق لا يقبل عمليات الجمع والطرح`, `المتغير النسبي يمثل الفئات الاسمية غير المرتبة`], 0, `في القياس المطلق (مثل الوزن أو الطول أو الدخل) الصفر يعني انعدام الصفة تماماً، أما في الفتري/النسبي (مثل درجة الحرارة المئوية) فالصفر نقطة اتفاقية ولا يعني انعدام الحرارة.`],
+      [2, `ما الفرق الرئيسي بين البيانات المهيكلة <bdi dir="ltr">(Structured)</bdi> والبيانات غير المهيكلة <bdi dir="ltr">(Unstructured)</bdi> من حيث التنظيم؟`, [`المهيكلة تتبع مخططاً صارماً من الجداول والصفوف والأعمدة، بينما غير المهيكلة تفتقر لنموذج بيانات محدد مسبقاً مثل النصوص الحرة والصور`, `المهيكلة لا يمكن تخزينها إلا في ملفات JSON`, `غير المهيكلة تُعالج فقط بلغة SQL التقليدية`, `المهيكلة تشغل مساحة تخزين أكبر دائماً من الفيديو والصور`], 0, `البيانات المهيكلة تنتظم في جداول ذات مخطط ثابت (Schema)، بينما غير المهيكلة مثل ملفات txt والوسائط والصور وملفات التصوير الدماغي (NIFTI) تفتقر لبنية جدولية ثابتة.`],
+      [2, `تُصنف ملفات <bdi dir="ltr">JSON</bdi> التي تنظم البيانات في صورة أزواج مفتاح-قيمة <bdi dir="ltr">(Key-Value)</bdi> مع مرونة في البنية ضمن:`, [`البيانات المهيكلة الصارمة`, `البيانات شبه المهيكلة (Semi-structured)`, `البيانات غير المهيكلة الخالصة`, `البيانات الفئوية الاسمية فقط`], 1, `ملفات JSON وXML لا تلتزم بجداول صارمة كقواعد SQL، لكنها تحوي وسوماً ومفاتيح (Key-Value) تصف البنية، لذا تُعد بيانات شبه مهيكلة.`],
+      [2, `في قواعد البيانات العلائقية، ما الوظيفة الدقيقة لـ «المفتاح الأجنبي» <bdi dir="ltr">(Foreign Key)</bdi>؟`, [`تشفير كلمات المرور داخل الجدول`, `ربط صف في جدول بمفتاح أساسي (Primary Key) في جدول آخر لتأسيس علاقة تكاملية بينهما`, `منع تخزين الأرقام العشرية في الجداول`, `فهرسة الملفات الصوتية داخل NoSQL`], 1, `المفاتيح الأساسية والأجنبية والثانوية تربط الجداول ببعضها داخل قواعد البيانات العلائقية وتسهل عمليات الاستعلام عبر العلاقات.`],
+      [2, `وفقاً لمصفوفة تصنيف البيانات، أي من العبارات التالية صحيح ودقيق «من بين السطور»؟`, [`جميع البيانات العلائقية يجب أن تكون مهيكلة في جداول`, `كل البيانات غير العلائقية هي بيانات غير مهيكلة بالضرورة`, `البيانات العلائقية قد تكون مهيكلة مثل الجداول أو غير مهيكلة مثل قواعد البيانات الشبكية (Graph Databases)`, `قواعد NoSQL لا تقبل أي خصائص علائقية مطلقاً`], 2, `البيانات العلائقية قد تكون مهيكلة (Tables) أو غير مهيكلة (Graph Databases)، كما أن بعض قواعد NoSQL قد تجمع بين كونها غير مهيكلة وامتلاكها خصائص علائقية.`],
+      [2, `بماذا تتميز قواعد البيانات غير العلائقية المعتمدة على <bdi dir="ltr">NoSQL</bdi> مقارنة بقواعد البيانات العلائقية التقليدية؟`, [`بعدم قدرتها على تخزين النصوص`, `بمرونتها العالية وقابليتها للتوسع الأفقي عند التعامل مع كميات ضخمة من البيانات غير المهيكلة أو شبه المهيكلة`, `بإلزام المستخدم بمخطط جدولي ثابت قبل إدخال أي سجل`, `بأنها تستخدم لغة SQL الصارمة في كل استعلام`], 1, `قواعد NoSQL توفر مرونة وقابلية عالية للتوسع (Scalability) في تخزين البيانات غير المهيكلة وشبه المهيكلة مثل ملفات السجل والوسائط وقواعد البيانات الشبكية.`],
+      [2, `عند استخدام دالة <bdi dir="ltr">merge</bdi> في <bdi dir="ltr">pandas</bdi> لدمج إطارين وتعيين المعامل <bdi dir="ltr">how='outer'</bdi>، ماذا يحدث؟`, [`يتم الاحتفاظ بالصفوف المشتركة فقط بين الإطارين`, `يتم احتواء كل البيانات من الإطارين، وأي بيانات غير مكتملة التطابق تُملأ بقيم NaN`, `يتم حذف الإطار الأول والاحتفاظ بالثاني فقط`, `يتم الدمج بشرط تساوي عدد الأعمدة تماماً`], 1, `الدمج الخارجي الكامل (outer join) يحتفظ بجميع المفاتيح من كلا الإطارين ويملأ الخانات المفقودة الناتجة عن عدم التطابق بـ NaN.`],
+      [2, `أي عبارة برمجية صحيحة لربط إطارين <bdi dir="ltr">df</bdi> و<bdi dir="ltr">marksdf</bdi> بناءً على عمود المعرّف <bdi dir="ltr">ID</bdi> بحيث يظهر الطلاب المشتركون في الجدولين فقط؟`, [`df.merge(marksdf, on='ID', how='inner')`, `df.merge(marksdf, on='ID', how='outer')`, `df.dropna(on='ID', how='inner')`, `df.concat(marksdf, axis=1, how='left')`], 0, `المعامل how='inner' في دالة merge ينفذ تقاطعاً داخلياً يبقي على السجلات المتطابقة في عمود المفتاح 'ID' فقط.`],
+      [2, `ما الميزة الأساسية لـ «مخطط النجمة» <bdi dir="ltr">(Star Schema)</bdi> عند مقارنته بمخطط ندفة الثلج <bdi dir="ltr">(Snowflake Schema)</bdi>؟`, [`يمنع تكرار البيانات تماماً عبر التطبيع الكامل لجداول الأبعاد`, `يعطي الأولوية للبساطة وسهولة الاستخدام وسرعة الاستعلام لعدم تطبيع جداول الأبعاد`, `يتكون من عدة جداول حقائق متصلة معاً`, `لا يحتوي على جدول حقائق مركزي`], 1, `مخططات النجمة تفضل البساطة وسهولة الاستخدام (جداول أبعاد غير مطبعة متصلة مباشرة بجدول الحقائق)، بينما تعمل ندفة الثلج على تطبيع الأبعاد لتحسين كفاءة التخزين وسلامة البيانات.`],
+      [2, `لماذا تختار بعض مشاريع تحليل البيانات «مخطط ندفة الثلج» <bdi dir="ltr">(Snowflake Schema)</bdi> رغم تعقيده النسبي؟`, [`لتقليل عدد جداول الأبعاد إلى جدول واحد فقط`, `لتحسين كفاءة التخزين وتقليل التكرار وتعزيز سلامة البيانات عبر تطبيع جداول الأبعاد`, `لأنه يلغي الحاجة إلى المفاتيح الأجنبية`, `لأنه مخصص حصراً لقواعد NoSQL غير المهيكلة`], 1, `مخطط ندفة الثلج يقسم جداول الأبعاد إلى جداول فرعية مطبعة (Normalized)، مما يرفع كفاءة التخزين ويحافظ على سلامة البيانات واتساقها.`],
+      [2, `ما الذي يميز «مخطط كوكبة الحقائق» <bdi dir="ltr">(Fact Constellation / Galaxy Schema)</bdi> عن مخططي النجمة وندفة الثلج؟`, [`يحتوي على جدول حقائق واحد فقط دون أبعاد`, `يتكون من عدة جداول حقائق (Fact Tables) تشترك في بعض جداول الأبعاد العامة (Conformed Dimensions)`, `لا يسمح بدمج أكثر من مخطط نجمي`, `يُستخدم فقط لتخزين الصور الطبية`], 1, `مخطط كوكبة الحقائق هو اندماج لسلسلة من مخططات النجوم أو ندفة الثلج يتضمن عدة جداول حقائق تتشارك جداول أبعاد شائعة.`],
+      [2, `عند إضافة أعمدة جديدة أو إزالتها من جدول أو مجموعة بيانات، ماذا يحدث للقيم التاريخية التي لم تتوفر لها بيانات في تلك الأعمدة؟`, [`تُحذف جميع الصفوف التاريخية تلقائياً`, `تنشأ قيم فارغة (Nulls) أو مسافات في المواضع التي ينبغي أن تكون فيها قيم`, `يتم استبدالها بالرقم صفر دائماً`, `ينقسم الجدول إلى مخطط ندفة ثلج تلقائياً`], 1, `عند تعديل هيكل الأعمدة (إضافة أو إزالة) مع الاحتفاظ بالبيانات التاريخية، تظهر قيم فارغة (فجوات) حيث لا تتوفر قيم مسجلة لتلك التعديلات.`],
+      [2, `أي من التالي يُعد مثالاً على «ملفات بيانات متخصصة غير مهيكلة» وردت في تصنيف أوعية البيانات؟`, [`جدول الموظفين في قاعدة SQL`, `ملفات التصوير الدماغي (NIFTI Files) والملفات الموجية والصور`, `ملف CSV يحتوي على أرقام الهوية والرواتب`, `جدول الحقائق في مستودع البيانات`], 1, `أوعية البيانات غير المهيكلة تشمل ملفات النصوص الحرة، الوسائط والصور (png)، وملفات السجل (Log Files)، وملفات التصوير العلمي المتخصصة مثل NIFTI.`],
+      [2, `تُعد قواعد البيانات الشبكية <bdi dir="ltr">(Graph Databases)</bdi> مثالاً بارزاً على:`, [`قواعد SQL الصارمة ذات الجداول المسطحة`, `قواعد NoSQL التي تخزن البيانات بطريقة غير مهيكلة مع الحفاظ على خصائص علائقية قوية`, `ملفات Excel المؤرشفة`, `مخططات النجمة في مستودعات البيانات التقليدية`], 1, `وفقاً لمصفوفة تصنيف البيانات، قواعد البيانات الشبكية من نوع NoSQL قد تكون غير مهيكلة من حيث البنية الجدولية لكنها تمتلك خاصية علائقية قوية عبر العقد والحواف.`],
+      [2, `ما المقصود بمصطلح «أوعية البيانات» <bdi dir="ltr">(Data Containers)</bdi>؟`, [`برامج مكافحة الفيروسات لحماية الخوادم`, `مجموعة من الأوعية الإلكترونية (مثل قواعد البيانات والملفات) التي تمكن الحواسيب من تخزين البيانات واسترجاعها وتنفيذ العمليات عليها`, `جداول الأبعاد الفرعية في مخطط ندفة الثلج`, `أدوات التحجيم الرياضي للمتغيرات`], 1, `أوعية البيانات هي الحاضنات الإلكترونية (DBs أو Files بمختلف صيغها) التي تتيح تخزين البيانات واسترجاعها ومعالجتها إلكترونياً.`],
+      [2, `في جدول بيانات موظفين يحتوي على الأعمدة (رقم الموظف، الاسم، سنوات الخبرة، رقم المشروع)، أي عمود يصلح لأن يكون «مفتاحاً أساسياً» <bdi dir="ltr">(Primary Key)</bdi>؟`, [`سنوات الخبرة`, `الاسم`, `رقم الموظف (Employee ID)`, `حالة المشروع`], 2, `المفتاح الأساسي يجب أن يكون فريداً لكل سجل ولا يتكرر ولا يقبل قيماً فارغة، وهو ما يتحقق في رقم الموظف (Employee ID) دون الاسم أو سنوات الخبرة.`],
+      [2, `ما القيمة المتوقعة لـ «المتوسط الحسابي» و«النطاق (المدى)» لمجموعة القيم <bdi dir="ltr">(90, 10, 0, 70, 50, 20)</bdi>؟`, [`المتوسط = 40، النطاق = 90`, `المتوسط = 45، النطاق = 80`, `المتوسط = 35، النطاق = 70`, `المتوسط = 40، النطاق = 20`], 0, `مجموع القيم = 90+10+0+70+50+20 = 240، وقسمته على 6 يساوي 40. أما النطاق (Range) = أكبر قيمة (90) - أصغر قيمة (0) = 90.`],
+      [2, `إذا اشتريت منازل في مدينة وكانت معظم الصفقات عند سعر <bdi dir="ltr">5,000,000</bdi> ريال، فأي مقياس نزعة مركزية يصف «السعر الأكثر تكراراً وشيوعاً بين عمليات الشراء»؟`, [`المتوسط الحسابي`, `المنوال (Mode)`, `الانحراف المعياري`, `المدى الربعي`], 1, `المنوال (Mode) هو القيمة الأكثر تكراراً وشيوعاً في مجموعة البيانات، ويصلح للبيانات الفئوية والكمية على حد سواء.`],
+      [2, `أين يقع «جدول الحقائق» <bdi dir="ltr">(Fact Table)</bdi> في مخطط النجمة وما طبيعة محتواه غالباً؟`, [`في الأطراف الخارجية ويحتوي على أوصاف نصية ثابتة`, `في المركز ويحتوي على المقاييس الكمية والمفاتيح الأجنبية المرتبطة بجداول الأبعاد`, `خارج مستودع البيانات في ملفات نصية`, `لا يحتوي على أي أرقام أو مفاتيح`], 1, `في Star Schema يتمركز جدول الحقائق في القلب ويضم القياسات الرقمية للأحداث (مثل المبيعات والكميات) مع مفاتيح تربطه بجداول الأبعاد المحيطة.`],
+      [2, `أي من التالي يُعد مثالاً على «متغير نوعي ترتيبي» <bdi dir="ltr">(Ordinal)</bdi> وليس اسمياً بحتاً؟`, [`نوع فصيلة الدم (A, B, O, AB)`, `تقدير الطالب الجامعي (ممتاز، جيد جداً، جيد، مقبول)`, `رقم الهاتف`, `لون السيارة`], 1, `المتغيرات الترتيبية فئات ذات ترتيب منطقي ذي معنى (ممتاز > جيد جداً > جيد)، بينما فصيلة الدم واللون فئات اسمية لا ترتيب تفاضلي بينها.`],
+      [2, `متى نلجأ إلى التخزين السحابي أو الأنظمة الموزعة بدلاً من نظام التخزين المحلي؟`, [`عند التعامل مع جداول صغيرة تقل عن مئة صف`, `عندما يصبح حجم البيانات ضخماً (Big Data) ويتجاوز قدرة القرص المحلي الواحد على التخزين والمعالجة`, `عندما نريد منع أي موظف من الوصول للبيانات`, `عند استخدام لغة Python في جهاز شخصي دون شبكة`], 1, `حجم البيانات الاعتيادية قد يكفيه تخزين محلي، أما البيانات الضخمة فتتطلب أنظمة موزعة أو تخزيناً سحابياً لتوفير السعة والتوازي.`],
+      [2, `ما العلاقة بين «البيانات الوصفية» <bdi dir="ltr">(Metadata)</bdi> و«ملفات XML / JSON»؟`, [`البيانات الوصفية هي وصف لبنية وخصائص البيانات، وملفات XML/JSON تدمج هذا الوصف مع القيم عبر وسوم ومفاتيح ذاتية الوصف`, `لا توجد أي صلة لأن XML لغة تنسيق صور`, `البيانات الوصفية تمنع قراءة ملفات JSON`, `ملفات JSON تحذف البيانات الوصفية تلقائياً`], 0, `توصف البيانات شبه المهيكلة بأنها ذاتية الوصف (Self-describing) لأنها تحوي وسوماً ومفاتيح تحدد بنية الحقول دون جدول خارجي صارم.`],
+      [2, `لماذا لا يكفي استخدام الدالة <bdi dir="ltr">how='left'</bdi> في <bdi dir="ltr">merge</bdi> إذا أردنا ضمان عدم فقدان أي سجل من كلا الملفين الأول والثاني؟`, [`لأن how='left' يحتفظ بسجلات الجدول الأيمن فقط`, `لأن how='left' يحتفظ بكل سجلات الجدول الأيسر ويسقط السجلات غير المتطابقة من الجدول الأيمن`, `لأن how='left' يحذف كل القيم المفقودة`, `لأن how='left' يرتب الصفوف أبجدياً ويحذف الأرقام`], 1, `للاحتفاظ بجميع السجلات من الملفين معاً دون إسقاط أي طرف غير متطابق نستخدم how='outer'، بينما how='left' يبقي على مفاتيح الإطار الأيسر فقط.`],
+      [2, `أي من أوعية البيانات التالية يجمع بين «الاستعلام المهيكل» و«العلاقات المفتاحية الصارمة»؟`, [`ملفات السجل النصية (Log Files)`, `قواعد البيانات العلائقية المدارة بـ SQL`, `مجلدات الصور الرقمية`, `قواعد البيانات الوثائقية غير المهيكلة`], 1, `قواعد البيانات العلائقية (RDBMS) تفرض بنية جدولية صارمة وتستعمل لغة SQL للاستعلام عبر المفاتيح الأساسية والأجنبية.`],
+      [2, `إذا أردنا تنظيم عرض أربعة رسوم بيانية في شبكة منتظمة <bdi dir="ltr">(2×2)</bdi> في مكتبات التصوير مثل <bdi dir="ltr">Bokeh</bdi>، فأي أداة نستخدم؟`, [`gridplot / layout`, `CategoricalColorMapper`, `dropna`, `Sigmoid`], 0, `تُستخدم أدوات التخطيط الشبكي مثل gridplot أو layout لترتيب الرسوم البيانية المتعددة في مصفوفة منتظمة (مثل 2×2).`],
+      [2, `في مخطط ندفة الثلج <bdi dir="ltr">(Snowflake Schema)</bdi>، ما الأثر الجانبي المباشر لعملية تطبيع جداول الأبعاد وتقسيمها إلى مستويات متفرعة؟`, [`اختفاء جدول الحقائق تماماً`, `زيادة عدد عمليات الربط (Joins) المطلوبة عند تنفيذ الاستعلامات مقارنة بمخطط النجمة`, `تحول قاعدة البيانات إلى NoSQL`, `توقف إمكانية ضغط البيانات`], 1, `تطبيع الأبعاد في Snowflake يحسّن التخزين ويمنع التكرار، لكنه يفرض على الاستعلامات تنفيذ Joins أكثر بين الجداول المتفرعة مقارنة ببساطة Star Schema.`],
+      [2, `أي مقياس يعتبر الأقل تأثراً بالقيم المتطرفة الشاذة عند وصف أسعار العقارات؟`, [`المتوسط الحسابي (Mean)`, `الوسيط (Median)`, `النطاق (Range)`, `مجموع المربعات`], 1, `الوسيط يعتمد على الترتيب الموقعي في منتصف البيانات لذا لا يتأثر بالقيم المتطرفة الكبيرة أو الصغيرة جداً، بخلاف المتوسط والنطاق.`],
+      [2, `في لغة <bdi dir="ltr">SQL</bdi>، ما الغرض من وجود «المفتاح الثانوي» <bdi dir="ltr">(Secondary Key)</bdi> بجانب المفتاح الرئيسي؟`, [`تحويل القيم النصية إلى منطقية`, `تسريع عمليات البحث والاستعلام على حقول غير رئيسية يُكثر البحث بها`, `حذف الأعمدة المكررة تلقائياً`, `تشغيل خوارزمية K-means داخل الجدول`], 1, `المفتاح الثانوي حقل (أو مجموعة حقول) مفهرس لتسريع الاستعلامات والبحث (مثل البحث بالبريد الإلكتروني أو اسم القسم) دون أن يكون هو المعرّف الأساسي الوحيد.`],
+      [2, `ملفات السجل <bdi dir="ltr">(Log Files)</bdi> الناتجة عن الخوادم وتطبيقات الويب تُصنف غالباً في بيئة البيانات الضخمة على أنها:`, [`بيانات مهيكلة بالكامل في جدول واحد`, `بيانات غير مهيكلة أو شبه مهيكلة يُستعلم عنها بأدوات NoSQL`, `مخططات كوكبة حقائق`, `بيانات قياس مطلق فقط`], 1, `ملفات السجل (Log Files) أُدرجت في مصادر المقرر كأمثلة على البيانات المخزنة بطريقة غير مهيكلة ويُستعلم عنها بأدوات NoSQL.`],
+      [2, `عندما يتساوى الوسيط والمنوال لبيانات أسعار المنازل المشتراة عند <bdi dir="ltr">5,000,000</bdi> ريال مع غياب ذيول متطرفة قوية، فهذا يشير غالباً إلى:`, [`أن التوزيع شديد الالتواء إلى اليمين`, `أن التوزيع متماثل ومركز التجمع والشيوع يتطابقان عند هذه القيمة`, `أن جميع المنازل مجانية`, `أن الانحراف المعياري يساوي 5,000,000`], 1, `تطابق الوسيط والمنوال يعني أن القيمة الواقعة في منتصف الترتيب هي نفسها القيمة الأكثر شيوعاً وتكراراً، وهو مؤشر على التمركز المتماثل حول 5,000,000 ريال.`],
+
+      // ==================== الفصل الثالث (30 سؤالاً) ====================
+      [3, `ما التعريف الأدق لـ «البيانات الضخمة» <bdi dir="ltr">(Big Data)</bdi>؟`, [`أي ملف بيانات يتجاوز حجمه 10 ميجابايت`, `مجموعة من البيانات ضخمة ومعقدة جداً لدرجة أن الأدوات والتقنيات التقليدية للمعالجة والتحليل لا تكفي للتعامل معها`, `بيانات مخزنة في جدول Excel واحد بألوان متعددة`, `البيانات الناتجة عن قواعد SQL فقط`], 1, `البيانات الضخمة لا تُقاس بالحجم فقط، بل بعجز الأدوات والتقنيات التقليدية عن معالجتها وتحليلها بكفاءة ضمن زمن مقبول.`],
+      [3, `في نموذج الأبعاد الخمسة للبيانات الضخمة <bdi dir="ltr">(5Vs)</bdi>، أي بُعد يشير إلى «موثوقية البيانات وجودتها ومدى خلوها من الضوضاء والتحيز»؟`, [`الحجم (Volume)`, `السرعة (Velocity)`, `التنوع (Variety)`, `المصداقية (Veracity)`], 3, `Veracity تعني المصداقية أو صحة البيانات وموثوقيتها؛ فكثرة البيانات وسرعتها لا تفيد إذا كانت ملوثة أو غير دقيقة.`],
+      [3, `ما المقصود ببُعد «القيمة» <bdi dir="ltr">(Value)</bdi> ضمن أبعاد البيانات الضخمة الخمسة <bdi dir="ltr">(5Vs)</bdi>؟`, [`تكلفة شراء الخوادم السحابية`, `القدرة على تحويل البيانات الخام الضخمة إلى رؤى وقرارات تحقق عائداً ملموساً للأعمال`, `عدد الأعمدة الرقمية في الجدول`, `سرعة كتابة البيانات على القرص الصلب`], 1, `القيمة (Value) هي البُعد الخامس الذي يربط الجهد التقني بالعائد الاقتصادي أو المعرفي الفعلي المستخلص من تحليل البيانات.`],
+      [3, `صُمم نظام <bdi dir="ltr">Apache Spark</bdi> ليعمل جنباً إلى جنب مع <bdi dir="ltr">Hadoop</bdi>، وغالباً ما يُستخدم كبديل لـ:`, [`نظام الملفات الموزعة HDFS`, `نموذج المعالجة MapReduce في Hadoop`, `لغة الاستعلام SQL في قواعد العلائقية`, `مكتبة Matplotlib للرسم البياني`], 1, `أُنشئ Apache Spark لمعالجة القيود المفروضة على Hadoop MapReduce تحديداً في سرعة المعالجة التكرارية.`],
+      [3, `كيف عالج <bdi dir="ltr">Apache Spark</bdi> القيود المفروضة على نموذج <bdi dir="ltr">MapReduce</bdi>؟`, [`بمنع التوازي والاعتماد على معالج واحد`, `بإجراء المعالجة في الذاكرة (In-Memory)، وتقليل عدد الخطوات المهمة، وإعادة استخدام البيانات عبر عمليات متوازية متعددة`, `بحفظ كل خطوة وسيطة على القرص المغناطيسي البطيء`, `بتحويل جميع البيانات إلى صور قبل المعالجة`], 1, `تفوق Spark على MapReduce عبر الحوسبة داخل الذاكرة (In-Memory Processing) وتقليل عمليات القراءة/الكتابة القرصية المتكررة مع إعادة استخدام البيانات بالتوازي.`],
+      [3, `يعمل إطار <bdi dir="ltr">Apache Spark</bdi> برمجياً بالاعتماد على بيئة التشغيل:`, [`آلة جافا الافتراضية Java Virtual Machine (JVM)`, `متصفح الويب فقط`, `محرك Excel VBA`, `قاعدة بيانات Access المحلية`], 0, `تم تصميم Spark ليعمل فوق آلة جافا الافتراضية (JVM) مع توفير واجهات برمجية بلغات متعددة مثل Python وScala وJava وR.`],
+      [3, `تُعد خدمة <bdi dir="ltr">Amazon Redshift</bdi> خدمة لتخزين البيانات بحجم بيتابايت تقدمها <bdi dir="ltr">AWS</bdi>، وتعتمد في بنيتها الأساسية على قاعدة بيانات مفتوحة المصدر هي:`, [`MongoDB`, `PostgreSQL`, `SQLite`, `Cassandra`], 1, `يعتمد Amazon Redshift في نواته على قاعدة بيانات PostgreSQL مفتوحة المصدر، مع إعادة تصميمها للتخزين العمودي والتوزيع المتوازي.`],
+      [3, `لماذا يستخدم كل من <bdi dir="ltr">Amazon Redshift</bdi> و<bdi dir="ltr">Google BigQuery</bdi> نهج «التخزين العمودي» <bdi dir="ltr">(Columnar Storage)</bdi>؟`, [`لمنع استخدام خوارزميات الضغط`, `لتحسين أداء الاستعلامات التحليلية على مجموعات البيانات الضخمة وتقليل قراءة الأعمدة غير المطلوبة وتعظيم الضغط`, `لأن التخزين الصفي لا يعمل على السحابة`, `لإجبار المستخدم على قراءة كامل الجدول عند طلب عمود واحد`], 1, `التخزين العمودي يجمع قيم كل عمود معاً، مما يسرّع الاستعلامات التحليلية (OLAP) التي تقرأ أعمدة محددة فقط، كما يزيد كفاءة خوارزميات الضغط لتجانس نوع البيانات داخل العمود.`],
+      [3, `ما الورقة البحثية الهندسية من <bdi dir="ltr">Google</bdi> التي يعتمد عليها نظام <bdi dir="ltr">Google BigQuery</bdi> لتشغيل استعلامات مخصصة على مجموعات بيانات موزعة؟`, [`ورقة PageRank`, `ورقة Dremel`, `ورقة Transformer`, `ورقة MapReduce`], 1, `يعتمد Google BigQuery على ورقة Dremel التي تصف نظاماً متدرجاً لتشغيل استعلامات SQL تفاعلية سريعة على مجموعات بيانات ضخمة وموزعة.`],
+      [3, `أي من ميزات الأمان التالية يوفرها <bdi dir="ltr">Amazon Redshift</bdi> لحماية مستودعات البيانات؟`, [`حذف سجلات الدخول فورياً`, `عزل الشبكة، والتشفير أثناء الراحة، والتكامل مع إدارة الهوية والوصول (AWS IAM)`, `تعطيل التشفير لزيادة سرعة القراءة`, `مشاركة كلمات المرور بشكل عام عبر الويب`], 1, `يوفر Redshift طبقات أمان مؤسسية تشمل عزل الشبكة (VPC)، التشفير أثناء الراحة (Encryption at Rest)، والتكامل مع AWS IAM.`],
+      [3, `ما المقصود بميزة «المرونة في التوسيع والتصغير» في <bdi dir="ltr">Amazon Redshift</bdi>؟`, [`تغيير حجم الخط في واجهة المستخدم`, `قدرة المؤسسات على إضافة سعة تخزين وحوسبة أو إزالتها بسهولة حسب تغير الاحتياج`, `تحويل قاعدة البيانات من علائقية إلى صور`, `تقليص عدد الأعمدة في الجدول تلقائياً`], 1, `المرونة (Elastic Scaling) تتيح زيادة أو تقليص السعة وفق حجم العمل لتجنب دفع تكاليف موارد غير مستغلة.`],
+      [3, `ما الوصف الدقيق لمكتبة <bdi dir="ltr">Google TensorFlow</bdi>؟`, [`مكتبة مخصصة لرسم الخرائط الجغرافية فقط`, `مكتبة رياضيات رمزية مفتوحة المصدر لتعلم الآلة تستخدم تدفق البيانات والبرمجة التفاضلية وتركز على الشبكات العصبية العميقة`, `برنامج إدارة قواعد بيانات علائقية مثل SQL`, `أداة لإزالة الروابط التشعبية من ملفات Word`], 1, `TensorFlow مكتبة مفتوحة المصدر طورتها Google تعتمد على الرسوم البيانية لتدفق البيانات والبرمجة التفاضلية لتدريب ونشر نماذج التعلم العميق.`],
+      [3, `تُبنى مكتبة تعلم الآلة الشهيرة <bdi dir="ltr">Scikit-Learn</bdi> في لغة بايثون فوق مكتبتين علميتين أساسيتين هما:`, [`TensorFlow وKeras`, `NumPy وSciPy`, `Hadoop وSpark`, `Redshift وBigQuery`], 1, `تعتمد Scikit-Learn على NumPy للمصفوفات والحسابات العددية وعلى SciPy للحسابات العلمية، وتُستخدم على نطاق واسع في الصناعة ومسابقات Kaggle.`],
+      [3, `إذا أراد فريق تحليل بيانات تدريب نموذج تصنيف تقليدي (مثل Random Forest أو SVM) على بيانات جدولية متوسطة الحجم في Python، فأي مكتبة هي الأنسب والأشهر؟`, [`Scikit-Learn`, `Amazon Redshift`, `Apache HDFS`, `PostgreSQL`], 0, `Scikit-Learn هي المكتبة القياسية في Python لخوارزميات تعلم الآلة التقليدية (تصنيف، انحدار، تجميع، تقليص أبعاد، واختيار ميزات).`],
+      [3, `أي من الأدوات التالية تُعد من أدوات الإدارة والمراقبة الرسمية لخدمة <bdi dir="ltr">Google BigQuery</bdi>؟`, [`AWS CLI`, `BigQuery Web UI وBigQuery API وأداة سطر الأوامر`, `PostgreSQL Local Manager`, `Spark JVM Console`], 1, `يوفر BigQuery واجهة الويب (Web UI)، وواجهة برمجة التطبيقات (API)، وأداة سطر الأوامر (bq CLI)، بينما AWS CLI تخص بيئة Amazon.`],
+      [3, `أي بُعد من أبعاد البيانات الضخمة الخمسة يُبرز تحدي «تدفق البيانات المستمر من حساسات إنترنت الأشياء ومعاملات الدفع اللحظية»؟`, [`الحجم (Volume)`, `السرعة (Velocity)`, `التنوع (Variety)`, `الهيكلية (Structure)`], 1, `السرعة (Velocity) تصف معدل توليد البيانات وتدفقها وضرورة معالجتها في الوقت الفعلي أو شبه الفعلي.`],
+      [3, `عند مقارنة <bdi dir="ltr">TensorFlow</bdi> بـ <bdi dir="ltr">Scikit-Learn</bdi>، أي عبارة تبرز الفارق التخصصي الدقيق بينهما؟`, [`Scikit-Learn مخصصة للتخزين السحابي وTensorFlow لقواعد SQL`, `TensorFlow تتفوق في الشبكات العصبية العميقة والبرمجة التفاضلية على وحدات GPU/TPU، بينما Scikit-Learn متخصصة في خوارزميات تعلم الآلة الكلاسيكية`, `كلاهما من تطوير شركة Amazon`, `Scikit-Learn لا تدعم خوارزميات التصنيف`], 1, `بينما تغطي Scikit-Learn تعلم الآلة الكلاسيكي وتقييمه بسهولة، تركز TensorFlow على تدريب الشبكات العصبية العميقة والحسابات الموزعة عبر تدفق البيانات.`],
+      [3, `لماذا تفرض خوارزميات <bdi dir="ltr">MapReduce</bdi> تكلفة زمنية مرتفعة في المهام التكرارية لتعلم الآلة مقارنة بـ <bdi dir="ltr">Apache Spark</bdi>؟`, [`لأن MapReduce يكتب النتائج الوسيطة على القرص الصلب في كل دورة تكرار بدلاً من إبقائها في الذاكرة`, `لأن MapReduce لا يدعم لغة Java`, `لأن Spark يعمل فقط بدون توزيع`, `لأن MapReduce يستخدم التخزين العمودي`], 0, `القراءة والكتابة القرصية بين كل مرحلتي Map وReduce تبطئ الخوارزميات التكرارية، وهو ما تجاوزه Spark بالحوسبة في الذاكرة.`],
+      [3, `ما المقصود بمصطلح «مستودع بيانات بحجم بيتابايت» <bdi dir="ltr">(Petabyte-scale Data Warehouse)</bdi> كما في <bdi dir="ltr">Redshift</bdi> و<bdi dir="ltr">BigQuery</bdi>؟`, [`أداة لضغط ملفات الصوت على الهاتف المحمول`, `منظومة تخزين وتحليل سحابية مُدارة قادرة على استيعاب واستعلام آلاف التيرابايتات من البيانات بسرعة عالية`, `خادم محلي بسعة 16 جيجابايت`, `جدول بيانات غير متصل بالإنترنت`], 1, `كلا الخدمتين (Redshift وBigQuery) تقدمان مستودعات بيانات سحابية مُدارة بالكامل أو شبه مُدارة تتسع لنطاق البيتابايت.`],
+      [3, `أي بُعد من أبعاد البيانات الضخمة يشير إلى «تباين مصادر البيانات بين نصوص وصور وفيديو وسجلات معاملات وجداول علائقية»؟`, [`المصداقية (Veracity)`, `التنوع (Variety)`, `السرعة (Velocity)`, `الاكتمال (Completeness)`], 1, `التنوع (Variety) يعبّر عن تعدد أشكال البيانات ومصادرها (مهيكلة، شبه مهيكلة، غير مهيكلة).`],
+      [3, `من أدوات التفاعل وإدارة خدمة <bdi dir="ltr">Amazon Redshift</bdi>:`, [`BigQuery Web UI`, `Amazon Redshift Management Console وAWS SDKs وAWS CLI`, `Scikit-Learn Pipeline`, `Tableau Desktop فقط`], 1, `تدعم Amazon Redshift الإدارة عبر وحدة التحكم الرسومية (Management Console)، حزم التطوير (AWS SDKs)، وواجهة سطر الأوامر (AWS CLI).`],
+      [3, `أي مما يلي يمثل تطبيقاً متقدماً يجمع بين «البيانات الضخمة» و«التعلم العميق»؟`, [`حساب المتوسط الحسابي لعشرة أرقام يدوياً`, `تحليل ملايين صور الأشعة الطبية أو البث المرئي لحظياً لاكتشاف الأنماط عبر TensorFlow وSpark`, `ترتيب أسماء 20 طالباً أبجدياً`, `تصميم فاتورة ورقية بسيطة`], 1, `دمج بنى المعالجة الضخمة مع أطر التعلم العميق يتيح معالجة ملايين السجلات والوسائط عالية الأبعاد.`],
+      [3, `ما الدور الذي تؤديه «خوارزميات الضغط المتقدمة» داخل مستودعات التخزين العمودية مثل <bdi dir="ltr">Redshift</bdi>؟`, [`زيادة حجم التخزين المطلوب للضعف`, `تقليل تكاليف التخزين وتسريع القراءة عبر تقليل حجم البيانات المنقولة من القرص للذاكرة`, `حذف القيم المتطرفة من الجداول`, `تحويل الجداول إلى ملفات نصية غير مهيكلة`], 1, `التخزين العمودي المتجانس يضاعف فاعلية خوارزميات الضغط، مما يخفض التكلفة ويسرع عمليات الإدخال والإخراج (I/O).`],
+      [3, `كيف تصف <bdi dir="ltr">Google BigQuery</bdi> من حيث الإدارة والبنية التحتية؟`, [`قاعدة بيانات محلية تتطلب شراء وتثبيت الخوادم يدوياً`, `خدمة تخزين بيانات مُدارة بالكامل (Serverless / Fully Managed) قائمة على منصة Google Cloud Platform`, `مكتبة رسوم بيانية بلغة JavaScript`, `محرك بحث نصي فقط للمستندات الورقية`], 1, `BigQuery خدمة مستودع بيانات سحابية مُدارة بالكامل (Fully Managed) على GCP، مما يعفي المؤسسة من إدارة الخوادم المادية.`],
+      [3, `لماذا توصف <bdi dir="ltr">TensorFlow</bdi> بأنها تستخدم «البرمجة التفاضلية» <bdi dir="ltr">(Differentiable Programming)</bdi>؟`, [`لأنها تحذف المشتقات الرياضية من الخوارزميات`, `لأنها تحسب المشتقات والتدرجات تلقائياً (Autodiff) لتحديث أوزان الشبكات العصبية أثناء التدريب`, `لأنها تقارن بين قواعد SQL وNoSQL فقط`, `لأنها مخصصة لتشفير البيانات أثناء الراحة`], 1, `حساب التدرجات التلقائي عبر البرمجة التفاضلية هو جوهر خوارزمية الانتشار العكسي لتدريب الشبكات العصبية العميقة.`],
+      [3, `عند بناء مسار عمل لتحليل البيانات الضخمة، لماذا يُفضل استخدام <bdi dir="ltr">Spark</bdi> مع أنظمة التخزين الموزعة بدلاً من أداة <bdi dir="ltr">pandas</bdi> التقليدية؟`, [`لأن pandas أداة أحادية العقدة محدودة بذاكرة الجهاز الواحد، بينما Spark يوزع المعالجة عبر عنقود من الخوادم`, `لأن pandas لا يدعم الأرقام العشرية`, `لأن Spark لا يستخدم الذاكرة مطلقاً`, `لأن pandas مخصص فقط للرسوم البيانية`], 0, `pandas ممتازة للبيانات التي تسع ذاكرة جهاز واحد، لكن عند الانتقال للبيانات الضخمة تتفوق بيئة Spark الموزعة.`],
+      [3, `أي من الأزواج التالية يربط الأداة بالشركة أو المظلة المطورة لها بشكل صحيح؟`, [`Redshift — Google / BigQuery — Amazon`, `Redshift — AWS / BigQuery & TensorFlow — Google`, `TensorFlow — Microsoft / Spark — Oracle`, `Scikit-Learn — Amazon / Dremel — Meta`], 1, `Amazon Redshift تتبع AWS، بينما Google BigQuery وورقة Dremel ومكتبة TensorFlow من تطوير Google.`],
+      [3, `في سياق البيانات الضخمة، ما الخطر المباشر إذا ركزت المؤسسة على أبعاد <bdi dir="ltr">Volume</bdi> و<bdi dir="ltr">Velocity</bdi> وأهملت بُعد <bdi dir="ltr">Veracity</bdi>؟`, [`الحصول على نتائج تحليلية سريعة وواسعة النطاق لكنها مضللة بسبب تلوث البيانات (Garbage In, Garbage Out)`, `نقص مساحة التخزين السحابي فقط`, `توقف لغة SQL عن العمل`, `تحول البيانات المهيكلة إلى صور`], 0, `إهمال المصداقية (Veracity) يؤدي لتضخيم الأخطاء بسرعة كبيرة وبناء قرارات استراتيجية على معطيات فاسدة.`],
+      [3, `ماذا يتيح إطار <bdi dir="ltr">Apache Spark</bdi> لفرق علم البيانات في بيئات الحوسبة المتوازية؟`, [`إعادة استخدام مجموعات البيانات الوسيطة عبر عمليات متوازية متعددة في الذاكرة دون إعادة قراءتها من القرص كل مرة`, `تحويل قواعد البيانات العلائقية إلى جداول ورقية`, `إلغاء الحاجة إلى اختبار النماذج`, `منع مشاركة البيانات بين المطورين`], 0, `الاحتفاظ بالبيانات في الذاكرة وإعادة استخدامها عبر عمليات متوازية متعددة هو سبب السرعة الفائقة لـ Spark.`],
+      [3, `أي العبارات التالية صحيحة عن استخدام مكتبة <bdi dir="ltr">Scikit-Learn</bdi>؟`, [`تقتصر على التجارب البحثية ولا تستخدمها شركات التكنولوجيا`, `تُستخدم على نطاق واسع في منافسات Kaggle وشركات التكنولوجيا لبناء نماذج تعلم الآلة بكفاءة`, `تعمل فقط على نظام تشغيل واحد مغلق`, `تعتمد في نواتها على لغة C# وقاعدة PostgreSQL`], 1, `Scikit-Learn مبنية على NumPy وSciPy وتُعد من أكثر المكتبات اعتماداً في Kaggle وشركات التكنولوجيا لبناء النماذج وتقييمها.`],
+
+      // ==================== الفصل الرابع (30 سؤالاً) ====================
+      [4, `تتألف حوكمة البيانات <bdi dir="ltr">(Data Governance)</bdi> من ثلاثة أركان أساسية هي «القواعد، والعمليات، والمسؤوليات»؛ أي مما يلي يندرج تحت ركن «القواعد» <bdi dir="ltr">(Rules)</bdi>؟`, [`كيف يطلب الموظف الإذن للوصول إلى البيانات`, `أين ستُخزن البيانات، وإلى أي مدة ستُخزن، ومن يحق له الوصول إليها`, `من يتابع تحديث البيانات يومياً في القسم`, `كتابة كود Python لتنظيف القيم المفقودة`], 1, `القواعد تحدد السياسات الثابتة: مكان التخزين، مدة الاحتفاظ، وصلاحيات الوصول؛ أما العمليات فتصف «كيف» يُطلب الإذن وتُحدّث البيانات، والمسؤوليات تحدد «من» يتحمل القرار.`],
+      [4, `ضمن أركان حوكمة البيانات الثلاثة، كيف نميز ركن «العمليات» <bdi dir="ltr">(Processes)</bdi> عن ركن «المسؤوليات» <bdi dir="ltr">(Accountabilities)</bdi>؟`, [`العمليات تجيب عن «كيف» يتم طلب الإذن والتأكد من التحديث والأمان، بينما المسؤوليات تجيب عن «من» يقرر الاحتفاظ بالبيانات ويتولى رعايتها`, `العمليات تخص الإدارة العليا فقط والمسؤوليات تخص المبرمجين`, `المسؤوليات تقتصر على النسخ الاحتياطي`, `لا فرق بينهما في إطار الحوكمة`], 0, `تمثل العمليات الإجراءات التشغيلية المتبعة (كيف يطلب الشخص الإذن وكيف يتم التحقق من التحديث والأمان)، بينما تحدد المسؤوليات أصحاب القرار (من المسؤول ومن يقرر ما يُحتفظ به).`],
+      [4, `من الجهة المخولة بالموافقة النهائية على «سياسة حوكمة البيانات» <bdi dir="ltr">(Data Governance Policy)</bdi> في المؤسسة؟`, [`فريق الدعم الفني الميداني`, `الإدارة العليا (Senior Management)`, `متدربو تحليل البيانات`, `قسم المشتريات فقط`], 1, `تُعتمد سياسة حوكمة البيانات وتُقر رسمياً من خلال الإدارة العليا (Senior Management) لضمان التزام جميع القطاعات بها.`],
+      [4, `ما الجوهر الفلسفي لـ «المبدأ الأول» من المبادئ الجوهرية الأربعة لحوكمة البيانات؟`, [`حجب البيانات داخل كل قسم ومنع مشاركتها كلياً`, `تعريف البيانات كأصل مؤسسي ذي قيمة استراتيجية والتحول من عقلية «بياناتنا» إلى «بيانات المؤسسة» مع مراعاة الخصوصية`, `بيع جميع بيانات العملاء لأطراف خارجية`, `الاكتفاء بتخزين البيانات في ملفات محلية غير متصلة`], 1, `ينص المبدأ الأول على أن البيانات أصل مؤسسي استراتيجي للمنظمة كلها لا ملكاً حصرياً لقسم بعينه، مع موازنة المشاركة بسياسات الخصوصية.`],
+      [4, `أي مستوى من مستويات حوكمة البيانات تتربّع فيه «اللجنة التوجيهية» <bdi dir="ltr">(Steering Committee)</bdi> وتُعد أعلى سلطة لإدارة البيانات وتحديد أعضاء المستوى الاستراتيجي؟`, [`المستوى التشغيلي (Operational Level)`, `المستوى التنفيذي (Executive Level)`, `المستوى التكتيكي (Tactical Level)`, `المستوى الداعم (Support Level)`], 1, `المستوى التنفيذي يضم اللجنة التوجيهية (الأفراد الأكثر خبرة وأعلى سلطة)، وتتولى الإشراف والدعم والتمويل وتعيين أعضاء المستوى الاستراتيجي.`],
+      [4, `ما الدور الدقيق لـ «مجلس حوكمة البيانات» <bdi dir="ltr">(Data Governance Council - DGC)</bdi> في المستوى الاستراتيجي؟`, [`التنفيذ البرمجي اليومي لتنظيف الجداول`, `إدارة (وليس تنفيذ) مبادرات تطوير السياسات والمقاييس وأطر العمل وقضايا التصعيد (Escalations)`, `حذف السجلات الفارغة في Python`, `صيانة الخوادم الكهربائية في مركز البيانات`], 1, `نقطة دقيقة جداً: مجلس حوكمة البيانات (DGC) في المستوى الاستراتيجي مسؤول عن «إدارة والموافقة» على المبادرات والسياسات ومعالجة التصعيدات، وليس التنفيذ المباشر لها.`],
+      [4, `في المستوى التكتيكي لحوكمة البيانات، ما المهمة المزدوجة لـ «مشرفي مجالات البيانات» <bdi dir="ltr">(Knowledge Experts)</bdi>؟`, [`تمويل مشاريع الحوكمة وتعيين الإدارة العليا`, `تصعيد القضايا الحرجة في مجالاتهم إلى المستوى الاستراتيجي، وكتابة وتوثيق قواعد الامتثال والأعمال ومناقشتها مع أصحاب المصلحة`, `تشفير الشبكات اللاسلكية فقط`, `بناء مخططات Star Schema في قواعد البيانات`], 1, `مشرفو مجالات البيانات في المستوى التكتيكي هم خبراء معرفة متخصصون (مثل خبير حماية البيانات أو جودة البيانات) يتولون توثيق قواعد الامتثال ومناقشتها مع أصحاب المصلحة وتصعيد المشكلات المعقدة.`],
+      [4, `ما الفارق الدقيق في المستوى التكتيكي بين «مشرفي مجالات البيانات» وبين «منسقي إشراف البيانات»؟`, [`مشرفو المجالات يوثقون القواعد ويصعّدون القضايا، بينما المنسقون هم المجموعة الضابطة المسؤولة عن توزيع القواعد والتشريعات لكل مجال على المستوى التشغيلي`, `المنسقون يملكون أعلى سلطة تنفيذية في المؤسسة`, `مشرفو المجالات يعملون في الدعم الفني فقط`, `كلاهما مسمى وظيفي واحد دون أي فرق`], 0, `منسقو إشراف البيانات هم حلقة الضبط والتنسيق التي توزع القواعد والتشريعات المعتمدة على المستوى التشغيلي عبر مختلف مجالات البيانات.`],
+      [4, `أي جهة تعمل في «المستوى التشغيلي» <bdi dir="ltr">(Operational Level)</bdi> وتكون مسؤولة يومياً عن إنتاج البيانات ومراجعتها وتحديثها والتخلص الآمن منها؟`, [`اللجنة التوجيهية`, `مجلس حوكمة البيانات (DGC)`, `مشرفو البيانات (Data Stewards)`, `مديرو الاستثمار`], 2, `مشرفو البيانات (Data Stewards) في المستوى التشغيلي هم المسؤولون فعلياً عن دورة حياة البيانات اليومية: إنتاجها، مراجعتها، تحديثها، والتخلص منها وفق القواعد.`],
+      [4, `ما الدور الذي يؤديه «مكتب إدارة البيانات» <bdi dir="ltr">(Data Management Office - DMO)</bdi> وما المستوى الذي ينتمي إليه؟`, [`ينتمي للمستوى التنفيذي ويتولى التصعيد القانوني فقط`, `ينتمي للمستوى الداعم (Support Level) وهو مسؤول عن تيسير وتنسيق جهود إدارة البيانات والإشراف عليها وتقديم تقارير الأداء للمستوى الاستراتيجي`, `ينتمي للمستوى التكتيكي ويحذف البيانات التاريخية`, `هو قاعدة بيانات من نوع NoSQL`], 1, `مكتب إدارة البيانات (DMO) يقع في المستوى الداعم (Support Level)؛ ينسق جهود البيانات، يدعم الامتثال، ويزود المستوى الاستراتيجي بالتقارير لتسهيل اتخاذ القرار.`],
+      [4, `أي مما يلي يصف بدقة مفهوم «الخصوصية» <bdi dir="ltr">(Privacy)</bdi> في أخلاقيات وعلوم البيانات؟`, [`ضغط قواعد البيانات لتوفير المساحة`, `حاجة المؤسسات إلى التأكد من حماية البيانات الشخصية وعدم استخدامها بطرق قد تضر الأفراد أو المجموعات`, `تسريع استعلامات SQL عبر الفهرسة`, `مشاركة أرقام الهواتف مع المعلنين لزيادة الدخل`], 1, `الخصوصية تعني صون البيانات الشخصية وحمايتها من أي استخدام غير مصرح به أو استغلال قد يلحق الضرر بالأفراد أو المجموعات.`],
+      [4, `ما العلاقة بين «الشفافية والقابلية للتفسير» <bdi dir="ltr">(Transparency & Explainability)</bdi> وبين حوكمة أنظمة الذكاء الاصطناعي والبيانات؟`, [`تهدف إلى إخفاء كيفية عمل النماذج عن المستخدمين`, `مبدأ يؤكد أهمية وضوح قرارات أنظمة الذكاء الاصطناعي وإمكانية فهم الأسباب التي أدت إلى كل مخرج`, `تعني نشر كلمات مرور الموظفين للعامة`, `تقتصر على تقليل استهلاك الكهرباء في مراكز البيانات`], 1, `الشفافية والقابلية للتفسير تضمنان ألا تكون القرارات المؤثرة في حياة الناس (مثل منح القروض أو التشخيص) ناتجة عن «صندوق أسود» غير قابل للمساءلة.`],
+      [4, `لماذا لا يُعتبر «التنوع في البيانات» في حد ذاته ضمن تحديات حوكمة وإدارة البيانات بالمعنى السلبي، مقارنة بتحديات مثل الخصوصية والامتثال والتكامل؟`, [`لأن التنوع في البيانات ميزة ومصدر ثراء تحليلي متى ما أُديرت معاييره، بينما الخصوصية والانحياز والأمن تمثل تحديات حوكمة مباشرة`, `لأن جميع البيانات في العالم مهيكلة بنوع واحد`, `لأن قواعد SQL تحول كل البيانات إلى أرقام تلقائياً`, `لأن التنوع يمنع استخدام Big Data`], 0, `كما ورد في نماذج اختبارات المادة، «التنوع في البيانات» ليس من التحديات المصنفة سلباً في إدارة البيانات بالمعنى التنظيمي الضيق مقارنة بمشكلات الأمن والخصوصية وضعف الجودة.`],
+      [4, `عندما يلتقي «مكتب إدارة البيانات» مع «المستوى الاستراتيجي» في دورة العمل، ما المخرج الأساسي الذي يقدمه المكتب للمجلس؟`, [`تقارير ومعلومات حول أداء العمل ومتطلبات الامتثال لتسهيل اتخاذ القرارات الاستراتيجية`, `رسوم بيانية عشوائية بدون بيانات وصفية`, `تصحيح أخطاء الإملاء في البريد الإلكتروني`, `حذف كافة البيانات القديمة دون مراجعة`], 0, `المستوى الداعم (DMO) يغذي المستوى الاستراتيجي (DGC) بتقارير الأداء وحالة الامتثال للمعايير التنظيمية لدعم قراراته.`],
+      [4, `ما الخطر الأخلاقي المباشر لاستخدام بيانات تاريخية متحيزة في تدريب نموذج توظيف دون مراجعة حوكمية؟`, [`بطء استجابة قاعدة البيانات بمقدار مللي ثانية`, `تعلم النموذج للانحياز التاريخي وإعادة إنتاجه بصورة آلية في استبعاد فئات معينة من المتقدمين`, `انخفاض حجم الملف النصي`, `تحول النموذج من موجه إلى تجميعي`], 1, `الحوكمة والأخلاقيات تحذران من «التحيز الخوارزمي»؛ فالبيانات المتحيزة تنتج قرارات تمييزية غير عادلة تحت ستار الموضوعية الرياضية.`],
+      [4, `أي من الأسئلة التالية تجيب عنه «المسؤوليات» <bdi dir="ltr">(Accountabilities)</bdi> داخل إطار حوكمة البيانات؟`, [`أي صيغة ضغط تستخدمها Redshift؟`, `من الذي يحق له أن يقرر ما البيانات التي يجب الاحتفاظ بها ومن المسؤول عنها؟`, `ما هي دالة التنشيط المناسبة للشبكة العصبية؟`, `كيف نرسم مخطط الصندوق في Matplotlib؟`], 1, `المسؤوليات تحدد بوضوح المساءلة (Accountability): من يملك صلاحية القرار بشأن الاحتفاظ بالبيانات أو التخلص منها ومن يتحمل مسؤولية جودتها.`],
+      [4, `كيف تساهم «مشاركة البيانات عبر الأقسام» وفق المبدأ الأول للحوكمة في رفع كفاءة المؤسسة؟`, [`تقلل الازدواجية في جمع البيانات وتمكّن الأقسام المختلفة من بناء رؤى متكاملة عند الحاجة مع احترام الخصوصية`, `تلغي الحاجة إلى التشفير نهائياً`, `تجعل جميع الموظفين مديرين تنفيذيين`, `تسمح بتعديل البيانات المالية عشوائياً من أي موظف`], 0, `التحول من عقلية «بياناتي» إلى «بيانات المؤسسة» يكسر الصوامع المعزولة (Data Silos) ويحقق الاستفادة القصوى من الأصل المعلوماتي مع ضوابط الخصوصية.`],
+      [4, `من يتولى «الإشراف والتمويل والدعم العام» لبرامج حوكمة البيانات في قمة الهرم التنظيمي؟`, [`مشرفو البيانات التشغيليون`, `اللجنة التوجيهية في المستوى التنفيذي (Executive Level)`, `مبرمجو واجهات الويب`, `مستخدمو التقارير النهائيون`], 1, `اللجنة التوجيهية (Steering Committee) توفر الغطاء التنفيذي والتمويل والشرعية التنظيمية لعمل كافة المستويات الأدنى.`],
+      [4, `ما الترتيب الهرمي الصحيح لمستويات حوكمة البيانات من الأعلى سلطة استراتيجية إلى التنفيذ اليومي؟`, [`التشغيلي ← التكتيكي ← الاستراتيجي ← التنفيذي`, `التنفيذي (اللجنة التوجيهية) ← الاستراتيجي (DGC) ← التكتيكي (مشرفو المجالات والمنسقون) ← التشغيلي (Data Stewards)`, `الداعم ← التشغيلي ← التنفيذي ← التكتيكي`, `التكتيكي ← التنفيذي ← التشغيلي ← الداعم`], 1, `يتدرج الهيكل من اللجنة التوجيهية (التنفيذي) إلى مجلس الحوكمة (الاستراتيجي) ثم خبراء المجالات والمنسقين (التكتيكي) فمشرفي البيانات اليوميين (التشغيلي)، ويساندهم DMO (الداعم).`],
+      [4, `في سياسات حوكمة البيانات، ماذا يقصد بـ «نزاهة البيانات» <bdi dir="ltr">(Data Integrity)</bdi>؟`, [`جعل البيانات عامة لجميع مستخدمي الإنترنت`, `الحفاظ على دقة البيانات واكتمالها وموثوقيتها وعدم تعرضها للتلاعب غير المشروع طوال دورة حياتها`, `حذف الأعمدة الفئوية من الجداول`, `تحويل كل البيانات إلى صور`], 1, `تهدف الحوكمة إلى إدارة «تواجد، استخدام، أمان، ونزاهة» مصادر البيانات، والنزاهة تعني بقاء البيانات صحيحة وموثوقة وغير محرّفة.`],
+      [4, `إذا نشأ نزاع بين قسم التسويق وقسم الامتثال حول صلاحية استخدام بيانات شخصية لعملاء أوروبيين، فإلى أي مستوى يُصعّد النزاع بعد تعذر حله تكتيكياً؟`, [`يُترك للمتدربين لحله ودياً`, `يُصعّد إلى مجلس حوكمة البيانات (DGC) في المستوى الاستراتيجي`, `يُحذف الجدول بالكامل`, `يُرسل مباشرة إلى خادم BigQuery`], 1, `إدارة قضايا ومسائل التصعيد (Escalations) تقع ضمن صميم مهام مجلس حوكمة البيانات (DGC) في المستوى الاستراتيجي، ويرفعها إليه مشرفو المجالات في المستوى التكتيكي.`],
+      [4, `أي دور في الحوكمة مسؤول عن «كتابة وتوثيق قواعد الامتثال وقواعد الأعمال» ومناقشتها مع أصحاب المصلحة؟`, [`مشرفو مجالات البيانات (Knowledge Experts) في المستوى التكتيكي`, `مشرفو البيانات التشغيليون فقط`, `مديرو الشبكات`, `خوارزمية K-means`], 0, `كتابة وتوثيق قواعد الامتثال وقواعد الأعمال ومناقشتها مع أصحاب المصلحة مهام أصيلة لمشرفي مجالات البيانات في المستوى التكتيكي.`],
+      [4, `لماذا يُعد «تحديد مدة الاحتفاظ بالبيانات والتخلص الآمن منها» جزءاً حيوياً من الحوكمة وليس مجرد توفير لمساحة القرص؟`, [`لأنه يقلل مخاطر تسرب البيانات الشخصية القديمة ويلتزم بالتشريعات واللوائح التنظيمية للخصوصية`, `لأن قواعد SQL تتعطل بعد مرور عام واحد`, `لأن التخلص من البيانات يزيد عدد القيم المفقودة`, `لأن القوانين تمنع الاحتفاظ بأي بيانات لأكثر من ساعة`], 0, `الاحتفاظ ببيانات شخصية منتهية الحاجة يرفع المخاطر القانونية والأمنية عند الاختراق، لذا تشترط تشريعات الخصوصية تحديد مدد الاحتفاظ والتخلص الآمن.`],
+      [4, `في أخلاقيات علم البيانات، ما المقصود بمبدأ «إخفاء الهوية» <bdi dir="ltr">(Anonymization)</bdi>؟`, [`تلوين أسماء العملاء باللون الأحمر`, `إزالة أو تعمية المعرّفات الشخصية بحيث لا يمكن ربط السجلات بأفراد محددين عند التحليل`, `حذف قيم المبيعات من الجدول`, `تشغيل النموذج بدون دالة خسارة`], 1, `إخفاء الهوية يحمي خصوصية الأفراد عبر فصل البيانات التحليلية عن أي معرّف مباشر أو غير مباشر يكشف هوية الشخص.`],
+      [4, `ما الدور الأساسي لـ «موافقة المستخدم المستنيرة» <bdi dir="ltr">(Informed Consent)</bdi> في مشاريع علوم البيانات؟`, [`إلزام المستخدم بقبول الشروط دون إطلاعه عليها`, `إعلام الفرد بوضوح عن نوع البيانات المجموعة والغرض من استخدامها والحصول على موافقته الطوعية`, `منع المستخدم من حذف حسابه لاحقاً`, `نقل البيانات إلى خوادم غير مشفرة`], 1, `الموافقة المستنيرة ركيزة أخلاقية وقانونية تضمن شفافية جمع البيانات ومعرفة أصحابها بكيفية توظيفها.`],
+      [4, `كيف يتكامل «مكتب إدارة البيانات» <bdi dir="ltr">(DMO)</bdi> مع «قواعد الامتثال للسياسات التنظيمية»؟`, [`يتجاهل السياسات لسرعة التنفيذ`, `يساهم في تلبية متطلبات الامتثال للسياسات والمعايير التنظيمية وتطوير الخطط الاستراتيجية لبرامج الحوكمة`, `ينفذ أوامر التدمير الذاتي للخوادم`, `يقوم فقط بتصميم واجهات المستخدم`], 1, `DMO يسهل الامتثال المؤسسي للمعايير التنظيمية ويساند صياغة الخطط الاستراتيجية لبرامج حوكمة البيانات.`],
+      [4, `أي من الممارسات التالية يتعارض مباشرة مع «حوكمة الوصول والأمان» للبيانات؟`, [`تطبيق مبدأ أقل صلاحية لازمة (Least Privilege)`, `منح جميع الموظفين في المؤسسة صلاحية تعديل وحذف جداول الرواتب والبيانات الطبية الحساسة`, `التحقق من هوية المستخدم عبر IAM`, `تسجيل عمليات الوصول للبيانات الحساسة (Audit Logs)`], 1, `الحوكمة الرشيدة تفرض تقييد الوصول وفق الحاجة الوظيفية (Role-Based Access) لحماية سرية ونزاهة البيانات الحساسة.`],
+      [4, `عندما تتعامل المؤسسة مع «قواعد بيانات ضخمة متدفقة»، لماذا يصبح وجود «منسقي إشراف البيانات» ضرورياً في المستوى التكتيكي؟`, [`لضمان توزيع القواعد والتشريعات الموحدة على كل مجال من مجالات البيانات في المستوى التشغيلي دون تضارب`, `لزيادة عدد الأخطاء البرمجية`, `لاستبدال جميع المهندسين بروبوتات`, `لتعطيل التقارير الديناميكية`], 0, `بدون منسقي إشراف البيانات، قد يطبق كل قطاع تشغيلي معايير متضاربة؛ لذا يضبط المنسقون توزيع القواعد على المستوى التشغيلي.`],
+      [4, `أي عبارة تلخص الفرق بين «إدارة البيانات» <bdi dir="ltr">(Data Management)</bdi> و«حوكمة البيانات» <bdi dir="ltr">(Data Governance)</bdi>؟`, [`الحوكمة تضع الإطار والسياسات والقواعد والمسؤوليات، بينما الإدارة تتولى التنفيذ الهندسي والتشغيلي لتخزين البيانات وتشغيلها وفق تلك القواعد`, `الحوكمة تخص الأجهزة فقط والإدارة تخص القوانين فقط`, `لا يوجد أي ارتباط بين المفهومين`, `إدارة البيانات تعني حذف البيانات وحوكمتها تعني نسخها`], 0, `الحوكمة تحدد «ما يجب فعله ومن المسؤول» (القواعد والرقابة)، والإدارة تترجم ذلك إلى ممارسات تقنية وهندسية يومية لحفظ البيانات وتشغيلها.`],
+      [4, `ما الهدف الأسمى من التوفيق بين «تحقيق القيمة الاستراتيجية للبيانات» و«الالتزام بأخلاقيات الخصوصية»؟`, [`بناء ثقة مستدامة مع العملاء والجهات التنظيمية مع تعظيم العائد من البيانات بأمان ومسؤولية`, `إيقاف كل مشاريع الذكاء الاصطناعي في المؤسسة`, `الاكتفاء بجمع البيانات دون تحليلها`, `الاعتماد على البيانات الوهمية فقط في الإنتاج`], 0, `الالتزام بالخصوصية والحوكمة لا يعطل الابتكار، بل يحصّن المؤسسة قانونياً وأخلاقياً ويبني ثقة مستدامة تدعم الاستفادة من البيانات.`],
+
+      // ==================== الفصل الخامس (30 سؤالاً) ====================
+      [5, `ما البُعد من أبعاد جودة البيانات الذي يشير إلى «وجود كل المعلومات الضرورية لغرض معين وضرورة ملء الفجوات والفراغات»؟`, [`الاتساق (Consistency)`, `الاكتمال (Completeness)`, `التشوش (Noise)`, `التفرد (Uniqueness)`], 1, `الاكتمال يعني ألا تفتقر السجلات إلى القيم أو الخصائص الضرورية للتحليل المطلوب، وأن تُعالج الفراغات والفجوات.`],
+      [5, `في سياق مشاكل جودة البيانات الواقعية، ماذا يعني مصطلح «التشوش» <bdi dir="ltr">(Noise / Noisy Data)</bdi>؟`, [`فقدان بعض الحقول وتركها فارغة`, `احتواء البيانات على سجلات غير صحيحة أو شاذة أو استثناءات وأخطاء قياس غير طبيعية (Abnormal Values)`, `تطابق جميع الصفوف مع بعضها`, `اختلاف تنسيق التاريخ بين عمودين`], 1, `عدم الاكتمال يعني قيماً مفقودة، أما التشوش فيعني وجود سجلات غير صحيحة أو قيم شاذة وأخطاء إدخال تلوث الإشارة الحقيقية.`],
+      [5, `إذا سُجل تاريخ الميلاد في صف بصيغة <bdi dir="ltr">DD/MM/YYYY</bdi> وفي صف آخر بصيغة <bdi dir="ltr">MM-DD-YY</bdi> أو تباينت وحدة العملة في نفس العمود، فما مشكلة الجودة هنا؟`, [`عدم الاكتمال`, `عدم الاتساق (Inconsistency)`, `المصداقية المفرطة`, `التخزين العمودي`], 1, `عدم الاتساق يعني احتواء البيانات على سجلات غير متوافقة في التمثيل أو الوحدة أو التعريف عبر نفس المجموعة أو عبر المصادر المدمجة.`],
+      [5, `لماذا تزداد احتمالية حدوث مشكلة «عدم الاتساق» عند «دمج البيانات من مصادر متعددة» <bdi dir="ltr">(Data Consolidation)</bdi>؟`, [`لأن كل مصدر قد يعتمد تنسيقات أو تسميات أو وحدات قياس مختلفة لنفس الكيان`, `لأن الدمج يحذف جميع القيم المتطرفة تلقائياً`, `لأن البيانات المدمجة تصبح صوراً`, `لأن لغة SQL تمنع توحيد الأعمدة`], 0, `توحيد البيانات من أنظمة متباينة يكشف اختلافات الترميز (مثل M/F مقابل Male/Female أو الدولار مقابل الريال) مما يفرض خطوة توحيد قبل التحليل.`],
+      [5, `ما الغرض الأساسي من خطوة «الفحص الشامل للبيانات» <bdi dir="ltr">(Data Profiling)</bdi> في تحديد أولويات جودة البيانات؟`, [`تشفير البيانات قبل إرسالها إلى BigQuery`, `تنفيذ عملية تصنيف وفحص شاملة لتقييم جودة مجموعات البيانات الكبيرة وفهم مشكلات مثل التناقضات والتكرار`, `حذف كافة الجداول التي تحتوي على نصوص`, `تدريب شبكة عصبية عميقة مباشرة`], 1, `Data Profiling يمسح البيانات إحصائياً وهيكلياً لاكتشاف التناقضات، التكرار، نسب الفراغ، وأنماط القيم قبل التسرع في التصحيح.`],
+      [5, `في تسلسل تحديد أولويات جودة البيانات، ما الدور الذي تؤديه خطوة «التفاعل مع أصحاب المصلحة وتحليل تأثير المشكلات»؟`, [`تجاهل شكاوى المستخدمين والتركيز على الكود فقط`, `جمع معلومات من أصحاب المصلحة حول المشكلات التي تؤثر عليهم مباشرة وتقييم أثرها على العمليات التجارية`, `تغيير أسماء الجداول إلى اللغة اللاتينية`, `اختيار ألوان المخطط البياني`], 1, `ليست كل أخطاء البيانات متساوية الأثر؛ التفاعل مع أصحاب المصلحة يكشف أي المشكلات تعطل العمل التجاري فعلياً.`],
+      [5, `لماذا نقوم بـ «رسم خريطة الترابط والتبعية» <bdi dir="ltr">(Dependency Mapping)</bdi> ضمن خطوات معالجة جودة البيانات؟`, [`لمعرفة المسافة الجغرافية بين الخوادم`, `لفهم تفاعلات مجموعات البيانات وتأثيراتها المتبادلة لتحديد البيانات التي سيوفر تحسينها فوائد شاملة للنظام كله`, `لتحويل البيانات المهيكلة إلى صور`, `لحساب دالة Sigmoid`], 1, `إصلاح مجموعة بيانات رئيسية (Upstream) تتغذى عليها عدة أنظمة لاحقة يحقق أثراً مضاعفاً على الجودة مقارنة بإصلاح تقارير طرفية معزولة.`],
+      [5, `على أي أساس يتم «ترتيب أولوية جهود التصحيح» في خطوة تحديد أولويات جودة البيانات؟`, [`بترتيب الحروف الأبجدية لأسماء الجداول`, `بناءً على حجم التأثير على الأعمال مقارنة بالجهد المطلوب لتصحيح المشكلة`, `البدء بالمشكلات الأقل تأثيراً والأصعب حلاً`, `تعديل الصفوف العشوائية أولاً`], 1, `مصفوفة الأولوية توازن بين العائد/التأثير التجاري (Business Impact) وبين الكلفة والجهد الهندسي المطلوب للتصحيح.`],
+      [5, `ما الوظيفة الدقيقة لـ «أداة إدارة مشاكل جودة البيانات» <bdi dir="ltr">(Data Quality Issue Management Tool)</bdi>؟`, [`كتابة أبحاث الذكاء الاصطناعي`, `تسهيل عملية إبلاغ المستخدم عن مشاكل جودة البيانات وتوجيه هذه المشاكل عبر مسارات محددة لتحقيق الحل الأمثل`, `توليد بيانات مزيفة باستخدام GAN`, `تحويل النصوص إلى متجهات Word2Vec`], 1, `تعمل هذه الأداة كنظام تتبع وتوجيه (Workflow/Ticketing) لالتقاط بلاغات الجودة وإحالتها إلى المسؤول المختص حتى الإغلاق.`],
+      [5, `كيف تساعد «قوالب قواعد جودة البيانات» <bdi dir="ltr">(Data Quality Rule Templates)</bdi> فرق البيانات؟`, [`تساعد في تحديد المشكلات المحتملة وتوفير رؤى حول الأسباب الجذرية لمشاكل البيانات بشكل معياري متكرر`, `تقوم بتصميم صفحات الويب التفاعلية`, `تستبدل الحاجة إلى قواعد البيانات كلياً`, `تحذف القيم المتطرفة دون إشعار`], 0, `قوالب القواعد توحد فحوصات الجودة (مثل التحقق من النطاقات، الصيغ، والتفرد) وتكشف الأسباب الجذرية المتكررة.`],
+      [5, `لماذا يجب على فرق جودة البيانات العمل بشكل وثيق مع الفرق التي تدير «مستودعات البيانات الوصفية» <bdi dir="ltr">(Metadata Repositories)</bdi>؟`, [`لضمان توفر متطلبات جودة البيانات والقواعد ونتائج القياس وتوثيق المشكلات لمستهلكي البيانات`, `لمنع مستخدمي البيانات من معرفة مصدر الجداول`, `لتقليص حجم ذاكرة GPU`, `لتحويل قواعد NoSQL إلى Excel`], 0, `دمج نتائج الجودة داخل مستودعات Metadata يجعل كل مستهلك للبيانات على دراية بمستوى موثوقية الجدول وقواعده وتاريخ فحصه.`],
+      [5, `أي عبارة تفرق بدقة بين «الدقة» <bdi dir="ltr">(Accuracy)</bdi> و«الاتساق» <bdi dir="ltr">(Consistency)</bdi> في جودة البيانات؟`, [`الدقة تعني مطابقة القيمة للواقع الحقيقي، بينما الاتساق يعني عدم تعارض القيم وتمثيلها عبر السجلات والأنظمة`, `الدقة تخص النصوص والاتساق يخص الأرقام فقط`, `كلاهما يعني غياب القيم الفارغة`, `الاتساق يعني تشفير البيانات`], 0, `قد تكون قيمة متسقة الشكل عبر كل الجداول (مثل تسجيل عمر موظف = 250 سنة بصيغة رقمية صحيحة في كل الأنظمة) لكنها غير دقيقة واقعياً؛ فالدقة تطابق الواقع والاتساق تطابق التمثيل وعدم التناقض.`],
+      [5, `عند اكتشاف قيم شاذة مثل راتب شهري سالب (-5000) أثناء الفحص، تحت أي مشكلة من مشاكل جودة البيانات الحقيقية يُصنّف ذلك؟`, [`عدم الاكتمال`, `التشوش / القيم غير الطبيعية (Abnormal Values)`, `زيادة الكفاءة التخزينية`, `التعلم التعزيزي`], 1, `الراتب السالب ليس قيمة مفقودة بل قيمة غير صحيحة أو شاذة منطقياً (Abnormal Value / Noise).`],
+      [5, `أي إجراء يعالج مشكلة «التكرار» <bdi dir="ltr">(Duplication)</bdi> المكتشفة عبر <bdi dir="ltr">Data Profiling</bdi>؟`, [`إضافة نسخ احتياطية إضافية داخل نفس الجدول`, `تنفيذ إزالة التكرار (Deduplication) ومطابقة الكيانات لتوحيد السجل المرجعي الواحد`, `تحويل نوع العمود إلى نصي`, `استخدام دالة Softmax`], 1, `اكتشاف التكرار في Data Profiling يتطلب دمج السجلات المكررة للكيان نفسه لتجنب تضخيم الإحصائيات والانحياز.`],
+      [5, `في بُعد «التوقيت المناسب» <bdi dir="ltr">(Timeliness)</bdi> لجودة البيانات، ما المشكلة إذا وصلت بيانات دقيقة ومكتملة لنظام كشف الاحتيال بعد إتمام المعاملة بساعتين؟`, [`ضعف الاكتمال`, `انخفاض التوقيت المناسب (تأخر توفر البيانات عن نافذة القرار)`, `انعدام الاتساق`, `كثرة الأعمدة`], 1, `جودة البيانات لا تقتصر على صحتها في المطلق، بل تشمل توفرها في الوقت اللازم لاتخاذ القرار.`],
+      [5, `ما فائدة توثيق «نتائج قياس الجودة» داخل مستودع البيانات الوصفية لمحلل البيانات؟`, [`تمنحه شفافية حول موثوقية المصدر وحدوده قبل بناء النماذج أو التقارير التنفيذية`, `تجبره على استخدام خوارزمية واحدة فقط`, `تخفي عنه أسماء الأعمدة`, `تزيد من تشتت البيانات`], 0, `الاطلاع على بطاقة جودة البيانات داخل Metadata يقي المحلل من بناء قرارات مصيرية على جداول متدنية الاكتمال أو مشوشة.`],
+      [5, `أي من المشكلات التالية لا يُكتشف بمجرد عدّ القيم الفارغة <bdi dir="ltr">NaN</bdi> بل يتطلب فحصاً نطاقياً أو منطقياً؟`, [`حقل البريد الإلكتروني الفارغ`, `تسجيل تاريخ تخرج الطالب قبل تاريخ ميلاده بخمس سنوات`, `عمود الهاتف الذي يفتقر إلى 30% من الأرقام`, `صف كامل خالٍ من القيم`], 1, `تاريخ التخرج قبل الميلاد قيمة غير فارغة لكنها غير متسقة منطقياً (Logical Inconsistency)، ويكشفها الفحص عبر قواعد الجودة.`],
+      [5, `عند دمج ملفين للعملاء واكتشاف أن العميل نفسه مسجل برقمين مختلفين، أي خطوة من معالجة البيانات تعالج هذا الوضع؟`, [`توحيد البيانات (Data Consolidation) ومطابقة السجلات`, `إزالة كلمات التوقف`, `التحويل إلى التدرج الرمادي`, `إضافة طبقات التفاف CNN`], 0, `Data Consolidation يوحد البيانات القادمة من مصادر متعددة ويزيل التضارب والتكرار الهيكلي والدلالي.`],
+      [5, `ماذا يحدث إذا طُبقت «قواعد التصحيح الآلي» قبل إجراء <bdi dir="ltr">Data Profiling</bdi>؟`, [`تعمل الخوارزميات بكفاءة مضاعفة`, `قد تتلف البيانات الصحيحة أو تُعالج الأعراض السطحية مع بقاء السبب الجذري دون تشخيص`, `تختفي الحاجة للتواصل مع أصحاب المصلحة`, `تتحول البيانات غير المهيكلة إلى مهيكلة`], 1, `الفحص الشامل Data Profiling هو التشخيص الطبي الذي يسبق العلاج؛ التعديل قبل التشخيص قد يطمس أنماطاً حقيقية أو يفشل في معالجة الجذر.`],
+      [5, `أي من أدوات جودة البيانات يركز على «توجيه البلاغ عبر مسارات عمل محددة لحله»؟`, [`أداة إدارة مشاكل جودة البيانات`, `مكتبة Matplotlib`, `مخطط النجمة`, `دالة ReLU`], 0, `أداة إدارة مشاكل جودة البيانات صُممت تحديداً لتسهيل الإبلاغ وتوجيه المشكلات في مسارات معالجة واضحة.`],
+      [5, `لماذا يُعد «تحديد الصلاحية» <bdi dir="ltr">(Validity)</bdi> مكملاً لـ «الاكتمال» في فحص جودة البيانات؟`, [`لأن العمود قد يكون مكتملاً بنسبة 100% لكنه يحتوي على صيغ غير صالحة كأرقام هواتف من 3 خانات أو تواريخ في شهر 15`, `لأن الصلاحية تعني وجود فراغات`, `لأن الاكتمال لا ينطبق على الأرقام`, `لأنهما مصطلحان متناقضان`], 0, `الاكتمال يفحص «هل الحقل ممتلئ؟»، أما الصلاحية فتفحص «هل القيمة تتبع الصيغة والمدى المسموحين؟».`],
+      [5, `في سياق تقارير جودة البيانات، ما المقصود بـ «السبب الجذري» <bdi dir="ltr">(Root Cause)</bdi> لمشكلة بيانات متكررة؟`, [`إصلاح السجل الخاطئ يدوياً كل صباح دون تغيير نموذج الإدخال`, `الخلل المنهجي في نظام المصدر أو واجهة الإدخال أو عملية النقل الذي يولد الخطأ باستمرار`, `عدد الصفوف في الجدول`, `اسم قاعدة البيانات`], 1, `قوالب قواعد الجودة تساعد في كشف الأسباب الجذرية (مثل غياب التحقق في نموذج الويب) لإيقاف نزيف الأخطاء من المنبع.`],
+      [5, `أي من أبعاد الجودة يتأثر مباشرة إذا نُسي تحديث عنوان إقامة العميل بعد انتقاله منذ ثلاث سنوات؟`, [`التخزين العمودي`, `الحداثة / التداول الزمني (Currency) والدقة الحالية`, `الترميز الثنائي`, `التعلم المعزز`], 1, `البيانات القديمة التي لم تعد تعكس الوضع الراهن تفقد حداثتها ودقتها التشغيلية.`],
+      [5, `ما الميزة العملية لاعتماد «قوالب قواعد جودة البيانات» جاهزة وقابلة لإعادة الاستخدام؟`, [`تسريع تطبيق معايير الفحص نفسها عبر مجموعات بيانات متعددة وضمان اتساق القياس`, `منع مشاركة البيانات بين الأقسام`, `تقليل دقة نماذج تعلم الآلة`, `استبدال لغة Python بلغة HTML`], 0, `القوالب المعيارية تضمن ألا يبتكر كل فريق تعريفاً مختلفاً للجودة، وتسرّع نشر الفحوصات في المؤسسة.`],
+      [5, `إذا أظهر <bdi dir="ltr">Data Profiling</bdi> أن 85% من عمود «الملاحظات الاختيارية» فارغ، بينما 40% من عمود «رقم الهوية» في جدول المعاملات المالية فارغ، فأيهما أولى بالتصحيح العاجل؟`, [`عمود الملاحظات الاختيارية لأنه أكثر فراغاً`, `عمود رقم الهوية في جدول المعاملات لأن تأثيره الحرج على الأعمال والامتثال أعلى بكثير`, `حذف الجدولين معاً`, `تجاهلهما معاً`], 1, `ترتيب الأولويات لا يعتمد على النسبة المجردة فقط، بل على التأثير على الأعمال (Business Impact)؛ فنقص المعرفات الأساسية في المعاملات أخطر من فراغ حقل اختياري.`],
+      [5, `أي نوع من البيانات يتطلب غالباً خطوات تنظيف إضافية قبل التحويل إلى تمثيل رقمي، مثل إزالة الروابط التشعبية وكلمات التوقف؟`, [`البيانات الرقمية المطلقة`, `البيانات النصية غير المهيكلة`, `جداول المفاتيح الأساسية في SQL`, `نتائج دالة describe()`], 1, `تنظيف البيانات النصية يبدأ بإزالة الروابط التشعبية والرموز وكلمات التوقف قبل الترميز وتحويل الكلمات إلى متجهات.`],
+      [5, `في سياق «تكامل البيانات» <bdi dir="ltr">(Data Integration)</bdi>، ماذا تعني مشكلة «تضارب الكيانات» <bdi dir="ltr">(Entity Resolution Conflict)</bdi>؟`, [`أن نفس العميل أو المنتج يظهر بمسميات أو معرّفات مختلفة في نظامين مما يمنع ربط سجلاته بدقة`, `أن لون الخلفية في التقرير غير واضح`, `أن الخادم يعمل بنظام Linux`, `أن حجم الشاشة صغير`], 0, `عند دمج مصادر متعددة، قد يُكتب اسم الشركة أو العميل بصور مختلفة، وتحل خوارزميات مطابقة الكيانات وتوحيد البيانات هذا التضارب.`],
+      [5, `كيف يؤثر تدني جودة البيانات (التشوش وعدم الاتساق) على مرحلة «النمذجة» في علم البيانات؟`, [`يرفع دقة التعميم تلقائياً`, `يُضعف قدرة الخوارزمية على التقاط الأنماط الحقيقية وقد يقود لفرط التجهيز على الضوضاء أو فشل التنبؤ`, `يلغي الحاجة إلى التقييم`, `يحول التجميع إلى انحدار`], 1, `البيانات المشوشة تخدع نماذج تعلم الآلة فتتعلم الضوضاء والاستثناءات بدلاً من القاعدة العامة.`],
+      [5, `أي عبارة تصف العلاقة بين «حوكمة البيانات» و«جودة البيانات» بدقة؟`, [`جودة البيانات بديل يلغي الحوكمة`, `حوكمة البيانات تضع السياسات والمسؤوليات والرقابة التي تضمن استمرارية جودة البيانات عبر دورة حياتها`, `جودة البيانات تخص النصوص فقط والحوكمة تخص الأرقام`, `لا توجد علاقة بينهما`], 1, `تحقيق جودة بيانات مستدامة يرتكز على الحوكمة (وجود مشرفين، قواعد امتثال، وأدوات بلاغ وتصحيح).`],
+      [5, `ما المخرج المتوقع بعد إتمام خطوات <bdi dir="ltr">Data Profiling</bdi> وتحليل أثر الأعمال ورسم خريطة الترابط؟`, [`خطة تنفيذية مرتبة الأولويات لتصحيح مشكلات الجودة بناءً على الأثر والجهد`, `حذف كافة مستودعات البيانات الوصفية`, `إغلاق قسم تحليل البيانات`, `تشغيل خوارزمية GAN لتوليد بيانات بديلة`], 0, `الخطوات السبع لتحديد أولويات جودة البيانات تتوج بترتيب أولوية جهود التصحيح حسب الأثر التجاري والجهد المطلوب.`],
+
+      // ==================== الفصل السادس (30 سؤالاً) ====================
+      [6, `ما الفارق الدقيق بين «الذكاء الاصطناعي الضيق/الضعيف» <bdi dir="ltr">(Narrow/Weak AI)</bdi> و«الذكاء الاصطناعي القوي/العام» <bdi dir="ltr">(Strong/General AI)</bdi>؟`, [`الضيق مخصص لأداء مهام محددة في بيئة معينة دون وعي ذاتي حقيقي، بينما القوي يمتلك القدرة على فهم وتعلم أي مهمة ذهنية يستطيع العقل البشري القيام بها`, `الضيق يعمل دون بيانات والقوي لا يستخدم الخوارزميات`, `الضيق خاص بالروبوتات المادية فقط`, `القوي متاح حالياً في الهواتف الذكية منذ عام 2010`], 0, `الذكاء الاصطناعي الضيق يتقن مجالاً محدداً (كالشطرنج أو التعرف على الصور) ويبدو ذكياً دون وعي ذاتي، بينما القوي لم يتحقق بعد نظرياً وعملياً ويضاهي مرونة العقل البشري الشاملة.`],
+      [6, `وفقاً لنظرية الذكاء الاصطناعي الضعيف، ما العاملان اللذان يمثلان أهمية بالغة في تأسيس قوة الذكاء الاصطناعي الحالي وسيظلان حاسمين في القوي القادم؟`, [`ألوان الواجهة وسرعة الطابعة`, `البيانات وقوة الحوسبة`, `لغة HTML وتصميم الجداول`, `تقليص الذاكرة ومنع الشبكات`], 1, `تؤكد النصوص أن البيانات وقوة الحوسبة هما الركيزتان الحاسمتان في الذكاء الضيق والقوي معاً، إلى جانب استكشاف الحوسبة الكمومية من شركات مثل Google وIBM.`],
+      [6, `في سياق الوكلاء الأذكياء <bdi dir="ltr">(Intelligent Agents)</bdi>، بأي أداة يستطيع الوكيل «إدراك» البيئة المحيطة به؟`, [`المشغّلات (Actuators)`, `المستشعرات / أدوات الاستشعار (Sensors)`, `دالة الخسارة فقط`, `ملفات السجل المؤرشفة`], 1, `يدرك الوكيل بيئته عبر المستشعرات (Sensors) ويؤثر فيها عبر المشغّلات (Actuators).`],
+      [6, `أي من التالي يمثل إحدى الخصائص الأساسية لـ «الوكيل العقلاني» <bdi dir="ltr">(Rational Agent)</bdi>؟`, [`اختيار الأفعال عشوائياً دون النظر للبيئة`, `القدرة على التعلم من الخبرات السابقة وتحديث السلوك بناءً على معلومات جديدة لتعظيم مقياس الأداء`, `تجاهل المستشعرات والعمل في بيئة مغلقة للأبد`, `تنفيذ نفس الفعل الثابت مهما تغيرت المدخلات`], 1, `العقلانية تعني اختيار الفعل الذي يعظّم الأداء المتوقع استناداً إلى الإدراك والمعرفة السابقة، مع القدرة على التعلم وتحديث السلوك.`],
+      [6, `في نموذج <bdi dir="ltr">PEAS</bdi> لتوصيف بيئة مهام الوكيل، ماذا يمثل كل حرف على الترتيب؟`, [`البرمجة، الطاقة، الخوارزمية، التخزين`, `مقياس الأداء (Performance)، البيئة (Environment)، المشغّلات (Actuators)، المستشعرات (Sensors)`, `الخصوصية، التقييم، التحليل، الأمان`, `المعالج، الذاكرة، الشبكة، الشاشة`], 1, `PEAS اختصار لـ: Performance Measure, Environment, Actuators, Sensors، والعنصر الذي يجمع المعلومات من البيئة هو المستشعرات (S).`],
+      [6, `ما الفرق الجوهري بين «البيئة المتغيرة/الديناميكية» <bdi dir="ltr">(Dynamic)</bdi> و«البيئة الثابتة» <bdi dir="ltr">(Static)</bdi> في سياق الوكلاء العقلانيين؟`, [`البيئة الثابتة أصغر حجماً في الذاكرة`, `البيئة المتغيرة تتغير باستمرار أثناء قيام الوكيل بالتفكير واتخاذ القرار، بينما الثابتة لا تتغير أثناء اتخاذ القرار`, `البيئة المتغيرة لا تحتوي على مستشعرات`, `البيئة الثابتة لا يوجد فيها هدف`], 1, `في البيئة الديناميكية (مثل قيادة السيارة) يتغير العالم أثناء حساب الوكيل لقراره، أما في البيئة الثابتة (كالشطرنج أو الكلمات المتقاطعة) فتنتظر البيئة حتى يتخذ الوكيل قراره.`],
+      [6, `كيف تعمل «الوكلاء القائمة على النموذج» <bdi dir="ltr">(Model-Based Reflex Agents)</bdi> للتعامل مع البيئات القابلة للملاحظة الجزئية؟`, [`تبني نموذجاً داخلياً لحالة البيئة وتحدّثه باستمرار بناءً على المستجدات وتاريخ الإدراكات`, `تعتمد على الإدراك اللحظي فقط دون أي ذاكرة داخلية`, `تطلب من المستخدم إدخال كل خطوة يدوياً`, `تتوقف عن العمل عند غياب جزء من الرؤية`], 0, `الوكيل القائم على النموذج يحتفظ بحالة داخلية (تمثيل للعالم غير المرئي لحظياً) ويحدّثها باستمرار لفهم أثر أفعاله وتطور البيئة.`],
+      [6, `ما الفارق الدقيق بين «استراتيجيات البحث الأعمى (غير المستنير)» و«استراتيجيات البحث المستنير (الاستدلالي)»؟`, [`البحث الأعمى أسرع دائماً في المساحات الضخمة`, `البحث المستنير يستخدم معرفة إضافية ودوال استدلالية (Heuristics) لتقدير تكلفة المسار الأمثل نحو الهدف، بينما الأعمى يفتقر لمعلومات توجهه نحو الهدف`, `البحث الأعمى يتطلب شبكات عصبية عميقة`, `البحث المستنير لا يزور أي عقد في الشجرة`], 1, `خوارزميات البحث المستنير (Informed Search) توظف دالة استدلالية (h) لتقدير قرب العقدة من الهدف، بخلاف البحث الأعمى الذي يتفحص الفضاء وفق بنية الشجرة فقط.`],
+      [6, `تُصنف «خوارزمية البحث بأولوية الاتساع» <bdi dir="ltr">(Breadth-First Search - BFS)</bdi> ضمن:`, [`خوارزميات البحث المستنير`, `خوارزميات البحث الأعمى (غير المستنير)`, `الشبكات التوليدية التنافسية`, `التعلم التعزيزي العميق`], 1, `تستكشف BFS العقد مستوىً بمستوى دون أي دالة استدلالية، لذا تُعد من أبرز خوارزميات البحث الأعمى.`],
+      [6, `كيف تعمل «خوارزمية البحث بأولوية الأفضل» <bdi dir="ltr">(Best-First Search)</bdi> عند الانتقال عبر فضاء الحالة؟`, [`تنتقل عشوائياً بين الفروع`, `تتحرك من عقدة إلى عقدة بفحص دالة الاستدلال لاختيار العقدة ذات أقصر مسافة مقدّرة أو أقل تكلفة للوصول للهدف`, `تفحص كل المستويات العميقة أولاً دون تقييم`, `تعتمد على حساب المتوسط الحسابي لكل العقد`], 1, `البحث بأولوية الأفضل يستخدم دالة تقييم/استدلال لاختيار العقدة الواعدة الأقرب أو الأقل تكلفة للانتقال التالي.`],
+      [6, `ما آلية عمل خوارزمية «تسلق التل» <bdi dir="ltr">(Hill Climbing)</bdi> وما أبرز قيودها المحتملة؟`, [`تبحث عن أفضل حل مجاور للحالة الحالية وتنتقل إليه، وقد تعلق عند قمة محلية (Local Maximum) دون بلوغ الحل الأمثل العالمي`, `تحفظ كامل شجرة البحث في الذاكرة لتضمن الحل العالمي دائماً`, `تتحرك للخلف دائماً نحو القيم الأسوأ`, `تستخدم في تقليل الأبعاد الخطي فقط`], 0, `تسلق التل بحث محلي جشع يقارن الحل الحالي بالحلول المجاورة ويختار الأفضل؛ لذا يستهلك ذاكرة ضئيلة لكنه قد يعلق في قمم محلية.`],
+      [6, `في خوارزمية <bdi dir="ltr">A*</bdi> أو البحث الاستدلالي لتقييم الحالة، إذا كانت تكلفة الوصول للحالة الحالية <bdi dir="ltr">g(1) = 1</bdi> وقيمة الاستدلال للهدف <bdi dir="ltr">h(1) = 4</bdi>، فما قيمة دالة التقييم الكلية <bdi dir="ltr">f(1)</bdi>؟`, [`3`, `5`, `4`, `1`], 1, `دالة التقييم الكلية في البحث الاستدلالي المجمع هي f(n) = g(n) + h(n)؛ وبالتعويض: 1 + 4 = 5.`],
+      [6, `إذا تفرعت من الحالة <bdi dir="ltr">(1)</bdi> حالتان تاليتان، إحداهما تكلفتها الكلية <bdi dir="ltr">f = 5</bdi> والأخرى <bdi dir="ltr">f = 7</bdi>، فأيهما يختارها البحث الموجه للتقدم في المسار؟`, [`الحالة ذات القيمة الأكبر (7)`, `الحالة ذات القيمة الأقل (5) لأنها تمثل التكلفة الكلية المقدّرة الأدنى`, `يتوقف البحث عند الحالة (1)`, `يختار العقدتين بالتساوي في نفس اللحظة`], 1, `تهدف خوارزميات البحث عن المسار إلى تقليل التكلفة الكلية المقدّرة f(n)؛ لذا تُفضل الحالة ذات القيمة الأقل.`],
+      [6, `أي من المدارس الفكرية الثلاث للذكاء الاصطناعي تنطلق من أن «الإنسان والكمبيوتر نظامان رمزيان ماديان، وجوهر الذكاء هو تمثيل المعرفة والاستدلال بتشغيل الرموز»؟`, [`المدرسة الارتباطية (Connectionism)`, `المدرسة الرمزية (Symbolicism)`, `المدرسة السلوكية (Behaviorism)`, `المدرسة التطورية المادية فقط`], 1, `المدرسة الرمزية ترى أن العملية المعرفية تقوم على الاستدلال وتشغيل الرموز، وأن تمثيل المعرفة واستنتاجها رمزياً هو جوهر الذكاء الاصطناعي.`],
+      [6, `ما الفكرة المركزية التي تقوم عليها «المدرسة الارتباطية» <bdi dir="ltr">(Connectionism)</bdi> في الذكاء الاصطناعي؟`, [`أن أساس التفكير هو تشغيل الرموز المنطقية الصريحة فقط`, `أن أساس التفكير هو الخلايا العصبية المترابطة وليس معالجة الرموز، وتتمثل في الشبكات العصبية والتعلم العميق`, `أن الذكاء لا يحتاج لأي تمثيل داخلي بل رد فعل فيزيائي فقط`, `أن الحاسوب يجب أن يستخدم لغة SQL للتفكير`], 1, `الارتباطية تستلهم البنية البيولوجية للدماغ البشري والوصلات العصبية، وممثلها الأبرز الشبكات العصبية والتعلم العميق.`],
+      [6, `بماذا تتميز «المدرسة السلوكية» <bdi dir="ltr">(Behaviorism)</bdi> عن المدرستين الرمزية والارتباطية؟`, [`ترى أن الذكاء يعتمد على نمط «الإدراك والفعل» والتفاعل المستمر مع البيئة الحقيقية دون اشتراط تمثيل رمزي مسبق أو استدلال مجرد`, `تعتمد حصراً على القواعد المنطقية من الدرجة الأولى`, `تقتصر على الشبكات العصبية الالتفافية`, `ترفض وجود أي مستشعرات أو حركة في العالم الحقيقي`], 0, `المدرسة السلوكية تركز على التحكم السلوكي والتكيّف والحوسبة التطورية عبر حلقة الإدراك-الفعل والتفاعل المباشر مع البيئة الحقيقية.`],
+      [6, `أي ثنائي يربط كل مدرسة فكرية بممثلها التقني الصحيح حسب منهج المقرر؟`, [`الرمزية: الشبكات العصبية / الارتباطية: الاستدلال الآلي`, `الرمزية: الاستدلال الرمزي والآلي / الارتباطية: الشبكات العصبية والتعلم العميق / السلوكية: التحكم السلوكي والتكيف والحوسبة التطورية`, `السلوكية: الاستدلال المنطقي / الرمزية: الروبوتات التفاعلية فقط`, `الارتباطية: قواعد SQL / السلوكية: مخطط النجمة`], 1, `الممثلون الأساسيون هم: الاستدلال الرمزي والآلي (الرمزية)، الشبكات العصبية والتعلم العميق (الارتباطية)، التحكم السلوكي والتكيف والحوسبة التطورية (السلوكية).`],
+      [6, `ماذا نعني بمفهوم «عدم اليقين المفاهيمي» في معالجة اللغة الطبيعية <bdi dir="ltr">(NLP)</bdi>؟`, [`فقدان الاتصال بالإنترنت أثناء التدريب`, `احتمال حمل الكلمات والجمل لمعانٍ متعددة تختلف باختلاف السياق عند تفسير النصوص أو الأوامر اللغوية`, `عدم وجود لوحة مفاتيح عربية`, `استخدام أرقام ثنائية بدل العشرية`], 1, `عدم اليقين المفاهيمي (أو الغموض الدلالي) ينشأ من تعدد دلالات الكلمة الواحدة حسب السياق اللغوي، وهو تحدٍ محوري في NLP.`],
+      [6, `تُعد تطبيقات «التعرف على الصوت والصورة» مثالاً بارزاً على أي فرع من فروع الذكاء الاصطناعي؟`, [`البحث الأعمى بأولوية الاتساع`, `التعلم العميق (Deep Learning) القائم على الشبكات العصبية متعددة الطبقات`, `قواعد البيانات العلائقية`, `تحليل التباين الأحادي فقط`], 1, `التعرف على الصوت والصورة يتطلب استخلاص ملامح هرمية معقدة من إشارات عالية الأبعاد، وهو مجال تفوق التعلم العميق والشبكات متعددة الطبقات.`],
+      [6, `ما دور الذكاء الاصطناعي الرئيسي في تطوير تقنيات «السيارات ذاتية القيادة»؟`, [`تصميم هيكل السيارة المعدني في المصنع`, `تحليل البيئة المحيطة لحظياً عبر دمج بيانات المستشعرات والكاميرات واتخاذ قرارات المسار الآمن`, `تقليل سعة خزان الوقود`, `كتابة فواتير الصيانة الورقية`], 1, `السيارات ذاتية القيادة وكلاء عقلانيون في بيئة ديناميكية معقدة؛ يرتكز دور الذكاء الاصطناعي فيها على إدراك وتحليل البيئة المحيطة واتخاذ القرارات اللحظية.`],
+      [6, `أي من التطبيقات المستقبلية يُتوقع أن يشهد تطوراً كبيراً في تقنيات الذكاء الاصطناعي المخصص؟`, [`إلغاء الحاجة إلى البيانات في التدريب`, `تطوير أنظمة ذكاء اصطناعي مخصصة لتقديم توصيات دقيقة ومفصّلة بناءً على بيانات وسلوك المستخدم`, `العودة إلى الآلات الحاسبة الميكانيكية`, `منع التعلم من الخبرات السابقة`], 1, `من أبرز التوجهات المستقبلية الرئيسية توظيف الذكاء الاصطناعي المخصص (Personalized AI) لتقديم توصيات وتجارب مصممة لكل مستخدم بناءً على بياناته.`],
+      [6, `في تعريف «فضاء الحالة» <bdi dir="ltr">(State Space)</bdi> لمسألة بحث في الذكاء الاصطناعي، ما العناصر المكونة له؟`, [`الألوان والأحجام فقط`, `الحالة الابتدائية، مجموعة الأفعال/المؤثرات الممكنة، نموذج الانتقال بين الحالات، اختبار الهدف، وتكلفة المسار`, `معدل التعلم وحجم الدفعة فقط`, `جدول الحقائق وجدول الأبعاد`], 1, `صياغة مسألة البحث في فضاء الحالة تتطلب تحديد نقطة البداية، الانتقالات الممكنة، الحالة الهدفية، ودالة التكلفة لحساب الحل.`],
+      [6, `لماذا يتجه الباحثون في كبرى شركات التقنية مثل <bdi dir="ltr">Google</bdi> و<bdi dir="ltr">IBM</bdi> إلى استكشاف «الحوسبة الكمومية» <bdi dir="ltr">(Quantum Computing)</bdi>؟`, [`لرسم المخططات الدائرية في Excel`, `لإرساء الأساس الحسابي الهائل المطلوب مستقبلاً لظهور عصر الذكاء الاصطناعي القوي وحل مسائل التوافيق المعقدة`, `لإبطاء سرعة معالجة البيانات`, `لاستبدال شاشات العرض`], 1, `تشير المصادر إلى أن استكشاف الحوسبة الكمومية من قبل Google وIBM يضع الأساس التحتي لقوة حوسبية غير مسبوقة تمهّد لظهور الذكاء القوي.`],
+      [6, `الوكيل الذي يختار فعله بناءً على الشرط اللحظي (إذا كان الضوء أحمر فتوقف) دون الاحتفاظ بأي سجل للحالات السابقة يُسمى:`, [`وكيل رد الفعل البسيط (Simple Reflex Agent)`, `وكيل قائم على النموذج`, `وكيل قائم على المنفعة`, `وكيل التعلم العميق`], 0, `وكيل رد الفعل البسيط يربط الإدراك الحالي مباشرة بالفعل عبر قواعد شرطية (Condition-Action) ولا يحتفظ بذاكرة داخلية.`],
+      [6, `في المدرسة الرمزية، ما الفرق بين «الإدراك» و«الاستدلال»؟`, [`الإدراك هو عملية معالجة الرموز، بينما الاستدلال يشير إلى عملية حل المشكلات باستخدام المعرفة الاستدلالية والبحث`, `الإدراك يخص الآلة فقط والاستدلال يخص الصور فقط`, `كلاهما يعني تخزين البيانات في السحابة`, `الاستدلال يعني حذف الرموز دون قراءة`], 0, `تفرق المدرسة الرمزية بدقة: الإدراك يعالج الرموز الواردة، أما الاستدلال فيوظف المعرفة والبحث لاستنتاج الحلول.`],
+      [6, `تُعد «القدرة على التعميم والتكيف مع مواقف غير متوقعة خارج نطاق المبرمج مسبقاً» سمة مميزة لـ:`, [`الذكاء الاصطناعي الضيق المحصور`, `الذكاء الاصطناعي القوي (Strong AI)`, `الاستعلام الثابت بلغة SQL`, `تقرير لوحة المعلومات الساكن`], 1, `الذكاء القوي لا يقتصر على مهمة واحدة مبرمجة، بل يمتلك فهماً عاماً وقدرة على التعلم ونقل المعرفة لأي مهمة ذهنية بشرية.`],
+      [6, `ما دور «المشغّلات» <bdi dir="ltr">(Actuators)</bdi> في مكونات الوكيل الذكي؟`, [`قراءة درجة الحرارة من البيئة`, `تنفيذ الأفعال وإحداث الأثر في البيئة (مثل توجيه المقود، تحريك ذراع روبوتية، أو إظهار قرار على الشاشة)`, `حساب معامل الارتباط`, `تحويل الملفات إلى JSON`], 1, `المستشعرات مدخلات الوكيل من البيئة، والمشغّلات مخرجاته التي ينفذ بها قراراته داخل البيئة.`],
+      [6, `في مسألة مثل لعبة الشطرنج بين لاعبين، كيف تُصنّف البيئة من حيث «التنبؤ والاستقرار أثناء التفكير»؟`, [`ثابتة (أو شبه ثابتة بالمؤقت) ومحددة القواعد مع وجود خصم تنافسي (Multi-agent)`, `عشوائية بالكامل دون قواعد`, `غير قابلة للملاحظة إطلاقاً`, `سلوكية دون حالات`], 0, `بيئة الشطرنج محددة القواعد وقابلة للملاحظة الكاملة وتنافسية (وكيلان)، وبعكس القيادة لا تتغير الرقعة أثناء دور تفكير اللاعب.`],
+      [6, `أي من التالي يُعد قيداً أساسياً في «خوارزمية البحث بأولوية العمق» مقارنة بـ «أولوية الاتساع» عند البحث عن أقصر مسار غير موزون؟`, [`أولوية الاتساع لا تجد الحل أبداً`, `أولوية العمق قد تسلك فرعاً عميقاً طويلاً أو لا نهائياً ولا تضمن إيجاد أقصر مسار، بينما الاتساع يضمن أقصر مسار بعدد الخطوات`, `أولوية الاتساع تستهلك ذاكرة أقل دائماً`, `أولوية العمق تتطلب دالة استدلالية حتمياً`], 1, `توسع BFS طبقة بطبقة يضمن بلوغ الهدف بأقل عدد خطوات في البحث غير الموزون، لكنه يستهلك ذاكرة أكبر من البحث بالعمق.`],
+      [6, `لماذا تحاكي الشبكات العصبية العميقة طريقة عمل العقل البشري في نموذج التعلم العميق؟`, [`لأنها تتكون من طبقات متعددة من العقد العصبية الاصطناعية المترابطة بأوزان تتعلم التمثيلات الهرمية للبيانات`, `لأنها تكتب قواعد إذا-فإن (If-Then) يدوياً لكل حالة`, `لأنها تعتمد على جدول حقائق واحد`, `لأنها تخلو من أي عمليات حسابية`], 0, `التعلم العميق ينبثق من المدرسة الارتباطية؛ يرتبط فيه عدد كبير من العقد في طبقات متتالية لاستخلاص الميزات تلقائياً.`],
+
+      // ==================== الفصل السابع (30 سؤالاً) ====================
+      [7, `ما الهدف الرئيسي لمجال «تعلم الآلة» <bdi dir="ltr">(Machine Learning)</bdi> وما الفئتان الرئيسيتان لتعلم الآلة التقليدي؟`, [`تخزين الصور فقط؛ والفئتان هما SQL وNoSQL`, `توقع نتائج أو اكتشاف أنماط بناءً على البيانات المدخلة؛ والفئتان هما التعلم الموجه (Supervised) والتعلم غير الموجه (Unsupervised)`, `رسم الخرائط الجغرافية؛ والفئتان هما النجمة وندفة الثلج`, `إدارة قواعد البيانات؛ والفئتان هما الداعم والتنفيذي`], 1, `يركز تعلم الآلة على بناء نماذج تتعلم من البيانات للتنبؤ أو الكشف عن الأنماط، وتنقسم فئتاه الرئيسيتان إلى الموجه (ببيانات موسومة) وغير الموجه (بلا وسوم).`],
+      [7, `ما الفارق الدقيق بين «التعلم الموجه» <bdi dir="ltr">(Supervised Learning)</bdi> و«التعلم غير الموجه» <bdi dir="ltr">(Unsupervised Learning)</bdi>؟`, [`الموجه يستخدم بيانات مصنفة وموسومة مسبقاً بمتغير هدف، بينما غير الموجه يستكشف البنية والأنماط في بيانات غير مصنفة مسبقاً`, `الموجه لا يحتاج إلى بيانات تدريب`, `غير الموجه يستخدم في التنبؤ بأسعار العقارات عبر الانحدار الخطي فقط`, `الموجه أسرع دائماً ولا يعاني من فرط التجهيز`], 0, `وجود التسميات (Labels) في بيانات التدريب هو الفاصل الأساسي: التصنيف والانحدار موجهان، أما التجميع وتصنيف النصوص دون وسوم مسبقة فغير موجه.`],
+      [7, `كيف يعمل «التعلم التعزيزي» <bdi dir="ltr">(Reinforcement Learning)</bdi> وما الإنجاز الشهير الذي ارتبط بدمجه مع التعلم العميق؟`, [`يتعلم الوكيل عبر التجربة والخطأ داخل بيئة يتلقى منها مكافآت أو عقوبات، وقد نجحت شركة DeepMind في دمجه مع التعلم العميق`, `يتعلم من جداول Excel الثابتة دون تفاعل`, `يقتصر على حذف الروابط التشعبية`, `يعتمد على حساب المنوال فقط`], 0, `في التعلم المعزز (التعزيزي)، يعظّم الوكيل المكافأة التراكمية عبر الخبرة والتفاعل، وقد أحدثت DeepMind نقلة كبرى بدمج التعلم العميق معه (Deep RL).`],
+      [7, `أي من الخوارزميات التالية لا تُستخدم للتصنيف <bdi dir="ltr">(Classification)</bdi> بل لمخرجات كمية مستمرة، أو يرد بصيغة «ليست للتصنيف» في أسئلة المقرر؟`, [`الانحدار اللوجستي (Logistic Regression)`, `شجرة القرار (Decision Tree)`, `الانحدار الخطي البسيط / الانحدار للتنبؤ بالقيم المستمرة (Regression)`, `آلة المتجهات الداعمة (SVM)`], 2, `الانحدار الخطي يتنبأ بقيم عددية مستمرة (مثل توقعات الطقس أو السعر)، بينما الانحدار اللوجستي وشجرة القرار التصنيفية وSVM تُستخدم للتصنيف (انتبه لفخ التسمية في Logistic Regression).`],
+      [7, `أين تُستخدم خوارزمية «الانحدار اللوجستي» <bdi dir="ltr">(Logistic Regression)</bdi> رغم احتواء اسمها على كلمة انحدار؟`, [`في مهام التصنيف (مثل التصنيف الثنائي 0 و1) باستخدام دالة Sigmoid لحصر المخرجات في النطاق (0, 1)`, `في التجميع غير الموجه للصور`, `في حساب المساحة السحابية في AWS`, `في إزالة كلمات التوقف من النصوص`], 0, `رغم اسمه، الانحدار اللوجستي خوارزمية تصنيف تحسب احتمال انتماء العينة لفئة ما عبر تمرير التركيبة الخطية داخل دالة Sigmoid.`],
+      [7, `ما النموذج الإحصائي الذي يُستخدم لفهم العلاقة الخطية بين متغير تابع ومتغير أو أكثر من المتغيرات التفسيرية المستقلة؟`, [`الانحدار الخطي (Linear Regression)`, `خوارزمية DBSCAN`, `البحث بأولوية الاتساع`, `تحليل السلة`], 0, `الانحدار الخطي ينمذج العلاقة بين المتغير التابع الكمي والمتغيرات التفسيرية للتنبؤ أو التفسير (مثل تطبيقات توقعات الطقس).`],
+      [7, `كيف تعمل «شجرة القرار» <bdi dir="ltr">(Decision Tree)</bdi> وماذا تمثل «عقدة الجذر» <bdi dir="ltr">(Root Node)</bdi> فيها؟`, [`تعتمد على إيجاد سلسلة من القرارات المتفرعة لتصنيف البيانات، وتمثل عقدة الجذر السمة الأكثر تمييزاً وفصلاً في البيانات`, `تجمع البيانات عشوائياً دون شروط`, `تمثل عقدة الجذر آخر نقطة بيانات في الملف`, `تُستخدم فقط لتحويل العشري إلى ثنائي`], 0, `تبدأ شجرة القرار بعقدة الجذر التي تمثل أفضل سمة تفصل البيانات (وفق معايير مثل Gini أو Entropy)، ثم تتفرع عبر العقد الداخلية إلى الأوراق.`],
+      [7, `في آلة المتجهات الداعمة <bdi dir="ltr">(SVM)</bdi>، ماذا يُطلق على المسافة الفاصلة بين «المستوى الفائق» <bdi dir="ltr">(Hyperplane)</bdi> وأقرب نقطة بيانات من أي فئة؟`, [`الربع الثالث (Q3)`, `الهامش (Margin)`, `كلمة التوقف`, `التدرج المعزز`], 1, `تسعى SVM إلى تعظيم الهامش (Margin) بين المستوى الفائق الفاصل وأقرب نقاط التدريب التي تُسمى المتجهات الداعمة (Support Vectors).`],
+      [7, `ماذا توصف نقاط البيانات الواقعة على حدود الهامش والتي تحدد موضع واتجاه المستوى الفائق في <bdi dir="ltr">SVM</bdi>؟`, [`القيم المفقودة (MAR)`, `المتجهات الداعمة (Support Vectors)`, `عقد الجذر`, `بيانات الضوضاء`], 1, `المتجهات الداعمة هي العينات الحرجة الأقرب إلى الحد الفاصل؛ إذا تغيرت تغيّر المستوى الفائق، وإذا حُذفت النقاط البعيدة لا يتغير الفاصل.`],
+      [7, `ما الفرق الجوهري بين أسلوب <bdi dir="ltr">Bagging</bdi> (مثل <bdi dir="ltr">Random Forests</bdi>) وأسلوب <bdi dir="ltr">Boosting</bdi> (مثل <bdi dir="ltr">Gradient Boosting</bdi>) في التعلم الجماعي؟`, [`Bagging يبني نماذج مستقلة بالتوازي على عينات عشوائية مع الإرجاع لتقليل التباين، بينما Boosting يبني نماذج متسلسلة يصحح كل نموذج أخطاء سابقه لتقليل التحيز`, `Bagging يبني النماذج بالتسلسل وBoosting بالتوازي`, `Boosting لا يستخدم نماذج ضعيفة أبداً`, `Bagging مخصص للنصوص فقط وBoosting للصور فقط`], 0, `الفارق الكلاسيكي: Bagging (تجميع التمهيد المتوازي) يخفض التباين (Variance) وفرط التجهيز، بينما Boosting (التعزيز المتسلسل) يحوّل النماذج الضعيفة إلى نموذج قوي بتصحيح الأخطاء تدريجياً.`],
+      [7, `لماذا تُعد خوارزمية «الغابات العشوائية» <bdi dir="ltr">(Random Forests)</bdi> أكثر كفاءة ودقة واستقراراً من شجرة القرار المفردة؟`, [`لأنها تحذف 90% من الأعمدة نهائياً`, `لقدرتها العالية على تقليل مشكلة الإفراط في التجهيز (Overfitting) عبر دمج تنبؤات عدة أشجار مستقلة`, `لأنها تعمل بدون بيانات تدريب`, `لأنها تعتمد على شجرة واحدة عميقة جداً`], 1, `شجرة القرار المفردة شديدة الحساسية لتقلبات التدريب وتعاني من Overfitting؛ وتجمع الغابة العشوائية عدة أشجار ببيانات وميزات عشوائية مما يخفض التباين ويقلل الإفراط.`],
+      [7, `أي مما يلي «ليست» من طرق بناء المجمعات <bdi dir="ltr">(Ensemble Methods)</bdi> في تعلم الآلة؟`, [`التعبئة / التجميع (Bagging)`, `التعزيز (Boosting)`, `التكديس (Stacking)`, `الضغط (Compression)`], 3, `طرق بناء المجمعات تشمل Bagging وBoosting وStacking، أما الضغط (Compression) فهو تقنية تخزين/شبكات وليس طريقة لبناء المجمعات.`],
+      [7, `ما المقصود بخوارزمية «التدرج المعزز» <bdi dir="ltr">(Gradient Boosting)</bdi>؟`, [`خوارزمية تعتمد على بناء مجموعة من النماذج الضعيفة (غالباً أشجار صغيرة) بشكل متسلسل لتقليل دالة الخسارة باستخدام التدرج`, `تخزين الصور في BigQuery`, `تقسيم البيانات بنسبة ثابتة 66/34`, `حساب المنوال للبيانات الفئوية`], 0, `Gradient Boosting ينشئ متسلسلة من النماذج الضعيفة بحيث يتدرب كل نموذج جديد على بواقي أخطاء (تدرجات خسارة) النماذج السابقة.`],
+      [7, `ما المصطلح الذي يطلق على قدرة النموذج المدرب على التعامل بكفاءة ودقة مع «بيانات جديدة غير مشاهدة» أثناء عملية التدريب؟`, [`الترميز (Tokenization)`, `قدرة التعميم (Generalization)`, `التحدب الزائد`, `التحليل الوصفي`], 1, `الهدف الحقيقي من تعلم الآلة ليس حفظ بيانات التدريب، بل امتلاك قدرة التعميم للتنبؤ الصحيح على بيانات الاختبار والواقع الجديدة.`],
+      [7, `تقسيم البيانات بنسب محددة مسبقاً مثل <bdi dir="ltr">66%</bdi> للتدريب و<bdi dir="ltr">34%</bdi> للاختبار يُعرف باسم:`, [`K-Fold Cross-Validation`, `التقسيم الثابت (Fixed Split / Hold-out)`, `تحليل السلة`, `التدرج العكسي`], 1, `Fixed Split تقسم البيانات لمرة واحدة إلى مجموعة تدريب ومجموعة اختبار بنسب ثابتة، بعكس K-Fold الذي يكرر التقسيم والتقييم K من المرات.`],
+      [7, `في تقييم نماذج التصنيف عبر مصفوفة الارتباك <bdi dir="ltr">(Confusion Matrix)</bdi>، ماذا يمثل الرمز <bdi dir="ltr">FN (False Negative)</bdi>؟`, [`العينات السلبية المصنفة بشكل صحيح كسلبية`, `العينات الإيجابية الحقيقية التي تم تصنيفها بشكل خاطئ كسلبية`, `العينات السلبية التي صُنفت خطأً كإيجابية`, `مجموع كل العينات في الاختبار`], 1, `FN (سالب كاذب): الحالة في الواقع إيجابية، لكن النموذج أخطأ وصنفها على أنها سلبية (مثل مريض شخّصه النموذج خطأً بأنه سليم).`],
+      [7, `ما المقياس الذي يجمع بين <bdi dir="ltr">Precision</bdi> و<bdi dir="ltr">Recall</bdi> عبر المتوسط التوافقي لتقييم أداء «نموذج التصنيف» خاصة عند عدم توازن الفئات؟`, [`MSE`, `F1-score`, `Elbow Score`, `Z-score`], 1, `يُستخدم F1-score في تقييم أداء نماذج التصنيف لأنه يوازن بين الدقة الإيجابية (Precision) والاستدعاء (Recall) عبر المتوسط التوافقي.`],
+      [7, `ما المقصود بمقياس الدقة الإجمالية <bdi dir="ltr">(Accuracy)</bdi>؟`, [`مربع الفرق بين القيم المتوقعة والحقيقية`, `نسبة التوقعات الصحيحة (TP + TN) من إجمالي عدد التوقعات الكلي`, `نسبة القيم المفقودة في العمود`, `طول المسافة بين نقطتين في DBSCAN`], 1, `تقيس Accuracy نسبة التنبؤات الصائبة إجمالاً إلى إجمالي العينات، لكنها قد تكون مضللة في البيانات غير المتوازنة.`],
+      [7, `عملية تقنية تُستخدم لتحليل وتصنيف المشاعر والعواطف المعبر عنها في النصوص (مثل فهم تقييمات مستخدمي تطبيق ما) تُسمى:`, [`تحليل السلة (Market Basket Analysis)`, `تحليل المشاعر (Sentiment Analysis)`, `التجميع المكاني`, `الانحدار الليني`], 1, `تحليل المشاعر يُوظف معالجة اللغة الطبيعية وتعلم الآلة لتصنيف النصوص والآراء إلى إيجابية أو سلبية أو محايدة.`],
+      [7, `في خطوات تنظيف وتجهيز النصوص لتحليل المشاعر أو سحابة الكلمات، ما الإجراء الأول الشائع لتنظيف النص الخام ثم ما خطوة تقسيمه؟`, [`أولاً إزالة الروابط التشعبية والرموز وإزالة كلمات التوقف (Stop Words)، ثم تقسيم النص إلى وحدات صغيرة تُسمى «الترميز» (Tokenization)`, `تحويل النص إلى أرقام ثنائية قبل قراءته`, `حساب الانحراف المعياري للكلمات`, `تشغيل خوارزمية K-means قبل التنظيف`], 0, `في معالجة النصوص: يبدأ التنظيف بإزالة الروابط التشعبية والتشويش وكلمات التوقف (التي لا تحمل دلالة عاطفية/موضوعية كحروف الجر)، ثم يُجزأ النص إلى رموز/توكنز (Tokenization).`],
+      [7, `لتحويل الكلمات النصية إلى تمثيل رقمي يحفظ السياق الدلالي، كيف تُحوَّل الكلمة إلى «متجه كلمة» <bdi dir="ltr">(Word Vector)</bdi>؟`, [`عبر تضمين الكلمات (Word Embedding) باستخدام نماذج مثل Word2Vec أو BERT`, `بترتيبها أبجدياً وإعطائها نفس الرقم`, `بتحويلها إلى مخطط صندوق`, `باستخدام دالة dropna()`], 0, `التضمين (Word Embeddings) مثل Word2Vec وBERT يمثل الكلمات في فضاء متجهي كثيف يلتقط القرب الدلالي والسياقي بين المفردات.`],
+      [7, `على ماذا يعتمد «تحليل السلة» <bdi dir="ltr">(Market Basket Analysis)</bdi> في استنتاج الارتباط بين المشتريات؟`, [`على الاحتمال الشرطي (Conditional Probability) وقواعد الارتباط`, `على معادلة الانحدار الخطي البسيط`, `على تطبيع الصور الرمادية`, `على بحث تسلق التل`], 0, `تحليل السلة يحسب احتمال شراء منتج B بشرط شراء منتج A (الاحتمال الشرطي، الثقة، والدعم) لاكتشاف سلوك الشراء المشترك.`],
+      [7, `أي نوع من الاحتمالات يُستخدم في تحليل البيانات ذات التوزيعات المنفصلة / المتقطعة (مثل عدد المرات أو رمي النرد)؟`, [`الاحتمالات المتقطعة (Discrete Probabilities)`, `الاحتمالات المستمرة اللانهائية`, `التدرج التفاضلي العكسي`, `مخطط كوكبة الحقائق`], 0, `التوزيعات المتقطعة (Discrete) تخص المتغيرات القابلة للعدّ ذات القيم المنفصلة وتُحلل بالاحتمالات المتقطعة.`],
+      [7, `ما الفرع الإحصائي الذي يُعنى بتجميع وتنظيم وتلخيص البيانات بطريقة تساعد على فهم الظواهر والتغيرات بصورة أساسية؟`, [`الإحصاء الوصفي (Descriptive Statistics)`, `التعلم المعزز العميق`, `البرمجة التفاضلية`, `الحوسبة الكمومية`], 0, `الإحصاء الوصفي يلخص سمات العينة والبيانات المتاحة (بالجداول والرسوم ومقاييس النزعة والتشتت) دون تعميم احتمالي خارجها.`],
+      [7, `تُعد حسابات المتوسط والانحراف المعياري والانحدار الزمني والتحليل الطيفي في سياق السلاسل والفترات أمثلة على:`, [`الإحصاءات الزمنية (Time-Series Statistics)`, `تشفير الشبكات`, `قواعد البيانات الشبكية`, `مخطط ندفة الثلج`], 0, `تُستخدم هذه الأدوات لتحليل تطور القيم وتذبذبها واتجاهاتها ودوريتها عبر البُعد الزمني.`],
+      [7, `في تحليل المشاعر وتصنيف البيانات، ماذا نسمي المرحلة الأخيرة في دورة تدريب وبناء النموذج قبل النشر؟`, [`جمع البيانات الخام`, `تقييم النموذج (Model Evaluation)`, `إزالة الروابط التشعبية`, `تحويل الأرقام العشرية إلى ثنائية`], 1, `بعد الإعداد والتقسيم والتدريب، تأتي الخطوة الأخيرة في تطوير النموذج وهي التقييم على بيانات الاختبار للتحقق من أدائه.`],
+      [7, `لماذا تُعطي سحابة الكلمات وتحليل المشاعر أهمية خاصة لإزالة «كلمات التوقف» <bdi dir="ltr">(Stop Words)</bdi> قبل استخراج الكلمات الإيجابية والسلبية؟`, [`لأن كلمات التوقف (مثل: في، من، على، هذا) تتكرر بكثافة عالية دون أن تضيف معنى عاطفياً أو تمييزياً وتطغى على الكلمات المفتاحية`, `لأن كلمات التوقف تحتوي على فيروسات برمجية`, `لأن Python لا تقبل الكلمات العربية`, `لأنها تحول النموذج إلى غير موجه`], 0, `إزالة كلمات التوقف تُصفّي الضوضاء اللغوية وتُبرز المفردات الدالة على المشاعر الإيجابية أو السلبية (مثل كلمات الغضب والاعتراض أو الرضا).`],
+      [7, `ما الناتج العشري الصحيح للعدد الثنائي <bdi dir="ltr">101100</bdi>؟`, [`40`, `44`, `36`, `52`], 1, `بحسب أوزان الخانات من اليمين (1، 2، 4، 8، 16، 32): لدينا 1 في خانة 32 و1 في خانة 8 و1 في خانة 4، إذن 32 + 8 + 4 = 44.`],
+      [7, `عند التعامل مع بيانات الصور كمدخلات لتعلم الآلة، أي من التالي يُعد من خطوات المعالجة والتحويل الشائعة؟`, [`تحويل مساحة اللون، التدرج الرمادي، التغيير الهندسي (تدوير/تحجيم)، وتحسين الصورة`, `استخدام دالة dropna فقط`, `تطبيق تحلیل السلة بالاحتمال الشرطي`, `ربط الجدولين بـ merge outer`], 0, `تحضير بيانات الصور يتضمن توحيد مساحة اللون أو التدرج الرمادي والتحويلات الهندسية وتحسين التباين لتناسب نموذج التعلم.`],
+      [7, `أي عبارة تصف الفرق بين «الذكاء في معناه المعرفي» (القدرة على الحساب والقياس والاستدلال والتلخيص والتصنيف) وبين «الخوارزمية»؟`, [`الخوارزمية هي سلسلة خطوات محددة ومنظمة تُنفذ لتحويل المدخلات إلى مخرجات، بينما الذكاء هو القدرة الكلية على الفهم والاستدلال والتعلم والتعميم`, `الخوارزمية لا تتبع أي خطوات`, `الذكاء يقتصر على العمليات الحسابية الأربع فقط`, `كلاهما اسم لملف JSON`], 0, `الخوارزمية هي التسلسل المنطقي للتعليمات (الوسيلة الإجرائية)، بينما يمثل الذكاء القدرة المعرفية الأوسع على الاستدلال والقياس والتلخيص والتصنيف.`],
+
+      // ==================== الفصل الثامن (30 سؤالاً) ====================
+      [8, `ما الفرق الرئيسي بين «تقليل الأبعاد باستخلاص/بناء الميزات» (مثل <bdi dir="ltr">PCA</bdi>) وبين «اختيار الميزات» <bdi dir="ltr">(Feature Selection)</bdi>؟`, [`اختيار الميزات ينتقي مجموعة فرعية من الميزات الأصلية دون تغييرها، بينما تقليل الأبعاد عبر PCA يحول الميزات الأصلية ويدمجها في مجموعة أقل من المتغيرات الجديدة غير المترابطة`, `اختيار الميزات يضاعف عدد الأعمدة تلقائياً`, `PCA يحذف كل الأعمدة الرقمية ويبقي النصوص`, `لا فرق بين الطريقتين في المخرجات`], 0, `اختيار الميزات يحافظ على القابلية للتفسير بانتقاء أعمدة أصلية، بينما PCA يولّد محاور جديدة (مركبات رئيسية متعامدة غير مترابطة) بتحويل خطي.`],
+      [8, `تُصنف طرق اختيار الميزات إلى ثلاث فئات: <bdi dir="ltr">Filter</bdi> و<bdi dir="ltr">Wrapper</bdi> و<bdi dir="ltr">Embedded</bdi>؛ كيف تعمل طرق التصفية <bdi dir="ltr">(Filter Methods)</bdi>؟`, [`تعتمد على تدريب نموذج تعلم الآلة مع كل مجموعة فرعية لتقييم الدقة`, `تقيّم كل ميزة وتصنّفها باستخدام مقاييس إحصائية مستقلة تماماً عن خوارزمية تعلم الآلة (مثل الارتباط واختبار كاي تربيع)`, `تدمج اختيار الميزات داخل دالة الخسارة أثناء التدريب مثل Lasso`, `تحذف الصفوف التي تحوي قيماً مفقودة فقط`], 1, `طرق Filter سريعة ومنخفضة التكلفة الحاسوبية لأنها تفحص العلاقة الإحصائية بين الميزة والهدف قبل تشغيل أي نموذج تعلم آلة.`],
+      [8, `ما الميزة والعيب الأساسيان لطرق التغليف <bdi dir="ltr">(Wrapper Methods)</bdi> في اختيار الميزات (مثل <bdi dir="ltr">RFE</bdi> والاختيار الأمامي/الخلفي)؟`, [`سريعة جداً لكنها تتجاهل التفاعلات بين الميزات`, `تأخذ تفاعلات الميزات مع النموذج بعين الاعتبار فتعطي دقة أعلى، لكنها مكلفة حسابياً وقد تسبب فرط تجهيز عند صغر البيانات لأنها تعيد تدريب النموذج مع كل توليفة`, `تعمل على البيانات غير المصنفة فقط`, `تستخدم معادلة Min-Max بدلاً من التدريب`], 1, `طرق Wrapper تجرّب مجموعات فرعية متكررة عبر تدريب النموذج الفعلي، مما يرفع الكلفة الحسابية بدرجة كبيرة مقارنة بـ Filter.`],
+      [8, `أي فئة من طرق اختيار الميزات ينتمي إليها انحدار <bdi dir="ltr">Lasso (L1 Regularization)</bdi> وأهمية السمات في أشجار القرار؟`, [`طرق التصفية (Filter)`, `طرق التغليف (Wrapper)`, `طرق الاختيار المدمجة (Embedded Methods)`, `خوارزميات التجميع الكثافي`], 2, `الطرق المدمجة (Embedded) تنفذ اختيار الميزات تلقائياً كجزء داخلي من عملية تدريب النموذج نفسها (مثل تصفير الأوزان في L1 Lasso).`],
+      [8, `ما المقصود بظاهرة «فرط التجهيز» <bdi dir="ltr">(Overfitting)</bdi> وما علامتها الكلاسيكية عند مقارنة التدريب والاختبار؟`, [`حفظ النموذج لضوضاء وتفاصيل بيانات التدريب الدقيقة بحيث يحقق أداءً ممتازاً جداً على التدريب لكنه يفشل ويتدهور أداؤه على بيانات الاختبار الجديدة`, `أداء ضعيف جداً على كل من التدريب والاختبار معاً`, `نقص عدد الأعمدة إلى عمود واحد`, `تساوي جميع القيم في الجدول`], 0, `Overfitting يعني تبايناً مرتفعاً وحفظاً للضوضاء؛ العلامة الفارقة هي الفجوة الواسعة بين دقة تدريب عالية جداً ودقة اختبار متدنية.`],
+      [8, `في المقابل، ماذا نسمي الحالة التي يكون فيها النموذج شديد البساطة ويعجز عن التقاط النمط الأساسي في بيانات التدريب والاختبار معاً؟`, [`فرط التجهيز (Overfitting)`, `نقص التجهيز (Underfitting / High Bias)`, `التطبيع القوي (Robust Scaling)`, `البيانات المفقودة تماماً`], 1, `Underfitting يحدث عندما يعجز النموذج عن تعلم البنية الأساسية (مثلاً استخدام خط مستقيم لبيانات منحنية معقدة)، فيكون الخطأ مرتفعاً في التدريب والاختبار.`],
+      [8, `ما الغرض الدقيق من عملية «إعادة التحجيم بطريقة الحد الأدنى والأقصى» <bdi dir="ltr">(Min-Max Scaling)</bdi>؟`, [`ترتيب القيم تنازلياً وحذف السالبة`, `إعادة تحجيم القيم لتقع ضمن نطاق محدد ومحصور غالباً بين 0 و1`, `حساب نسبة المفقود في كل عمود`, `تحويل النصوص إلى فئات لونية`], 1, `Min-Max Scaling يطرح القيمة الدنيا ويقسم على المدى (max - min) ليحصر جميع القيم في النطاق [0, 1]، لكنه حساس للقيم المتطرفة.`],
+      [8, `كيف تعمل طريقة التحويل المعياري <bdi dir="ltr">(Z-Score Standardization)</bdi> وما استخدامها المزدوج؟`, [`تحول القيم بطرح المتوسط والقسمة على الانحراف المعياري ليصبح المتوسط 0 والانحراف المعياري 1، وتُستخدم أيضاً لاكتشاف القيم المتطرفة بقياس بعدها بالانحرافات المعيارية`, `تقسم على الوسيط فقط دون المتوسط`, `تحصر القيم دائماً بين 0 و1 فقط`, `تُستخدم حصراً مع المتغيرات الفئوية الاسمية`], 0, `Z-score يقيس بُعد النقطة عن المتوسط بوحدات الانحراف المعياري؛ لذا يوحّد مقياس الميزات ويكشف القيم الشاذة (مثلاً |Z| > 3).`],
+      [8, `لماذا تُفضل طريقة «التحجيم القوي/المتين» <bdi dir="ltr">(Robust Scaling)</bdi> عند التعامل مع مجموعات بيانات تحتوي على قيم متطرفة كثيرة؟`, [`لأنها تحذف 50% من البيانات قبل البدء`, `لأنها تعتمد في حساباتها على الوسيط (Median) والمدى الربعي (IQR) مما يجعلها لا تتأثر بالقيم الشاذة`, `لأنها تستخدم القيمة القصوى والدنيا في المقام`, `لأنها تحول كل القيم إلى أصفار`], 1, `بخلاف Min-Max (المتأثر بالحدين الأدنى والأقصى) وZ-score (المتأثر بالمتوسط والانحراف)، يعتمد Robust Scaling على الوسيط وIQR المقاومين للشذوذ.`],
+      [8, `تُسمى عملية إنشاء حقول وميزات جديدة ذات معنى من خلال دمج أو تحويل الحقول الموجودة (مثل حساب مؤشر كتلة الجسم <bdi dir="ltr">BMI</bdi> من الطول والوزن) بـ:`, [`حذف السمات (Feature Deletion)`, `بناء السمات / توسيع الميزة (Attribute Construction / Feature Engineering)`, `التجميع الهرمي`, `التحقق المتقاطع`], 1, `توسيع الميزة أو بناء السمات يولّد متغيرات جديدة أكثر تعبيراً عن الظاهرة من دمج أو تحويل المتغيرات الخام المتوفرة.`],
+      [8, `لماذا تُعد خطوة «تطبيع الميزات» <bdi dir="ltr">(Feature Normalization / Scaling)</bdi> حاسمة في خوارزميات مثل <bdi dir="ltr">KNN</bdi> و<bdi dir="ltr">SVM</bdi> و<bdi dir="ltr">K-means</bdi> والشبكات العصبية؟`, [`لضمان تساوي نطاقات قيم متغيرات الإدخال فلا تطغى سمة ذات أرقام كبيرة (كالراتب بالآلاف) على سمة صغيرة (كعدد الأبناء) في حسابات المسافة والتدرج`, `لأنها تغير نوع الملف من CSV إلى JSON`, `لأنها تحذف جميع القيم الصحيحة`, `لتقليص عدد الصفوف للنصف`], 0, `الخوارزميات المعتمدة على المسافات الإقليدية أو النزول التدريجي تتأثر بشدة باختلاف المقاييس؛ فالتطبيع يمنح كل ميزة وزناً عادلاً عند البداية.`],
+      [8, `ما المقصود بالبيانات «المفقودة عشوائياً بالاعتماد على متغير آخر مسجَّل» <bdi dir="ltr">(MAR - Missing At Random)</bdi>؟`, [`فقدان القيمة يعتمد على القيمة المفقودة نفسها فقط`, `احتمال فقدان البيانات مرتبط بمتغير آخر موجود ومُسجل في الجدول (مثلاً ارتفاع نسبة ترك حقل الدخل فارغاً لدى فئة عمرية معينة مسجلة)`, `أن الفقدان حدث نتيجة عطل في الكابل لا علاقة له بأي متغير`, `أن الجدول خالٍ تماماً من أي قيم`], 1, `التمييز الدقيق في أنواع الفقدان: MCAR (عشوائي تماماً دون أي علاقة)، MAR (مرتبط بمتغير آخر مسجل)، MNAR (مرتبط بالقيمة المفقودة ذاتها).`],
+      [8, `لماذا يُفضل استخدام «المنوال» <bdi dir="ltr">(Mode)</bdi> عند تعويض القيم المفقودة في الأعمدة الفئوية بدلاً من المتوسط الحسابي؟`, [`لأن البيانات الفئوية (مثل المدينة أو الجنس) لا تقبل حساب المتوسط الرياضي، والمنوال يمثل الفئة الأكثر شيوعاً وتكراراً`, `لأن المنوال يحذف العمود بالكامل`, `لأن المتوسط يساوي دائماً صفراً للبيانات الفئوية`, `لأن المنوال يكتشف القيم المتطرفة فقط`], 0, `لا معنى لجمع «الرياض + جدة» وقسمتهما على 2؛ لذا يمثل المنوال الخيار المنطقي لتعويض القيم الفئوية المفقودة بالقيمة الأكثر شيوعاً.`],
+      [8, `إذا أردنا تحويل «بيانات القيمة العددية» مثل العمر الدقيق إلى «بيانات فئة» لتقليل تقلبات المتغيرات (مثال: تجزئة العمر إلى شرائح)، ماذا نسمي هذه الخطوة؟`, [`التجزئة / التقطيع الفئوي (Binning / Discretization)`, `التضمين الدلالي لـ BERT`, `الانتشار العكسي`, `الدمج الخارجي`], 0, `تجزئة المتغير الكمي إلى فئات أو شرائح (Binning) تندرج ضمن أشكال تحويل البيانات الشائعة لتبسيط العلاقة وتقليل حساسية القيم المتطرفة.`],
+      [8, `أي عبارة تصف «الترميز الأحادي الساخن» <bdi dir="ltr">(One-Hot Encoding)</bdi> مقارنة بـ «الترميز الترتيبي» <bdi dir="ltr">(Label/Ordinal Encoding)</bdi>؟`, [`One-Hot يحول الفئات الاسمية غير المرتبة إلى أعمدة ثنائية (0/1) دون افتراض أفضلية رقمية بينها، بعكس Label Encoding الذي يفرض ترتيباً رقمياً قد يضلل النموذج`, `One-Hot يُستخدم للأرقام المستمرة فقط`, `Label Encoding ينشئ عموداً لكل صف`, `كلاهما يحذف الفئات النادرة`], 0, `إعطاء أرقام (1، 2، 3) لمدن غير مرتبة يجعل النموذج يظن أن المدينة 3 أكبر من 1، وهو ما يتلافاه One-Hot Encoding للفئات الاسمية.`],
+      [8, `ما التأثير الرياضي المباشر لتقنية <bdi dir="ltr">PCA</bdi> (تحليل المكونات الرئيسية) عند تطبيقه على مجموعة بيانات كثيرة الأعمدة؟`, [`تحويل المتغيرات الأصلية المترابطة إلى عدد أقل من المكونات الرئيسية المتعامدة (غير المترابطة) التي تحتفظ بأكبر قدر ممكن من التباين`, `زيادة عدد الأعمدة المترابطة خطياً`, `ترتيب الصفوف حسب الأبجدية`, `تطبيق التجميع الكثافي DBSCAN`], 0, `PCA يزيل التداخل الخطي (Multicollinearity) ويحافظ على معظم معلومات التباين في أبعاد أقل.`],
+      [8, `ماذا يحدث إذا طبقنا <bdi dir="ltr">Min-Max Scaling</bdi> أو <bdi dir="ltr">Z-Score</bdi> على كامل مجموعة البيانات «قبل» تقسيمها إلى تدريب واختبار؟`, [`تسرّب البيانات (Data Leakage) لأن معلومات التوزيع (المتوسط/الحد الأقصى) من مجموعة الاختبار تسللت إلى تدريب النموذج`, `ارتفاع دقة التعميم الحقيقية في الإنتاج`, `تحول النموذج إلى غير موجه`, `عدم تغير أي شيء في التقييم`], 0, `القاعدة الذهبية في المعالجة المسبقة: تُحسب معاملات التحجيم (fit) على بيانات التدريب فقط، ثم تُطبَّق (transform) على الاختبار لمنع تسرب البيانات.`],
+      [8, `أي مما يلي يُعد إجراءً صحيحاً للحد من مشكلة فرط التجهيز <bdi dir="ltr">(Overfitting)</bdi>؟`, [`زيادة تعقيد النموذج وعدد معاملاته بلا قيود`, `استخدام التنظيم (Regularization مثل L1/L2)، أو زيادة بيانات التدريب، أو تقليل عدد الميزات، أو استخدام Cross-Validation والـ Dropout`, `التدريب لآلاف الحقب الإضافية على نفس البيانات الصغيرة`, `إلغاء مجموعة الاختبار تماماً`], 1, `معالجة Overfitting تعتمد على كبح تعقيد النموذج (Regularization/Pruning)، وتوفير بيانات أكثر أو ميزات أنقى، وتطبيق التحقق المتقاطع.`],
+      [8, `في أي حالة يكون تعويض القيم المفقودة بالمتوسط الحسابي <bdi dir="ltr">(Mean Imputation)</bdi> مضللاً ويفضل عليه الوسيط <bdi dir="ltr">(Median)</bdi>؟`, [`عندما يكون التوزيع متماثلاً تماماً كالجرس`, `عندما يكون التوزيع شديد الالتواء ويحتوي على قيم متطرفة عالية تسحب المتوسط بعيداً عن المركز الحقيقي`, `عندما يكون العمود منطقياً (True/False)`, `عندما لا توجد أي قيم مفقودة`], 1, `لأن المتوسط حساس للقيم المتطرفة، فإن استخدامه مع توزيع ملتوٍ يزرع قيماً تعويضية غير ممثلة لمعظم العينات، بينما يصمد الوسيط.`],
+      [8, `كيف يرتبط «حجم العينة الصغير مع عدد ضخم من الميزات» <bdi dir="ltr">(Curse of Dimensionality)</bdi> بفرط التجهيز؟`, [`يجعل الفضاء شديد التناثر فيسهل على النموذج إيجاد فواصل وهمية تحفظ نقاط التدريب وتفشل عند التعميم`, `يمنع حدوث فرط التجهيز تماماً`, `يخفض زمن التدريب لصفر`, `يلغي الحاجة لاختيار الميزات`], 0, `لعنة الأبعاد تزيد احتمالية المصادفات الزائفة في الفضاء عالي الأبعاد، مما يجعل اختيار الميزات وتقليل الأبعاد ضرورة لمنع Overfitting.`],
+      [8, `أي من الطرق التالية تُصنف كطريقة «تصفية» <bdi dir="ltr">(Filter)</bdi> لاختيار الميزات؟`, [`الاختيار المتسلسل الأمامي (Forward Selection)`, `معامل ارتباط بيرسون / المعلومات المتبادلة (Mutual Information) / اختبار كاي تربيع`, `الإزالة التكرارية للميزات (RFE)`, `معاملات انحدار Ridge داخل التدريب`], 1, `المقاييس الإحصائية المستقلة عن أي مصنّف أو منحدر (مثل بيرسون، ANOVA، Chi-Square، Mutual Information) تنتمي لطرق Filter.`],
+      [8, `ما الدور الذي يؤديه «معامل التنظيم» في <bdi dir="ltr">L1 (Lasso)</bdi> مقارنة بـ <bdi dir="ltr">L2 (Ridge)</bdi> من حيث اختيار الميزات؟`, [`L1 يدفع أوزان الميزات غير المهمة إلى الصفر تماماً (فيُجري اختيار ميزات فعلياً)، بينما L2 يقلص الأوزان نحو الصفر دون تصفيرها غالباً`, `L2 يحذف جميع الميزات وL1 يبقيها`, `كلاهما يزيد الأوزان إلى ما لا نهاية`, `لا علاقة لأي منهما بفرط التجهيز`], 0, `العقوبة المطلقة في L1 تُنتج حلولاً متناثرة (Sparse) بأوزان صفرية، مما يجعله أداة اختيار ميزات مدمجة.`],
+      [8, `إذا أظهر عمود في <bdi dir="ltr">DataFrame</bdi> نسبة فقدان تتجاوز 80% ولا توجد طريقة موثوقة لاستنتاج قيمه، فما الإجراء الأنسب غالباً؟`, [`حشو العمود بالكامل بالرقم 999`, `دراسة حذف العمود (باستخدام dropna على الأعمدة أو drop) لضعف قيمته المعلوماتية وخطر تشويه النموذج بالتعويض المفرط`, `تكرار الصفوف المتبقية 100 مرة`, `تحويل العمود إلى فهرس أساسي`], 1, `التعويض (Imputation) لعمود مفقود بأغلبية ساحقة يخلق بيانات مصطنعة مضللة؛ لذا يكون إسقاط العمود (إذا لم يكن وجود الفقدان نفسه ذا دلالة) أأمن.`],
+      [8, `في الكود البرمجي الذي يأخذ العنصر الأول من نتيجة قائمة أو سلسلة مؤشرة <bdi dir="ltr">[0]</bdi>، ماذا يفيد الفهرس <bdi dir="ltr">0</bdi> في بايثون؟`, [`العنصر الأخير في القائمة`, `العنصر الأول في الترتيب لأن الفهرسة في بايثون تبدأ من الصفر (0-indexed)`, `حذف القائمة`, `طول القائمة الكلي`], 1, `الفهرسة في بايثون ومكتباته (NumPy/pandas) تبدأ دائماً من 0 لأول عنصر، لذا يُرجع [0] أول قيمة.`],
+      [8, `أي مما يلي يُعد مثالاً على «بناء السمات» <bdi dir="ltr">(Attribute Construction)</bdi> في تحليل التجارة الإلكترونية؟`, [`حساب «متوسط قيمة الطلب الواحد» بقسمة إجمالي الإنفاق على عدد الطلبات`, `تحويل العملة عبر Min-Max Scaling فقط`, `حذف عمود التاريخ`, `إزالة التكرارات`], 0, `دمج عمودين قائمين (الإنفاق وعدد الطلبات) لتوليد ميزة جديدة تعبر عن السلوك الشرائي (متوسط قيمة الطلب) هو بناء سمات بامتياز.`],
+      [8, `ما الغرض من تحويل المتغيرات الفئوية إلى تمثيل رقمي مقابل قبل إدخالها لمعظم نماذج التصنيف؟`, [`لأن الخوارزميات الرياضية (كالانحدار اللوجستي والشبكات العصبية وSVM) تجري عمليات جبرية ومصفوفية تتطلب مدخلات عددية`, `لأن لغة بايثون لا تدعم النصوص`, `لتقليل دقة النموذج`, `لتحويل التقييم من F1 إلى MSE`], 0, `النماذج الرياضية تعتمد على الضرب المصفوفي وحساب المسافات والتدرجات، مما يستلزم ترميز الفئات النصية إلى أرقام.`],
+      [8, `عندما نطبق <bdi dir="ltr">PCA</bdi> على بيانات ميزاتها ذات وحدات مختلفة جداً (متر وكيلوغرام ومليون ريال)، ماذا يجب فعله قبل <bdi dir="ltr">PCA</bdi>؟`, [`لا شيء؛ PCA محصن ضد اختلاف المقاييس`, `توحيد/معايرة الميزات (Standardization) أولاً حتى لا تسيطر الميزة ذات التباين العددي الأكبر على المكون الرئيسي الأول`, `تحويل كل القيم إلى نصوص`, `تشغيل K-means ثم حذف المحاور`], 1, `PCA يبحث عن اتجاهات أقصى تباين (Variance)؛ بدون توحيد المقاييس، سيهيمن العمود المقاس بالملايين على اتجاه المكون الأول.`],
+      [8, `أي من الأساليب التالية ينتمي لفئة <bdi dir="ltr">Wrapper</bdi> ويبدأ بكل الميزات ثم يحذف أضعفها تكرارياً بناءً على أوزان النموذج؟`, [`الإزالة التكرارية للميزات (Recursive Feature Elimination - RFE)`, `اختبار كاي تربيع`, `معامل التباين`, `تطبيع Z-score`], 0, `RFE يدرّب النموذج، يرتب أهمية الميزات، يحذف الأضعف، ويعيد التدريب دورياً حتى يبلغ العدد المطلوب، وهو نموذج أصيل لـ Wrapper.`],
+      [8, `ما الفارق العملي بين «التطبيع» (Normalization: <bdi dir="ltr">[0, 1]</bdi>) و«المعايرة» (Standardization: <bdi dir="ltr">Mean=0, Std=1</bdi>) عند وجود حد أدنى وأقصى معروفين بصورة ثابتة (مثل قيم البكسلات في الصور <bdi dir="ltr">0–255</bdi>)؟`, [`التطبيع Min-Max مناسب جداً لقيم البكسلات المحدودة في [0, 255] لإعادتها إلى [0, 1]، بينما المعايرة تناسب المتغيرات غير محدودة الأطراف أو القريبة من الطبيعي`, `المعايرة مخصصة للصور فقط`, `التطبيع يغير ترتيب القيم`, `كلاهما يعطي نفس الأرقام حرفياً دائماً`], 0, `عندما تكون الحدود معروفة وثابتة بدون قيم شاذة (كشدة الإضاءة 0-255)، يتألق Min-Max، أما في البيانات المتصلة غير المحدودة فتُستخدم المعايرة أو Robust Scaling.`],
+      [8, `أي عبارة تلخص «الهدف الاستراتيجي» لهندسة واختيار الميزات في بناء النماذج؟`, [`إدخال أكبر عدد ممكن من الأعمدة العشوائية`, `تزويد النموذج بأكثر السمات تمثيلاً وأقلها ضوضاءً وتكراراً لتحقيق أعلى تعميم بأبسط بنية ممكنة`, `تعقيد البيانات لإخفاء معانيها عن المحلل`, `منع تقييم النموذج على بيانات جديدة`], 1, `جودة الميزات تفوق كميتها؛ تقليل الضوضاء والتكرار يرفع سرعة التدريب ودقة التعميم وقابلية التفسير.`],
+
+      // ==================== الفصل التاسع (30 سؤالاً) ====================
+      [9, `أي نوع من التعلم تنتمي إليه خوارزميات التجميع <bdi dir="ltr">(Clustering)</bdi> مثل <bdi dir="ltr">K-means</bdi> و<bdi dir="ltr">DBSCAN</bdi>؟`, [`التعلم الموجه للتصنيف`, `التعلم غير الموجه (Unsupervised Learning)`, `التعلم المعزز`, `التحليل التوجيهي`], 1, `خوارزميات التجميع تكتشف المجموعات المتجانسة طبيعياً داخل البيانات دون أي وسوم (Labels) مسبقة.`],
+      [9, `ما الهدف الدقيق من تطبيق «طريقة المرفق» <bdi dir="ltr">(Elbow Method)</bdi> عند استخدام خوارزمية <bdi dir="ltr">K-means</bdi>؟`, [`تحديد عدد الطبقات في الشبكة العصبية`, `تحديد العدد الأمثل للمجموعات (K) عبر مراقبة نقطة الانحناء التي يقل بعدها التحسن في تقليل التشتت الداخلي`, `حساب المسافة بين نقطتي دعم في SVM`, `اكتشاف القيم المفقودة في DataFrame`], 1, `في Elbow Method نرسم مجموع مربعات المسافات داخل المجموعات (Inertia/WCSS) مقابل K، ونختار قيمة K عند نقطة «المرفق» التي يتباطأ بعدها الانخفاض.`],
+      [9, `ما الوظيفة المحددة للمعامل <bdi dir="ltr">MinPts</bdi> في خوارزمية التجميع المكاني المبني على الكثافة مع الضوضاء <bdi dir="ltr">(DBSCAN)</bdi>؟`, [`تحديد العدد الأقصى للمجموعات في الفضاء`, `تحديد الحد الأدنى لعدد النقاط الذي يجب أن يتواجد ضمن نصف القطر (Eps) لتُعتبر النقطة «نقطة أساسية» (Core Point)`, `تحديد نسبة تقسيم البيانات للتدريب والاختبار`, `تحديد معدل التعلم في المحسّن`], 1, `تعتمد DBSCAN على معاملين: Eps (نصف قطر الجوار) وMinPts (الحد الأدنى لعدد النقاط داخل ذلك النصف قطر لتشكيل نواة تجمع كثيف).`],
+      [9, `ما الميزة التنافسية الأبرز لخوارزمية <bdi dir="ltr">DBSCAN</bdi> مقارنة بخوارزميات مثل <bdi dir="ltr">K-means</bdi> والتجميع الهرمي <bdi dir="ltr">(Hierarchical Clustering)</bdi>؟`, [`تتطلب تحديد عدد المجموعات K مسبقاً بدقة`, `يمكنها التعامل مع البيانات الضوضائيه وعزل القيم الشاذة، واكتشاف التجمعات ذات الأشكال غير المنتظمة (غير الكروية)`, `تفترض أن كل التجمعات كروية متساوية الحجم`, `تعمل على البيانات النصية دون تحويل رقمي`], 1, `K-means يميل لتشكيل عناقيد كروية ويتأثر بالقيم الشاذة ويفرض تحديد K، بينما DBSCAN يكتشف أشكالاً معقدة (كالأهلة والحلقات) ويصنف النقاط المعزولة كضوضاء.`],
+      [9, `في خوارزمية <bdi dir="ltr">DBSCAN</bdi>، كيف تُصنف النقطة التي لا يقع ضمن نصف قطرها <bdi dir="ltr">Eps</bdi> عدد <bdi dir="ltr">MinPts</bdi> من النقاط، ولا تقع ضمن جوار أي نقطة أساسية؟`, [`نقطة أساسية (Core Point)`, `نقطة ضوضاء / شاذة (Noise / Outlier Point)`, `نقطة حدّية (Border Point)`, `عقدة جذر`], 1, `النقاط في DBSCAN ثلاثة أنواع: أساسية (Core)، وحدّية (Border: في جوار نقطة أساسية لكن جوارها أقل من MinPts)، وضوضاء (Noise: ليست هذا ولا ذاك).`],
+      [9, `أي قيود تعاني منها خوارزمية <bdi dir="ltr">K-means</bdi> عند التعامل مع المجموعات الواقعية؟`, [`لا تقبل الأرقام العشرية`, `حساسيتها الشديدة لاختيار المراكز الابتدائية وللقيم المتطرفة، وافتراضها أن التجمعات كروية متقاربة الكثافة، والحاجة لتحديد K مسبقاً`, `عدم قدرتها على حساب المتوسط`, `حاجتها إلى بيانات موسومة مسبقاً`], 1, `لأن K-means تحسب مراكز التجمع عبر المتوسط الحسابي والمسافة الإقليدية، تتأثر بالشذوذ والمراكز الابتدائية وتعجز عن فصل الأشكال المتداخلة غير الكروية.`],
+      [9, `ما المقصود بتقنية «التحقق المتقاطع ذي K طيات» <bdi dir="ltr">(K-Fold Cross-Validation)</bdi>؟`, [`تقسيم البيانات إلى K من الأجزاء (الطيات)، ثم تكرار التدريب والتقييم K مرة بحيث يستخدم في كل مرة K-1 جزء للتدريب وجزء مختلف للتقييم`, `تقسيم البيانات إلى تدريب واختبار لمرة واحدة بنسبة 66/34`, `تجميع البيانات في K مجموعة بدون اختبار`, `حساب دالة الخسارة على بيانات التدريب فقط`], 0, `K-Fold يضمن اختبار النموذج على كل نقطة بيانات مرة واحدة كاختبار، وحساب متوسط الأداء عبر الطيات مما يعطي تقديراً أكثر موثوقية لعمومية النموذج.`],
+      [9, `لماذا تُفضل تقنية <bdi dir="ltr">K-Fold Cross-Validation</bdi> على التقسيم الثابت <bdi dir="ltr">(Fixed Split)</bdi> خاصة عندما تكون مجموعة البيانات متوسطة أو محدودة الحجم؟`, [`لأنها تمنع إهدار جزء من البيانات وتقلل اعتماد نتيجة التقييم على حظ التقسيم العشوائي الواحد`, `لأنها تلغي الحاجة إلى تدريب النموذج`, `لأنها أسرع K مرة من التدريب الواحد`, `لأنها تحذف جميع القيم المفقودة تلقائياً`], 0, `في Fixed Split قد تقع حالات صعبة كلها في التدريب أو كلها في الاختبار بالصدفة، بينما K-Fold يختبر كل الأجزاء ويكشف استقرار النموذج.`],
+      [9, `ما دالة الخسارة التي تحسب «متوسط مربعات الفرق بين القيم المتوقعة والقيم الحقيقية» في مهام الانحدار؟`, [`متوسط الخطأ التربيعي (MSE - Mean Squared Error)`, `مقياس F1-score`, `مؤشر جيني (Gini Impurity)`, `دالة السوفت ماكس (Softmax)`], 0, `تقيس MSE متوسط مربعات الفروق (ŷ - y)²، وتضاعف عقوبة الأخطاء الكبيرة بسبب التربيع.`],
+      [9, `كيف يختلف مقياس <bdi dir="ltr">RMSE</bdi> (جذر متوسط الخطأ التربيعي) عن <bdi dir="ltr">MSE</bdi> من حيث التفسير العملي؟`, [`RMSE يعيد وحدة الخطأ إلى نفس وحدة المتغير الأصلي (مثل الريال أو الدرجة) عبر أخذ الجذر التربيعي لـ MSE`, `RMSE يعطي دائماً قيماً سالبة`, `MSE يقيس التصنيف وRMSE يقيس التجميع`, `لا يوجد أي فرق رياضي بينهما`], 0, `وحدة MSE مربعة (مثلاً ريال²)، لذا نأخذ الجذر التربيعي (RMSE) لتسهيل تفسيره مباشرة بنفس وحدة التنبؤ.`],
+      [9, `في التجميع الهرمي <bdi dir="ltr">(Hierarchical Clustering)</bdi>، ما الشكل البياني الشهير الذي يوضح تسلسل دمج أو تقسيم العناقيد عبر المستويات؟`, [`مخطط الصندوق (Boxplot)`, `المخطط الشجري (Dendrogram)`, `منحنى المرفق (Elbow Curve)`, `مصفوفة الارتباك`], 1, `الـ Dendrogram يوثق شجرة الدمج التراكمي (Agglomerative) أو التقسيم (Divisive) ويتيح قص الشجرة عند الارتفاع المطلوب للحصول على عدد المجموعات.`],
+      [9, `ما الفارق الدقيق بين النهج «التجميعي/التراكمي» <bdi dir="ltr">(Agglomerative)</bdi> والنهج «التقسيمي» <bdi dir="ltr">(Divisive)</bdi> في التجميع الهرمي؟`, [`التراكمي يبدأ من أسفل لأعلى (كل نقطة عنقود مستقل ثم تُدمج تدريجياً)، بينما التقسيمي يبدأ من أعلى لأسفل (كل النقاط في عنقود واحد ثم يُقسم)`, `التراكمي يحتاج تحديد K والآخر لا`, `التقسيمي يعمل على الصور فقط`, `كلاهما نسخة من خوارزمية KNN`], 0, `Agglomerative يبني الشجرة تصاعدياً بالدمج، وDivisive يفككها تنازلياً بالتقسيم.`],
+      [9, `عند تقييم جودة التجميع غير الموجه بدون وجود تسميات حقيقية، ماذا يقيس «معامل سيلهويت» <bdi dir="ltr">(Silhouette Score)</bdi>؟`, [`نسبة التنبؤات الصحيحة إلى الخاطئة`, `مدى تماسك النقطة مع عنقودها مقارنة ببُعدها عن أقرب عنقود مجاور (بقيم بين -1 و+1)`, `عدد النقاط المفقودة في الجدول`, `طول المسار في بحث A*`], 1, `اقتراب Silhouette Score من +1 يعني أن العناقيد متماسكة داخلياً ومتباعدة جيداً عن بعضها، بينما القريب من 0 أو السالب يدل على تداخل أو سوء تعيين.`],
+      [9, `في خوارزمية <bdi dir="ltr">K-means</bdi>، كيف تتحدث مواقع «مراكز العناقيد» <bdi dir="ltr">(Centroids)</bdi> في كل دورة تكرار؟`, [`تتحرك عشوائياً في كل خطوة`, `تُحسب كمتوسط حسابي لإحداثيات جميع النقاط المنتمية لكل عنقود في الخطوة الحالية، وتكرر العملية حتى التقارب (Convergence)`, `تبقى ثابتة تماماً عند أول نقطتين`, `تنتقل إلى أبعد نقطة ضوضاء`], 1, `تتناوب K-means بين خطوتين: إسناد كل نقطة لأقرب مركز، ثم إعادة حساب كل مركز كمتوسط نقاطه حتى تتوقف المراكز عن التغير.`],
+      [9, `في التحقق المتقاطع الطبقي <bdi dir="ltr">(Stratified K-Fold)</bdi> لمسألة تصنيف غير متوازنة، ما الميزة الإضافية التي يقدمها مقارنة بـ <bdi dir="ltr">K-Fold</bdi> العادي؟`, [`يحافظ في كل طية (Fold) على نفس النسب التقريبية للفئات الموجودة في مجموعة البيانات الكاملة`, `يلغي إحدى الفئات تماماً`, `يزيد عدد الطيات إلى مليون`, `يحول التصنيف إلى انحدار`], 0, `بدون Stratified، قد تخلو إحدى الطيات من فئة الأقلية النادرة؛ أما الطبقي فيضمن تمثيلاً متناسباً لكل فئة في جميع الطيات.`],
+      [9, `ماذا يحدث لنتائج <bdi dir="ltr">DBSCAN</bdi> إذا تم اختيار قيمة <bdi dir="ltr">Eps</bdi> صغيرة جداً بشكل مبالغ فيه؟`, [`تندمج جميع نقاط البيانات في عنقود واحد عملاق`, `تُصنف معظم نقاط البيانات على أنها ضوضاء (Noise) ولا تتشكل عناقيد ذات معنى`, `يتحول DBSCAN إلى K-means`, `تنخفض سرعة المعالج إلى الصفر`], 1, `إذا كان نصف القطر Eps صغيراً جداً، فلن تستطيع معظم النقاط جمع MinPts في جوارها فتُعامل كضوضاء.`],
+      [9, `وماذا يحدث في المقابل إذا تم اختيار قيمة <bdi dir="ltr">Eps</bdi> كبيرة جداً بشكل مبالغ فيه في <bdi dir="ltr">DBSCAN</bdi>؟`, [`تُصنف كل النقاط كضوضاء`, `تندمج عناقيد متميزة في عنقود واحد كبير وتُبتلع النقاط الشاذة داخله`, `ترتفع دقة الكشف عن الشذوذ`, `يتوقف حساب المسافات`], 1, `تضخيم Eps يوسّع الجوار فيربط عناقيد منفصلة ببعضها ويُفقد الخوارزمية قدرتها على الفصل وعزل الضوضاء.`],
+      [9, `في سياق <bdi dir="ltr">K-means</bdi>، ماذا تعني تقنية <bdi dir="ltr">K-means++</bdi>؟`, [`تشغيل الخوارزمية بدون بيانات`, `طريقة ذكية لتهيئة المراكز الابتدائية متباعدة عن بعضها لتسريع التقارب وتجنب الوقوع في حلول محلية رديئة`, `زيادة عدد الأبعاد تلقائياً`, `حساب الجذر التربيعي للبيانات`], 1, `التهيئة العشوائية الساذجة في K-means قد توقعنا في تجمع رديء؛ وتختار K-means++ المراكز الأولى باحتمال يتناسب مع مربع البُعد عن المراكز المختارة سابقاً.`],
+      [9, `أي مقياس تقييم في التصنيف يركز على «كم من الحالات الإيجابية الحقيقية نجح النموذج في اصطيادها» (مهم جداً في الكشف عن الأمراض الخطيرة والاحتيال)؟`, [`Precision (الدقة الإيجابية)`, `Recall / Sensitivity (الاستدعاء / الحساسية)`, `Specificity`, `MSE`], 1, `Recall = TP / (TP + FN)؛ عندما تكون تكلفة تفويت حالة إيجابية (FN) كارثية كعدم اكتشاف مرض أو عملية احتيال، تصبح الأولوية لتعظيم Recall.`],
+      [9, `وفي المقابل، أي مقياس يركز على «كم من الحالات التي تنبأ النموذج بأنها إيجابية كانت إيجابية بالفعل» (مهم في تصفية البريد المزعج حتى لا تُحذف رسائل مهمة)؟`, [`Precision (الدقة الإيجابية)`, `Recall`, `RMSE`, `Inertia`], 0, `Precision = TP / (TP + FP)؛ عندما يكون الإنذار الكاذب (FP) مكلفاً جداً كتوجيه رسالة عمل مهمة لمجلد السبام، تصبح الأولوية لتعظيم Precision.`],
+      [9, `ما الفرق بين «تقييم التحقق» <bdi dir="ltr">(Validation Set)</bdi> و«مجموعة الاختبار النهائية» <bdi dir="ltr">(Test Set)</bdi>؟`, [`مجموعة التحقق تُستخدم لضبط المعاملات الفائقة (Hyperparameters) واختيار أفضل نموذج، بينما الاختبار يُترك للنهاية لقياس الأداء غير المتحيز على بيانات لم يرها الضبط إطلاقاً`, `مجموعة الاختبار تُستخدم لتدريب النموذج`, `مجموعة التحقق لا تحتوي على تسميات`, `هما مصطلحان لبيانات التدريب نفسها`], 0, `إذا ضبطنا المعاملات على بيانات الاختبار نقع في تسرب غير مباشر؛ لذا نستخدم Validation للضبط وTest للتقييم الختامي المستقل.`],
+      [9, `في تحليل الانحدار، ماذا يقيس معامل التحديد <bdi dir="ltr">R² (R-Squared)</bdi>؟`, [`نسبة التباين في المتغير التابع التي يفسرها النموذج مقارنة بالمتوسط البسيط`, `عدد القيم المتطرفة في البيانات`, `الحد الأدنى لعدد النقاط في DBSCAN`, `مجموع الأخطاء المطلقة فقط`], 0, `R² يقيس جودة ملاءمة النموذج؛ اقترابه من 1 يعني أن الميزات تفسر معظم التباين في الهدف.`],
+      [9, `ما الفرق بين «التنبؤ بالخسارة» عبر <bdi dir="ltr">MAE</bdi> (متوسط الخطأ المطلق) و<bdi dir="ltr">MSE</bdi> عند وجود قيم متطرفة شديدة في الاختبار؟`, [`MSE يعاقب الأخطاء الكبيرة بقسوة بسبب التربيع، بينما MAE يعطي وزناً خطياً متساوياً لكل خطأ فيكون أقل حساسية للشذوذ`, `MAE يربع الأخطاء وMSE يأخذ القيمة المطلقة`, `MAE يصلح للتصنيف فقط`, `MSE لا يتأثر بالقيم الشاذة مطلقاً`], 0, `التربيع في MSE يضخم أثر الفروق الكبيرة، وهو مفيد إذا أردنا تجنب الأخطاء الجسيمة بشدة، بينما MAE أمتن أمام القيم الشاذة.`],
+      [9, `لماذا لا يصلح حساب <bdi dir="ltr">Elbow Method</bdi> لتحديد عدد المجموعات في <bdi dir="ltr">DBSCAN</bdi>؟`, [`لأن DBSCAN لا يعتمد على مراكز كروية ولا يأخذ K كمدخل، بل يحدد عدد العناقيد تلقائياً حسب الكثافة (Eps وMinPts)`, `لأن DBSCAN يعمل على النصوص فقط`, `لأن Elbow Method مخصصة لـ SQL`, `لأن DBSCAN يعطي دائماً عنقودين فقط`], 0, `طريقة المرفق تقيس WCSS حول المراكز لعدة قيم لـ K؛ وهي مصممة للتجميع التجزئي المعتمد على المراكز مثل K-means.`],
+      [9, `أي من خطوات التقييم التالية تضمن أن اختيار أفضل قيم لـ <bdi dir="ltr">K</bdi> في <bdi dir="ltr">KNN</bdi> أو معاملات <bdi dir="ltr">SVM</bdi> لا يعتمد على صدفة تقسيم واحد؟`, [`البحث الشبكي المقترن بالتحقق المتقاطع (Grid Search with K-Fold CV)`, `استخدام دالة show()`, `التقسيم الثابت 99/1`, `تجاهل مجموعة التحقق`], 0, `الجمع بين Grid Search وK-Fold Cross-Validation يختبر كل توليفة معاملات فائقة عبر جميع الطيات ليختار الأكثر استقراراً.`],
+      [9, `في التجميع الهرمي التراكمي، ما معنى «الربط المفرد» <bdi dir="ltr">(Single Linkage)</bdi>؟`, [`المسافة بين عنقودين تُقاس كأقصر مسافة بين أقرب نقطتين (نقطة من الأول ونقطة من الثاني)`, `المسافة بين أبعد نقطتين في العنقودين`, `المسافة بين مركزي العنقودين فقط`, `حذف أبعد نقطتين`], 0, `Single Linkage يعتمد على أقرب جار (قد ينتج عناقيد متطاولة كالسلاسل)، بينما Complete Linkage يعتمد على أبعد نقطتين، وWard يقلل التباين.`],
+      [9, `ما دلالة حصول نموذج تصنيف على دقة <bdi dir="ltr">Accuracy = 98%</bdi> في مجموعة بيانات فيها <bdi dir="ltr">98%</bdi> حالات سليمة و<bdi dir="ltr">2%</bdi> حالات احتيال فقط؟`, [`أن النموذج مثالي ولا يحتاج لمراجعة`, `قد يكون النموذج تافهاً يتنبأ دائماً بـ «سليم» ويفشل في كشف أي حالة احتيال (Recall للاحتيال = 0%)، لذا يجب فحص F1 وRecall ومصفوفة الارتباك`, `أن خوارزمية K-means فشلت`, `أن البيانات مفقودة بنسبة 98%`], 1, `هذه أشهر خدعة في تقييم التصنيف غير المتوازن (Accuracy Paradox)؛ الدقة العالية لا تعني نجاحاً إذا أهمل النموذج فئة الأقلية المهمة.`],
+      [9, `متى نستخدم «منحنى خاصية التشغيل للمستقبل» <bdi dir="ltr">(ROC Curve)</bdi> ومقياس <bdi dir="ltr">AUC</bdi>؟`, [`لتقييم أداء نموذج التصنيف الثنائي عبر مختلف عتبات الاحتمال (Thresholds) بالموازنة بين معدل الإيجابيات الحقيقية والكاذبة`, `لتحديد عدد العناقيد في K-means`, `لتطبيع القيم بين 0 و1 في Min-Max`, `لتخزين البيانات في Redshift`], 0, `AUC-ROC يقيس قدرة المصنّف الاحتمالي على التمييز بين الفئتين بغض النظر عن عتبة القرار المختارة.`],
+      [9, `في تقنية <bdi dir="ltr">K-Fold</bdi>، إذا وضعنا <bdi dir="ltr">K = N</bdi> (حيث N إجمالي عدد الصفوف في البيانات)، ماذا تُسمى هذه الحالة الخاصة؟`, [`Leave-One-Out Cross-Validation (LOOCV)`, `Fixed Split`, `DBSCAN`, `Elbow Method`], 0, `عندما تساوي K عدد العينات تماماً، تُترك عينة واحدة فقط للاختبار في كل دورة وتُدرَّب على N-1 عينة، وتُسمى LOOCV.`],
+      [9, `أي عبارة تصف الفرق بين «نموذج التجميع» و«نموذج التصنيف» في المخرجات؟`, [`التصنيف يُخرج فئات معروفة ومُسماة مسبقاً تعلمها من أمثلة موسومة، بينما التجميع يُخرج مجموعات مكتشفة وفق التشابه أو الكثافة دون أسماء مسبقة`, `كلاهما يتطلب بيانات موسومة مسبقاً`, `التجميع يتنبأ بأرقام مستمرة كالأسعار`, `التصنيف لا يستخدم البيانات الرقمية`], 0, `التصنيف يتبع التعلّم الموجه بوسوم معروفة، والتجميع يتبع التعلّم غير الموجه لاكتشاف التجمعات الكامنة.`],
+
+      // ==================== الفصل العاشر والحادي عشر وما بعده (30 سؤالاً) ====================
+      [10, `لماذا تُعد «دوال التنشيط غير الخطية» <bdi dir="ltr">(Activation Functions)</bdi> ضرورية في الطبقات المخفية للشبكات العصبية العميقة؟`, [`لأن بدونها ستنهار الشبكة مهما بلغ عدد طبقاتها إلى مجرد تحويل خطي واحد عاجز عن تعلم الأنماط المعقدة غير الخطية`, `لأنها تحذف الأوزان السالبة من قاعدة SQL`, `لأنها تحوّل الشبكة العصبية إلى خوارزمية K-means`, `لتقليص حجم الملف النصي فقط`], 0, `تركيب دوال خطية متتالية يُنتج دالة خطية دائماً؛ لذا تدخل دوال التنشيط لاخطيةً تسمح للشبكة بتمثيل وتقريب أي دالة معقدة.`],
+      [10, `ما الأثر المباشر لاستخدام دالة <bdi dir="ltr">Sigmoid</bdi> على القيم المتوقعة في مهام التصنيف الثنائي؟`, [`تحويل المخرجات إلى نطاق محصور بين -∞ و+∞`, `تحويل المخرجات إلى نطاق احتمالي محصور بين 0 و1`, `حصر المخرجات في أعداد صحيحة أكبر من 10 فقط`, `تحويل القيم السالبة إلى نفس القيمة السالبة خطياً`], 1, `دالة Sigmoid تضغط أي قيمة حقيقية داخل النطاق (0, 1) وفق الصيغة 1 / (1 + e⁻ˣ)، مما يجعلها مثالية لتفسير الاحتمال في التصنيف الثنائي.`],
+      [10, `ما أبرز عيب رياضي لدالة <bdi dir="ltr">Sigmoid</bdi> عند استخدامها في الشبكات العصبية العميقة ذات الطبقات الكثيرة؟`, [`مشكلة «تلاشي التدرج» (Vanishing Gradient) عند الأطراف المشبعة، مما يبطئ أو يوقف تعلم الطبقات المبكرة`, `أنها تنتج قيماً أكبر من 1000 دائماً`, `أنها غير قابلة للاشتقاق عند الصفر`, `أنها تحذف جميع الطبقات الالتفافية`], 0, `أقصى مشتقة لدالة Sigmoid تساوي 0.25 فقط، وعند القيم الكبيرة أو الصغيرة جداً تقترب المشتقة من الصفر، فيتلاشى التدرج عبر الطبقات المتعددة.`],
+      [10, `كيف تعرَّف دالة <bdi dir="ltr">ReLU (Rectified Linear Unit)</bdi> رياضياً، ولماذا أصبحت الافتراضية في الطبقات المخفية العميقة؟`, [`f(x) = max(0, x)؛ لأنها بسيطة حسابياً وتُبقي التدرج يساوي 1 للقيم الموجبة فتخفف مشكلة تلاشي التدرج وتسرّع التقارب`, `f(x) = 1 / (1 + e⁻ˣ)؛ لأنها تحصر الناتج في (0, 1)`, `f(x) = tanh(x)؛ لأنها متماثلة حول الصفر`, `f(x) = x²؛ لأنها تضاعف الأخطاء`], 0, `دالة ReLU تمرر القيم الموجبة كما هي وتصفّر السالبة؛ بساطتها وعدم تشبعها في الاتجاه الموجب سرّعا تدريب الشبكات العميقة جداً.`],
+      [10, `ما المشكلة المعروفة بـ «موت الخلايا العصبية في <bdi dir="ltr">ReLU</bdi>» <bdi dir="ltr">(Dying ReLU)</bdi> وكيف تعالجها دوال مثل <bdi dir="ltr">Leaky ReLU</bdi> أو <bdi dir="ltr">Softplus</bdi>؟`, [`إذا أصبحت مدخلات عصبون سالبة باستمرار يصبح خرجه ومشتقته صفراً دائماً فيتوقف عن التحديث؛ وتعالج Leaky ReLU ذلك بميل صغير غير صفري للسالب`, `تنفجر القيم الموجبة إلى ما لا نهاية`, `تتحول المخرجات إلى احتمالات مجموعها 1`, `تختفي طبقة الإدخال تماماً`], 0, `عندما تتلقى ReLU قيماً سالبة يكون التدرج صفراً؛ لذا تعطي Leaky ReLU ميلاً صغيراً (مثل 0.01x) للقيم السالبة، بينما توفر Softplus تقريبَ ReLU أملساً ومشتقاً في كل مكان.`],
+      [10, `ما الفارق الدقيق بين دالة <bdi dir="ltr">ReLU</bdi> ودالة <bdi dir="ltr">Softplus</bdi> <bdi dir="ltr">(ln(1 + eˣ))</bdi>؟`, [`Softplus هي النسخة الملساء القابلة للاشتقاق في كل النقاط (حتى عند الصفر) لدالة ReLU وتكون قيمتها دائماً موجبة تماماً (> 0)`, `Softplus تساوي صفراً لكل القيم السالبة بصورة حادة`, `ReLU تحول المخرجات إلى احتمالات متعددة الفئات`, `Softplus تُستخدم فقط في طبقة الإخراج للتصنيف الثنائي`], 0, `Softplus تقارب ReLU بسلاسة دون انكسار حاد عند x=0 ومشتقتها هي دالة Sigmoid نفسها، فلا تعاني من موت العصبون الحاد.`],
+      [10, `متى نستخدم دالة <bdi dir="ltr">Softmax</bdi> في طبقة الإخراج بدلاً من <bdi dir="ltr">Sigmoid</bdi>؟`, [`في التصنيف متعدد الفئات الحصري (Multi-class) لتحويل متجه المخرجات إلى توزيع احتمالي غير سالب يساوي مجموعه تماماً 1`, `في الطبقات المخفية لـ CNN لتسريع الالتفاف`, `في الانحدار الخطي للتنبؤ بأسعار العقارات`, `عند وجود فئتين متوافقتين غير متنافيتين (Multi-label)`], 0, `Softmax تعمم التوزيع الاحتمالي على K فئة متنافية بحيث يجمع كل الاحتمالات إلى 1.0؛ أما في Multi-label غير المتنافي فتُستخدم Sigmoid مستقلة لكل مخرج.`],
+      [10, `ما المعمارية العصبية المصممة خصيصاً لمعالجة البيانات المكانية والشبكية مثل الصور والفيديو عبر المرشحات والالتفاف؟`, [`الشبكة العصبية المتكررة (RNN)`, `الشبكة العصبية الالتفافية (CNN - Convolutional Neural Network)`, `خوارزمية DBSCAN`, `الوكيل السلوكي البسيط`], 1, `CNN تستثمر الترابط المكاني عبر طبقات الالتفاف (Convolution) والتجميع (Pooling) لاكتشاف الحواف والأنسجة ثم الأشكال المعقدة.`],
+      [10, `في <bdi dir="ltr">CNN</bdi>، ما الوظيفة الدقيقة لطبقات «التجميع» <bdi dir="ltr">(Pooling Layers مثل Max Pooling)</bdi> بعد طبقات الالتفاف؟`, [`تضاعف عدد المعاملات إلى عشرة أضعاف`, `تقليص الأبعاد المكانية لخرائط الميزات لتقليل عدد المعاملات والعمليات الحسابية وتوفير درجة من الثبات ضد الإزاحات الطفيفة`, `تحويل الصور إلى نصوص عربية`, `توليد صور جديدة من الضوضاء العشوائية`], 1, `Max Pooling يأخذ القيمة القصوى داخل كل نافذة صغيرة، مما يقلص الحجم المكاني ويمنع فرط التجهيز ويجعل التمثيل أمتن أمام الإزاحة الطفيفة.`],
+      [10, `أي من الشبكات العصبية التالية توفر «ذاكرة داخلية/حلقات متكررة» لكل خلية عصبية لمعالجة البيانات المتسلسلة مثل النصوص والسلاسل الزمنية؟`, [`الشبكة العصبية الالتفافية (CNN)`, `الشبكة العصبية المتكررة (RNN - Recurrent Neural Network)`, `شجرة القرار المفردة`, `طريقة المرفق (Elbow Method)`], 1, `RNN تحتفظ بحالة خفية (Hidden State) تنتقل عبر الخطوات الزمنية المتتالية، مما يمنحها ذاكرة للسياق المتسلسل.`],
+      [10, `ما المشكلة الأساسية التي تواجه شبكات <bdi dir="ltr">RNN</bdi> التقليدية عند التعامل مع تسلسلات طويلة جداً (مثل فقرات نصية ممتدة)؟`, [`عجزها عن قبول الكلمات الإنجليزية`, `مشكلة تلاشي أو انفجار التدرج عبر الزمن (BPTT) مما يفقدها القدرة على تذكر التبعيات طويلة المدى`, `أنها تعمل على الصور فقط`, `أنها لا تستخدم أي أوزان`], 1, `تكرار ضرب التدرجات عبر عدد كبير من الخطوات الزمنية في RNN القياسية يسبب تلاشي الإشارة المبكرة، فتفشل في ربط بداية الجملة الطويلة بنهايتها.`],
+      [10, `كيف عالجت معمارية <bdi dir="ltr">LSTM (Long Short-Term Memory)</bdi> مشكلة الذاكرة قصيرة المدى في <bdi dir="ltr">RNN</bdi>؟`, [`بإلغاء الحلقات المتكررة نهائياً`, `بإدخال «حالة الخلية» (Cell State) وثلاث بوابات منظِّمة: بوابة النسيان (Forget)، بوابة الإدخال (Input)، وبوابة الإخراج (Output)`, `باستبدال جميع الدوال بدالة الخط المستقيم`, `بتطبيق التجميع الكثافي DBSCAN`], 1, `تتيح بوابات LSTM التحكم الانتقائي فيما يجب الاحتفاظ به في الذاكرة طويلة المدى أو نسيانه أو إخراجه، مما يحفظ التبعيات الطويلة.`],
+      [10, `ما الفارق المعماري الدقيق بين <bdi dir="ltr">GRU (Gated Recurrent Unit)</bdi> و<bdi dir="ltr">LSTM</bdi>؟`, [`GRU أكثر تعقيداً ولها أربع بوابات وحالتان منفصلتان`, `GRU نسخة مبسطة وأسرع تدمج حالتي الخلية والمخفية وتكتفي ببوابتين فقط: بوابة التحديث (Update) وبوابة إعادة الضبط (Reset)`, `GRU مخصصة للصور فقط`, `LSTM لا تحتوي على أي بوابات`], 1, `تقوم GRU بدمج بوابتي النسيان والإدخال في بوابة واحدة (Update Gate) مع تقليل عدد المعاملات، فغالباً ما تعطي أداءً مقارباً لـ LSTM بزمن تدريب أقل.`],
+      [10, `تتكون «الشبكات التوليدية التنافسية» <bdi dir="ltr">(GANs)</bdi> من شبكتين متنافستين تتدربان معاً؛ ما هما وما دور كل منهما؟`, [`المُرمّز ومُفكك الترميز؛ وكلاهما يضغط الجداول`, `المولِّد (Generator) الذي ينتج عينات اصطناعية تحاكي الواقع، والمميِّز (Discriminator) الذي يحاول التفريق بين العينات الحقيقية والمزيّفة`, `عقدة الجذر وعقدة الورقة`, `المستشعر والمشغّل`], 1, `في لعبة تنافسية (Minimax Game)، يحاول المولّد خداع المميّز بصور/بيانات واقعية، بينما يطوّر المميّز قدرته على كشف التزييف حتى يبلغ المولّد درجة إتقان عالية.`],
+      [10, `ما الميزة الرئيسية لمحسّن «النزول التدرجي العشوائي» <bdi dir="ltr">(SGD)</bdi> مقارنة بالنزول التدرجي الكلي <bdi dir="ltr">(Batch Gradient Descent)</bdi>؟`, [`يحسب التدرج على عينة واحدة أو دفعة صغيرة في كل خطوة، مما يجعله أسرع بكثير في البيانات الضخمة ويساعد تذبذبه على الهروب من الحدود المحلية الضعيفة`, `لا يحتاج لتحديد معدل تعلم`, `يحسب مشتقة البيانات كلها في كل تحديث مما يجمّد الذاكرة`, `يعمل فقط بدون دوال خسارة`], 0, `Batch GD بطيء ومكلف للبيانات الضخمة، بينما SGD يحدث الأوزان بتواتر عالٍ بتكلفة حسابية منخفضة لكل خطوة.`],
+      [10, `كيف يعمل محسّن <bdi dir="ltr">RMSProp</bdi> لتحسين استقرار وسرعة التدريب مقارنة بـ <bdi dir="ltr">SGD</bdi> القياسي؟`, [`يستخدم معدل تعلم ثابتاً لكل المعاملات للأبد`, `يكيف معدل التعلم لكل معامِل على حدة بتقسيمه على جذر المتوسط المتحرك الأسي لمربعات التدرجات السابقة`, `يحذف نصف الأوزان بعد كل حقبة`, `يحوّل الشبكة إلى شجرة قرار`], 1, `RMSProp يبطئ الخطوات في الاتجاهات شديدة التذبذب ويسرّعها في الاتجاهات الهادئة، وهو بارع خصوصاً في تدريب الشبكات المتكررة.`],
+      [10, `لماذا يُعد محسّن <bdi dir="ltr">Adam (Adaptive Moment Estimation)</bdi> الأكثر انتشاراً كخيار افتراضي في تدريب الشبكات العصبية العميقة؟`, [`لأنه يجمع بين مزايا الزخم (Momentum: العزم الأول للتدرجات) ومزايا RMSProp (العزم الثاني لمربعات التدرجات) مع تصحيح الانحياز`, `لأنه لا يستخدم التدرجات المشتقة مطلقاً`, `لأنه يقتصر على التصنيف الثنائي بـ Sigmoid`, `لأنه أبطأ من Batch GD وأعلى استهلاكاً للذاكرة دائماً`], 0, `Adam يجمع تتبع متوسط التدرجات (الزخم) ومتوسط مربعات التدرجات (التكيّف لكل وزن)، مما يجعله سريع التقارب ومتيناً عبر معماريات متنوعة.`],
+      [10, `ماذا يحدث عند ضبط «معدل التعلم» <bdi dir="ltr">(Learning Rate)</bdi> في المحسّنات بقيمة كبيرة جداً بشكل مفرط؟`, [`يتقارب النموذج بسلاسة تامة في خطوتين`, `تتجاوز التحديثات نقطة الحد الأدنى وتقفز يميناً ويساراً مما قد يسبب تباعد الخسارة وانفجارها (Divergence)`, `لا تتغير الأوزان نهائياً`, `يتحول التعلم الموجه إلى تجميع`], 1, `معدل التعلم المرتفع جداً يجعل الخطوة أكبر من عرض الوادي في دالة الخسارة، فتتأرجح الخسارة أو تتضخم بدلاً من الهبوط نحو القاع.`],
+      [10, `في تدريب الشبكات العصبية، ماذا تعني تقنية «الإسقاط العشوائي» <bdi dir="ltr">(Dropout)</bdi> وما الهدف منها؟`, [`حذف 50% من صفوف ملف البيانات قبل التدريب`, `تعطيل نسبة عشوائية من العقد العصبية أثناء كل خطوة تدريب لمنع الاعتماد المفرط بين الخلايا وتقليل فرط التجهيز (Overfitting)`, `إزالة طبقة الإخراج نهائياً`, `إيقاف التدريب قبل أن يبدأ`], 1, `Dropout يجبر الشبكة على تعلم تمثيلات موزعة ومتينة لأن أي خلية لا يمكنها الاتكال الدائم على جارتها أثناء التدريب.`],
+      [10, `ما دور «خوارزمية الانتشار العكسي» <bdi dir="ltr">(Backpropagation)</bdi> في تدريب الشبكات العصبية؟`, [`تمرير الصورة من الإدخال إلى الإخراج فقط`, `حساب تدرج دالة الخسارة بالنسبة لكل وزن عبر قاعدة السلسلة من طبقة الإخراج رجوعاً إلى الطبقات الأولى لتحديث الأوزان`, `تقسيم البيانات إلى تدريب واختبار`, `تسمية الفئات في K-means`], 1, `التمرير الأمامي (Forward Pass) يحسب التنبؤ والخسارة، بينما الانتشار العكسي يوزع مسؤولية الخطأ على الأوزان رجوعاً عبر قاعدة السلسلة التفاضلية.`],
+      [10, `أي عبارة تفرق بدقة بين «الحقبة» <bdi dir="ltr">(Epoch)</bdi> و«حجم الدفعة» <bdi dir="ltr">(Batch Size)</bdi> و«التكرار» <bdi dir="ltr">(Iteration)</bdi>؟`, [`Epoch هو مرور كامل على جميع بيانات التدريب مرة واحدة، وBatch Size عدد العينات المعالجة قبل تحديث الأوزان، وIteration هو تحديث واحد على دفعة واحدة`, `Epoch يعني تحديثاً واحداً لعينة واحدة فقط`, `Batch Size هو عدد الطبقات المخفية في الشبكة`, `كلاهما مسمى لدالة التنشيط`], 0, `إذا كان لدينا 1000 عينة وBatch Size = 100، فإن الحقبة الواحدة (Epoch) تتطلب 10 تكرارات (Iterations) لإتمام دورة كاملة على البيانات.`],
+      [10, `ما الميزة الخاصة التي تقدمها دالة التنشيط <bdi dir="ltr">tanh</bdi> مقارنة بدالة <bdi dir="ltr">Sigmoid</bdi>؟`, [`tanh متمركزة حول الصفر (Zero-centered) بنطاق (-1, 1) مما يسهل تقارب الأوزان في الطبقات اللاحقة مقارنة بنطاق (0, 1) في Sigmoid`, `tanh لا تعاني من تشبع التدرج إطلاقاً`, `tanh تعطي قيماً أكبر من 10 دائماً`, `Sigmoid متمركزة حول الصفر وtanh ليست كذلك`], 0, `كون مخرجات tanh متمركزة حول الصفر (-1 إلى 1) يجعل التحديثات متوازنة الموجب والسالب، رغم أنها لا تزال تشترك مع Sigmoid في التشبع عند الأطراف.`],
+      [10, `لماذا تُستخدم طبقة «التسوية الدفعية» <bdi dir="ltr">(Batch Normalization)</bdi> بين طبقات الشبكات العصبية العميقة؟`, [`لتثبيت وتطبيع توزيع مدخلات كل طبقة أثناء التدريب، مما يقلل التحول المتغير الداخلي ويسمح بمعدلات تعلم أعلى ويسرّع الاستقرار`, `لتحويل النصوص إلى صور`, `لاستبدال دالة Softmax في الإخراج`, `لإزالة الحاجة إلى بيانات تدريب`], 0, `Batch Normalization تحافظ على متوسط قريب من الصفر وتباين مضبوط لتنشيطات الطبقات، مما يخفف الحساسية لتهيئة الأوزان ويسرع التدريب.`],
+      [10, `ما الفارق الدقيق بين «بوابة النسيان» <bdi dir="ltr">(Forget Gate)</bdi> و«بوابة الإدخال» <bdi dir="ltr">(Input Gate)</bdi> داخل خلية <bdi dir="ltr">LSTM</bdi>؟`, [`بوابة النسيان تقرر ما المعلومات القديمة التي يجب إسقاطها من حالة الخلية، بينما بوابة الإدخال تقرر ما المعلومات الجديدة التي ستُخزن في حالة الخلية`, `بوابة النسيان تحذف بيانات الاختبار وبوابة الإدخال تقرأ الملف من القرص`, `كلاهما ينفذ نفس العملية تماماً`, `بوابة الإدخال تخص الصور وبوابة النسيان تخص الصوت`], 0, `تستخدم كل بوابة دالة Sigmoid لإنتاج معاملات بين 0 (تجاهل كلي) و1 (احتفاظ كلي) للتحكم في تدفق الذاكرة القديمة والجديدة.`],
+      [10, `عندما ندرّب شبكة <bdi dir="ltr">GAN</bdi> وتظهر مشكلة «انهيار النمط» <bdi dir="ltr">(Mode Collapse)</bdi>، ماذا يعني ذلك عملياً؟`, [`أن المولّد ينجح في إنتاج كل تنوعات البيانات بدقة`, `أن المولّد يعلق في إنتاج عينة واحدة أو نمط متكرر محدود جداً يخدع المميّز دون تغطية تنوع البيانات الحقيقية`, `أن المميّز يرفض جميع الصور الحقيقية فقط`, `أن دالة الخسارة وصلت إلى الكمال العالمي`], 1, `Mode Collapse من أشهر تحديات تدريب GANs؛ إذ يكتفي المولد بتكرار مخرج واحد مقنع بدلاً من تعلم كامل التوزيع.`],
+      [10, `في <bdi dir="ltr">CNN</bdi>، ما الغرض من استخدام «الحشو» <bdi dir="ltr">(Padding - Same Padding)</bdi> حول حواف الصورة قبل تطبيق مرشح الالتفاف؟`, [`تشويه حواف الصورة عمداً`, `الحفاظ على الأبعاد المكانية لمخرج الطبقة مساوية للأصل وعدم إهمال معلومات الحواف والزوايا`, `تقليص الصورة إلى بكسل واحد مباشرة`, `تطبيق دالة Sigmoid على الألوان`], 1, `بدون Padding تتقلص أبعاد الصورة بعد كل التفاف وتُسهم البكسلات الطرفية في الحسابات بدرجة أقل بكثير من البكسلات المركزية.`],
+      [10, `ما نوع دالة الخسارة الأنسب والأكثر شيوعاً مع طبقة إخراج <bdi dir="ltr">Softmax</bdi> في التصنيف متعدد الفئات؟`, [`متوسط الخطأ التربيعي (MSE)`, `الإنتروبيا المتقاطعة الفئوية (Categorical Cross-Entropy)`, `معامل سيلهويت`, `مسافة مانهاتن`], 1, `Cross-Entropy تقيس تباعد التوزيع الاحتمالي المتنبأ به عن التوزيع الحقيقي (One-Hot)، وتعطي تدرجات قوية وسريعة التعلم مع Softmax وSigmoid مقارنة بـ MSE.`],
+      [10, `ما الفارق في السلوك بين «التعلم النقلي» <bdi dir="ltr">(Transfer Learning)</bdi> وبين تدريب شبكة عميقة من الصفر على مجموعة صور طبية صغيرة؟`, [`التعلم النقلي يستفيد من أوزان شبكة مدربة مسبقاً على ملايين الصور (كـ ImageNet) لاستخلاص الملامح الأساسية ثم يكيّف الطبقات الأخيرة، مما يرفع الدقة ويقلل فرط التجهيز والحاجة لبيانات هائلة`, `التدريب من الصفر أسرع وأدق دائماً على البيانات الصغيرة`, `التعلم النقلي يمحو جميع الأوزان قبل الاستخدام`, `لا يعمل التعلم النقلي مع شبكات CNN`], 0, `الطبقات الأولى في CNN تتعلم ملامح عامة (حواف، منحنيات، أنسجة) قابلة لإعادة الاستخدام في مجالات أخرى عبر Transfer Learning.`],
+      [10, `كيف يتفوق محسّن <bdi dir="ltr">SGD with Momentum</bdi> على <bdi dir="ltr">SGD</bdi> التقليدي عند عبور مناطق مسطحة أو أودية متذبذبة؟`, [`يضيف جزءاً من متجه التحديث السابق (كسرعة متراكمة) مما يخمد التذبذبات العرضية ويسرّع التقدم في الاتجاه الثابت المتسق`, `يقسم معدل التعلم على الصفر`, `يلغي استخدام أي معدل تعلم`, `يغيّر دالة التنشيط تلقائياً إلى ReLU`], 0, `الزخم (Momentum) يحاكي الكرة المتدحرجة بكتلة؛ يحتفظ بالاندفاع في الاتجاه المستمر ويمتص الاهتزازات الجانبية.`],
+      [10, `أي عبارة تصف التكامل الصحيح بين اختيار «دالة التنشيط في الإخراج»، «دالة الخسارة»، و«نوع المشكلة» في الشبكات العصبية؟`, [`التصنيف الثنائي: Sigmoid + Binary Cross-Entropy / التصنيف متعدد الفئات الحصري: Softmax + Categorical Cross-Entropy / الانحدار الكمي: خطية (Linear) + MSE أو MAE`, `الانحدار الكمي: Softmax + Gini / التصنيف متعدد الفئات: ReLU + Silhouette`, `التصنيف الثنائي: Linear + K-means`, `جميع المشاكل تستخدم Softmax + MSE دائماً`], 0, `هذه القاعدة الهندسية الحاسمة في تصميم الشبكات العصبية: مواءمة دالة تنشيط طبقة الإخراج مع دالة الخسارة ونوع المتغير المستهدف.`]
+    ];
+
+    const LETTERS = [`أ`, `ب`, `ج`, `د`];
+
+    let appState = {
+      activeChapter: 1,
+      statusFilter: `all`,
+      viewMode: `all`,
+      searchQuery: ``,
+      singleIndex: 0,
+      answers: {},    // { "qIndex": selectedOptionIdx }
+      bookmarks: {}   // { "qIndex": true }
+    };
+
+    function getGlobalIndex(qObj) {
+      return QUESTIONS.indexOf(qObj);
+    }
+
+    function getChapterQuestions(chId) {
+      return QUESTIONS.filter(function(q) { return q[0] === chId; });
+    }
+
+    function escapeHtml(str) {
+      // Allow intentional <bdi dir="ltr">...</bdi> tags in question/explanation strings while keeping safe
+      return String(str);
+    }
+
+    function getChapterStats(chId) {
+      const qs = getChapterQuestions(chId);
+      let answered = 0;
+      let correct = 0;
+      let wrong = 0;
+      let bookmarked = 0;
+      for (let i = 0; i < qs.length; i++) {
+        const idx = getGlobalIndex(qs[i]);
+        const ans = appState.answers[idx];
+        if (ans !== undefined) {
+          answered++;
+          if (ans === qs[i][3]) correct++;
+          else wrong++;
+        }
+        if (appState.bookmarks[idx]) bookmarked++;
+      }
+      return { total: qs.length, answered: answered, correct: correct, wrong: wrong, bookmarked: bookmarked };
+    }
+
+    function getTotalStats() {
+      let answered = 0;
+      let correct = 0;
+      let wrong = 0;
+      let bookmarked = 0;
+      for (let i = 0; i < QUESTIONS.length; i++) {
+        const ans = appState.answers[i];
+        if (ans !== undefined) {
+          answered++;
+          if (ans === QUESTIONS[i][3]) correct++;
+          else wrong++;
+        }
+        if (appState.bookmarks[i]) bookmarked++;
+      }
+      return { total: QUESTIONS.length, answered: answered, correct: correct, wrong: wrong, bookmarked: bookmarked };
+    }
+
+    function getFilteredChapterQuestions() {
+      const qs = getChapterQuestions(appState.activeChapter);
+      const q = appState.searchQuery.trim().toLowerCase();
+      return qs.filter(function(item) {
+        const idx = getGlobalIndex(item);
+        const ans = appState.answers[idx];
+        if (appState.statusFilter === `unanswered` && ans !== undefined) return false;
+        if (appState.statusFilter === `correct` && ans !== item[3]) return false;
+        if (appState.statusFilter === `wrong` && (ans === undefined || ans === item[3])) return false;
+        if (appState.statusFilter === `bookmarked` && !appState.bookmarks[idx]) return false;
+        if (q) {
+          const hay = (item[1] + ` ` + item[2].join(` `) + ` ` + item[4]).toLowerCase();
+          if (hay.indexOf(q) === -1) return false;
+        }
+        return true;
+      });
+    }
+
+    async function persistState() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === `function`) {
+        try {
+          await window.notebookAppApi.setAppState(appState);
+        } catch (e) {
+          showStatusMessage(`تعذر حفظ التقدم تلقائياً في هذه الجلسة.`);
+        }
+      }
+    }
+
+    function showStatusMessage(msg) {
+      const el = document.getElementById(`status-message`);
+      if (!el) return;
+      if (!msg) {
+        el.hidden = true;
+        el.textContent = ``;
+      } else {
+        el.hidden = false;
+        el.textContent = msg;
+      }
+    }
+
+    function selectChapter(chId) {
+      appState.activeChapter = chId;
+      appState.singleIndex = 0;
+      renderAll();
+      persistState();
+    }
+
+    function setStatusFilter(filter) {
+      appState.statusFilter = filter;
+      appState.singleIndex = 0;
+      renderAll();
+      persistState();
+    }
+
+    function onSearchChange(val) {
+      appState.searchQuery = val;
+      appState.singleIndex = 0;
+      renderQuestions();
+      renderNavStrip();
+    }
+
+    function onViewModeChange(val) {
+      appState.viewMode = val;
+      appState.singleIndex = 0;
+      renderQuestions();
+      persistState();
+    }
+
+    function stepSingleQuestion(delta) {
+      const list = getFilteredChapterQuestions();
+      if (list.length === 0) return;
+      appState.singleIndex = Math.max(0, Math.min(list.length - 1, appState.singleIndex + delta));
+      renderQuestions();
+      persistState();
+    }
+
+    function jumpToQuestionInChapter(posInChapter) {
+      const chQs = getChapterQuestions(appState.activeChapter);
+      const targetItem = chQs[posInChapter];
+      if (!targetItem) return;
+      if (appState.viewMode === `single`) {
+        appState.statusFilter = `all`;
+        appState.searchQuery = ``;
+        const searchEl = document.getElementById(`search-input`);
+        if (searchEl) searchEl.value = ``;
+        appState.singleIndex = posInChapter;
+        renderAll();
+      } else {
+        const card = document.getElementById(`q-card-` + getGlobalIndex(targetItem));
+        if (card) {
+          card.scrollIntoView({ behavior: `smooth`, block: `center` });
+        } else {
+          appState.statusFilter = `all`;
+          appState.searchQuery = ``;
+          const searchEl = document.getElementById(`search-input`);
+          if (searchEl) searchEl.value = ``;
+          renderAll();
+          const cardAfter = document.getElementById(`q-card-` + getGlobalIndex(targetItem));
+          if (cardAfter) cardAfter.scrollIntoView({ behavior: `smooth`, block: `center` });
+        }
+      }
+    }
+
+    function selectAnswer(globalIdx, optIdx) {
+      if (appState.answers[globalIdx] !== undefined) return;
+      appState.answers[globalIdx] = optIdx;
+      renderAll();
+      persistState();
+    }
+
+    function toggleBookmark(globalIdx) {
+      if (appState.bookmarks[globalIdx]) {
+        delete appState.bookmarks[globalIdx];
+      } else {
+        appState.bookmarks[globalIdx] = true;
+      }
+      renderAll();
+      persistState();
+    }
+
+    function resetCurrentChapter(btn) {
+      if (btn && btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.textContent = `تأكيد إعادة تعيين الفصل الحالي؟`;
+        btn.classList.add(`btn-danger-armed`);
+        setTimeout(function() {
+          if (btn.dataset.armed === `true`) {
+            btn.dataset.armed = `false`;
+            btn.textContent = `إعادة تعيين الفصل`;
+            btn.classList.remove(`btn-danger-armed`);
+          }
+        }, 4000);
+        return;
+      }
+      if (btn) {
+        btn.dataset.armed = `false`;
+        btn.textContent = `إعادة تعيين الفصل`;
+        btn.classList.remove(`btn-danger-armed`);
+      }
+      const chQs = getChapterQuestions(appState.activeChapter);
+      for (let i = 0; i < chQs.length; i++) {
+        const idx = getGlobalIndex(chQs[i]);
+        delete appState.answers[idx];
+      }
+      appState.singleIndex = 0;
+      showStatusMessage(`تم مسح إجابات الفصل الحالي بنجاح.`);
+      renderAll();
+      persistState();
+    }
+
+    function resetAllProgress(btn) {
+      if (btn && btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.textContent = `اضغط مجدداً لتصفير الـ 300 سؤال`;
+        btn.classList.add(`btn-danger-armed`);
+        setTimeout(function() {
+          if (btn.dataset.armed === `true`) {
+            btn.dataset.armed = `false`;
+            btn.textContent = `تصفير البنك كاملاً`;
+            btn.classList.remove(`btn-danger-armed`);
+          }
+        }, 4000);
+        return;
+      }
+      if (btn) {
+        btn.dataset.armed = `false`;
+        btn.textContent = `تصفير البنك كاملاً`;
+        btn.classList.remove(`btn-danger-armed`);
+      }
+      appState.answers = {};
+      appState.bookmarks = {};
+      appState.singleIndex = 0;
+      showStatusMessage(`تم تصفير جميع الإجابات والمحفوظات عبر كل الفصول.`);
+      renderAll();
+      persistState();
+    }
+
+    function exportReport() {
+      const lines = [`الفصل,إجمالي الأسئلة,المجاب عليها,الإجابات الصحيحة,الأخطاء,الدقة %`];
+      for (let i = 0; i < CHAPTERS.length; i++) {
+        const ch = CHAPTERS[i];
+        const st = getChapterStats(ch.id);
+        const acc = st.answered > 0 ? Math.round((st.correct / st.answered) * 100) : 0;
+        lines.push(`"` + ch.title + `",` + st.total + `,` + st.answered + `,` + st.correct + `,` + st.wrong + `,` + acc + `%`);
+      }
+      const tot = getTotalStats();
+      const totAcc = tot.answered > 0 ? Math.round((tot.correct / tot.answered) * 100) : 0;
+      lines.push(`"الإجمالي الكلي",` + tot.total + `,` + tot.answered + `,` + tot.correct + `,` + tot.wrong + `,` + totAcc + `%`);
+      const csv = `\uFEFF` + lines.join(`\n`);
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.triggerFileDownload === `function`) {
+        window.notebookAppApi.triggerFileDownload({
+          content: csv,
+          contentType: `text/csv`,
+          encoding: `UTF-8`,
+          filename: `data-science-question-bank-report.csv`
+        });
+        showStatusMessage(`تم تصدير تقرير الأداء بصيغة CSV.`);
+      } else {
+        showStatusMessage(`التصدير متاح داخل بيئة التطبيق المضيفة.`);
+      }
+    }
+
+    function renderKPIs() {
+      const tot = getTotalStats();
+      const ch = getChapterStats(appState.activeChapter);
+      const acc = tot.answered > 0 ? Math.round((tot.correct / tot.answered) * 100) : 0;
+      const compPct = tot.total > 0 ? Math.round((tot.answered / tot.total) * 100) : 0;
+
+      const elCorrect = document.getElementById(`kpi-correct`);
+      const elAcc = document.getElementById(`kpi-accuracy`);
+      const elAns = document.getElementById(`kpi-answered`);
+      const elRem = document.getElementById(`kpi-remaining`);
+      const elChScore = document.getElementById(`kpi-chapter-score`);
+      const elChMeta = document.getElementById(`kpi-chapter-meta`);
+      const elBm = document.getElementById(`kpi-bookmarks`);
+      const elProgLbl = document.getElementById(`progress-label`);
+      const elBarOk = document.getElementById(`bar-correct`);
+      const elBarErr = document.getElementById(`bar-wrong`);
+      const elBar = document.getElementById(`progress-bar`);
+
+      if (elCorrect) elCorrect.textContent = tot.correct + ` / ` + tot.total;
+      if (elAcc) elAcc.textContent = `الدقة من المجاب: ` + acc + `%`;
+      if (elAns) elAns.textContent = tot.answered + ` / ` + tot.total;
+      if (elRem) elRem.textContent = `المتبقي: ` + (tot.total - tot.answered) + ` سؤال`;
+      if (elChScore) elChScore.textContent = ch.correct + ` / ` + ch.total;
+      if (elChMeta) elChMeta.textContent = `تمت الإجابة على ` + ch.answered + ` من ` + ch.total;
+      if (elBm) elBm.textContent = String(tot.bookmarked);
+
+      if (elProgLbl) {
+        elProgLbl.textContent = compPct + `% مكتمل (` + tot.correct + ` صح · ` + tot.wrong + ` خطأ)`;
+      }
+      if (elBarOk && tot.total > 0) elBarOk.style.width = ((tot.correct / tot.total) * 100) + `%`;
+      if (elBarErr && tot.total > 0) elBarErr.style.width = ((tot.wrong / tot.total) * 100) + `%`;
+      if (elBar) {
+        elBar.setAttribute(`aria-valuemax`, String(tot.total));
+        elBar.setAttribute(`aria-valuenow`, String(tot.answered));
+      }
+    }
+
+    function renderChapterSidebar() {
+      const listEl = document.getElementById(`chapter-list`);
+      const selEl = document.getElementById(`mobile-chapter-select`);
+      if (listEl) {
+        let html = ``;
+        for (let i = 0; i < CHAPTERS.length; i++) {
+          const ch = CHAPTERS[i];
+          const st = getChapterStats(ch.id);
+          const activeCls = ch.id === appState.activeChapter ? ` is-active` : ``;
+          html += `<button type="button" class="chapter-btn` + activeCls + `" onclick="selectChapter(` + ch.id + `)">` +
+            `<div class="chapter-btn-top"><span>` + ch.title + `</span></div>` +
+            `<div class="chapter-btn-sub"><span>منجز: <span class="mono-num">` + st.answered + `/` + st.total + `</span></span><span>النتيجة: <span class="mono-num">` + st.correct + `</span></span></div>` +
+            `</button>`;
+        }
+        listEl.innerHTML = html;
+      }
+      if (selEl) {
+        let optHtml = ``;
+        for (let i = 0; i < CHAPTERS.length; i++) {
+          const ch = CHAPTERS[i];
+          const st = getChapterStats(ch.id);
+          const selected = ch.id === appState.activeChapter ? ` selected` : ``;
+          optHtml += `<option value="` + ch.id + `"` + selected + `>` + ch.title + ` (` + st.correct + `/` + st.total + `)</option>`;
+        }
+        selEl.innerHTML = optHtml;
+      }
+    }
+
+    function renderChapterHeaderAndTabs() {
+      const chObj = CHAPTERS.find(function(c) { return c.id === appState.activeChapter; }) || CHAPTERS[0];
+      const st = getChapterStats(chObj.id);
+      const titleEl = document.getElementById(`chapter-title`);
+      const descEl = document.getElementById(`chapter-desc`);
+      const pillsEl = document.getElementById(`chapter-pills`);
+      if (titleEl) titleEl.textContent = chObj.title;
+      if (descEl) descEl.textContent = chObj.desc;
+      if (pillsEl) {
+        const chAcc = st.answered > 0 ? Math.round((st.correct / st.answered) * 100) : 0;
+        pillsEl.innerHTML =
+          `<span class="tag tag-neutral">المجموع: <span class="mono-num">` + st.total + `</span></span>` +
+          `<span class="tag tag-success">صحيح: <span class="mono-num">` + st.correct + `</span></span>` +
+          `<span class="tag tag-error">خطأ: <span class="mono-num">` + st.wrong + `</span></span>` +
+          `<span class="tag">الدقة: <span class="mono-num">` + chAcc + `%</span></span>`;
+      }
+
+      const cAll = document.getElementById(`cnt-all`);
+      const cUn = document.getElementById(`cnt-unanswered`);
+      const cWr = document.getElementById(`cnt-wrong`);
+      const cOk = document.getElementById(`cnt-correct`);
+      const cBm = document.getElementById(`cnt-bookmarked`);
+      if (cAll) cAll.textContent = String(st.total);
+      if (cUn) cUn.textContent = String(st.total - st.answered);
+      if (cWr) cWr.textContent = String(st.wrong);
+      if (cOk) cOk.textContent = String(st.correct);
+      if (cBm) cBm.textContent = String(st.bookmarked);
+
+      const tabBtns = document.querySelectorAll(`.tab-btn`);
+      for (let i = 0; i < tabBtns.length; i++) {
+        const f = tabBtns[i].getAttribute(`data-filter`);
+        if (f === appState.statusFilter) tabBtns[i].classList.add(`is-active`);
+        else tabBtns[i].classList.remove(`is-active`);
+      }
+
+      const vm = document.getElementById(`view-mode-select`);
+      if (vm) vm.value = appState.viewMode;
+    }
+
+    function renderNavStrip() {
+      const strip = document.getElementById(`q-nav-strip`);
+      if (!strip) return;
+      const chQs = getChapterQuestions(appState.activeChapter);
+      let html = ``;
+      for (let i = 0; i < chQs.length; i++) {
+        const idx = getGlobalIndex(chQs[i]);
+        const ans = appState.answers[idx];
+        let cls = `q-dot`;
+        if (ans !== undefined) {
+          cls += (ans === chQs[i][3]) ? ` is-correct` : ` is-wrong`;
+        }
+        if (appState.bookmarks[idx]) cls += ` is-bookmarked`;
+        html += `<button type="button" class="` + cls + `" title="الانتقال إلى السؤال ` + (i + 1) + `" onclick="jumpToQuestionInChapter(` + i + `)">` + (i + 1) + `</button>`;
+      }
+      strip.innerHTML = html;
+    }
+
+    function renderQuestions() {
+      const container = document.getElementById(`questions-list`);
+      const singleControls = document.getElementById(`single-nav-controls`);
+      const singleCounter = document.getElementById(`single-counter`);
+      const prevBtn = document.getElementById(`prev-q-btn`);
+      const nextBtn = document.getElementById(`next-q-btn`);
+      if (!container) return;
+
+      const chQs = getChapterQuestions(appState.activeChapter);
+      const filtered = getFilteredChapterQuestions();
+
+      if (filtered.length === 0) {
+        if (singleControls) singleControls.style.display = `none`;
+        container.innerHTML = `<div class="empty-state">` +
+          `<strong>لا توجد أسئلة مطابقة للتصفية الحالية</strong>` +
+          `<span>جرّب إزالة نص البحث أو التبديل إلى تبويب «الكل» لاستعراض أسئلة الفصل.</span>` +
+          `<button type="button" class="btn btn-secondary" onclick="setStatusFilter('all')">عرض كل أسئلة الفصل</button>` +
+          `</div>`;
+        return;
+      }
+
+      let toRender = filtered;
+      if (appState.viewMode === `single`) {
+        if (appState.singleIndex >= filtered.length) appState.singleIndex = filtered.length - 1;
+        if (appState.singleIndex < 0) appState.singleIndex = 0;
+        toRender = [filtered[appState.singleIndex]];
+        if (singleControls) singleControls.style.display = `flex`;
+        if (singleCounter) singleCounter.textContent = (appState.singleIndex + 1) + ` / ` + filtered.length;
+        if (prevBtn) prevBtn.disabled = appState.singleIndex === 0;
+        if (nextBtn) nextBtn.disabled = appState.singleIndex === filtered.length - 1;
+      } else {
+        if (singleControls) singleControls.style.display = `none`;
+      }
+
+      let html = ``;
+      for (let i = 0; i < toRender.length; i++) {
+        const item = toRender[i];
+        const globalIdx = getGlobalIndex(item);
+        const posInCh = chQs.indexOf(item) + 1;
+        const userAns = appState.answers[globalIdx];
+        const isAnswered = userAns !== undefined;
+        const isCorrect = isAnswered && userAns === item[3];
+        const isBookmarked = Boolean(appState.bookmarks[globalIdx]);
+
+        let cardStateCls = ``;
+        if (isAnswered) cardStateCls = isCorrect ? ` state-correct` : ` state-wrong`;
+
+        html += `<article class="q-card` + cardStateCls + `" id="q-card-` + globalIdx + `">`;
+        html += `<div class="q-card-head">` +
+          `<div class="q-meta">` +
+          `<span class="q-num">س <bdi dir="ltr">` + posInCh + ` / ` + chQs.length + `</bdi></span>` +
+          `<span>` + (isAnswered ? (isCorrect ? `إجابة صحيحة` : `إجابة خاطئة`) : `بانتظار الإجابة`) + `</span>` +
+          `</div>` +
+          `<button type="button" class="bookmark-btn` + (isBookmarked ? ` is-active` : ``) + `" onclick="toggleBookmark(` + globalIdx + `)">` +
+          (isBookmarked ? `★ محفوظ للمراجعة` : `☆ حفظ للمراجعة`) +
+          `</button></div>`;
+
+        html += `<h3 class="q-text">` + escapeHtml(item[1]) + `</h3>`;
+        html += `<div class="options-grid">`;
+        for (let optIdx = 0; optIdx < item[2].length; optIdx++) {
+          let optCls = `option-btn`;
+          if (isAnswered) {
+            if (optIdx === item[3]) optCls += ` opt-correct`;
+            else if (optIdx === userAns) optCls += ` opt-wrong`;
+            else optCls += ` opt-dim`;
+          }
+          html += `<button type="button" class="` + optCls + `"` + (isAnswered ? ` disabled` : ``) + ` onclick="selectAnswer(` + globalIdx + `, ` + optIdx + `)">` +
+            `<span class="option-letter">` + LETTERS[optIdx] + `</span>` +
+            `<span>` + escapeHtml(item[2][optIdx]) + `</span>` +
+            `</button>`;
+        }
+        html += `</div>`;
+
+        if (isAnswered) {
+          html += `<div class="explanation-box ` + (isCorrect ? `exp-correct` : `exp-wrong`) + `">` +
+            `<div class="exp-title ` + (isCorrect ? `is-correct` : `is-wrong`) + `">` +
+            (isCorrect ? `✓ إجابة موفقة — التحليل المفاهيمي` : `✕ الإجابة الصحيحة هي («` + LETTERS[item[3]] + `») — لماذا؟`) +
+            `</div>` +
+            `<p class="exp-body">` + escapeHtml(item[4]) + `</p>` +
+            `</div>`;
+        }
+
+        html += `</article>`;
+      }
+      container.innerHTML = html;
+    }
+
+    function renderAll() {
+      renderKPIs();
+      renderChapterSidebar();
+      renderChapterHeaderAndTabs();
+      renderNavStrip();
+      renderQuestions();
+    }
+
+    async function initApp() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === `function`) {
+        try {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === `object`) {
+            if (typeof saved.activeChapter === `number` && saved.activeChapter >= 1 && saved.activeChapter <= 10) {
+              appState.activeChapter = saved.activeChapter;
+            }
+            if (typeof saved.statusFilter === `string`) appState.statusFilter = saved.statusFilter;
+            if (typeof saved.viewMode === `string`) appState.viewMode = saved.viewMode;
+            if (typeof saved.singleIndex === `number`) appState.singleIndex = saved.singleIndex;
+            if (saved.answers && typeof saved.answers === `object`) appState.answers = saved.answers;
+            if (saved.bookmarks && typeof saved.bookmarks === `object`) appState.bookmarks = saved.bookmarks;
+          }
+        } catch (e) {
+          showStatusMessage(`تم التشغيل بحالة جديدة لعدم توفر بيانات محفوظة مسبقاً.`);
+        }
+      }
+      renderAll();
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    document.addEventListener(`DOMContentLoaded`, function() {
+      initApp();
+    });
+  </script>
+</body>
+</html>
