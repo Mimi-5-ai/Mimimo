@@ -1,692 +1,2645 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>الفصل العاشر الشامل (100%) | تحليل وتمثيل البيانات</title>
-<style>
-:root{
-  --bg:#f0f5ff;
-  --card:#ffffff;
-  --ink:#0f172a;
-  --muted:#475569;
-  --accent:#1d4ed8;
-  --accent-dark:#1e3a8a;
-  --accent2:#dbeafe;
-  --line:#cbd5e1;
-  --good:#059669;
-  --good-bg:#ecfdf5;
-  --bad:#dc2626;
-  --bad-bg:#fef2f2;
-  --warn:#d97706;
-  --warn-bg:#fffbeb;
-}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
-header{background:linear-gradient(135deg,#0f172a,#1d4ed8);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(15,23,42,0.2)}
-.wrap{max-width:1040px;margin:auto;padding:0 16px}
-.eyebrow{opacity:.92;font-size:.9rem;background:rgba(255,255,255,0.16);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
-h1{margin:5px 0;font-size:clamp(1.5rem,4vw,2.25rem)}
-header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
-nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
-nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:var(--accent2);color:var(--accent-dark);font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
-nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
-nav button.active,.btn.primary{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
-main .btn.primary{background:var(--accent);color:white}
-main{padding:22px 0 48px}
-.panel{display:none}
-.panel.active{display:block;animation:fadeIn .25s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(15,23,42,0.04)}
-h2{font-size:1.35rem;margin:0 0 12px;color:#0f172a}
-h3{font-size:1.08rem;margin:0 0 8px;color:var(--accent-dark)}
-small,.muted{color:var(--muted)}
-ul,ol{padding-right:22px;margin:8px 0}
-li{margin:6px 0}
-details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
-summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f8fafc;color:#0f172a;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
-details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
-.details-body{padding:16px 18px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
-.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
-.badge-new{display:inline-block;background:var(--warn-bg);color:var(--warn);border:1px solid #fcd34d;font-size:.78rem;padding:1px 8px;border-radius:6px;margin-right:6px;font-weight:bold}
-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
-th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
-th{background:#eff6ff;color:#1e3a8a;font-weight:bold}
-tr:last-child td{border-bottom:0}
-.note{border-right:4px solid var(--accent);padding:10px 14px;background:#eff6ff;border-radius:8px;margin:10px 0}
-.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
-.math-box{background:#f8fafc;border:2px solid #93c5fd;border-radius:12px;padding:12px 16px;margin:10px 0;text-align:center;font-size:1.03rem;font-weight:bold;color:#1e3a8a;direction:ltr}
-.step-box{background:#f0fdf4;border:1px solid #86efac;border-right:4px solid var(--good);border-radius:10px;padding:12px 16px;margin:10px 0;font-size:.95rem}
-.code-box{background:#0f172a;color:#e2e8f0;padding:14px 18px;border-radius:12px;font-family:Consolas,Monaco,monospace;direction:ltr;text-align:left;overflow-x:auto;margin:10px 0;border:1px solid #334155;line-height:1.65;font-size:.91rem}
-.code-box .kw{color:#38bdf8;font-weight:bold}
-.code-box .str{color:#4ade80}
-.code-box .num{color:#f472b6}
-.code-box .cmt{color:#94a3b8;font-style:italic}
-.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
-.options{display:grid;gap:8px;margin-top:12px}
-.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
-.option:hover:not(:disabled){border-color:var(--accent);background:#eff6ff}
-.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
-.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
-.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
-.feedback.good{color:var(--good);background:var(--good-bg)}
-.feedback.bad{color:var(--bad);background:var(--bad-bg)}
-.progress{height:10px;background:#cbd5e1;border-radius:9px;overflow:hidden;margin:12px 0}
-.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
-.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#dbeafe);border:2px solid #93c5fd;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
-.flashcard:hover{transform:scale(1.005)}
-.flashcard .term{font-size:1.32rem;font-weight:bold;color:#1e3a8a}
-.flashcard .answer{margin-top:16px;font-size:1.04rem;color:#0f172a;background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04);white-space:pre-line}
-.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
-.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
-footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
-@media(max-width:600px){
-  .card{padding:14px}
-  nav button{flex:1 1 calc(50% - 8px);text-align:center}
-  .flashcard{min-height:200px;padding:18px}
-  th,td{padding:8px 10px;font-size:.88rem}
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="briefing">
+  <title>الفصل العاشر: التعلم الآلي بدون إشراف — الدليل التفاعلي والاختبار الشامل</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Noto+Sans+Arabic:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js" defer></script>
+
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* 1. Briefing Style Tokens */
+      --background: #faf9f5;
+      --surface-container-low: #ffffff;
+      --surface-container: #f1efe8;
+      --surface-container-high: #e6e2d6;
+
+      --on-surface: #17181a;
+      --on-surface-variant: #56585c;
+
+      --outline: #17181a;
+      --outline-variant: #dedad0;
+
+      --primary: #17181a;
+      --on-primary: #faf9f5;
+      --primary-container: #f2b705;
+      --on-primary-container: #17181a;
+      --secondary: #1f4e5f;
+      --tertiary: #785008;
+      --error: #b42318;
+      --on-error: #ffffff;
+
+      --data-1: #1f4e5f;
+      --data-2: #d99000;
+      --data-3: #2b6e52;
+      --data-4: #b84a39;
+      --data-context: #c4bfb2;
+
+      /* 2. RTL Arabic Font Adaptation */
+      --font-headline: 'Noto Sans Arabic', 'Source Serif 4', serif;
+      --font-body: 'Noto Sans Arabic', 'Plus Jakarta Sans', sans-serif;
+      --font-label: 'Noto Sans Arabic', 'Geist Mono', monospace;
+      --font-mono-ltr: 'Geist Mono', monospace;
+
+      --rounded: 0.25rem;
+      --rounded-lg: 0.375rem;
+      --rounded-full: 0.25rem;
+
+      --section-rule: 1.5px solid var(--outline);
+      --card-border: 1px solid var(--outline-variant);
+      --badge-radius: 2px;
+      --heading-tracking: 0;
+      --label-tracking: 0;
+
+      /* 3. Shared Tokens & Semantic Tints */
+      --positive: #1f6b48;
+      --warning: #8f5400;
+      --focus: #1f4e5f;
+
+      --positive-bg: #e7f4ed;
+      --positive-border: #8ec5a9;
+      --error-bg: #fdeceb;
+      --error-border: #e59992;
+      --warning-bg: #f5e6c4;
+      --secondary-bg: #e8f1f4;
+      --secondary-border: #adc9d4;
+      --tertiary-bg: #f5e6c4;
+      --highlight-pill: #f5e6c4;
+      --svg-ring-fill: #e8f1f4;
+      --svg-noise-bg: #fdeceb;
+
+      /* Narrative Type Scale */
+      --display-size: clamp(2rem, 1.35rem + 2.4vw, 3.25rem);
+      --headline-size: clamp(1.45rem, 1.15rem + 1.2vw, 2.05rem);
+      --subhead-size: clamp(1.125rem, 1.02rem + 0.45vw, 1.35rem);
+      --body-size: clamp(1rem, 0.96rem + 0.18vw, 1.1rem);
+      --label-size: clamp(0.75rem, 0.72rem + 0.12vw, 0.85rem);
+
+      /* Spacing Scale */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base Reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.7;
+      scroll-behavior: smooth;
+    }
+    header { position: static !important; }
+
+    button, input, select, textarea {
+      font-family: inherit;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-xl);
+      padding: var(--space-lg);
+      max-width: 1120px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Briefing Dossier Treatments */
+    .dossier-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      border-bottom: var(--section-rule);
+      padding-bottom: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+    .dossier-bar-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .dossier-pill {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: var(--label-size);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--badge-radius);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .dossier-meta {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      font-weight: 500;
+    }
+    .title {
+      font-family: var(--font-headline);
+      font-size: var(--display-size);
+      font-weight: 800;
+      line-height: 1.2;
+      color: var(--on-surface);
+      margin: 0;
+    }
+    .standfirst {
+      font-family: var(--font-body);
+      font-size: var(--subhead-size);
+      font-weight: 600;
+      color: var(--secondary);
+      margin-top: var(--space-sm);
+      margin-bottom: 0;
+      max-width: 68ch;
+      line-height: 1.6;
+    }
+    h2.section-heading {
+      font-family: var(--font-headline);
+      font-size: var(--headline-size);
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--on-surface);
+      margin: 0 0 var(--space-sm) 0;
+    }
+    h3.sub-heading {
+      font-family: var(--font-headline);
+      font-size: var(--subhead-size);
+      font-weight: 700;
+      color: var(--secondary);
+      margin: 0 0 var(--space-sm) 0;
+    }
+    p {
+      margin: 0 0 var(--space-md) 0;
+      max-width: 68ch;
+    }
+
+    .figure-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+    }
+    .figure-card .value {
+      font-family: var(--font-mono-ltr);
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+    .index-num {
+      font-family: var(--font-mono-ltr);
+      font-weight: 600;
+      font-size: var(--label-size);
+      color: var(--secondary);
+      background: var(--surface-container);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--badge-radius);
+      display: inline-block;
+    }
+    .aside-box {
+      background: var(--surface-container);
+      border-top: var(--section-rule);
+      padding: var(--space-md) var(--space-lg);
+      border-radius: 0 0 var(--rounded-lg) var(--rounded-lg);
+    }
+
+    /* Header & Dossier Overview Strip */
+    .hero-section {
+      padding-top: var(--space-sm);
+    }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr));
+      gap: var(--space-md);
+      margin-top: var(--space-lg);
+    }
+    .kpi-tile {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-top: 2px solid var(--outline);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .kpi-label {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      font-weight: 600;
+    }
+    .kpi-value {
+      font-family: var(--font-mono-ltr);
+      font-size: clamp(1.35rem, 1.1rem + 0.8vw, 1.85rem);
+      font-weight: 700;
+      color: var(--on-surface);
+      font-variant-numeric: tabular-nums;
+    }
+    .kpi-note {
+      font-size: var(--label-size);
+      color: var(--secondary);
+      font-weight: 600;
+    }
+
+    /* Quick Jump Index Navigation */
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-top: var(--space-lg);
+      padding: var(--space-md);
+      background: var(--surface-container);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      align-items: center;
+    }
+    .toc-label {
+      font-size: var(--label-size);
+      font-weight: 700;
+      color: var(--on-surface-variant);
+      margin-left: var(--space-sm);
+    }
+    .nav-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: var(--label-size);
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .nav-chip:hover {
+      background: var(--surface-container-high);
+      border-color: var(--outline);
+    }
+    .nav-chip.accent {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+    .nav-chip.accent:hover {
+      background: var(--secondary);
+      border-color: var(--secondary);
+    }
+
+    /* Section & Layout Grids */
+    .unit-section {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+      padding-top: var(--space-md);
+    }
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+      gap: var(--space-lg);
+      align-items: start;
+    }
+    .asymmetric-split {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.25fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+
+    /* Tables */
+    .table-wrap {
+      overflow-x: auto;
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: right;
+      font-size: var(--body-size);
+    }
+    th {
+      background: var(--surface-container);
+      color: var(--on-surface);
+      font-weight: 700;
+      font-size: var(--label-size);
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--section-rule);
+    }
+    td {
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: 1px solid var(--outline-variant);
+      vertical-align: top;
+    }
+    tr:last-child td { border-bottom: none; }
+
+    /* Tags & Code */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--rounded);
+      font-size: var(--label-size);
+      font-weight: 600;
+      background: var(--highlight-pill);
+      color: var(--tertiary);
+    }
+    .tag-blue {
+      background: var(--secondary-bg);
+      color: var(--secondary);
+    }
+    .tag-green {
+      background: var(--positive-bg);
+      color: var(--positive);
+    }
+    .tag-red {
+      background: var(--error-bg);
+      color: var(--error);
+    }
+
+    .formula-box {
+      background: var(--surface-container);
+      border-right: 3px solid var(--secondary);
+      padding: var(--space-md);
+      border-radius: var(--rounded);
+      margin: var(--space-sm) 0 var(--space-md) 0;
+    }
+    .formula-ltr {
+      font-family: var(--font-mono-ltr);
+      font-size: clamp(0.95rem, 0.9rem + 0.25vw, 1.08rem);
+      font-weight: 600;
+      color: var(--on-surface);
+      direction: ltr;
+      text-align: left;
+      display: block;
+      overflow-x: auto;
+      padding: var(--space-xs) 0;
+    }
+    .code-block {
+      background: var(--on-surface);
+      color: var(--background);
+      font-family: var(--font-mono-ltr);
+      font-size: 0.875rem;
+      line-height: 1.6;
+      padding: var(--space-md);
+      border-radius: var(--rounded-lg);
+      direction: ltr;
+      text-align: left;
+      overflow-x: auto;
+      margin: var(--space-sm) 0;
+    }
+    .code-comment {
+      color: var(--data-context);
+    }
+    .code-keyword {
+      color: var(--primary-container);
+      font-weight: 600;
+    }
+
+    /* Bullet Lists */
+    .structured-list {
+      margin: 0;
+      padding-right: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .structured-list li::marker {
+      color: var(--secondary);
+      font-weight: 700;
+    }
+
+    /* Interactive Controls & Inputs */
+    .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      align-items: end;
+      margin-bottom: var(--space-md);
+    }
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      flex: 1 1 120px;
+    }
+    .field-label {
+      font-size: var(--label-size);
+      font-weight: 700;
+      color: var(--on-surface);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .field-input {
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-sm);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      font-family: var(--font-mono-ltr);
+      font-size: var(--body-size);
+      font-weight: 600;
+      direction: ltr;
+      text-align: center;
+      width: 100%;
+    }
+    .field-input:focus {
+      border-color: var(--outline);
+    }
+    .range-input {
+      width: 100%;
+      min-height: 44px;
+      accent-color: var(--secondary);
+      cursor: pointer;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      font-weight: 600;
+      font-size: var(--label-size);
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out), transform var(--dur-micro) var(--ease-out);
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-primary {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+    .btn-primary:hover:not(:disabled) {
+      background: var(--secondary);
+      border-color: var(--secondary);
+    }
+    .btn-secondary {
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      border-color: var(--outline-variant);
+    }
+    .btn-secondary:hover:not(:disabled) {
+      background: var(--surface-container);
+      border-color: var(--outline);
+    }
+    .btn-secondary.active-tab {
+      background: var(--secondary);
+      color: var(--on-primary);
+      border-color: var(--secondary);
+    }
+    .btn-danger-outline {
+      background: var(--surface-container-low);
+      color: var(--error);
+      border-color: var(--error-border);
+    }
+    .btn-danger-outline:hover:not(:disabled) {
+      background: var(--error-bg);
+    }
+
+    /* Interactive Visualizations */
+    .viz-frame {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+      min-height: 320px;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .viz-svg {
+      width: 100%;
+      height: auto;
+      min-height: 280px;
+      display: block;
+    }
+    .viz-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      padding-top: var(--space-xs);
+      border-top: 1px solid var(--outline-variant);
+    }
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      font-weight: 600;
+    }
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .legend-dot.c1 { background: var(--data-1); }
+    .legend-dot.c2 { background: var(--data-2); }
+    .legend-dot.c3 { background: var(--data-3); }
+    .legend-dot.c4 { background: var(--data-4); }
+    .legend-dot.ctx { background: var(--data-context); }
+
+    .result-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+      gap: var(--space-md);
+      margin-top: var(--space-sm);
+    }
+    .result-box {
+      background: var(--surface-container);
+      border-radius: var(--rounded);
+      padding: var(--space-sm) var(--space-md);
+      border-right: 3px solid var(--data-1);
+    }
+    .result-box.alt {
+      border-right-color: var(--data-2);
+    }
+    .result-box .res-num {
+      font-family: var(--font-mono-ltr);
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--on-surface);
+      display: block;
+      direction: ltr;
+      text-align: right;
+    }
+    .result-box .res-math {
+      font-family: var(--font-mono-ltr);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      display: block;
+      direction: ltr;
+      text-align: right;
+      margin-top: var(--space-xs);
+    }
+
+    /* Pros & Cons */
+    .pros-cons-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .pros-card {
+      background: var(--positive-bg);
+      border: 1px solid var(--positive-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+    }
+    .cons-card {
+      background: var(--error-bg);
+      border: 1px solid var(--error-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+    }
+    .pros-card h4, .cons-card h4 {
+      margin: 0 0 var(--space-sm) 0;
+      font-size: var(--body-size);
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .pros-card h4 { color: var(--positive); }
+    .cons-card h4 { color: var(--error); }
+
+    /* Stepper Status */
+    .step-info-box {
+      background: var(--surface-container);
+      border-right: 3px solid var(--primary-container);
+      padding: var(--space-md);
+      border-radius: var(--rounded);
+      font-size: var(--body-size);
+    }
+
+    /* Quiz Section */
+    .quiz-section {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+      padding-top: var(--space-md);
+    }
+    .quiz-dashboard {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-top: 2px solid var(--outline);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .quiz-stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .quiz-stat {
+      background: var(--surface-container);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+    }
+    .quiz-stat-label {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      display: block;
+    }
+    .quiz-stat-val {
+      font-family: var(--font-mono-ltr);
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--on-surface);
+      font-variant-numeric: tabular-nums;
+    }
+    .progress-track {
+      width: 100%;
+      height: 10px;
+      background: var(--surface-container-high);
+      border-radius: var(--rounded);
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--secondary);
+      width: 0%;
+      transition: width var(--dur-short) var(--ease-out);
+    }
+    .filter-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: center;
+      justify-content: space-between;
+    }
+    .filter-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+
+    .quiz-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .q-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+      transition: border-color var(--dur-micro) var(--ease-out);
+    }
+    .q-card.state-correct {
+      border-color: var(--positive);
+      border-right: 4px solid var(--positive);
+    }
+    .q-card.state-wrong {
+      border-color: var(--error);
+      border-right: 4px solid var(--error);
+    }
+    .q-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+    .q-meta {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .q-text {
+      font-weight: 700;
+      font-size: clamp(1.02rem, 0.98rem + 0.2vw, 1.15rem);
+      color: var(--on-surface);
+      margin: 0;
+      line-height: 1.6;
+    }
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+      gap: var(--space-sm);
+    }
+    .opt-btn {
+      min-height: 48px;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded);
+      text-align: right;
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      cursor: pointer;
+      font-size: var(--body-size);
+      font-weight: 500;
+      line-height: 1.5;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .opt-btn:hover:not(:disabled) {
+      background: var(--surface-container);
+      border-color: var(--outline);
+    }
+    .opt-btn:disabled {
+      cursor: default;
+    }
+    .opt-letter {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: var(--badge-radius);
+      background: var(--surface-container);
+      color: var(--on-surface);
+      font-weight: 700;
+      font-size: var(--label-size);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .opt-btn.opt-correct {
+      background: var(--positive-bg);
+      border-color: var(--positive);
+      color: var(--on-surface);
+      font-weight: 700;
+    }
+    .opt-btn.opt-correct .opt-letter {
+      background: var(--positive);
+      color: var(--on-error);
+    }
+    .opt-btn.opt-wrong {
+      background: var(--error-bg);
+      border-color: var(--error);
+      color: var(--on-surface);
+    }
+    .opt-btn.opt-wrong .opt-letter {
+      background: var(--error);
+      color: var(--on-error);
+    }
+
+    .rationale-box {
+      background: var(--surface-container);
+      border-top: 1px solid var(--outline-variant);
+      padding: var(--space-md);
+      border-radius: var(--rounded);
+      font-size: var(--body-size);
+      line-height: 1.65;
+      display: none;
+    }
+    .rationale-box.visible {
+      display: block;
+    }
+    .rationale-title {
+      font-weight: 700;
+      color: var(--secondary);
+      margin-bottom: var(--space-xs);
+      display: block;
+    }
+    .quiz-empty-msg {
+      padding: var(--space-xl);
+      text-align: center;
+      background: var(--surface-container);
+      border-radius: var(--rounded-lg);
+      color: var(--on-surface-variant);
+      font-weight: 600;
+    }
+
+    /* Footer */
+    .source-footer {
+      border-top: var(--section-rule);
+      padding: var(--space-lg) 0 var(--space-xl) 0;
+      color: var(--on-surface-variant);
+      font-size: var(--label-size);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+
+    /* Responsive Media Queries */
+    @media (max-width: 820px) {
+      .asymmetric-split {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+    @media (max-width: 640px) {
+      .page-grid {
+        grid-template-columns: minmax(0, 1fr);
+        padding: var(--space-md);
+        gap: var(--space-lg);
+      }
+      .figure-card, .q-card, .quiz-dashboard {
+        padding: var(--space-md);
+      }
+      .options-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
 </head>
 <body>
-<header>
-  <div class="wrap">
-    <div class="eyebrow">نسخة شاملة ومحدثة 100% • مقرر تحليل وتمثيل البيانات</div>
-    <h1>الفصل العاشر: التعلم الآلي بدون إشراف (Unsupervised Learning - Clustering)</h1>
-    <p>يغطي الفرق بين التعلم بإشراف وبدون إشراف، مقاييس المسافة (مانهاتن والإقليدية)، مقاييس كفاءة التجميع (الخارجية كجاكارد والداخلية كمعامل الظل Silhouette)، خوارزمية K-means وطريقة المرفق (Elbow)، وخوارزمية DBSCAN والتجميع الهرمي</p>
-    <nav>
-      <button class="active" data-tab="summary">الشرح والقوانين والأكواد (100%)</button>
-      <button data-tab="tables">جداول المقارنات والمعادلات</button>
-      <button data-tab="terms">قاموس المصطلحات والدوال</button>
-      <button data-tab="cards">البطاقات (28)</button>
-      <button data-tab="quiz">الاختبار العشوائي (25)</button>
-    </nav>
-  </div>
-</header>
+  <main class="page-grid">
 
-<main class="wrap">
-  <section id="summary" class="panel active">
-    <div class="card">
-      <h2>خريطة الفصل العاشر (الوحدات الثلاث الكاملة)</h2>
-      <div class="grid">
-        <div>
-          <span class="tag">الوحدة الأولى</span>
-          <h3>أساسيات التجميع ومقاييس المسافة والكفاءة</h3>
-          <p>مقارنة التعلم بإشراف وبدون إشراف، مسافة كتلة المدينة (مانهاتن) والمسافة الإقليدية، وطرق التحقق من كفاءة التجميع الثلاث (الخارجية كجاكارد، الداخلية كـ <span dir="ltr">Silhouette</span> و <span dir="ltr">WSS</span>، والنسبية).</p>
+    <!-- ==================== HEADER / DOSSIER OPENING ==================== -->
+    <header class="hero-section">
+      <div class="dossier-bar">
+        <div class="dossier-bar-group">
+          <span class="dossier-pill">الفصل العاشر</span>
+          <span class="dossier-meta">تحليل وتمثيل البيانات • 3 وحدات دراسية</span>
         </div>
-        <div>
-          <span class="tag">الوحدة الثانية</span>
-          <h3>خوارزمية K-means وطريقة المرفق</h3>
-          <p>خطوات عمل <span dir="ltr">K-means</span> الخمس، مسألة تتبع النقاط وتحديث المراكز (<span dir="ltr">Centroids</span>)، المزايا والعيوب، التطبيق البرمجي بـ <span dir="ltr">Scikit-learn</span>، وتحديد $K$ الأمثل بطريقة المرفق (<span dir="ltr">Elbow method</span>).</p>
+        <span class="dossier-meta" id="header-progress-badge">التقدم: 0 / 30 سؤالاً</span>
+      </div>
+
+      <h1 class="title">التعلم الآلي بدون إشراف (<bdi dir="ltr">Unsupervised Machine Learning</bdi>)</h1>
+      <p class="standfirst">
+        دليل دراسي تفاعلي شامل يغطي جميع وحدات الفصل العاشر: مفاهيم التجميع ومقاييس المسافة وتقييم الكفاءة، وخوارزمية <bdi dir="ltr">K-Means</bdi> وطريقة المرفق، وخوارزمية <bdi dir="ltr">DBSCAN</bdi> والتجميع الهرمي — مدعوماً بمحاكيات بصرية لبيانات الكتاب واختبار اختيار من متعدد من 30 سؤالاً مع الشرح التفصيلي.
+      </p>
+
+      <div class="kpi-grid">
+        <div class="kpi-tile">
+          <span class="kpi-label">الوحدة (1): الأساسيات والمقاييس</span>
+          <span class="kpi-value">01</span>
+          <span class="kpi-note">إشراف مقابل بدون إشراف، المسافات، WCSS</span>
         </div>
-        <div>
-          <span class="tag">الوحدة الثالثة</span>
-          <h3>خوارزمية DBSCAN والتجميع الهرمي</h3>
-          <p>خوارزمية <span dir="ltr">DBSCAN</span> ومعاملاها (<span dir="ltr">eps, minPts</span>) وتصنيف النقاط الثلاث (<span dir="ltr">Core, Border, Noise</span>)، والتجميع الهرمي (<span dir="ltr">Agglomerative &amp; Divisive</span>) وطرق الربط الأربع ورسم <span dir="ltr">Dendrogram</span>.</p>
+        <div class="kpi-tile">
+          <span class="kpi-label">الوحدة (2): التجميع بالمتوسطات</span>
+          <span class="kpi-value">02</span>
+          <span class="kpi-note">خوارزمية K-Means وطريقة المرفق (Elbow)</span>
+        </div>
+        <div class="kpi-tile">
+          <span class="kpi-label">الوحدة (3): الكثافة والهرمية</span>
+          <span class="kpi-value">03</span>
+          <span class="kpi-note">DBSCAN، الضجيج، والتجميع التصاعدي والتنازلي</span>
+        </div>
+        <div class="kpi-tile">
+          <span class="kpi-label">بنك أسئلة الفصل العاشر</span>
+          <span class="kpi-value">30</span>
+          <span class="kpi-note">10 أسئلة لكل وحدة + تعليل فوري</span>
         </div>
       </div>
-    </div>
 
-    <!-- ==================== الوحدة الأولى ==================== -->
-    <details open>
-      <summary>الوحدة الأولى: أساسيات التجميع (Clustering)، مقاييس المسافة، ومقاييس كفاءة التجميع</summary>
-      <div class="details-body">
-        <h3>1) المقارنة بين التعلم بإشراف (Supervised) والتعلم بدون إشراف (Unsupervised)</h3>
-        <div class="exam-alert">
-          <b>🔥 فرق جوهري ومؤكد في الاختبار:</b><br>
-          • <b>التعلم الآلي بإشراف (<span dir="ltr">Supervised Learning</span>):</b> تتوفر فيه <b>سمة الهدف / المخرج المعروف مسبقاً ($Y$ - <span dir="ltr">Target / Label</span>)</b> إلى جانب السمات المستقلة ($X$)، والهدف هو تدريب نموذج للتنبؤ بقيمة $Y$ للبيانات الجديدة. وينقسم إلى: <b>الانحدار (<span dir="ltr">Regression</span>)</b> إذا كان الهدف كمياً متصلاً، و<b>التصنيف (<span dir="ltr">Classification</span>)</b> إذا كان الهدف فئوياً محدداً.<br>
-          • <b>التعلم الآلي بدون إشراف (<span dir="ltr">Unsupervised Learning</span>):</b> <b>لا تتوفر فيه سمة الهدف ($Y$) نهائياً</b> (بيانات غير معنونة <span dir="ltr">Unlabeled Data</span> تحتوي على $X$ فقط)، والهدف هو اكتشاف الأنماط الخفية والهياكل وتقسيم البيانات إلى مجموعات متشابهة فيما يُعرف بـ <b>التجميع العنقودي (<span dir="ltr">Clustering</span>)</b>!
+      <nav class="toc-nav" aria-label="التنقل بين وحدات الفصل العاشر">
+        <span class="toc-label">الانتقال السريع:</span>
+        <a href="#unit-1" class="nav-chip"><span class="index-num">01</span> الوحدة الأولى: المفاهيم والمسافات</a>
+        <a href="#unit-2" class="nav-chip"><span class="index-num">02</span> الوحدة الثانية: K-Means والمرفق</a>
+        <a href="#unit-3" class="nav-chip"><span class="index-num">03</span> الوحدة الثالثة: DBSCAN والهرمي</a>
+        <a href="#quiz-section" class="nav-chip accent"><i data-lucide="check-square" aria-hidden="true"></i> الاختبار الشامل (30 سؤالاً)</a>
+      </nav>
+    </header>
+
+    <!-- ==================== UNIT 1 ==================== -->
+    <section id="unit-1" class="unit-section" aria-labelledby="unit-1-title">
+      <div class="dossier-bar">
+        <div class="dossier-bar-group">
+          <span class="dossier-pill">الوحدة 01</span>
+          <span class="dossier-meta">المفاهيم الأساسية • مقاييس المسافة • كفاءة التجميع</span>
+        </div>
+        <span class="index-num">UNIT 10.1</span>
+      </div>
+
+      <h2 id="unit-1-title" class="section-heading">الفرق بين التعلم بإشراف وبدون إشراف، ومقاييس المسافة وكفاءة التجميع</h2>
+      <p>
+        على عكس التعلم الآلي بإشراف الذي يعتمد على وجود «سمة هدف» معروفة مسبقاً لتدريب النموذج، يتعامل <strong>التعلم الآلي بدون إشراف</strong> مع بيانات غير موسومة لاكتشاف الأنماط الخفية والبنية الداخلية للبيانات استناداً إلى التشابه والتباعد بين السمات المستقلة.
+      </p>
+
+      <!-- 1.1 Supervised vs Unsupervised Comparison Table -->
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>وجه المقارنة</th>
+              <th>التعلم الآلي بإشراف (<bdi dir="ltr">Supervised Learning</bdi>)</th>
+              <th>التعلم الآلي بدون إشراف (<bdi dir="ltr">Unsupervised Learning</bdi>)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>هيئة البيانات</strong></td>
+              <td>سمات مستقلة + سمة هدف، ويُعبّر عنها بالزوج <bdi dir="ltr">(x, y)</bdi></td>
+              <td>مجموعة من السمات المستقلة فقط، <strong>ولا توجد سمة هدف</strong> <bdi dir="ltr">(x)</bdi></td>
+            </tr>
+            <tr>
+              <td><strong>الهدف الرئيسي</strong></td>
+              <td>تعلم دالة تكتشف الأنماط في البيانات بالاعتماد على السمة الهدف <bdi dir="ltr">y</bdi></td>
+              <td>تعلم الأنماط من خلال <strong>التشابه والتباعد</strong> بين البيانات عبر السمات المستقلة</td>
+            </tr>
+            <tr>
+              <td><strong>أبرز الأمثلة</strong></td>
+              <td>تصنيف البيانات (<bdi dir="ltr">Classification</bdi>)، والتعرف على الوجوه</td>
+              <td>تجميع/تقسيم البيانات (<bdi dir="ltr">Data Clustering</bdi>)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 1.2 Clustering Concept -->
+      <div class="two-col-grid">
+        <article class="figure-card">
+          <h3 class="sub-heading">ما المقصود بتجميع البيانات (<bdi dir="ltr">Clustering</bdi>)؟</h3>
+          <p>
+            <strong>التجميع (<bdi dir="ltr">Clustering</bdi>)</strong> هو مجموعة من التقنيات تقوم بتجميع البيانات المتشابهة معاً في مجموعات تُسمى <strong>عناقيد (<bdi dir="ltr">Clusters</bdi>)</strong>، بحيث:
+          </p>
+          <ul class="structured-list">
+            <li>يُقاس التشابه بين العناصر بناءً على سماتها المستقلة.</li>
+            <li>تُجمع العناصر المتشابهة معاً في نفس العنقود (<bdi dir="ltr">Cluster</bdi>).</li>
+            <li>تُوزع البيانات المختلفة على عناقيد مختلفة.</li>
+          </ul>
+          <div class="aside-box" style="margin-top: var(--space-md);">
+            <strong>مثال توضيحي من المنهج:</strong> تجميع بيانات الموظفين في مجموعتين بناءً على سمات مستقلة مثل العمر (<bdi dir="ltr">Age</bdi>) والمستوى التعليمي (<bdi dir="ltr">Educational level</bdi>). ويُعد تحديد عدد المجموعات من المعاملات الهامة التي تحتاج إلى تجارب وقياسات متعددة لتحديده بدقة.
+          </div>
+        </article>
+
+        <!-- 1.3 Distance Metrics Formulas -->
+        <article class="figure-card">
+          <h3 class="sub-heading">مقاييس المسافة (<bdi dir="ltr">Distance Metrics</bdi>)</h3>
+          <p>
+            تحدد المسافة مدى تقارب أو تباعد العناصر؛ <strong>كلما قلت المسافة زاد التشابه، والعكس صحيح</strong>.
+          </p>
+
+          <div class="formula-box">
+            <strong>1. مسافة سيتي بلوك (<bdi dir="ltr">City-block / Manhattan Distance</bdi>):</strong>
+            <span>مجموع الفروق المطلقة بين السمات الرقمية للعنصرين:</span>
+            <code class="formula-ltr">D_c = Σ |a_i - b_i|   (i = 1 ... d)</code>
+            <span class="dossier-meta">حيث <bdi dir="ltr">a_i</bdi> سمات العنصر الأول، <bdi dir="ltr">b_i</bdi> سمات الثاني، و<bdi dir="ltr">d</bdi> عدد السمات.</span>
+          </div>
+
+          <div class="formula-box">
+            <strong>2. المسافة الإقليدية (<bdi dir="ltr">Euclidean Distance</bdi>):</strong>
+            <span>المسافة المباشرة (المستقيمة) بين العناصر، وهي <strong>الأكثر استخداماً</strong>:</span>
+            <code class="formula-ltr">D_e = √( Σ (a_i - b_i)² )   (i = 1 ... d)</code>
+          </div>
+        </article>
+      </div>
+
+      <!-- 1.4 Interactive Distance Calculator -->
+      <article class="figure-card" aria-labelledby="dist-calc-title">
+        <div class="dossier-bar">
+          <div class="dossier-bar-group">
+            <span class="tag tag-blue">أداة تفاعلية</span>
+            <h3 id="dist-calc-title" class="sub-heading" style="margin:0;">حاسبة ومستكشف مقاييس المسافة</h3>
+          </div>
+          <button type="button" class="btn btn-secondary" onclick="resetDistanceExample()">استعادة مثال الكتاب: (70, 175) و (80, 170)</button>
         </div>
 
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+        <p>
+          عدّل قيم الوزن (<bdi dir="ltr">X</bdi>) والطول (<bdi dir="ltr">Y</bdi>) للشخصين أدناه لملاحظة الفرق الهندسي والحسابي بين مسافة سيتي بلوك (المسار المتدرج) والمسافة الإقليدية (الخط المباشر).
+        </p>
 
-        <h3>2) مقاييس المسافة في التجميع (<span dir="ltr">Distance Measures</span>) — القوانين والمسائل الحسابية</h3>
-        <p>لتجميع النقاط المتشابهة في عنقود واحد، نحتاج إلى قياس المسافة بين أي نقطتين $A = (a_1, a_2, \dots, a_p)$ و $B = (b_1, b_2, \dots, b_p)$:</p>
-        <ul>
-          <li><b>1. مسافة كتلة المدينة / مسافة مانهاتن (<span dir="ltr">City-Block / Manhattan Distance - $D_c$</span>):</b>
-            <ul>
-              <li>تساوي مجموع القيم المطلقة للفروق بين إحداثيات النقطتين:</li>
-            </ul>
-            <div class="math-box">
-              D<sub>c</sub>(A, B) = &sum;<sub>j=1</sub><sup>p</sup> | a<sub>j</sub> &minus; b<sub>j</sub> | = |x<sub>1</sub> &minus; x<sub>2</sub>| + |y<sub>1</sub> &minus; y<sub>2</sub>|
+        <div class="asymmetric-split">
+          <div>
+            <div class="controls-row">
+              <div class="field-group">
+                <label class="field-label" for="p1-x">الشخص الأول — الوزن <bdi dir="ltr">(a₁)</bdi></label>
+                <input id="p1-x" class="field-input" type="number" value="70" min="0" max="250" oninput="updateDistanceViz()">
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="p1-y">الشخص الأول — الطول <bdi dir="ltr">(a₂)</bdi></label>
+                <input id="p1-y" class="field-input" type="number" value="175" min="0" max="250" oninput="updateDistanceViz()">
+              </div>
             </div>
-          </li>
-          <li><b>2. المسافة الإقليدية (<span dir="ltr">Euclidean Distance - $D_e$</span>):</b>
-            <ul>
-              <li>هي المسافة المستقيمة المباشرة، وتساوي الجذر التربيعي لمجموع مربعات الفروق بين إحداثيات النقطتين:</li>
-            </ul>
-            <div class="math-box">
-              D<sub>e</sub>(A, B) = &radic;[ &sum;<sub>j=1</sub><sup>p</sup> ( a<sub>j</sub> &minus; b<sub>j</sub> )<sup>2</sup> ] = &radic;[ (x<sub>1</sub> &minus; x<sub>2</sub>)<sup>2</sup> + (y<sub>1</sub> &minus; y<sub>2</sub>)<sup>2</sup> ]
+            <div class="controls-row">
+              <div class="field-group">
+                <label class="field-label" for="p2-x">الشخص الثاني — الوزن <bdi dir="ltr">(b₁)</bdi></label>
+                <input id="p2-x" class="field-input" type="number" value="80" min="0" max="250" oninput="updateDistanceViz()">
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="p2-y">الشخص الثاني — الطول <bdi dir="ltr">(b₂)</bdi></label>
+                <input id="p2-y" class="field-input" type="number" value="170" min="0" max="250" oninput="updateDistanceViz()">
+              </div>
             </div>
-          </li>
-        </ul>
-        <div class="step-box">
-          <b>مسألة حسابية شاملة على المسافتين (مهمة جداً للاختبار!):</b><br>
-          لتكن لدينا النقطة $A = (1, 2)$ والنقطة $B = (4, 6)$:<br>
-          1) <b>مسافة كتلة المدينة (مانهاتن $D_c$):</b><br>
-          $D_c = |1 - 4| + |2 - 6| = |-3| + |-4| = 3 + 4 = \mathbf{7}$.<br>
-          2) <b>المسافة الإقليدية ($D_e$):</b><br>
-          $D_e = \sqrt{(1 - 4)^2 + (2 - 6)^2} = \sqrt{(-3)^2 + (-4)^2} = \sqrt{9 + 16} = \sqrt{25} = \mathbf{5}$.
-        </div>
 
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+            <div class="result-strip">
+              <div class="result-box">
+                <span class="dossier-meta">مسافة سيتي بلوك (<bdi dir="ltr">City-block</bdi>)</span>
+                <span class="res-num" id="dist-city-val">15</span>
+                <span class="res-math" id="dist-city-steps">|70 - 80| + |175 - 170| = 10 + 5 = 15</span>
+              </div>
+              <div class="result-box alt">
+                <span class="dossier-meta">المسافة الإقليدية (<bdi dir="ltr">Euclidean</bdi>)</span>
+                <span class="res-num" id="dist-euclid-val">11.18</span>
+                <span class="res-math" id="dist-euclid-steps">√((70-80)² + (175-170)²) = √125 ≈ 11.18</span>
+              </div>
+            </div>
+          </div>
 
-        <h3>3) طرق التحقق من كفاءة التجميع الثلاث (<span dir="ltr">Cluster Validation Measures</span>)</h3>
-        <div class="exam-alert">
-          <b>🌟 تنقسم مقاييس تقييم جودة وكفاءة التجميع إلى 3 أنواع رئيسية:</b>
+          <div class="viz-frame">
+            <svg id="dist-svg" class="viz-svg" viewBox="0 0 420 260" role="img" aria-label="مخطط يوضح الفرق بين مسافة سيتي بلوك والمسافة الإقليدية"></svg>
+            <div class="viz-legend">
+              <span class="legend-item"><span class="legend-dot c1"></span> المسافة الإقليدية (المباشرة)</span>
+              <span class="legend-item"><span class="legend-dot c2"></span> مسافة سيتي بلوك (أفقي + عمودي)</span>
+            </div>
+          </div>
         </div>
-        <ul>
-          <li><b>أولاً: المقاييس الخارجية (<span dir="ltr">1. External Measures</span>):</b>
-            <ul>
-              <li>تُستخدم عندما تتوفر لدينا <b>تسميات مرجعية خارجية (حقيقية)</b> نقارن بها نتائج التجميع، وتعتمد على أزواج النقاط ($M_{11}$: أزواج في نفس المجموعة في الاثنين، $M_{00}$: أزواج في مجموعات مختلفة في الاثنين، $M_{10}$ و $M_{01}$: أزواج اختلف تصنيفها):</li>
-              <li><b>1) مؤشر راند (<span dir="ltr">RAND-correct Index</span>):</b> يقيس نسبة الأزواج المتفق عليها من إجمالي كافة الأزواج:
-                <div class="math-box">RAND = ( M<sub>00</sub> + M<sub>11</sub> ) / ( M<sub>00</sub> + M<sub>01</sub> + M<sub>10</sub> + M<sub>11</sub> )</div>
+      </article>
+
+      <!-- 1.5 Clustering Evaluation -->
+      <article class="figure-card">
+        <h3 class="sub-heading">التحقق من كفاءة تجميع البيانات (<bdi dir="ltr">Clustering Validation</bdi>)</h3>
+        <p>
+          للتأكد من جودة العناقيد الناتجة واختيار أفضل عدد لها، نعتمد على ثلاث فئات من طرق التقييم:
+        </p>
+        <div class="two-col-grid">
+          <div class="aside-box">
+            <span class="index-num">01</span>
+            <h4 style="margin: var(--space-xs) 0;">المقاييس الخارجية (<bdi dir="ltr">External Metrics</bdi>)</h4>
+            <p style="margin-bottom:0;">
+              تعتمد على معلومات خارجية مثل الفئة الحقيقية (<bdi dir="ltr">Label</bdi>) في حال توفرها، لمقارنة العناقيد الناتجة بالتصنيف المرجعي.
+            </p>
+          </div>
+          <div class="aside-box">
+            <span class="index-num">02</span>
+            <h4 style="margin: var(--space-xs) 0;">المقاييس الداخلية (<bdi dir="ltr">Internal Metrics</bdi>)</h4>
+            <p style="margin-bottom: var(--space-sm);">
+              تقيس جودة التجميع من البيانات نفسها دون فئات مسبقة، ومن أشهرها:
+            </p>
+            <ul class="structured-list">
+              <li><strong>مؤشر سيلويت (<bdi dir="ltr">Silhouette Index</bdi>):</strong> يساوي متوسط قيم <bdi dir="ltr">s(xᵢ)</bdi> لجميع النقاط، ويقيس مدى تشابه النقطة مع مجموعتها مقارنة بأقرب مجموعة أخرى (كلما اقترب من <bdi dir="ltr">+1</bdi> كان أفضل).</li>
+              <li><strong>مجموع المربعات داخل المجموعات (<bdi dir="ltr">WCSS</bdi>):</strong> يحسب مجموع مربع المسافة بين كل عناصر المجموعة ومركزها <bdi dir="ltr">C_k</bdi>:
+                <code class="formula-ltr">WCSS = Σ_{k=1..K} Σ_{x ∈ k} ||x - C_k||²</code>
+                حيث <bdi dir="ltr">K</bdi> عدد المجموعات، <bdi dir="ltr">N_k</bdi> عدد العناصر في المجموعة <bdi dir="ltr">k</bdi>، و<bdi dir="ltr">C_k</bdi> مركز المجموعة <bdi dir="ltr">k</bdi>.
               </li>
-              <li><b>2) معامل جاكارد (<span dir="ltr">Jaccard Index - $J$</span>):</b> يستثني $M_{00}$ ويركز على الأزواج المتواجدة معاً:
-                <div class="math-box">J = M<sub>11</sub> / ( M<sub>01</sub> + M<sub>10</sub> + M<sub>11</sub> )</div>
-              </li>
             </ul>
-          </li>
-          <li><b>ثانياً: المقاييس الداخلية (<span dir="ltr">2. Internal Measures</span>):</b>
-            <ul>
-              <li>تُقيّم جودة التجميع بالاعتماد على <b>البيانات نفسها فقط دون أي تسميات خارجية</b> (تقيس مدى تماسك النقاط داخل نفس العنقود <span dir="ltr">Cohesion</span> وتباعد العناقيد عن بعضها <span dir="ltr">Separation</span>)، ومن أشهرها:</li>
-              <li><b>1) معامل الظل (<span dir="ltr">Silhouette Index - $s(x_i)$</span>):</b>
-                <div class="math-box">
-                  s(x<sub>i</sub>) = [ b(x<sub>i</sub>) &minus; a(x<sub>i</sub>) ] / max( b(x<sub>i</sub>), a(x<sub>i</sub>) )
-                </div>
-                حيث:<br>
-                • <b>$a(x_i)$:</b> متوسط المسافة بين النقطة $x_i$ وجميع النقاط الأخرى <b>داخل نفس مجموعتها</b> (يقيس التماسك، وكلما كان أصغر كان أفضل).<br>
-                • <b>$b(x_i)$:</b> أقل متوسط مسافة بين النقطة $x_i$ وجميع النقاط في <b>أقرب مجموعة مجاورة أخرى</b> (يقيس الانفصال، وكلما كان أكبر كان أفضل).<br>
-                • <b>نطاق قيمة معامل الظل:</b> تتراوح قيمته بين $[-1, +1]$؛ وكلما اقتربت من <b>$+1$</b> دلّ ذلك على تجميع ممتاز ومثالي!
-              </li>
-              <li><b>2) مجموع المربعات داخل المجموعات (<span dir="ltr">Within-groups Sum of Squares - WSS / WCSS</span>):</b> يقيس مجموع مربعات المسافات بين كل نقطة ومركز مجموعتها (وكلما كان أصغر كانت المجموعة أكثر تماسكاً).</li>
-            </ul>
-          </li>
-          <li><b>ثالثاً: المقاييس النسبية (<span dir="ltr">3. Relative Measures</span>):</b>
-            <ul>
-              <li>تُستخدم لمقارنة نتائج تجميعات مختلفة ناتجة عن نفس الخوارزمية عند تغيير معاملاتها (مثل مقارنة كفاءة <span dir="ltr">K-means</span> عند قيم مختلفة لعدد العناقيد $K=2, 3, 4\dots$).</li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-    </details>
-
-    <!-- ==================== الوحدة الثانية ==================== -->
-    <details>
-      <summary>الوحدة الثانية: خوارزمية K-means Clustering، مسألة التتبع، وطريقة المرفق (The Elbow Method)</summary>
-      <div class="details-body">
-        <h3>1) خوارزمية التجميع بالمتوسطات (<span dir="ltr">K-Means Clustering</span>) وخطواتها الخمس</h3>
-        <ul>
-          <li><b>مفهومها:</b> هي أشهر خوارزميات التجميع التقسيمي (<span dir="ltr">Partitioning Clustering</span>)؛ وتهدف إلى تقسيم $N$ من العينات إلى <b>$K$ من المجموعات (العناقيد)</b> بحيث تنتمي كل نقطة إلى المجموعة ذات <b>المركز الأقرب إليها (<span dir="ltr">Nearest Centroid</span>)</b>.</li>
-          <li><b>خطوات عمل خوارزمية <span dir="ltr">K-means</span> الخمس بالترتيب:</b>
-            <ol>
-              <li><b>الخطوة (1):</b> تحديد عدد المجموعات المطلوب ($K$)، واختيار $K$ من النقاط عشوائياً لتكون <b>المراكز الأولية للمجموعات (<span dir="ltr">Initial Centroids</span>)</b>.</li>
-              <li><b>الخطوة (2):</b> حساب المسافة (الإقليدية أو مانهاتن) بين كل نقطة في البيانات وبين جميع المراكز الـ $K$.</li>
-              <li><b>الخطوة (3):</b> إسناد (تخصيص) كل نقطة إلى المجموعة التي يمتلك مركزها <b>أقرب (أصغر) مسافة</b> إليها.</li>
-              <li><b>الخطوة (4):</b> <b>تحديث مراكز المجموعات (<span dir="ltr">Update Centroids</span>)</b> عن طريق حساب <b>المتوسط الحسابي لإحداثيات جميع النقاط</b> التي انضمت لكل مجموعة.</li>
-              <li><b>الخطوة (5):</b> تكرار الخطوات (2 و 3 و 4) حتى نصل إلى حالة <b>التقارب / الثبات (<span dir="ltr">Convergence</span>)</b> (أي لا يتغير انتماء النقاط للمجموعات أو لا تتغير مواقع المراكز).</li>
-            </ol>
-          </li>
-        </ul>
-
-        <div class="step-box">
-          <b>مسألة تتبع حسابية على K-means (كيف نسند النقطة وكيف نحدث المركز في الاختبار؟):</b><br>
-          لنفترض أن لدينا $K = 2$، والمركز الأول $C_1 = (2, 2)$ والمركز الثاني $C_2 = (8, 8)$:<br>
-          • <b>سؤال (أ): لأي مجموعة تنتمي النقطة $P = (3, 4)$؟</b><br>
-          - نحسب المسافة للمركز الأول $C_1$: $|3-2| + |4-2| = 1 + 2 = 3$ (أو إقليدياً $\sqrt{1+4} = \sqrt{5} \approx 2.24$).<br>
-          - نحسب المسافة للمركز الثاني $C_2$: $|3-8| + |4-8| = 5 + 4 = 9$ (أو إقليدياً $\sqrt{25+16} \approx 6.4$).<br>
-          - بما أن المسافة إلى $C_1$ أصغر، إذن تنضم النقطة $P$ إلى <b>المجموعة الأولى ($C_1$)</b>!<br>
-          • <b>سؤال (ب): إذا أصبحت المجموعة الأولى تضم 3 نقاط هي: $(1, 2), (3, 4), (5, 6)$، فما هو موقع المركز الجديد المحدث ($C_1^{\text{new}}$)؟</b><br>
-          - نحسب متوسط الإحداثي السيني $X$: $(1 + 3 + 5) \div 3 = 9 \div 3 = \mathbf{3}$.<br>
-          - نحسب متوسط الإحداثي الصادي $Y$: $(2 + 4 + 6) \div 3 = 12 \div 3 = \mathbf{4}$.<br>
-          - إذن المركز الجديد هو: $C_1^{\text{new}} = \mathbf{(3, 4)}$.
+          </div>
         </div>
+        <p style="margin-top: var(--space-md); margin-bottom: 0;">
+          <strong>ثالثاً — المقاييس النسبية (<bdi dir="ltr">Relative Metrics</bdi>):</strong> تُستخدم للمقارنة بين نتائج التجميع عند تغيير المعاملات (مثل مقارنة قيم <bdi dir="ltr">K</bdi> المختلفة في طريقة المرفق لاختيار الأفضل).
+        </p>
+      </article>
+    </section>
 
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+    <!-- ==================== UNIT 2 ==================== -->
+    <section id="unit-2" class="unit-section" aria-labelledby="unit-2-title">
+      <div class="dossier-bar">
+        <div class="dossier-bar-group">
+          <span class="dossier-pill">الوحدة 02</span>
+          <span class="dossier-meta">خوارزمية K-Means • التقارب • طريقة المرفق (Elbow)</span>
+        </div>
+        <span class="index-num">UNIT 10.2</span>
+      </div>
 
-        <h3>2) مميزات وعيوب (<span dir="ltr">K-means</span>)، وطريقة المرفق (<span dir="ltr">The Elbow Method</span>)</h3>
-        <ul>
-          <li><b>مميزات <span dir="ltr">K-means</span>:</b> بسيطة وسهلة الفهم والتنفيذ، سريعة جداً وفعالة حسابياً مع البيانات الكبيرة.</li>
-          <li><b>عيوب <span dir="ltr">K-means</span> (مهمة جداً في الاختبار!):</b>
-            <ol>
-              <li>تتطلب من المستخدم <b>تحديد عدد المجموعات ($K$) مسبقاً</b> قبل التشغيل.</li>
-              <li><b>حساسة لاختيار المراكز الأولية</b> (قد تصل لحل محلي غير مثالي، ويعالج ذلك بـ <code dir="ltr">init='k-means++'</code>).</li>
-              <li><b>حساسة جداً للقيم المتطرفة والضجيج (<span dir="ltr">Sensitive to Outliers &amp; Noise</span>)</b> لأن المتوسط الحسابي يتأثر بالقيم الشاذة.</li>
-              <li>تفترض أن المجموعات كروية الشكل ومتقاربة الحجم، وتفشل في اكتشاف الأشكال الهندسية غير المنتظمة أو المتداخلة.</li>
-            </ol>
-          </li>
-          <li><b>كيف نحدد العدد الأمثل للمجموعات ($K$)؟ — طريقة المرفق (<span dir="ltr">The Elbow Method</span>):</b>
-            <ul>
-              <li>نقوم بتشغيل خوارزمية <span dir="ltr">K-means</span> لعدة قيم متتالية لـ $K$ (مثلاً من $K=1$ إلى $K=10$)، وفي كل مرة نحسب قيمة مجموع مربعات المسافات داخل المجموعات <b><span dir="ltr">WCSS</span></b> (والتي تُخزن في خاصية <b><code dir="ltr">kmeans.inertia_</code></b>).</li>
-              <li>نرسم منحنى يربط بين $K$ على المحور الأفقي و <span dir="ltr">WCSS</span> على المحور الرأسي؛ فنلاحظ أن <span dir="ltr">WCSS</span> تنخفض بشدة في البداية، وعند نقطة معينة ينكسر المنحنى على شكل <b>"مرفق / كوع" (<span dir="ltr">Elbow</span>)</b> ويصبح الانخفاض بعدها طفيفاً جداً &larr; <b>قيمة $K$ عند نقطة انحناء المرفق هي العدد الأمثل للمجموعات!</b></li>
-            </ul>
-          </li>
-        </ul>
+      <h2 id="unit-2-title" class="section-heading">خوارزمية <bdi dir="ltr">K-Means Clustering</bdi> وتحديد العدد الأمثل للمجموعات</h2>
+      <p>
+        تُعد <strong><bdi dir="ltr">K-Means</bdi></strong> من أشهر خوارزميات التجميع في علم البيانات؛ فهي تسعى لتقسيم مجموعة البيانات إلى <bdi dir="ltr">K</bdi> مجموعات <strong>متجانسة داخلياً ومتباينة فيما بينها</strong> عبر تقليل المسافة بين النقاط ومركز مجموعتها وزيادة المسافة بين المجموعات.
+      </p>
 
-        <div class="code-box">
-<span class="kw">from</span> sklearn.cluster <span class="kw">import</span> KMeans<br><br>
-<span class="cmt"># 1. حساب WCSS (inertia_) لتحديد أفضل K بطريقة المرفق (Elbow Method)</span><br>
-wcss = []<br>
-<span class="kw">for</span> i <span class="kw">in</span> <span class="kw">range</span>(<span class="num">1</span>, <span class="num">11</span>):<br>
-    kmeans = KMeans(n_clusters=i, init=<span class="str">'k-means++'</span>, random_state=<span class="num">42</span>)<br>
-    kmeans.fit(X)<br>
-    wcss.append(kmeans.inertia_)  <span class="cmt"># خاصية inertia_ ترجع قيمة WCSS</span><br><br>
-plt.plot(<span class="kw">range</span>(<span class="num">1</span>, <span class="num">11</span>), wcss, marker=<span class="str">'o'</span>)<br>
-plt.title(<span class="str">'The Elbow Method'</span>)<br><br>
-<span class="cmt"># 2. تدريب نموذج K-means بالعدد الأمثل (مثلاً K=5) واستخراج المراكز والتصنيفات</span><br>
-kmeans = KMeans(n_clusters=<span class="num">5</span>, init=<span class="str">'k-means++'</span>, random_state=<span class="num">42</span>)<br>
-y_kmeans = kmeans.fit_predict(X)<br>
-centroids = kmeans.cluster_centers_  <span class="cmt"># استخراج إحداثيات مراكز المجموعات</span>
+      <!-- 2.1 Algorithm Steps -->
+      <div class="figure-card">
+        <h3 class="sub-heading">خطوات عمل خوارزمية <bdi dir="ltr">K-Means</bdi></h3>
+        <div class="kpi-grid" style="margin-top: var(--space-sm);">
+          <div class="aside-box">
+            <span class="index-num">01</span>
+            <h4 style="margin: var(--space-xs) 0;">تحديد عدد التجميعات (<bdi dir="ltr">K</bdi>)</h4>
+            <p style="margin:0;">خطوة هامة وحساسة يُحدد فيها عدد المجموعات المطلوب إنشاؤها مسبقاً.</p>
+          </div>
+          <div class="aside-box">
+            <span class="index-num">02</span>
+            <h4 style="margin: var(--space-xs) 0;">تهيئة المراكز الأولية (<bdi dir="ltr">Centroids</bdi>)</h4>
+            <p style="margin:0;">اختيار <bdi dir="ltr">K</bdi> نقاط عشوائية لتمثيل المراكز الأولية للمجموعات.</p>
+          </div>
+          <div class="aside-box">
+            <span class="index-num">03</span>
+            <h4 style="margin: var(--space-xs) 0;">تعيين النقاط لأقرب مركز</h4>
+            <p style="margin:0;">حساب المسافة بين كل نقطة وكل مركز، وتعيين النقطة إلى المركز الأقرب.</p>
+          </div>
+          <div class="aside-box">
+            <span class="index-num">04</span>
+            <h4 style="margin: var(--space-xs) 0;">تحديث المراكز والتقارب</h4>
+            <p style="margin:0;">حساب مركز جديد لكل مجموعة (متوسط مواقع نقاطها)، وتكرار الخطوتين 3 و4 حتى <strong>التقارب (<bdi dir="ltr">Convergence</bdi>)</strong>.</p>
+          </div>
         </div>
       </div>
-    </details>
 
-    <!-- ==================== الوحدة الثالثة ==================== -->
-    <details>
-      <summary>الوحدة الثالثة: خوارزمية DBSCAN (الكثافة) والتجميع الهرمي (Hierarchical Clustering)</summary>
-      <div class="details-body">
-        <h3>1) خوارزمية التجميع المعتمد على الكثافة (<span dir="ltr">DBSCAN</span>) وتصنيف النقاط الثلاث</h3>
-        <ul>
-          <li><b>مفهوم <span dir="ltr">DBSCAN</span> (<span dir="ltr">Density-Based Spatial Clustering of Applications with Noise</span>):</b>
-            <ul>
-              <li>خوارزمية تجميع تعتمد على <b>كثافة النقاط</b>؛ حيث تبحث عن المناطق عالية الكثافة وتفصلها عن المناطق منخفضة الكثافة (الضجيج).</li>
-            </ul>
-          </li>
-          <li><b>المعاملان الأساسيان لخوارزمية <span dir="ltr">DBSCAN</span>:</b>
-            <ol>
-              <li><b>1. نصف القطر (<code dir="ltr">eps</code> أو $\epsilon$):</b> أقصى مسافة حول النقطة لاعتبار النقاط الأخرى جيراناً لها (نطاق الجوار).</li>
-              <li><b>2. الحد الأدنى للنقاط (<code dir="ltr">minPts</code> أو <code dir="ltr">min_samples</code>):</b> أقل عدد من النقاط يجب أن يتواجد داخل دائرة نصف قطرها <code dir="ltr">eps</code> (بما فيها النقطة نفسها) لكي تُعتبر المنطقة كثيفة.</li>
-            </ol>
-          </li>
-        </ul>
-
-        <div class="exam-alert">
-          <b>🔥🔥 سؤال امتحاني مؤكد: كيف تصنف خوارزمية <span dir="ltr">DBSCAN</span> نقاط البيانات إلى 3 أنواع؟</b><br>
-          1) <b>نقطة أساسية / مركزية (<span dir="ltr">Core Point</span>):</b> هي نقطة يقع داخل جوارها (<code dir="ltr">eps</code>) عدد من النقاط <b>أكبر من أو يساوي <code dir="ltr">minPts</code></b> ($\text{Neighbors} \ge \text{minPts}$).<br>
-          2) <b>نقطة حدية / طرفية (<span dir="ltr">Border Point</span>):</b> هي نقطة يقع داخل جوارها عدد من النقاط <b>أقل من <code dir="ltr">minPts</code></b>، ولكنها <b>تقع في جوار نقطة أساسية (<span dir="ltr">Core Point</span>)</b>.<br>
-          3) <b>نقطة ضجيج / شاذة (<span dir="ltr">Noise / Outlier Point</span>):</b> هي نقطة <b>ليست نقطة أساسية ولا تقع في جوار أي نقطة أساسية</b> (وفي كود <span dir="ltr">Scikit-learn</span> تُعطى التسمية <b><code dir="ltr">-1</code></b>!).
+      <!-- 2.2 Interactive K-Means Step-by-Step Simulator -->
+      <article class="figure-card" aria-labelledby="kmeans-sim-title">
+        <div class="dossier-bar">
+          <div class="dossier-bar-group">
+            <span class="tag tag-blue">محاكاة تفاعلية</span>
+            <h3 id="kmeans-sim-title" class="sub-heading" style="margin:0;">تتبع خطوات مثال الكتاب في <bdi dir="ltr">K-Means</bdi></h3>
+          </div>
+          <span class="dossier-meta">البيانات: 8 نقاط • <bdi dir="ltr">K = 2</bdi></span>
         </div>
 
-        <div class="step-box">
-          <b>مسألة تتبع خوارزمية DBSCAN (كما في جدول النقاط الست بالملزمة):</b><br>
-          إذا كان لدينا $\text{eps} = 1.5$ و $\text{minPts} = 3$:<br>
-          • إذا كانت النقطة $P_1$ يقع ضمن مسافة $\le 1.5$ منها <b>3 نقاط</b> (بما فيها $P_1$) &larr; إذن $P_1$ هي <b>نقطة أساسية (<span dir="ltr">Core Point</span>)</b> لأن $3 \ge 3$.<br>
-          • إذا كانت النقطة $P_5$ يقع ضمن مسافة $\le 1.5$ منها نقطتان فقط ($2 < 3$)، ولكن إحدى هاتين النقطتين هي النقطة الأساسية $P_1$ &larr; إذن $P_5$ هي <b>نقطة حدية (<span dir="ltr">Border Point</span>)</b>.<br>
-          • إذا كانت النقطة $P_6$ بعيدة عن جميع النقاط بمسافة أكبر من $1.5$ (عدد نقاط جوارها $= 1 < 3$ وليست جارة لأي نقطة أساسية) &larr; إذن $P_6$ هي <b>نقطة ضجيج (<span dir="ltr">Noise Point</span>)</b>!
+        <p>
+          نريد تقسيم النقاط الثماني من الكتاب: <bdi dir="ltr">(5,8), (6,9), (7,8), (8,7), (6,3), (5,2), (4,3), (3,2)</bdi> إلى مجموعتين، مع افتراض اختيار <bdi dir="ltr">(3,2)</bdi> و <bdi dir="ltr">(7,8)</bdi> كمراكز أولية. تنقل بين المراحل لمشاهدة تطور المراكز وتعيين النقاط:
+        </p>
+
+        <div class="controls-row">
+          <button type="button" id="km-btn-0" class="btn btn-secondary active-tab" onclick="setKMeansStep(0)">1. تهيئة المراكز الأولية</button>
+          <button type="button" id="km-btn-1" class="btn btn-secondary" onclick="setKMeansStep(1)">2. تعيين النقاط لأقرب مركز</button>
+          <button type="button" id="km-btn-2" class="btn btn-secondary" onclick="setKMeansStep(2)">3. تحديث المراكز (المتوسط)</button>
+          <button type="button" id="km-btn-3" class="btn btn-secondary" onclick="setKMeansStep(3)">4. التحقق من التقارب</button>
         </div>
 
-        <ul>
-          <li><b>مميزات وعيوب <span dir="ltr">DBSCAN</span> مقارنة بـ <span dir="ltr">K-means</span>:</b>
-            <ul>
-              <li><b>المميزات:</b> (1) <b>لا تتطلب تحديد عدد المجموعات $K$ مسبقاً</b>، (2) قادرة على اكتشاف عناقيد ذات <b>أشكال هندسية عشوائية وغير منتظمة</b>، (3) <b>قوية جداً في التعامل مع الضجيج والقيم المتطرفة (<span dir="ltr">Outliers</span>)</b> وعزلها.</li>
-              <li><b>العيوب:</b> (1) تفشل عندما تكون المجموعات ذات <b>كثافات متفاوتة جداً (<span dir="ltr">Varying densities</span>)</b>، (2) حساسة لاختيار قيمتي <code dir="ltr">eps</code> و <code dir="ltr">minPts</code>.</li>
-            </ul>
-          </li>
-        </ul>
-        <div class="code-box">
-<span class="kw">from</span> sklearn.cluster <span class="kw">import</span> DBSCAN<br><br>
-dbscan = DBSCAN(eps=<span class="num">0.5</span>, min_samples=<span class="num">5</span>)<br>
-clusters = dbscan.fit_predict(X)  <span class="cmt"># النقاط التي تأخذ الرقم -1 هي نقاط الضجيج (Noise)</span>
+        <div class="asymmetric-split">
+          <div class="viz-frame">
+            <svg id="kmeans-svg" class="viz-svg" viewBox="0 0 420 300" role="img" aria-label="رسم تفاعلي لمراحل خوارزمية K-Means"></svg>
+            <div class="viz-legend">
+              <span class="legend-item"><span class="legend-dot c1"></span> المجموعة الأولى (المركز 1)</span>
+              <span class="legend-item"><span class="legend-dot c2"></span> المجموعة الثانية (المركز 2)</span>
+              <span class="legend-item"><span class="legend-dot ctx"></span> قبل التعيين / المركز السابق</span>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap: var(--space-md);">
+            <div id="kmeans-step-desc" class="step-info-box"></div>
+            <div class="result-strip">
+              <div class="result-box">
+                <span class="dossier-meta">مركز المجموعة 1 (<bdi dir="ltr">C₁</bdi>)</span>
+                <span class="res-num" id="km-c1-val">(3, 2)</span>
+                <span class="res-math" id="km-c1-pts">المركز الأولي المختار</span>
+              </div>
+              <div class="result-box alt">
+                <span class="dossier-meta">مركز المجموعة 2 (<bdi dir="ltr">C₂</bdi>)</span>
+                <span class="res-num" id="km-c2-val">(7, 8)</span>
+                <span class="res-math" id="km-c2-pts">المركز الأولي المختار</span>
+              </div>
+            </div>
+            <div class="code-block" aria-label="كود تطبيق K-Means باستخدام scikit-learn">
+<span class="code-comment"># تطبيق K-Means باستخدام مكتبة scikit-learn</span>
+<span class="code-keyword">from</span> sklearn.cluster <span class="code-keyword">import</span> KMeans
+km = KMeans(n_clusters=<span class="code-keyword">2</span>, random_state=42)
+labels = km.fit_predict(X)
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 2.3 Pros, Cons & Elbow Method -->
+      <div class="pros-cons-grid">
+        <article class="pros-card">
+          <h4><i data-lucide="check-circle" aria-hidden="true"></i> مميزات <bdi dir="ltr">K-Means</bdi></h4>
+          <ul class="structured-list">
+            <li><strong>سهل الفهم والتطبيق:</strong> خطواته الحسابية واضحة ومباشرة.</li>
+            <li><strong>الكفاءة العالية:</strong> يتطلب وقت تنفيذ يتناسب خطياً مع عدد النقاط (<bdi dir="ltr">n</bdi>) وعدد المجموعات (<bdi dir="ltr">K</bdi>) وعدد التكرارات (<bdi dir="ltr">t</bdi>) أي <bdi dir="ltr">O(n · K · t)</bdi>.</li>
+          </ul>
+        </article>
+
+        <article class="cons-card">
+          <h4><i data-lucide="alert-triangle" aria-hidden="true"></i> عيوب <bdi dir="ltr">K-Means</bdi></h4>
+          <ul class="structured-list">
+            <li>لا بد من تحديد عدد المجموعات <bdi dir="ltr">K</bdi> يدوياً قبل التشغيل.</li>
+            <li><strong>حساس للقيم المتطرفة (<bdi dir="ltr">Outliers</bdi>):</strong> لأن المركز يُحسب بالمتوسط الحسابي فتسحبه القيم البعيدة.</li>
+            <li><strong>لا يمكنه التعامل مع البيانات غير الخطية</strong> (الأشكال الحلقية أو المنحنية المعقدة).</li>
+          </ul>
+        </article>
+      </div>
+
+      <!-- 2.4 Interactive Elbow Method -->
+      <article class="figure-card" aria-labelledby="elbow-title">
+        <div class="dossier-bar">
+          <div class="dossier-bar-group">
+            <span class="tag tag-blue">أداة تفاعلية</span>
+            <h3 id="elbow-title" class="sub-heading" style="margin:0;">تحديد عدد المجموعات بطريقة المرفق (<bdi dir="ltr">The Elbow Method</bdi>)</h3>
+          </div>
+          <span class="dossier-meta">انقر على أي نقطة على المنحنى</span>
         </div>
 
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+        <div class="asymmetric-split">
+          <div>
+            <p>
+              تعتمد <strong>طريقة المرفق (<bdi dir="ltr">Elbow Method</bdi>)</strong> على حساب قيمة <bdi dir="ltr">WCSS</bdi> مع أعداد مختلفة من المجموعات ورسمها في مخطط خطي (<bdi dir="ltr">Line Plot</bdi>)، ثم اختيار عدد المجموعات الذي يحدث عنده <strong>استقرار واضح</strong> في قيمة <bdi dir="ltr">WCSS</bdi>.
+            </p>
+            <div class="controls-row">
+              <button type="button" class="btn btn-secondary" onclick="selectElbowK(1)">K = 1</button>
+              <button type="button" class="btn btn-secondary" onclick="selectElbowK(2)">K = 2</button>
+              <button type="button" class="btn btn-secondary active-tab" id="elbow-k3-btn" onclick="selectElbowK(3)">K = 3 (المرفق)</button>
+              <button type="button" class="btn btn-secondary" onclick="selectElbowK(4)">K = 4</button>
+              <button type="button" class="btn btn-secondary" onclick="selectElbowK(5)">K = 5</button>
+            </div>
+            <div id="elbow-feedback" class="step-info-box"></div>
+            <div class="code-block">
+wcss = []
+<span class="code-keyword">for</span> k <span class="code-keyword">in</span> range(1, 7):
+    km = KMeans(n_clusters=k).fit(X)
+    wcss.append(km.inertia_)
+            </div>
+          </div>
 
-        <h3>2) التجميع الهرمي (<span dir="ltr">Hierarchical Clustering</span>) وطرق الربط الأربع</h3>
-        <ul>
-          <li><b>مفهومه ونوعاه الأساسيان:</b> يبني التجميع الهرمي شجرة متدرجة من المجموعات تُسمى <b>مخطط الشجرة (<span dir="ltr">Dendrogram</span>)</b> دون الحاجة لتحديد $K$ مسبقاً، وينقسم إلى نوعين:
-            <ol>
-              <li><b>1. التجميع الهرمي التصاعدي / التراكمي (<span dir="ltr">Agglomerative - Bottom-Up</span>):</b> هو الأكثر شيوعاً؛ يبدأ من الأسفل باعتبار <b>كل نقطة مجموعة مستقلة بذاتها</b>، ثم يدمج في كل خطوة أقرب مجموعتين معاً حتى تتجمع كل النقاط في مجموعة واحدة في القمة.</li>
-              <li><b>2. التجميع الهرمي التنازلي / التقسيمي (<span dir="ltr">Divisive - Top-Down</span>):</b> عكس السابق؛ يبدأ من الأعلى باعتبار <b>جميع النقاط في مجموعة واحدة كبيرة</b>، ثم يقسمها تدريجياً إلى مجموعات أصغر حتى تصبح كل نقطة منفردة.</li>
-            </ol>
-          </li>
-        </ul>
+          <div class="viz-frame">
+            <svg id="elbow-svg" class="viz-svg" viewBox="0 0 420 260" role="img" aria-label="منحنى المرفق لحساب WCSS مقابل عدد المجموعات K"></svg>
+          </div>
+        </div>
+      </article>
+    </section>
 
-        <div class="exam-alert">
-          <b>🔥 طرق حساب المسافة بين المجموعات الأربع في التجميع الهرمي (<span dir="ltr">Linkage Methods</span>):</b><br>
-          1) <b>الربط الفردي / الأقرب (<span dir="ltr">Single Linkage</span>):</b> المسافة بين مجموعتين هي <b>أقصر (أقل) مسافة</b> بين أقرب نقطتين في المجموعتين: $\min d(x_i, x_j)$.<br>
-          2) <b>الربط الكامل / الأبعد (<span dir="ltr">Complete Linkage</span>):</b> المسافة بين مجموعتين هي <b>أكبر (أبعد) مسافة</b> بين أبعد نقطتين في المجموعتين: $\max d(x_i, x_j)$.<br>
-          3) <b>الربط المتوسط (<span dir="ltr">Average Linkage</span>):</b> المسافة بين مجموعتين هي <b>متوسط جميع المسافات</b> الممكنة بين كل نقطة في المجموعة الأولى وكل نقطة في المجموعة الثانية.<br>
-          4) <b>طريقة وارد (<span dir="ltr">Ward Linkage</span>):</b> تدمج المجموعتين اللتين يؤدي دمجهما إلى <b>أقل زيادة ممكنة في التباين الكلي (مجموع المربعات الداخلي <span dir="ltr">WSS</span>)</b> (وهي الطريقة الافتراضية في <span dir="ltr">Scikit-learn</span>).
+    <!-- ==================== UNIT 3 ==================== -->
+    <section id="unit-3" class="unit-section" aria-labelledby="unit-3-title">
+      <div class="dossier-bar">
+        <div class="dossier-bar-group">
+          <span class="dossier-pill">الوحدة 03</span>
+          <span class="dossier-meta">DBSCAN • الكثافة والضجيج • التجميع الهرمي</span>
+        </div>
+        <span class="index-num">UNIT 10.3</span>
+      </div>
+
+      <h2 id="unit-3-title" class="section-heading">خوارزمية <bdi dir="ltr">DBSCAN</bdi> والتجميع الهرمي (<bdi dir="ltr">Hierarchical Clustering</bdi>)</h2>
+      <p>
+        لتجاوز قيود <bdi dir="ltr">K-Means</bdi> مع الأشكال غير الخطية والقيم المتطرفة، نلجأ إلى التجميع المعتمد على الكثافة عبر خوارزمية <strong><bdi dir="ltr">DBSCAN</bdi></strong>، أو إلى بناء بنية شجرية متدرجة عبر <strong>التجميع الهرمي</strong>.
+      </p>
+
+      <!-- 3.1 DBSCAN Concept & Steps -->
+      <div class="two-col-grid">
+        <article class="figure-card">
+          <h3 class="sub-heading">مفهوم وأنواع النقاط في <bdi dir="ltr">DBSCAN</bdi></h3>
+          <p>
+            خوارزمية تجميع <strong>غير خطية</strong> تبحث عن المناطق عالية الكثافة لتشكيل المجموعات، وتفصلها عن المناطق منخفضة الكثافة التي تُعتبر <strong>ضجيجاً (<bdi dir="ltr">Noise</bdi>)</strong> أو قيماً خارجية، وتعتمد على معاملين هما نصف قطر الجوار (<bdi dir="ltr">eps</bdi>) والحد الأدنى للنقاط (<bdi dir="ltr">minPts</bdi>):
+          </p>
+          <ul class="structured-list">
+            <li><span class="tag tag-green">نقطة أساسية (Core Point)</span> تقع ضمن جوارها <bdi dir="ltr">eps</bdi> نقاط عددها ≥ <bdi dir="ltr">minPts</bdi>.</li>
+            <li><span class="tag tag-blue">نقطة حدية (Border Point)</span> عدد جيرانها أقل من <bdi dir="ltr">minPts</bdi> لكنها تقع داخل جوار نقطة أساسية.</li>
+            <li><span class="tag tag-red">نقطة ضجيج (Noise Point)</span> لا توجد نقاط كافية في جوارها ولا ترتبط بأي نقطة أساسية، فلا تتبع أي مجموعة.</li>
+          </ul>
+        </article>
+
+        <article class="figure-card">
+          <h3 class="sub-heading">خطوات عمل خوارزمية <bdi dir="ltr">DBSCAN</bdi></h3>
+          <ol class="structured-list">
+            <li>تحديد جميع <strong>النقاط الأساسية (<bdi dir="ltr">Core Points</bdi>)</strong> في البيانات.</li>
+            <li>لكل نقطة أساسية لم تنضم لمجموعة بعد، ننشئ <strong>مجموعة جديدة</strong>.</li>
+            <li>نضيف جميع النقاط المتصلة بها (كل نقطة أساسية أو حدية ضمن نطاق <bdi dir="ltr">eps</bdi> أو متصلة بها عبر سلسلة نقاط أساسية).</li>
+            <li>نكرر الخطوة السابقة لجميع النقاط الأساسية المتبقية.</li>
+            <li>أي نقطة لا تكفي النقاط في جوارها لتكون أساسية أو حدية تُصنف كـ <strong>نقطة ضجيج</strong>.</li>
+          </ol>
+          <div class="code-block">
+<span class="code-keyword">from</span> sklearn.cluster <span class="code-keyword">import</span> DBSCAN
+db = DBSCAN(eps=<span class="code-keyword">1.5</span>, min_samples=<span class="code-keyword">2</span>)
+labels = db.fit_predict(X) <span class="code-comment"># -1 تعني ضجيج</span>
+          </div>
+        </article>
+      </div>
+
+      <!-- 3.2 Interactive DBSCAN Explorer on Textbook Data -->
+      <article class="figure-card" aria-labelledby="dbscan-lab-title">
+        <div class="dossier-bar">
+          <div class="dossier-bar-group">
+            <span class="tag tag-blue">مختبر تفاعلي</span>
+            <h3 id="dbscan-lab-title" class="sub-heading" style="margin:0;">تجربة مثال الكتاب لـ <bdi dir="ltr">DBSCAN</bdi></h3>
+          </div>
+          <button type="button" class="btn btn-secondary" onclick="resetDbscanDefaults()">ضبط مثال الكتاب (<bdi dir="ltr">eps=1.5, minPts=2</bdi>)</button>
         </div>
 
-        <div class="code-box">
-<span class="kw">import</span> scipy.cluster.hierarchy <span class="kw">as</span> sch<br>
-<span class="kw">from</span> sklearn.cluster <span class="kw">import</span> AgglomerativeClustering<br><br>
-<span class="cmt"># 1. رسم شجرة التجميع الهرمي (Dendrogram) لتحديد عدد العناقيد المناسب</span><br>
-dendrogram = sch.dendrogram(sch.linkage(X, method=<span class="str">'ward'</span>))<br>
-plt.title(<span class="str">'Dendrogram'</span>)<br><br>
-<span class="cmt"># 2. تطبيق التجميع الهرمي التصاعدي (AgglomerativeClustering)</span><br>
-hc = AgglomerativeClustering(n_clusters=<span class="num">5</span>, linkage=<span class="str">'ward'</span>)<br>
-y_hc = hc.fit_predict(X)
+        <p>
+          البيانات من الكتاب: <bdi dir="ltr">(1,2), (2,2), (2,3), (8,7), (8,8), (25,80)</bdi>. حرّك قيمتي <bdi dir="ltr">eps</bdi> و <bdi dir="ltr">minPts</bdi> لمراقبة كيف تتشكل المجموعات أو تتحول النقاط إلى ضجيج (ملاحظة: الرسم يعرض المنطقة القريبة مع إظهار النقطة البعيدة <bdi dir="ltr">(25,80)</bdi> كمؤشر موقعي).
+        </p>
+
+        <div class="asymmetric-split">
+          <div>
+            <div class="controls-row">
+              <div class="field-group">
+                <label class="field-label" for="db-eps-slider">
+                  <span>نصف قطر الجوار (<bdi dir="ltr">eps</bdi>)</span>
+                  <span class="index-num" id="db-eps-readout">1.5</span>
+                </label>
+                <input id="db-eps-slider" class="range-input" type="range" min="0.5" max="4.0" step="0.1" value="1.5" oninput="updateDbscanFromSlider(this.value)">
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="db-minpts-input">الحد الأدنى (<bdi dir="ltr">minPts</bdi>)</label>
+                <input id="db-minpts-input" class="field-input" type="number" min="1" max="5" step="1" value="2" oninput="updateDbscanFromMinPts(this.value)">
+              </div>
+            </div>
+
+            <div id="dbscan-summary" class="step-info-box"></div>
+
+            <div class="table-wrap" style="margin-top: var(--space-md);">
+              <table>
+                <thead>
+                  <tr>
+                    <th>النقطة</th>
+                    <th>النقاط ضمن <bdi dir="ltr">eps</bdi></th>
+                    <th>النوع</th>
+                    <th>التصنيف النهائي</th>
+                  </tr>
+                </thead>
+                <tbody id="dbscan-table-body"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="viz-frame">
+            <svg id="dbscan-svg" class="viz-svg" viewBox="0 0 420 290" role="img" aria-label="تمثيل تفاعلي لنقاط DBSCAN ودوائر نصف القطر eps"></svg>
+            <div class="viz-legend">
+              <span class="legend-item"><span class="legend-dot c1"></span> المجموعة الأولى</span>
+              <span class="legend-item"><span class="legend-dot c3"></span> المجموعة الثانية</span>
+              <span class="legend-item"><span class="legend-dot c4"></span> نقطة ضجيج (Noise)</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 3.3 DBSCAN Pros & Cons -->
+      <div class="pros-cons-grid">
+        <article class="pros-card">
+          <h4><i data-lucide="check-circle" aria-hidden="true"></i> مميزات <bdi dir="ltr">DBSCAN</bdi></h4>
+          <ul class="structured-list">
+            <li>يمكنه تجميع <strong>البيانات غير الخطية</strong> (أشكال غير كروية ومعقدة).</li>
+            <li>يستطيع التعامل مع <strong>القيم المتطرفة</strong> وعزلها كضجيج تلقائياً.</li>
+          </ul>
+        </article>
+        <article class="cons-card">
+          <h4><i data-lucide="alert-triangle" aria-hidden="true"></i> عيوب <bdi dir="ltr">DBSCAN</bdi></h4>
+          <ul class="structured-list">
+            <li>يحتاج إلى <strong>قدر كبير من الحسابات</strong> مع مجموعات البيانات الكبيرة.</li>
+            <li><strong>صعوبة تحديد المعاملات المناسبة</strong> (<bdi dir="ltr">eps</bdi> و <bdi dir="ltr">minPts</bdi>) خصوصاً عند تغير الكثافات.</li>
+          </ul>
+        </article>
+      </div>
+
+      <!-- 3.4 Hierarchical Clustering Interactive Switcher -->
+      <article class="figure-card" aria-labelledby="hier-title">
+        <div class="dossier-bar">
+          <div class="dossier-bar-group">
+            <span class="tag tag-blue">مقارنة تفاعلية</span>
+            <h3 id="hier-title" class="sub-heading" style="margin:0;">التجميع الهرمي (<bdi dir="ltr">Hierarchical Clustering</bdi>)</h3>
+          </div>
+          <div class="dossier-bar-group">
+            <button type="button" id="hier-btn-agg" class="btn btn-secondary active-tab" onclick="setHierMode('agglomerative')">التصاعدي (<bdi dir="ltr">Agglomerative</bdi>)</button>
+            <button type="button" id="hier-btn-div" class="btn btn-secondary" onclick="setHierMode('divisive')">التنازلي (<bdi dir="ltr">Divisive</bdi>)</button>
+          </div>
+        </div>
+
+        <p>
+          التجميع الهرمي هو أسلوب يهدف إلى بناء <strong>تسلسل هرمي من التجمعات</strong>، وينقسم إلى نوعين متعاكسين في اتجاه البناء:
+        </p>
+
+        <div class="asymmetric-split">
+          <div id="hier-text-box" class="aside-box"></div>
+          <div class="viz-frame" style="min-height: 240px;">
+            <svg id="hier-svg" class="viz-svg" viewBox="0 0 420 220" style="min-height:200px;" role="img" aria-label="مخطط يوضح آلية التجميع الهرمي التصاعدي والتنازلي"></svg>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ==================== COMPREHENSIVE 30-QUESTION QUIZ ==================== -->
+    <section id="quiz-section" class="quiz-section" aria-labelledby="quiz-title">
+      <div class="dossier-bar">
+        <div class="dossier-bar-group">
+          <span class="dossier-pill">الاختبار التفاعلي</span>
+          <span class="dossier-meta">30 سؤال اختيار من متعدد • 10 أسئلة لكل وحدة</span>
+        </div>
+        <span class="index-num">EXAM BANK</span>
+      </div>
+
+      <h2 id="quiz-title" class="section-heading">بنك أسئلة الفصل العاشر: التعلم الآلي بدون إشراف</h2>
+      <p>
+        اختبر فهمك الكامل لجميع وحدات الفصل العاشر. عند اختيار إجابة في أي سؤال، سيظهر التقييم الفوري مع <strong>الشرح التفصيلي لطريقة الحل والقاعدة العلمية</strong>، ويُحفظ تقدمك تلقائياً.
+      </p>
+
+      <!-- Live Quiz Dashboard -->
+      <div class="quiz-dashboard">
+        <div class="quiz-stats-row">
+          <div class="quiz-stat">
+            <span class="quiz-stat-label">تم حلّها</span>
+            <span class="quiz-stat-val" id="stat-answered">0 / 30</span>
+          </div>
+          <div class="quiz-stat">
+            <span class="quiz-stat-label">الإجابات الصحيحة</span>
+            <span class="quiz-stat-val" id="stat-correct" style="color: var(--positive);">0</span>
+          </div>
+          <div class="quiz-stat">
+            <span class="quiz-stat-label">الوحدة 1 | الوحدة 2 | الوحدة 3</span>
+            <span class="quiz-stat-val" id="stat-units" style="font-size: 1rem;">0/10 | 0/10 | 0/10</span>
+          </div>
+          <div class="quiz-stat">
+            <span class="quiz-stat-label">نسبة الإتقان</span>
+            <span class="quiz-stat-val" id="stat-percent">0%</span>
+          </div>
+        </div>
+
+        <div class="progress-track" aria-label="شريط تقدم الاختبار">
+          <div id="quiz-progress-fill" class="progress-fill"></div>
+        </div>
+
+        <div class="filter-toolbar">
+          <div class="filter-group" role="group" aria-label="تصفية الأسئلة">
+            <button type="button" id="flt-all" class="btn btn-secondary active-tab" onclick="setQuizFilter('all')">جميع الأسئلة (30)</button>
+            <button type="button" id="flt-u1" class="btn btn-secondary" onclick="setQuizFilter('1')">الوحدة 1 (10)</button>
+            <button type="button" id="flt-u2" class="btn btn-secondary" onclick="setQuizFilter('2')">الوحدة 2 (10)</button>
+            <button type="button" id="flt-u3" class="btn btn-secondary" onclick="setQuizFilter('3')">الوحدة 3 (10)</button>
+            <button type="button" id="flt-unanswered" class="btn btn-secondary" onclick="setQuizFilter('unanswered')">غير محلولة</button>
+            <button type="button" id="flt-wrong" class="btn btn-secondary" onclick="setQuizFilter('wrong')">الخاطئة للمراجعة</button>
+          </div>
+
+          <button type="button" id="reset-quiz-btn" class="btn btn-danger-outline" onclick="handleResetQuiz(this)">
+            <i data-lucide="rotate-ccw" aria-hidden="true"></i>
+            إعادة تعيين الاختبار
+          </button>
         </div>
       </div>
-    </details>
-  </section>
 
-  <!-- التبويب الثاني: جداول المقارنات والمعادلات -->
-  <section id="tables" class="panel">
-    <div class="card">
-      <h2>1. مقارنة شاملة بين خوارزميات التجميع الثلاث (K-means vs DBSCAN vs Hierarchical)</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>وجه المقارنة</th>
-            <th>خوارزمية K-means</th>
-            <th>خوارزمية DBSCAN</th>
-            <th>التجميع الهرمي (Hierarchical)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><b>مبدأ العمل</b></td>
-            <td>تقسيمي يعتمد على المسافة من <b>مراكز المجموعات (<span dir="ltr">Centroids</span>)</b>.</td>
-            <td>يعتمد على <b>كثافة النقاط</b> (<code dir="ltr">eps</code> و <code dir="ltr">minPts</code>).</td>
-            <td>يبني شجرة هرمية (<span dir="ltr">Dendrogram</span>) تصاعدياً (<span dir="ltr">Agglomerative</span>) أو تنازلياً (<span dir="ltr">Divisive</span>).</td>
-          </tr>
-          <tr>
-            <td><b>هل يتطلب تحديد $K$ مسبقاً؟</b></td>
-            <td><b>نعم،</b> يجب تحديد $K$ مسبقاً (ويمكن الاستعانة بطريقة المرفق <span dir="ltr">Elbow</span>).</td>
-            <td><b>لا</b> يتطلب تحديد عدد المجموعات $K$ مسبقاً.</td>
-            <td><b>لا</b> يتطلب تحديد $K$ لبناء شجرة الـ <span dir="ltr">Dendrogram</span>.</td>
-          </tr>
-          <tr>
-            <td><b>التعامل مع الضجيج والمتطرفات</b></td>
-            <td><b>ضعيف جداً؛</b> يتأثر بشدة بالقيم المتطرفة.</td>
-            <td><b>ممتاز؛</b> يعزل القيم الشاذة كنقاط ضجيج (<span dir="ltr">Noise = -1</span>).</td>
-            <td>يتأثر بالضجيج خاصة في طريقة <span dir="ltr">Single linkage</span>.</td>
-          </tr>
-          <tr>
-            <td><b>شكل المجموعات المكتشفة</b></td>
-            <td>يكتشف المجموعات <b>الكروية/الدائرية</b> فقط.</td>
-            <td>يكتشف المجموعات ذات <b>الأشكال الهندسية العشوائية وغير المنتظمة</b>.</td>
-            <td>يعتمد على طريقة الربط (<span dir="ltr">Single, Complete, Average, Ward</span>).</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+      <!-- Questions List Container -->
+      <div id="quiz-list" class="quiz-list"></div>
+    </section>
 
-    <div class="card">
-      <h2>2. ملخص القوانين الرياضية في الفصل العاشر</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>المقياس</th>
-            <th>المعادلة الرياضية</th>
-            <th>التصنيف والاستخدام</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><b>مسافة مانهاتن (<span dir="ltr">City-Block</span>)</b></td>
-            <td dir="ltr">$D_c = \sum |a_j - b_j|$</td>
-            <td>مقياس مسافة (مجموع الفروق المطلقة).</td>
-          </tr>
-          <tr>
-            <td><b>المسافة الإقليدية (<span dir="ltr">Euclidean</span>)</b></td>
-            <td dir="ltr">$D_e = \sqrt{\sum (a_j - b_j)^2}$</td>
-            <td>مقياس مسافة (الجذر التربيعي لمجموع مربعات الفروق).</td>
-          </tr>
-          <tr>
-            <td><b>مؤشر راند (<span dir="ltr">RAND-correct</span>)</b></td>
-            <td dir="ltr">$\frac{M_{00} + M_{11}}{M_{00} + M_{01} + M_{10} + M_{11}}$</td>
-            <td>مقياس كفاءة تجميع <b>خارجي (<span dir="ltr">External</span>)</b>.</td>
-          </tr>
-          <tr>
-            <td><b>معامل جاكارد (<span dir="ltr">Jaccard Index</span>)</b></td>
-            <td dir="ltr">$J = \frac{M_{11}}{M_{01} + M_{10} + M_{11}}$</td>
-            <td>مقياس كفاءة تجميع <b>خارجي (<span dir="ltr">External</span>)</b> يستثني $M_{00}$.</td>
-          </tr>
-          <tr>
-            <td><b>معامل الظل (<span dir="ltr">Silhouette Index</span>)</b></td>
-            <td dir="ltr">$s(x_i) = \frac{b(x_i) - a(x_i)}{\max(b(x_i), a(x_i))}$</td>
-            <td>مقياس كفاءة تجميع <b>داخلي (<span dir="ltr">Internal</span>)</b> يتراوح بين $[-1, +1]$.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
+    <footer class="source-footer">
+      <span>المصدر المرجعي: ملخص مقرر تحليل وتمثيل البيانات — الفصل العاشر (التعلم الآلي بدون إشراف: الوحدات 1، 2، 3).</span>
+      <span>جميع الحسابات والمحاكيات التفاعلية مبنية على أمثلة ومعادلات المقرر.</span>
+    </footer>
+  </main>
 
-  <!-- التبويب الثالث: قاموس المصطلحات والدوال -->
-  <section id="terms" class="panel">
-    <div class="card">
-      <h2>قاموس المصطلحات والدوال الشامل للفصل العاشر</h2>
-      <p class="muted">جميع المفاهيم والخوارزميات والدوال البرمجية الخاصة بالتعلم الآلي بدون إشراف:</p>
-      <div id="termsGrid" class="grid"></div>
-    </div>
-  </section>
+  <api-shim></api-shim>
+  <script>
+    // =========================================================================
+    // 1. DATA: 30 MCQs (10 per Unit) with template literals
+    // =========================================================================
+    const QUIZ_DATA = [
+      // --- UNIT 1 (1..10) ---
+      {
+        id: 1,
+        unit: 1,
+        unitLabel: `الوحدة 1: المفاهيم الأساسية`,
+        question: `ما الفارق الجوهري بين التعلم الآلي بإشراف والتعلم الآلي بدون إشراف من حيث بنية البيانات؟`,
+        options: [
+          `التعلم بإشراف لا يستخدم سمات مستقلة إطلاقاً`,
+          `التعلم بدون إشراف يعتمد على سمات مستقلة فقط ولا توجد فيه سمة هدف (y)`,
+          `التعلم بدون إشراف يتطلب وجود سمة هدف رقمية مستمرة`,
+          `التعلم بإشراف يقتصر فقط على تقسيم البيانات إلى عناقيد`
+        ],
+        correct: 1,
+        rationale: `في التعلم بإشراف تُعطى البيانات على هيئة (x, y) حيث x سمات مستقلة و y سمة هدف، بينما في التعلم بدون إشراف تتكون البيانات من سمات مستقلة فقط دون وجود سمة هدف.`
+      },
+      {
+        id: 2,
+        unit: 1,
+        unitLabel: `الوحدة 1: المفاهيم الأساسية`,
+        question: `أيٌّ من المهام التالية يُعد مثالاً نموذجياً على التعلم الآلي بدون إشراف؟`,
+        options: [
+          `التعرف على الوجوه بناءً على صور موسومة مسبقاً`,
+          `تصنيف البيانات إلى فئات محددة سلفاً`,
+          `تجميع البيانات المتشابهة في مجموعات (Data Clustering) دون سمة هدف`,
+          `التنبؤ بإصابة مريض بالسكري اعتماداً على سجلات طبية مصنفة`
+        ],
+        correct: 2,
+        rationale: `تقسيم وتجميع البيانات (Data Clustering) هو المثال الأبرز للتعلم الآلي بدون إشراف لغياب السمة الهدف، أما التصنيف والتعرف على الوجوه فهما من أمثلة التعلم بإشراف.`
+      },
+      {
+        id: 3,
+        unit: 1,
+        unitLabel: `الوحدة 1: تجميع البيانات`,
+        question: `ما القاعدة الأساسية التي تعتمد عليها تقنيات تجميع البيانات (Clustering)؟`,
+        options: [
+          `وضع جميع العينات في عنقود واحد لتقليل زمن المعالجة`,
+          `قياس التشابه بين العناصر بناءً على السمات، وجمع المتشابهة في نفس العنقود وتوزيع المختلفة على عناقيد مختلفة`,
+          `حذف السمات المستقلة والاعتماد على السمة الهدف فقط`,
+          `بناء فاصل خطي يعظم الهامش بين فئتين معروفة مسبقاً`
+        ],
+        correct: 1,
+        rationale: `تقوم تقنيات التجميع بقياس التشابه عبر السمات المستقلة؛ فتجمع العناصر المتقاربة في نفس العنقود (Cluster) وتفصل العناصر المختلفة في عناقيد مستقلة.`
+      },
+      {
+        id: 4,
+        unit: 1,
+        unitLabel: `الوحدة 1: تجميع البيانات`,
+        question: `في مثال تجميع بيانات الموظفين بناءً على العمر والمستوى التعليمي، ما الملاحظة المهمة حول تحديد عدد المجموعات (Clusters)؟`,
+        options: [
+          `يكون عدد المجموعات دائماً مساوياً لعدد السمات المستقلة`,
+          `يُعد من المعاملات الهامة التي تحتاج إلى العديد من التجارب والقياسات لتحديده بدقة`,
+          `يُحدد تلقائياً بـ 5 مجموعات في جميع قواعد البيانات`,
+          `يساوي دائماً عدد الصفوف مقسوماً على اثنين`
+        ],
+        correct: 1,
+        rationale: `اختيار عدد المجموعات معامل حساس ومهم، ويحتاج إلى تجارب وقياسات متعددة (مثل مؤشر سيلويت أو طريقة المرفق) للوصول إلى التوزيع الأدق.`
+      },
+      {
+        id: 5,
+        unit: 1,
+        unitLabel: `الوحدة 1: مقاييس المسافة`,
+        question: `عند استخدام مقاييس المسافة (Distance Metrics) في التجميع، ما العلاقة بين المسافة والتشابه بين عنصرين؟`,
+        options: [
+          `كلما زادت المسافة زاد التشابه بين العنصرين`,
+          `كلما قلت المسافة زاد التشابه بين العنصرين، والعكس صحيح`,
+          `لا توجد أي علاقة رياضية بين المسافة والتشابه`,
+          `يزداد التشابه فقط إذا كانت المسافة سالبة`
+        ],
+        correct: 1,
+        rationale: `تعكس المسافة مدى تقارب أو تباعد العناصر في فضاء السمات؛ فالمسافة الأصغر تعني تقارباً أكبر في القيم وبالتالي تشابهاً أعلى.`
+      },
+      {
+        id: 6,
+        unit: 1,
+        unitLabel: `الوحدة 1: مقاييس المسافة`,
+        question: `إذا كان الوزن والطول لشخصين هما (70, 175) و (80, 170)، فكم تبلغ مسافة سيتي بلوك (City-block distance) بينهما؟`,
+        options: [
+          `5`,
+          `11.18`,
+          `15`,
+          `125`
+        ],
+        correct: 2,
+        rationale: `مسافة سيتي بلوك تساوي مجموع الفروق المطلقة للسمات: D_c = |70 - 80| + |175 - 170| = 10 + 5 = 15.`
+      },
+      {
+        id: 7,
+        unit: 1,
+        unitLabel: `الوحدة 1: مقاييس المسافة`,
+        question: `لنفس الشخصين ذوي السمات (70, 175) و (80, 170)، ما القيمة التقريبية للمسافة الإقليدية (Euclidean distance) بينهما؟`,
+        options: [
+          `15`,
+          `11.18`,
+          `25`,
+          `10`
+        ],
+        correct: 1,
+        rationale: `المسافة الإقليدية تحسب بالجذر التربيعي لمجموع مربعات الفروق: √((70-80)² + (175-170)²) = √(100 + 25) = √125 ≈ 11.18، وهي المقياس الأكثر استخداماً.`
+      },
+      {
+        id: 8,
+        unit: 1,
+        unitLabel: `الوحدة 1: مقاييس المسافة`,
+        question: `على أي نوع من السمات يُطبق مقياس City-block distance؟`,
+        options: [
+          `السمات الاسمية غير المرتبة فقط`,
+          `السمات الرقمية`,
+          `النصوص غير المهيكلة فقط`,
+          `القيم المنطقية دون تحويل`
+        ],
+        correct: 1,
+        rationale: `يتطلب حساب مجموع الفرق المطلق (|a_i - b_i|) عمليات طرح رقمية، لذا يُطبق مقياس City-block على السمات الرقمية.`
+      },
+      {
+        id: 9,
+        unit: 1,
+        unitLabel: `الوحدة 1: كفاءة التجميع`,
+        question: `أيٌّ من المقاييس التالية يُعد من المقاييس الداخلية للتحقق من كفاءة التجميع دون الحاجة لفئات خارجية مسبقة؟`,
+        options: [
+          `دقة التصنيف (Accuracy) من مصفوفة الارتباك`,
+          `مؤشر سيلويت (Silhouette Index) ومجموع المربعات داخل المجموعات (WCSS)`,
+          `منحنى ROC`,
+          `الارتباط الخطي مع السمة الهدف`
+        ],
+        correct: 1,
+        rationale: `المقاييس الداخلية تقيس جودة التجميع من البيانات نفسها (مدى التماسك الداخلي والتباعد بين العناقيد) ومن أشهرها Silhouette Index و WCSS.`
+      },
+      {
+        id: 10,
+        unit: 1,
+        unitLabel: `الوحدة 1: كفاءة التجميع`,
+        question: `في معادلة Within-groups sum of squares (WCSS)، ماذا يمثل كل من K و N_k و C_k؟`,
+        options: [
+          `عدد السمات، عدد التكرارات، وقيمة الضجيج`,
+          `عدد المجموعات، عدد العناصر في المجموعة k، ومركز المجموعة k`,
+          `نصف قطر الجوار، عدد الجيران، والحد الفاصل`,
+          `عدد الصفوف الكلي، معامل التنظيم، والانحراف المعياري`
+        ],
+        correct: 1,
+        rationale: `تقيس WCSS مجموع مربع المسافة بين كل عناصر المجموعة (عددها N_k) ومركز المجموعة C_k عبر جميع المجموعات K، وتنخفض قيمتها كلما زاد التجانس داخل العناقيد.`
+      },
 
-  <!-- التبويب الرابع: البطاقات التعليمية -->
-  <section id="cards" class="panel">
-    <div class="card">
-      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
-      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
-      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
-        <div class="term" id="flashTerm"></div>
-        <div class="answer" id="flashAnswer" hidden></div>
-        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
-      </div>
-      <div class="row" style="margin-top:14px">
-        <button class="btn" id="prevCard">السابق</button>
-        <span id="cardCount" class="muted"></span>
-        <button class="btn primary" id="nextCard">التالي</button>
-      </div>
-    </div>
-  </section>
+      // --- UNIT 2 (11..20) ---
+      {
+        id: 11,
+        unit: 2,
+        unitLabel: `الوحدة 2: K-Means`,
+        question: `ما الهدف الرئيسي لخوارزمية K-Means Clustering؟`,
+        options: [
+          `تكبير المسافة بين النقاط داخل نفس المجموعة`,
+          `تقسيم البيانات إلى مجموعات متجانسة داخلياً (أقل مسافة داخلية) ومتباينة فيما بينها`,
+          `حساب الاحتمالات الشرطية لتصنيف البيانات`,
+          `عزل القيم المتطرفة في مجموعة ضجيج (-1)`
+        ],
+        correct: 1,
+        rationale: `تعمل K-Means على تقليل المسافة بين النقاط داخل نفس المجموعة وزيادة المسافة بين المجموعات المختلفة للوصول إلى عناقيد متجانسة.`
+      },
+      {
+        id: 12,
+        unit: 2,
+        unitLabel: `الوحدة 2: K-Means`,
+        question: `ما الخطوتان اللتان تتكرران في خوارزمية K-Means بعد تهيئة المراكز الأولية (Centroids)؟`,
+        options: [
+          `دمج العناقيد المتجاورة ثم تقسيمها هرمياً`,
+          `تعيين النقاط لأقرب مركز، ثم تحديث المراكز بحساب متوسط مواقع نقاط كل مجموعة`,
+          `حساب الكثافة المحلية ثم حذف النقاط الحدية`,
+          `تحويل البيانات عبر دالة polynomial ثم حساب الانحدار`
+        ],
+        correct: 1,
+        rationale: `تتكرر في K-Means خطوتا: (1) إسناد كل نقطة لأقرب مركز، و(2) إعادة حساب مركز كل مجموعة كمتوسط إحداثيات جميع النقاط التابعة لها.`
+      },
+      {
+        id: 13,
+        unit: 2,
+        unitLabel: `الوحدة 2: K-Means`,
+        question: `متى تتوقف الحلقة التكرارية في خوارزمية K-Means عن التحديث؟`,
+        options: [
+          `بعد 3 دورات تكرار فقط مهما كانت النتائج`,
+          `عند تحقق التقارب (Convergence)، أي عدم حدوث تغير كبير في مراكز التجميعات`,
+          `عندما يصبح عدد النقاط في كل مجموعة متساوياً تماماً`,
+          `عندما تساوي قيمة K صفراً`
+        ],
+        correct: 1,
+        rationale: `تتوقف الخوارزمية عند الوصول إلى حالة التقارب (Convergence)، حيث تثبت مراكز المجموعات أو يصبح التغير فيها صغيراً جداً.`
+      },
+      {
+        id: 14,
+        unit: 2,
+        unitLabel: `الوحدة 2: K-Means (تطبيق)`,
+        question: `في مثال الكتاب، إذا أُسندت النقاط (3,2), (4,3), (5,2), (6,3) إلى المجموعة الأولى، فما إحداثيات المركز الجديد لهذه المجموعة؟`,
+        options: [
+          `(4.0, 2.0)`,
+          `(4.5, 2.5)`,
+          `(5.0, 2.5)`,
+          `(6.5, 8.0)`
+        ],
+        correct: 1,
+        rationale: `يُحسب المركز الجديد بالمتوسط الحسابي للإحداثيات: x = (3+4+5+6)/4 = 18/4 = 4.5، و y = (2+3+2+3)/4 = 10/4 = 2.5، فيصبح المركز (4.5, 2.5).`
+      },
+      {
+        id: 15,
+        unit: 2,
+        unitLabel: `الوحدة 2: K-Means (تطبيق)`,
+        question: `وفي نفس مثال الكتاب، إذا ضمت المجموعة الثانية النقاط (5,8), (6,9), (7,8), (8,7)، فما المركز الجديد لها؟`,
+        options: [
+          `(6.5, 8.0)`,
+          `(7.0, 8.0)`,
+          `(6.0, 7.5)`,
+          `(4.5, 2.5)`
+        ],
+        correct: 0,
+        rationale: `متوسط المحور x = (5+6+7+8)/4 = 26/4 = 6.5، ومتوسط المحور y = (8+9+8+7)/4 = 32/4 = 8، إذاً المركز الجديد هو (6.5, 8).`
+      },
+      {
+        id: 16,
+        unit: 2,
+        unitLabel: `الوحدة 2: K-Means (تطبيق)`,
+        question: `إذا استقر المركزان عند (4.5, 2.5) و (6.5, 8)، فأي مجموعة تُعيّن إليها نقطة جديدة إحداثياتها (5, 3)؟`,
+        options: [
+          `المجموعة الثانية ذات المركز (6.5, 8)`,
+          `المجموعة الأولى ذات المركز (4.5, 2.5) لأنها الأقرب مسافة`,
+          `تُستبعد باعتبارها نقطة ضجيج`,
+          `تُنشئ مجموعة ثالثة جديدة تلقائياً`
+        ],
+        correct: 1,
+        rationale: `المسافة إلى (4.5, 2.5) تساوي √(0.5² + 0.5²) ≈ 0.71، بينما المسافة إلى (6.5, 8) تساوي √(1.5² + 5²) ≈ 5.22، ولذلك تتبع النقطة المركز الأول الأقرب.`
+      },
+      {
+        id: 17,
+        unit: 2,
+        unitLabel: `الوحدة 2: مزايا K-Means`,
+        question: `ما الذي يميز الكفاءة الزمنية لخوارزمية K-Means؟`,
+        options: [
+          `يتناسب وقت التنفيذ أسياً مع عدد النقاط`,
+          `يتناسب وقت التنفيذ خطياً مع عدد النقاط (n) وعدد المجموعات (K) وعدد التكرارات (t)`,
+          `يتطلب وقتاً تربيعياً لحساب كافة الأزواج مثل DBSCAN`,
+          `لا يتأثر وقت التنفيذ بزيادة عدد النقاط`
+        ],
+        correct: 1,
+        rationale: `تتميز K-Means بسهولة التطبيق وكفاءتها الزمنية العالية حيث يتناسب وقت التنفيذ خطياً مع n و K و t.`
+      },
+      {
+        id: 18,
+        unit: 2,
+        unitLabel: `الوحدة 2: عيوب K-Means`,
+        question: `لماذا تُعد خوارزمية K-Means حساسة للقيم المتطرفة (Outliers)؟`,
+        options: [
+          `لأنها تتجاهل القيم المتطرفة وتُصنفها كضجيج`,
+          `لأن تحديث المراكز يعتمد على المتوسط الحسابي، فتنجذب المراكز نحو القيم المتطرفة البعيدة`,
+          `لأنها تزيد قيمة K تلقائياً عند وجود قيم متطرفة`,
+          `لأنها تستخدم مسافة مانهاتن دائماً`
+        ],
+        correct: 1,
+        rationale: `حساب المركز عبر المتوسط الحسابي يجعل أي قيمة متطرفة بعيدة تؤثر بقوة على موقع المركز وتسحبه خارج قلب الكتلة الحقيقية للبيانات.`
+      },
+      {
+        id: 19,
+        unit: 2,
+        unitLabel: `الوحدة 2: عيوب K-Means`,
+        question: `أيٌّ من العبارات التالية يُعد من العيوب الرئيسية لخوارزمية K-Means؟`,
+        options: [
+          `تحتاج تحديد عدد المجموعات K يدوياً ولا تتعامل مع البيانات غير الخطية`,
+          `تكتشف الأشكال الحلقية المتداخلة بدقة تامة`,
+          `لا يمكن تطبيقها عبر مكتبة scikit-learn`,
+          `تحدد القيم المتطرفة كضجيج وتعزلها`
+        ],
+        correct: 0,
+        rationale: `عيوب K-Means الثلاثة هي: ضرورة تحديد K يدوياً، الحساسية للقيم المتطرفة، وعدم قدرتها على التعامل مع البيانات غير الخطية.`
+      },
+      {
+        id: 20,
+        unit: 2,
+        unitLabel: `الوحدة 2: طريقة المرفق`,
+        question: `في طريقة المرفق (The Elbow Method) الموضحة بالكتاب، لماذا تم اختيار عدد المجموعات 3؟`,
+        options: [
+          `لأن قيمة WCSS تصل إلى الصفر تماماً عند K = 3`,
+          `لأن قيمة WCSS تستقر عنده ولا تتأثر كثيراً بإضافة مجموعة رابعة`,
+          `لأن 3 هو أكبر عدد مسموح به في scikit-learn`,
+          `لأن عدد السمات المستقلة في البيانات كان 3`
+        ],
+        correct: 1,
+        rationale: `نختار نقطة المرفق التي يبدأ عندها استقرار منحنى WCSS؛ ففي مثال الكتاب لا تنخفض WCSS بشكل مؤثر عند إضافة مجموعة رابعة، لذا يُعتمد K = 3.`
+      },
 
-  <!-- التبويب الخامس: الاختبار الذاتي العشوائي -->
-  <section id="quiz" class="panel">
-    <div class="card">
-      <div class="row">
-        <div>
-          <h2>الاختبار الشامل المتغير للفصل العاشر (25 سؤالاً) <span class="badge-new">ترتيب عشوائي ذكي 🎲</span></h2>
-          <p class="muted">يختبر فهمك لمسائل المسافات، مقاييس الكفاءة، تتبع K-means و DBSCAN، والتجميع الهرمي مع تصحيح فوري!</p>
-        </div>
-        <div class="score" id="score">النتيجة: 0 / 25</div>
-      </div>
-      <div class="progress"><div id="progressBar"></div></div>
-      <div id="quizArea"></div>
-      <div class="row">
-        <button class="btn" id="resetQuiz">إعادة الاختبار بترتيب عشوائي جديد 🔀</button>
-        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
-      </div>
-      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
-    </div>
-  </section>
-</main>
+      // --- UNIT 3 (21..30) ---
+      {
+        id: 21,
+        unit: 3,
+        unitLabel: `الوحدة 3: DBSCAN`,
+        question: `ما المبدأ الذي تعتمد عليه خوارزمية DBSCAN في تكوين المجموعات؟`,
+        options: [
+          `مبدأ الكثافة: البحث عن مناطق عالية الكثافة وفصلها عن المناطق منخفضة الكثافة التي تُعد ضجيجاً`,
+          `حساب متوسط المسافة إلى مراكز عشوائية`,
+          `تقسيم البيانات هرمياً من الأعلى للأسفل`,
+          `التنبؤ بقيم مستمرة عبر معاملات خطية`
+        ],
+        correct: 0,
+        rationale: `DBSCAN خوارزمية تجميع غير خطية تعتمد على الكثافة لتجميع النقاط المتقاربة بكثافة وعزل النقاط المتفرقة في مناطق منخفضة الكثافة كضجيج.`
+      },
+      {
+        id: 22,
+        unit: 3,
+        unitLabel: `الوحدة 3: DBSCAN`,
+        question: `ما المعاملان الأساسيان اللازمان لتشغيل خوارزمية DBSCAN؟`,
+        options: [
+          `K و n_estimators`,
+          `eps (نصف قطر الجوار) و minPts (الحد الأدنى لعدد النقاط)`,
+          `WCSS و Silhouette`,
+          `degree و lambda`
+        ],
+        correct: 1,
+        rationale: `يحدد eps نطاق الجوار حول كل نقطة، ويحدد minPts الحد الأدنى من النقاط داخل هذا النطاق لتكوين نقطة أساسية عالية الكثافة.`
+      },
+      {
+        id: 23,
+        unit: 3,
+        unitLabel: `الوحدة 3: DBSCAN`,
+        question: `متى تعتبر خوارزمية DBSCAN نقطةً ما «نقطة ضجيج» (Noise Point)؟`,
+        options: [
+          `إذا كانت مسافة الجوار أقل من الصفر`,
+          `إذا لم توجد نقاط كافية في جوارها eps لتكون نقطة أساسية أو حدية، فلا تتبع أي مجموعة`,
+          `إذا كان عدد جيرانها أكبر من minPts`,
+          `إذا كانت تقع في منتصف المجموعة الأولى`
+        ],
+        correct: 1,
+        rationale: `النقطة التي لا تحقق شرط النقطة الأساسية (جيران ≥ minPts) ولا تقع في جوار نقطة أساسية (حدية)، تبقى معزولة كضجيج لا ينتمي لأي مجموعة.`
+      },
+      {
+        id: 24,
+        unit: 3,
+        unitLabel: `الوحدة 3: DBSCAN (تطبيق)`,
+        question: `في مثال الكتاب: البيانات (25,80), (8,8), (8,7), (2,3), (2,2), (1,2) مع minPts=2 و eps=1.5، ما تصنيف النقطة (25, 80)؟`,
+        options: [
+          `نقطة أساسية في المجموعة الأولى`,
+          `نقطة حدية في المجموعة الثانية`,
+          `نقطة ضجيج (Noise) لا تتبع أي مجموعة`,
+          `مركز المجموعة الثالثة`
+        ],
+        correct: 2,
+        rationale: `بالبحث في جوار نصف قطر 1.5 حول (25,80) لا توجد أي نقاط مجاورة (عدد النقاط المجاورة = 0)، لذا تُعتبر نقطة ضجيج.`
+      },
+      {
+        id: 25,
+        unit: 3,
+        unitLabel: `الوحدة 3: DBSCAN (تطبيق)`,
+        question: `في نفس مثال الكتاب لخوارزمية DBSCAN (مع eps=1.5 و minPts=2)، ما المجموعات الصحيحة الناتجة؟`,
+        options: [
+          `مجموعة واحدة تضم جميع النقاط الست`,
+          `المجموعة الأولى {(1,2), (2,2), (2,3)}، المجموعة الثانية {(8,7), (8,8)}، و(25,80) ضجيج`,
+          `المجموعة الأولى {(1,2), (8,8)} والمجموعة الثانية {(2,3), (25,80)}`,
+          `ثلاث مجموعات بدون أي نقاط ضجيج`
+        ],
+        correct: 1,
+        rationale: `النقاط (1,2),(2,2),(2,3) متقاربة بمسافات ≤ 1.41 (أقل من 1.5) فتكوّن المجموعة الأولى، والنقطتان (8,7),(8,8) المسافة بينهما 1 (أقل من 1.5) فتكوّنان المجموعة الثانية.`
+      },
+      {
+        id: 26,
+        unit: 3,
+        unitLabel: `الوحدة 3: مزايا DBSCAN`,
+        question: `ما أبرز ميزتين تتفوق بهما خوارزمية DBSCAN على خوارزمية K-Means؟`,
+        options: [
+          `تعمل أسرع مع البيانات الضخمة ولا تحتاج ضبط معاملات`,
+          `يمكنها تجميع البيانات غير الخطية وتستطيع التعامل مع القيم المتطرفة (الضجيج)`,
+          `تتطلب تحديد عدد المجموعات K يدوياً وتحسب المتوسط لكل مركز`,
+          `تبني شجرة قرار للتصنيف بإشراف`
+        ],
+        correct: 1,
+        rationale: `تتفوق DBSCAN في قدرتها على اكتشاف العناقيد غير الخطية وعزل القيم المتطرفة تلقائياً كنقاط ضجيج.`
+      },
+      {
+        id: 27,
+        unit: 3,
+        unitLabel: `الوحدة 3: عيوب DBSCAN`,
+        question: `ما العيبان الرئيسيان اللذان يواجهان تطبيق خوارزمية DBSCAN؟`,
+        options: [
+          `الحاجة لقدرات حسابية كبيرة، وصعوبة تحديد المعاملات المناسبة (eps و minPts)`,
+          `عدم قدرتها على عزل القيم المتطرفة`,
+          `ضرورة استخدام بيانات موسومة (x, y)`,
+          `فشلها التام مع البيانات غير الخطية`
+        ],
+        correct: 0,
+        rationale: `تتطلب DBSCAN قدراً كبيراً من الحسابات لحساب الجوار لكل نقطة، كما يصعب أحياناً اختيار قيمتي eps و minPts المناسبتين لطبيعة البيانات.`
+      },
+      {
+        id: 28,
+        unit: 3,
+        unitLabel: `الوحدة 3: التجميع الهرمي`,
+        question: `كيف يعمل التجميع الهرمي التصاعدي (Agglomerative Clustering)؟`,
+        options: [
+          `يبدأ بوضع جميع النقاط في عنقود واحد ثم يقسمه لعناقيد أصغر`,
+          `يبدأ بوضع كل نقطة في عنقود منفصل، ثم يدمج العناقيد الأكثر تشابهاً خطوة بخطوة حتى عنقود واحد شامل`,
+          `يختار K مراكز عشوائية ويثبتها من البداية`,
+          `يحذف النقاط البعيدة ولا يربطها بأي عنقود`
+        ],
+        correct: 1,
+        rationale: `التجميع التصاعدي يسير من الأسفل للأعلى: كل نقطة تبدأ كعنقود مستقل، ثم تُدمج العناقيد الأقرب (باستخدام مقاييس المسافة) تدريجياً في عنقود واحد.`
+      },
+      {
+        id: 29,
+        unit: 3,
+        unitLabel: `الوحدة 3: التجميع الهرمي`,
+        question: `أيٌّ من العبارات التالية يصف التجميع الهرمي التنازلي (Divisive Clustering)؟`,
+        options: [
+          `يبدأ بكل نقطة في عنقود منفصل ثم يدمجها معاً`,
+          `يبدأ بوضع جميع النقاط في عنقود واحد، ثم يقسمه لعناقيد أصغر تدريجياً حتى تصل كل نقطة لعنقود منفصل`,
+          `يعتمد على الكثافة المحلية دون تسلسل هرمي`,
+          `يحتاج إلى سمة هدف يحددها المستخدم`
+        ],
+        correct: 1,
+        rationale: `التجميع التنازلي يسير من الأعلى للأسفل: يبدأ بعنقود واحد يحوي كل البيانات ثم ينقسم تدريجياً إلى عناقيد أصغر فأصغر.`
+      },
+      {
+        id: 30,
+        unit: 3,
+        unitLabel: `الوحدة 3: مقارنة شاملة`,
+        question: `إذا كانت لديك بيانات غير خطية وتحتوي على قيم شاذة متفرقة، ولا تعرف عدد المجموعات مسبقاً، فما الخوارزمية الأنسب من الفصل العاشر؟`,
+        options: [
+          `K-Means`,
+          `DBSCAN`,
+          `الانحدار الخطي (Linear Regression)`,
+          `K-Nearest Neighbors (K-NN)`
+        ],
+        correct: 1,
+        rationale: `DBSCAN هي الأنسب لأنها تعالج البيانات غير الخطية، وتفصل القيم الشاذة كضجيج، ولا تشترط معرفة عدد المجموعات K مسبقاً (بينما K-NN والانحدار الخطي من التعلم بإشراف).`
+      }
+    ];
 
-<footer>مبني بالكامل (100%) على محتوى الفصل العاشر (التعلم الآلي بدون إشراف) من مقرر تحليل وتمثيل البيانات</footer>
-
-<script>
-const terms = [
-  ["Supervised vs Unsupervised Learning", "التعلم بإشراف يعتمد على وجود سمة الهدف المعروفة (Y) للتنبؤ بها، بينما التعلم بدون إشراف يعمل على بيانات غير معنونة (بدون Y) لاكتشاف المجموعات (Clustering)."],
-  ["City-Block / Manhattan Distance", "مسافة كتلة المدينة (مانهاتن): مجموع القيم المطلقة للفروق بين إحداثيات النقطتين: Dc = sum(|a_j - b_j|)."],
-  ["Euclidean Distance", "المسافة الإقليدية: الجذر التربيعي لمجموع مربعات الفروق بين إحداثيات النقطتين: De = sqrt(sum((a_j - b_j)^2))."],
-  ["RAND-correct & Jaccard Index", "من المقاييس الخارجية (External Measures) لتقييم كفاءة التجميع بمقارنته بتصنيف مرجعي."],
-  ["Silhouette Index (معامل الظل)", "من المقاييس الداخلية (Internal Measures) لكفاءة التجميع: s(x) = (b(x) - a(x)) / max(b(x), a(x))، وتتراوح قيمته بين [-1, +1]."],
-  ["WSS / WCSS (kmeans.inertia_)", "Within-groups Sum of Squares: مجموع مربعات المسافات بين النقاط ومراكز مجموعاتها (مقياس داخلي، وتستخرجه خاصية inertia_)."],
-  ["K-Means Clustering", "خوارزمية تجميع تقسم البيانات إلى K مجموعات عبر تحديث مواقع المراكز (Centroids) بالمتوسط الحسابي حتى التقارب."],
-  ["The Elbow Method (طريقة المرفق)", "طريقة بصرية لتحديد العدد الأمثل للمجموعات (K) في K-means عبر رسم منحنى WCSS مقابل K واختيار نقطة انحناء المرفق."],
-  ["DBSCAN", "خوارزمية تجميع تعتمد على الكثافة، تكتشف الأشكال غير المنتظمة وتعزل الضجيج دون الحاجة لتحديد K مسبقاً."],
-  ["eps & minPts (في DBSCAN)", "المعامل eps هو نصف قطر جوار النقطة، و minPts (أو min_samples) هو الحد الأدنى لعدد النقاط داخل الجوار لتكوين منطقة كثيفة."],
-  ["Core / Border / Noise Points", "تصنيف النقاط في DBSCAN: أساسية (Core >= minPts)، حدية (Border < minPts لكنها بجوار Core)، وضجيج (Noise لا تنتمي لأي مجموعة وتأخذ -1)."],
-  ["Agglomerative vs Divisive", "نوعا التجميع الهرمي: التصاعدي (Agglomerative) يبدأ بكل نقطة كمجموعة ويدمجها، والتنازلي (Divisive) يبدأ بمجموعة واحدة ويقسمها."],
-  ["Single / Complete / Average / Ward Linkage", "طرق حساب المسافة بين المجموعات في التجميع الهرمي: الأقرب (Single)، الأبعد (Complete)، المتوسط (Average)، وتقليل التباين (Ward)."],
-  ["Dendrogram (مخطط الشجرة)", "التمثيل المرئي الشجري لخطوات الدمج في التجميع الهرمي، ويُرسم بدالة sch.dendrogram()."]
-];
-
-const cards = [
-  ["ما الفرق الأساسي بين التعلم الآلي بإشراف (Supervised) والتعلم الآلي بدون إشراف (Unsupervised)؟", "• التعلم بإشراف: تتوفر فيه سمة الهدف (Y) لتدريب النموذج على التنبؤ بها (مثل الانحدار والتصنيف).\n• التعلم بدون إشراف: لا تتوفر فيه سمة الهدف (Y)، ويهدف لاكتشاف الأنماط وتقسيم البيانات إلى عناقيد متشابهة (Clustering)."],
-  ["ما هما قانونا حساب المسافة بين نقطتين A و B: 1) مسافة مانهاتن (City-block)، و 2) المسافة الإقليدية (Euclidean)؟", "1) مسافة مانهاتن: Dc = Σ |a_j - b_j|\n2) المسافة الإقليدية: De = √[ Σ (a_j - b_j)² ]"],
-  ["[مسألة حسابية] احسبي مسافة مانهاتن (Dc) والمسافة الإقليدية (De) بين النقطتين A(2, 3) و B(5, 7).", "• مسافة مانهاتن: Dc = |2 - 5| + |3 - 7| = 3 + 4 = 7.\n• المسافة الإقليدية: De = √[ (2 - 5)² + (3 - 7)² ] = √[ 9 + 16 ] = √25 = 5."],
-  ["ما هي الأنواع الثلاثة لطرق التحقق من كفاءة التجميع (Cluster Validation)؟", "1) المقاييس الخارجية (External Measures): مثل مؤشر RAND ومعامل جاكارد.\n2) المقاييس الداخلية (Internal Measures): مثل معامل الظل (Silhouette) و WSS.\n3) المقاييس النسبية (Relative Measures)."],
-  ["ما الفرق بين معادلة مؤشر راند (RAND-correct) ومعادلة معامل جاكارد (Jaccard Index)؟", "• RAND = (M00 + M11) / (M00 + M01 + M10 + M11)\n• Jaccard (J) = M11 / (M01 + M10 + M11) — (يستثني M00 من البسط والمقام)."],
-  ["ما هي معادلة معامل الظل (Silhouette Index)؟ وماذا يمثل الرمزان a(xi) و b(xi) فيها؟", "s(xi) = (b(xi) - a(xi)) / max(b(xi), a(xi))\n• a(xi): متوسط المسافة بين النقطة والنقاط الأخرى في (نفس مجموعتها).\n• b(xi): أقل متوسط مسافة بين النقطة والنقاط في (أقرب مجموعة أخرى)."],
-  ["ما هو النطاق الرياضي لقيمة معامل الظل (Silhouette Index)؟ ومتى يكون التجميع مثالياً؟", "يتراوح بين [-1 و +1].\nويكون التجميع ممتازاً ومثالياً كلما اقتربت القيمة من (+1) (أي عندما تكون a صغيرة جداً و b كبيرة جداً)."],
-  ["ما هي الخطوات الخمس لعمل خوارزمية (K-means Clustering)؟", "1) اختيار K مراكز أولية عشوائية (Centroids).\n2) حساب المسافة بين كل نقطة وجميع المراكز.\n3) إسناد كل نقطة إلى المركز الأقرب إليها.\n4) تحديث موقع كل مركز بحساب المتوسط الحسابي لنقاط مجموعته.\n5) تكرار الخطوات حتى التقارب (Convergence) وثبات المراكز."],
-  ["[مسألة حسابية] إذا ضمت مجموعة في K-means ثلاث نقاط هي: (2, 4)، (4, 6)، (6, 8)، فما هو موقع المركز المحدث (New Centroid) لهذه المجموعة؟", "نحسب متوسط X ومتوسط Y:\n• X_new = (2 + 4 + 6) / 3 = 12 / 3 = 4.\n• Y_new = (4 + 6 + 8) / 3 = 18 / 3 = 6.\nإذن المركز الجديد هو: (4, 6)."],
-  ["ما هي أبرز عيوب خوارزمية (K-means)؟", "1) تتطلب تحديد عدد المجموعات K مسبقاً.\n2) حساسة جداً للقيم المتطرفة والضجيج (Outliers).\n3) حساسة لاختيار المراكز الأولية.\n4) تفشل في اكتشاف المجموعات ذات الأشكال غير الكروية."],
-  ["كيف نحدد العدد الأمثل للمجموعات (K) في خوارزمية K-means؟ وما الخاصية البرمجية التي تعطي قيمة WCSS؟", "باستخدام طريقة المرفق (The Elbow Method) عبر رسم قيم WCSS مقابل K واختيار نقطة انحناء المرفق.\nوالخاصية في Scikit-learn هي: kmeans.inertia_"],
-  ["كيف نستخرج إحداثيات المراكز النهائية بعد تدريب نموذج KMeans في Scikit-learn؟", "باستخدام الخاصية:\nkmeans.cluster_centers_"],
-  ["على ماذا تعتمد خوارزمية (DBSCAN)؟ وما هما معاملاها الأساسيان؟", "تعتمد على كثافة النقاط (Density-based).\nومعاملاها هما:\n1) eps (نصف قطر الجوار).\n2) minPts / min_samples (الحد الأدنى لعدد النقاط داخل الجوار)."],
-  ["ما هي الأنواع الثلاثة للنقاط في خوارزمية (DBSCAN)؟", "1) نقطة أساسية (Core Point): عدد نقاط جوارها >= minPts.\n2) نقطة حدية (Border Point): عدد نقاط جوارها < minPts ولكنها تقع في جوار نقطة أساسية.\n3) نقطة ضجيج (Noise Point): ليست أساسية ولا تقع في جوار أي نقطة أساسية."],
-  ["بأي رقم ترمز مكتبة Scikit-learn لنقاط الضجيج (Noise Points) في مخرجات خوارزمية DBSCAN؟", "ترمز لها بالرقم السالب (-1)."],
-  ["ما هي مميزات خوارزمية (DBSCAN) التي تتفوق بها على خوارزمية (K-means)؟", "1) لا تحتاج لتحديد عدد المجموعات K مسبقاً.\n2) تكتشف المجموعات ذات الأشكال الهندسية العشوائية وغير المنتظمة.\n3) قوية في التعامل مع الضجيج والقيم المتطرفة وعزلها."],
-  ["ما هو العيب الرئيسي لخوارزمية (DBSCAN)؟", "تواجه صعوبة وتفشل عندما تكون المجموعات في البيانات ذات كثافات متفاوتة بشكل كبير (Varying densities)، كما أنها حساسة لاختيار eps و minPts."],
-  ["ما الفرق بين النوعين الرئيسيين للتجميع الهرمي: (Agglomerative) و (Divisive)؟", "• التصاعدي (Agglomerative - Bottom-up): يبدأ باعتبار كل نقطة مجموعة مستقلة، ثم يدمج الأقرب تدريجياً حتى تصبح مجموعة واحدة.\n• التنازلي (Divisive - Top-down): يبدأ بوضع كل النقاط في مجموعة واحدة كبيرة، ثم يقسمها تدريجياً."],
-  ["ما هي الطرق الأربع لحساب المسافة بين المجموعات (Linkage Methods) في التجميع الهرمي؟", "1) Single linkage (أقصر مسافة بين نقطتين).\n2) Complete linkage (أبعد مسافة بين نقطتين).\n3) Average linkage (متوسط المسافات بين كل الأزواج).\n4) Ward linkage (تقليل الزيادة في التباين الداخلي WSS)."],
-  ["ما هو مخطط الشجرة (Dendrogram)؟ وكيف نرسمه في البايثون؟", "هو رسم شجري يوضح التسلسل الهرمي لعمليات دمج أو تقسيم المجموعات في التجميع الهرمي.\nويُرسم باستخدام مكتبة scipy: sch.dendrogram(sch.linkage(X, method='ward'))."],
-  ["[مسألة حسابية] في مقاييس التجميع الخارجية، إذا كان M11 = 20، و M00 = 30، و M01 = 5، و M10 = 5، فكم تبلغ قيمة مؤشر RAND وقيمة معامل جاكارد J؟", "• مؤشر RAND = (30 + 20) / (30 + 5 + 5 + 20) = 50 / 60 = 0.833.\n• معامل جاكارد J = 20 / (5 + 5 + 20) = 20 / 30 = 0.667."],
-  ["[مسألة حسابية] إذا كان متوسط مسافة النقطة لمجموعتها a(x) = 2، وأقل متوسط مسافة لأقرب مجموعة أخرى b(x) = 6، فكم تبلغ قيمة معامل الظل Silhouette؟", "s(x) = (6 - 2) / max(6, 2) = 4 / 6 = 2/3 ≈ +0.67."],
-  ["لماذا يُصنف معامل الظل (Silhouette) ومجموع المربعات داخل المجموعات (WSS) كمقاييس داخلية (Internal Measures)؟", "لأنها تقيس جودة التجميع (التماسك والانفصال) بالاعتماد على إحداثيات البيانات نفسها فقط دون الحاجة لأي تسميات خارجية مسبقة."],
-  ["من أي وحدة في مكتبة Scikit-learn نستورد الخوارزميات: KMeans، و DBSCAN، و AgglomerativeClustering؟", "نستوردها جميعاً من الوحدة:\nsklearn.cluster"],
-  ["ما وظيفة المعامل (init='k-means++') داخل الفئة KMeans() في Scikit-learn؟", "اختيار المراكز الأولية للمجموعات بطريقة ذكية ومتباعدة لتسريع التقارب وتجنب الوقوع في الحلول المحلية السيئة."],
-  ["متى تتوقف خوارزمية K-means عن التكرار (حالة التقارب Convergence)؟", "عندما لا تنتقل أي نقطة من مجموعة إلى أخرى في التكرار الجديد (أي تثبت مواقع مراكز المجموعات Centroids ولا تتغير)."],
-  ["إذا كانت نقطة البيانات تقع على مسافة 4 من المركز C1، وعلى مسافة 2.5 من المركز C2، وعلى مسافة 6 من المركز C3، فإلى أي مجموعة تسندها خوارزمية K-means؟", "تسندها إلى المجموعة الثانية (C2) لأنها صاحبة المسافة الأصغر (الأقرب = 2.5)."],
-  ["في خوارزمية DBSCAN، إذا كان minPts = 5، وكانت النقطة A في جوارها 6 نقاط، والنقطة B في جوارها 2 فقط ولكن إحداهما هي النقطة A، فما تصنيف A و B؟", "• النقطة A: نقطة أساسية (Core Point) لأن 6 >= 5.\n• النقطة B: نقطة حدية (Border Point) لأن 2 < 5 ولكنها تقع في جوار النقطة الأساسية A."]
-];
-
-const masterQuestions = [
-  {q:"ما الفرق الجوهري بين التعلم الآلي بإشراف (Supervised Learning) والتعلم الآلي بدون إشراف (Unsupervised Learning)؟",o:["التعلم بإشراف تتوفر فيه سمة الهدف المعروفة (Y) للتنبؤ بها، بينما التعلم بدون إشراف لا تتوفر فيه سمة الهدف (Y) ويهدف لاكتشاف المجموعات والأنماط الخفية (Clustering)","التعلم بدون إشراف يتطلب وجود سمة الهدف (Y) دائماً، والتعلم بإشراف يعمل بدونها","كلاهما لا يستخدمان أي بيانات رقمية","التعلم بدون إشراف يُسمى الانحدار الخطي فقط"],a:0,e:"غياب سمة الهدف (Y) هو السمة المميزة للتعلم بدون إشراف (Unsupervised Learning) مثل خوارزميات التجميع العنقودي (Clustering)."},
-  {q:"[مسألة حسابية] احسبي مسافة كتلة المدينة (مانهاتن - City-block distance) بين النقطتين A = (1, 5) و B = (4, 1).",o:["7 (لأن |1 - 4| + |5 - 1| = 3 + 4 = 7)","5","1","25"],a:0,e:"قانون مسافة مانهاتن هو مجموع الفروق المطلقة: |1 - 4| + |5 - 1| = |-3| + |4| = 3 + 4 = 7."},
-  {q:"[مسألة حسابية] احسبي المسافة الإقليدية (Euclidean distance) بين النقطتين A = (1, 5) و B = (4, 1).",o:["5 (لأن الجذر التربيعي لـ (1-4)² + (5-1)² = جذر (9 + 16) = جذر 25 = 5)","7","25","12"],a:0,e:"المسافة الإقليدية = الجذر التربيعي لـ ((-3)^2 + (4)^2) = جذر (9 + 16) = جذر 25 = 5."},
-  {q:"أي من مقاييس التحقق من كفاءة التجميع التالية يُصنف كمقياس (خارجي - External Measure)، وما هي معادلته؟",o:["معامل جاكارد (Jaccard Index): J = M11 / (M01 + M10 + M11)","معامل الظل (Silhouette Index)","مجموع المربعات داخل المجموعات (WSS)","طريقة المرفق (Elbow Method)"],a:0,e:"مؤشر RAND ومعامل جاكارد (Jaccard Index) هما من المقاييس الخارجية التي تقارن التجميع بتصنيف مرجعي خارجي."},
-  {q:"يُعد معامل الظل (Silhouette Index) من أشهر المقاييس الداخلية لكفاءة التجميع؛ فما هي معادلته الرياضية وما نطاق قيمه؟",o:["s(x) = (b(x) - a(x)) / max(b(x), a(x)) ، وتتراوح قيمته بين [-1 و +1]","s(x) = a(x) + b(x) ، وتتراوح قيمته بين [0 و 100]","s(x) = Q3 - Q1 ، وتتراوح قيمته بين [0 و 1]","s(x) = M11 / M00"],a:0,e:"يحسب معامل الظل الفرق بين مسافة الانفصال b(x) ومسافة التماسك a(x) مقسوماً على الأكبر منهما، ويتراوح بين -1 و +1."},
-  {q:"في معادلة معامل الظل (Silhouette Index)، ماذا يمثل الرمز a(x_i) والرمز b(x_i)؟",o:["a(x_i) هو متوسط المسافة بين النقطة ونقاط مجموعتها نفسها، و b(x_i) هو أقل متوسط مسافة بين النقطة ونقاط أقرب مجموعة مجاورة أخرى","a(x_i) هو عدد المجموعات، و b(x_i) هو عدد الصفوف المفقودة","كلاهما يمثلان المتوسط الحسابي للعمود الأول","a(x_i) هو الربع الأول، و b(x_i) هو الربع الثالث"],a:0,e:"يقيس a(x_i) مدى التماسك الداخلي للمجموعة (كلما صغر كان أفضل)، ويقيس b(x_i) مدى الانفصال عن أقرب مجموعة أخرى (كلما كبر كان أفضل)."},
-  {q:"[مسألة حسابية] إذا كان متوسط مسافة النقطة لنفس مجموعتها a(x) = 1، وأقل متوسط مسافة لأقرب مجموعة مجاورة b(x) = 4، فكم تبلغ قيمة معامل الظل s(x)؟",o:["+0.75 (لأن (4 - 1) / max(4, 1) = 3 / 4 = 0.75)","-0.75","5.0","0.25"],a:0,e:"نعوض في قانون Silhouette مباشرة: (b - a) / max(b, a) = (4 - 1) / 4 = 3 / 4 = +0.75."},
-  {q:"في خوارزمية (K-means Clustering)، كيف يتم تحديث موقع مركز المجموعة (Centroid) في كل تكرار؟",o:["عن طريق حساب المتوسط الحسابي لإحداثيات جميع النقاط التي تم إسنادها إلى تلك المجموعة","عن طريق اختيار أبعد نقطة متطرفة في الجدول","عن طريق حذف جميع نقاط المجموعة","عن طريق ضرب المركز القديم في صفر"],a:0,e:"في الخطوة الرابعة من K-means، يتم تحديث كل مركز (Centroid) بحساب المتوسط الحسابي (Mean) لجميع النقاط المنتمية لمجموعته."},
-  {q:"[مسألة حسابية] في خوارزمية K-means، إذا انضمت النقاط الثلاث: (0, 2)، (4, 4)، (8, 6) إلى المجموعة الأولى، فما هي إحداثيات المركز المحدث الجديد (New Centroid) لهذه المجموعة؟",o:["(4, 4) — لأن متوسط X = (0+4+8)/3 = 4، ومتوسط Y = (2+4+6)/3 = 4","(12, 12)","(0, 2)","(8, 6)"],a:0,e:"نحسب متوسط الإحداثيات السينية: (0+4+8)/3 = 12/3 = 4، ومتوسط الإحداثيات الصادية: (2+4+6)/3 = 12/3 = 4. إذن المركز هو (4, 4)."},
-  {q:"جميع ما يلي يُعد من عيوب ونقاط ضعف خوارزمية (K-means) ما عدا:",o:["قدرتها الفائقة على اكتشاف المجموعات ذات الأشكال الهندسية المتعرجة وعزل الضجيج دون تحديد K","تتطلب من المستخدم تحديد عدد المجموعات (K) مسبقاً","حساسة جداً للقيم المتطرفة والضجيج (Outliers)","حساسة لاختيار المراكز الأولية وتفترض أن المجموعات كروية الشكل"],a:0,e:"اكتشاف الأشكال غير المنتظمة وعزل الضجيج دون تحديد K هي من مميزات خوارزمية DBSCAN وليست K-means."},
-  {q:"ما هي الطريقة الشائعة لتحديد العدد الأمثل للمجموعات (K) في خوارزمية K-means عن طريق رسم منحنى مجموع مربعات المسافات داخل المجموعات (WCSS)؟",o:["طريقة المرفق (The Elbow Method)","طريقة بايز الساذج (Naive Bayes)","اختبار مربع كاي (Chi-squared)","طريقة الانحدار اللوجستي"],a:0,e:"تُستخدم طريقة المرفق (The Elbow Method) برسم WCSS مقابل K واختيار قيمة K عند نقطة انحناء المرفق."},
-  {q:"في مكتبة Scikit-learn، ما اسم الخاصية التي تُرجع قيمة مجموع المربعات داخل المجموعات (WCSS)، وما اسم الخاصية التي تُرجع إحداثيات مراكز المجموعات بعد تدريب KMeans؟",o:["الخاصية kmeans.inertia_ لقيمة WCSS، والخاصية kmeans.cluster_centers_ للمراكز","الخاصية kmeans.wcss_ و kmeans.means_","الخاصية kmeans.score_ و kmeans.labels_","الخاصية kmeans.eps_ و kmeans.min_samples_"],a:0,e:"في كائن KMeans المدرب: تُخزن قيمة WCSS في inertia_، وتُخزن إحداثيات المراكز في cluster_centers_."},
-  {q:"على ماذا تعتمد خوارزمية (DBSCAN) في تجميع البيانات؟ وما هما معاملاها الأساسيان؟",o:["تعتمد على كثافة النقاط (Density)، ومعاملاها هما: نصف القطر (eps) والحد الأدنى لعدد النقاط (minPts / min_samples)","تعتمد على شجرة القرار، ومعاملاها هما: الجذر والأوراق","تعتمد على تحديد عدد المجموعات K مسبقاً فقط","تعتمد على الانحدار الخطي ومعدل التعلم"],a:0,e:"خوارزمية DBSCAN هي خوارزمية تجميع مكانية معتمدة على الكثافة، وتستخدم المعاملين eps و minPts."},
-  {q:"في خوارزمية (DBSCAN)، كيف يتم تصنيف النقطة التي يقع داخل جوارها (eps) عدد من النقاط أكبر من أو يساوي (minPts)؟",o:["نقطة أساسية / مركزية (Core Point)","نقطة حدية / طرفية (Border Point)","نقطة ضجيج / شاذة (Noise Point)","نقطة مفقودة (NaN Point)"],a:0,e:"النقطة التي تحقق شرط الكثافة (عدد جيرانها ضمن eps >= minPts) تُصنف كنقطة أساسية (Core Point)."},
-  {q:"في خوارزمية (DBSCAN)، ما هي النقطة الحدية (Border Point)؟",o:["هي نقطة يقل عدد النقاط في جوارها عن minPts، ولكنها تقع ضمن جوار نقطة أساسية (Core Point)","هي نقطة يزيد عدد النقاط في جوارها عن minPts","هي نقطة بعيدة عن جميع النقاط ولا تنتمي لأي مجموعة","هي مركز المجموعة الحسابي"],a:0,e:"النقطة الحدية (Border Point) لا تمتلك جيراناً كافين لتكون أساسية بنفسها (< minPts)، لكنها تقع في جوار نقطة أساسية فتتبع لمجموعتها."},
-  {q:"[مسألة تتبع] في خوارزمية DBSCAN، إذا كان (eps = 2) و (minPts = 4)، وكانت النقطة P يقع ضمن مسافة <= 2 منها نقطة واحدة فقط (هي نفسها) ولا تقع في جوار أي نقطة أساسية، فما تصنيف النقطة P وما رقم مجموعتها في Scikit-learn؟",o:["نقطة ضجيج (Noise Point)، وتأخذ الرقم (-1) في Scikit-learn","نقطة أساسية (Core Point)، وتأخذ الرقم (0)","نقطة حدية (Border Point)، وتأخذ الرقم (+1)","يتم استبدالها بالمتوسط الحسابي"],a:0,e:"النقطة المعزولة التي لا تحقق شرط الكثافة ولا تجاور أي نقطة أساسية تُصنف كنقطة ضجيج (Noise) ويعطيها DBSCAN في بايثون التسمية -1."},
-  {q:"بماذا تتميز خوارزمية (DBSCAN) عن خوارزمية (K-means)؟",o:["لا تتطلب تحديد عدد المجموعات مسبقاً، وتكتشف المجموعات ذات الأشكال الهندسية العشوائية، وتتعامل بكفاءة مع الضجيج والقيم المتطرفة","تشترط تحديد عدد المجموعات K مسبقاً ولا تكتشف إلا الدوائر","تتأثر بشدة بأي نقطة ضجيج واحدة","تعتمد على حساب المتوسط الحسابي لكل مجموعة"],a:0,e:"هذه المزايا الثلاث هي أهم نقاط تفوق DBSCAN على K-means."},
-  {q:"متى تواجه خوارزمية (DBSCAN) صعوبة وتفشل في التجميع بشكل جيد؟",o:["عندما تحتوي البيانات على مجموعات ذات كثافات متفاوتة ومختلفة بشكل كبير (Varying densities)","عندما تحتوي البيانات على نقاط ضجيج متطرفة","عندما لا نعرف عدد المجموعات K مسبقاً","عندما تكون المجموعات غير كروية الشكل"],a:0,e:"من أبرز عيوب DBSCAN عدم قدرتها على التعامل مع العناقيد ذات الكثافات المختلفة جداً لأن قيمتي eps و minPts ثابتتان لكل البيانات."},
-  {q:"ما الفرق بين التجميع الهرمي التصاعدي (Agglomerative) والتجميع الهرمي التنازلي (Divisive)؟",o:["التصاعدي (Agglomerative) يبدأ باعتبار كل نقطة مجموعة مستقلة ثم يدمجها تدريجياً من أسفل لأعلى، بينما التنازلي (Divisive) يبدأ بمجموعة واحدة تضم كل النقاط ثم يقسمها من أعلى لأسفل","التصاعدي يبدأ بمجموعة واحدة ويقسمها، والتنازلي يبدأ بنقاط منفردة ويدمجها","كلاهما يتطلبان تحديد K قبل رسم الشجرة","التصاعدي يعتمد على الانحدار اللوجستي فقط"],a:0,e:"Agglomerative هو نهج من أسفل لأعلى (يدمج المجموعات)، بينما Divisive هو نهج من أعلى لأسفل (يقسم المجموعة الكلية)."},
-  {q:"في التجميع الهرمي، أي طريقة من طرق الربط (Linkage Methods) تحسب المسافة بين مجموعتين على أنها (أقصر / أقل مسافة بين أقرب نقطتين في المجموعتين)؟",o:["الربط الفردي (Single Linkage)","الربط الكامل (Complete Linkage)","الربط المتوسط (Average Linkage)","طريقة وارد (Ward Linkage)"],a:0,e:"طريقة Single Linkage تعتمد على أقصر مسافة (min distance) بين نقطتين في المجموعتين."},
-  {q:"في التجميع الهرمي، ما الفرق بين طريقة (Complete Linkage) وطريقة (Ward Linkage)؟",o:["Complete Linkage تحسب أبعد (أكبر) مسافة بين نقطتين في المجموعتين، بينما Ward Linkage تدمج المجموعتين اللتين تحققان أقل زيادة في التباين الداخلي الكلي (WSS)","Complete Linkage تحسب أقصر مسافة، و Ward تحسب مسافة مانهاتن فقط","كلتاهما تحذفان النقاط الحدية","لا تُستخدمان في التجميع الهرمي"],a:0,e:"Complete Linkage تأخذ أقصى مسافة (max distance)، بينما Ward Linkage تعتمد على تقليل التباين المدمج (وهي الافتراضية في Scikit-learn)."},
-  {q:"ماذا نسمي الرسم البياني الشجري الذي يوضح خطوات دمج المجموعات في التجميع الهرمي ويساعد في تحديد عدد العناقيد المناسب؟",o:["مخطط الشجرة (Dendrogram)","مخطط الصندوق (Box Plot)","خريطة الحرارة (Heatmap)","المخطط الدائري (Pie Plot)"],a:0,e:"يُسمى التمثيل الشجري للتجميع الهرمي بـ Dendrogram ويُرسم بواسطة مكتبة scipy.cluster.hierarchy."},
-  {q:"من أي مكتبة فرعية نستورد الفئات البرمجية: KMeans و DBSCAN و AgglomerativeClustering؟",o:["من sklearn.cluster","من sklearn.preprocessing","من sklearn.feature_selection","من scipy.stats"],a:0,e:"توجد جميع خوارزميات التجميع العنقودي في مكتبة Scikit-learn داخل الوحدة الفرعية sklearn.cluster."},
-  {q:"إذا أردنا مقارنة كفاءة نتائج خوارزمية K-means عند تغيير عدد المجموعات (K=2 ثم K=3 ثم K=4) لاختيار الأفضل بينها، فإلى أي نوع من مقاييس التحقق ينتمي هذا الإجراء؟",o:["المقاييس النسبية (Relative Measures)","المقاييس الخارجية (External Measures)","التحويل اللوغاريتمي","ترميز التسميات"],a:0,e:"مقارنة تجميعات مختلفة ناتجة عن تغيير معاملات الخوارزمية (مثل تغيير K) تُعرف بالمقاييس النسبية (Relative Measures)."},
-  {q:"[مسألة حسابية] إذا كان لدينا المركز C1=(0, 0) والمركز C2=(10, 10)، فأي مركز منهما هو الأقرب للنقطة P=(2, 1)؟ ولأي مجموعة ستنضم؟",o:["المركز C1=(0, 0) هو الأقرب (بمسافة مانهاتن = 3)، وستنضم النقطة P للمجموعة الأولى","المركز C2=(10, 10) هو الأقرب، وستنضم للمجموعة الثانية","المسافة متساوية تماماً للمركزين","سيتم حذف النقطة P"],a:0,e:"المسافة إلى C1 هي |2-0| + |1-0| = 3، بينما المسافة إلى C2 هي |2-10| + |1-10| = 8 + 9 = 17. إذن C1 أقرب بكثير فتنضم للمجموعة الأولى."}
-];
-
-const termsGrid = document.getElementById("termsGrid");
-terms.forEach(([en, ar]) => {
-  const d = document.createElement("div");
-  d.className = "card";
-  d.style.margin = "0";
-  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
-  termsGrid.appendChild(d);
-});
-
-let ci = 0, showAnswer = false;
-function renderCard() {
-  document.getElementById("flashTerm").textContent = cards[ci][0];
-  document.getElementById("flashAnswer").textContent = cards[ci][1];
-  document.getElementById("flashAnswer").hidden = !showAnswer;
-  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
-  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
-}
-document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
-document.getElementById("flashcard").addEventListener("keydown", e => {
-  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
-});
-document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
-document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
-renderCard();
-
-document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
-  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
-  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
-  window.scrollTo({ top: 0, behavior: "smooth" });
-});
-
-function shuffleArray(arr) {
-  const copy = [...arr];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-}
-
-let currentQuestions = [];
-let answers = {};
-
-function prepareShuffledQuiz() {
-  currentQuestions = shuffleArray(masterQuestions).map(item => {
-    const optsWithFlag = item.o.map((text, idx) => ({ text, isCorrect: idx === item.a }));
-    const shuffledOpts = shuffleArray(optsWithFlag);
-    return {
-      q: item.q,
-      o: shuffledOpts.map(x => x.text),
-      a: shuffledOpts.findIndex(x => x.isCorrect),
-      e: item.e
+    // =========================================================================
+    // 2. APPLICATION STATE (persisted via notebookAppApi)
+    // =========================================================================
+    let appState = {
+      answers: {},       // { [questionId]: selectedOptionIndex }
+      quizFilter: 'all', // 'all' | '1' | '2' | '3' | 'unanswered' | 'wrong'
+      kmeansStep: 0,
+      elbowK: 3,
+      dbscanEps: 1.5,
+      dbscanMinPts: 2,
+      hierMode: 'agglomerative'
     };
-  });
-}
 
-function renderQuiz() {
-  prepareShuffledQuiz();
-  const area = document.getElementById("quizArea");
-  area.innerHTML = "";
-  const letters = ["أ", "ب", "ج", "د"];
-  currentQuestions.forEach((item, i) => {
-    const box = document.createElement("div");
-    box.className = "qbox";
-    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
-    const opts = box.querySelector(".options");
-    item.o.forEach((opt, j) => {
-      const btn = document.createElement("button");
-      btn.className = "option";
-      btn.textContent = `${letters[j]}) ${opt}`;
-      btn.onclick = () => {
-        answers[i] = j;
-        [...opts.children].forEach((x, k) => {
-          x.classList.remove("correct", "wrong");
-          x.disabled = true;
-          if (k === item.a) x.classList.add("correct");
-          if (k === j && j !== item.a) x.classList.add("wrong");
+    async function persistState() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === 'function') {
+        try {
+          await window.notebookAppApi.setAppState(appState);
+        } catch (err) {
+          // Graceful no-op if unavailable
+        }
+      }
+    }
+
+    // =========================================================================
+    // 3. UNIT 1 INTERACTIVE: DISTANCE CALCULATOR & SVG PLOT
+    // =========================================================================
+    function resetDistanceExample() {
+      const p1x = document.getElementById('p1-x');
+      const p1y = document.getElementById('p1-y');
+      const p2x = document.getElementById('p2-x');
+      const p2y = document.getElementById('p2-y');
+      if (p1x) p1x.value = 70;
+      if (p1y) p1y.value = 175;
+      if (p2x) p2x.value = 80;
+      if (p2y) p2y.value = 170;
+      updateDistanceViz();
+    }
+
+    function updateDistanceViz() {
+      const p1xEl = document.getElementById('p1-x');
+      const p1yEl = document.getElementById('p1-y');
+      const p2xEl = document.getElementById('p2-x');
+      const p2yEl = document.getElementById('p2-y');
+      if (!p1xEl || !p1yEl || !p2xEl || !p2yEl) return;
+
+      const x1 = Number(p1xEl.value) || 0;
+      const y1 = Number(p1yEl.value) || 0;
+      const x2 = Number(p2xEl.value) || 0;
+      const y2 = Number(p2yEl.value) || 0;
+
+      const dx = Math.abs(x1 - x2);
+      const dy = Math.abs(y1 - y2);
+      const city = dx + dy;
+      const euclid = Math.sqrt(dx * dx + dy * dy);
+
+      const cityValEl = document.getElementById('dist-city-val');
+      const cityStepsEl = document.getElementById('dist-city-steps');
+      const euclidValEl = document.getElementById('dist-euclid-val');
+      const euclidStepsEl = document.getElementById('dist-euclid-steps');
+
+      if (cityValEl) cityValEl.textContent = Number.isInteger(city) ? String(city) : city.toFixed(2);
+      if (cityStepsEl) cityStepsEl.textContent = `|${x1} - ${x2}| + |${y1} - ${y2}| = ${dx} + ${dy} = ${city}`;
+      if (euclidValEl) euclidValEl.textContent = euclid.toFixed(2);
+      if (euclidStepsEl) euclidStepsEl.textContent = `√((${x1}-${x2})² + (${y1}-${y2})²) = √${(dx*dx + dy*dy)} ≈ ${euclid.toFixed(2)}`;
+
+      const svg = document.getElementById('dist-svg');
+      if (!svg) return;
+
+      const pad = 42;
+      const w = 420;
+      const h = 260;
+      const minX = Math.min(x1, x2) - 8;
+      const maxX = Math.max(x1, x2) + 8;
+      const minY = Math.min(y1, y2) - 8;
+      const maxY = Math.max(y1, y2) + 8;
+      const spanX = Math.max(maxX - minX, 10);
+      const spanY = Math.max(maxY - minY, 10);
+
+      const mapX = (val) => pad + ((val - minX) / spanX) * (w - pad * 2);
+      const mapY = (val) => h - pad - ((val - minY) / spanY) * (h - pad * 2);
+
+      const sx1 = mapX(x1);
+      const sy1 = mapY(y1);
+      const sx2 = mapX(x2);
+      const sy2 = mapY(y2);
+
+      svg.innerHTML = `
+        <line x1="${pad}" y1="${h - pad}" x2="${w - pad}" y2="${h - pad}" stroke="var(--outline)" stroke-width="1.5" />
+        <line x1="${pad}" y1="${pad / 2}" x2="${pad}" y2="${h - pad}" stroke="var(--outline)" stroke-width="1.5" />
+        <text x="${w / 2}" y="${h - 10}" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)" font-family="var(--font-mono-ltr)">X (Weight / a1)</text>
+        <text x="16" y="${h / 2}" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)" font-family="var(--font-mono-ltr)" transform="rotate(-90 16 ${h / 2})">Y (Height / a2)</text>
+
+        <!-- City-block path (horizontal then vertical) -->
+        <polyline points="${sx1},${sy1} ${sx2},${sy1} ${sx2},${sy2}" fill="none" stroke="var(--data-2)" stroke-width="3" stroke-dasharray="6 4" />
+        <circle cx="${sx2}" cy="${sy1}" r="3.5" fill="var(--data-2)" />
+        <text x="${(sx1 + sx2) / 2}" y="${sy1 - 8}" text-anchor="middle" font-size="11" font-weight="600" fill="var(--tertiary)" font-family="var(--font-mono-ltr)">|Δx| = ${dx}</text>
+        <text x="${sx2 + 8}" y="${(sy1 + sy2) / 2}" text-anchor="start" font-size="11" font-weight="600" fill="var(--tertiary)" font-family="var(--font-mono-ltr)">|Δy| = ${dy}</text>
+
+        <!-- Euclidean straight line -->
+        <line x1="${sx1}" y1="${sy1}" x2="${sx2}" y2="${sy2}" stroke="var(--data-1)" stroke-width="3" />
+        <text x="${(sx1 + sx2) / 2}" y="${(sy1 + sy2) / 2 + 16}" text-anchor="middle" font-size="12" font-weight="700" fill="var(--data-1)" font-family="var(--font-mono-ltr)">D_e = ${euclid.toFixed(2)}</text>
+
+        <!-- Endpoints -->
+        <circle cx="${sx1}" cy="${sy1}" r="7" fill="var(--on-surface)" stroke="var(--surface-container-low)" stroke-width="2" />
+        <text x="${sx1}" y="${sy1 - 12}" text-anchor="middle" font-size="11" font-weight="700" fill="var(--on-surface)" font-family="var(--font-mono-ltr)">P1(${x1}, ${y1})</text>
+
+        <circle cx="${sx2}" cy="${sy2}" r="7" fill="var(--on-surface)" stroke="var(--surface-container-low)" stroke-width="2" />
+        <text x="${sx2}" y="${sy2 + 20}" text-anchor="middle" font-size="11" font-weight="700" fill="var(--on-surface)" font-family="var(--font-mono-ltr)">P2(${x2}, ${y2})</text>
+      `;
+    }
+
+    // =========================================================================
+    // 4. UNIT 2 INTERACTIVE: K-MEANS STEPPER & ELBOW METHOD
+    // =========================================================================
+    const KM_POINTS = [
+      { x: 3, y: 2, group: 1 },
+      { x: 4, y: 3, group: 1 },
+      { x: 5, y: 2, group: 1 },
+      { x: 6, y: 3, group: 1 },
+      { x: 5, y: 8, group: 2 },
+      { x: 6, y: 9, group: 2 },
+      { x: 7, y: 8, group: 2 },
+      { x: 8, y: 7, group: 2 }
+    ];
+
+    function setKMeansStep(step) {
+      appState.kmeansStep = step;
+      for (let i = 0; i <= 3; i++) {
+        const btn = document.getElementById(`km-btn-${i}`);
+        if (btn) {
+          if (i === step) btn.classList.add('active-tab');
+          else btn.classList.remove('active-tab');
+        }
+      }
+
+      const descEl = document.getElementById('kmeans-step-desc');
+      const c1ValEl = document.getElementById('km-c1-val');
+      const c1PtsEl = document.getElementById('km-c1-pts');
+      const c2ValEl = document.getElementById('km-c2-val');
+      const c2PtsEl = document.getElementById('km-c2-pts');
+      const svg = document.getElementById('kmeans-svg');
+      if (!svg) return;
+
+      let c1 = { x: 3, y: 2 };
+      let c2 = { x: 7, y: 8 };
+      let assigned = false;
+      let showOld = false;
+
+      if (step === 0) {
+        if (descEl) descEl.innerHTML = `<strong>الخطوة 1 — تهيئة المراكز الأولية:</strong> تم اختيار النقطتين <bdi dir="ltr">(3, 2)</bdi> و <bdi dir="ltr">(7, 8)</bdi> كمراكز أولية عشوائية قبل تعيين باقي النقاط.`;
+        if (c1ValEl) c1ValEl.textContent = `(3, 2)`;
+        if (c1PtsEl) c1PtsEl.textContent = `مركز أولي للمجموعة 1`;
+        if (c2ValEl) c2ValEl.textContent = `(7, 8)`;
+        if (c2PtsEl) c2PtsEl.textContent = `مركز أولي للمجموعة 2`;
+      } else if (step === 1) {
+        assigned = true;
+        if (descEl) descEl.innerHTML = `<strong>الخطوة 2 — تعيين النقاط لأقرب مركز:</strong> النقاط الأربع السفلية <bdi dir="ltr">(3,2), (4,3), (5,2), (6,3)</bdi> أقرب إلى <bdi dir="ltr">(3,2)</bdi>، والنقاط الأربع العلوية <bdi dir="ltr">(5,8), (6,9), (7,8), (8,7)</bdi> أقرب إلى <bdi dir="ltr">(7,8)</bdi>.`;
+        if (c1ValEl) c1ValEl.textContent = `(3, 2)`;
+        if (c1PtsEl) c1PtsEl.textContent = `النقاط: (3,2),(4,3),(5,2),(6,3)`;
+        if (c2ValEl) c2ValEl.textContent = `(7, 8)`;
+        if (c2PtsEl) c2PtsEl.textContent = `النقاط: (5,8),(6,9),(7,8),(8,7)`;
+      } else if (step === 2) {
+        assigned = true;
+        showOld = true;
+        c1 = { x: 4.5, y: 2.5 };
+        c2 = { x: 6.5, y: 8.0 };
+        if (descEl) descEl.innerHTML = `<strong>الخطوة 3 — تحديث المراكز (المتوسط):</strong> مركز المجموعة الأولى الجديد <bdi dir="ltr">((3+4+5+6)/4, (2+3+2+3)/4) = (4.5, 2.5)</bdi>، ومركز الثانية <bdi dir="ltr">((5+6+7+8)/4, (8+9+8+7)/4) = (6.5, 8)</bdi>.`;
+        if (c1ValEl) c1ValEl.textContent = `(4.5, 2.5)`;
+        if (c1PtsEl) c1PtsEl.textContent = `المتوسط الجديد للمجموعة 1`;
+        if (c2ValEl) c2ValEl.textContent = `(6.5, 8.0)`;
+        if (c2PtsEl) c2PtsEl.textContent = `المتوسط الجديد للمجموعة 2`;
+      } else {
+        assigned = true;
+        c1 = { x: 4.5, y: 2.5 };
+        c2 = { x: 6.5, y: 8.0 };
+        if (descEl) descEl.innerHTML = `<strong>الخطوة 4 — تحقق التقارب (<bdi dir="ltr">Convergence</bdi>):</strong> عند إعادة فحص أقرب مركز لكل نقطة باستخدام المركزين <bdi dir="ltr">(4.5, 2.5)</bdi> و <bdi dir="ltr">(6.5, 8)</bdi>، لا تتغير عضوية أي نقطة وبالتالي تثبت المراكز وتتوقف الخوارزمية.`;
+        if (c1ValEl) c1ValEl.textContent = `(4.5, 2.5)`;
+        if (c1PtsEl) c1PtsEl.textContent = `مستقر — 4 نقاط`;
+        if (c2ValEl) c2ValEl.textContent = `(6.5, 8.0)`;
+        if (c2PtsEl) c2PtsEl.textContent = `مستقر — 4 نقاط`;
+      }
+
+      const w = 420;
+      const h = 300;
+      const pad = 40;
+      const mx = (x) => pad + ((x - 1.5) / 8.0) * (w - pad * 2);
+      const my = (y) => h - pad - ((y - 0.5) / 9.5) * (h - pad * 2);
+
+      let linesHtml = '';
+      let ptsHtml = '';
+
+      KM_POINTS.forEach((pt) => {
+        const px = mx(pt.x);
+        const py = my(pt.y);
+        const color = !assigned ? 'var(--data-context)' : (pt.group === 1 ? 'var(--data-1)' : 'var(--data-2)');
+        const targetC = pt.group === 1 ? c1 : c2;
+        if (assigned) {
+          linesHtml += `<line x1="${px}" y1="${py}" x2="${mx(targetC.x)}" y2="${my(targetC.y)}" stroke="${color}" stroke-width="1.5" stroke-dasharray="3 3" opacity="0.7" />`;
+        }
+        ptsHtml += `
+          <circle cx="${px}" cy="${py}" r="6.5" fill="${color}" stroke="var(--surface-container-low)" stroke-width="2" />
+          <text x="${px}" y="${py - 10}" text-anchor="middle" font-size="10.5" font-weight="600" fill="var(--on-surface)" font-family="var(--font-mono-ltr)">(${pt.x},${pt.y})</text>
+        `;
+      });
+
+      let oldCentroidsHtml = '';
+      if (showOld) {
+        oldCentroidsHtml = `
+          <line x1="${mx(3)}" y1="${my(2)}" x2="${mx(c1.x)}" y2="${my(c1.y)}" stroke="var(--data-1)" stroke-width="2" stroke-dasharray="4 2" />
+          <line x1="${mx(7)}" y1="${my(8)}" x2="${mx(c2.x)}" y2="${my(c2.y)}" stroke="var(--data-2)" stroke-width="2" stroke-dasharray="4 2" />
+          <circle cx="${mx(3)}" cy="${my(2)}" r="5" fill="none" stroke="var(--data-context)" stroke-width="2" />
+          <circle cx="${mx(7)}" cy="${my(8)}" r="5" fill="none" stroke="var(--data-context)" stroke-width="2" />
+        `;
+      }
+
+      const drawX = (cx, cy, strokeCol, label) => `
+        <g transform="translate(${mx(cx)}, ${my(cy)})">
+          <circle cx="0" cy="0" r="11" fill="var(--surface-container-low)" stroke="${strokeCol}" stroke-width="2.5" />
+          <line x1="-5" y1="-5" x2="5" y2="5" stroke="${strokeCol}" stroke-width="2.5" />
+          <line x1="5" y1="-5" x2="-5" y2="5" stroke="${strokeCol}" stroke-width="2.5" />
+          <text x="0" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="${strokeCol}" font-family="var(--font-mono-ltr)">${label}</text>
+        </g>
+      `;
+
+      svg.innerHTML = `
+        <line x1="${pad}" y1="${h - pad}" x2="${w - pad / 2}" y2="${h - pad}" stroke="var(--outline)" stroke-width="1.5" />
+        <line x1="${pad}" y1="${pad / 2}" x2="${pad}" y2="${h - pad}" stroke="var(--outline)" stroke-width="1.5" />
+        ${linesHtml}
+        ${oldCentroidsHtml}
+        ${ptsHtml}
+        ${drawX(c1.x, c1.y, 'var(--data-1)', `C1(${c1.x}, ${c1.y})`)}
+        ${drawX(c2.x, c2.y, 'var(--data-2)', `C2(${c2.x}, ${c2.y})`)}
+      `;
+      persistState();
+    }
+
+    const ELBOW_DATA = [
+      { k: 1, wcss: 148, note: `عند K=1: جميع النقاط في مجموعة واحدة؛ قيمة WCSS مرتفعة جداً (تشتت عالٍ).` },
+      { k: 2, wcss: 62,  note: `عند K=2: انخفاض حاد في WCSS، لكن لا تزال بعض التجمعات متباعدة.` },
+      { k: 3, wcss: 21,  note: `عند K=3 (نقطة المرفق): تستقر قيمة WCSS بعدها، ولا تعود إضافة مجموعة رابعة ذات أثر كبير — لذا نختار 3 مجموعات.` },
+      { k: 4, wcss: 16,  note: `عند K=4: الانخفاض في WCSS طفيف جداً مقارنة بـ K=3، مما يدل على عدم الحاجة لمجموعة رابعة.` },
+      { k: 5, wcss: 13,  note: `عند K=5: استمرار التسطح التدريجي دون فائدة هيكلية حقيقية.` }
+    ];
+
+    function selectElbowK(k) {
+      appState.elbowK = k;
+      const svg = document.getElementById('elbow-svg');
+      const fb = document.getElementById('elbow-feedback');
+      const item = ELBOW_DATA.find((d) => d.k === k) || ELBOW_DATA[2];
+      if (fb) {
+        fb.innerHTML = `<strong>عند <bdi dir="ltr">K = ${item.k}</bdi> (<bdi dir="ltr">WCSS ≈ ${item.wcss}</bdi>):</strong> ${item.note}`;
+      }
+
+      // Highlight button states
+      const buttons = document.querySelectorAll('#unit-2 button[onclick^="selectElbowK"]');
+      buttons.forEach((b) => {
+        const match = b.getAttribute('onclick')?.includes(`(${k})`);
+        if (match) b.classList.add('active-tab');
+        else b.classList.remove('active-tab');
+      });
+
+      if (!svg) return;
+      const w = 420;
+      const h = 260;
+      const pad = 44;
+      const mx = (kv) => pad + ((kv - 1) / 4) * (w - pad * 2);
+      const my = (wv) => h - pad - (wv / 160) * (h - pad * 1.6);
+
+      const polyPoints = ELBOW_DATA.map((d) => `${mx(d.k)},${my(d.wcss)}`).join(' ');
+      let circles = '';
+      ELBOW_DATA.forEach((d) => {
+        const cx = mx(d.k);
+        const cy = my(d.wcss);
+        const isSelected = d.k === k;
+        const isElbow = d.k === 3;
+        const fill = isSelected ? 'var(--primary-container)' : (isElbow ? 'var(--data-1)' : 'var(--surface-container-low)');
+        const stroke = isElbow ? 'var(--data-1)' : 'var(--on-surface)';
+        circles += `
+          <g style="cursor:pointer;" onclick="selectElbowK(${d.k})">
+            <circle cx="${cx}" cy="${cy}" r="${isSelected ? 9 : 6}" fill="${fill}" stroke="${stroke}" stroke-width="2.5" />
+            <text x="${cx}" y="${h - pad + 18}" text-anchor="middle" font-size="11" font-weight="700" fill="var(--on-surface)" font-family="var(--font-mono-ltr)">K=${d.k}</text>
+            <text x="${cx}" y="${cy - 12}" text-anchor="middle" font-size="10.5" font-weight="600" fill="var(--on-surface-variant)" font-family="var(--font-mono-ltr)">${d.wcss}</text>
+          </g>
+        `;
+      });
+
+      svg.innerHTML = `
+        <line x1="${pad}" y1="${h - pad}" x2="${w - pad / 2}" y2="${h - pad}" stroke="var(--outline)" stroke-width="1.5" />
+        <line x1="${pad}" y1="${pad / 2}" x2="${pad}" y2="${h - pad}" stroke="var(--outline)" stroke-width="1.5" />
+        <text x="16" y="${h / 2}" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)" font-family="var(--font-mono-ltr)" transform="rotate(-90 16 ${h / 2})">WCSS</text>
+        <polyline points="${polyPoints}" fill="none" stroke="var(--data-1)" stroke-width="3" />
+        ${circles}
+        <text x="${mx(3) + 14}" y="${my(21) - 18}" font-size="11" font-weight="700" fill="var(--secondary)" font-family="var(--font-body)">نقطة المرفق (K=3)</text>
+      `;
+      persistState();
+    }
+
+    // =========================================================================
+    // 5. UNIT 3 INTERACTIVE: DBSCAN LAB & HIERARCHICAL SWITCHER
+    // =========================================================================
+    const DB_POINTS = [
+      { id: 'P1', x: 1,  y: 2,  displayX: 1,   displayY: 2 },
+      { id: 'P2', x: 2,  y: 2,  displayX: 2,   displayY: 2 },
+      { id: 'P3', x: 2,  y: 3,  displayX: 2,   displayY: 3 },
+      { id: 'P4', x: 8,  y: 7,  displayX: 8,   displayY: 7 },
+      { id: 'P5', x: 8,  y: 8,  displayX: 8,   displayY: 8 },
+      { id: 'P6', x: 25, y: 80, displayX: 12.2, displayY: 9.2, outlier: true }
+    ];
+
+    function resetDbscanDefaults() {
+      const slider = document.getElementById('db-eps-slider');
+      const minInput = document.getElementById('db-minpts-input');
+      if (slider) slider.value = 1.5;
+      if (minInput) minInput.value = 2;
+      appState.dbscanEps = 1.5;
+      appState.dbscanMinPts = 2;
+      renderDbscan();
+    }
+
+    function updateDbscanFromSlider(val) {
+      appState.dbscanEps = parseFloat(val) || 1.5;
+      renderDbscan();
+    }
+
+    function updateDbscanFromMinPts(val) {
+      const n = parseInt(val, 10);
+      appState.dbscanMinPts = (!isNaN(n) && n >= 1) ? Math.min(5, n) : 2;
+      renderDbscan();
+    }
+
+    function renderDbscan() {
+      const eps = appState.dbscanEps;
+      const minPts = appState.dbscanMinPts;
+      const epsReadout = document.getElementById('db-eps-readout');
+      if (epsReadout) epsReadout.textContent = eps.toFixed(1);
+
+      const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+      const neighbors = DB_POINTS.map((p, idx) => {
+        const nb = [];
+        DB_POINTS.forEach((q, j) => {
+          if (dist(p, q) <= eps + 1e-9) nb.push(j);
         });
-        const fb = document.getElementById("fb" + i);
-        fb.hidden = false;
-        fb.className = "feedback " + (j === item.a ? "good" : "bad");
-        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
-        updateScore();
+        return nb;
+      });
+
+      const isCore = neighbors.map((nb) => nb.length >= minPts);
+      const cluster = new Array(DB_POINTS.length).fill(-1);
+      let cid = 0;
+
+      for (let i = 0; i < DB_POINTS.length; i++) {
+        if (!isCore[i] || cluster[i] !== -1) continue;
+        cid++;
+        const queue = [i];
+        cluster[i] = cid;
+        while (queue.length > 0) {
+          const curr = queue.shift();
+          if (isCore[curr]) {
+            neighbors[curr].forEach((nIdx) => {
+              if (cluster[nIdx] === -1) {
+                cluster[nIdx] = cid;
+                if (isCore[nIdx]) queue.push(nIdx);
+              }
+            });
+          }
+        }
+      }
+
+      const types = DB_POINTS.map((_, i) => {
+        if (isCore[i]) return 'نقطة أساسية (Core)';
+        if (cluster[i] !== -1) return 'نقطة حدية (Border)';
+        return 'ضجيج (Noise)';
+      });
+
+      const tbody = document.getElementById('dbscan-table-body');
+      if (tbody) {
+        tbody.innerHTML = DB_POINTS.map((p, i) => {
+          const count = neighbors[i].length;
+          const clLabel = cluster[i] === -1
+            ? `<span class="tag tag-red">ضجيج (-1)</span>`
+            : `<span class="tag ${cluster[i] === 1 ? 'tag-blue' : 'tag-green'}">المجموعة ${cluster[i]}</span>`;
+          return `
+            <tr>
+              <td dir="ltr" style="text-align:right; font-family:var(--font-mono-ltr); font-weight:600;">(${p.x}, ${p.y})</td>
+              <td style="font-family:var(--font-mono-ltr);">${count}</td>
+              <td>${types[i]}</td>
+              <td>${clLabel}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      const noiseCount = cluster.filter((c) => c === -1).length;
+      const summary = document.getElementById('dbscan-summary');
+      if (summary) {
+        summary.innerHTML = `<strong>النتيجة عند <bdi dir="ltr">eps = ${eps.toFixed(1)}</bdi> و <bdi dir="ltr">minPts = ${minPts}</bdi>:</strong> تم تكوين <strong>${cid}</strong> مجموعة فعلية، وعزل <strong>${noiseCount}</strong> نقطة كضجيج (<bdi dir="ltr">Noise</bdi>).`;
+      }
+
+      const svg = document.getElementById('dbscan-svg');
+      if (!svg) return;
+      const w = 420;
+      const h = 290;
+      const pad = 38;
+      const scale = 25;
+      const mx = (dx) => pad + dx * scale;
+      const my = (dy) => h - pad - dy * (scale * 0.92);
+      const rPx = eps * scale;
+
+      let circlesHtml = '';
+      let ptsHtml = '';
+
+      DB_POINTS.forEach((p, i) => {
+        const px = mx(p.displayX);
+        const py = my(p.displayY);
+        const cl = cluster[i];
+        const col = cl === -1 ? 'var(--data-4)' : (cl === 1 ? 'var(--data-1)' : (cl === 2 ? 'var(--data-3)' : 'var(--data-2)'));
+        if (!p.outlier) {
+          circlesHtml += `<circle cx="${px}" cy="${py}" r="${rPx}" fill="${col}" fill-opacity="0.09" stroke="${col}" stroke-width="1" stroke-dasharray="3 3" />`;
+        } else {
+          circlesHtml += `<rect x="${px - 38}" y="${py - 22}" width="76" height="44" rx="6" fill="var(--svg-noise-bg)" stroke="var(--error)" stroke-dasharray="4 3" />`;
+        }
+        ptsHtml += `
+          <circle cx="${px}" cy="${py}" r="6.5" fill="${col}" stroke="var(--surface-container-low)" stroke-width="2" />
+          <text x="${px}" y="${py - 11}" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--on-surface)" font-family="var(--font-mono-ltr)">(${p.x},${p.y})</text>
+        `;
+      });
+
+      svg.innerHTML = `
+        <line x1="${pad}" y1="${h - pad}" x2="${w - 18}" y2="${h - pad}" stroke="var(--outline)" stroke-width="1.5" />
+        <line x1="${pad}" y1="18" x2="${pad}" y2="${h - pad}" stroke="var(--outline)" stroke-width="1.5" />
+        ${circlesHtml}
+        ${ptsHtml}
+        <text x="${mx(12.2)}" y="${my(9.2) + 36}" text-anchor="middle" font-size="10" font-weight="700" fill="var(--error)" font-family="var(--font-body)">بعيدة جداً عن باقي النقاط</text>
+      `;
+      persistState();
+    }
+
+    function setHierMode(mode) {
+      appState.hierMode = mode;
+      const btnAgg = document.getElementById('hier-btn-agg');
+      const btnDiv = document.getElementById('hier-btn-div');
+      const box = document.getElementById('hier-text-box');
+      const svg = document.getElementById('hier-svg');
+
+      if (btnAgg && btnDiv) {
+        if (mode === 'agglomerative') {
+          btnAgg.classList.add('active-tab');
+          btnDiv.classList.remove('active-tab');
+        } else {
+          btnDiv.classList.add('active-tab');
+          btnAgg.classList.remove('active-tab');
+        }
+      }
+
+      if (box) {
+        if (mode === 'agglomerative') {
+          box.innerHTML = `
+            <span class="index-num">Bottom-Up</span>
+            <h4 style="margin: var(--space-xs) 0;">التجميع التصاعدي (<bdi dir="ltr">Agglomerative Clustering</bdi>)</h4>
+            <ul class="structured-list">
+              <li>يبدأ بوضع <strong>كل نقطة بيانات في عنقود منفصل</strong>.</li>
+              <li>يتم دمج العناقيد الأكثر تشابهاً مع بعضها خطوة بخطوة حتى نحصل على عنقود واحد يشمل جميع النقاط.</li>
+              <li>يعتمد على حساب التشابه بين العناقيد باستخدام مقاييس المسافة.</li>
+            </ul>
+          `;
+        } else {
+          box.innerHTML = `
+            <span class="index-num">Top-Down</span>
+            <h4 style="margin: var(--space-xs) 0;">التجميع التنازلي (<bdi dir="ltr">Divisive Clustering</bdi>)</h4>
+            <ul class="structured-list">
+              <li>يبدأ بوضع <strong>جميع النقاط في عنقود واحد</strong> كبير.</li>
+              <li>يتم تقسيم العنقود إلى عناقيد أصغر تدريجياً.</li>
+              <li>تستمر عملية التقسيم حتى الوصول إلى كل نقطة بيانات في عنقود منفصل.</li>
+            </ul>
+          `;
+        }
+      }
+
+      if (svg) {
+        const isAgg = mode === 'agglomerative';
+        const arrowDir = isAgg ? `↑ اتجاه الدمج (من الفرد إلى الكل)` : `↓ اتجاه التقسيم (من الكل إلى الفرد)`;
+        const col = isAgg ? 'var(--data-1)' : 'var(--data-2)';
+        svg.innerHTML = `
+          <!-- Dendrogram lines -->
+          <line x1="80" y1="175" x2="80" y2="120" stroke="${col}" stroke-width="2" />
+          <line x1="150" y1="175" x2="150" y2="120" stroke="${col}" stroke-width="2" />
+          <line x1="80" y1="120" x2="150" y2="120" stroke="${col}" stroke-width="2" />
+
+          <line x1="250" y1="175" x2="250" y2="100" stroke="${col}" stroke-width="2" />
+          <line x1="330" y1="175" x2="330" y2="100" stroke="${col}" stroke-width="2" />
+          <line x1="250" y1="100" x2="330" y2="100" stroke="${col}" stroke-width="2" />
+
+          <line x1="115" y1="120" x2="115" y2="50" stroke="${col}" stroke-width="2.5" />
+          <line x1="290" y1="100" x2="290" y2="50" stroke="${col}" stroke-width="2.5" />
+          <line x1="115" y1="50" x2="290" y2="50" stroke="${col}" stroke-width="2.5" />
+
+          <circle cx="202" cy="50" r="6" fill="${col}" />
+          <text x="202" y="34" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--on-surface)" font-family="var(--font-body)">عنقود واحد شامل لجميع النقاط</text>
+
+          <circle cx="80" cy="175" r="5" fill="var(--on-surface)" />
+          <circle cx="150" cy="175" r="5" fill="var(--on-surface)" />
+          <circle cx="250" cy="175" r="5" fill="var(--on-surface)" />
+          <circle cx="330" cy="175" r="5" fill="var(--on-surface)" />
+          <text x="80" y="196" text-anchor="middle" font-size="11" font-family="var(--font-mono-ltr)" fill="var(--on-surface-variant)">A</text>
+          <text x="150" y="196" text-anchor="middle" font-size="11" font-family="var(--font-mono-ltr)" fill="var(--on-surface-variant)">B</text>
+          <text x="250" y="196" text-anchor="middle" font-size="11" font-family="var(--font-mono-ltr)" fill="var(--on-surface-variant)">C</text>
+          <text x="330" y="196" text-anchor="middle" font-size="11" font-family="var(--font-mono-ltr)" fill="var(--on-surface-variant)">D</text>
+
+          <rect x="20" y="10" width="380" height="1" fill="none" />
+          <text x="205" y="214" text-anchor="middle" font-size="11.5" font-weight="700" fill="${col}" font-family="var(--font-body)">${arrowDir}</text>
+        `;
+      }
+      persistState();
+    }
+
+    // =========================================================================
+    // 6. QUIZ ENGINE (30 MCQs + PERSISTENCE + FILTERING + RATIONALE)
+    // =========================================================================
+    const LETTERS = ['أ', 'ب', 'ج', 'د'];
+
+    function setQuizFilter(filter) {
+      appState.quizFilter = filter;
+      const filterIds = {
+        all: 'flt-all',
+        '1': 'flt-u1',
+        '2': 'flt-u2',
+        '3': 'flt-u3',
+        unanswered: 'flt-unanswered',
+        wrong: 'flt-wrong'
       };
-      opts.appendChild(btn);
-    });
-    area.appendChild(box);
-  });
-  updateScore();
-}
+      Object.entries(filterIds).forEach(([key, id]) => {
+        const el = document.getElementById(id);
+        if (el) {
+          if (key === filter) el.classList.add('active-tab');
+          else el.classList.remove('active-tab');
+        }
+      });
+      renderQuiz();
+      persistState();
+    }
 
-function updateScore() {
-  let correct = 0;
-  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
-  document.getElementById("score").textContent = `النتيجة: ${correct} / ${currentQuestions.length}`;
-  document.getElementById("progressBar").style.width = (Object.keys(answers).length / currentQuestions.length * 100) + "%";
-}
+    function answerQuestion(qId, optIdx) {
+      appState.answers[String(qId)] = optIdx;
+      renderQuiz();
+      updateQuizDashboard();
+      persistState();
+    }
 
-document.getElementById("resetQuiz").onclick = () => {
-  answers = {};
-  document.getElementById("finalResult").textContent = "";
-  renderQuiz();
-  window.scrollTo({ top: 0, behavior: "smooth" });
-};
+    function handleResetQuiz(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== 'true') {
+        btn.dataset.armed = 'true';
+        btn.textContent = `اضغط مرة أخرى لتأكيد المسح`;
+        setTimeout(() => {
+          if (btn && btn.dataset.armed === 'true') {
+            btn.dataset.armed = 'false';
+            btn.textContent = `إعادة تعيين الاختبار`;
+          }
+        }, 4000);
+        return;
+      }
+      btn.dataset.armed = 'false';
+      btn.textContent = `إعادة تعيين الاختبار`;
+      appState.answers = {};
+      renderQuiz();
+      updateQuizDashboard();
+      persistState();
+    }
 
-document.getElementById("finishQuiz").onclick = () => {
-  let correct = 0;
-  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
-  const pct = Math.round(correct / currentQuestions.length * 100);
-  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${currentQuestions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! أنتِ مستعدة تماماً للاختبار في هذا الفصل." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
-};
+    function updateQuizDashboard() {
+      const total = QUIZ_DATA.length;
+      let answered = 0;
+      let correct = 0;
+      const unitCorrect = { 1: 0, 2: 0, 3: 0 };
 
-renderQuiz();
-</script>
+      QUIZ_DATA.forEach((q) => {
+        const chosen = appState.answers[String(q.id)];
+        if (chosen !== undefined) {
+          answered++;
+          if (chosen === q.correct) {
+            correct++;
+            unitCorrect[q.unit]++;
+          }
+        }
+      });
+
+      const pct = answered > 0 ? Math.round((correct / total) * 100) : 0;
+
+      const elAns = document.getElementById('stat-answered');
+      const elCor = document.getElementById('stat-correct');
+      const elUnits = document.getElementById('stat-units');
+      const elPct = document.getElementById('stat-percent');
+      const elFill = document.getElementById('quiz-progress-fill');
+      const elBadge = document.getElementById('header-progress-badge');
+
+      if (elAns) elAns.textContent = `${answered} / ${total}`;
+      if (elCor) elCor.textContent = String(correct);
+      if (elUnits) elUnits.textContent = `${unitCorrect[1]}/10 | ${unitCorrect[2]}/10 | ${unitCorrect[3]}/10`;
+      if (elPct) elPct.textContent = `${pct}%`;
+      if (elFill) elFill.style.width = `${Math.round((answered / total) * 100)}%`;
+      if (elBadge) elBadge.textContent = `التقدم: ${answered} / ${total} سؤالاً`;
+    }
+
+    function renderQuiz() {
+      const container = document.getElementById('quiz-list');
+      if (!container) return;
+
+      const filter = appState.quizFilter;
+      const filtered = QUIZ_DATA.filter((q) => {
+        const ans = appState.answers[String(q.id)];
+        if (filter === 'all') return true;
+        if (filter === '1' || filter === '2' || filter === '3') return String(q.unit) === filter;
+        if (filter === 'unanswered') return ans === undefined;
+        if (filter === 'wrong') return ans !== undefined && ans !== q.correct;
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="quiz-empty-msg">لا توجد أسئلة مطابقة للتصفية المحددة حالياً. اختر «جميع الأسئلة» لعرض بنك الأسئلة كاملاً.</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map((q) => {
+        const chosen = appState.answers[String(q.id)];
+        const isAnswered = chosen !== undefined;
+        const isCorrect = isAnswered && chosen === q.correct;
+        const cardStateClass = isAnswered ? (isCorrect ? 'state-correct' : 'state-wrong') : '';
+        const statusTag = !isAnswered
+          ? `<span class="tag">لم يُجب بعد</span>`
+          : (isCorrect ? `<span class="tag tag-green">إجابة صحيحة</span>` : `<span class="tag tag-red">إجابة خاطئة</span>`);
+
+        const optionsHtml = q.options.map((optText, idx) => {
+          let optClass = '';
+          if (isAnswered) {
+            if (idx === q.correct) optClass = 'opt-correct';
+            else if (idx === chosen) optClass = 'opt-wrong';
+          }
+          return `
+            <button type="button"
+                    class="opt-btn ${optClass}"
+                    onclick="answerQuestion(${q.id}, ${idx})"
+                    ${isAnswered ? 'aria-pressed="' + (idx === chosen ? 'true' : 'false') + '"' : ''}>
+              <span class="opt-letter">${LETTERS[idx]}</span>
+              <span>${optText}</span>
+            </button>
+          `;
+        }).join('');
+
+        return `
+          <article class="q-card ${cardStateClass}" id="question-${q.id}">
+            <div class="q-header">
+              <div class="q-meta">
+                <span class="index-num">سؤال ${String(q.id).padStart(2, '0')}</span>
+                <span class="tag tag-blue">${q.unitLabel}</span>
+              </div>
+              ${statusTag}
+            </div>
+            <p class="q-text">${q.question}</p>
+            <div class="options-grid">
+              ${optionsHtml}
+            </div>
+            <div class="rationale-box ${isAnswered ? 'visible' : ''}">
+              <span class="rationale-title">التوضيح والشرح العلمي (الإجابة الصحيحة: ${LETTERS[q.correct]}):</span>
+              <span>${q.rationale}</span>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    // =========================================================================
+    // 7. BOOTSTRAP & LIFECYCLE
+    // =========================================================================
+    async function initApp() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === 'function') {
+        try {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === 'object') {
+            if (saved.answers && typeof saved.answers === 'object') appState.answers = saved.answers;
+            if (saved.quizFilter) appState.quizFilter = saved.quizFilter;
+            if (typeof saved.kmeansStep === 'number') appState.kmeansStep = saved.kmeansStep;
+            if (typeof saved.elbowK === 'number') appState.elbowK = saved.elbowK;
+            if (typeof saved.dbscanEps === 'number') appState.dbscanEps = saved.dbscanEps;
+            if (typeof saved.dbscanMinPts === 'number') appState.dbscanMinPts = saved.dbscanMinPts;
+            if (saved.hierMode) appState.hierMode = saved.hierMode;
+          }
+        } catch (err) {
+          // Fallback to defaults
+        }
+      }
+
+      const dbSlider = document.getElementById('db-eps-slider');
+      const dbMinInput = document.getElementById('db-minpts-input');
+      if (dbSlider) dbSlider.value = appState.dbscanEps;
+      if (dbMinInput) dbMinInput.value = appState.dbscanMinPts;
+
+      updateDistanceViz();
+      setKMeansStep(appState.kmeansStep);
+      selectElbowK(appState.elbowK);
+      renderDbscan();
+      setHierMode(appState.hierMode);
+      setQuizFilter(appState.quizFilter);
+      updateQuizDashboard();
+
+      if (typeof lucide !== 'undefined' && typeof lucide.createIcons === 'function') {
+        lucide.createIcons();
+      }
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === 'function') {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initApp);
+  </script>
 </body>
 </html>

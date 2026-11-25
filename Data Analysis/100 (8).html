@@ -1,648 +1,3028 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>الفصل التاسع الشامل (100%) | تحليل وتمثيل البيانات</title>
-<style>
-:root{
-  --bg:#f0f5ff;
-  --card:#ffffff;
-  --ink:#0f172a;
-  --muted:#475569;
-  --accent:#1d4ed8;
-  --accent-dark:#1e3a8a;
-  --accent2:#dbeafe;
-  --line:#cbd5e1;
-  --good:#059669;
-  --good-bg:#ecfdf5;
-  --bad:#dc2626;
-  --bad-bg:#fef2f2;
-  --warn:#d97706;
-  --warn-bg:#fffbeb;
-}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
-header{background:linear-gradient(135deg,#0f172a,#1d4ed8);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(15,23,42,0.2)}
-.wrap{max-width:1040px;margin:auto;padding:0 16px}
-.eyebrow{opacity:.92;font-size:.9rem;background:rgba(255,255,255,0.16);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
-h1{margin:5px 0;font-size:clamp(1.5rem,4vw,2.25rem)}
-header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
-nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
-nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:var(--accent2);color:var(--accent-dark);font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
-nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
-nav button.active,.btn.primary{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
-main .btn.primary{background:var(--accent);color:white}
-main{padding:22px 0 48px}
-.panel{display:none}
-.panel.active{display:block;animation:fadeIn .25s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(15,23,42,0.04)}
-h2{font-size:1.35rem;margin:0 0 12px;color:#0f172a}
-h3{font-size:1.08rem;margin:0 0 8px;color:var(--accent-dark)}
-small,.muted{color:var(--muted)}
-ul,ol{padding-right:22px;margin:8px 0}
-li{margin:6px 0}
-details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
-summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f8fafc;color:#0f172a;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
-details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
-.details-body{padding:16px 18px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
-.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
-.badge-new{display:inline-block;background:var(--warn-bg);color:var(--warn);border:1px solid #fcd34d;font-size:.78rem;padding:1px 8px;border-radius:6px;margin-right:6px;font-weight:bold}
-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
-th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
-th{background:#eff6ff;color:#1e3a8a;font-weight:bold}
-tr:last-child td{border-bottom:0}
-.note{border-right:4px solid var(--accent);padding:10px 14px;background:#eff6ff;border-radius:8px;margin:10px 0}
-.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
-.math-box{background:#f8fafc;border:2px solid #93c5fd;border-radius:12px;padding:12px 16px;margin:10px 0;text-align:center;font-size:1.03rem;font-weight:bold;color:#1e3a8a;direction:ltr}
-.step-box{background:#f0fdf4;border:1px solid #86efac;border-right:4px solid var(--good);border-radius:10px;padding:12px 16px;margin:10px 0;font-size:.95rem}
-.code-box{background:#0f172a;color:#e2e8f0;padding:14px 18px;border-radius:12px;font-family:Consolas,Monaco,monospace;direction:ltr;text-align:left;overflow-x:auto;margin:10px 0;border:1px solid #334155;line-height:1.65;font-size:.91rem}
-.code-box .kw{color:#38bdf8;font-weight:bold}
-.code-box .str{color:#4ade80}
-.code-box .num{color:#f472b6}
-.code-box .cmt{color:#94a3b8;font-style:italic}
-.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
-.options{display:grid;gap:8px;margin-top:12px}
-.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
-.option:hover:not(:disabled){border-color:var(--accent);background:#eff6ff}
-.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
-.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
-.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
-.feedback.good{color:var(--good);background:var(--good-bg)}
-.feedback.bad{color:var(--bad);background:var(--bad-bg)}
-.progress{height:10px;background:#cbd5e1;border-radius:9px;overflow:hidden;margin:12px 0}
-.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
-.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#dbeafe);border:2px solid #93c5fd;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
-.flashcard:hover{transform:scale(1.005)}
-.flashcard .term{font-size:1.32rem;font-weight:bold;color:#1e3a8a}
-.flashcard .answer{margin-top:16px;font-size:1.04rem;color:#0f172a;background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04);white-space:pre-line}
-.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
-.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
-footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
-@media(max-width:600px){
-  .card{padding:14px}
-  nav button{flex:1 1 calc(50% - 8px);text-align:center}
-  .flashcard{min-height:200px;padding:18px}
-  th,td{padding:8px 10px;font-size:.88rem}
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="briefing">
+  <title>الفصل التاسع: اختيار السمات وتقليصها — دليل تفاعلي واختبارات شاملة</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/katex.min.js" defer></script>
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* 1. Briefing style tokens */
+      --background: #faf9f5;
+      --surface-container-low: #ffffff;
+      --surface-container: #f1efe8;
+      --surface-container-high: #e6e2d6;
+
+      /* Ink */
+      --on-surface: #17181a;
+      --on-surface-variant: #56585c;
+
+      /* Rules */
+      --outline: #17181a;
+      --outline-variant: #dedad0;
+
+      /* Accents */
+      --primary: #17181a;
+      --on-primary: #faf9f5;
+      --primary-container: #f2b705;
+      --on-primary-container: #17181a;
+      --secondary: #1f4e5f;
+      --tertiary: #785008;
+      --error: #b42318;
+      --on-error: #ffffff;
+
+      /* Data series */
+      --data-1: #1f4e5f;
+      --data-2: #d99000;
+      --data-3: #2b6e52;
+      --data-4: #b84a39;
+      --data-context: #c4bfb2;
+
+      /* 2. Shared semantic & derived surface tokens */
+      --positive: #2b6e52;
+      --positive-bg: #ebf5f0;
+      --positive-border: #9bcbb5;
+      --error-bg: #fdf1f0;
+      --error-border: #eab3ae;
+      --warning: #785008;
+      --warning-bg: #fdf6e3;
+      --warning-border: #ebd089;
+      --secondary-bg: #edf4f7;
+      --secondary-border: #b6d1dc;
+      --btn-secondary-border: #c8c4b8;
+      --tag-warm-bg: #f5e6c4;
+      --code-bg: #17181a;
+      --code-fg: #f1efe8;
+      --code-muted: #a6aab0;
+      --code-accent: #f2b705;
+      --code-teal: #7cc4e8;
+
+      --focus: #1f4e5f;
+
+      /* Fonts (Arabic script prioritized first per non-Latin guidelines) */
+      --font-headline: 'Noto Sans Arabic', 'Source Serif 4', serif;
+      --font-body: 'Noto Sans Arabic', 'Plus Jakarta Sans', sans-serif;
+      --font-label: 'Geist Mono', 'Noto Sans Arabic', monospace;
+
+      /* Shape */
+      --rounded: 0.25rem;
+      --rounded-lg: 0.375rem;
+      --rounded-full: 0.25rem;
+      --badge-radius: 2px;
+
+      /* Style effects */
+      --section-rule: 1.5px solid var(--outline);
+      --card-border: 1px solid var(--outline-variant);
+      --heading-tracking: 0;
+      --label-tracking: 0;
+      --latin-tracking: 0.06em;
+
+      /* Narrative Type Scale */
+      --display-size: clamp(2rem, 1.35rem + 2.4vw, 3.125rem);
+      --headline-size: clamp(1.5rem, 1.15rem + 1.3vw, 2rem);
+      --subhead-size: clamp(1.15rem, 1.02rem + 0.5vw, 1.375rem);
+      --body-size: clamp(1rem, 0.96rem + 0.22vw, 1.09375rem);
+      --label-size: clamp(0.75rem, 0.72rem + 0.14vw, 0.8125rem);
+
+      /* Spacing scale */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.7;
+      scroll-behavior: smooth;
+    }
+    header { position: static !important; }
+
+    button, input, select, textarea {
+      font-family: inherit;
+    }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-xl);
+      padding: var(--space-lg);
+      max-width: 1120px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Focus rings */
+    :focus-visible {
+      outline: 2.5px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* Dossier bars & badges */
+    .dossier-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      border-bottom: var(--section-rule);
+      padding-bottom: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+    .dossier-bar-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .dossier-pill {
+      display: inline-flex;
+      align-items: center;
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: var(--label-size);
+      letter-spacing: var(--label-tracking);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--badge-radius);
+    }
+    .dossier-meta {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      letter-spacing: var(--label-tracking);
+    }
+    .index-num {
+      font-family: var(--font-label);
+      font-weight: 600;
+      font-size: var(--label-size);
+      color: var(--secondary);
+      background: var(--surface-container);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--badge-radius);
+      font-variant-numeric: tabular-nums;
+      direction: ltr;
+      unicode-bidi: isolate;
+    }
+
+    /* Typography */
+    .hero-title {
+      font-family: var(--font-headline);
+      font-weight: 800;
+      font-size: var(--display-size);
+      line-height: 1.2;
+      color: var(--on-surface);
+      margin: 0 0 var(--space-sm) 0;
+    }
+    .standfirst {
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: var(--subhead-size);
+      line-height: 1.55;
+      color: var(--secondary);
+      margin: 0 0 var(--space-lg) 0;
+      max-width: 68ch;
+    }
+    .unit-title {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: var(--headline-size);
+      line-height: 1.25;
+      color: var(--on-surface);
+      margin: 0 0 var(--space-xs) 0;
+    }
+    .unit-subtitle {
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: var(--subhead-size);
+      color: var(--secondary);
+      margin: 0 0 var(--space-md) 0;
+    }
+    .section-heading {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: var(--subhead-size);
+      color: var(--on-surface);
+      margin: var(--space-lg) 0 var(--space-sm) 0;
+      padding-bottom: var(--space-xs);
+      border-bottom: 1px solid var(--outline-variant);
+    }
+    .prose {
+      max-width: 72ch;
+      margin: 0 0 var(--space-md) 0;
+    }
+
+    /* Cards & Callouts */
+    .figure-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+    }
+    .aside-box {
+      background: var(--surface-container);
+      border-top: var(--section-rule);
+      padding: var(--space-md) var(--space-lg);
+      border-radius: 0 0 var(--rounded) var(--rounded);
+      margin: var(--space-md) 0;
+    }
+    .aside-title {
+      font-weight: 700;
+      font-size: var(--body-size);
+      color: var(--on-surface);
+      margin: 0 0 var(--space-xs) 0;
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .tag-chip {
+      display: inline-block;
+      background: var(--tag-warm-bg);
+      color: var(--tertiary);
+      font-weight: 700;
+      font-size: var(--label-size);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--rounded);
+    }
+    .tag-chip--blue {
+      background: var(--secondary-bg);
+      color: var(--secondary);
+    }
+    .tag-chip--green {
+      background: var(--positive-bg);
+      color: var(--positive);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      font-weight: 600;
+      font-size: var(--label-size);
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  color var(--dur-micro) var(--ease-out),
+                  border-color var(--dur-micro) var(--ease-out),
+                  transform var(--dur-micro) var(--ease-out);
+    }
+    .btn:active:not(:disabled) {
+      transform: translateY(1px);
+    }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+    .btn-primary:hover:not(:disabled) {
+      background: var(--secondary);
+      border-color: var(--secondary);
+    }
+    .btn-secondary {
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      border-color: var(--btn-secondary-border);
+    }
+    .btn-secondary:hover:not(:disabled) {
+      background: var(--surface-container);
+      border-color: var(--on-surface);
+    }
+    .btn-gold {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      border-color: var(--primary-container);
+    }
+    .btn-gold:hover:not(:disabled) {
+      background: var(--tag-warm-bg);
+      border-color: var(--tertiary);
+    }
+    .btn-tab {
+      background: var(--surface-container-low);
+      color: var(--on-surface-variant);
+      border-color: var(--outline-variant);
+    }
+    .btn-tab.is-active {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+
+    /* Progress & Navigation Overview */
+    .overview-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+    .unit-nav-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+      gap: var(--space-md);
+      margin-top: var(--space-md);
+    }
+    .unit-nav-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+      text-align: right;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      transition: border-color var(--dur-short) var(--ease-out),
+                  background-color var(--dur-short) var(--ease-out);
+    }
+    .unit-nav-card:hover {
+      border-color: var(--secondary);
+      background: var(--secondary-bg);
+    }
+    .unit-nav-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+    .unit-nav-title {
+      font-weight: 700;
+      font-size: var(--body-size);
+      color: var(--on-surface);
+    }
+    .unit-nav-score {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--secondary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stat-panel {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .stat-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      border-bottom: 1px solid var(--outline-variant);
+      padding-bottom: var(--space-sm);
+    }
+    .stat-value {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: var(--headline-size);
+      color: var(--secondary);
+      font-variant-numeric: tabular-nums;
+      direction: ltr;
+      unicode-bidi: isolate;
+    }
+    .progress-track {
+      width: 100%;
+      height: 10px;
+      background: var(--surface-container-high);
+      border-radius: var(--rounded);
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--secondary);
+      width: 0%;
+      transition: width var(--dur-long) var(--ease-out);
+    }
+    .progress-fill--gold {
+      background: var(--primary-container);
+    }
+    .progress-fill--green {
+      background: var(--positive);
+    }
+
+    /* Adaptive 2D Grids */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+      gap: var(--space-md);
+      margin: var(--space-md) 0;
+    }
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+      gap: var(--space-lg);
+      align-items: start;
+      margin: var(--space-md) 0;
+    }
+    .card-wrapper { container-type: inline-size; }
+
+    .mini-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+    }
+    .mini-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-xs);
+    }
+    .mini-card-title {
+      font-weight: 700;
+      color: var(--on-surface);
+      margin: 0;
+    }
+
+    /* Lists */
+    .clean-list {
+      margin: var(--space-sm) 0;
+      padding-inline-start: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .clean-list li::marker {
+      color: var(--secondary);
+      font-weight: 700;
+    }
+
+    /* Tables */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      margin: var(--space-md) 0;
+    }
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: right;
+      font-size: 0.95rem;
+    }
+    table.data-table thead th {
+      background: var(--surface-container);
+      color: var(--on-surface);
+      font-weight: 700;
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--section-rule);
+      white-space: nowrap;
+    }
+    table.data-table tbody td {
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: 1px solid var(--outline-variant);
+      vertical-align: top;
+    }
+    table.data-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .num-cell {
+      font-family: var(--font-label);
+      font-variant-numeric: tabular-nums;
+      direction: ltr;
+      unicode-bidi: isolate;
+      text-align: center;
+    }
+
+    /* Math & Code Blocks (kept LTR inside RTL) */
+    .math-box {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-inline-start: 4px solid var(--secondary);
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+      margin: var(--space-md) 0;
+      direction: ltr;
+      text-align: center;
+      overflow-x: auto;
+    }
+    .katex {
+      direction: ltr;
+      unicode-bidi: isolate;
+      font-size: 1.15em;
+    }
+    .code-block {
+      background: var(--code-bg);
+      color: var(--code-fg);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      margin: var(--space-md) 0;
+      direction: ltr;
+      text-align: left;
+      font-family: var(--font-label);
+      font-size: 0.875rem;
+      line-height: 1.65;
+      overflow-x: auto;
+      white-space: pre;
+    }
+    .code-comment { color: var(--code-muted); }
+    .code-kw { color: var(--code-accent); font-weight: 600; }
+    .code-fn { color: var(--code-teal); }
+    .inline-code {
+      font-family: var(--font-label);
+      font-size: 0.88em;
+      background: var(--surface-container);
+      color: var(--secondary);
+      padding: 0.1rem 0.35rem;
+      border-radius: var(--badge-radius);
+      direction: ltr;
+      unicode-bidi: isolate;
+      display: inline-block;
+    }
+
+    /* Interactive Labs */
+    .lab-panel {
+      background: var(--surface-container-low);
+      border: var(--section-rule);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      margin: var(--space-xl) 0;
+    }
+    .lab-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      border-bottom: 1px solid var(--outline-variant);
+      padding-bottom: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+    .lab-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: end;
+      gap: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+    .control-field {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .control-field label {
+      font-weight: 700;
+      font-size: var(--label-size);
+      color: var(--on-surface);
+    }
+    .num-input {
+      min-height: 44px;
+      width: 96px;
+      padding: var(--space-xs) var(--space-sm);
+      border: 1px solid var(--outline);
+      border-radius: var(--rounded);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      font-family: var(--font-label);
+      font-size: var(--body-size);
+      text-align: center;
+      direction: ltr;
+    }
+    .range-input {
+      min-height: 44px;
+      width: 210px;
+      accent-color: var(--secondary);
+      cursor: pointer;
+    }
+    .viz-container {
+      width: 100%;
+      min-height: 290px;
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .viz-svg {
+      width: 100%;
+      height: auto;
+      max-height: 330px;
+      display: block;
+    }
+    .kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(170px, 100%), 1fr));
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+    }
+    .kpi-box {
+      background: var(--surface-container);
+      border-radius: var(--rounded);
+      padding: var(--space-sm) var(--space-md);
+    }
+    .kpi-label {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      display: block;
+    }
+    .kpi-val {
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: var(--secondary);
+      font-variant-numeric: tabular-nums;
+      direction: ltr;
+      unicode-bidi: isolate;
+      display: inline-block;
+    }
+
+    /* Unit Quiz Section */
+    .quiz-section {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-top: 3px solid var(--secondary);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      margin-top: var(--space-xl);
+    }
+    .quiz-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      border-bottom: var(--section-rule);
+      padding-bottom: var(--space-md);
+      margin-bottom: var(--space-lg);
+    }
+    .quiz-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .quiz-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+    .q-card {
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      transition: border-color var(--dur-short) var(--ease-out);
+    }
+    .q-card.is-correct {
+      border-color: var(--positive-border);
+      background: var(--positive-bg);
+    }
+    .q-card.is-wrong {
+      border-color: var(--error-border);
+      background: var(--error-bg);
+    }
+    .q-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-sm);
+    }
+    .q-num {
+      font-family: var(--font-label);
+      font-weight: 600;
+      font-size: var(--label-size);
+      color: var(--secondary);
+      white-space: nowrap;
+    }
+    .q-text {
+      font-weight: 700;
+      font-size: var(--body-size);
+      color: var(--on-surface);
+      margin: 0 0 var(--space-md) 0;
+    }
+    .q-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+      gap: var(--space-sm);
+    }
+    .q-opt {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      width: 100%;
+      min-height: 44px;
+      text-align: right;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded);
+      cursor: pointer;
+      font-size: 0.96rem;
+      line-height: 1.5;
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  border-color var(--dur-micro) var(--ease-out);
+    }
+    .q-opt:hover:not(:disabled) {
+      background: var(--secondary-bg);
+      border-color: var(--secondary);
+    }
+    .q-opt:disabled {
+      cursor: default;
+    }
+    .q-opt-letter {
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: var(--label-size);
+      min-width: 24px;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--badge-radius);
+      background: var(--surface-container);
+      color: var(--on-surface);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .q-opt.opt-correct {
+      background: var(--positive-bg);
+      border-color: var(--positive);
+      font-weight: 600;
+    }
+    .q-opt.opt-correct .q-opt-letter {
+      background: var(--positive);
+      color: var(--on-primary);
+    }
+    .q-opt.opt-wrong {
+      background: var(--error-bg);
+      border-color: var(--error);
+    }
+    .q-opt.opt-wrong .q-opt-letter {
+      background: var(--error);
+      color: var(--on-error);
+    }
+    .q-explanation {
+      margin-top: var(--space-md);
+      padding: var(--space-sm) var(--space-md);
+      background: var(--surface-container-low);
+      border-inline-start: 4px solid var(--secondary);
+      border-radius: var(--rounded);
+      font-size: 0.95rem;
+    }
+    .q-explanation.is-correct-exp {
+      border-inline-start-color: var(--positive);
+    }
+    .q-explanation.is-wrong-exp {
+      border-inline-start-color: var(--error);
+    }
+    .q-exp-badge {
+      display: inline-block;
+      font-weight: 700;
+      font-size: var(--label-size);
+      margin-bottom: var(--space-xs);
+    }
+    .q-exp-badge--ok { color: var(--positive); }
+    .q-exp-badge--no { color: var(--error); }
+
+    /* Unit completion banner */
+    .unit-footer {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      margin-top: var(--space-lg);
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--outline-variant);
+    }
+
+    /* Bar chart comparison in Unit 4 */
+    .bar-row {
+      display: grid;
+      grid-template-columns: minmax(0, 190px) minmax(0, 1fr) 70px;
+      gap: var(--space-md);
+      align-items: center;
+      margin-bottom: var(--space-sm);
+    }
+    .bar-track {
+      height: 18px;
+      background: var(--surface-container-high);
+      border-radius: var(--rounded);
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      background: var(--data-context);
+      transition: width var(--dur-long) var(--ease-out);
+    }
+    .bar-fill.is-active {
+      background: var(--data-1);
+    }
+    .bar-fill.is-best {
+      background: var(--data-3);
+    }
+
+    /* Status message banner */
+    .inline-toast {
+      margin-top: var(--space-sm);
+      padding: var(--space-xs) var(--space-sm);
+      background: var(--warning-bg);
+      border: 1px solid var(--warning-border);
+      color: var(--warning);
+      border-radius: var(--rounded);
+      font-size: var(--label-size);
+      display: none;
+    }
+    .inline-toast.is-visible {
+      display: block;
+    }
+
+    /* Container query example */
+    @container (min-width: 520px) {
+      .adaptive-split {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: var(--space-md);
+      }
+    }
+    @container (max-width: 519px) {
+      .adaptive-split {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--space-md);
+      }
+    }
+
+    /* Responsive mobile rules */
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-md);
+        gap: var(--space-lg);
+      }
+      .overview-grid,
+      .two-col-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .figure-card,
+      .lab-panel,
+      .quiz-section {
+        padding: var(--space-md);
+      }
+      .bar-row {
+        grid-template-columns: minmax(0, 1fr) 64px;
+      }
+      .bar-row > :first-child {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
 </head>
 <body>
-<header>
-  <div class="wrap">
-    <div class="eyebrow">نسخة شاملة ومحدثة 100% • مقرر تحليل وتمثيل البيانات</div>
-    <h1>الفصل التاسع: اختيار السمات وتقليصها (Feature Selection &amp; Reduction)</h1>
-    <p>يغطي الوحدات الأربع كاملة: تقنيات اختيار السمات (Filter, Wrapper, Model-based)، اختبار مربع كاي (Chi-squared)، المعلومات المتبادلة (Mutual Information)، ارتباط بيرسون، تحليل المكونات الرئيسية (PCA)، والتطبيق البرمجي بـ Scikit-learn</p>
-    <nav>
-      <button class="active" data-tab="summary">الشرح والقوانين والأكواد (100%)</button>
-      <button data-tab="tables">ملخص القوانين والمقارنات</button>
-      <button data-tab="terms">قاموس المصطلحات والدوال</button>
-      <button data-tab="cards">البطاقات (28)</button>
-      <button data-tab="quiz">الاختبار العشوائي (25)</button>
-    </nav>
+  <div class="page-grid">
+
+    <!-- HERO & CHAPTER DASHBOARD -->
+    <header class="figure-card" id="top">
+      <div class="dossier-bar">
+        <div class="dossier-bar-group">
+          <span class="dossier-pill">الفصل التاسع</span>
+          <span class="dossier-meta">تحليل وتمثيل البيانات · <bdi dir="ltr">4</bdi> وحدات دراسية · <bdi dir="ltr">40</bdi> سؤال اختيار من متعدد</span>
+        </div>
+        <div class="dossier-bar-group">
+          <button type="button" class="btn btn-secondary" onclick="exportProgressSummary()">تصدير تقرير المذاكرة</button>
+          <button type="button" class="btn btn-secondary" id="reset-all-btn" onclick="resetAllProgress(this)">إعادة ضبط التقدم</button>
+        </div>
+      </div>
+
+      <h1 class="hero-title">اختيار السمات وتقليصها</h1>
+      <p class="standfirst">
+        دليل مراجعة تفاعلي شامل لوحدات الفصل التاسع الأربع: من هندسة السمات ومقاييس التصفية الإحصائية (<bdi dir="ltr">Chi-squared</bdi>، <bdi dir="ltr">Mutual Information</bdi>، <bdi dir="ltr">Pearson</bdi>) إلى تحليل المكونات الرئيسية (<bdi dir="ltr">PCA</bdi>) والتطبيق العملي في <bdi dir="ltr">Scikit-learn</bdi>، مع اختبار من <bdi dir="ltr">10</bdi> أسئلة لكل وحدة وتفسير تفصيلي لكل إجابة.
+      </p>
+
+      <div class="overview-grid">
+        <div>
+          <span class="dossier-meta">خريطة وحدات الفصل التاسع — اختر وحدة للانتقال المباشر:</span>
+          <div class="unit-nav-grid">
+            <button type="button" class="unit-nav-card" onclick="scrollToSection('unit-1')">
+              <div class="unit-nav-top">
+                <span class="index-num">01</span>
+                <span class="unit-nav-score" id="nav-score-1">0 / 10</span>
+              </div>
+              <div class="unit-nav-title">هندسة السمات واختبار مربع كاي</div>
+              <span class="dossier-meta" id="nav-status-1">غير مكتملة</span>
+            </button>
+            <button type="button" class="unit-nav-card" onclick="scrollToSection('unit-2')">
+              <div class="unit-nav-top">
+                <span class="index-num">02</span>
+                <span class="unit-nav-score" id="nav-score-2">0 / 10</span>
+              </div>
+              <div class="unit-nav-title">المعلومات المتبادلة وارتباط بيرسون</div>
+              <span class="dossier-meta" id="nav-status-2">غير مكتملة</span>
+            </button>
+            <button type="button" class="unit-nav-card" onclick="scrollToSection('unit-3')">
+              <div class="unit-nav-top">
+                <span class="index-num">03</span>
+                <span class="unit-nav-score" id="nav-score-3">0 / 10</span>
+              </div>
+              <div class="unit-nav-title">تقليص السمات وتحليل <bdi dir="ltr">PCA</bdi></div>
+              <span class="dossier-meta" id="nav-status-3">غير مكتملة</span>
+            </button>
+            <button type="button" class="unit-nav-card" onclick="scrollToSection('unit-4')">
+              <div class="unit-nav-top">
+                <span class="index-num">04</span>
+                <span class="unit-nav-score" id="nav-score-4">0 / 10</span>
+              </div>
+              <div class="unit-nav-title">التطبيق العملي بـ <bdi dir="ltr">Scikit-learn</bdi></div>
+              <span class="dossier-meta" id="nav-status-4">غير مكتملة</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="aside-box stat-panel" style="margin: 0;">
+          <div class="stat-row">
+            <span>إجمالي الإجابات الصحيحة</span>
+            <span class="stat-value" id="global-correct-val">0 / 40</span>
+          </div>
+          <div class="progress-track" aria-label="نسبة الإجابات الصحيحة">
+            <div class="progress-fill progress-fill--green" id="global-correct-bar"></div>
+          </div>
+          <div class="stat-row">
+            <span>الأسئلة المجابة</span>
+            <span class="stat-value" id="global-answered-val">0 / 40</span>
+          </div>
+          <div class="stat-row" style="border-bottom: none; padding-bottom: 0;">
+            <span>الوحدات المُراجعة</span>
+            <span class="stat-value" id="global-units-val">0 / 4</span>
+          </div>
+          <div id="global-status-msg" class="inline-toast" role="status" aria-live="polite"></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ========================================================== -->
+    <!-- UNIT 1                                                     -->
+    <!-- ========================================================== -->
+    <section class="figure-card" id="unit-1" aria-labelledby="unit-1-heading">
+      <div class="dossier-bar">
+        <div class="dossier-bar-group">
+          <span class="index-num">01</span>
+          <span class="dossier-pill">الوحدة الأولى</span>
+          <span class="dossier-meta">مقدمة لهندسة السمات · اختيار السمات · <bdi dir="ltr">Chi-squared Test</bdi></span>
+        </div>
+        <button type="button" class="btn btn-secondary" id="read-btn-1" onclick="toggleUnitRead(1)">تحديد الوحدة كمُراجعة</button>
+      </div>
+
+      <h2 class="unit-title" id="unit-1-heading">مقدمة لهندسة السمات واختيارها عبر اختبار مربع كاي</h2>
+      <p class="unit-subtitle">لماذا لا نُدخل جميع الأعمدة إلى النموذج؟ وكيف نصطفي السمات المؤثرة دون المساس بجوهر المعلومات؟</p>
+
+      <p class="prose">
+        في تحليلات البيانات المستندة إلى التعلم الآلي، تُعرَّف <strong>السمة (<bdi dir="ltr">Feature</bdi>)</strong> بأنها خاصية فردية قابلة للقياس أو صفة لظاهرة تتم ملاحظتها. على سبيل المثال، في أنظمة التعرف على الوجوه قد تشمل السمات: شكل الفم، شكل الأنف، تفاصيل العين، وتفاصيل الأذن. ويمكن استخراج هذه السمات مباشرة من البيانات الخام أو اشتقاق سمات جديدة من سمات موجودة مسبقاً.
+      </p>
+      <p class="prose">
+        إن استخدام مجموعات مختلفة من السمات عند بناء النماذج يؤدي مباشرةً إلى اختلاف جودتها وكفاءتها. ولهذا تبرز أهمية <strong>هندسة السمات (<bdi dir="ltr">Feature Engineering</bdi>)</strong> التي تشمل <strong>اختيار السمات</strong> أو <strong>تقليصها</strong> قبل تدريب النموذج، وهي عملية تتطلب عادةً تعاوناً وثيقاً بين <strong>خبراء المجال</strong> و<strong>علماء البيانات</strong> لتحديد السمات الأكثر ارتباطاً بالمشكلة المطلوب حلها.
+      </p>
+
+      <h3 class="section-heading">أولاً: مفهوم اختيار السمات وفوائده الأربع</h3>
+      <p class="prose">
+        تهدف عملية <strong>اختيار السمات (<bdi dir="ltr">Feature Selection</bdi>)</strong> إلى تضمين السمات المهمة وحذف السمات الزائدة (<bdi dir="ltr">Redundant</bdi>) أو غير ذات الصلة (<bdi dir="ltr">Irrelevant</bdi>) دون تغيير قيم السمات المتبقية أو التأثير سلباً على المعلومات.
+      </p>
+
+      <div class="card-grid">
+        <div class="mini-card">
+          <div class="mini-card-head">
+            <h4 class="mini-card-title">1. تبسيط النموذج</h4>
+            <span class="tag-chip">البساطة</span>
+          </div>
+          <p class="prose" style="margin:0;">إزالة المتغيرات المشتِّتة تجعل بنية النموذج أوضح وأسهل في التفسير والفهم.</p>
+        </div>
+        <div class="mini-card">
+          <div class="mini-card-head">
+            <h4 class="mini-card-title">2. اختصار وقت البناء</h4>
+            <span class="tag-chip tag-chip--blue">السرعة</span>
+          </div>
+          <p class="prose" style="margin:0;">انخفاض عدد الأعمدة يقلل العمليات الحسابية اللازمة لتدريب النموذج واختباره.</p>
+        </div>
+        <div class="mini-card">
+          <div class="mini-card-head">
+            <h4 class="mini-card-title">3. تقليل مشاكل كثرة السمات</h4>
+            <span class="tag-chip">الاستقرار</span>
+          </div>
+          <p class="prose" style="margin:0;">الحد من ظاهرة الإفراط في التخصيص (<bdi dir="ltr">Overfitting</bdi>) وتشتت الأبعاد العالية.</p>
+        </div>
+        <div class="mini-card">
+          <div class="mini-card-head">
+            <h4 class="mini-card-title">4. تحسين قابلية التعميم</h4>
+            <span class="tag-chip tag-chip--green">الدقة</span>
+          </div>
+          <p class="prose" style="margin:0;">يصبح النموذج قادراً على العمل بكفاءة عالية على مجموعات بيانات جديدة ومختلفة.</p>
+        </div>
+      </div>
+
+      <h3 class="section-heading">ثانياً: تقنيات اختيار السمات الثلاث</h3>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>التقنية</th>
+              <th>آلية العمل</th>
+              <th>الاعتماد على النموذج</th>
+              <th>أشهر الأمثلة</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>طرق التصفية<br><span class="inline-code">Filter Methods</span></strong></td>
+              <td>تحسب الارتباطات والاعتمادية الإحصائية بين كل سمة حرة والسمة الهدف قبل التدريب.</td>
+              <td>لا تعتمد على النموذج إطلاقاً</td>
+              <td><bdi dir="ltr">Chi-squared</bdi>، <bdi dir="ltr">Mutual Information</bdi>، <bdi dir="ltr">Pearson Correlation</bdi></td>
+            </tr>
+            <tr>
+              <td><strong>طرق التغليف<br><span class="inline-code">Wrapper Methods</span></strong></td>
+              <td>تجرّب مجموعات فرعية من السمات وتختار المجموعة التي تحقق أعلى كفاءة للنموذج.</td>
+              <td>تعتمد كلياً على أداء النموذج</td>
+              <td>الاختيار المتسلسل للأمام أو للخلف</td>
+            </tr>
+            <tr>
+              <td><strong>الطرق المدمجة<br><span class="inline-code">Model-based Methods</span></strong></td>
+              <td>يتم اختيار السمات تلقائياً أثناء بناء النموذج كجزء أساسي من تهيئته.</td>
+              <td>مدمجة داخل خوارزمية النموذج</td>
+              <td>انحدار لاسو (<bdi dir="ltr">Lasso</bdi>) وأشجار القرار</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="section-heading">ثالثاً: اختبار مربع كاي (<bdi dir="ltr">Chi-squared Test</bdi>)</h3>
+      <p class="prose">
+        يُجرى اختبار مربع كاي (<bdi dir="ltr">χ²</bdi>) رياضياً على توزيعتين لتحديد مستوى التشابه أو الاستقلالية بين تبايناتهما. في <strong>فرضيته الصفرية (<bdi dir="ltr">Null Hypothesis</bdi>)</strong>، يفترض الاختبار أن التوزيعات المحددة <strong>مستقلة</strong> (لا توجد علاقة بين السمة والسمة الهدف).
+      </p>
+      <p class="prose">
+        عند تطبيقه لتصفية السمات، نحسب قيمة <bdi dir="ltr">χ²</bdi> لكل سمة مع السمة الهدف، ثم نرتب السمات <strong>تنازلياً</strong> ونختار العدد المطلوب (<bdi dir="ltr">K</bdi>) من السمات ذات القيم الأعلى؛ لأن ارتفاع قيمة <bdi dir="ltr">χ²</bdi> يعني تباعداً أكبر عن الاستقلالية، وبالتالي اعتماد السمة الهدف على تلك السمة بشكل أقوى (كما تفوقت سمة <span class="inline-code">Wind</span> في مثال الملخص لحصولها على أعلى قيمة <bdi dir="ltr">χ²</bdi>).
+      </p>
+
+      <div class="math-box">
+        <span class="math-tex" data-tex="\chi^2 = \sum \frac{(O_{ij} - E_{ij})^2}{E_{ij}}">χ² = Σ [ (Oᵢⱼ − Eᵢⱼ)² / Eᵢⱼ ]</span>
+      </div>
+
+      <div class="aside-box">
+        <div class="aside-title">تنبيهات الاختبار — دلالات المعادلة</div>
+        <ul class="clean-list">
+          <li><span class="inline-code">O_ij</span>: <strong>التكرارات الملاحظة (<bdi dir="ltr">Observed</bdi>)</strong> الفعلية في جدول البيانات.</li>
+          <li><span class="inline-code">E_ij</span>: <strong>التكرارات المتوقعة (<bdi dir="ltr">Expected</bdi>)</strong> في حال صحة الفرضية الصفرية (الاستقلال التام).</li>
+          <li>كلما كبر الفارق بين الملاحظ والمتوقع زادت قيمة <bdi dir="ltr">χ²</bdi>، وزادت أهمية السمة في التنبؤ بالهدف.</li>
+        </ul>
+      </div>
+
+      <!-- UNIT 1 INTERACTIVE LAB -->
+      <div class="lab-panel" aria-label="مختبر الوحدة الأولى التفاعلي">
+        <div class="lab-header">
+          <div>
+            <span class="tag-chip tag-chip--blue">مختبر تفاعلي — الوحدة 01</span>
+            <h3 style="margin: var(--space-xs) 0 0 0;">محاكي اختبار مربع كاي (<bdi dir="ltr">χ²</bdi>) ومقارنة التقنيات</h3>
+          </div>
+          <div class="quiz-actions">
+            <button type="button" class="btn btn-tab is-active" id="u1-tab-filter" onclick="setU1Tech('filter')">Filter</button>
+            <button type="button" class="btn btn-tab" id="u1-tab-wrapper" onclick="setU1Tech('wrapper')">Wrapper</button>
+            <button type="button" class="btn btn-tab" id="u1-tab-embedded" onclick="setU1Tech('embedded')">Model-based</button>
+          </div>
+        </div>
+
+        <p class="prose" id="u1-tech-desc" style="margin-bottom: var(--space-md);"></p>
+
+        <div class="lab-controls">
+          <div class="control-field">
+            <label for="u1-chi-slider">حرّك التكرار الملاحظ <bdi dir="ltr">O₁₁</bdi> لسمة <span class="inline-code">Wind = قوية</span> عند الهدف <span class="inline-code">نعم</span> (إجمالي العينة = 24):</label>
+            <input type="range" class="range-input" id="u1-chi-slider" min="1" max="11" step="1" value="6" oninput="updateU1ChiSlider(this.value)">
+          </div>
+          <div class="control-field">
+            <label for="u1-chi-num">القيمة <bdi dir="ltr">O₁₁</bdi>:</label>
+            <input type="number" class="num-input" id="u1-chi-num" min="1" max="11" step="1" value="6" oninput="updateU1ChiNumber(this.value)">
+          </div>
+        </div>
+
+        <div class="card-wrapper">
+          <div class="adaptive-split">
+            <div class="table-wrap" style="margin: 0;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>السمة <span class="inline-code">Wind</span></th>
+                    <th class="num-cell">الهدف: نعم</th>
+                    <th class="num-cell">الهدف: لا</th>
+                    <th class="num-cell">المجموع</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>قوية</strong></td>
+                    <td class="num-cell" id="u1-o11">6 (E=6)</td>
+                    <td class="num-cell" id="u1-o12">6 (E=6)</td>
+                    <td class="num-cell">12</td>
+                  </tr>
+                  <tr>
+                    <td><strong>هادئة</strong></td>
+                    <td class="num-cell" id="u1-o21">6 (E=6)</td>
+                    <td class="num-cell" id="u1-o22">6 (E=6)</td>
+                    <td class="num-cell">12</td>
+                  </tr>
+                  <tr>
+                    <td><strong>المجموع</strong></td>
+                    <td class="num-cell">12</td>
+                    <td class="num-cell">12</td>
+                    <td class="num-cell">24</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="kpi-strip" style="margin-top: 0;">
+              <div class="kpi-box">
+                <span class="kpi-label">قيمة <bdi dir="ltr">χ²</bdi> لسمة <span class="inline-code">Wind</span></span>
+                <span class="kpi-val" id="u1-chi-result">0.00</span>
+              </div>
+              <div class="kpi-box">
+                <span class="kpi-label">قيمة مقارنة ثابتة (<span class="inline-code">Outlook</span>)</span>
+                <span class="kpi-val">4.17</span>
+              </div>
+              <div class="kpi-box" style="grid-column: 1 / -1;">
+                <span class="kpi-label">التفسير الإحصائي والترتيب</span>
+                <strong id="u1-chi-verdict" style="color: var(--on-surface);">التكرار الملاحظ يطابق المتوقع — استقلال تام!</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- UNIT 1 QUIZ -->
+      <div class="quiz-section" id="quiz-unit-1">
+        <div class="quiz-toolbar">
+          <div>
+            <span class="dossier-pill">اختبار الوحدة الأولى</span>
+            <h3 style="margin: var(--space-xs) 0 0 0;">10 أسئلة اختيار من متعدد — مع توضيح سبب الإجابة الصحيحة</h3>
+          </div>
+          <div class="quiz-actions">
+            <span class="index-num" id="score-badge-1">0 / 10</span>
+            <button type="button" class="btn btn-tab is-active" id="filter-all-1" onclick="setQuizFilter(1, 'all')">كل الأسئلة</button>
+            <button type="button" class="btn btn-tab" id="filter-wrong-1" onclick="setQuizFilter(1, 'wrong')">الخاطئة فقط</button>
+            <button type="button" class="btn btn-secondary" id="reset-unit-1" onclick="resetUnitQuiz(1, this)">إعادة اختبار الوحدة</button>
+          </div>
+        </div>
+        <div class="quiz-list" id="quiz-list-1"></div>
+      </div>
+
+      <div class="unit-footer">
+        <span class="dossier-meta">نهاية الوحدة الأولى — تأكد من مراجعة كل الأخطاء قبل الانتقال.</span>
+        <button type="button" class="btn btn-primary" onclick="scrollToSection('unit-2')">الانتقال إلى الوحدة الثانية ←</button>
+      </div>
+    </section>
+
+    <!-- ========================================================== -->
+    <!-- UNIT 2                                                     -->
+    <!-- ========================================================== -->
+    <section class="figure-card" id="unit-2" aria-labelledby="unit-2-heading">
+      <div class="dossier-bar">
+        <div class="dossier-bar-group">
+          <span class="index-num">02</span>
+          <span class="dossier-pill">الوحدة الثانية</span>
+          <span class="dossier-meta"><bdi dir="ltr">Mutual Information</bdi> · <bdi dir="ltr">Pearson Correlation</bdi></span>
+        </div>
+        <button type="button" class="btn btn-secondary" id="read-btn-2" onclick="toggleUnitRead(2)">تحديد الوحدة كمُراجعة</button>
+      </div>
+
+      <h2 class="unit-title" id="unit-2-heading">المعلومات المتبادلة ومعامل ارتباط بيرسون</h2>
+      <p class="unit-subtitle">كيف نقيس اعتمادية المتغيرات غير الخطية، ومتى نكتفي بقياس العلاقة الخطية المباشرة؟</p>
+
+      <div class="two-col-grid">
+        <div>
+          <h3 class="section-heading" style="margin-top: 0;">أولاً: المعلومات المتبادلة (<bdi dir="ltr">Mutual Information</bdi>)</h3>
+          <p class="prose">
+            تمثل <strong>المعلومات المتبادلة (<bdi dir="ltr">MI</bdi>)</strong> بين متغيرين مستقلين مقياساً رياضياً لمدى <strong>اعتماد كل متغير على الآخر</strong>. كلما زادت كمية المعلومات المشتركة بين السمة والسمة الهدف، ارتفعت قيمة <bdi dir="ltr">MI</bdi>، مما يدل على أن معرفة قيمة السمة يقلل من عدم اليقين بشأن السمة الهدف.
+          </p>
+          <ul class="clean-list">
+            <li>إذا كانت <span class="inline-code">MI = 0</span> فهذا يعني أن المتغيرين <strong>مستقلان تماماً</strong>.</li>
+            <li>الميزة الكبرى لـ <bdi dir="ltr">MI</bdi>: تلتقط العلاقات <strong>الخطية وغير الخطية</strong> معاً (مثل المنحنيات التربيعية أو الدورية)، على عكس معامل بيرسون.</li>
+          </ul>
+          <div class="math-box">
+            <span class="math-tex" data-tex="I(X; Y) = \sum_{y \in Y} \sum_{x \in X} p(x, y) \log\left(\frac{p(x, y)}{p(x)p(y)}\right)">I(X; Y) = Σₓ Σᵧ p(x,y) · log[ p(x,y) / (p(x)·p(y)) ]</span>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="section-heading" style="margin-top: 0;">ثانياً: معامل ارتباط بيرسون (<bdi dir="ltr">Pearson Correlation</bdi>)</h3>
+          <p class="prose">
+            يعبّر معامل ارتباط بيرسون (<bdi dir="ltr">r</bdi>) عن قوة واتجاه <strong>العلاقة الخطية</strong> بين اثنتين من السمات الرقمية، وتنحصر قيمته دائماً داخل النطاق المغلق <bdi dir="ltr">[-1, 1]</bdi>:
+          </p>
+          <ul class="clean-list">
+            <li><strong>القيم الموجبة (<bdi dir="ltr">r &gt; 0</bdi>):</strong> تشير إلى <strong>علاقة طردية</strong> (زيادة أحد المتغيرين يصاحبها زيادة الآخر).</li>
+            <li><strong>القيم السالبة (<bdi dir="ltr">r &lt; 0</bdi>):</strong> تشير إلى <strong>علاقة عكسية</strong> (زيادة أحدهما يصاحبها نقصان الآخر).</li>
+            <li><strong>القيمة صفر (<bdi dir="ltr">r = 0</bdi>):</strong> تشير إلى <strong>عدم وجود علاقة خطية</strong> بين السمتين.</li>
+          </ul>
+          <div class="math-box">
+            <span class="math-tex" data-tex="r = \frac{\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})}{(n - 1)\,\sigma_x\,\sigma_y}">r = Σ (xᵢ − x̄)(yᵢ − ȳ) / [ (n − 1) · σₓ · σᵧ ]</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="aside-box">
+        <div class="aside-title">دلالات رموز معادلة ارتباط بيرسون</div>
+        <div class="card-grid" style="margin-bottom: 0;">
+          <div><span class="inline-code">n</span> : عدد العناصر (الصفوف) في مجموعة البيانات.</div>
+          <div><span class="inline-code">x̄ , ȳ</span> : المتوسط الحسابي للسمة <bdi dir="ltr">x</bdi> والمتوسط الحسابي للسمة <bdi dir="ltr">y</bdi>.</div>
+          <div><span class="inline-code">σ_x , σ_y</span> : مقياس تشتت السمتين <bdi dir="ltr">x</bdi> و<bdi dir="ltr">y</bdi> (الانحراف المعياري / التباين كما ورد بالملخص).</div>
+        </div>
+      </div>
+
+      <!-- UNIT 2 INTERACTIVE LAB -->
+      <div class="lab-panel" aria-label="مختبر الوحدة الثانية التفاعلي">
+        <div class="lab-header">
+          <div>
+            <span class="tag-chip tag-chip--blue">مختبر تفاعلي — الوحدة 02</span>
+            <h3 style="margin: var(--space-xs) 0 0 0;">مقارنة معامل بيرسون (<bdi dir="ltr">r</bdi>) والمعلومات المتبادلة (<bdi dir="ltr">MI</bdi>)</h3>
+          </div>
+          <div class="quiz-actions">
+            <button type="button" class="btn btn-tab is-active" id="u2-btn-pos" onclick="setU2Preset('pos')">علاقة طردية</button>
+            <button type="button" class="btn btn-tab" id="u2-btn-neg" onclick="setU2Preset('neg')">علاقة عكسية</button>
+            <button type="button" class="btn btn-tab" id="u2-btn-none" onclick="setU2Preset('none')">عدم وجود علاقة</button>
+            <button type="button" class="btn btn-tab" id="u2-btn-nonlinear" onclick="setU2Preset('nonlinear')">علاقة غير خطية (U)</button>
+          </div>
+        </div>
+
+        <div class="lab-controls">
+          <div class="control-field">
+            <label for="u2-noise-slider">مستوى التشتت العشوائي (الضوضاء): <span id="u2-noise-label" class="inline-code">12%</span></label>
+            <input type="range" class="range-input" id="u2-noise-slider" min="0" max="100" step="5" value="12" oninput="updateU2Noise(this.value)">
+          </div>
+        </div>
+
+        <div class="two-col-grid" style="margin: 0;">
+          <div class="viz-container">
+            <svg id="u2-svg" class="viz-svg" viewBox="0 0 420 260" role="img" aria-label="مخطط تشتت للعلاقة بين X و Y"></svg>
+          </div>
+          <div class="kpi-strip" style="margin-top: 0; grid-template-columns: minmax(0, 1fr);">
+            <div class="kpi-box">
+              <span class="kpi-label">معامل ارتباط بيرسون (<bdi dir="ltr">r ∈ [-1, 1]</bdi>)</span>
+              <span class="kpi-val" id="u2-pearson-val">+0.94</span>
+            </div>
+            <div class="kpi-box">
+              <span class="kpi-label">المعلومات المتبادلة (<bdi dir="ltr">Mutual Information</bdi>)</span>
+              <span class="kpi-val" id="u2-mi-val">1.48</span>
+            </div>
+            <div class="kpi-box">
+              <span class="kpi-label">الاستنتاج العلمي</span>
+              <p id="u2-verdict" style="margin: var(--space-xs) 0 0 0; font-size: 0.94rem;"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- UNIT 2 QUIZ -->
+      <div class="quiz-section" id="quiz-unit-2">
+        <div class="quiz-toolbar">
+          <div>
+            <span class="dossier-pill">اختبار الوحدة الثانية</span>
+            <h3 style="margin: var(--space-xs) 0 0 0;">10 أسئلة اختيار من متعدد — مع توضيح سبب الإجابة الصحيحة</h3>
+          </div>
+          <div class="quiz-actions">
+            <span class="index-num" id="score-badge-2">0 / 10</span>
+            <button type="button" class="btn btn-tab is-active" id="filter-all-2" onclick="setQuizFilter(2, 'all')">كل الأسئلة</button>
+            <button type="button" class="btn btn-tab" id="filter-wrong-2" onclick="setQuizFilter(2, 'wrong')">الخاطئة فقط</button>
+            <button type="button" class="btn btn-secondary" id="reset-unit-2" onclick="resetUnitQuiz(2, this)">إعادة اختبار الوحدة</button>
+          </div>
+        </div>
+        <div class="quiz-list" id="quiz-list-2"></div>
+      </div>
+
+      <div class="unit-footer">
+        <span class="dossier-meta">نهاية الوحدة الثانية — لاحظ الفرق الدقيق بين العلاقة الخطية والاعتمادية العامة.</span>
+        <button type="button" class="btn btn-primary" onclick="scrollToSection('unit-3')">الانتقال إلى الوحدة الثالثة ←</button>
+      </div>
+    </section>
+
+    <!-- ========================================================== -->
+    <!-- UNIT 3                                                     -->
+    <!-- ========================================================== -->
+    <section class="figure-card" id="unit-3" aria-labelledby="unit-3-heading">
+      <div class="dossier-bar">
+        <div class="dossier-bar-group">
+          <span class="index-num">03</span>
+          <span class="dossier-pill">الوحدة الثالثة</span>
+          <span class="dossier-meta">تقليص السمات · تحليل المكونات الرئيسية <bdi dir="ltr">(PCA)</bdi></span>
+        </div>
+        <button type="button" class="btn btn-secondary" id="read-btn-3" onclick="toggleUnitRead(3)">تحديد الوحدة كمُراجعة</button>
+      </div>
+
+      <h2 class="unit-title" id="unit-3-heading">تقليص السمات وتحليل المكونات الرئيسية (<bdi dir="ltr">PCA</bdi>)</h2>
+      <p class="unit-subtitle">بدلاً من حذف الأعمدة، كيف ندمج السمات في محاور متعامدة جديدة تحفظ معظم المعلومات؟</p>
+
+      <h3 class="section-heading">أولاً: مفهوم تقليص السمات والفرق بينه وبين اختيار السمات</h3>
+      <p class="prose">
+        <strong>تقليص السمات (<bdi dir="ltr">Feature / Dimensionality Reduction</bdi>)</strong> هو عملية تهدف إلى تقليص عدد الأبعاد المتواجدة في مجموعة البيانات عبر تطبيق <strong>عملية تحويل</strong> (قد تكون <strong>خطية أو غير خطية</strong>) لعدد من السمات إلى عدد أقل من <strong>السمات المدمجة</strong> المعتمدة على السمات الأصلية، مع الحفاظ على غالبية المعلومات التي تحتويها البيانات الأصلية.
+      </p>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>وجه المقارنة</th>
+              <th>اختيار السمات (<bdi dir="ltr">Feature Selection</bdi>)</th>
+              <th>تقليص السمات (<bdi dir="ltr">Feature Reduction</bdi>)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>الآلية الأساسية</strong></td>
+              <td>حذف سمات بعينها والإبقاء على مجموعة فرعية من السمات الأصلية كما هي.</td>
+              <td>دمج السمات الأصلية معاً عبر تحويل رياضي لتخليق عدد أقل من السمات الجديدة.</td>
+            </tr>
+            <tr>
+              <td><strong>طبيعة السمات الناتجة</strong></td>
+              <td>نفس السمات الأصلية المختارة (سهلة التفسير المباشر).</td>
+              <td>سمات مدمجة جديدة (مثل المكونات الرئيسية <bdi dir="ltr">PC1, PC2</bdi>).</td>
+            </tr>
+            <tr>
+              <td><strong>أشهر التقنيات</strong></td>
+              <td><bdi dir="ltr">Chi-squared</bdi>، <bdi dir="ltr">Mutual Information</bdi>، <bdi dir="ltr">Pearson</bdi>.</td>
+              <td>تحليل المكونات الرئيسية (<bdi dir="ltr">PCA</bdi>).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="section-heading">ثانياً: أساسيات تحليل المكونات الرئيسية (<bdi dir="ltr">PCA</bdi>)</h3>
+      <ul class="clean-list">
+        <li>يمثل <bdi dir="ltr">PCA</bdi> البيانات بمجموعة أقل من المتغيرات الجديدة تُعرف باسم <strong>المكونات الرئيسية (<bdi dir="ltr">Principal Components</bdi>)</strong>.</li>
+        <li>يحدد محلل البيانات عدد المكونات الرئيسية المطلوبة، وتُستخدم هذه المكونات لتحويل جميع البيانات عبر <strong>إسقاطها (<bdi dir="ltr">Projection</bdi>)</strong> على هذه المحاور الرئيسية.</li>
+        <li><strong>المكون الرئيسي الأول (<bdi dir="ltr">PC1</bdi>):</strong> يعبّر عن الاتجاه الذي <strong>يعظّم التباين (<bdi dir="ltr">Maximizes Variance</bdi>)</strong> في البيانات بعد تحويلها.</li>
+        <li><strong>التعامد (<bdi dir="ltr">Orthogonality</bdi>):</strong> كل مكون رئيسي جديد يمثل متجهاً <strong>عمودياً</strong> على المكون السابق له (أي لا يوجد ارتباط خطي بين المكونات).</li>
+      </ul>
+
+      <h3 class="section-heading">ثالثاً: خطوات حساب <bdi dir="ltr">PCA</bdi> والمثال التطبيقي (المساحة وسعر المنزل)</h3>
+      <p class="prose">
+        لنفترض لدينا <bdi dir="ltr">N = 5</bdi> سجلات وسمتين (<bdi dir="ltr">d = 2</bdi>): المساحة (<bdi dir="ltr">Area</bdi>) وسعر المنزل (<bdi dir="ltr">House Price</bdi>). تسير خطوات الحساب كالتالي:
+      </p>
+      <ol class="clean-list">
+        <li><strong>حساب متوسط كل سمة (<bdi dir="ltr">μ</bdi>):</strong> متوسط المساحة = <span class="inline-code">(9+3+2+6.5+2.5)/5 = 4.6</span>، ومتوسط السعر = <span class="inline-code">(10+2+1+7+3)/5 = 4.6</span>.</li>
+        <li><strong>تكوين مصفوفة البيانات الممركزة حول المتوسط (<bdi dir="ltr">Mean-Centered Data X</bdi>):</strong> بأبعاد <bdi dir="ltr">N × d</bdi> عبر طرح متوسط كل سمة من قيمها في جميع السجلات.</li>
+        <li><strong>استخراج المحاور الرئيسية:</strong> بتطبيق تحليل القيمة المفردة (<bdi dir="ltr">SVD</bdi>) وتحليل مصفوفة التغاير (<bdi dir="ltr">Covariance Matrix</bdi>).</li>
+        <li><strong>إسقاط البيانات وتقليص الأبعاد:</strong> استخدام المكون الرئيسي الأول (<bdi dir="ltr">PC1</bdi>) لتكوين سمة واحدة جديدة تختزل <strong><bdi dir="ltr">99.4%</bdi> من تباين البيانات</strong>!</li>
+      </ol>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="num-cell">#</th>
+              <th class="num-cell">Area (الأصلية)</th>
+              <th class="num-cell">House Price (الأصلية)</th>
+              <th class="num-cell">Area − 4.6 (ممركزة)</th>
+              <th class="num-cell">Price − 4.6 (ممركزة)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="num-cell">1</td><td class="num-cell">9</td><td class="num-cell">10</td><td class="num-cell">+4.4</td><td class="num-cell">+5.4</td></tr>
+            <tr><td class="num-cell">2</td><td class="num-cell">3</td><td class="num-cell">2</td><td class="num-cell">-1.6</td><td class="num-cell">-2.6</td></tr>
+            <tr><td class="num-cell">3</td><td class="num-cell">2</td><td class="num-cell">1</td><td class="num-cell">-2.6</td><td class="num-cell">-3.6</td></tr>
+            <tr><td class="num-cell">4</td><td class="num-cell">6.5</td><td class="num-cell">7</td><td class="num-cell">+1.9</td><td class="num-cell">+2.4</td></tr>
+            <tr><td class="num-cell">5</td><td class="num-cell">2.5</td><td class="num-cell">3</td><td class="num-cell">-2.1</td><td class="num-cell">-1.6</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- UNIT 3 INTERACTIVE LAB -->
+      <div class="lab-panel" aria-label="مختبر الوحدة الثالثة التفاعلي">
+        <div class="lab-header">
+          <div>
+            <span class="tag-chip tag-chip--blue">مختبر تفاعلي — الوحدة 03</span>
+            <h3 style="margin: var(--space-xs) 0 0 0;">محاكي خطوات <bdi dir="ltr">PCA</bdi> على بيانات المساحة وسعر المنزل</h3>
+          </div>
+          <div class="quiz-actions">
+            <button type="button" class="btn btn-tab is-active" id="u3-step-1" onclick="setU3Step(1)">1. البيانات الأصلية</button>
+            <button type="button" class="btn btn-tab" id="u3-step-2" onclick="setU3Step(2)">2. التمركز حول المتوسط</button>
+            <button type="button" class="btn btn-tab" id="u3-step-3" onclick="setU3Step(3)">3. المحاور والإسقاط (PC1)</button>
+          </div>
+        </div>
+
+        <div class="two-col-grid" style="margin: 0;">
+          <div class="viz-container">
+            <svg id="u3-svg" class="viz-svg" viewBox="0 0 420 280" role="img" aria-label="تمثيل خطوات تحليل المكونات الرئيسية PCA"></svg>
+          </div>
+          <div>
+            <div class="aside-box" style="margin-top: 0;">
+              <div class="aside-title" id="u3-step-title">الخطوة 1: البيانات الأصلية وحساب المتوسط</div>
+              <p id="u3-step-desc" style="margin: 0;"></p>
+            </div>
+            <div class="kpi-strip">
+              <div class="kpi-box">
+                <span class="kpi-label">المتوسط (<bdi dir="ltr">μ_Area, μ_Price</bdi>)</span>
+                <span class="kpi-val" id="u3-kpi-mean">(4.6, 4.6)</span>
+              </div>
+              <div class="kpi-box">
+                <span class="kpi-label">نسبة التباين المحفوظ في <bdi dir="ltr">PC1</bdi></span>
+                <span class="kpi-val" id="u3-kpi-var">99.4%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- UNIT 3 QUIZ -->
+      <div class="quiz-section" id="quiz-unit-3">
+        <div class="quiz-toolbar">
+          <div>
+            <span class="dossier-pill">اختبار الوحدة الثالثة</span>
+            <h3 style="margin: var(--space-xs) 0 0 0;">10 أسئلة اختيار من متعدد — مع توضيح سبب الإجابة الصحيحة</h3>
+          </div>
+          <div class="quiz-actions">
+            <span class="index-num" id="score-badge-3">0 / 10</span>
+            <button type="button" class="btn btn-tab is-active" id="filter-all-3" onclick="setQuizFilter(3, 'all')">كل الأسئلة</button>
+            <button type="button" class="btn btn-tab" id="filter-wrong-3" onclick="setQuizFilter(3, 'wrong')">الخاطئة فقط</button>
+            <button type="button" class="btn btn-secondary" id="reset-unit-3" onclick="resetUnitQuiz(3, this)">إعادة اختبار الوحدة</button>
+          </div>
+        </div>
+        <div class="quiz-list" id="quiz-list-3"></div>
+      </div>
+
+      <div class="unit-footer">
+        <span class="dossier-meta">نهاية الوحدة الثالثة — تذكّر أن المكونات الرئيسية متعامدة وتدمج السمات بدلاً من حذفها.</span>
+        <button type="button" class="btn btn-primary" onclick="scrollToSection('unit-4')">الانتقال إلى الوحدة الرابعة ←</button>
+      </div>
+    </section>
+
+    <!-- ========================================================== -->
+    <!-- UNIT 4                                                     -->
+    <!-- ========================================================== -->
+    <section class="figure-card" id="unit-4" aria-labelledby="unit-4-heading">
+      <div class="dossier-bar">
+        <div class="dossier-bar-group">
+          <span class="index-num">04</span>
+          <span class="dossier-pill">الوحدة الرابعة</span>
+          <span class="dossier-meta">التطبيق العملي بـ <bdi dir="ltr">Scikit-learn</bdi> · بيانات سرطان الثدي</span>
+        </div>
+        <button type="button" class="btn btn-secondary" id="read-btn-4" onclick="toggleUnitRead(4)">تحديد الوحدة كمُراجعة</button>
+      </div>
+
+      <h2 class="unit-title" id="unit-4-heading">التطبيق العملي لاختيار السمات وتقليصها في <bdi dir="ltr">Python</bdi></h2>
+      <p class="unit-subtitle">كيف ارتفعت دقة مصنف الانحدار اللوجستي على بيانات سرطان الثدي من <bdi dir="ltr">95.6%</bdi> إلى <bdi dir="ltr">97.4%</bdi> بعد تقليص السمات؟</p>
+
+      <h3 class="section-heading">أولاً: تجهيز البيانات وبناء النموذج الأساسي (<bdi dir="ltr">Baseline</bdi>)</h3>
+      <p class="prose">
+        في هذا التطبيق العملي نعمل على قاعدة بيانات تشخيص <strong>سرطان الثدي</strong> التي تحتوي على <strong><bdi dir="ltr">31</bdi> سمة</strong> (منها السمة الهدف <span class="inline-code">diagnosis</span> التي تأخذ القيمتين النصيتين <span class="inline-code">M</span> للخبيث و<span class="inline-code">B</span> للحميد). تم تنفيذ الخطوات التالية:
+      </p>
+      <ol class="clean-list">
+        <li><strong>ترميز السمة الهدف:</strong> تحويل قيم <span class="inline-code">diagnosis</span> من <span class="inline-code">M, B</span> إلى <span class="inline-code">0, 1</span> باستخدام أداة <span class="inline-code">LabelEncoder</span>.</li>
+        <li><strong>استكشاف التوزيع:</strong> استخدام دالة <span class="inline-code">value_counts()</span> لتكوين مدرج تكراري (<bdi dir="ltr">Histogram</bdi>) لقيم الحقل.</li>
+        <li><strong>فصل وتقسيم البيانات:</strong> فصل السمة الهدف عن السمات المستقلة، ثم تقسيمها لتدريب واختبار عبر دالة <span class="inline-code">train_test_split</span>.</li>
+        <li><strong>بناء المصنف الأساسي:</strong> تدريب نموذج <span class="inline-code">LogisticRegression</span> على كامل السمات الأصلية قبل أي اختيار أو تقليص، فحقق دقة <strong><bdi dir="ltr">95.6%</bdi></strong>.</li>
+      </ol>
+
+      <h3 class="section-heading">ثانياً: تطبيق تقنيات الاختيار والتقليص ومقارنة النتائج</h3>
+      <div class="card-grid">
+        <div class="mini-card">
+          <div class="mini-card-head">
+            <h4 class="mini-card-title">1. اختيار السمات بـ <bdi dir="ltr">Chi-squared</bdi></h4>
+            <span class="tag-chip tag-chip--green">97.4%</span>
+          </div>
+          <p class="prose" style="margin: 0;">استخدام <span class="inline-code">SelectKBest</span> مع <span class="inline-code">chi2</span> وتحديد <span class="inline-code">k=5</span> سمات فقط. ارتفعت الدقة من <bdi dir="ltr">95.6%</bdi> إلى <strong><bdi dir="ltr">97.4%</bdi></strong>.</p>
+        </div>
+        <div class="mini-card">
+          <div class="mini-card-head">
+            <h4 class="mini-card-title">2. اختيار السمات بـ <bdi dir="ltr">Mutual Info</bdi></h4>
+            <span class="tag-chip tag-chip--green">97.4%</span>
+          </div>
+          <p class="prose" style="margin: 0;">استخدام <span class="inline-code">mutual_info_classif</span> واختيار <span class="inline-code">k=6</span> سمات بناءً على أعلى ارتباط بالهدف، محققةً دقة <strong><bdi dir="ltr">97.4%</bdi></strong>.</p>
+        </div>
+        <div class="mini-card">
+          <div class="mini-card-head">
+            <h4 class="mini-card-title">3. تقليص السمات بـ <bdi dir="ltr">PCA</bdi></h4>
+            <span class="tag-chip tag-chip--blue">3 مكونات</span>
+          </div>
+          <p class="prose" style="margin: 0;">استخدام <span class="inline-code">PCA</span> من المكتبة الفرعية <span class="inline-code">sklearn.decomposition</span> واختيار <strong><bdi dir="ltr">3</bdi> مكونات رئيسية</strong> بعد تجربة أعداد مختلفة.</p>
+        </div>
+      </div>
+
+      <!-- UNIT 4 INTERACTIVE LAB -->
+      <div class="lab-panel" aria-label="مختبر الوحدة الرابعة التفاعلي">
+        <div class="lab-header">
+          <div>
+            <span class="tag-chip tag-chip--blue">مختبر تفاعلي — الوحدة 04</span>
+            <h3 style="margin: var(--space-xs) 0 0 0;">مستكشف الأكواد ومقارنة دقة النماذج</h3>
+          </div>
+          <div class="quiz-actions">
+            <button type="button" class="btn btn-tab" id="u4-btn-baseline" onclick="setU4Model('baseline')">البيانات الأصلية (95.6%)</button>
+            <button type="button" class="btn btn-tab is-active" id="u4-btn-chi2" onclick="setU4Model('chi2')">Chi-squared (K=5)</button>
+            <button type="button" class="btn btn-tab" id="u4-btn-mi" onclick="setU4Model('mi')">Mutual Info (K=6)</button>
+            <button type="button" class="btn btn-tab" id="u4-btn-pca" onclick="setU4Model('pca')">PCA (3 مكونات)</button>
+          </div>
+        </div>
+
+        <div class="two-col-grid" style="margin: 0;">
+          <div>
+            <p style="font-weight: 700; margin-top: 0;">مقارنة دقة التصنيف وعدد المدخلات:</p>
+            <div class="bar-row">
+              <span>البيانات الأصلية (30 سمة)</span>
+              <div class="bar-track"><div class="bar-fill" id="u4-bar-baseline" style="width: 95.6%;"></div></div>
+              <span class="num-cell"><strong>95.6%</strong></span>
+            </div>
+            <div class="bar-row">
+              <span><bdi dir="ltr">Chi-squared (K=5)</bdi></span>
+              <div class="bar-track"><div class="bar-fill is-best" id="u4-bar-chi2" style="width: 97.4%;"></div></div>
+              <span class="num-cell"><strong>97.4%</strong></span>
+            </div>
+            <div class="bar-row">
+              <span><bdi dir="ltr">Mutual Info (K=6)</bdi></span>
+              <div class="bar-track"><div class="bar-fill is-best" id="u4-bar-mi" style="width: 97.4%;"></div></div>
+              <span class="num-cell"><strong>97.4%</strong></span>
+            </div>
+            <div class="bar-row">
+              <span><bdi dir="ltr">PCA (n_components=3)</bdi></span>
+              <div class="bar-track"><div class="bar-fill" id="u4-bar-pca" style="width: 93.0%;"></div></div>
+              <span class="num-cell"><strong id="u4-pca-label">3 محاور</strong></span>
+            </div>
+            <div class="aside-box" id="u4-model-note" style="margin-bottom: 0;"></div>
+          </div>
+
+          <div>
+            <p style="font-weight: 700; margin-top: 0;">الشيفرة البرمجية الموافقة في <bdi dir="ltr">Scikit-learn</bdi>:</p>
+            <pre class="code-block" id="u4-code-block" style="margin: 0;"></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- UNIT 4 QUIZ -->
+      <div class="quiz-section" id="quiz-unit-4">
+        <div class="quiz-toolbar">
+          <div>
+            <span class="dossier-pill">اختبار الوحدة الرابعة</span>
+            <h3 style="margin: var(--space-xs) 0 0 0;">10 أسئلة اختيار من متعدد — مع توضيح سبب الإجابة الصحيحة</h3>
+          </div>
+          <div class="quiz-actions">
+            <span class="index-num" id="score-badge-4">0 / 10</span>
+            <button type="button" class="btn btn-tab is-active" id="filter-all-4" onclick="setQuizFilter(4, 'all')">كل الأسئلة</button>
+            <button type="button" class="btn btn-tab" id="filter-wrong-4" onclick="setQuizFilter(4, 'wrong')">الخاطئة فقط</button>
+            <button type="button" class="btn btn-secondary" id="reset-unit-4" onclick="resetUnitQuiz(4, this)">إعادة اختبار الوحدة</button>
+          </div>
+        </div>
+        <div class="quiz-list" id="quiz-list-4"></div>
+      </div>
+
+      <div class="unit-footer">
+        <span class="dossier-meta">نهاية الوحدة الرابعة — أحسنت! راجع الملخص الجامع أدناه لتثبيت الفروق السريعة.</span>
+        <button type="button" class="btn btn-gold" onclick="scrollToSection('summary-sheet')">عرض الملخص الجامع والاستعداد للاختبار ↓</button>
+      </div>
+    </section>
+
+    <!-- ========================================================== -->
+    <!-- FINAL SYNTHESIS & CHEAT SHEET                              -->
+    <!-- ========================================================== -->
+    <section class="figure-card" id="summary-sheet" aria-labelledby="summary-heading">
+      <div class="dossier-bar">
+        <div class="dossier-bar-group">
+          <span class="index-num">05</span>
+          <span class="dossier-pill">بطاقة المراجعة السريعة</span>
+          <span class="dossier-meta">مقارنة شاملة لجميع خوارزميات الفصل التاسع</span>
+        </div>
+        <button type="button" class="btn btn-secondary" onclick="scrollToSection('top')">العودة إلى الأعلى ↑</button>
+      </div>
+
+      <h2 class="unit-title" id="summary-heading">الخلاصة المقارنة لخوارزميات الفصل التاسع</h2>
+      <p class="prose">
+        جدول مرجعي سريع يجمع الفروق الجوهرية التي تتكرر في اختبارات مادة تحليل وتمثيل البيانات:
+      </p>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>الأسلوب / الخوارزمية</th>
+              <th>التصنيف</th>
+              <th>ما الذي يقيسه؟</th>
+              <th>النطاق / المعيار</th>
+              <th>الاستدعاء في <bdi dir="ltr">Scikit-learn</bdi></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>اختبار مربع كاي (<bdi dir="ltr">Chi-squared</bdi>)</strong></td>
+              <td>اختيار سمات (تصفية)</td>
+              <td>تشابه التباينات ومقدار الخروج عن الاستقلالية (<bdi dir="ltr">H₀</bdi>).</td>
+              <td>قيم موجبة؛ الأعلى أكثر أهمية</td>
+              <td><span class="inline-code">SelectKBest(chi2, k=5)</span></td>
+            </tr>
+            <tr>
+              <td><strong>المعلومات المتبادلة (<bdi dir="ltr">MI</bdi>)</strong></td>
+              <td>اختيار سمات (تصفية)</td>
+              <td>اعتماد المتغيرات (يلتقط الخطي وغير الخطي).</td>
+              <td><bdi dir="ltr">≥ 0</bdi>؛ الصفر يعني استقلالاً تاماً</td>
+              <td><span class="inline-code">mutual_info_classif</span></td>
+            </tr>
+            <tr>
+              <td><strong>ارتباط بيرسون (<bdi dir="ltr">Pearson r</bdi>)</strong></td>
+              <td>اختيار سمات (تصفية)</td>
+              <td>العلاقة الخطية بين سمتين رقميتين فقط.</td>
+              <td><bdi dir="ltr">[-1, 1]</bdi>؛ <bdi dir="ltr">0</bdi> = لا علاقة خطية</td>
+              <td><span class="inline-code">f_regression / df.corr()</span></td>
+            </tr>
+            <tr>
+              <td><strong>المكونات الرئيسية (<bdi dir="ltr">PCA</bdi>)</strong></td>
+              <td>تقليص سمات (دمج)</td>
+              <td>محاور متعامدة تعظم التباين عبر <bdi dir="ltr">SVD</bdi>.</td>
+              <td>عدد المكونات <span class="inline-code">n_components</span></td>
+              <td><span class="inline-code">sklearn.decomposition.PCA</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="aside-box" id="readiness-summary-box">
+        <div class="aside-title">تقييم الجاهزية النهائي للفصل التاسع</div>
+        <p id="readiness-text" style="margin: 0;">أجب عن أسئلة الوحدات الأربع ليظهر هنا تقييم جاهزيتك وتوصية المراجعة المخصصة.</p>
+      </div>
+
+      <p class="dossier-meta" style="margin-top: var(--space-lg); margin-bottom: 0;">
+        المصدر المرجعي: مقرر تحليل وتمثيل البيانات — الفصل التاسع (اختيار السمات وتقليصها، الوحدات 1–4).
+      </p>
+    </section>
+
   </div>
-</header>
 
-<main class="wrap">
-  <section id="summary" class="panel active">
-    <div class="card">
-      <h2>خريطة الفصل التاسع (الوحدات الأربع الكاملة)</h2>
-      <div class="grid">
-        <div>
-          <span class="tag">الوحدة الأولى</span>
-          <h3>اختيار السمات واختبار مربع كاي ($\chi^2$)</h3>
-          <p>مفهوم وفوائد اختيار السمات الأربعة، تقنيات الاختيار الثلاث (<span dir="ltr">Filter, Wrapper, Model-based</span>)، ومعادلة ومسألة اختبار مربع كاي (<span dir="ltr">Chi-squared test</span>) لجدول التوافق.</p>
-        </div>
-        <div>
-          <span class="tag">الوحدة الثانية</span>
-          <h3>المعلومات المتبادلة وارتباط بيرسون</h3>
-          <p>مفهوم ومعادلة ومسألة المعلومات المتبادلة (<span dir="ltr">Mutual Information</span>) لجدول الاحتمالات، ومعادلة وخصائص معامل ارتباط بيرسون (<span dir="ltr">Pearson Correlation</span>).</p>
-        </div>
-        <div>
-          <span class="tag">الوحدة الثالثة</span>
-          <h3>تقليص السمات وتحليل المكونات (PCA)</h3>
-          <p>الفرق الجوهري بين اختيار السمات وتقليص السمات، والخطوات الخمس لحساب (<span dir="ltr">PCA</span>) بالمعادلات (المتوسط، التمركز، مصفوفة التغاير، <span dir="ltr">SVD</span>، والإسقاط).</p>
-        </div>
-        <div>
-          <span class="tag">الوحدة الرابعة</span>
-          <h3>التطبيق البرمجي على بيانات سرطان الثدي</h3>
-          <p>تطبيق <span dir="ltr">SelectKBest</span> مع <span dir="ltr">chi2</span> ومع <span dir="ltr">mutual_info_classif</span>، وتطبيق <span dir="ltr">PCA</span> من <span dir="ltr">sklearn.decomposition</span> ومقارنة دقة نموذج <span dir="ltr">LogisticRegression</span>.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- ==================== الوحدة الأولى ==================== -->
-    <details open>
-      <summary>الوحدة الأولى: هندسة واختيار السمات (Feature Selection) واختبار مربع كاي (Chi-squared Test)</summary>
-      <div class="details-body">
-        <h3>1) مفهوم السمات، هندسة السمات، وفوائد اختيار السمات</h3>
-        <ul>
-          <li><b>مفهوم السمات (<span dir="ltr">Features</span>) وهندسة السمات (<span dir="ltr">Feature Engineering</span>):</b>
-            <ul>
-              <li>السمات هي المتغيرات أو الأعمدة المستقلة ($X$) التي نستخدمها كمدخلات لنموذج التعلم الآلي للتنبؤ بسمة الهدف ($Y$).</li>
-              <li><b>اختيار السمات (<span dir="ltr">Feature Selection</span>):</b> هو عملية انتقاء <b>أهم وأفضل مجموعة فرعية من السمات الأصلية</b> الأكثر ارتباطاً بسمة الهدف، وحذف السمات غير المهمة أو الزائدة عن الحاجة (<span dir="ltr">Irrelevant or Redundant features</span>).</li>
-            </ul>
-          </li>
-          <li><b>الفوائد الأربع لاختيار السمات (<span dir="ltr">Benefits of Feature Selection</span>):</b>
-            <ol>
-              <li><b>1. تقليل الإفراط في التخصيص (<span dir="ltr">Reduce Overfitting</span>):</b> حذف السمات المشوشة وغير المهمة يجعل النموذج أكثر قدرة على التعميم على البيانات الجديدة.</li>
-              <li><b>2. تحسين دقة النموذج (<span dir="ltr">Improve Accuracy</span>):</b> التركيز على السمات القوية يرفع من دقة التنبؤ أو التصنيف.</li>
-              <li><b>3. تقليل وقت التدريب والتعقيد الحسابي (<span dir="ltr">Reduce Training Time</span>):</b> عدد سمات أقل يعني حسابات أسرع واستهلاكاً أقل للذاكرة.</li>
-              <li><b>4. تبسيط النماذج وسهولة تفسيرها (<span dir="ltr">Simplify Models</span>):</b> جعل النموذج أسهل في الفهم والتفسير البشري.</li>
-            </ol>
-          </li>
-        </ul>
-
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
-
-        <h3>2) التقنيات الثلاث لاختيار السمات (<span dir="ltr">3 Feature Selection Techniques</span>)</h3>
-        <div class="exam-alert">
-          <b>🔥🔥 مقارنة امتحانية مؤكدة بين الطرق الثلاث لاختيار السمات:</b><br>
-          1) <b>طرق التصفية / الفلترة (<span dir="ltr">Filter Methods</span>):</b> تقيس أهمية كل سمة وعلاقتها بسمة الهدف باستخدام <b>مقاييس إحصائية بحتة بشكل مستقل تماماً عن أي خوارزمية تعلم آلي</b> (وهي سريعة جداً). ومن أشهر أمثلتها: (<b>اختبار مربع كاي <span dir="ltr">Chi-squared</span></b>، <b>المعلومات المتبادلة <span dir="ltr">Mutual Information</span></b>، و<b>ارتباط بيرسون <span dir="ltr">Pearson Correlation</span></b>).<br>
-          2) <b>طرق التغليف (<span dir="ltr">Wrapper Methods</span>):</b> تبحث عن أفضل مجموعة فرعية من السمات من خلال <b>تدريب وتقييم نموذج تعلم آلي فعلي مراراً وتكراراً</b> على مجموعات مختلفة من السمات (مثل الاختيار الأمامي <span dir="ltr">Forward Selection</span> والحذف الخلفي <span dir="ltr">Backward Elimination</span>). وهي دقيقة لكنها مكلفة وبطيئة حسابياً.<br>
-          3) <b>الطرق المعتمدة على النموذج / المدمجة (<span dir="ltr">Model-based / Embedded Methods</span>):</b> تتم عملية اختيار السمات <b>تلقائياً أثناء عملية تدريب النموذج نفسه</b> كجزء مدمج من الخوارزمية (مثل انحدار <span dir="ltr">Lasso</span> الذي يصفر معاملات السمات غير المهمة، وأشجار القرار <span dir="ltr">Decision Trees</span>).
-        </div>
-
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
-
-        <h3>3) اختبار مربع كاي (<span dir="ltr">Chi-Squared Test - $\chi^2$</span>) — المعادلة والمسألة الحسابية الكاملة</h3>
-        <ul>
-          <li><b>متى نستخدمه؟</b> هو أحد أشهر طرق التصفية (<span dir="ltr">Filter methods</span>)، ويُستخدم لاختبار <b>مدى الاستقلالية أو الارتباط بين سمتين نوعيتين (فئويتين <span dir="ltr">Categorical features</span>)</b> من خلال جدول التوافق (<span dir="ltr">Contingency Table</span>).</li>
-          <li><b>القاعدة الذهبية لتفسير قيمة $\chi^2$:</b>
-            <ul>
-              <li>إذا كانت السمة <b>مستقلة تماماً</b> عن الهدف، تكون قيمة $\chi^2$ قريبة من <b>الصفر ($0$)</b> (أي أن السمة غير مهمة).</li>
-              <li><b>كلما زادت قيمة $\chi^2$</b>، دلّ ذلك على وجود <b>ارتباط واعتمادية أقوى</b> بين السمة والهدف، وبالتالي تكون السمة <b>أكثر أهمية</b> ونختارها!</li>
-            </ul>
-          </li>
-          <li><b>المعادلة الرياضية لاختبار مربع كاي ($\chi^2$):</b></li>
-        </ul>
-        <div class="math-box">
-          &chi;<sup>2</sup> = &sum; [ ( O<sub>ij</sub> &minus; E<sub>ij</sub> )<sup>2</sup> / E<sub>ij</sub> ] &nbsp;&nbsp; where &nbsp;&nbsp; E<sub>ij</sub> = ( Row Total<sub>i</sub> &times; Column Total<sub>j</sub> ) / Grand Total
-        </div>
-        <ul>
-          <li>حيث:
-            <ul>
-              <li><b>$O_{ij}$ (<span dir="ltr">Observed Frequency</span>):</b> التكرار المشاهد (الفعلي) في الخلية $(i, j)$ من جدول البيانات.</li>
-              <li><b>$E_{ij}$ (<span dir="ltr">Expected Frequency</span>):</b> التكرار المتوقع للخلية في حال الاستقلالية، ويساوي: <b>(مجموع الصف $\times$ مجموع العمود) $\div$ المجموع الكلي للعينات</b>.</li>
-            </ul>
-          </li>
-        </ul>
-
-        <div class="step-box">
-          <b>مسألة الكتاب الكاملة (مقارنة سمة <code>Outlook</code> وسمة <code>Wind</code> مع الهدف <code>Play Tennis</code> لـ 14 يوماً):</b><br>
-          في بيانات لعب التنس (المجموع الكلي $N = 14$ يوماً: منها $9$ أيام <code dir="ltr">Yes</code> و $5$ أيام <code dir="ltr">No</code>):<br><br>
-          <b>أولاً: حساب $\chi^2$ لسمة حالة الطقس (<code dir="ltr">Outlook</code>: Sunny, Overcast, Rain):</b><br>
-          • <b>Sunny (مجموعه 5 أيام):</b> المشاهد ($O$): $\text{Yes}=2, \text{No}=3$.<br>
-          &nbsp;&nbsp;- المتوقع ($E$): $E_{\text{Yes}} = \frac{5 \times 9}{14} = 3.21$ ، و $E_{\text{No}} = \frac{5 \times 5}{14} = 1.79$.<br>
-          • <b>Overcast (مجموعه 4 أيام):</b> المشاهد ($O$): $\text{Yes}=4, \text{No}=0$.<br>
-          &nbsp;&nbsp;- المتوقع ($E$): $E_{\text{Yes}} = \frac{4 \times 9}{14} = 2.57$ ، و $E_{\text{No}} = \frac{4 \times 5}{14} = 1.43$.<br>
-          • <b>Rain (مجموعه 5 أيام):</b> المشاهد ($O$): $\text{Yes}=3, \text{No}=2$.<br>
-          &nbsp;&nbsp;- المتوقع ($E$): $E_{\text{Yes}} = \frac{5 \times 9}{14} = 3.21$ ، و $E_{\text{No}} = \frac{5 \times 5}{14} = 1.79$.<br>
-          • <b>مجموع $\chi^2$ لسمة <code dir="ltr">Outlook</code>:</b> بجمع $\frac{(O-E)^2}{E}$ للخلايا الست نحصل على: <b>$\chi^2(\text{Outlook}) \approx \mathbf{3.55}$</b>.<br><br>
-          <b>ثانياً: حساب $\chi^2$ لسمة الرياح (<code dir="ltr">Wind</code>: Weak=8, Strong=6):</b><br>
-          • بنفس الطريقة نحسب المتوقع ونجمع الفروق فنحصل على: <b>$\chi^2(\text{Wind}) \approx \mathbf{0.93}$</b>.<br><br>
-          <b>✅ القرار النهائي:</b> بما أن $\chi^2(\text{Outlook}) = 3.55$ <b>أكبر من</b> $\chi^2(\text{Wind}) = 0.93$، فإن سمة <b><code dir="ltr">Outlook</code> هي الأهم والأقوى ارتباطاً</b> بالهدف!
-        </div>
-      </div>
-    </details>
-
-    <!-- ==================== الوحدة الثانية ==================== -->
-    <details>
-      <summary>الوحدة الثانية: المعلومات المتبادلة (Mutual Information) ومعامل ارتباط بيرسون (Pearson Correlation)</summary>
-      <div class="details-body">
-        <h3>1) المعلومات المتبادلة (<span dir="ltr">Mutual Information - MI</span>)</h3>
-        <ul>
-          <li><b>مفهومها:</b> تقيس <b>المعلومات المتبادلة $I(X; Y)$</b> مقدار المعلومات التي يقدمها متغير عشوائي ($X$ - السمة) حول متغير عشوائي آخر ($Y$ - الهدف)؛ أي كم يقل عدم اليقين بشأن الهدف $Y$ عند معرفتنا بقيمة السمة $X$.</li>
-          <li><b>خصائصها:</b>
-            <ul>
-              <li>تكون قيمتها دائماً غير سالبة ($I(X; Y) \ge 0$).</li>
-              <li>تساوي <b>صفراً ($0$)</b> إذا وفقط إذا كان المتغيران $X$ و $Y$ <b>مستقلين تماماً</b> (لأنه عند الاستقلال يكون $P(X,Y) = P(X)P(Y)$، وبالتالي $\log(1) = 0$).</li>
-              <li><b>كلما زادت قيمة المعلومات المتبادلة</b>، زادت أهمية السمة في التنبؤ بالهدف.</li>
-            </ul>
-          </li>
-          <li><b>المعادلة الرياضية للمعلومات المتبادلة (<span dir="ltr">Mutual Information</span>):</b></li>
-        </ul>
-        <div class="math-box">
-          I(X; Y) = &sum;<sub>x&in;X</sub> &sum;<sub>y&in;Y</sub> P(x, y) &middot; log [ P(x, y) / ( P(x) &middot; P(y) ) ]
-        </div>
-        <ul>
-          <li>حيث:
-            <ul>
-              <li><b>$P(x, y)$:</b> الاحتمال المشترك (<span dir="ltr">Joint Probability</span>) لحدوث القيمة $x$ والقيمة $y$ معاً (عدد مرات ظهورهما معاً مقسوماً على العدد الكلي $N$).</li>
-              <li><b>$P(x)$ و $P(y)$:</b> الاحتمالات الهامشية (<span dir="ltr">Marginal Probabilities</span>) لكل من $x$ و $y$ على حدة.</li>
-            </ul>
-          </li>
-        </ul>
-
-        <div class="step-box">
-          <b>مثال حساب حد واحد في معادلة Mutual Information (من مسألة الكتاب):</b><br>
-          إذا كان الاحتمال المشترك لكون الطقس مشمساً واللعب نعم هو $P(\text{Sunny}, \text{Yes}) = \frac{2}{14} \approx 0.143$، وكان احتمال الطقس المشمس $P(\text{Sunny}) = \frac{5}{14} \approx 0.357$، واحتمال اللعب نعم $P(\text{Yes}) = \frac{9}{14} \approx 0.643$:<br>
-          • نحسب مساهمة هذه الخلية: $0.143 \times \log\left(\frac{0.143}{0.357 \times 0.643}\right)$.<br>
-          • وعند جمع جميع الخلايا نجد أن $I(\text{Outlook}; \text{Play}) = \mathbf{0.246}$ (أو باللوغاريتم الطبيعي $0.171$)، بينما $I(\text{Wind}; \text{Play}) = \mathbf{0.048}$ (أو $0.033$)؛ مما يؤكد مجدداً أن سمة <b><code dir="ltr">Outlook</code> هي الأهم</b>!
-        </div>
-
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
-
-        <h3>2) معامل ارتباط بيرسون (<span dir="ltr">Pearson Correlation Coefficient</span>)</h3>
-        <ul>
-          <li><b>متى نستخدمه في اختيار السمات؟</b> يُستخدم لقياس قوة واتجاه <b>العلاقة الخطية بين المتغيرات الكمية (الرقمية المتصلة)</b>.</li>
-          <li><b>المعادلة الرياضية لمعامل ارتباط بيرسون ($r$):</b></li>
-        </ul>
-        <div class="math-box">
-          r = &sum; (x<sub>i</sub> &minus; x&#772;)(y<sub>i</sub> &minus; y&#772;) / &radic;[ &sum; (x<sub>i</sub> &minus; x&#772;)<sup>2</sup> &middot; &sum; (y<sub>i</sub> &minus; y&#772;)<sup>2</sup> ]
-        </div>
-        <ul>
-          <li><b>كيف نختار السمات باستخدام ارتباط بيرسون؟</b>
-            <ol>
-              <li>نختار السمات التي لها <b>ارتباط قوي (موجب قريب من $+1$ أو سالب قريب من $-1$) مع سمة الهدف ($Y$)</b>.</li>
-              <li>إذا وجدنا سمتين مستقلتين ($X_1$ و $X_2$) بينهما ارتباط عالٍ جداً ببعضهما (تعددية خطية)، نحذف إحداهما لأنها زائدة عن الحاجة (<span dir="ltr">Redundant</span>) وتحمل نفس المعلومة.</li>
-            </ol>
-          </li>
-        </ul>
-      </div>
-    </details>
-
-    <!-- ==================== الوحدة الثالثة ==================== -->
-    <details>
-      <summary>الوحدة الثالثة: تقليص السمات وتحليل المكونات الرئيسية (PCA - Principal Component Analysis)</summary>
-      <div class="details-body">
-        <h3>1) الفرق الجوهري بين اختيار السمات (Selection) وتقليص السمات (Reduction)</h3>
-        <div class="exam-alert">
-          <b>🔥🔥 سؤال امتحاني كلاسيكي مهم جداً: ما الفرق بين اختيار السمات وتقليص السمات؟</b><br>
-          • <b>اختيار السمات (<span dir="ltr">Feature Selection</span>):</b> يحتفظ بمجموعة فرعية من <b>السمات الأصلية كما هي دون تغيير في قيمها</b>، ويحذف بقية السمات الأقل أهمية.<br>
-          • <b>تقليص السمات (<span dir="ltr">Feature Reduction / Dimensionality Reduction</span>):</b> يقوم <b>بدمج وتحويل كافة السمات الأصلية رياضياً لإنشاء مجموعة جديدة أصغر من السمات المركبة (المكونات الرئيسية <span dir="ltr">Principal Components</span>)</b> مع الحفاظ على <b>غالبية المعلومات (التباين <span dir="ltr">Variance</span>)</b> الموجودة في البيانات الأصلية!
-        </div>
-
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
-
-        <h3>2) تحليل المكونات الرئيسية (<span dir="ltr">PCA</span>) — الخطوات الخمس بالترتيب والمعادلات</h3>
-        <p>تعمل خوارزمية <b>تحليل المكونات الرئيسية (<span dir="ltr">Principal Component Analysis - PCA</span>)</b> على إسقاط البيانات من فضاء عالي الأبعاد إلى فضاء أقل أبعاداً باتجاه المحاور التي تمتلك <b>أكبر تباين ممكن (<span dir="ltr">Maximum Variance</span>)</b>، وتتم عبر <b>5 خطوات رياضية متسلسلة</b>:</p>
-
-        <ol>
-          <li><b>الخطوة (1): حساب المتوسط الحسابي ($\mu$) لكل سمة (عمود):</b>
-            <div class="math-box">&mu; = (1 / N) &sum;<sub>i=1</sub><sup>N</sup> x<sub>i</sub></div>
-          </li>
-          <li><b>الخطوة (2): تمركز البيانات حول المتوسط (<span dir="ltr">Mean-Centered Data Matrix $X$</span>):</b>
-            <p style="margin:4px 0">نطرح المتوسط الحسابي لكل عمود من جميع قيم ذلك العمود ليصبح متوسط البيانات الجديدة صفراً:</p>
-            <div class="math-box">X = Data &minus; &mu;</div>
-          </li>
-          <li><b>الخطوة (3): حساب مصفوفة التغاير (<span dir="ltr">Covariance Matrix $\Sigma$</span>):</b>
-            <p style="margin:4px 0">تُحسَب مصفوفة التغاير بضرب منقول مصفوفة البيانات المتمركزة ($X^T$) في نفسها ($X$) والقسمة على $(N - 1)$:</p>
-            <div class="math-box">&Sigma; = [ 1 / (N &minus; 1) ] &middot; X<sup>T</sup> X</div>
-          </li>
-          <li><b>الخطوة (4): تفكيك القيمة المفردة (<span dir="ltr">SVD</span>) لحساب القيم الذاتية والمتجهات الذاتية:</b>
-            <p style="margin:4px 0">نطبق <span dir="ltr">SVD</span> (أو تحليل القيم الذاتية) على مصفوفة التغاير $\Sigma$ للحصول على:</p>
-            <ul>
-              <li><b>القيم الذاتية (<span dir="ltr">Eigenvalues - $\lambda$</span>):</b> تمثل <b>مقدار التباين (كمية المعلومات)</b> الذي يفسره كل مكون رئيسي؛ فنرتبها تنازلياً ونختار المكونات ذات القيم الذاتية الأكبر!</li>
-              <li><b>المتجهات الذاتية (<span dir="ltr">Eigenvectors - $e$</span>):</b> تمثل <b>اتجاهات المحاور الجديدة (المكونات الرئيسية <span dir="ltr">Principal Components</span>)</b>.</li>
-            </ul>
-          </li>
-          <li><b>الخطوة (5): إسقاط البيانات على المكونات الرئيسية المختارة (<span dir="ltr">Projection $X'$</span>):</b>
-            <p style="margin:4px 0">نضرب مصفوفة البيانات المتمركزة ($X$) في المتجه الذاتي الأول ($e_1$) للحصول على البيانات المقلصة في بُعد واحد:</p>
-            <div class="math-box">X' = X &middot; e<sub>1</sub></div>
-          </li>
-        </ol>
-
-        <div class="step-box">
-          <b>ملخص مسألة المنازل في الكتاب (تقليص سمتي المساحة والسعر لـ $N = 4$ منازل إلى سمة واحدة بـ PCA):</b><br>
-          1) نحسب متوسط المساحة ومتوسط السعر للمنازل الأربعة.<br>
-          2) نطرح المتوسط من كل عمود فنحصل على المصفوفة المتمركزة $X$ (أبعادها $4 \times 2$).<br>
-          3) نحسب مصفوفة التغاير $\Sigma = \frac{1}{4-1} X^T X = \frac{1}{3} X^T X$ (وتنتج مصفوفة مربعة $2 \times 2$).<br>
-          4) نوجد القيم الذاتية ($\lambda_1, \lambda_2$) ونختار المتجه الذاتي $e_1$ المقابل لأكبر قيمة ذاتية $\lambda_1$.<br>
-          5) نضرب $X' = X \cdot e_1$ فنحصل على عمود واحد فقط ($4 \times 1$) يمثل السمة الجديدة المقلصة للمنازل الأربعة!
-        </div>
-      </div>
-    </details>
-
-    <!-- ==================== الوحدة الرابعة ==================== -->
-    <details>
-      <summary>الوحدة الرابعة: التطبيق البرمجي لاختيار وتقليص السمات على بيانات سرطان الثدي (breast-cancer.csv)</summary>
-      <div class="details-body">
-        <h3>1) إعداد البيانات وبناء النموذج الأساسي (Baseline Model)</h3>
-        <ul>
-          <li>في ملف بيانات سرطان الثدي (<code dir="ltr">breast-cancer.csv</code>)، نقوم أولاً بترميز عمود الهدف النصي (<span dir="ltr">Class</span>) إلى أرقام ($0$ و $1$) باستخدام <code dir="ltr">LabelEncoder</code>، وتقسيم البيانات إلى تدريب واختبار بـ <code dir="ltr">train_test_split</code>.</li>
-          <li>عند تدريب مصنف الانحدار اللوجستي (<code dir="ltr">LogisticRegression</code>) على <b>جميع السمات الأصلية</b> بدون اختيار سمات، بلغت دقة النموذج: <b>$95.6\%$</b>.</li>
-        </ul>
-
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
-
-        <h3>2) اختيار أفضل $K$ سمات باستخدام (<span dir="ltr">SelectKBest</span>) مع (<span dir="ltr">chi2</span>) ومع (<span dir="ltr">mutual_info_classif</span>)</h3>
-        <div class="exam-alert">
-          <b>🌟 الدوال والفئات البرمجية في الوحدة الرابعة (مهمة جداً في أسئلة الأكواد):</b><br>
-          • نستورد أداة اختيار أفضل $K$ سمات <b><code dir="ltr">SelectKBest</code></b>، ودالة مربع كاي <b><code dir="ltr">chi2</code></b>، ودالة المعلومات المتبادلة للتصنيف <b><code dir="ltr">mutual_info_classif</code></b> من الوحدة: <b><code dir="ltr">sklearn.feature_selection</code></b>.<br>
-          • نستورد فئة تحليل المكونات الرئيسية <b><code dir="ltr">PCA</code></b> من الوحدة: <b><code dir="ltr">sklearn.decomposition</code></b>.
-        </div>
-
-        <div class="code-box">
-<span class="kw">from</span> sklearn.feature_selection <span class="kw">import</span> SelectKBest, chi2, mutual_info_classif<br>
-<span class="kw">from</span> sklearn.decomposition <span class="kw">import</span> PCA<br>
-<span class="kw">from</span> sklearn.linear_model <span class="kw">import</span> LogisticRegression<br>
-<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> accuracy_score<br><br>
-<span class="cmt"># 1. اختيار أفضل 5 سمات باستخدام اختبار مربع كاي (chi2)</span><br>
-fs_chi2 = SelectKBest(score_func=chi2, k=<span class="num">5</span>)<br>
-X_train_chi2 = fs_chi2.fit_transform(X_train, y_train)<br>
-X_test_chi2  = fs_chi2.transform(X_test)<br>
-<span class="cmt"># عند تدريب LogisticRegression على هذه الـ 5 سمات فقط، ارتفعت الدقة من 95.6% إلى 97.4%!</span><br><br>
-<span class="cmt"># 2. اختيار أفضل 6 سمات باستخدام المعلومات المتبادلة (mutual_info_classif)</span><br>
-fs_mi = SelectKBest(score_func=mutual_info_classif, k=<span class="num">6</span>)<br>
-X_train_mi = fs_mi.fit_transform(X_train, y_train)<br>
-X_test_mi  = fs_mi.transform(X_test)<br>
-<span class="cmt"># حقق النموذج أيضاً دقة ممتازة بلغت 97.4%!</span><br><br>
-<span class="cmt"># 3. تقليص جميع السمات إلى 3 مكونات رئيسية فقط باستخدام PCA</span><br>
-pca = PCA(n_components=<span class="num">3</span>)<br>
-X_train_pca = pca.fit_transform(X_train)<br>
-X_test_pca  = pca.transform(X_test)<br>
-<span class="cmt"># لاحظي أن pca.fit_transform(X_train) لا تحتاج لتمرير y_train لأن PCA غير خاضع للإشراف!</span>
-        </div>
-      </div>
-    </details>
-  </section>
-
-  <!-- التبويب الثاني: ملخص القوانين والمقارنات -->
-  <section id="tables" class="panel">
-    <div class="card">
-      <h2>1. جدول المقارنة الشامل لطرق اختيار وتقليص السمات في الفصل التاسع</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>الطريقة / الخوارزمية</th>
-            <th>التصنيف</th>
-            <th>المعادلة أو المبدأ الرياضي</th>
-            <th>الأداة في Scikit-learn</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><b>1. اختبار مربع كاي (<span dir="ltr">Chi-squared</span>)</b></td>
-            <td>اختيار سمات (<span dir="ltr">Filter</span>)</td>
-            <td dir="ltr">$\chi^2 = \sum \frac{(O_{ij} - E_{ij})^2}{E_{ij}}$</td>
-            <td dir="ltr"><code>SelectKBest(score_func=chi2, k=...)</code></td>
-          </tr>
-          <tr>
-            <td><b>2. المعلومات المتبادلة (<span dir="ltr">Mutual Info</span>)</b></td>
-            <td>اختيار سمات (<span dir="ltr">Filter</span>)</td>
-            <td dir="ltr">$I(X;Y) = \sum\sum P(x,y)\log\frac{P(x,y)}{P(x)P(y)}$</td>
-            <td dir="ltr"><code>SelectKBest(score_func=mutual_info_classif, k=...)</code></td>
-          </tr>
-          <tr>
-            <td><b>3. ارتباط بيرسون (<span dir="ltr">Pearson</span>)</b></td>
-            <td>اختيار سمات (<span dir="ltr">Filter</span>)</td>
-            <td>يقيس الارتباط الخطي للمتغيرات الكمية في $[-1, 1]$.</td>
-            <td dir="ltr"><code>df.corr()</code> / <code>f_regression</code></td>
-          </tr>
-          <tr>
-            <td><b>4. تحليل المكونات الرئيسية (<span dir="ltr">PCA</span>)</b></td>
-            <td>تقليص سمات (<span dir="ltr">Reduction</span>)</td>
-            <td>مصفوفة التغاير $\Sigma = \frac{1}{N-1}X^TX$ ثم <span dir="ltr">SVD</span> والإسقاط $X'=Xe$.</td>
-            <td dir="ltr"><code>PCA(n_components=...)</code><br><small>(من <code>sklearn.decomposition</code>)</small></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- التبويب الثالث: قاموس المصطلحات والدوال -->
-  <section id="terms" class="panel">
-    <div class="card">
-      <h2>قاموس المصطلحات والدوال الشامل للفصل التاسع</h2>
-      <p class="muted">جميع المفاهيم الرياضية والفئات البرمجية لاختيار وتقليص السمات:</p>
-      <div id="termsGrid" class="grid"></div>
-    </div>
-  </section>
-
-  <!-- التبويب الرابع: البطاقات التعليمية -->
-  <section id="cards" class="panel">
-    <div class="card">
-      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
-      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
-      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
-        <div class="term" id="flashTerm"></div>
-        <div class="answer" id="flashAnswer" hidden></div>
-        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
-      </div>
-      <div class="row" style="margin-top:14px">
-        <button class="btn" id="prevCard">السابق</button>
-        <span id="cardCount" class="muted"></span>
-        <button class="btn primary" id="nextCard">التالي</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- التبويب الخامس: الاختبار الذاتي العشوائي -->
-  <section id="quiz" class="panel">
-    <div class="card">
-      <div class="row">
-        <div>
-          <h2>الاختبار الشامل المتغير للفصل التاسع (25 سؤالاً) <span class="badge-new">ترتيب عشوائي ذكي 🎲</span></h2>
-          <p class="muted">يختبر فهمك لطرق الاختيار، مسائل Chi-squared و Mutual Information، خطوات PCA، وأكواد Scikit-learn مع تعليل فوري!</p>
-        </div>
-        <div class="score" id="score">النتيجة: 0 / 25</div>
-      </div>
-      <div class="progress"><div id="progressBar"></div></div>
-      <div id="quizArea"></div>
-      <div class="row">
-        <button class="btn" id="resetQuiz">إعادة الاختبار بترتيب عشوائي جديد 🔀</button>
-        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
-      </div>
-      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
-    </div>
-  </section>
-</main>
-
-<footer>مبني بالكامل (100%) على محتوى الفصل التاسع (اختيار السمات وتقليصها - الوحدات الأربع) من مقرر تحليل وتمثيل البيانات</footer>
-
-<script>
-const terms = [
-  ["Feature Selection (اختيار السمات)", "انتقاء أفضل مجموعة فرعية من السمات الأصلية الأكثر ارتباطاً بالهدف وحذف السمات غير المهمة دون تغيير قيم السمات المختارة."],
-  ["Feature Reduction (تقليص السمات)", "دمج وتحويل السمات الأصلية رياضياً لإنشاء عدد أقل من السمات الجديدة المركبة مع الحفاظ على غالبية المعلومات (مثل PCA)."],
-  ["Filter Methods (طرق التصفية)", "تقنيات تختار السمات بناءً على مقاييس إحصائية بحتة (مثل Chi-squared و Mutual Information و Pearson) بشكل مستقل عن خوارزمية التعلم الآلي."],
-  ["Wrapper Methods (طرق التغليف)", "تقنيات تقيم مجموعات فرعية مختلفة من السمات عبر تدريب واختبار نموذج تعلم آلي فعلي لاختيار المجموعة الأفضل أداءً."],
-  ["Model-based / Embedded Methods", "طرق مدمجة تقوم باختيار السمات تلقائياً كجزء من عملية تدريب النموذج نفسه (مثل Lasso وأشجار القرار)."],
-  ["Chi-Squared Test (اختبار مربع كاي)", "اختبار إحصائي يقيس درجة الارتباط أو الاستقلالية بين السمات الفئوية عبر مقارنة التكرار المشاهد (O) بالتكرار المتوقع (E)."],
-  ["Contingency Table (جدول التوافق)", "جدول تكراري يعرض توزيع الحالات المشتركة بين متغيرين فئويين لحساب اختبار مربع كاي."],
-  ["Mutual Information (المعلومات المتبادلة)", "مقياس يحسب كمية المعلومات التي تقدمها سمة معينة (X) حول سمة الهدف (Y) بناءً على الاحتمالات المشتركة والهامشية."],
-  ["PCA (Principal Component Analysis)", "تحليل المكونات الرئيسية: خوارزمية لتقليص الأبعاد تحول السمات المترابطة إلى مكونات رئيسية متعامدة تحتفظ بأكبر قدر من التباين."],
-  ["Mean-Centered Data (بيانات متمركزة)", "طرح المتوسط الحسابي لكل عمود من جميع قيم ذلك العمود (X = Data - μ) كخطوة أساسية في PCA."],
-  ["Covariance Matrix (مصفوفة التغاير)", "مصفوفة مربعة تقيس التباين المشترك بين السمات: Σ = (1 / (N - 1)) * X^T * X."],
-  ["Eigenvalues & Eigenvectors", "القيم الذاتية (تمثل مقدار التباين/المعلومات لكل مكون) والمتجهات الذاتية (تمثل اتجاهات المحاور الجديدة للمكونات الرئيسية في PCA)."],
-  ["SelectKBest", "فئة في sklearn.feature_selection لاختيار أفضل K سمات بناءً على دالة تقييم إحصائية مثل chi2 أو mutual_info_classif."],
-  ["sklearn.decomposition.PCA", "الفئة البرمجية في مكتبة Scikit-learn لتطبيق خوارزمية تحليل المكونات الرئيسية بتحديد عدد المكونات n_components."]
-];
-
-const cards = [
-  ["ما هي الفوائد الأربع الرئيسية لعملية اختيار السمات (Feature Selection)؟", "1) تقليل الإفراط في التخصيص (Reduce Overfitting).\n2) تحسين دقة النموذج (Improve Accuracy).\n3) تقليل وقت التدريب والتعقيد الحسابي.\n4) تبسيط النماذج وسهولة تفسيرها."],
-  ["ما هي التقنيات (الطرق) الثلاث الرئيسية لاختيار السمات؟", "1) طرق التصفية / الفلترة (Filter methods).\n2) طرق التغليف (Wrapper methods).\n3) الطرق المعتمدة على النموذج / المدمجة (Model-based / Embedded methods)."],
-  ["ما الفرق بين (Filter methods) و (Wrapper methods) و (Model-based methods)؟", "• Filter: تقيم السمات بمقاييس إحصائية (كـ Chi-squared و MI) بشكل مستقل عن أي نموذج تعلم آلي.\n• Wrapper: تجرب مجموعات سمات مختلفة بتدريب نموذج تعلم آلي فعلي لاختيار الأفضل.\n• Model-based: تختار السمات تلقائياً أثناء تدريب النموذج نفسه."],
-  ["ما هي المعادلة الرياضية لاختبار مربع كاي (Chi-squared Test)؟", "χ² = Σ [ (O_ij - E_ij)² / E_ij ]\nحيث O_ij هو التكرار المشاهد الفعلي، و E_ij هو التكرار المتوقع."],
-  ["كيف نحسب التكرار المتوقع (E_ij) لأي خلية في جدول التوافق (Contingency Table)؟", "E_ij = (مجموع الصف i × مجموع العمود j) ÷ المجموع الكلي للعينات (Grand Total)."],
-  ["[مسألة حسابية] في جدول توافق إجمالي عيناته 20، إذا كان مجموع الصف الأول = 10، ومجموع العمود الأول = 8، فكم يبلغ التكرار المتوقع (E_11)؟", "E_11 = (10 × 8) ÷ 20 = 80 ÷ 20 = 4."],
-  ["[مسألة حسابية] إذا كان التكرار المشاهد لخلية هو O = 7، والتكرار المتوقع لها هو E = 4، فكم تبلغ مساهمة هذه الخلية في مجموع مربع كاي (χ²)؟", "(O - E)² / E = (7 - 4)² / 4 = (3)² / 4 = 9 / 4 = 2.25."],
-  ["عند المقارنة بين سمتين باستخدام اختبار مربع كاي، أيهما نختار: السمة ذات قيمة χ² الأكبر أم الأصغر؟ ولماذا؟", "نختار السمة ذات قيمة (χ² الأكبر)؛ لأن القيمة الأكبر تعني انحرافاً أكبر عن فرضية الاستقلال، أي ارتباطاً واعتمادية أقوى مع سمة الهدف!"],
-  ["في مسألة لعب التنس بالكتاب، كانت χ²(Outlook) = 3.55 و χ²(Wind) = 0.93، فأي السمتين أهم لتحديد قرار اللعب؟", "سمة (Outlook - حالة الطقس) هي الأهم لأن قيمة χ² لها (3.55) أكبر بكثير من سمة الرياح (0.93)."],
-  ["ما هي المعادلة الرياضية للمعلومات المتبادلة (Mutual Information - I(X; Y))؟", "I(X; Y) = Σ_x Σ_y P(x, y) * log( P(x, y) / (P(x) * P(y)) )"],
-  ["متى تساوي قيمة المعلومات المتبادلة I(X; Y) صفراً (0)؟", "تساوي صفراً عندما تكون السمة X والهدف Y مستقلين تماماً عن بعضهما؛ لأن P(x,y) = P(x)*P(y) فيكون ناتج القسمة 1، و log(1) = 0."],
-  ["فيماذا يُستخدم معامل ارتباط بيرسون (Pearson Correlation) في اختيار السمات؟ وما هو نطاقه؟", "يُستخدم لقياس قوة واتجاه العلاقة الخطية بين المتغيرات الكمية (الرقمية المتصلة)، ويقع نطاقه دائماً بين [-1 و +1]."],
-  ["ما الفرق الجوهري بين (اختيار السمات - Feature Selection) و (تقليص السمات - Feature Reduction)؟", "• اختيار السمات: ينتقي مجموعة فرعية من السمات الأصلية كما هي ويحذف الباقي.\n• تقليص السمات (مثل PCA): يدمج ويحول كافة السمات الأصلية رياضياً إلى عدد أقل من السمات المركبة الجديدة مع الحفاظ على غالبية المعلومات."],
-  ["ما هي الخطوات الخمس المتسلسلة لحساب تحليل المكونات الرئيسية (PCA)؟", "1) حساب المتوسط الحسابي (μ) لكل سمة.\n2) تمركز البيانات حول المتوسط (X = Data - μ).\n3) حساب مصفوفة التغاير: Σ = (1 / (N - 1)) * X^T * X.\n4) تطبيق SVD لإيجاد القيم الذاتية (Eigenvalues) والمتجهات الذاتية (Eigenvectors).\n5) إسقاط البيانات على المتجهات الذاتية المختارة: X' = X * e."],
-  ["في خطوات PCA، كيف نحسب مصفوفة التغاير (Covariance Matrix Σ) من مصفوفة البيانات المتمركزة حول المتوسط (X)؟", "نضرب منقول المصفوفة (X^T) في المصفوفة (X) ونقسم على (N - 1):\nΣ = (1 / (N - 1)) * X^T * X"],
-  ["في خوارزمية PCA، ماذا تمثل كل من: القيم الذاتية (Eigenvalues) والمتجهات الذاتية (Eigenvectors)؟", "• القيم الذاتية (Eigenvalues): تمثل مقدار التباين (كمية المعلومات) الذي يفسره كل مكون رئيسي.\n• المتجهات الذاتية (Eigenvectors): تمثل اتجاهات المحاور الجديدة (المكونات الرئيسية)."],
-  ["على أي أساس نختار المكونات الرئيسية الأهم في خوارزمية PCA بعد تطبيق SVD؟", "نرتب المكونات تنازلياً حسب قيمها الذاتية (Eigenvalues)، ونختار المتجهات الذاتية المقابلة لأكبر القيم الذاتية لأنها تحتفظ بأكبر قدر من التباين (المعلومات)."],
-  ["كيف نحصل على البيانات الجديدة المقلصة (X') في الخطوة الأخيرة من خوارزمية PCA؟", "عن طريق ضرب مصفوفة البيانات المتمركزة حول المتوسط (X) في مصفوفة المتجهات الذاتية المختارة (e):\nX' = X * e"],
-  ["من أي وحدة في مكتبة Scikit-learn نستورد الفئة SelectKBest والدالتين chi2 و mutual_info_classif؟", "من الوحدة: sklearn.feature_selection"],
-  ["من أي وحدة في مكتبة Scikit-learn نستورد الفئة PCA لتحليل المكونات الرئيسية؟", "من الوحدة: sklearn.decomposition"],
-  ["كيف نكتب الكود البرمجي لاختيار أفضل 5 سمات باستخدام اختبار مربع كاي في Scikit-learn؟", "fs = SelectKBest(score_func=chi2, k=5)\nX_train_fs = fs.fit_transform(X_train, y_train)\nX_test_fs = fs.transform(X_test)"],
-  ["كيف نكتب الكود البرمجي لاختيار أفضل 6 سمات باستخدام المعلومات المتبادلة للتصنيف في Scikit-learn؟", "fs = SelectKBest(score_func=mutual_info_classif, k=6)\nX_train_fs = fs.fit_transform(X_train, y_train)"],
-  ["كيف نكتب الكود البرمجي لتقليص أبعاد البيانات إلى 3 مكونات رئيسية باستخدام PCA في Scikit-learn؟", "pca = PCA(n_components=3)\nX_train_pca = pca.fit_transform(X_train)\nX_test_pca = pca.transform(X_test)"],
-  ["لماذا نمرر (X_train, y_train) معاً في SelectKBest.fit_transform، بينما نمرر (X_train) فقط بدون y_train في PCA.fit_transform؟", "لأن SelectKBest طريقة خاضعة للإشراف تحسب علاقة كل سمة X بالهدف y، بينما PCA طريقة غير خاضعة للإشراف (Unsupervised) تعتمد فقط على تباين السمات X نفسها!"],
-  ["ماذا حدث لدقة مصنف LogisticRegression على بيانات سرطان الثدي في الوحدة الرابعة بعد اختيار أفضل 5 سمات بـ chi2؟", "ارتفعت دقة المصنف من 95.6% (عند استخدام كل السمات) إلى 97.4% (بعد اختيار أهم 5 سمات فقط)!"],
-  ["[مسألة حسابية] إذا كانت قيم سمة لـ 3 عينات هي [10, 20, 30]، فما هي قيمها بعد خطوة التمركز حول المتوسط (Mean-centering) في PCA؟", "1) المتوسط μ = (10 + 20 + 30) / 3 = 20.\n2) نطرح 20 من كل قيمة: [10-20, 20-20, 30-20] = [-10, 0, +10]."],
-  ["ما هو مجموع عناصر أي عمود دائماً بعد إجراء خطوة التمركز حول المتوسط (X = Data - μ) في PCA؟", "مجموع عناصر أي عمود متمركز حول المتوسط يساوي دائماً صفراً (0)!"],
-  ["إذا كانت مصفوفة البيانات الأصلية تحتوي على 100 عينة و 10 سمات (100 × 10)، وطبقنا عليها PCA(n_components=3)، فما أبعاد المصفوفة الناتجة؟", "تصبح أبعاد المصفوفة الناتجة: (100 × 3) أي 100 عينة و 3 مكونات رئيسية فقط."]
-];
-
-const masterQuestions = [
-  {q:"جميع ما يلي يُعد من الفوائد الأربع الرئيسية لعملية اختيار السمات (Feature Selection) ما عدا:",o:["زيادة الإفراط في التخصيص (Overfitting) وزيادة وقت التدريب","تقليل الإفراط في التخصيص (Reduce Overfitting)","تحسين دقة النموذج (Improve Accuracy)","تقليل وقت التدريب وتبسيط النماذج لسهولة تفسيرها"],a:0,e:"اختيار السمات يقلل من الـ Overfitting، ويحسن الدقة، ويقلل وقت التدريب، ويبسط النموذج."},
-  {q:"أي تقنية من تقنيات اختيار السمات تعتمد على المقاييس الإحصائية البحتة (مثل مربع كاي Chi-squared والمعلومات المتبادلة Mutual Information) بشكل مستقل تماماً عن أي خوارزمية تعلم آلي؟",o:["طرق التصفية / الفلترة (Filter methods)","طرق التغليف (Wrapper methods)","الطرق المعتمدة على النموذج (Model-based methods)","التجميع الهرمي (Hierarchical clustering)"],a:0,e:"طرق التصفية (Filter methods) تقيم أهمية السمات إحصائياً بمعزل عن خوارزميات التعلم الآلي."},
-  {q:"تُعرف طرق اختيار السمات التي تقوم بتجربة وتقييم مجموعات فرعية مختلفة من السمات عن طريق تدريب واختبار نموذج تعلم آلي فعلي مراراً وتكراراً باسم:",o:["طرق التغليف (Wrapper methods)","طرق التصفية (Filter methods)","تحليل المكونات الرئيسية (PCA)","التحجيم القياسي (Standard Scaling)"],a:0,e:"طرق التغليف (Wrapper methods) تستخدم نموذج تعلم آلي كمعيار لتقييم المجموعات الفرعية المختلفة من السمات."},
-  {q:"يُستخدم اختبار مربع كاي (Chi-squared Test) في اختيار السمات لقياس مدى الارتباط أو الاستقلالية بين:",o:["السمات النوعية (الفئوية - Categorical features) من خلال جدول التوافق (Contingency table)","المصفوفات الصوتية فقط","الصور ثلاثية الأبعاد فقط","المتغيرات الزمنية بدون هدف"],a:0,e:"اختبار مربع كاي يختبر الاستقلالية بين المتغيرات الفئوية بمقارنة التكرارات المشاهدة بالتكرارات المتوقعة في جدول التوافق."},
-  {q:"في معادلة اختبار مربع كاي: χ² = Σ [ (O_ij - E_ij)² / E_ij ] ، ماذا يمثل الرمز (O_ij) والرمز (E_ij)؟",o:["O_ij هو التكرار المشاهد (الفعلي) في الجدول، و E_ij هو التكرار المتوقع المحسوب بـ (مجموع الصف × مجموع العمود) / المجموع الكلي","O_ij هو المتوسط الحسابي، و E_ij هو الانحراف المعياري","O_ij هو الربع الأول، و E_ij هو الربع الثالث","كلاهما يمثلان القيم المتطرفة"],a:0,e:"في معادلة مربع كاي: O هو Observed frequency (التكرار المشاهد)، و E هو Expected frequency (التكرار المتوقع)."},
-  {q:"[مسألة حسابية] في جدول توافق إجمالي عدد عيناته (N = 50)، إذا كان مجموع الصف الأول = 20، ومجموع العمود الأول = 15، فكم تبلغ قيمة التكرار المتوقع (E_11) لهذه الخلية؟",o:["6.0 (لأن E = (20 × 15) / 50 = 300 / 50 = 6)","35.0","15.0","300.0"],a:0,e:"التكرار المتوقع = (مجموع الصف × مجموع العمود) ÷ المجموع الكلي = (20 × 15) ÷ 50 = 300 ÷ 50 = 6."},
-  {q:"[مسألة حسابية] إذا كان التكرار المشاهد لخلية في جدول التوافق هو (O = 10) والتكرار المتوقع لها هو (E = 5)، فكم تبلغ مساهمة هذه الخلية في قيمة مربع كاي (χ²)؟",o:["5.0 (لأن (10 - 5)² / 5 = 25 / 5 = 5)","1.0","25.0","0.0"],a:0,e:"نعوض في قانون الخلية: (O - E)² / E = (10 - 5)² / 5 = (5)² / 5 = 25 / 5 = 5.0."},
-  {q:"عند حساب اختبار مربع كاي لسمتين فحصلنا على: χ²(Outlook) = 3.55 و χ²(Wind) = 0.93، فأي السمتين نختار كسمة أهم للتنبؤ بالهدف؟ ولماذا؟",o:["نختار سمة (Outlook) لأن قيمة χ² لها أكبر، مما يدل على ارتباط واعتمادية أقوى مع سمة الهدف","نختار سمة (Wind) لأن قيمتها أقرب إلى الصفر","نحذف السمتين معاً لأن مجموعهما أقل من 10","لهما نفس الأهمية تماماً"],a:0,e:"كلما زادت قيمة χ² دلّ ذلك على رفض فرضية الاستقلال ووجود علاقة أقوى بين السمة والهدف، لذا Outlook هي الأهم."},
-  {q:"أي مقياس من مقاييس التصفية تُكتب معادلته على الصورة: I(X; Y) = Σ Σ P(x, y) log [ P(x, y) / (P(x)P(y)) ] ؟",o:["المعلومات المتبادلة (Mutual Information)","اختبار مربع كاي (Chi-squared)","معامل ارتباط بيرسون (Pearson Correlation)","تحليل المكونات الرئيسية (PCA)"],a:0,e:"هذه هي معادلة المعلومات المتبادلة (Mutual Information) التي تعتمد على الاحتمال المشترك P(x,y) والاحتمالات الهامشية P(x) و P(y)."},
-  {q:"متى تكون قيمة المعلومات المتبادلة I(X; Y) بين سمة X وسمة الهدف Y مساوية للصفر (0)؟",o:["عندما تكون السمة X والهدف Y مستقلين إحصائياً بشكل تام (حيث P(x,y) = P(x)P(y) فلا تقدم السمة أي معلومة عن الهدف)","عندما تكون السمة X مطابقة تماماً للهدف Y","عندما تكون جميع القيم سالبة","لا يمكن أن تساوي صفراً أبداً"],a:0,e:"عند الاستقلال التام يكون P(x,y) = P(x)P(y)، فيصبح الكسر داخل اللوغاريتم مساوياً لـ 1، وبما أن log(1) = 0 فإن I(X;Y) = 0."},
-  {q:"أي مقياس من مقاييس اختيار السمات يُستخدم لقياس قوة واتجاه (العلاقة الخطية بين المتغيرات الكمية المتصلة) في النطاق [-1, 1]؟",o:["معامل ارتباط بيرسون (Pearson Correlation)","اختبار مربع كاي للبيانات النصية","التحويل اللوغاريتمي","الترميز الثنائي الساخن (One-Hot)"],a:0,e:"معامل ارتباط بيرسون يقيس الارتباط الخطي بين المتغيرات الكمية ويتراوح بين -1 و +1."},
-  {q:"ما الفرق الجوهري الصحيح بين (اختيار السمات - Feature Selection) و (تقليص السمات - Feature Reduction)؟",o:["اختيار السمات ينتقي مجموعة فرعية من السمات الأصلية كما هي ويحذف الباقي، بينما تقليص السمات يدمج ويحول السمات الأصلية رياضياً لإنشاء عدد أقل من السمات المركبة الجديدة","تقليص السمات يحذف الصفوف المفقودة فقط، واختيار السمات يضاعف عدد الأعمدة","كلاهما يقومان بنفس العملية الحسابية تماماً دون أي اختلاف","اختيار السمات يغير قيم جميع الأعمدة باستخدام المتجهات الذاتية"],a:0,e:"في اختيار السمات تبقى السمات المختارة كما هي، أما في تقليص السمات (مثل PCA) فيتم دمج وتحويل السمات الأصلية إلى مكونات جديدة أقل عدداً."},
-  {q:"ما هي الخوارزمية الأشهر لتقليص أبعاد السمات (Dimensionality Reduction) عن طريق إسقاط البيانات باتجاه المحاور التي تمتلك أكبر تباين؟",o:["تحليل المكونات الرئيسية (Principal Component Analysis - PCA)","خوارزمية بايز الساذج (Naive Bayes)","اختبار مربع كاي (Chi-squared)","الترميز الترتيبي (Ordinal Encoding)"],a:0,e:"خوارزمية تحليل المكونات الرئيسية (PCA) هي التقنية القياسية لتقليص أبعاد السمات مع الحفاظ على أقصى تباين ممكن."},
-  {q:"ما هو الترتيب الصحيح للخطوات الخمس لحساب تحليل المكونات الرئيسية (PCA)؟",o:["1) حساب المتوسط μ -> 2) تمركز البيانات (X = Data - μ) -> 3) حساب مصفوفة التغاير Σ -> 4) تطبيق SVD لإيجاد القيم والمتجهات الذاتية -> 5) إسقاط البيانات (X' = X e)","1) إسقاط البيانات -> 2) حساب المتوسط -> 3) حذف الأعمدة -> 4) حساب مربع كاي -> 5) الترتيب","1) تطبيق SVD -> 2) جمع البيانات -> 3) قسمة المصفوفات -> 4) حساب المنوال -> 5) الرسم","لا يحتاج PCA إلى حساب المتوسط أو مصفوفة التغاير"],a:0,e:"تتم خوارزمية PCA عبر هذه الخطوات الخمس المتسلسلة بالضبط بدءاً من المتوسط والتمركز وحتى الإسقاط النهائي."},
-  {q:"[مسألة حسابية] في الخطوة الثانية من خوارزمية PCA (تمركز البيانات حول المتوسط Mean-centering)، إذا كانت قيم عمود لـ 3 عينات هي [4, 6, 8]، فما هي قيم هذا العمود بعد التمركز حول المتوسط؟",o:["[-2, 0, +2] (لأن المتوسط μ = 6، ونطرح 6 من كل قيمة)","[2, 3, 4]","[16, 36, 64]","[0, 0, 0]"],a:0,e:"نحسب المتوسط: μ = (4 + 6 + 8) / 3 = 18 / 3 = 6. ثم نطرح المتوسط من كل عنصر: 4-6 = -2، 6-6 = 0، 8-6 = +2."},
-  {q:"في الخطوة الثالثة من خوارزمية PCA، ما هي المعادلة الرياضية لحساب مصفوفة التغاير (Covariance Matrix Σ) من مصفوفة البيانات المتمركزة X (حيث N عدد العينات)؟",o:["Σ = [ 1 / (N - 1) ] * X^T * X","Σ = X + μ","Σ = (O - E)² / E","Σ = Q3 - Q1"],a:0,e:"تُحسب مصفوفة التغاير بضرب منقول مصفوفة البيانات المتمركزة (X^T) في المصفوفة (X) والقسمة على (N - 1)."},
-  {q:"عند تطبيق تفكيك القيمة المفردة (SVD) على مصفوفة التغاير في خوارزمية PCA، ماذا تمثل كل من (القيم الذاتية - Eigenvalues) و (المتجهات الذاتية - Eigenvectors)؟",o:["القيم الذاتية تمثل مقدار التباين (كمية المعلومات) لكل مكون، والمتجهات الذاتية تمثل اتجاهات المحاور الجديدة (المكونات الرئيسية)","القيم الذاتية تمثل عدد الصفوف المفقودة، والمتجهات الذاتية تمثل أسماء الأعمدة","كلاهما يمثلان المتوسط الحسابي للبيانات الأصلية","لا تُستخدم القيم الذاتية أو المتجهات الذاتية في PCA"],a:0,e:"القيم الذاتية (λ) تقيس التباين المفسر فنختار الأكبر منها، والمتجهات الذاتية (e) تحدد اتجاه المكونات الرئيسية التي نسقط البيانات عليها."},
-  {q:"في الخطوة الخامسة والأخيرة من خوارزمية PCA، كيف نحسب مصفوفة البيانات الجديدة المقلصة (X') من مصفوفة البيانات المتمركزة (X) والمتجه الذاتي المختار (e)؟",o:["بضرب المصفوفتين: X' = X · e","بقسمة المتوسط على الانحراف المعياري","بطرح الربع الأول من الربع الثالث","بجمع احتمالات اللوغاريتم"],a:0,e:"يتم إسقاط البيانات المتمركزة X على الفضاء الجديد بضربها نقطياً في المتجهات الذاتية المختارة: X' = X · e."},
-  {q:"من أي وحدة في مكتبة Scikit-learn يتم استيراد الأداة SelectKBest والدالتين chi2 و mutual_info_classif؟",o:["sklearn.feature_selection","sklearn.decomposition","sklearn.preprocessing","sklearn.cluster"],a:0,e:"توجد جميع أدوات اختيار السمات (SelectKBest, chi2, mutual_info_classif) داخل الوحدة sklearn.feature_selection."},
-  {q:"من أي وحدة في مكتبة Scikit-learn يتم استيراد الفئة PCA لتحليل المكونات الرئيسية؟",o:["sklearn.decomposition","sklearn.feature_selection","sklearn.linear_model","sklearn.metrics"],a:0,e:"توجد فئة PCA لتفكيك المصفوفات وتقليص الأبعاد داخل الوحدة sklearn.decomposition."},
-  {q:"ما وظيفة الكود البرمجي التالي: fs = SelectKBest(score_func=chi2, k=5) ؟",o:["تهيئة أداة لاختيار أفضل 5 سمات من البيانات بالاعتماد على درجات اختبار مربع كاي (chi2)","تقليص البيانات إلى 5 صفوف فقط باستخدام PCA","تقسيم البيانات إلى 5 مجموعات عنقودية بـ K-means","حذف أول 5 أعمدة من الجدول عشوائياً"],a:0,e:"تقوم SelectKBest بتقييم جميع السمات باستخدام الدالة المحددة في score_func (هنا chi2) والاحتفاظ بأعلى k=5 سمات."},
-  {q:"لماذا نمرر المتغير التابع (y_train) في الكود fs.fit_transform(X_train, y_train) مع SelectKBest، بينما لا نمرره في pca.fit_transform(X_train) مع PCA؟",o:["لأن SelectKBest طريقة خاضعة للإشراف تحسب ارتباط كل سمة بالهدف y، بينما PCA طريقة غير خاضعة للإشراف تعتمد فقط على تباين السمات المستقلة X","لأن PCA يحذف المتغير التابع y_train من الذاكرة","لأن SelectKBest لا تقبل مصفوفة X_train","لا يوجد أي فرق بينهما"],a:0,e:"طرق التصفية مثل chi2 و mutual_info_classif تقيس العلاقة بين X و y، بينما يعتمد PCA على مصفوفة التغاير للسمات X وحدها دون النظر إلى y."},
-  {q:"في التجربة العملية على بيانات سرطان الثدي بالوحدة الرابعة، كيف أثر اختيار أفضل 5 سمات بواسطة (chi2) أو أفضل 6 سمات بواسطة (mutual_info_classif) على دقة مصنف LogisticRegression؟",o:["تحسنت وارتفعت دقة المصنف من 95.6% (بكل السمات) إلى 97.4% (بالسمات المختارة فقط) مع تقليل عدد السمات","انخفضت الدقة إلى 50%","توقف النموذج عن العمل بسبب نقص السمات","لم تتغير الدقة وبقيت 0%"],a:0,e:"أثبتت التجربة العملية فائدة اختيار السمات؛ حيث ارتفعت الدقة من 95.6% إلى 97.4% رغم استخدام 5 أو 6 سمات فقط."},
-  {q:"في الكود: pca = PCA(n_components=3) ، إلى ماذا يشير المعامل (n_components=3)؟",o:["عدد المكونات الرئيسية (السمات المركبة الجديدة) التي نريد تقليص البيانات إليها وهو 3 مكونات","عدد الصفوف التي سيتم حذفها من الجدول","درجة الحدود في الانحدار كثير الحدود","عتبة القيم المتطرفة Z-score"],a:0,e:"يحدد المعامل n_components في فئة PCA عدد الأبعاد أو المكونات الرئيسية التي سيتم الاحتفاظ بها بعد التقليص."},
-  {q:"إذا كان لدينا جدول بيانات يضم 500 عينة و 20 سمة (أبعاده 500 × 20)، وطبقنا عليه SelectKBest(score_func=chi2, k=5)، فما هي أبعاد مصفوفة المخرجات الناتجة؟",o:["500 صف × 5 أعمدة (500 × 5)","5 صفوف × 20 عموداً (5 × 20)","500 صف × 20 عموداً","5 صفوف × 5 أعمدة"],a:0,e:"اختيار السمات لا يغير عدد العينات (الصفوف = 500)، بل يختار أفضل k=5 أعمدة فقط بدلاً من 20 عموداً، فتصبح الأبعاد 500 × 5."}
-];
-
-const termsGrid = document.getElementById("termsGrid");
-terms.forEach(([en, ar]) => {
-  const d = document.createElement("div");
-  d.className = "card";
-  d.style.margin = "0";
-  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
-  termsGrid.appendChild(d);
-});
-
-let ci = 0, showAnswer = false;
-function renderCard() {
-  document.getElementById("flashTerm").textContent = cards[ci][0];
-  document.getElementById("flashAnswer").textContent = cards[ci][1];
-  document.getElementById("flashAnswer").hidden = !showAnswer;
-  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
-  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
-}
-document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
-document.getElementById("flashcard").addEventListener("keydown", e => {
-  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
-});
-document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
-document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
-renderCard();
-
-document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
-  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
-  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
-  window.scrollTo({ top: 0, behavior: "smooth" });
-});
-
-function shuffleArray(arr) {
-  const copy = [...arr];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-}
-
-let currentQuestions = [];
-let answers = {};
-
-function prepareShuffledQuiz() {
-  currentQuestions = shuffleArray(masterQuestions).map(item => {
-    const optsWithFlag = item.o.map((text, idx) => ({ text, isCorrect: idx === item.a }));
-    const shuffledOpts = shuffleArray(optsWithFlag);
-    return {
-      q: item.q,
-      o: shuffledOpts.map(x => x.text),
-      a: shuffledOpts.findIndex(x => x.isCorrect),
-      e: item.e
+  <api-shim></api-shim>
+  <script>
+    /* ================================================================
+       DATA: 40 QUESTIONS (10 PER UNIT) WITH EXPLANATIONS
+    ================================================================ */
+    const QUIZ_DATA = {
+      1: [
+        {
+          id: `u1_q1`,
+          q: `ما المقصود بـ "السمة" (Feature) في تحليلات البيانات المستندة إلى التعلم الآلي؟`,
+          opts: [
+            `خاصية فردية قابلة للقياس أو صفة لظاهرة تتم ملاحظتها`,
+            `النتيجة النهائية التي يتنبأ بها النموذج فقط`,
+            `مجموع الصفوف المخزنة في قاعدة البيانات`,
+            `أداة برمجية لتقسيم البيانات إلى تدريب واختبار`
+          ],
+          ans: 0,
+          exp: `تُعرّف السمة في التعلم الآلي بأنها خاصية فردية قابلة للقياس أو صفة تصف شيئاً ما (مثل شكل الفم أو العين في التعرف على الوجوه).`
+        },
+        {
+          id: `u1_q2`,
+          q: `تتطلب عملية هندسة السمات (Feature Engineering) بشكل عام تعاوناً بين:`,
+          opts: [
+            `مديري قواعد البيانات ومصممي الواجهات`,
+            `خبراء المجال (Domain Experts) وعلماء البيانات`,
+            `فريق التسويق ومختبري البرمجيات فقط`,
+            `العملاء ومستخدمي النظام النهائيين`
+          ],
+          ans: 1,
+          exp: `تحتاج هندسة السمات إلى خبرة خبراء المجال لفهم المعنى العملي للسمات، وإلى علماء البيانات لتطبيق الأساليب الإحصائية والبرمجية المناسبة.`
+        },
+        {
+          id: `u1_q3`,
+          q: `ما الهدف الرئيسي من عملية اختيار السمات (Feature Selection)؟`,
+          opts: [
+            `دمج جميع السمات في سمة واحدة جديدة`,
+            `تضمين السمات المهمة وحذف السمات الزائدة أو غير المرتبطة بالمشكلة`,
+            `زيادة عدد الأعمدة لتحسين دقة التدريب دائماً`,
+            `تحويل جميع النصوص إلى مصفوفات ثنائية فقط`
+          ],
+          ans: 1,
+          exp: `تهدف عملية اختيار السمات إلى الإبقاء على السمات الأكثر أهمية وحذف السمات الزائدة أو غير ذات الصلة دون تغيير قيم السمات المختارة.`
+        },
+        {
+          id: `u1_q4`,
+          q: `أي مما يلي لا يُعد من فوائد عملية اختيار السمات؟`,
+          opts: [
+            `تبسيط النموذج واختصار الوقت اللازم لبنائه`,
+            `تقليل المشاكل الناجمة عن كثرة السمات`,
+            `تحسين قابلية النموذج للتعميم على بيانات جديدة`,
+            `تخليق سمات جديدة مدمجة بدلاً من السمات الأصلية`
+          ],
+          ans: 3,
+          exp: `تخليق سمات مدمجة جديدة يصف عملية "تقليص السمات" (Feature Reduction) وليس "اختيار السمات" الذي يكتفي بالانتقاء والحذف.`
+        },
+        {
+          id: `u1_q5`,
+          q: `ماذا يُقصد بفائدة "تحسين قابلية النموذج للتعميم" بعد اختيار السمات؟`,
+          opts: [
+            `أن يعمل النموذج بكفاءة على مجموعات مختلفة من البيانات وليس بيانات التدريب وحدها`,
+            `أن يصبح النموذج قادراً على تشغيل قواعد بيانات علائقية`,
+            `أن يزداد حجم البيانات المخزنة في الذاكرة`,
+            `أن يختفي الحاجة إلى تقسيم البيانات للتقييم`
+          ],
+          ans: 0,
+          exp: `قابلية التعميم (Generalization) تعني قدرة النموذج على تقديم تنبؤات دقيقة عند اختباره على بيانات جديدة غير مرئية أثناء التدريب.`
+        },
+        {
+          id: `u1_q6`,
+          q: `في أي تقنية من تقنيات اختيار السمات يتم اختيار السمات "دون الاعتماد على النموذج"؟`,
+          opts: [
+            `طرق التصفية (Filter Methods)`,
+            `طرق التغليف (Wrapper Methods)`,
+            `الطرق المدمجة في النموذج (Model-based Methods)`,
+            `تحليل المكونات الرئيسية (PCA)`
+          ],
+          ans: 0,
+          exp: `طرق التصفية (Filter Methods) تعتمد على مقاييس إحصائية بحتة بين السمات الحرة والسمة الهدف قبل بناء النموذج ودون الاعتماد عليه.`
+        },
+        {
+          id: `u1_q7`,
+          q: `ما الفرق بين Wrapper Methods و Model-based Methods؟`,
+          opts: [
+            `Wrapper تختار بناءً على كفاءة النموذج مع كل مجموعة فرعية، بينما Model-based تختار أثناء بناء النموذج كجزء من تهيئته`,
+            `Wrapper تستخدم للإحصاء فقط، بينما Model-based للرسم البياني`,
+            `لا يوجد فرق بينهما وكلاهما لا يعتمد على النموذج`,
+            `Wrapper تحذف الصفوف بينما Model-based تحذف الأعمدة`
+          ],
+          ans: 0,
+          exp: `في طرق التغليف (Wrapper) يتم تقييم كفاءة النموذج مع مجموعات مختلفة من السمات، أما الطرق المدمجة (Model-based) فتُجرى عملية الاختيار ضمنياً أثناء تدريب وتهيئة النموذج.`
+        },
+        {
+          id: `u1_q8`,
+          q: `ماذا تفترض الفرضية الصفرية (Null Hypothesis) في اختبار مربع كاي (Chi-squared)؟`,
+          opts: [
+            `أن السمة المختارة هي السبب الوحيد للسمة الهدف`,
+            `أن التوزيعات المحددة مستقلة عن بعضها البعض`,
+            `أن المتوسط الحسابي يساوي الانحراف المعياري`,
+            `أن البيانات خالية تماماً من القيم المتطرفة`
+          ],
+          ans: 1,
+          exp: `تفترض الفرضية الصفرية في اختبار Chi-squared أن التوزيعات مستقلة؛ وكلما زادت قيمة χ² رفضنا الاستقلالية واستنتجنا وجود علاقة اعتمادية مهمة.`
+        },
+        {
+          id: `u1_q9`,
+          q: `بعد حساب قيمة Chi-squared لكل سمة في مجموعة البيانات، كيف يتم اختيار أفضل K سمات؟`,
+          opts: [
+            `بترتيبها تصاعدياً واختيار أقل القيم`,
+            `بترتيبها تنازلياً واختيار السمات ذات القيم الأعلى`,
+            `باختيار السمات التي تقترب قيمتها من الصفر`,
+            `باختيار السمات ذات القيم السالبة فقط`
+          ],
+          ans: 1,
+          exp: `تُرتب السمات تنازلياً حسب قيمة χ² وتُختار السمات ذات القيم الأعلى (مثل سمة Wind في مثال الملخص)، لأن القيمة الأعلى تعني اعتماداً أكبر للسمة الهدف عليها.`
+        },
+        {
+          id: `u1_q10`,
+          q: `في معادلة اختبار مربع كاي χ² = Σ (Oᵢⱼ − Eᵢⱼ)² / Eᵢⱼ، ماذا يمثل الرمزان Oᵢⱼ و Eᵢⱼ؟`,
+          opts: [
+            `القيم المتطرفة والوسيط`,
+            `التكرارات الملاحظة (Observed) والتكرارات المتوقعة (Expected)`,
+            `المتوسط الحسابي والتباين`,
+            `بيانات التدريب وبيانات الاختبار`
+          ],
+          ans: 1,
+          exp: `يمثل Oᵢⱼ التكرارات الملاحظة فعلياً في البيانات، بينما يمثل Eᵢⱼ التكرارات المتوقعة نظرياً إذا كانت المتغيرات مستقلة.`
+        }
+      ],
+      2: [
+        {
+          id: `u2_q1`,
+          q: `أي مجموعة من الخوارزميات التالية تنتمي بأكملها إلى طرق التصفية (Filter Methods)؟`,
+          opts: [
+            `Chi-squared و Mutual Information و Pearson Correlation`,
+            `PCA و K-Means و Random Forest`,
+            `Logistic Regression و SVM و Lasso`,
+            `Standard Scaling و LabelEncoder و Dropna`
+          ],
+          ans: 0,
+          exp: `أشهر ثلاث خوارزميات تنتمي لفئة Filter Methods وفقاً للفصل التاسع هي: اختبار مربع كاي، المعلومات المتبادلة، ومعامل ارتباط بيرسون.`
+        },
+        {
+          id: `u2_q2`,
+          q: `ما الذي يمثله مقياس المعلومات المتبادلة (Mutual Information) بين متغيرين مستقلين؟`,
+          opts: [
+            `الفرق بين القيمة العظمى والقيمة الصغرى`,
+            `مقياس لاعتماد كل متغير على الآخر وكمية المعلومات المشتركة بينهما`,
+            `ميل الخط المستقيم في الانحدار الخطي فقط`,
+            `نسبة القيم المفقودة في كلا العمودين`
+          ],
+          ans: 1,
+          exp: `تقيس المعلومات المتبادلة (Mutual Information) درجة اعتماد كل متغير على الآخر، أي مقدار المعلومات التي يوفرها أحد المتغيرين عن المتغير الآخر.`
+        },
+        {
+          id: `u2_q3`,
+          q: `إذا بلغت قيمة المعلومات المتبادلة (MI) بين سمة ما والسمة الهدف صفراً (0)، فماذا يعني ذلك؟`,
+          opts: [
+            `وجود علاقة طردية تامة`,
+            `وجود علاقة عكسية تامة`,
+            `أن المتغيرين مستقلان تماماً ولا يعتمد أحدهما على الآخر`,
+            `أن السمة تحتوي على قيم مفقودة`
+          ],
+          ans: 2,
+          exp: `القيمة 0 في المعلومات المتبادلة تعني الاستقلال التام؛ أي أن معرفة إحدى السمتين لا تعطي أي معلومة عن السمة الأخرى.`
+        },
+        {
+          id: `u2_q4`,
+          q: `بماذا يتميز مقياس المعلومات المتبادلة (MI) مقارنةً بمعامل ارتباط بيرسون؟`,
+          opts: [
+            `MI يلتقط العلاقات الخطية وغير الخطية، بينما بيرسون يقيس العلاقة الخطية فقط`,
+            `MI يقع في النطاق [-1, 1] بينما بيرسون دائماً موجب`,
+            `بيرسون يعمل مع النصوص فقط بينما MI للأرقام فقط`,
+            `MI يحذف الأعمدة تلقائياً دون تحديد K`
+          ],
+          ans: 0,
+          exp: `معامل بيرسون يختص باكتشاف العلاقة الخطية فقط (وقد يعطي صفراً في علاقة منحنية واضحة)، بينما تكتشف المعلومات المتبادلة أي نوع من الاعتمادية الإحصائية.`
+        },
+        {
+          id: `u2_q5`,
+          q: `ما هو النطاق الرياضي لقيم معامل ارتباط بيرسون (Pearson Correlation)؟`,
+          opts: [
+            `[0, 1]`,
+            `[-1, 1]`,
+            `[0, ∞)`,
+            `(-∞, +∞)`
+          ],
+          ans: 1,
+          exp: `ينحصر معامل ارتباط بيرسون دائماً بين -1 و +1، حيث يمثل الطرفان ارتباطاً خطياً تاماً (عكسياً أو طردياً) ويمثل الصفر انعدام العلاقة الخطية.`
+        },
+        {
+          id: `u2_q6`,
+          q: `في معامل ارتباط بيرسون، ماذا تشير القيم الموجبة (مثل +0.85)؟`,
+          opts: [
+            `علاقة عكسية بين السمتين`,
+            `عدم وجود علاقة خطية`,
+            `علاقة خطية طردية: زيادة إحدى السمتين يصاحبها زيادة الأخرى`,
+            `وجود خطأ في ترميز البيانات`
+          ],
+          ans: 2,
+          exp: `القيم الموجبة في معامل بيرسون تعبر عن علاقة طردية؛ كلما ازدادت قيم السمة الأولى ازدادت معها قيم السمة الثانية.`
+        },
+        {
+          id: `u2_q7`,
+          q: `إذا حسبنا معامل ارتباط بيرسون بين سمتين رقميتين فكانت النتيجة -0.91، فالتفسير الصحيح هو:`,
+          opts: [
+            `علاقة عكسية خطية قوية بين السمتين`,
+            `علاقة طردية ضعيفة جداً`,
+            `عدم وجود أي ارتباط بين السمتين`,
+            `القيمة مرفوضة لأن الارتباط لا يكون سالباً`
+          ],
+          ans: 0,
+          exp: `الإشارة السالبة تدل على علاقة عكسية، واقتراب المقدار من 1 (-0.91) يدل على أن العلاقة الخطية العكسية قوية جداً.`
+        },
+        {
+          id: `u2_q8`,
+          q: `إلى ماذا تشير القيمة (0) في معامل ارتباط بيرسون؟`,
+          opts: [
+            `إلى تطابق السمتين تماماً`,
+            `إلى عدم وجود علاقة خطية بين السمتين`,
+            `إلى أن السمتين نوعيتان وليستا رقميتين`,
+            `إلى أن عدد الصفوف يساوي صفراً`
+          ],
+          ans: 1,
+          exp: `القيمة 0 في معامل ارتباط بيرسون تعني انعدام العلاقة الخطية بين السمتين الرقميتين.`
+        },
+        {
+          id: `u2_q9`,
+          q: `ما نوع السمات التي يُستخدم معامل ارتباط بيرسون لقياس العلاقة الخطية بينها؟`,
+          opts: [
+            `السمات النصية الاسمية فقط`,
+            `اثنتين من السمات الرقمية`,
+            `الصور والملفات الصوتية`,
+            `السمات المنطقية بعد حذفها`
+          ],
+          ans: 1,
+          exp: `يعبر معامل ارتباط بيرسون عن العلاقة الخطية بين اثنتين من السمات الرقمية (الكمية) باستخدام متوسطاتها وتشتتها.`
+        },
+        {
+          id: `u2_q10`,
+          q: `في معادلة ارتباط بيرسون، ماذا يمثل الرمز n والرمز x̄ على الترتيب؟`,
+          opts: [
+            `عدد الأعمدة، والقيمة العظمى للسمة x`,
+            `عدد العناصر (الصفوف)، والمتوسط الحسابي للسمة x`,
+            `نسبة الخطأ، والانحراف المعياري للسمة y`,
+            `عدد المكونات الرئيسية، وعدد الفئات`
+          ],
+          ans: 1,
+          exp: `يمثل n عدد العناصر (الصفوف في الجدول)، بينما يمثل x̄ المتوسط الحسابي للسمة x، وȳ المتوسط الحسابي للسمة y.`
+        }
+      ],
+      3: [
+        {
+          id: `u3_q1`,
+          q: `ما التعريف الأدق لعملية "تقليص السمات" (Feature Reduction)؟`,
+          opts: [
+            `حذف السجلات المكررة من قاعدة البيانات`,
+            `تقليص عدد الأبعاد بتحويل السمات إلى عدد أقل من السمات المدمجة مع الحفاظ على غالبية المعلومات`,
+            `تحويل الأرقام العشرية إلى أعداد صحيحة`,
+            `تغيير أسماء الأعمدة لتسهيل قراءتها`
+          ],
+          ans: 1,
+          exp: `يهدف تقليص السمات إلى خفض عدد الأبعاد عبر تحويل السمات الأصلية إلى سمات مدمجة أقل عدداً تحتفظ بمعظم المعلومات الأصلية.`
+        },
+        {
+          id: `u3_q2`,
+          q: `ما الاختلاف الجوهري بين "اختيار السمات" و"تقليص السمات"؟`,
+          opts: [
+            `اختيار السمات يحذف سمات ويبقي أخرى، بينما تقليص السمات يدمج السمات معاً لتخليق مجموعة أقل من السمات`,
+            `اختيار السمات يعمل مع PCA فقط`,
+            `تقليص السمات يزيد عدد الأعمدة بينما اختيار السمات يقلل الصفوف`,
+            `كلاهما يؤدي نفس العملية تماماً بدون أي فرق`
+          ],
+          ans: 0,
+          exp: `اختيار السمات ينتقي سمات أصلية ويزيل أخرى دون تعديل، أما تقليص السمات فيخلق سمات جديدة مدمجة من السمات الأصلية.`
+        },
+        {
+          id: `u3_q3`,
+          q: `هل عملية التحويل المستخدمة في تقليص السمات خطية فقط؟`,
+          opts: [
+            `نعم، يجب أن تكون خطية دائماً`,
+            `لا، يمكن أن تكون عملية التحويل خطية أو غير خطية`,
+            `نعم، وتُطبق على السمة الهدف فقط`,
+            `لا، تكون غير خطية فقط في جميع الخوارزميات`
+          ],
+          ans: 1,
+          exp: `تنص أساسيات تقليص السمات على أن عملية التحويل لدمج السمات يمكن أن تكون خطية (مثل PCA) أو غير خطية.`
+        },
+        {
+          id: `u3_q4`,
+          q: `ما الاسم الذي يُطلق على المتغيرات الأقل عدداً الناتجة عن تطبيق تقنية PCA؟`,
+          opts: [
+            `السمات المفقودة (Missing Features)`,
+            `المكونات الرئيسية (Principal Components)`,
+            `معاملات التنظيم (Regularization Terms)`,
+            `العناقيد المتجانسة (Clusters)`
+          ],
+          ans: 1,
+          exp: `يقوم تحليل المكونات الرئيسية (PCA) بتمثيل البيانات بمجموعة أقل من المحاور المتغيرات تُعرف باسم المكونات الرئيسية.`
+        },
+        {
+          id: `u3_q5`,
+          q: `بماذا يتميز المكون الرئيسي الأول (PC1) في خوارزمية PCA؟`,
+          opts: [
+            `يعبر عن الاتجاه الذي يقلل التباين إلى الصفر`,
+            `يعبر عن الاتجاه الذي يعظّم التباين (Variance) بالبيانات بعد تحويلها`,
+            `يمثل متوسط القيم المتطرفة فقط`,
+            `يكون موازياً للمكون الرئيسي الثاني دائماً`
+          ],
+          ans: 1,
+          exp: `يُختار المكون الرئيسي الأول بحيث يقع على الاتجاه الذي يحفظ ويعظم أكبر قدر ممكن من التباين في البيانات المسقطة.`
+        },
+        {
+          id: `u3_q6`,
+          q: `ما العلاقة الهندسية بين كل مكون رئيسي والمكون الذي يسبقه في PCA؟`,
+          opts: [
+            `متطابقان في الاتجاه`,
+            `كل مكون يمثل متجهاً عمودياً (Orthogonal) على المكون السابق له`,
+            `يصنعان زاوية 45 درجة دائماً`,
+            `متعاكسان تماماً في الإشارة`
+          ],
+          ans: 1,
+          exp: `شرط أساسي في PCA أن يكون كل مكون رئيسي متعامداً (بزاوية 90 درجة) على المكون السابق له لضمان عدم تكرار المعلومات.`
+        },
+        {
+          id: `u3_q7`,
+          q: `كيف تُحسب مصفوفة البيانات الممركزة حول المتوسط (Mean-Centered Data X) في PCA؟`,
+          opts: [
+            `بقسمة كل قيمة على أكبر قيمة في العمود`,
+            `بطرح متوسط كل سمة من القيم الخاصة بها لكل السجلات`,
+            `بجمع السمتين معاً في عمود واحد مباشرة`,
+            `بحساب الجذر التربيعي لكل سجل`
+          ],
+          ans: 1,
+          exp: `تبدأ حسابات PCA بحساب متوسط كل سمة ثم طرح هذا المتوسط من كل قيمة في السجلات لنقل مركز البيانات إلى نقطة الأصل (0, 0).`
+        },
+        {
+          id: `u3_q8`,
+          q: `في مثال الملخص (بيانات المساحة Area: 9, 3, 2, 6.5, 2.5)، كم يبلغ المتوسط الحسابي وما القيمة الممركزة لأول سجل؟`,
+          opts: [
+            `المتوسط = 4.6، والقيمة الممركزة = 4.4`,
+            `المتوسط = 5.0، والقيمة الممركزة = 4.0`,
+            `المتوسط = 4.6، والقيمة الممركزة = 5.4`,
+            `المتوسط = 3.0، والقيمة الممركزة = 6.0`
+          ],
+          ans: 0,
+          exp: `مجموع القيم = 23، وبقسمته على 5 يكون المتوسط 4.6. وعند طرحه من القيمة الأولى 9 نحصل على 9 − 4.6 = 4.4.`
+        },
+        {
+          id: `u3_q9`,
+          q: `إذا كان لدينا N سجلاً و d سمة، فما أبعاد مصفوفة Mean-Centered Data؟`,
+          opts: [
+            `d × d`,
+            `N × d`,
+            `1 × N`,
+            `N × 1`
+          ],
+          ans: 1,
+          exp: `تحافظ مصفوفة البيانات الممركزة على نفس أبعاد البيانات الأصلية: N صفاً (سجلات) في d عموداً (سمات).`
+        },
+        {
+          id: `u3_q10`,
+          q: `في مثال حساب PCA بالملخص، أي أداتين رياضيتين استُخدمتا بعد تمركز البيانات لاستخراج المحاور الرئيسية؟`,
+          opts: [
+            `تحليل القيمة المفردة (SVD) وتحليل مصفوفة التغاير (Covariance Matrix)`,
+            `اختبار مربع كاي ومعامل بيرسون`,
+            `التجميع الهرمي ومسافة مانهاتن`,
+            `الانحدار اللوجستي ودالة السوفت ماكس`
+          ],
+          ans: 0,
+          exp: `يُعتمد في حساب المكونات الرئيسية لـ PCA على تحليل مصفوفة التغاير (Covariance Matrix) أو تحليل القيمة المفردة (SVD).`
+        }
+      ],
+      4: [
+        {
+          id: `u4_q1`,
+          q: `كم إجمالي عدد السمات في قاعدة بيانات تشخيص سرطان الثدي المستخدمة في الوحدة الرابعة؟`,
+          opts: [
+            `10 سمات`,
+            `31 سمة`,
+            `5 سمات`,
+            `100 سمة`
+          ],
+          ans: 1,
+          exp: `وفقاً للملخص، تحتوي قاعدة بيانات تشخيص سرطان الثدي على 31 سمة (تشمل السمات المستقلة والسمة الهدف diagnosis).`
+        },
+        {
+          id: `u4_q2`,
+          q: `ما الأداة المستخدمة لتحويل السمة الهدف (diagnosis) من M و B إلى 0 و 1؟`,
+          opts: [
+            `StandardScaler`,
+            `LabelEncoder`,
+            `PCA`,
+            `SelectKBest`
+          ],
+          ans: 1,
+          exp: `استُخدم LabelEncoder لترميز الفئات النصية للسمة الهدف (M و B) إلى قيم رقمية ثنائية (0 و 1).`
+        },
+        {
+          id: `u4_q3`,
+          q: `أي دالة استُخدمت في تجهيز البيانات لتكوين Histogram (التوزيع التكراري) للقيم الموجودة في حقل diagnosis؟`,
+          opts: [
+            `describe()`,
+            `value_counts()`,
+            `dropna()`,
+            `fit_transform()`
+          ],
+          ans: 1,
+          exp: `تُستخدم دالة value_counts() لحساب تكرار كل فئة (0 و 1) وتمثيل التوزيع في صورة Histogram.`
+        },
+        {
+          id: `u4_q4`,
+          q: `ما الدالة المستخدمة من مكتبة Scikit-learn لتقسيم البيانات إلى جزء للتدريب وآخر للاختبار؟`,
+          opts: [
+            `train_test_split`,
+            `chi2_split`,
+            `pca_divide`,
+            `cross_val_join`
+          ],
+          ans: 0,
+          exp: `دالة train_test_split تُستخدم لفصل مجموعة البيانات إلى بيانات تدريب (Training) وبيانات اختبار (Testing) قبل بناء المصنف.`
+        },
+        {
+          id: `u4_q5`,
+          q: `كم بلغت دقة نموذج Logistic Regression على البيانات الأصلية قبل تطبيق أي اختيار أو تقليص للسمات؟`,
+          opts: [
+            `88.2%`,
+            `95.6%`,
+            `97.4%`,
+            `99.1%`
+          ],
+          ans: 1,
+          exp: `حقق النموذج الأساسي (Baseline) المبني على البيانات الأصلية كاملة دقة قدرها 95.6%.`
+        },
+        {
+          id: `u4_q6`,
+          q: `ما الفئتان المستخدمتان من مكتبة sklearn.feature_selection لتطبيق اختيار السمات بمربع كاي مع تحديد 5 سمات؟`,
+          opts: [
+            `SelectKBest و chi2 مع k=5`,
+            `PCA و StandardScaler مع n=5`,
+            `LabelEncoder و train_test_split مع k=5`,
+            `Ridge و Lasso مع alpha=5`
+          ],
+          ans: 0,
+          exp: `تحتوي مكتبة feature_selection في scikit-learn على الفئة SelectKBest والدالة chi2، وبوضع k=5 يتم اختيار أفضل 5 سمات.`
+        },
+        {
+          id: `u4_q7`,
+          q: `ماذا حدث لكفاءة نموذج التصنيف بعد اختيار 5 سمات فقط باستخدام Chi-squared؟`,
+          opts: [
+            `انخفضت إلى 85.0%`,
+            `بقيت ثابتة عند 95.6%`,
+            `تحسنت وارتفعت من 95.6% إلى 97.4%`,
+            `توقف النموذج عن العمل`
+          ],
+          ans: 2,
+          exp: `أزال اختيار السمات بـ chi2 السمات المشتّتة، مما رفع دقة النموذج من 95.6% إلى 97.4% رغم استخدام 5 سمات فقط!`
+        },
+        {
+          id: `u4_q8`,
+          q: `كم عدد السمات المختارة عند تطبيق mutual_info_classif وما الدقة التي حققها النموذج في المثال؟`,
+          opts: [
+            `3 سمات بدقة 91.0%`,
+            `6 سمات بدقة 97.4%`,
+            `15 سمة بدقة 95.6%`,
+            `2 سمة بدقة 99.0%`
+          ],
+          ans: 1,
+          exp: `تم تحديد عدد السمات بـ 6 سمات بناءً على أفضل كفاءة مع mutual_info_classif، وبلغت دقة النموذج بعد التدريب 97.4%.`
+        },
+        {
+          id: `u4_q9`,
+          q: `من أي مكتبة فرعية داخل scikit-learn يتم استدعاء خوارزمية PCA؟`,
+          opts: [
+            `sklearn.feature_selection`,
+            `sklearn.decomposition`,
+            `sklearn.preprocessing`,
+            `sklearn.metrics`
+          ],
+          ans: 1,
+          exp: `تقع خوارزميات تقليص الأبعاد وتحليل المصفوفات مثل PCA داخل المكتبة الفرعية sklearn.decomposition.`
+        },
+        {
+          id: `u4_q10`,
+          q: `كم عدد المكونات الرئيسية التي تم اختيارها في تطبيق PCA بالوحدة الرابعة، وكيف تم تحديده؟`,
+          opts: [
+            `10 مكونات بشكل عشوائي`,
+            `3 مكونات رئيسية بناءً على تجربة أعداد مختلفة وقياس كفاءة النموذج`,
+            `31 مكوناً رئيسياً للحفاظ على كل الأعمدة`,
+            `مكون واحد فقط دون تجربة`
+          ],
+          ans: 1,
+          exp: `تم اختيار 3 مكونات رئيسية (n_components=3) بناءً على تجربة أعداد مختلفة من المكونات ومقارنة كفاءة النموذج عند كل عدد.`
+        }
+      ]
     };
-  });
-}
 
-function renderQuiz() {
-  prepareShuffledQuiz();
-  const area = document.getElementById("quizArea");
-  area.innerHTML = "";
-  const letters = ["أ", "ب", "ج", "د"];
-  currentQuestions.forEach((item, i) => {
-    const box = document.createElement("div");
-    box.className = "qbox";
-    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
-    const opts = box.querySelector(".options");
-    item.o.forEach((opt, j) => {
-      const btn = document.createElement("button");
-      btn.className = "option";
-      btn.textContent = `${letters[j]}) ${opt}`;
-      btn.onclick = () => {
-        answers[i] = j;
-        [...opts.children].forEach((x, k) => {
-          x.classList.remove("correct", "wrong");
-          x.disabled = true;
-          if (k === item.a) x.classList.add("correct");
-          if (k === j && j !== item.a) x.classList.add("wrong");
+    /* ================================================================
+       STATE & PERSISTENCE (notebookAppApi)
+    ================================================================ */
+    const LETTERS_AR = [`أ`, `ب`, `ج`, `د`];
+
+    let appState = {
+      answers: {},
+      readUnits: {},
+      quizFilter: { 1: `all`, 2: `all`, 3: `all`, 4: `all` },
+      labU1Tech: `filter`,
+      labU1O11: 6,
+      labU2Preset: `pos`,
+      labU2Noise: 12,
+      labU3Step: 1,
+      labU4Model: `chi2`
+    };
+
+    async function saveAppState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === `function`) {
+          await window.notebookAppApi.setAppState(appState);
+        }
+      } catch (e) {
+        // Ignore persistence errors silently in non-hosted preview
+      }
+    }
+
+    async function loadAppState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === `function`) {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === `object`) {
+            appState = {
+              answers: saved.answers && typeof saved.answers === `object` ? saved.answers : {},
+              readUnits: saved.readUnits && typeof saved.readUnits === `object` ? saved.readUnits : {},
+              quizFilter: saved.quizFilter && typeof saved.quizFilter === `object` ? saved.quizFilter : { 1: `all`, 2: `all`, 3: `all`, 4: `all` },
+              labU1Tech: saved.labU1Tech || `filter`,
+              labU1O11: typeof saved.labU1O11 === `number` ? saved.labU1O11 : 6,
+              labU2Preset: saved.labU2Preset || `pos`,
+              labU2Noise: typeof saved.labU2Noise === `number` ? saved.labU2Noise : 12,
+              labU3Step: typeof saved.labU3Step === `number` ? saved.labU3Step : 1,
+              labU4Model: saved.labU4Model || `chi2`
+            };
+          }
+        }
+      } catch (e) {
+        // Fallback to default state
+      }
+    }
+
+    /* ================================================================
+       NAVIGATION & PROGRESS
+    ================================================================ */
+    function scrollToSection(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: `smooth`, block: `start` });
+      }
+    }
+
+    function toggleUnitRead(unitNum) {
+      const key = String(unitNum);
+      appState.readUnits[key] = !appState.readUnits[key];
+      updateGlobalProgressUI();
+      saveAppState();
+    }
+
+    function updateGlobalProgressUI() {
+      let totalCorrect = 0;
+      let totalAnswered = 0;
+      let unitsDone = 0;
+      const unitScores = {};
+
+      for (let u = 1; u <= 4; u++) {
+        const list = QUIZ_DATA[u];
+        let uCorrect = 0;
+        let uAnswered = 0;
+        for (let i = 0; i < list.length; i++) {
+          const q = list[i];
+          const chosen = appState.answers[q.id];
+          if (typeof chosen === `number`) {
+            uAnswered++;
+            if (chosen === q.ans) uCorrect++;
+          }
+        }
+        unitScores[u] = { correct: uCorrect, answered: uAnswered };
+        totalCorrect += uCorrect;
+        totalAnswered += uAnswered;
+
+        const scoreBadge = document.getElementById(`score-badge-${u}`);
+        if (scoreBadge) scoreBadge.textContent = `${uCorrect} / 10`;
+
+        const navScore = document.getElementById(`nav-score-${u}`);
+        if (navScore) navScore.textContent = `${uCorrect} / 10`;
+
+        const isRead = Boolean(appState.readUnits[String(u)]);
+        if (isRead || uAnswered === 10) unitsDone++;
+
+        const navStatus = document.getElementById(`nav-status-${u}`);
+        if (navStatus) {
+          if (uAnswered === 10 && uCorrect >= 8) {
+            navStatus.textContent = `ممتاز (${uCorrect}/10)`;
+          } else if (isRead) {
+            navStatus.textContent = `تمت المراجعة`;
+          } else if (uAnswered > 0) {
+            navStatus.textContent = `جاري الحل (${uAnswered}/10)`;
+          } else {
+            navStatus.textContent = `غير مكتملة`;
+          }
+        }
+
+        const readBtn = document.getElementById(`read-btn-${u}`);
+        if (readBtn) {
+          readBtn.textContent = isRead ? `✓ تمت المراجعة` : `تحديد الوحدة كمُراجعة`;
+          readBtn.className = isRead ? `btn btn-gold` : `btn btn-secondary`;
+        }
+      }
+
+      const globalCorrectVal = document.getElementById(`global-correct-val`);
+      if (globalCorrectVal) globalCorrectVal.textContent = `${totalCorrect} / 40`;
+
+      const globalAnsweredVal = document.getElementById(`global-answered-val`);
+      if (globalAnsweredVal) globalAnsweredVal.textContent = `${totalAnswered} / 40`;
+
+      const globalUnitsVal = document.getElementById(`global-units-val`);
+      if (globalUnitsVal) globalUnitsVal.textContent = `${unitsDone} / 4`;
+
+      const bar = document.getElementById(`global-correct-bar`);
+      if (bar) bar.style.width = `${Math.round((totalCorrect / 40) * 100)}%`;
+
+      const readinessText = document.getElementById(`readiness-text`);
+      if (readinessText) {
+        if (totalAnswered === 0) {
+          readinessText.textContent = `لم تبدأ الاختبارات بعد — ابدأ بحل أسئلة الوحدة الأولى أو تصفح المختبرات التفاعلية لقياس مستواك.`;
+        } else {
+          let weakestUnit = 1;
+          let minScore = 11;
+          for (let u = 1; u <= 4; u++) {
+            if (unitScores[u].correct < minScore) {
+              minScore = unitScores[u].correct;
+              weakestUnit = u;
+            }
+          }
+          const pct = Math.round((totalCorrect / 40) * 100);
+          if (totalAnswered < 40) {
+            readinessText.textContent = `أجبت عن ${totalAnswered} من أصل 40 سؤالاً، وحصلت على ${totalCorrect} إجابة صحيحة (${pct}%). أكمل بقية الأسئلة في الوحدات المتبقية للوصول إلى التقييم الكامل.`;
+          } else if (totalCorrect >= 36) {
+            readinessText.textContent = `جاهزية ممتازة للاختبار! نتيجتك ${totalCorrect} / 40 (${pct}%). أنت متمكن من جميع مفاهيم الفصل التاسع وتطبيقاتها البرمجية.`;
+          } else {
+            readinessText.textContent = `نتيجتك الإجمالية ${totalCorrect} / 40 (${pct}%). نوصيك بإعادة مراجعة الوحدة (${weakestUnit}) والضغط على زر "الخاطئة فقط" لتثبيت المفاهيم.`;
+          }
+        }
+      }
+    }
+
+    function showGlobalToast(msg) {
+      const box = document.getElementById(`global-status-msg`);
+      if (!box) return;
+      box.textContent = msg;
+      box.classList.add(`is-visible`);
+    }
+
+    function resetAllProgress(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.textContent = `اضغط مرة أخرى للتأكيد`;
+        showGlobalToast(`تحذير: الضغط مرة أخرى سيمسح إجابات جميع الوحدات (40 سؤالاً).`);
+        setTimeout(function () {
+          if (btn.dataset.armed === `true`) {
+            btn.dataset.armed = `false`;
+            btn.textContent = `إعادة ضبط التقدم`;
+          }
+        }, 4000);
+        return;
+      }
+      btn.dataset.armed = `false`;
+      btn.textContent = `إعادة ضبط التقدم`;
+      appState.answers = {};
+      appState.readUnits = {};
+      appState.quizFilter = { 1: `all`, 2: `all`, 3: `all`, 4: `all` };
+      renderAllQuizzes();
+      updateGlobalProgressUI();
+      saveAppState();
+      showGlobalToast(`تمت إعادة ضبط جميع الإجابات وسجل المراجعة بنجاح.`);
+    }
+
+    function exportProgressSummary() {
+      const lines = [
+        `تقرير مراجعة الفصل التاسع: اختيار السمات وتقليصها`,
+        `===================================================`
+      ];
+      let totalCorrect = 0;
+      for (let u = 1; u <= 4; u++) {
+        let uCorrect = 0;
+        let uAnswered = 0;
+        const list = QUIZ_DATA[u];
+        for (let i = 0; i < list.length; i++) {
+          const q = list[i];
+          const chosen = appState.answers[q.id];
+          if (typeof chosen === `number`) {
+            uAnswered++;
+            if (chosen === q.ans) uCorrect++;
+          }
+        }
+        totalCorrect += uCorrect;
+        lines.push(`الوحدة ${u}: الصحيح ${uCorrect}/10 | المجاب ${uAnswered}/10`);
+      }
+      lines.push(`---------------------------------------------------`);
+      lines.push(`النتيجة الإجمالية: ${totalCorrect} / 40`);
+      const content = lines.join(`\n`);
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.triggerFileDownload === `function`) {
+        window.notebookAppApi.triggerFileDownload({
+          content: content,
+          contentType: `text/plain`,
+          encoding: `UTF-8`,
+          filename: `chapter9_study_report.txt`
         });
-        const fb = document.getElementById("fb" + i);
-        fb.hidden = false;
-        fb.className = "feedback " + (j === item.a ? "good" : "bad");
-        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
-        updateScore();
-      };
-      opts.appendChild(btn);
+        showGlobalToast(`تم تصدير تقرير المذاكرة (chapter9_study_report.txt).`);
+      } else {
+        showGlobalToast(`ملخص النتيجة الحالية: ${totalCorrect} / 40 إجابة صحيحة.`);
+      }
+    }
+
+    /* ================================================================
+       QUIZ RENDERER & INTERACTION
+    ================================================================ */
+    function renderUnitQuiz(unitNum) {
+      const container = document.getElementById(`quiz-list-${unitNum}`);
+      if (!container) return;
+      const list = QUIZ_DATA[unitNum];
+      const filterMode = (appState.quizFilter && appState.quizFilter[unitNum]) || `all`;
+
+      const allBtn = document.getElementById(`filter-all-${unitNum}`);
+      const wrongBtn = document.getElementById(`filter-wrong-${unitNum}`);
+      if (allBtn) allBtn.classList.toggle(`is-active`, filterMode === `all`);
+      if (wrongBtn) wrongBtn.classList.toggle(`is-active`, filterMode === `wrong`);
+
+      let html = ``;
+      let renderedCount = 0;
+
+      for (let i = 0; i < list.length; i++) {
+        const item = list[i];
+        const chosen = appState.answers[item.id];
+        const hasAnswered = typeof chosen === `number`;
+        const isCorrect = hasAnswered && chosen === item.ans;
+
+        if (filterMode === `wrong` && (!hasAnswered || isCorrect)) {
+          continue;
+        }
+        renderedCount++;
+
+        const cardCls = hasAnswered ? (isCorrect ? `q-card is-correct` : `q-card is-wrong`) : `q-card`;
+        let optsHtml = ``;
+        for (let idx = 0; idx < item.opts.length; idx++) {
+          let optCls = `q-opt`;
+          if (hasAnswered) {
+            if (idx === item.ans) optCls += ` opt-correct`;
+            else if (idx === chosen) optCls += ` opt-wrong`;
+          }
+          const disabledAttr = hasAnswered ? `disabled` : ``;
+          optsHtml += `
+            <button type="button" class="${optCls}" ${disabledAttr} onclick="selectQuizAnswer('${item.id}', ${idx}, ${unitNum})">
+              <span class="q-opt-letter">${LETTERS_AR[idx]}</span>
+              <span>${escapeHtml(item.opts[idx])}</span>
+            </button>
+          `;
+        }
+
+        let expHtml = ``;
+        if (hasAnswered) {
+          const expCls = isCorrect ? `q-explanation is-correct-exp` : `q-explanation is-wrong-exp`;
+          const badgeCls = isCorrect ? `q-exp-badge q-exp-badge--ok` : `q-exp-badge q-exp-badge--no`;
+          const badgeTxt = isCorrect
+            ? `✓ إجابة صحيحة`
+            : `✕ إجابة غير صحيحة — الإجابة الصحيحة هي (${LETTERS_AR[item.ans]})`;
+          expHtml = `
+            <div class="${expCls}">
+              <span class="${badgeCls}">${badgeTxt}</span>
+              <div><strong>سبب الإجابة الصحيحة:</strong> ${escapeHtml(item.exp)}</div>
+            </div>
+          `;
+        }
+
+        html += `
+          <article class="${cardCls}" id="card-${item.id}">
+            <div class="q-header">
+              <span class="q-num">سؤال ${i + 1} من 10</span>
+              ${hasAnswered ? `<span class="dossier-meta">${isCorrect ? `صحيح` : `يحتاج مراجعة`}</span>` : `<span class="dossier-meta">اختر إجابة</span>`}
+            </div>
+            <p class="q-text">${escapeHtml(item.q)}</p>
+            <div class="q-options">${optsHtml}</div>
+            ${expHtml}
+          </article>
+        `;
+      }
+
+      if (renderedCount === 0) {
+        html = `
+          <div class="aside-box" style="margin: 0;">
+            <div class="aside-title">لا توجد أسئلة خاطئة حالياً</div>
+            <p style="margin: 0;">أجبت إجابات صحيحة عن الأسئلة المحلولة في هذه الوحدة، أو لم تُجب بعد. اضغط "كل الأسئلة" لعرض القائمة الكاملة.</p>
+          </div>
+        `;
+      }
+      container.innerHTML = html;
+    }
+
+    function renderAllQuizzes() {
+      for (let u = 1; u <= 4; u++) {
+        renderUnitQuiz(u);
+      }
+    }
+
+    function selectQuizAnswer(qId, optionIdx, unitNum) {
+      if (typeof appState.answers[qId] === `number`) return;
+      appState.answers[qId] = optionIdx;
+      renderUnitQuiz(unitNum);
+      updateGlobalProgressUI();
+      saveAppState();
+    }
+
+    function setQuizFilter(unitNum, mode) {
+      appState.quizFilter[unitNum] = mode;
+      renderUnitQuiz(unitNum);
+      saveAppState();
+    }
+
+    function resetUnitQuiz(unitNum, btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.textContent = `اضغط للتأكيد`;
+        setTimeout(function () {
+          if (btn.dataset.armed === `true`) {
+            btn.dataset.armed = `false`;
+            btn.textContent = `إعادة اختبار الوحدة`;
+          }
+        }, 3500);
+        return;
+      }
+      btn.dataset.armed = `false`;
+      btn.textContent = `إعادة اختبار الوحدة`;
+      const list = QUIZ_DATA[unitNum];
+      for (let i = 0; i < list.length; i++) {
+        delete appState.answers[list[i].id];
+      }
+      appState.quizFilter[unitNum] = `all`;
+      renderUnitQuiz(unitNum);
+      updateGlobalProgressUI();
+      saveAppState();
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, `&amp;`)
+        .replace(/</g, `&lt;`)
+        .replace(/>/g, `&gt;`)
+        .replace(/"/g, `&quot;`);
+    }
+
+    /* ================================================================
+       LAB 1: FEATURE SELECTION TECHNIQUES & CHI-SQUARED CALCULATOR
+    ================================================================ */
+    const TECH_DESCRIPTIONS = {
+      filter: `طرق التصفية (Filter Methods): تحسب مقاييس إحصائية مثل مربع كاي أو المعلومات المتبادلة أو بيرسون بين السمات الحرة والسمة الهدف قبل تشغيل أي نموذج، وتمتاز بالسرعة العالية والاستقلال التام عن الخوارزمية.`,
+      wrapper: `طرق التغليف (Wrapper Methods): تجرّب مجموعات فرعية مختلفة من السمات على النموذج الفعلي وتقيس كفاءته في كل مرة لاختيار أفضل توليفة، وهي دقيقة لكنها مكلفة زمنياً.`,
+      embedded: `الطرق المدمجة في النموذج (Model-based Methods): تكون عملية اختيار السمات جزءاً أساسياً من تهيئة وتدريب النموذج نفسه (مثل تصفير المعاملات في Lasso Regression).`
+    };
+
+    function setU1Tech(tech) {
+      appState.labU1Tech = tech;
+      const desc = document.getElementById(`u1-tech-desc`);
+      if (desc) desc.textContent = TECH_DESCRIPTIONS[tech] || ``;
+      const keys = [`filter`, `wrapper`, `embedded`];
+      for (let i = 0; i < keys.length; i++) {
+        const btn = document.getElementById(`u1-tab-${keys[i]}`);
+        if (btn) btn.classList.toggle(`is-active`, keys[i] === tech);
+      }
+      saveAppState();
+    }
+
+    function updateU1ChiSlider(val) {
+      const clamped = Math.max(1, Math.min(11, parseInt(val, 10) || 6));
+      const numEl = document.getElementById(`u1-chi-num`);
+      if (numEl) numEl.value = clamped;
+      renderU1Chi(clamped);
+    }
+
+    function updateU1ChiNumber(val) {
+      let parsed = parseInt(val, 10);
+      if (isNaN(parsed)) return;
+      parsed = Math.max(1, Math.min(11, parsed));
+      const sliderEl = document.getElementById(`u1-chi-slider`);
+      if (sliderEl) sliderEl.value = parsed;
+      renderU1Chi(parsed);
+    }
+
+    function renderU1Chi(o11) {
+      appState.labU1O11 = o11;
+      const o12 = 12 - o11;
+      const o21 = 12 - o11;
+      const o22 = o11;
+      const exp = 6;
+      const chi2 = (Math.pow(o11 - exp, 2) / exp) * 4;
+
+      const c11 = document.getElementById(`u1-o11`);
+      const c12 = document.getElementById(`u1-o12`);
+      const c21 = document.getElementById(`u1-o21`);
+      const c22 = document.getElementById(`u1-o22`);
+      if (c11) c11.textContent = `${o11} (E=6)`;
+      if (c12) c12.textContent = `${o12} (E=6)`;
+      if (c21) c21.textContent = `${o21} (E=6)`;
+      if (c22) c22.textContent = `${o22} (E=6)`;
+
+      const resEl = document.getElementById(`u1-chi-result`);
+      if (resEl) resEl.textContent = chi2.toFixed(2);
+
+      const verdictEl = document.getElementById(`u1-chi-verdict`);
+      if (verdictEl) {
+        if (chi2 === 0) {
+          verdictEl.textContent = `التكرار الملاحظ يطابق المتوقع (O = E) — السمة مستقلة تماماً عن الهدف وتُقبل الفرضية الصفرية.`;
+        } else if (chi2 > 4.17) {
+          verdictEl.textContent = `قيمة χ² لسمة Wind (${chi2.toFixed(2)}) أعلى من Outlook (4.17) — تتفوق في الترتيب التنازلي وتُختار أولاً!`;
+        } else {
+          verdictEl.textContent = `توجد درجة ارتباط بسيطة (${chi2.toFixed(2)})، لكن سمة Outlook (4.17) لا تزال أعلى أهمية منها.`;
+        }
+      }
+      saveAppState();
+    }
+
+    /* ================================================================
+       LAB 2: PEARSON CORRELATION VS MUTUAL INFORMATION SVG SIMULATOR
+    ================================================================ */
+    const U2_PRESETS = [`pos`, `neg`, `none`, `nonlinear`];
+
+    function setU2Preset(preset) {
+      appState.labU2Preset = preset;
+      for (let i = 0; i < U2_PRESETS.length; i++) {
+        const b = document.getElementById(`u2-btn-${U2_PRESETS[i]}`);
+        if (b) b.classList.toggle(`is-active`, U2_PRESETS[i] === preset);
+      }
+      renderU2Lab();
+      saveAppState();
+    }
+
+    function updateU2Noise(val) {
+      appState.labU2Noise = parseInt(val, 10) || 0;
+      const lbl = document.getElementById(`u2-noise-label`);
+      if (lbl) lbl.textContent = `${appState.labU2Noise}%`;
+      renderU2Lab();
+      saveAppState();
+    }
+
+    function pseudoRand(seed) {
+      const x = Math.sin(seed * 12.9898 + 78.233) * 43758.5453;
+      return x - Math.floor(x);
+    }
+
+    function renderU2Lab() {
+      const svg = document.getElementById(`u2-svg`);
+      if (!svg) return;
+
+      const preset = appState.labU2Preset;
+      const noiseScale = (appState.labU2Noise / 100) * 0.65;
+      const n = 28;
+      const pts = [];
+
+      for (let i = 0; i < n; i++) {
+        const x = (i + 0.5) / n;
+        const j1 = (pseudoRand(i + 1) - 0.5) * 2;
+        const j2 = (pseudoRand(i + 101) - 0.5) * 2;
+        let y = 0.5;
+        if (preset === `pos`) {
+          y = 0.12 + 0.76 * x + j1 * noiseScale;
+        } else if (preset === `neg`) {
+          y = 0.88 - 0.76 * x + j1 * noiseScale;
+        } else if (preset === `none`) {
+          y = 0.5 + j2 * 0.42;
+        } else {
+          // Parabola U-shape: symmetric so linear correlation is ~0, but MI is high!
+          const centered = (x - 0.5) * 2;
+          y = 0.15 + 0.72 * centered * centered + j1 * (noiseScale * 0.6);
+        }
+        y = Math.max(0.05, Math.min(0.95, y));
+        pts.push({ x: x, y: y });
+      }
+
+      // Compute exact Pearson r
+      let sumX = 0, sumY = 0;
+      for (let i = 0; i < n; i++) {
+        sumX += pts[i].x;
+        sumY += pts[i].y;
+      }
+      const meanX = sumX / n;
+      const meanY = sumY / n;
+      let num = 0, denX = 0, denY = 0;
+      for (let i = 0; i < n; i++) {
+        const dx = pts[i].x - meanX;
+        const dy = pts[i].y - meanY;
+        num += dx * dy;
+        denX += dx * dx;
+        denY += dy * dy;
+      }
+      const r = (denX * denY) > 0 ? num / Math.sqrt(denX * denY) : 0;
+
+      // Compute binned Mutual Information (4x4 grid)
+      const bins = 4;
+      const joint = [];
+      const px = [0, 0, 0, 0];
+      const py = [0, 0, 0, 0];
+      for (let a = 0; a < bins; a++) joint.push([0, 0, 0, 0]);
+      for (let i = 0; i < n; i++) {
+        const bx = Math.min(bins - 1, Math.floor(pts[i].x * bins));
+        const by = Math.min(bins - 1, Math.floor(pts[i].y * bins));
+        joint[bx][by] += 1 / n;
+        px[bx] += 1 / n;
+        py[by] += 1 / n;
+      }
+      let mi = 0;
+      for (let a = 0; a < bins; a++) {
+        for (let b = 0; b < bins; b++) {
+          const pxy = joint[a][b];
+          if (pxy > 0 && px[a] > 0 && py[b] > 0) {
+            mi += pxy * Math.log2(pxy / (px[a] * py[b]));
+          }
+        }
+      }
+
+      // Render SVG (plot area x: 50..390, y: 20..220)
+      const padL = 50, padR = 390, padT = 20, padB = 220;
+      const w = padR - padL, h = padB - padT;
+      let svgHtml = `
+        <line x1="${padL}" y1="${padB}" x2="${padR}" y2="${padB}" stroke="var(--outline)" stroke-width="1.5" />
+        <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padB}" stroke="var(--outline)" stroke-width="1.5" />
+        <line x1="${padL}" y1="${padT + h * 0.5}" x2="${padR}" y2="${padT + h * 0.5}" stroke="var(--outline-variant)" stroke-dasharray="3 3" />
+        <line x1="${padL + w * 0.5}" y1="${padT}" x2="${padL + w * 0.5}" y2="${padB}" stroke="var(--outline-variant)" stroke-dasharray="3 3" />
+      `;
+
+      // Best-fit linear trend line for visual clarity
+      const slope = denX > 0 ? num / denX : 0;
+      const intercept = meanY - slope * meanX;
+      const y0 = Math.max(0.02, Math.min(0.98, intercept));
+      const y1 = Math.max(0.02, Math.min(0.98, intercept + slope));
+      svgHtml += `<line x1="${padL}" y1="${padB - y0 * h}" x2="${padR}" y2="${padB - y1 * h}" stroke="var(--data-2)" stroke-width="2" stroke-dasharray="5 4" />`;
+
+      for (let i = 0; i < n; i++) {
+        const cx = (padL + pts[i].x * w).toFixed(1);
+        const cy = (padB - pts[i].y * h).toFixed(1);
+        svgHtml += `<circle cx="${cx}" cy="${cy}" r="5" fill="var(--data-1)" stroke="var(--surface-container-low)" stroke-width="1.5" />`;
+      }
+
+      svgHtml += `
+        <text x="${(padL + padR) / 2}" y="246" text-anchor="middle" fill="var(--on-surface-variant)" font-size="12" font-family="var(--font-label)">السمة المستقلة X</text>
+        <text x="20" y="${(padT + padB) / 2}" text-anchor="middle" fill="var(--on-surface-variant)" font-size="12" font-family="var(--font-label)" transform="rotate(-90 20 ${(padT + padB) / 2})">السمة Y</text>
+      `;
+      svg.innerHTML = svgHtml;
+
+      const rEl = document.getElementById(`u2-pearson-val`);
+      if (rEl) rEl.textContent = (r >= 0 ? `+` : ``) + r.toFixed(2);
+      const miEl = document.getElementById(`u2-mi-val`);
+      if (miEl) miEl.textContent = mi.toFixed(2);
+
+      const vEl = document.getElementById(`u2-verdict`);
+      if (vEl) {
+        if (preset === `nonlinear`) {
+          vEl.textContent = `لاحظ الفارق! العلاقة التربيعية واضحة جداً في الرسم، لكن معامل بيرسون r قريب من الصفر لأنه يرى الخط المستقيم فقط، بينما التقطت المعلومات المتبادلة MI الاعتمادية بنجاح.`;
+        } else if (preset === `none`) {
+          vEl.textContent = `البيانات مبعثرة باستقلال: معامل بيرسون قريب من 0 والمعلومات المتبادلة منخفضة جداً.`;
+        } else if (preset === `pos`) {
+          vEl.textContent = `كلما زادت X زادت Y (علاقة طردية موجبة). تقترب r من +1 عند انخفاض الضوضاء، وترتفع MI معها.`;
+        } else {
+          vEl.textContent = `كلما زادت X نقصت Y (علاقة عكسية سالبة). تقترب r من -1 عند انخفاض الضوضاء، وترتفع MI معها.`;
+        }
+      }
+    }
+
+    /* ================================================================
+       LAB 3: PCA STEP-BY-STEP VISUALIZER (EXACT PDF DATASET)
+    ================================================================ */
+    const PCA_RAW = [
+      { id: 1, x: 9, y: 10 },
+      { id: 2, x: 3, y: 2 },
+      { id: 3, x: 2, y: 1 },
+      { id: 4, x: 6.5, y: 7 },
+      { id: 5, x: 2.5, y: 3 }
+    ];
+    const PCA_MEAN_X = 4.6;
+    const PCA_MEAN_Y = 4.6;
+    // Exact unit eigenvector PC1 = (0.624, 0.781)
+    const PC1_UX = 0.624;
+    const PC1_UY = 0.781;
+
+    function setU3Step(step) {
+      appState.labU3Step = step;
+      for (let s = 1; s <= 3; s++) {
+        const b = document.getElementById(`u3-step-${s}`);
+        if (b) b.classList.toggle(`is-active`, s === step);
+      }
+      renderU3Lab();
+      saveAppState();
+    }
+
+    function renderU3Lab() {
+      const svg = document.getElementById(`u3-svg`);
+      const titleEl = document.getElementById(`u3-step-title`);
+      const descEl = document.getElementById(`u3-step-desc`);
+      const meanEl = document.getElementById(`u3-kpi-mean`);
+      if (!svg) return;
+
+      const step = appState.labU3Step;
+      const padL = 55, padR = 390, padT = 22, padB = 245;
+      const w = padR - padL, h = padB - padT;
+
+      // Coordinate mapping depends on whether we show raw [0..11] or centered [-6..6]
+      function mapX(val, isCentered) {
+        if (!isCentered) return padL + (val / 11) * w;
+        return padL + ((val + 6) / 12) * w;
+      }
+      function mapY(val, isCentered) {
+        if (!isCentered) return padB - (val / 11) * h;
+        return padB - ((val + 6) / 12) * h;
+      }
+
+      const isCentered = step >= 2;
+      let html = ``;
+
+      if (!isCentered) {
+        // Axes at 0..11
+        html += `
+          <line x1="${padL}" y1="${padB}" x2="${padR}" y2="${padB}" stroke="var(--outline)" stroke-width="1.5" />
+          <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padB}" stroke="var(--outline)" stroke-width="1.5" />
+          <line x1="${mapX(PCA_MEAN_X, false)}" y1="${padT}" x2="${mapX(PCA_MEAN_X, false)}" y2="${padB}" stroke="var(--data-2)" stroke-dasharray="4 4" />
+          <line x1="${padL}" y1="${mapY(PCA_MEAN_Y, false)}" x2="${padR}" y2="${mapY(PCA_MEAN_Y, false)}" stroke="var(--data-2)" stroke-dasharray="4 4" />
+          <circle cx="${mapX(PCA_MEAN_X, false)}" cy="${mapY(PCA_MEAN_Y, false)}" r="6" fill="var(--data-2)" />
+          <text x="${mapX(PCA_MEAN_X, false) + 8}" y="${mapY(PCA_MEAN_Y, false) + 14}" fill="var(--tertiary)" font-size="11" font-family="var(--font-label)">Mean (4.6, 4.6)</text>
+        `;
+      } else {
+        // Origin axes at (0, 0)
+        const ox = mapX(0, true);
+        const oy = mapY(0, true);
+        html += `
+          <line x1="${padL}" y1="${oy}" x2="${padR}" y2="${oy}" stroke="var(--outline-variant)" stroke-width="1.2" />
+          <line x1="${ox}" y1="${padT}" x2="${ox}" y2="${padB}" stroke="var(--outline-variant)" stroke-width="1.2" />
+          <circle cx="${ox}" cy="${oy}" r="4" fill="var(--on-surface-variant)" />
+        `;
+      }
+
+      if (step === 3) {
+        // Draw PC1 axis line and orthogonal PC2 axis line
+        const t = 6.2;
+        const p1x1 = mapX(-t * PC1_UX, true), p1y1 = mapY(-t * PC1_UY, true);
+        const p1x2 = mapX(t * PC1_UX, true), p1y2 = mapY(t * PC1_UY, true);
+        const t2 = 3.2;
+        const p2x1 = mapX(-t2 * (-PC1_UY), true), p2y1 = mapY(-t2 * PC1_UX, true);
+        const p2x2 = mapX(t2 * (-PC1_UY), true), p2y2 = mapY(t2 * PC1_UX, true);
+
+        html += `
+          <line x1="${p1x1}" y1="${p1y1}" x2="${p1x2}" y2="${p1y2}" stroke="var(--data-3)" stroke-width="2.5" />
+          <line x1="${p2x1}" y1="${p2y1}" x2="${p2x2}" y2="${p2y2}" stroke="var(--data-context)" stroke-width="1.5" stroke-dasharray="4 3" />
+          <text x="${p1x2 - 36}" y="${p1y2 + 12}" fill="var(--positive)" font-size="12" font-weight="700" font-family="var(--font-label)">PC1 (99.4%)</text>
+          <text x="${p2x2 + 6}" y="${p2y2 + 4}" fill="var(--on-surface-variant)" font-size="11" font-family="var(--font-label)">PC2 ⟂</text>
+        `;
+      }
+
+      for (let i = 0; i < PCA_RAW.length; i++) {
+        const pt = PCA_RAW[i];
+        const px = isCentered ? pt.x - PCA_MEAN_X : pt.x;
+        const py = isCentered ? pt.y - PCA_MEAN_Y : pt.y;
+        const sx = mapX(px, isCentered);
+        const sy = mapY(py, isCentered);
+
+        if (step === 3) {
+          // Projection onto PC1
+          const proj = px * PC1_UX + py * PC1_UY;
+          const projX = mapX(proj * PC1_UX, true);
+          const projY = mapY(proj * PC1_UY, true);
+          html += `
+            <line x1="${sx}" y1="${sy}" x2="${projX}" y2="${projY}" stroke="var(--data-4)" stroke-width="1.2" stroke-dasharray="2 2" />
+            <circle cx="${projX}" cy="${projY}" r="4.5" fill="var(--data-3)" />
+          `;
+        }
+
+        html += `
+          <circle cx="${sx}" cy="${sy}" r="5.5" fill="var(--data-1)" stroke="var(--surface-container-low)" stroke-width="1.5" />
+          <text x="${sx + 8}" y="${sy - 6}" fill="var(--on-surface)" font-size="11" font-family="var(--font-label)">#${pt.id} (${px.toFixed(1)}, ${py.toFixed(1)})</text>
+        `;
+      }
+
+      svg.innerHTML = html;
+
+      if (titleEl && descEl && meanEl) {
+        if (step === 1) {
+          titleEl.textContent = `الخطوة 1: البيانات الأصلية وحساب المتوسط`;
+          descEl.textContent = `لدينا 5 سجلات لبيانات (Area, House Price). نبدأ بحساب متوسط كل عمود (4.6, 4.6) والموضح بالنقطة الذهبية.`;
+          meanEl.textContent = `(4.6, 4.6)`;
+        } else if (step === 2) {
+          titleEl.textContent = `الخطوة 2: تكوين المصفوفة الممركزة حول المتوسط`;
+          descEl.textContent = `نطرح (4.6, 4.6) من جميع النقاط لتنتقل سحابة البيانات ويصبح متوسطها الجديد عند نقطة الأصل (0, 0).`;
+          meanEl.textContent = `(0.0, 0.0)`;
+        } else {
+          titleEl.textContent = `الخطوة 3: المكون الرئيسي الأول PC1 والإسقاط`;
+          descEl.textContent = `يمتد المحور الأخضر PC1 في اتجاه أكبر تباين، والمحور PC2 عمودي عليه. بإسقاط النقاط على PC1 نختزل السمتين في سمة واحدة تحفظ 99.4% من المعلومات!`;
+          meanEl.textContent = `(0.0, 0.0)`;
+        }
+      }
+    }
+
+    /* ================================================================
+       LAB 4: SCIKIT-LEARN CODE & ACCURACY EXPLORER
+    ================================================================ */
+    const U4_MODELS = {
+      baseline: {
+        note: `<strong>النموذج الأساسي (Baseline):</strong> تدريب المصنف LogisticRegression على جميع السمات المستقلة الأصلية (30 سمة) بعد ترميز diagnosis بـ LabelEncoder، وحقق دقة 95.6%.`,
+        code: `<span class="code-comment"># 1. ترميز السمة الهدف (M/B -> 0/1) وتقسيم البيانات</span>
+<span class="code-kw">from</span> sklearn.preprocessing <span class="code-kw">import</span> LabelEncoder
+<span class="code-kw">from</span> sklearn.model_selection <span class="code-kw">import</span> train_test_split
+<span class="code-kw">from</span> sklearn.linear_model <span class="code-kw">import</span> LogisticRegression
+
+y = LabelEncoder().<span class="code-fn">fit_transform</span>(df[<span class="code-fn">'diagnosis'</span>])
+X = df.<span class="code-fn">drop</span>(columns=[<span class="code-fn">'diagnosis'</span>])
+X_train, X_test, y_train, y_test = <span class="code-fn">train_test_split</span>(X, y)
+
+clf = <span class="code-fn">LogisticRegression</span>().<span class="code-fn">fit</span>(X_train, y_train)
+<span class="code-comment"># الدقة المحققة على جميع السمات: 95.6%</span>`
+      },
+      chi2: {
+        note: `<strong>اختيار السمات بـ Chi-squared:</strong> تقليص السمات إلى 5 سمات فقط عبر SelectKBest و chi2 أدى إلى التخلص من الضوضاء ورفع الدقة من 95.6% إلى 97.4%.`,
+        code: `<span class="code-comment"># 2. اختيار أفضل 5 سمات باستخدام اختبار مربع كاي</span>
+<span class="code-kw">from</span> sklearn.feature_selection <span class="code-kw">import</span> SelectKBest, chi2
+
+selector = <span class="code-fn">SelectKBest</span>(chi2, k=5)
+X_train_k = selector.<span class="code-fn">fit_transform</span>(X_train, y_train)
+X_test_k = selector.<span class="code-fn">transform</span>(X_test)
+
+clf_chi = <span class="code-fn">LogisticRegression</span>().<span class="code-fn">fit</span>(X_train_k, y_train)
+<span class="code-comment"># تحسن كفاءة النموذج من 95.6% إلى 97.4%</span>`
+      },
+      mi: {
+        note: `<strong>اختيار السمات بـ Mutual Information:</strong> استخدام mutual_info_classif واختيار أعلى 6 سمات ارتباطاً بالهدف حقق أيضاً دقة مرتفعة قدرها 97.4%.`,
+        code: `<span class="code-comment"># 3. اختيار أفضل 6 سمات باستخدام المعلومات المتبادلة</span>
+<span class="code-kw">from</span> sklearn.feature_selection <span class="code-kw">import</span> SelectKBest, mutual_info_classif
+
+mi_selector = <span class="code-fn">SelectKBest</span>(mutual_info_classif, k=6)
+X_train_mi = mi_selector.<span class="code-fn">fit_transform</span>(X_train, y_train)
+X_test_mi = mi_selector.<span class="code-fn">transform</span>(X_test)
+
+clf_mi = <span class="code-fn">LogisticRegression</span>().<span class="code-fn">fit</span>(X_train_mi, y_train)
+<span class="code-comment"># كفاءة النموذج بـ 6 سمات مختارة: 97.4%</span>`
+      },
+      pca: {
+        note: `<strong>تقليص السمات بـ PCA:</strong> استدعاء PCA من sklearn.decomposition وتحديد 3 مكونات رئيسية (n_components=3) بناءً على تجربة أعداد مختلفة وقياس كفاءة النموذج.`,
+        code: `<span class="code-comment"># 4. تقليص الأبعاد إلى 3 مكونات رئيسية via PCA</span>
+<span class="code-kw">from</span> sklearn.decomposition <span class="code-kw">import</span> PCA
+
+pca = <span class="code-fn">PCA</span>(n_components=3)
+X_train_pca = pca.<span class="code-fn">fit_transform</span>(X_train)
+X_test_pca = pca.<span class="code-fn">transform</span>(X_test)
+
+clf_pca = <span class="code-fn">LogisticRegression</span>().<span class="code-fn">fit</span>(X_train_pca, y_train)
+<span class="code-comment"># اختزال 30 سمة في 3 مكونات رئيسية فقط</span>`
+      }
+    };
+
+    function setU4Model(modelKey) {
+      appState.labU4Model = modelKey;
+      const keys = [`baseline`, `chi2`, `mi`, `pca`];
+      for (let i = 0; i < keys.length; i++) {
+        const k = keys[i];
+        const b = document.getElementById(`u4-btn-${k}`);
+        if (b) b.classList.toggle(`is-active`, k === modelKey);
+
+        const bar = document.getElementById(`u4-bar-${k}`);
+        if (bar) {
+          bar.classList.toggle(`is-active`, k === modelKey && k !== `chi2` && k !== `mi`);
+        }
+      }
+
+      const info = U4_MODELS[modelKey] || U4_MODELS.chi2;
+      const noteEl = document.getElementById(`u4-model-note`);
+      const codeEl = document.getElementById(`u4-code-block`);
+      if (noteEl) noteEl.innerHTML = info.note;
+      if (codeEl) codeEl.innerHTML = info.code;
+      saveAppState();
+    }
+
+    /* ================================================================
+       MATH RENDERING & INITIALIZATION
+    ================================================================ */
+    function renderMathFormulas() {
+      if (typeof window.katex === `undefined`) return;
+      const nodes = document.querySelectorAll(`.math-tex`);
+      for (let i = 0; i < nodes.length; i++) {
+        const el = nodes[i];
+        const tex = el.getAttribute(`data-tex`);
+        if (tex) {
+          try {
+            window.katex.render(tex, el, { displayMode: true, throwOnError: false });
+          } catch (e) {
+            // Keep readable HTML fallback
+          }
+        }
+      }
+    }
+
+    async function initApp() {
+      await loadAppState();
+      renderAllQuizzes();
+      updateGlobalProgressUI();
+
+      // Hydrate labs from restored state
+      setU1Tech(appState.labU1Tech);
+      const u1Slider = document.getElementById(`u1-chi-slider`);
+      const u1Num = document.getElementById(`u1-chi-num`);
+      if (u1Slider) u1Slider.value = appState.labU1O11;
+      if (u1Num) u1Num.value = appState.labU1O11;
+      renderU1Chi(appState.labU1O11);
+
+      const u2Slider = document.getElementById(`u2-noise-slider`);
+      const u2Lbl = document.getElementById(`u2-noise-label`);
+      if (u2Slider) u2Slider.value = appState.labU2Noise;
+      if (u2Lbl) u2Lbl.textContent = `${appState.labU2Noise}%`;
+      setU2Preset(appState.labU2Preset);
+
+      setU3Step(appState.labU3Step);
+      setU4Model(appState.labU4Model);
+
+      renderMathFormulas();
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    window.addEventListener(`load`, function () {
+      renderMathFormulas();
     });
-    area.appendChild(box);
-  });
-  updateScore();
-}
 
-function updateScore() {
-  let correct = 0;
-  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
-  document.getElementById("score").textContent = `النتيجة: ${correct} / ${currentQuestions.length}`;
-  document.getElementById("progressBar").style.width = (Object.keys(answers).length / currentQuestions.length * 100) + "%";
-}
-
-document.getElementById("resetQuiz").onclick = () => {
-  answers = {};
-  document.getElementById("finalResult").textContent = "";
-  renderQuiz();
-  window.scrollTo({ top: 0, behavior: "smooth" });
-};
-
-document.getElementById("finishQuiz").onclick = () => {
-  let correct = 0;
-  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
-  const pct = Math.round(correct / currentQuestions.length * 100);
-  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${currentQuestions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! أنتِ مستعدة تماماً للاختبار في هذا الفصل." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
-};
-
-renderQuiz();
-</script>
+    if (document.readyState === `loading`) {
+      document.addEventListener(`DOMContentLoaded`, initApp);
+    } else {
+      initApp();
+    }
+  </script>
 </body>
 </html>

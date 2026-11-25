@@ -1,0 +1,3026 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="carbon">
+  <title>الفصل الثامن: تهيئة السمات وتحويلها — المرجع التفاعلي والاختبار الشامل</title>
+
+  <!-- Google Fonts: IBM Plex Sans + IBM Plex Mono + Noto Sans Arabic -->
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Noto+Sans+Arabic:wght@100..900&display=swap" rel="stylesheet">
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/contrib/auto-render.min.js"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces (Carbon) */
+      --background: #ffffff;
+      --surface-container-low: #f4f4f4;
+      --surface-container: #f4f4f4;
+      --surface-container-high: #e0e0e0;
+
+      /* Ink */
+      --on-surface: #161616;
+      --on-surface-variant: #525252;
+
+      /* Rules */
+      --outline: #8d8d8d;
+      --outline-variant: #e0e0e0;
+
+      /* Accents */
+      --primary: #0f62fe;
+      --on-primary: #ffffff;
+      --primary-container: #d0e2ff;
+      --on-primary-container: #161616;
+      --primary-hover: #0043ce;
+      --secondary: #6f6f6f;
+      --tertiary: #198038;
+      --tertiary-container: #defbe6;
+      --error: #da1e28;
+      --error-container: #fff1f1;
+      --on-error: #ffffff;
+
+      /* Code surface tokens */
+      --code-surface: #161616;
+      --code-header: #262626;
+      --code-text: #f4f4f4;
+      --code-muted: #a8a8a8;
+      --code-keyword: #78a9ff;
+      --code-string: #42be65;
+      --code-func: #be95ff;
+
+      /* Data series */
+      --data-1: #0f62fe;
+      --data-2: #6929c4;
+      --data-3: #005d5d;
+      --data-4: #9f1853;
+      --data-context: #8d8d8d;
+
+      /* Fonts */
+      --font-headline: 'Noto Sans Arabic', 'IBM Plex Sans', sans-serif;
+      --font-body: 'Noto Sans Arabic', 'IBM Plex Sans', sans-serif;
+      --font-label: 'IBM Plex Mono', 'Noto Sans Arabic', monospace;
+
+      /* Shape */
+      --rounded: 0.125rem;
+      --rounded-lg: 0.25rem;
+      --rounded-full: 0.75rem;
+
+      /* Style effects */
+      --shadow-1: 0 2px 6px rgb(0 0 0 / 0.1);
+      --shadow-2: 0 4px 12px rgb(0 0 0 / 0.12);
+      --rule: 1px solid var(--outline-variant);
+      --field-rule: 1px solid var(--outline);
+      --indicator: 2px solid var(--primary);
+      --indicator-success: 3px solid var(--tertiary);
+      --indicator-error: 3px solid var(--error);
+
+      /* Shared semantic tokens */
+      --positive: #198038;
+      --warning: #b28600;
+      --warning-container: #fcf4d6;
+      --focus: #0f62fe;
+
+      /* Type scale (Narrative) */
+      --display-size: clamp(2.125rem, 1.4rem + 2.6vw, 3.25rem);
+      --headline-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.125rem);
+      --subhead-size: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+      --body-size: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+      --label-size: 0.75rem;
+
+      /* Spacing scale */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { overflow-x: clip; margin: 0; padding: 0; scroll-behavior: smooth; }
+    header { position: static !important; }
+
+    body {
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
+      font-size: inherit;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: var(--space-xl);
+      padding: var(--space-lg);
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Top masthead */
+    .doc-header {
+      border-bottom: var(--rule);
+      background-color: var(--background);
+    }
+    .doc-header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: var(--space-xl) var(--space-lg) var(--space-lg);
+    }
+
+    .meta-strip {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+    .mono-tag {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      letter-spacing: 0;
+      text-transform: none;
+    }
+    .mono-code {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: var(--label-size);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--primary);
+      background-color: var(--primary-container);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--rounded-full);
+      display: inline-flex;
+      align-items: center;
+      line-height: 1.2;
+    }
+
+    .headline-display {
+      font-family: var(--font-headline);
+      font-size: var(--display-size);
+      font-weight: 300;
+      line-height: 1.2;
+      margin: 0 0 var(--space-md);
+      color: var(--on-surface);
+    }
+    .headline-display strong {
+      font-weight: 700;
+    }
+
+    .lede {
+      max-width: 68ch;
+      color: var(--on-surface-variant);
+      margin: 0 0 var(--space-lg);
+      font-size: var(--subhead-size);
+      line-height: 1.55;
+    }
+
+    /* Key KPI strip (Carbon flat gray layers + 2px blue indicator) */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+      gap: var(--space-md);
+      margin-top: var(--space-md);
+    }
+    .kpi-tile {
+      background-color: var(--surface-container);
+      padding: var(--space-md);
+      border-bottom: 1px solid var(--outline-variant);
+    }
+    .kpi-tile--primary {
+      border-bottom: var(--indicator);
+    }
+    .kpi-label {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      margin-bottom: var(--space-xs);
+      display: block;
+    }
+    .kpi-value {
+      font-family: 'IBM Plex Mono', 'Noto Sans Arabic', monospace;
+      font-size: 1.65rem;
+      font-weight: 300;
+      color: var(--on-surface);
+      line-height: 1.25;
+      margin-bottom: var(--space-xs);
+    }
+    .kpi-sub {
+      font-size: 0.875rem;
+      color: var(--on-surface-variant);
+    }
+
+    /* Sidebar Navigation */
+    .side-rail {
+      align-self: start;
+      position: sticky;
+      top: var(--space-lg);
+    }
+    .rail-panel {
+      background-color: var(--surface-container);
+      padding: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+    .rail-title {
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--on-surface-variant);
+      padding-bottom: var(--space-sm);
+      border-bottom: var(--rule);
+      margin: 0 0 var(--space-sm);
+    }
+    .rail-nav {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .rail-link {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-sm) var(--space-md);
+      color: var(--on-surface);
+      text-decoration: none;
+      font-size: 0.9375rem;
+      border-inline-start: 2px solid transparent;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+      min-height: 44px;
+    }
+    .rail-link:hover {
+      background-color: var(--surface-container-high);
+    }
+    .rail-link.is-active {
+      border-inline-start: var(--indicator);
+      font-weight: 600;
+      color: var(--primary);
+      background-color: var(--background);
+    }
+    .rail-num {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+    }
+
+    .rail-progress-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.875rem;
+      padding: var(--space-xs) 0;
+      border-bottom: var(--rule);
+    }
+    .rail-progress-row:last-child {
+      border-bottom: none;
+    }
+    .rail-progress-val {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 600;
+      color: var(--on-surface);
+    }
+
+    /* Mobile quick nav strip */
+    .quick-nav {
+      display: none;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+      padding-bottom: var(--space-md);
+      border-bottom: var(--rule);
+      margin-bottom: var(--space-lg);
+    }
+    .quick-nav a {
+      text-decoration: none;
+      color: var(--on-surface);
+      background-color: var(--surface-container);
+      padding: var(--space-sm) var(--space-md);
+      font-size: 0.875rem;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      border-bottom: 2px solid transparent;
+    }
+    .quick-nav a:hover {
+      background-color: var(--surface-container-high);
+      border-bottom-color: var(--primary);
+    }
+
+    /* Main Content Sections */
+    .main-column {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2xl);
+    }
+
+    .unit-section {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+
+    .unit-header {
+      border-bottom: var(--rule);
+      padding-bottom: var(--space-md);
+    }
+    .unit-eyebrow {
+      font-family: 'IBM Plex Mono', 'Noto Sans Arabic', monospace;
+      font-size: var(--label-size);
+      color: var(--primary);
+      font-weight: 600;
+      margin-bottom: var(--space-xs);
+      display: block;
+    }
+    .unit-title {
+      font-family: var(--font-headline);
+      font-size: var(--headline-size);
+      font-weight: 300;
+      margin: 0 0 var(--space-sm);
+      line-height: 1.25;
+    }
+    .unit-title strong {
+      font-weight: 700;
+    }
+    .unit-summary {
+      max-width: 65ch;
+      color: var(--on-surface-variant);
+      margin: 0;
+    }
+
+    .topic-block {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+      padding-top: var(--space-sm);
+    }
+    .topic-heading {
+      font-size: var(--subhead-size);
+      font-weight: 600;
+      margin: 0;
+      color: var(--on-surface);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+    }
+    .topic-index {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.875rem;
+      color: var(--primary);
+      font-weight: 600;
+    }
+    .prose {
+      max-width: 65ch;
+      margin: 0;
+      color: var(--on-surface);
+    }
+
+    /* Carbon Flat Layers */
+    .layer {
+      background-color: var(--surface-container);
+      padding: var(--space-md);
+    }
+    .layer .layer {
+      background-color: var(--surface-container-high);
+    }
+
+    .card-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .card-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+
+    .feature-card {
+      background-color: var(--surface-container);
+      padding: var(--space-md);
+      border-top: 2px solid var(--outline-variant);
+    }
+    .feature-card--accent {
+      border-top-color: var(--primary);
+    }
+    .feature-card h4 {
+      margin: 0 0 var(--space-xs);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--on-surface);
+    }
+    .feature-card p {
+      margin: 0;
+      font-size: 0.9375rem;
+      color: var(--on-surface-variant);
+    }
+
+    /* Carbon Notification Strip */
+    .callout {
+      background-color: var(--surface-container);
+      padding: var(--space-md);
+      border-inline-start: 3px solid var(--primary);
+      display: flex;
+      gap: var(--space-md);
+      align-items: flex-start;
+    }
+    .callout--success {
+      border-inline-start-color: var(--tertiary);
+    }
+    .callout--warning {
+      border-inline-start-color: var(--warning);
+    }
+    .callout-icon {
+      color: var(--primary);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .callout--success .callout-icon { color: var(--tertiary); }
+    .callout--warning .callout-icon { color: var(--warning); }
+    .callout-title {
+      font-weight: 600;
+      margin: 0 0 var(--space-xs);
+      font-size: 0.9375rem;
+    }
+    .callout-body {
+      margin: 0;
+      font-size: 0.9375rem;
+      color: var(--on-surface-variant);
+      max-width: 65ch;
+    }
+
+    /* Math Box (LTR for KaTeX) */
+    .math-panel {
+      background-color: var(--surface-container);
+      padding: var(--space-md) var(--space-lg);
+      border-inline-start: 2px solid var(--primary);
+      overflow-x: auto;
+    }
+    .math-label {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      margin-bottom: var(--space-sm);
+      display: block;
+    }
+    .math-ltr {
+      direction: ltr;
+      text-align: left;
+      font-size: 1.05rem;
+      padding: var(--space-xs) 0;
+    }
+    .symbol-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+      gap: var(--space-sm);
+      margin-top: var(--space-sm);
+      padding-top: var(--space-sm);
+      border-top: var(--rule);
+      font-size: 0.9rem;
+    }
+
+    /* Python Code Blocks (Carbon dark terminal layer) */
+    .code-panel {
+      background-color: var(--code-surface);
+      color: var(--code-text);
+      margin: var(--space-xs) 0;
+    }
+    .code-toolbar {
+      background-color: var(--code-header);
+      padding: var(--space-sm) var(--space-md);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--on-surface-variant);
+    }
+    .code-lang {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: var(--label-size);
+      color: var(--code-muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .code-copy-btn {
+      background-color: transparent;
+      color: var(--code-text);
+      border: 1px solid var(--code-muted);
+      padding: var(--space-xs) var(--space-sm);
+      font-family: var(--font-body);
+      font-size: 0.8125rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      min-height: 32px;
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .code-copy-btn:hover {
+      background-color: var(--on-surface-variant);
+    }
+    pre.code-pre {
+      margin: 0;
+      padding: var(--space-md);
+      direction: ltr;
+      text-align: left;
+      overflow-x: auto;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.875rem;
+      line-height: 1.6;
+      color: var(--code-text);
+    }
+    .kw { color: var(--code-keyword); }
+    .str { color: var(--code-string); }
+    .fn { color: var(--code-func); }
+    .cm { color: var(--code-muted); }
+
+    /* Carbon Data Tables */
+    .table-wrap {
+      overflow-x: auto;
+      border-top: var(--rule);
+      border-bottom: var(--rule);
+    }
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9375rem;
+    }
+    table.data-table th {
+      background-color: var(--surface-container-high);
+      color: var(--on-surface);
+      font-weight: 600;
+      text-align: start;
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: 1px solid var(--outline);
+      white-space: nowrap;
+    }
+    table.data-table td {
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--rule);
+      color: var(--on-surface);
+    }
+    table.data-table tbody tr:nth-child(even) {
+      background-color: var(--surface-container-low);
+    }
+    .num-cell {
+      font-family: 'IBM Plex Mono', monospace;
+      direction: ltr;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    /* Interactive Labs */
+    .lab-box {
+      background-color: var(--surface-container);
+      padding: var(--space-lg);
+      border-top: var(--indicator);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .lab-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: var(--space-md);
+      flex-wrap: wrap;
+      border-bottom: var(--rule);
+      padding-bottom: var(--space-sm);
+    }
+    .lab-title {
+      margin: 0;
+      font-size: 1.125rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .control-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      align-items: flex-end;
+    }
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      flex: 1 1 200px;
+    }
+    .field-label {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--on-surface-variant);
+    }
+    .carbon-input, .carbon-select {
+      height: 44px;
+      background-color: var(--background);
+      border: none;
+      border-bottom: var(--field-rule);
+      padding: 0 var(--space-md);
+      color: var(--on-surface);
+      border-radius: 0;
+      width: 100%;
+    }
+    .carbon-select {
+      padding-inline-end: var(--space-xl);
+    }
+
+    /* Carbon Buttons */
+    .btn {
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-lg);
+      border: 1px solid transparent;
+      border-radius: 0;
+      cursor: pointer;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+      text-decoration: none;
+    }
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--on-primary);
+    }
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+    }
+    .btn-secondary {
+      background-color: var(--background);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+    .btn-secondary:hover {
+      background-color: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    .btn-ghost {
+      background-color: var(--surface-container-high);
+      color: var(--on-surface);
+    }
+    .btn-ghost:hover {
+      background-color: var(--outline-variant);
+    }
+    .btn.is-selected {
+      background-color: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+    .btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .tab-bar {
+      display: flex;
+      flex-wrap: wrap;
+      border-bottom: var(--rule);
+      gap: var(--space-xs);
+    }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      padding: var(--space-sm) var(--space-md);
+      min-height: 44px;
+      cursor: pointer;
+      color: var(--on-surface-variant);
+      font-weight: 500;
+      transition: color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .tab-btn:hover {
+      color: var(--on-surface);
+      background-color: var(--surface-container-high);
+    }
+    .tab-btn.is-active {
+      color: var(--on-surface);
+      font-weight: 600;
+      border-bottom-color: var(--primary);
+    }
+
+    .chart-shell {
+      background-color: var(--background);
+      padding: var(--space-md);
+      border: var(--rule);
+    }
+    .chart-canvas-wrap {
+      position: relative;
+      min-height: 300px;
+      height: 300px;
+      width: 100%;
+    }
+
+    /* Exam Section */
+    .exam-dashboard {
+      background-color: var(--surface-container);
+      padding: var(--space-lg);
+      border-top: var(--indicator);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .exam-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(170px, 100%), 1fr));
+      gap: var(--space-sm);
+    }
+    .exam-stat-tile {
+      background-color: var(--background);
+      padding: var(--space-md);
+      border-bottom: var(--rule);
+    }
+    .exam-stat-tile--lead {
+      border-bottom: var(--indicator);
+    }
+    .exam-filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: center;
+      justify-content: space-between;
+      padding-top: var(--space-sm);
+      border-top: var(--rule);
+    }
+    .filter-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+    }
+    .filter-btn {
+      min-height: 40px;
+      padding: var(--space-xs) var(--space-md);
+      background-color: var(--background);
+      border: 1px solid var(--outline-variant);
+      color: var(--on-surface);
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+    .filter-btn.is-active {
+      background-color: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+      font-weight: 600;
+    }
+
+    .question-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+    .question-card {
+      background-color: var(--surface-container);
+      padding: var(--space-lg);
+      border-inline-start: 3px solid var(--outline);
+      transition: border-color var(--dur-short) var(--ease-out);
+    }
+    .question-card.is-correct {
+      border-inline-start-color: var(--tertiary);
+    }
+    .question-card.is-wrong {
+      border-inline-start-color: var(--error);
+    }
+    .q-meta {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-sm);
+      padding-bottom: var(--space-sm);
+      border-bottom: var(--rule);
+    }
+    .q-number {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+    .q-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+    }
+    .q-badge {
+      font-size: var(--label-size);
+      background-color: var(--background);
+      color: var(--on-surface-variant);
+      padding: 2px var(--space-sm);
+      border-radius: var(--rounded-full);
+      border: 1px solid var(--outline-variant);
+    }
+    .q-stem {
+      font-size: 1.0625rem;
+      font-weight: 600;
+      margin: 0 0 var(--space-md);
+      color: var(--on-surface);
+    }
+    .q-code-snippet {
+      background-color: var(--code-surface);
+      color: var(--code-text);
+      padding: var(--space-sm) var(--space-md);
+      direction: ltr;
+      text-align: left;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      margin-bottom: var(--space-md);
+    }
+    .q-options {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-sm);
+    }
+    .q-option-btn {
+      width: 100%;
+      min-height: 44px;
+      text-align: start;
+      background-color: var(--background);
+      border: 1px solid var(--outline-variant);
+      padding: var(--space-sm) var(--space-md);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      color: var(--on-surface);
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .q-option-btn:hover:not(:disabled) {
+      background-color: var(--primary-container);
+      border-color: var(--primary);
+    }
+    .q-option-key {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 600;
+      font-size: 0.875rem;
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--surface-container);
+      color: var(--on-surface);
+      flex-shrink: 0;
+    }
+    .q-option-btn.opt-correct {
+      background-color: var(--tertiary-container);
+      border-color: var(--tertiary);
+      font-weight: 600;
+    }
+    .q-option-btn.opt-correct .q-option-key {
+      background-color: var(--tertiary);
+      color: var(--on-primary);
+    }
+    .q-option-btn.opt-wrong {
+      background-color: var(--error-container);
+      border-color: var(--error);
+    }
+    .q-option-btn.opt-wrong .q-option-key {
+      background-color: var(--error);
+      color: var(--on-error);
+    }
+
+    .q-feedback {
+      margin-top: var(--space-md);
+      padding: var(--space-md);
+      background-color: var(--background);
+      border-inline-start: 3px solid var(--tertiary);
+      display: none;
+    }
+    .q-feedback.is-visible {
+      display: block;
+    }
+    .q-feedback.is-error-fb {
+      border-inline-start-color: var(--error);
+    }
+    .q-feedback-status {
+      font-weight: 700;
+      font-size: 0.9375rem;
+      margin-bottom: var(--space-xs);
+      color: var(--tertiary);
+    }
+    .q-feedback.is-error-fb .q-feedback-status {
+      color: var(--error);
+    }
+    .q-feedback-text {
+      margin: 0;
+      font-size: 0.9375rem;
+      color: var(--on-surface-variant);
+    }
+
+    /* Footer */
+    .doc-footer {
+      border-top: var(--rule);
+      padding: var(--space-xl) var(--space-lg);
+      max-width: 1280px;
+      margin: var(--space-2xl) auto 0;
+      color: var(--on-surface-variant);
+      font-size: 0.875rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+
+    .inline-status {
+      font-size: 0.875rem;
+      color: var(--tertiary);
+      font-weight: 600;
+      min-height: 20px;
+    }
+
+    @media (max-width: 960px) {
+      .page-grid {
+        grid-template-columns: 1fr;
+      }
+      .side-rail {
+        display: none;
+      }
+      .quick-nav {
+        display: flex;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page-grid {
+        grid-template-columns: 1fr;
+        padding: var(--space-md);
+      }
+      aside {
+        display: none;
+      }
+      .doc-header-inner {
+        padding: var(--space-lg) var(--space-md);
+      }
+      .lab-box, .exam-dashboard, .question-card {
+        padding: var(--space-md);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="doc-header">
+    <div class="doc-header-inner">
+      <div class="meta-strip">
+        <span class="mono-code">CHAPTER 08 • FEATURE ENGINEERING</span>
+        <span class="mono-tag">مقرر تحليل وتمثيل البيانات — المرجع التفاعلي الشامل</span>
+      </div>
+      <h1 class="headline-display">تهيئة السمات <strong>وتحويلها</strong></h1>
+      <p class="lede">
+        دليل دراسي متكامل يغطي الوحدات الثلاث للفصل الثامن: تقنيات ترميز السمات الفئوية، طرق تحجيم السمات الرقمية، وأساليب تحويل السمات وبنائها — مدعوماً بالمعادلات الرياضية، أمثلة بايثون العملية، مختبرات محاكاة فورية، واختبار شامل من 30 سؤالاً.
+      </p>
+
+      <div class="kpi-grid">
+        <div class="kpi-tile kpi-tile--primary">
+          <span class="kpi-label">الوحدات الدراسية</span>
+          <div class="kpi-value">03</div>
+          <span class="kpi-sub">الترميز، التحجيم، والتحويل</span>
+        </div>
+        <div class="kpi-tile">
+          <span class="kpi-label">التقنيات والأدوات</span>
+          <div class="kpi-value">09</div>
+          <span class="kpi-sub">معادلات + أكواد <bdi dir="ltr">pandas &amp; sklearn</bdi></span>
+        </div>
+        <div class="kpi-tile">
+          <span class="kpi-label">المختبرات التفاعلية</span>
+          <div class="kpi-value">03</div>
+          <span class="kpi-sub">تجربة حية للبيانات والرسوم</span>
+        </div>
+        <div class="kpi-tile">
+          <span class="kpi-label">بنك الاختبار الشامل</span>
+          <div class="kpi-value">30</div>
+          <span class="kpi-sub">10 أسئلة لكل وحدة بتصحيح فوري</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="page-grid">
+    <!-- Sidebar Navigation (Desktop) -->
+    <aside class="side-rail" aria-label="فهرس الفصل الثامن">
+      <div class="rail-panel">
+        <h2 class="rail-title">محتويات الفصل الثامن</h2>
+        <nav class="rail-nav">
+          <a href="#unit-1" class="rail-link is-active" data-nav="unit-1">
+            <span>الوحدة 1: ترميز السمات</span>
+            <span class="rail-num">01</span>
+          </a>
+          <a href="#lab-1" class="rail-link" data-nav="lab-1">
+            <span>مختبر الترميز التفاعلي</span>
+            <span class="rail-num">L1</span>
+          </a>
+          <a href="#unit-2" class="rail-link" data-nav="unit-2">
+            <span>الوحدة 2: تحجيم السمات</span>
+            <span class="rail-num">02</span>
+          </a>
+          <a href="#lab-2" class="rail-link" data-nav="lab-2">
+            <span>مختبر مقارنة التحجيم</span>
+            <span class="rail-num">L2</span>
+          </a>
+          <a href="#unit-3" class="rail-link" data-nav="unit-3">
+            <span>الوحدة 3: تحويل السمات</span>
+            <span class="rail-num">03</span>
+          </a>
+          <a href="#lab-3" class="rail-link" data-nav="lab-3">
+            <span>مختبر التحويل والتقطيع</span>
+            <span class="rail-num">L3</span>
+          </a>
+          <a href="#exam-section" class="rail-link" data-nav="exam-section">
+            <span>الاختبار الشامل (30 سؤالاً)</span>
+            <span class="rail-num">30</span>
+          </a>
+        </nav>
+      </div>
+
+      <div class="rail-panel">
+        <h2 class="rail-title">ملخص تقدمك في الاختبار</h2>
+        <div class="rail-progress-row">
+          <span>الأسئلة المجابة</span>
+          <span class="rail-progress-val" id="rail-answered">0 / 30</span>
+        </div>
+        <div class="rail-progress-row">
+          <span>الإجابات الصحيحة</span>
+          <span class="rail-progress-val" id="rail-score">0</span>
+        </div>
+        <div class="rail-progress-row">
+          <span>الوحدة 1 (الترميز)</span>
+          <span class="rail-progress-val" id="rail-u1">0 / 10</span>
+        </div>
+        <div class="rail-progress-row">
+          <span>الوحدة 2 (التحجيم)</span>
+          <span class="rail-progress-val" id="rail-u2">0 / 10</span>
+        </div>
+        <div class="rail-progress-row">
+          <span>الوحدة 3 (التحويل)</span>
+          <span class="rail-progress-val" id="rail-u3">0 / 10</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Column -->
+    <main class="main-column">
+      <!-- Quick Jump Bar (Mobile & Tablet) -->
+      <nav class="quick-nav" aria-label="التنقل السريع">
+        <a href="#unit-1">الوحدة 1: الترميز</a>
+        <a href="#unit-2">الوحدة 2: التحجيم</a>
+        <a href="#unit-3">الوحدة 3: التحويل</a>
+        <a href="#exam-section">الاختبار الشامل (30)</a>
+      </nav>
+
+      <!-- =========================================================
+           UNIT 1: FEATURE ENCODING
+           ========================================================= -->
+      <section id="unit-1" class="unit-section">
+        <div class="unit-header">
+          <span class="unit-eyebrow">UNIT 01 • FEATURE ENCODING TECHNIQUES</span>
+          <h2 class="unit-title">الوحدة الأولى: <strong>تقنيات ترميز السمات</strong></h2>
+          <p class="unit-summary">
+            تحويل البيانات النصية والفئوية إلى تمثيلات رقمية أو ثنائية تفهمها خوارزميات التحليل الإحصائي والتعلم الآلي دون فقدان المعنى أو فرض علاقات ترتيبية خاطئة.
+          </p>
+        </div>
+
+        <!-- 1.1 Concept & Benefits -->
+        <div class="topic-block">
+          <h3 class="topic-heading">
+            <span class="topic-index">1.1</span>
+            مفهوم ترميز السمات وأهميته في تحليل البيانات
+          </h3>
+          <p class="prose">
+            في سياق تحليل البيانات، يشير <strong>ترميز السمات (Feature Encoding)</strong> إلى عملية تحويل البيانات من صيغة معينة (مثل النصوص أو الفئات الاسمية والترتيبية) إلى مجموعة من القيم المعرفية أو الرموز الرقمية التي يمكن استخدامها في عمليات التحليل الإحصائي والتعلم الآلي — مثل تحويل البيانات النصية إلى أرقام أو تحويل البيانات الفئوية إلى متغيرات ثنائية.
+          </p>
+
+          <div class="card-grid-4">
+            <div class="feature-card feature-card--accent">
+              <h4>1. تقليل الحجم والتعقيد</h4>
+              <p>يساعد ترميز السمات في تقليل حجم البيانات وتبسيطها، مما يجعل عمليات التحليل أسرع وأكثر فعالية.</p>
+            </div>
+            <div class="feature-card">
+              <h4>2. تحسين الأداء</h4>
+              <p>يؤدي إلى تحسين أداء نماذج التحليل الإحصائي والذكاء الاصطناعي لتركيزه على الجوانب الأساسية والمهمة للبيانات.</p>
+            </div>
+            <div class="feature-card">
+              <h4>3. تجنب المشاكل في التحليل</h4>
+              <p>تحتوي البيانات على متغيرات متعددة ومتنوعة، ويساعد الترميز في اختيار السمات الأكثر أهمية وصلة للتركيز عليها.</p>
+            </div>
+            <div class="feature-card">
+              <h4>4. تحسين التفاعلية</h4>
+              <p>يحسن التفاعلية وسرعة استجابة النظام لاحتياجات المستخدمين، خاصة في النظم التفاعلية والتطبيقات الذكية.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1.2 One-Hot Encoding -->
+        <div class="topic-block">
+          <h3 class="topic-heading">
+            <span class="topic-index">1.2</span>
+            ترميز الواحد الساخن (<bdi dir="ltr">One-Hot Encoding</bdi>)
+          </h3>
+          <p class="prose">
+            يقوم <strong>One-Hot Encoding</strong> بتحويل البيانات النوعية التي تمثل فئات غير مرتبة (Nominal) إلى كود ثنائي من <bdi dir="ltr">0</bdi> و<bdi dir="ltr">1</bdi>، ويمثلها في عدة حقول جديدة؛ بحيث يمثل كل حقل جديد فئة واحدة من الفئات الأصلية، ويُوضع الرقم <bdi dir="ltr">1</bdi> في الحقل المقابل للفئة الفعلية و<bdi dir="ltr">0</bdi> في بقية الحقول.
+          </p>
+
+          <div class="card-grid-2">
+            <div class="layer">
+              <div class="mono-tag" style="margin-bottom: var(--space-sm);">مثال المقرر: جدول الألوان (Color)</div>
+              <div class="table-wrap">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>السمة الأصلية (<bdi dir="ltr">Color</bdi>)</th>
+                      <th class="num-cell">Red</th>
+                      <th class="num-cell">Blue</th>
+                      <th class="num-cell">Green</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>Green</td><td class="num-cell">0</td><td class="num-cell">0</td><td class="num-cell">1</td></tr>
+                    <tr><td>Blue</td><td class="num-cell">0</td><td class="num-cell">1</td><td class="num-cell">0</td></tr>
+                    <tr><td>Red</td><td class="num-cell">1</td><td class="num-cell">0</td><td class="num-cell">0</td></tr>
+                    <tr><td>Blue</td><td class="num-cell">0</td><td class="num-cell">1</td><td class="num-cell">0</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="code-panel">
+              <div class="code-toolbar">
+                <span class="code-lang">PYTHON • PANDAS GET_DUMMIES</span>
+                <button type="button" class="code-copy-btn" onclick="copyCodeBlock(this, 'code-onehot')">نسخ الكود</button>
+              </div>
+              <pre class="code-pre" id="code-onehot"><span class="kw">import</span> pandas <span class="kw">as</span> pd
+
+<span class="cm"># تحويل حقل gender ذي الفئتين (M, F) إلى One-Hot Encoding</span>
+gender_encoded = pd.<span class="fn">get_dummies</span>(df[<span class="str">'gender'</span>])
+
+<span class="cm"># أو دمجه مباشرة مع إطار البيانات الأصلي</span>
+df_encoded = pd.<span class="fn">get_dummies</span>(df, columns=[<span class="str">'gender'</span>], dtype=<span class="fn">int</span>)
+<span class="fn">print</span>(gender_encoded.head())</pre>
+            </div>
+          </div>
+
+          <div class="callout">
+            <i data-lucide="info" class="callout-icon" aria-hidden="true"></i>
+            <div>
+              <p class="callout-title">متى نفضل One-Hot Encoding؟</p>
+              <p class="callout-body">
+                يُعد الخيار الأمثل للبيانات الاسمية (Nominal) مثل اللون أو الجنس أو المدينة؛ لأنه لا يعطي قيمة رقمية أكبر لفئة على حساب أخرى، مما يمنع نماذج التعلم الآلي من افتراض وجود أفضلية أو ترتيب رياضي بين الفئات.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1.3 Label Encoding -->
+        <div class="topic-block">
+          <h3 class="topic-heading">
+            <span class="topic-index">1.3</span>
+            ترميز التسميات (<bdi dir="ltr">Label Encoding / Integer Encoding</bdi>)
+          </h3>
+          <p class="prose">
+            يُعرف أيضاً بـ <strong>Integer Encoding</strong>، ويقوم بترميز الفئات المختلفة في الحقل النوعي بقيم صحيحة متتابعة تبدأ من الصفر (<bdi dir="ltr">0, 1, 2, ...</bdi>). فمثلاً عند ترميز الألوان <bdi dir="ltr">(Red, Green, Blue)</bdi> يتم تحويلها إلى الأرقام <bdi dir="ltr">0, 1, 2</bdi> عبر الفئة <code>LabelEncoder</code> في مكتبة <code>sklearn.preprocessing</code>.
+          </p>
+
+          <div class="code-panel">
+            <div class="code-toolbar">
+              <span class="code-lang">PYTHON • SKLEARN LABELENCODER &amp; INVERSE_TRANSFORM</span>
+              <button type="button" class="code-copy-btn" onclick="copyCodeBlock(this, 'code-label')">نسخ الكود</button>
+            </div>
+            <pre class="code-pre" id="code-label"><span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> LabelEncoder
+
+<span class="cm"># 1. إنشاء كائن بالمعاملات الافتراضية</span>
+le = <span class="fn">LabelEncoder</span>()
+
+<span class="cm"># 2. التعرف على الفئات وتوليد الرموز عبر fit_transform</span>
+encoded = le.<span class="fn">fit_transform</span>(df[<span class="str">'department'</span>])
+<span class="fn">print</span>(encoded)
+<span class="cm"># الناتج: [1 0 0 2 1 2 1 0 2]</span>
+
+<span class="cm"># 3. التحويل العكسي لإرجاع الرموز إلى قيمها الأصلية</span>
+original = le.<span class="fn">inverse_transform</span>([0, 1, 2])
+<span class="fn">print</span>(original)
+<span class="cm"># الناتج: ['Finance' 'Operations' 'Sales']</span></pre>
+          </div>
+
+          <div class="callout callout--warning">
+            <i data-lucide="alert-triangle" class="callout-icon" aria-hidden="true"></i>
+            <div>
+              <p class="callout-title">آلية عمل fit_transform و inverse_transform</p>
+              <p class="callout-body">
+                ترتب دالة <code>LabelEncoder</code> الفئات أبجدياً بشكل تلقائي (<bdi dir="ltr">0 → Finance</bdi>، <bdi dir="ltr">1 → Operations</bdi>، <bdi dir="ltr">2 → Sales</bdi>). وبعد استدعاء <code>fit</code> أو <code>fit_transform</code>، تحتفظ الأداة بخريطة التحويل مما يتيح استخدام <code>inverse_transform()</code> لاستعادة النصوص الأصلية من الرموز الرقمية.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1.4 Ordinal Encoding -->
+        <div class="topic-block">
+          <h3 class="topic-heading">
+            <span class="topic-index">1.4</span>
+            الترميز الترتيبي (<bdi dir="ltr">OrdinalEncoder</bdi>)
+          </h3>
+          <p class="prose">
+            يشبه <code>LabelEncoder</code> في تحويل الفئات إلى أعداد صحيحة، ولكنه <strong>يراعي الترتيب المنطقي (Order)</strong> عند ترميز الفئات الترتيبية عبر تمرير قائمة <code>categories</code> المحددة مسبقاً. ففي مثال درجات الموظفين من <bdi dir="ltr">G0</bdi> إلى <bdi dir="ltr">G4</bdi>، تأخذ <bdi dir="ltr">G0</bdi> القيمة <bdi dir="ltr">0</bdi>، وتأخذ <bdi dir="ltr">G1</bdi> القيمة <bdi dir="ltr">1</bdi>، وهكذا حتى <bdi dir="ltr">G4 = 4</bdi>.
+          </p>
+
+          <div class="code-panel">
+            <div class="code-toolbar">
+              <span class="code-lang">PYTHON • SKLEARN ORDINALENCODER</span>
+              <button type="button" class="code-copy-btn" onclick="copyCodeBlock(this, 'code-ordinal')">نسخ الكود</button>
+            </div>
+            <pre class="code-pre" id="code-ordinal"><span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> OrdinalEncoder
+
+<span class="cm"># تحديد الترتيب الصريح للفئات عبر المعامل categories</span>
+grade_order = [[<span class="str">'G0'</span>, <span class="str">'G1'</span>, <span class="str">'G2'</span>, <span class="str">'G3'</span>, <span class="str">'G4'</span>]]
+oe = <span class="fn">OrdinalEncoder</span>(categories=grade_order)
+
+<span class="cm"># يتطلب OrdinalEncoder مصفوفة ثنائية الأبعاد df[['grade']]</span>
+df[<span class="str">'grade_encoded'</span>] = oe.<span class="fn">fit_transform</span>(df[[<span class="str">'grade'</span>]])</pre>
+          </div>
+
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>التقنية</th>
+                  <th>نوع البيانات الأنسب</th>
+                  <th>مراعاة الترتيب</th>
+                  <th>الأعمدة الناتجة</th>
+                  <th>الأداة في بايثون</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>One-Hot Encoding</strong></td>
+                  <td>نوعية اسمية (Nominal)</td>
+                  <td>لا تفرض ترتيباً</td>
+                  <td>عمود ثنائي (0/1) لكل فئة</td>
+                  <td><bdi dir="ltr">pd.get_dummies()</bdi></td>
+                </tr>
+                <tr>
+                  <td><strong>Label Encoding</strong></td>
+                  <td>السمة الهدف أو الفئات التلقائية</td>
+                  <td>ترتيب أبجدي تلقائي</td>
+                  <td>عمود واحد (0, 1, 2...)</td>
+                  <td><bdi dir="ltr">LabelEncoder()</bdi></td>
+                </tr>
+                <tr>
+                  <td><strong>Ordinal Encoding</strong></td>
+                  <td>نوعية ترتيبية (Ordinal)</td>
+                  <td>ترتيب مخصص عبر <bdi dir="ltr">categories</bdi></td>
+                  <td>عمود واحد مرتب (0, 1, 2...)</td>
+                  <td><bdi dir="ltr">OrdinalEncoder()</bdi></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Lab 1: Interactive Feature Encoding Lab -->
+        <div id="lab-1" class="lab-box">
+          <div class="lab-header">
+            <div>
+              <span class="mono-tag">INTERACTIVE LAB 01</span>
+              <h3 class="lab-title">مختبر ترميز السمات التفاعلي</h3>
+            </div>
+            <div class="filter-pills">
+              <button type="button" class="btn btn-secondary" onclick="loadEncodingPreset('colors')">الألوان (Color)</button>
+              <button type="button" class="btn btn-secondary" onclick="loadEncodingPreset('dept')">الأقسام (Department)</button>
+              <button type="button" class="btn btn-secondary" onclick="loadEncodingPreset('grades')">الدرجات (G0–G4)</button>
+            </div>
+          </div>
+
+          <div class="control-row">
+            <div class="field-group">
+              <label for="lab1-method" class="field-label">طريقة الترميز</label>
+              <select id="lab1-method" class="carbon-select" onchange="updateEncodingLab()">
+                <option value="onehot">One-Hot Encoding (pd.get_dummies)</option>
+                <option value="label">Label Encoding (LabelEncoder)</option>
+                <option value="ordinal">Ordinal Encoding (OrdinalEncoder)</option>
+              </select>
+            </div>
+            <div class="field-group" style="flex: 2 1 320px;">
+              <label for="lab1-values" class="field-label">قيم السمة الفئوية (مفصولة بفاصلة)</label>
+              <input id="lab1-values" type="text" class="carbon-input" dir="ltr" value="Green, Blue, Red, Blue" oninput="updateEncodingLab()">
+            </div>
+          </div>
+
+          <div id="lab1-order-wrap" class="control-row" style="display: none;">
+            <div class="field-group">
+              <label for="lab1-order" class="field-label">ترتيب الفئات المخصص (<bdi dir="ltr">categories</bdi>) — من الأدنى إلى الأعلى</label>
+              <input id="lab1-order" type="text" class="carbon-input" dir="ltr" value="G0, G1, G2, G3, G4" oninput="updateEncodingLab()">
+            </div>
+          </div>
+
+          <div id="lab1-output" class="layer"></div>
+
+          <div id="lab1-inverse-box" class="control-row" style="display: none;">
+            <div class="field-group">
+              <label for="lab1-inv-input" class="field-label">اختبار <bdi dir="ltr">inverse_transform</bdi> (أدخل رموزاً رقمية مفصولة بفاصلة)</label>
+              <input id="lab1-inv-input" type="text" class="carbon-input" dir="ltr" value="0, 1, 2" oninput="updateInversePreview()">
+            </div>
+            <div class="field-group">
+              <span class="field-label">القيم المستعادة</span>
+              <div id="lab1-inv-result" class="layer" style="min-height: 44px; display: flex; align-items: center; font-family: 'IBM Plex Mono', monospace;" dir="ltr"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           UNIT 2: FEATURE SCALING
+           ========================================================= -->
+      <section id="unit-2" class="unit-section">
+        <div class="unit-header">
+          <span class="unit-eyebrow">UNIT 02 • FEATURE SCALING</span>
+          <h2 class="unit-title">الوحدة الثانية: <strong>تحجيم السمات</strong></h2>
+          <p class="unit-summary">
+            تغيير مقياس البيانات الرقمية لتوحيد نطاقها إلى مجال محدد مثل <bdi dir="ltr">[0, 1]</bdi> أو <bdi dir="ltr">[-1, 1]</bdi> أو متوسط صفر وانحراف معياري واحد، لمنع هيمنة السمات ذات القيم الكبيرة على حسابات النموذج.
+          </p>
+        </div>
+
+        <!-- 2.1 Concept & Importance -->
+        <div class="topic-block">
+          <h3 class="topic-heading">
+            <span class="topic-index">2.1</span>
+            مفهوم تحجيم السمات وأهميته
+          </h3>
+          <p class="prose">
+            <strong>تحجيم السمات (Feature Scaling)</strong> هو عملية تغيير مقياس البيانات في مجموعة السمات بحيث يتم توحيد مقياسها أو تحويلها إلى نطاق محدد، مثل النطاق <bdi dir="ltr">[0, 1]</bdi> أو <bdi dir="ltr">[-1, 1]</bdi> أو تحويلها إلى متوسط يساوي صفراً وانحراف معياري يساوي واحداً.
+          </p>
+          <div class="card-grid-4">
+            <div class="feature-card feature-card--accent">
+              <h4>1. تحسين أداء النموذج</h4>
+              <p>خوارزميات مثل الانحدار الخطي (Linear Regression) والشبكات العصبية (Neural Networks) تعمل بكفاءة أعلى عندما تكون الميزات في نطاق متقارب دون تداخل من القيم الكبيرة جداً أو الصغيرة جداً في حساب دالة الهدف.</p>
+            </div>
+            <div class="feature-card">
+              <h4>2. تسريع التدريب</h4>
+              <p>توحيد مقياس البيانات يسرّع عملية تدريب النموذج، إذ يقلل من عدد الخطوات اللازمة لخوارزميات التحسين للوصول إلى الحل الأمثل.</p>
+            </div>
+            <div class="feature-card">
+              <h4>3. تسهيل فهم البيانات</h4>
+              <p>عندما تقع جميع الميزات في نطاق متساوٍ، يصبح من الأسهل فهم ومقارنة العلاقة بينها وبين المخرجات المستهدفة.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2.2 Standard Scaling -->
+        <div class="topic-block">
+          <h3 class="topic-heading">
+            <span class="topic-index">2.2</span>
+            التحجيم القياسي (<bdi dir="ltr">Standard Scaling / Z-Score Normalization</bdi>)
+          </h3>
+          <p class="prose">
+            تقوم هذه الطريقة بتوسيط البيانات حول الصفر وتحويل تشتتها باستخدام المتوسط الحسابي والانحراف المعياري، بحيث يصبح للسمة المحجمة متوسط <bdi dir="ltr">0</bdi> وانحراف معياري <bdi dir="ltr">1</bdi>.
+          </p>
+
+          <div class="math-panel">
+            <span class="mono-tag math-label">معادلة التوحيد القياسي (Z-Score)</span>
+            <div class="math-ltr">$$Z_i = \frac{X_i - \mu}{\sigma}$$</div>
+            <div class="symbol-list">
+              <div><strong><bdi dir="ltr">Xᵢ = 723</bdi></strong> (أول قيمة في مثال <bdi dir="ltr">performance_score</bdi>)</div>
+              <div><strong><bdi dir="ltr">μ = 610.667</bdi></strong> (المتوسط الحسابي للسمة)</div>
+              <div><strong><bdi dir="ltr">σ = 222.194</bdi></strong> (الانحراف المعياري للسمة)</div>
+              <div><strong>التطبيق:</strong> <bdi dir="ltr">(723 − 610.667) / 222.194 = 0.5056</bdi></div>
+            </div>
+          </div>
+
+          <div class="code-panel">
+            <div class="code-toolbar">
+              <span class="code-lang">PYTHON • SKLEARN STANDARDSCALER</span>
+              <button type="button" class="code-copy-btn" onclick="copyCodeBlock(this, 'code-standard')">نسخ الكود</button>
+            </div>
+            <pre class="code-pre" id="code-standard"><span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> StandardScaler
+
+scaler = <span class="fn">StandardScaler</span>()
+df[<span class="str">'performance_score_scaler'</span>] = scaler.<span class="fn">fit_transform</span>(df[[<span class="str">'performance_score'</span>]])</pre>
+          </div>
+        </div>
+
+        <!-- 2.3 Min-Max Scaling -->
+        <div class="topic-block">
+          <h3 class="topic-heading">
+            <span class="topic-index">2.3</span>
+            التحجيم الخطي (<bdi dir="ltr">Min-Max Scaling</bdi>)
+          </h3>
+          <p class="prose">
+            تحول هذه الطريقة البيانات خطياً إلى نطاق جديد محدد من قبل المستخدم (وغالباً <bdi dir="ltr">[0, 1]</bdi>). <strong>ويُفضل استخدامها</strong> في الحالات التي يكون فيها الانحراف المعياري صغيراً جداً أو في حالة وجود قيمة متطرفة ذات معنى نرغب في الحفاظ عليها ضمن حدود النطاق.
+          </p>
+
+          <div class="math-panel">
+            <span class="mono-tag math-label">معادلة التحجيم الخطي (Min-Max Scaling)</span>
+            <div class="math-ltr">$$x_i' = \frac{x_i - Min_x}{Max_x - Min_x}(new\_max_x - new\_min_x) + new\_min_x$$</div>
+            <div class="symbol-list">
+              <div><strong><bdi dir="ltr">Minₓ = 53</bdi></strong>: أقل قيمة في البيانات الأصلية</div>
+              <div><strong><bdi dir="ltr">Maxₓ = 901</bdi></strong>: أعلى قيمة في البيانات الأصلية</div>
+              <div><strong><bdi dir="ltr">[new_minₓ, new_maxₓ] = [0, 1]</bdi></strong>: النطاق الجديد</div>
+              <div><strong>التطبيق للقيمة 723:</strong> <bdi dir="ltr">(723 − 53) / (901 − 53) × (1 − 0) + 0 = 0.7901</bdi></div>
+            </div>
+          </div>
+
+          <div class="code-panel">
+            <div class="code-toolbar">
+              <span class="code-lang">PYTHON • SKLEARN MINMAXSCALER</span>
+              <button type="button" class="code-copy-btn" onclick="copyCodeBlock(this, 'code-minmax')">نسخ الكود</button>
+            </div>
+            <pre class="code-pre" id="code-minmax"><span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> MinMaxScaler
+
+<span class="cm"># الافتراضي هو النطاق [0, 1] ويمكن تخصيصه عبر feature_range</span>
+scaler = <span class="fn">MinMaxScaler</span>(feature_range=(0, 1))
+df[<span class="str">'performance_score_minmax'</span>] = scaler.<span class="fn">fit_transform</span>(df[[<span class="str">'performance_score'</span>]])</pre>
+          </div>
+        </div>
+
+        <!-- 2.4 Robust Scaling -->
+        <div class="topic-block">
+          <h3 class="topic-heading">
+            <span class="topic-index">2.4</span>
+            التحجيم المتين (<bdi dir="ltr">Robust Scaling</bdi>)
+          </h3>
+          <p class="prose">
+            تعتمد هذه الطريقة على استخدام <strong>الربع الأول (<bdi dir="ltr">Q₁</bdi>)</strong> و<strong>الربع الثالث (<bdi dir="ltr">Q₃</bdi>)</strong> و<strong>الوسيط (الربع الثاني <bdi dir="ltr">Q₂</bdi>)</strong> في تحجيم البيانات؛ ولذلك <strong>يُفضل استخدامها عند وجود قيم متطرفة غير مرغوب بها</strong> لأن الأرباع لا تتأثر بالقيم الشاذة مثل المتوسط والحدين الأدنى والأقصى.
+          </p>
+
+          <div class="math-panel">
+            <span class="mono-tag math-label">معادلة التحجيم المتين (Robust Scaling)</span>
+            <div class="math-ltr">$$x_i' = \frac{x_i - Median_x}{Q_{3x} - Q_{1x}}$$</div>
+            <div class="symbol-list">
+              <div><strong><bdi dir="ltr">Q₁ = 556</bdi></strong>: قيمة الربع الأول</div>
+              <div><strong><bdi dir="ltr">Q₂ (Median) = 674</bdi></strong>: قيمة الوسيط الحسابي / الربع الثاني</div>
+              <div><strong><bdi dir="ltr">Q₃ = 711</bdi></strong>: قيمة الربع الثالث (<bdi dir="ltr">IQR = 711 − 556 = 155</bdi>)</div>
+              <div><strong>التطبيق للقيمة 723:</strong> <bdi dir="ltr">(723 − 674) / (711 − 556) = 49 / 155 = 0.3161</bdi></div>
+            </div>
+          </div>
+
+          <div class="callout">
+            <i data-lucide="info" class="callout-icon" aria-hidden="true"></i>
+            <div>
+              <p class="callout-title">تنبيه امتحاني دقيق حول تسمية الوسيط في المقرر</p>
+              <p class="callout-body">
+                يستخدم <code>RobustScaler</code> في البسط قيمة <strong>الوسيط (الربع الثاني = 674)</strong> رغم كتابة الرمز <bdi dir="ltr">Meanₓ</bdi> سهواً في إحدى شرائح العرض، وقد نصّ الشرح المرافق في المقرر بوضوح على أنها «قيمة الوسيط الحسابي أو الربع الثاني للبيانات» وقيمة الحساب الفعلي هي <bdi dir="ltr">674</bdi>.
+              </p>
+            </div>
+          </div>
+
+          <div class="code-panel">
+            <div class="code-toolbar">
+              <span class="code-lang">PYTHON • SKLEARN ROBUSTSCALER</span>
+              <button type="button" class="code-copy-btn" onclick="copyCodeBlock(this, 'code-robust')">نسخ الكود</button>
+            </div>
+            <pre class="code-pre" id="code-robust"><span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> RobustScaler
+
+scaler = <span class="fn">RobustScaler</span>()
+df[<span class="str">'performance_score_robust'</span>] = scaler.<span class="fn">fit_transform</span>(df[[<span class="str">'performance_score'</span>]])</pre>
+          </div>
+        </div>
+
+        <!-- Lab 2: Interactive Scaling Comparator -->
+        <div id="lab-2" class="lab-box">
+          <div class="lab-header">
+            <div>
+              <span class="mono-tag">INTERACTIVE LAB 02</span>
+              <h3 class="lab-title">مختبر مقارنة طرق تحجيم السمات (<bdi dir="ltr">performance_score</bdi>)</h3>
+            </div>
+            <div class="filter-pills">
+              <button type="button" class="btn btn-secondary" id="lab2-btn-base" onclick="setScalingScenario('base')">بيانات المقرر الأصلية</button>
+              <button type="button" class="btn btn-secondary" id="lab2-btn-outlier" onclick="setScalingScenario('outlier')">إضافة قيمة متطرفة (2500)</button>
+            </div>
+          </div>
+
+          <div class="control-row">
+            <div class="field-group">
+              <label for="lab2-custom-x" class="field-label">اختبر قيمة جديدة (<bdi dir="ltr">Xᵢ</bdi>) لحساب تحجيمها</label>
+              <input id="lab2-custom-x" type="number" class="carbon-input" dir="ltr" value="723" oninput="updateScalingLab()">
+            </div>
+            <div class="field-group">
+              <label for="lab2-new-min" class="field-label">الحد الأدنى لنطاق <bdi dir="ltr">Min-Max</bdi></label>
+              <input id="lab2-new-min" type="number" class="carbon-input" dir="ltr" value="0" oninput="updateScalingLab()">
+            </div>
+            <div class="field-group">
+              <label for="lab2-new-max" class="field-label">الحد الأعلى لنطاق <bdi dir="ltr">Min-Max</bdi></label>
+              <input id="lab2-new-max" type="number" class="carbon-input" dir="ltr" value="1" oninput="updateScalingLab()">
+            </div>
+          </div>
+
+          <div class="kpi-grid" id="lab2-stats-strip"></div>
+
+          <div class="chart-shell">
+            <div class="mono-tag" style="margin-bottom: var(--space-sm);">مقارنة القيم المحجمة عبر النقاط — لاحظ ثبات Robust Scaling عند وجود قيمة متطرفة</div>
+            <div class="chart-canvas-wrap">
+              <canvas id="scaling-chart"></canvas>
+            </div>
+          </div>
+
+          <div class="table-wrap" id="lab2-table-wrap"></div>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           UNIT 3: FEATURE TRANSFORMATION
+           ========================================================= -->
+      <section id="unit-3" class="unit-section">
+        <div class="unit-header">
+          <span class="unit-eyebrow">UNIT 03 • FEATURE TRANSFORMATION</span>
+          <h2 class="unit-title">الوحدة الثالثة: <strong>تحويل السمات</strong></h2>
+          <p class="unit-summary">
+            تغيير شكل وتوزيع السمات الرقمية لتقليل أثر القيم المتطرفة، معالجة التوزيعات المائلة، تقطيع القيم المستمرة إلى فئات، واشتقاق سمات جديدة ذات دلالة تحليلية أقوى.
+          </p>
+        </div>
+
+        <!-- 3.1 Concept & Operations -->
+        <div class="topic-block">
+          <h3 class="topic-heading">
+            <span class="topic-index">3.1</span>
+            مفهوم تحويل السمات وعملياته الرئيسية
+          </h3>
+          <p class="prose">
+            يؤدي <strong>تحويل السمات (Feature Transformation)</strong> إلى تعديل الميزات بحيث تكون بالشكل المطلوب للتحليل والنمذجة؛ كما يقلل من تأثير القيم المتطرفة، ويتعامل مع توزيعات البيانات المائلة (Skewed distributions)، ويجعل النموذج أكثر قوة. ويشمل ثلاث عمليات رئيسية:
+          </p>
+          <div class="card-grid-4">
+            <div class="feature-card feature-card--accent">
+              <h4>1. التحويلات الحسابية</h4>
+              <p>تطبيق عملية حسابية (مثل اللوغاريتم) على البيانات الرقمية لتحويلها إلى صورة أخرى أكثر اعتدالاً.</p>
+            </div>
+            <div class="feature-card">
+              <h4>2. تقسيم السمات</h4>
+              <p>تقسيم سمة واحدة إلى عدة سمات أو نطاقات بناءً على معايير محددة.</p>
+            </div>
+            <div class="feature-card">
+              <h4>3. تجميع البيانات في فئات</h4>
+              <p>استخدام سمة أو أكثر في تجميع البيانات معاً أو بناء سمة جديدة مشتقة.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3.2 Discretization -->
+        <div class="topic-block">
+          <h3 class="topic-heading">
+            <span class="topic-index">3.2</span>
+            تقطيع السمات إلى فئات (<bdi dir="ltr">Discretization</bdi>)
+          </h3>
+          <p class="prose">
+            الغرض من <strong>Discretization</strong> هو تحويل السمات الرقمية المستمرة إلى مجموعة من الفئات أو النطاقات (مثل تحويل العمر إلى: أقل من 20، بين 20 و60، أكبر من 60). ومن أهم فوائدها <strong>تبسيط البيانات والمساعدة في تمثيلها بشكل أفضل</strong>.
+          </p>
+          <p class="prose">
+            في مثال المقرر على بيانات <code>hoursPerWeek</code>، أظهر رسم <strong>Histogram</strong> أن القيم موزعة على نطاق واسع مع تركز النسبة الأكبر عند <bdi dir="ltr">40</bdi> ساعة، فتم تقسيمها إلى ثلاث فئات: أقل من 40، يساوي 40، وأكثر من 40، ثم استخدام <code>value_counts()</code> لتمثيل التوزيع الجديد لأن السمة تحولت إلى سمة نوعية مكونة من عدة فئات.
+          </p>
+
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>نوع التقطيع</th>
+                  <th>آلية التقسيم</th>
+                  <th>الدالة / المثال في المقرر</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Equal Width (متساوي العرض)</strong></td>
+                  <td>تقسيم كامل النطاق <bdi dir="ltr">[Min, Max]</bdi> إلى عدد من النطاقات المتساوية في الطول الرياضي.</td>
+                  <td><bdi dir="ltr">pd.cut(series, bins=5)</bdi></td>
+                </tr>
+                <tr>
+                  <td><strong>Equal Frequency (متساوي التكرار)</strong></td>
+                  <td>تقسيم كامل النطاق إلى عدد من النطاقات تحتوي على مجموع تكرارات متساوية تقريباً.</td>
+                  <td>تقسيم العمر إلى 5 نطاقات بتكرارات متقاربة (<bdi dir="ltr">pd.qcut / cut</bdi> كما ورد بالمقرر)</td>
+                </tr>
+                <tr>
+                  <td><strong>Ad Hoc (مخصص حسب الحاجة)</strong></td>
+                  <td>يعتمد على اختيار محلل البيانات استناداً إلى خبرة مسبقة أو رسم مثل Histogram.</td>
+                  <td>تقسيم <bdi dir="ltr">hoursPerWeek</bdi> حول 40 ساعة</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="code-panel">
+            <div class="code-toolbar">
+              <span class="code-lang">PYTHON • DISCRETIZATION (CUT &amp; VALUE_COUNTS)</span>
+              <button type="button" class="code-copy-btn" onclick="copyCodeBlock(this, 'code-disc')">نسخ الكود</button>
+            </div>
+            <pre class="code-pre" id="code-disc"><span class="kw">import</span> pandas <span class="kw">as</span> pd
+
+<span class="cm"># 1. تقطيع Ad hoc لساعات العمل الأسبوعية حول 40 ساعة</span>
+bins = [0, 39, 40, 100]
+labels = [<span class="str">'Less than 40'</span>, <span class="str">'Equal to 40'</span>, <span class="str">'More than 40'</span>]
+df[<span class="str">'hours_cat'</span>] = pd.<span class="fn">cut</span>(df[<span class="str">'hoursPerWeek'</span>], bins=bins, labels=labels)
+
+<span class="cm"># تمثيل توزيع الفئات الجديدة عبر value_counts()</span>
+<span class="fn">print</span>(df[<span class="str">'hours_cat'</span>].<span class="fn">value_counts</span>())
+
+<span class="cm"># 2. تقسيم العمر إلى 5 نطاقات (Equal width عبر cut، أو Equal frequency عبر qcut)</span>
+df[<span class="str">'age_bins'</span>] = pd.<span class="fn">cut</span>(df[<span class="str">'age'</span>], bins=5)
+df[<span class="str">'age_freq'</span>] = pd.<span class="fn">qcut</span>(df[<span class="str">'age'</span>], q=5)</pre>
+          </div>
+        </div>
+
+        <!-- 3.3 Log Transformation -->
+        <div class="topic-block">
+          <h3 class="topic-heading">
+            <span class="topic-index">3.3</span>
+            التحويل اللوغاريتمي (<bdi dir="ltr">Log Transformation</bdi>)
+          </h3>
+          <p class="prose">
+            نستخدم <strong>Log Transformation</strong> عندما تشهد إحدى السمات <strong>نمواً أو انخفاضاً هائلاً</strong> عبر مجموعة كائنات البيانات؛ فعند رسم <strong>Box plot</strong> لهذه السمات تظهر نقاط كثيرة خارج شوكة الصندوق تشير ظاهرياً إلى قيم متطرفة، لكنها في الواقع قيم طبيعية ناتجة عن مصدر البيانات (وليست سجلات خاطئة).
+          </p>
+          <p class="prose">
+            في مثال المقرر على الناتج المحلي الإجمالي <strong>Gross Domestic Product (GDP)</strong> لعام 2020 في عدة دول، كان التوزيع شديد الالتواء قبل التحويل، وعند تطبيق دالة <code>np.log()</code> تقاربت القيم واختفى التشتت المفرط في الـ Box plot.
+          </p>
+
+          <div class="code-panel">
+            <div class="code-toolbar">
+              <span class="code-lang">PYTHON • NUMPY LOG TRANSFORMATION</span>
+              <button type="button" class="code-copy-btn" onclick="copyCodeBlock(this, 'code-log')">نسخ الكود</button>
+            </div>
+            <pre class="code-pre" id="code-log"><span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="cm"># تطبيق التحويل اللوغاريتمي الطبيعي على حقل GDP</span>
+df[<span class="str">'GDP_log'</span>] = np.<span class="fn">log</span>(df[<span class="str">'GDP'</span>])</pre>
+          </div>
+        </div>
+
+        <!-- 3.4 Attribute Construction -->
+        <div class="topic-block">
+          <h3 class="topic-heading">
+            <span class="topic-index">3.4</span>
+            بناء السمات (<bdi dir="ltr">Attribute Construction</bdi>)
+          </h3>
+          <p class="prose">
+            تعني <strong>Attribute Construction</strong> إنشاء سمة (حقل) جديدة بناءً على مجموعة من الحقول أو السمات الموجودة بالفعل. ومن أبرز الأمثلة حساب <strong>مؤشر كتلة الجسم (BMI — Body Mass Index)</strong> اعتماداً على الوزن والطول بعد تهيئة بيانات الأشخاص.
+          </p>
+
+          <div class="math-panel">
+            <span class="mono-tag math-label">معادلة اشتقاق مؤشر كتلة الجسم (BMI)</span>
+            <div class="math-ltr">$$\text{BMI} = \frac{\text{Weight (kg)}}{(\text{Height (m)})^2}$$</div>
+          </div>
+
+          <div class="code-panel">
+            <div class="code-toolbar">
+              <span class="code-lang">PYTHON • ATTRIBUTE CONSTRUCTION (BMI)</span>
+              <button type="button" class="code-copy-btn" onclick="copyCodeBlock(this, 'code-bmi')">نسخ الكود</button>
+            </div>
+            <pre class="code-pre" id="code-bmi"><span class="cm"># إنشاء سمة BMI اعتماداً على الوزن (كجم) والطول (متر)</span>
+df[<span class="str">'BMI'</span>] = df[<span class="str">'Weight'</span>] / (df[<span class="str">'Height'</span>] ** 2)
+
+<span class="cm"># وإذا كان الطول مسجلاً بالسنتيمتر، نقسمه على 100 أولاً</span>
+df[<span class="str">'BMI'</span>] = df[<span class="str">'Weight'</span>] / ((df[<span class="str">'Height_cm'</span>] / 100) ** 2)</pre>
+          </div>
+        </div>
+
+        <!-- Lab 3: Interactive Transformation Lab -->
+        <div id="lab-3" class="lab-box">
+          <div class="lab-header">
+            <div>
+              <span class="mono-tag">INTERACTIVE LAB 03</span>
+              <h3 class="lab-title">مختبر تحويل السمات (Log + Discretization + BMI)</h3>
+            </div>
+          </div>
+
+          <div class="tab-bar" role="tablist">
+            <button type="button" class="tab-btn is-active" id="tab-btn-log" onclick="switchLab3Tab('log')">1. التحويل اللوغاريتمي (GDP)</button>
+            <button type="button" class="tab-btn" id="tab-btn-disc" onclick="switchLab3Tab('disc')">2. التقطيع (Discretization)</button>
+            <button type="button" class="tab-btn" id="tab-btn-bmi" onclick="switchLab3Tab('bmi')">3. بناء سمة BMI</button>
+          </div>
+
+          <!-- Panel 1: Log Transformation -->
+          <div id="lab3-panel-log">
+            <div class="control-row" style="margin-bottom: var(--space-md);">
+              <button type="button" class="btn btn-primary" id="btn-log-raw" onclick="setLogView('raw')">البيانات الأصلية (GDP بالمليار دولار)</button>
+              <button type="button" class="btn btn-secondary" id="btn-log-trans" onclick="setLogView('log')">بعد تطبيق np.log(GDP)</button>
+            </div>
+            <div class="kpi-grid" id="lab3-log-kpis" style="margin-bottom: var(--space-md);"></div>
+            <div class="chart-shell">
+              <div class="chart-canvas-wrap">
+                <canvas id="log-chart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 2: Discretization -->
+          <div id="lab3-panel-disc" style="display: none;">
+            <div class="control-row" style="margin-bottom: var(--space-md);">
+              <div class="field-group">
+                <label for="lab3-disc-mode" class="field-label">طريقة التقطيع</label>
+                <select id="lab3-disc-mode" class="carbon-select" onchange="updateDiscLab()">
+                  <option value="width">Equal Width (عرض نطاقات متساوٍ — pd.cut)</option>
+                  <option value="freq">Equal Frequency (تكرارات متساوية — pd.qcut)</option>
+                  <option value="adhoc">Ad Hoc (مخصص لساعات العمل حول 40 ساعة)</option>
+                </select>
+              </div>
+              <div class="field-group" id="lab3-bins-wrap">
+                <label for="lab3-disc-bins" class="field-label">عدد الفئات (<bdi dir="ltr">bins</bdi>)</label>
+                <select id="lab3-disc-bins" class="carbon-select" onchange="updateDiscLab()">
+                  <option value="3">3 فئات</option>
+                  <option value="4">4 فئات</option>
+                  <option value="5" selected>5 فئات</option>
+                </select>
+              </div>
+            </div>
+            <div id="lab3-disc-output" class="table-wrap"></div>
+          </div>
+
+          <!-- Panel 3: BMI Attribute Construction -->
+          <div id="lab3-panel-bmi" style="display: none;">
+            <div class="control-row" style="margin-bottom: var(--space-md);">
+              <div class="field-group">
+                <label for="bmi-weight" class="field-label">الوزن (كجم — <bdi dir="ltr">Weight</bdi>)</label>
+                <input id="bmi-weight" type="number" class="carbon-input" dir="ltr" value="75" min="20" max="250" oninput="updateBmiLab()">
+              </div>
+              <div class="field-group">
+                <label for="bmi-height" class="field-label">الطول (سم — <bdi dir="ltr">Height_cm</bdi>)</label>
+                <input id="bmi-height" type="number" class="carbon-input" dir="ltr" value="175" min="100" max="230" oninput="updateBmiLab()">
+              </div>
+            </div>
+            <div class="kpi-grid" id="lab3-bmi-result"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           COMPREHENSIVE EXAM: 30 QUESTIONS (10 PER UNIT)
+           ========================================================= -->
+      <section id="exam-section" class="unit-section">
+        <div class="unit-header">
+          <span class="unit-eyebrow">ASSESSMENT • 30 QUESTIONS • INSTANT GRADING</span>
+          <h2 class="unit-title">الاختبار الشامل: <strong>30 سؤالاً في الفصل الثامن</strong></h2>
+          <p class="unit-summary">
+            10 أسئلة شاملة لكل وحدة تغطي المفاهيم النظرية، التطبيقات الحسابية، وأكواد بايثون، مع تصحيح فوري وشرح تفصيلي لكل سؤال وحفظ تلقائي لتقدمك.
+          </p>
+        </div>
+
+        <div class="exam-dashboard">
+          <div class="exam-stats-grid">
+            <div class="exam-stat-tile exam-stat-tile--lead">
+              <span class="kpi-label">النتيجة الإجمالية</span>
+              <div class="kpi-value" id="exam-total-score">0 / 30</div>
+              <span class="kpi-sub" id="exam-accuracy">نسبة الدقة: 0%</span>
+            </div>
+            <div class="exam-stat-tile">
+              <span class="kpi-label">الوحدة 1: ترميز السمات</span>
+              <div class="kpi-value" id="exam-u1-score">0 / 10</div>
+              <span class="kpi-sub" id="exam-u1-done">أجبت على 0 من 10</span>
+            </div>
+            <div class="exam-stat-tile">
+              <span class="kpi-label">الوحدة 2: تحجيم السمات</span>
+              <div class="kpi-value" id="exam-u2-score">0 / 10</div>
+              <span class="kpi-sub" id="exam-u2-done">أجبت على 0 من 10</span>
+            </div>
+            <div class="exam-stat-tile">
+              <span class="kpi-label">الوحدة 3: تحويل السمات</span>
+              <div class="kpi-value" id="exam-u3-score">0 / 10</div>
+              <span class="kpi-sub" id="exam-u3-done">أجبت على 0 من 10</span>
+            </div>
+          </div>
+
+          <div class="exam-filter-row">
+            <div class="filter-pills" role="group" aria-label="تصفية الأسئلة">
+              <button type="button" class="filter-btn is-active" data-filter="all" onclick="setExamFilter('all')">الكل (30)</button>
+              <button type="button" class="filter-btn" data-filter="1" onclick="setExamFilter('1')">الوحدة 1 (10)</button>
+              <button type="button" class="filter-btn" data-filter="2" onclick="setExamFilter('2')">الوحدة 2 (10)</button>
+              <button type="button" class="filter-btn" data-filter="3" onclick="setExamFilter('3')">الوحدة 3 (10)</button>
+              <button type="button" class="filter-btn" data-filter="unanswered" onclick="setExamFilter('unanswered')">غير المجابة</button>
+              <button type="button" class="filter-btn" data-filter="wrong" onclick="setExamFilter('wrong')">الأخطاء للمراجعة</button>
+            </div>
+
+            <div class="filter-pills">
+              <button type="button" class="btn btn-secondary" onclick="exportExamCsv()">تصدير النتائج CSV</button>
+              <button type="button" class="btn btn-ghost" id="reset-exam-btn" onclick="resetExam(this)">إعادة الاختبار</button>
+            </div>
+          </div>
+          <div class="inline-status" id="exam-status-msg" aria-live="polite"></div>
+        </div>
+
+        <div id="question-list" class="question-list"></div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="doc-footer">
+    <span>المصدر التعليمي: ملخص مقرر تحليل وتمثيل البيانات — الفصل الثامن (تهيئة السمات وتحويلها: الوحدات 1 و2 و3).</span>
+    <span class="mono-tag">30 QUESTIONS • INTERACTIVE REFERENCE</span>
+  </footer>
+
+  <api-shim></api-shim>
+
+  <script>
+    // =========================================================================
+    // 1. STATE & PERSISTENCE (notebookAppApi)
+    // =========================================================================
+    const appState = {
+      answers: {}, // { qId: chosenIndex }
+      examFilter: 'all',
+      scalingScenario: 'base',
+      logView: 'raw'
+    };
+
+    let scalingChartInstance = null;
+    let logChartInstance = null;
+
+    async function loadSavedState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === 'function') {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === 'object') {
+            if (saved.answers && typeof saved.answers === 'object') {
+              appState.answers = saved.answers;
+            }
+            if (saved.examFilter) appState.examFilter = saved.examFilter;
+            if (saved.scalingScenario) appState.scalingScenario = saved.scalingScenario;
+            if (saved.logView) appState.logView = saved.logView;
+          }
+        }
+      } catch (e) {
+        // Fallback safely if host API is unavailable
+      }
+    }
+
+    async function persistState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === 'function') {
+          await window.notebookAppApi.setAppState({
+            answers: appState.answers,
+            examFilter: appState.examFilter,
+            scalingScenario: appState.scalingScenario,
+            logView: appState.logView
+          });
+        }
+      } catch (e) {
+        // Ignore persistence error in standalone mode
+      }
+    }
+
+    function getThemeColor(tokenName) {
+      return getComputedStyle(document.documentElement).getPropertyValue(tokenName).trim();
+    }
+
+    // =========================================================================
+    // 2. COPY CODE UTILITY
+    // =========================================================================
+    function copyCodeBlock(btn, preId) {
+      const pre = document.getElementById(preId);
+      if (!pre || !btn) return;
+      const text = pre.textContent || '';
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function() {
+          btn.textContent = 'تم النسخ';
+          setTimeout(function() { btn.textContent = 'نسخ الكود'; }, 1500);
+        }).catch(function() {
+          btn.textContent = 'تم النسخ';
+        });
+      } else {
+        btn.textContent = 'غير مدعوم';
+      }
+    }
+
+    // =========================================================================
+    // 3. INTERACTIVE LAB 1: FEATURE ENCODING
+    // =========================================================================
+    let currentLabelClasses = [];
+
+    function loadEncodingPreset(preset) {
+      const methodEl = document.getElementById('lab1-method');
+      const valEl = document.getElementById('lab1-values');
+      const orderEl = document.getElementById('lab1-order');
+      if (!methodEl || !valEl || !orderEl) return;
+
+      if (preset === 'colors') {
+        methodEl.value = 'onehot';
+        valEl.value = 'Green, Blue, Red, Blue';
+      } else if (preset === 'dept') {
+        methodEl.value = 'label';
+        valEl.value = 'Operations, Finance, Finance, Sales, Operations, Sales';
+      } else if (preset === 'grades') {
+        methodEl.value = 'ordinal';
+        valEl.value = 'G2, G0, G4, G1, G3';
+        orderEl.value = 'G0, G1, G2, G3, G4';
+      }
+      updateEncodingLab();
+    }
+
+    function updateEncodingLab() {
+      const methodEl = document.getElementById('lab1-method');
+      const valEl = document.getElementById('lab1-values');
+      const orderEl = document.getElementById('lab1-order');
+      const orderWrap = document.getElementById('lab1-order-wrap');
+      const invBox = document.getElementById('lab1-inverse-box');
+      const outputEl = document.getElementById('lab1-output');
+      if (!methodEl || !valEl || !orderEl || !orderWrap || !invBox || !outputEl) return;
+
+      const method = methodEl.value;
+      const values = valEl.value.split(',').map(function(s) { return s.trim(); }).filter(function(s) { return s.length > 0; });
+
+      orderWrap.style.display = method === 'ordinal' ? 'flex' : 'none';
+      invBox.style.display = method === 'label' ? 'flex' : 'none';
+
+      if (values.length === 0) {
+        outputEl.innerHTML = `<p class="prose">أدخل قيمة واحدة على الأقل لعرض نتائج الترميز.</p>`;
+        return;
+      }
+
+      if (method === 'onehot') {
+        const uniqueCols = Array.from(new Set(values));
+        let html = `<div class="mono-tag" style="margin-bottom: var(--space-sm);">المخرجات عبر pd.get_dummies() — عدد الأعمدة المولدة: ${uniqueCols.length}</div>`;
+        html += `<div class="table-wrap"><table class="data-table"><thead><tr><th>القيمة الأصلية</th>`;
+        uniqueCols.forEach(function(col) {
+          html += `<th class="num-cell">${escapeHtml(col)}</th>`;
+        });
+        html += `</tr></thead><tbody>`;
+        values.forEach(function(v) {
+          html += `<tr><td>${escapeHtml(v)}</td>`;
+          uniqueCols.forEach(function(col) {
+            html += `<td class="num-cell">${v === col ? '1' : '0'}</td>`;
+          });
+          html += `</tr>`;
+        });
+        html += `</tbody></table></div>`;
+        outputEl.innerHTML = html;
+      } else if (method === 'label') {
+        const sortedClasses = Array.from(new Set(values)).sort(function(a, b) { return a.localeCompare(b); });
+        currentLabelClasses = sortedClasses;
+        const mapObj = {};
+        sortedClasses.forEach(function(c, idx) { mapObj[c] = idx; });
+
+        let html = `<div class="mono-tag" style="margin-bottom: var(--space-sm);">خريطة LabelEncoder (ترتيب أبجدي تلقائي): ${sortedClasses.map(function(c, i) { return escapeHtml(c) + ' → ' + i; }).join(' | ')}</div>`;
+        html += `<div class="table-wrap"><table class="data-table"><thead><tr><th>القيمة الأصلية</th><th class="num-cell">الرمز بعد fit_transform</th></tr></thead><tbody>`;
+        values.forEach(function(v) {
+          html += `<tr><td>${escapeHtml(v)}</td><td class="num-cell">${mapObj[v]}</td></tr>`;
+        });
+        html += `</tbody></table></div>`;
+        outputEl.innerHTML = html;
+        updateInversePreview();
+      } else if (method === 'ordinal') {
+        const customOrder = orderEl.value.split(',').map(function(s) { return s.trim(); }).filter(function(s) { return s.length > 0; });
+        const orderMap = {};
+        customOrder.forEach(function(c, idx) { orderMap[c] = idx; });
+
+        let html = `<div class="mono-tag" style="margin-bottom: var(--space-sm);">خريطة OrdinalEncoder (وفق ترتيب categories المحدد): ${customOrder.map(function(c, i) { return escapeHtml(c) + ' → ' + i; }).join(' | ')}</div>`;
+        html += `<div class="table-wrap"><table class="data-table"><thead><tr><th>القيمة الأصلية</th><th class="num-cell">grade_encoded</th></tr></thead><tbody>`;
+        values.forEach(function(v) {
+          const code = Object.prototype.hasOwnProperty.call(orderMap, v) ? orderMap[v] : 'غير موجود في categories';
+          html += `<tr><td>${escapeHtml(v)}</td><td class="num-cell">${code}</td></tr>`;
+        });
+        html += `</tbody></table></div>`;
+        outputEl.innerHTML = html;
+      }
+    }
+
+    function updateInversePreview() {
+      const invInput = document.getElementById('lab1-inv-input');
+      const invResult = document.getElementById('lab1-inv-result');
+      if (!invInput || !invResult) return;
+
+      const nums = invInput.value.split(',').map(function(s) { return s.trim(); }).filter(function(s) { return s.length > 0; });
+      const mapped = nums.map(function(n) {
+        const idx = parseInt(n, 10);
+        if (isNaN(idx) || idx < 0 || idx >= currentLabelClasses.length) {
+          return 'ValueError(' + n + ')';
+        }
+        return "'" + currentLabelClasses[idx] + "'";
+      });
+      invResult.textContent = '[' + mapped.join(', ') + ']';
+    }
+
+    // =========================================================================
+    // 4. INTERACTIVE LAB 2: FEATURE SCALING COMPARATOR
+    // =========================================================================
+    const BASE_SCORES = [723, 556, 674, 53, 711, 901, 516, 665, 697];
+
+    function setScalingScenario(mode) {
+      appState.scalingScenario = mode;
+      persistState();
+      updateScalingLab();
+    }
+
+    function computeStats(arr) {
+      const n = arr.length;
+      const mean = arr.reduce(function(a, b) { return a + b; }, 0) / n;
+      const variance = arr.reduce(function(a, b) { return a + Math.pow(b - mean, 2); }, 0) / n;
+      const std = Math.sqrt(variance);
+      const sorted = arr.slice().sort(function(a, b) { return a - b; });
+      const min = sorted[0];
+      const max = sorted[n - 1];
+
+      function quantile(q) {
+        const pos = (n - 1) * q;
+        const base = Math.floor(pos);
+        const rest = pos - base;
+        if (sorted[base + 1] !== undefined) {
+          return sorted[base] + rest * (sorted[base + 1] - sorted[base]);
+        }
+        return sorted[base];
+      }
+
+      const q1 = quantile(0.25);
+      const median = quantile(0.5);
+      const q3 = quantile(0.75);
+      const iqr = q3 - q1;
+
+      return { mean: mean, std: std, min: min, max: max, q1: q1, median: median, q3: q3, iqr: iqr };
+    }
+
+    function updateScalingLab() {
+      const btnBase = document.getElementById('lab2-btn-base');
+      const btnOut = document.getElementById('lab2-btn-outlier');
+      const customEl = document.getElementById('lab2-custom-x');
+      const newMinEl = document.getElementById('lab2-new-min');
+      const newMaxEl = document.getElementById('lab2-new-max');
+      const statsEl = document.getElementById('lab2-stats-strip');
+      const tableWrap = document.getElementById('lab2-table-wrap');
+      if (!btnBase || !btnOut || !customEl || !newMinEl || !newMaxEl || !statsEl || !tableWrap) return;
+
+      const isOutlier = appState.scalingScenario === 'outlier';
+      btnBase.classList.toggle('is-selected', !isOutlier);
+      btnOut.classList.toggle('is-selected', isOutlier);
+
+      const dataset = isOutlier ? BASE_SCORES.concat([2500]) : BASE_SCORES.slice();
+      const stats = computeStats(dataset);
+
+      const xVal = parseFloat(customEl.value);
+      const newMin = parseFloat(newMinEl.value);
+      const newMax = parseFloat(newMaxEl.value);
+      const safeMin = isNaN(newMin) ? 0 : newMin;
+      const safeMax = isNaN(newMax) ? 1 : newMax;
+
+      function scaleStandard(x) { return stats.std === 0 ? 0 : (x - stats.mean) / stats.std; }
+      function scaleMinMax(x) {
+        if (stats.max === stats.min) return safeMin;
+        return ((x - stats.min) / (stats.max - stats.min)) * (safeMax - safeMin) + safeMin;
+      }
+      function scaleRobust(x) { return stats.iqr === 0 ? 0 : (x - stats.median) / stats.iqr; }
+
+      const testX = isNaN(xVal) ? 723 : xVal;
+
+      statsEl.innerHTML = `
+        <div class="exam-stat-tile exam-stat-tile--lead">
+          <span class="kpi-label">المتوسط (μ) والانحراف (σ)</span>
+          <div class="kpi-value" style="font-size: 1.15rem;">${stats.mean.toFixed(2)} ± ${stats.std.toFixed(2)}</div>
+          <span class="kpi-sub">Z(${testX}) = ${scaleStandard(testX).toFixed(4)}</span>
+        </div>
+        <div class="exam-stat-tile">
+          <span class="kpi-label">المدى [Min, Max]</span>
+          <div class="kpi-value" style="font-size: 1.15rem;">[${stats.min}, ${stats.max}]</div>
+          <span class="kpi-sub">MinMax(${testX}) = ${scaleMinMax(testX).toFixed(4)}</span>
+        </div>
+        <div class="exam-stat-tile">
+          <span class="kpi-label">الوسيط (Q₂) والمدى الربيعي</span>
+          <div class="kpi-value" style="font-size: 1.15rem;">${stats.median.toFixed(1)} | IQR=${stats.iqr.toFixed(1)}</div>
+          <span class="kpi-sub">Robust(${testX}) = ${scaleRobust(testX).toFixed(4)}</span>
+        </div>
+      `;
+
+      // Table
+      let tHtml = `<table class="data-table"><thead><tr>
+        <th>العينة</th>
+        <th class="num-cell">القيمة الأصلية</th>
+        <th class="num-cell">Standard (Z-Score)</th>
+        <th class="num-cell">Min-Max [${safeMin}, ${safeMax}]</th>
+        <th class="num-cell">Robust (IQR)</th>
+      </tr></thead><tbody>`;
+
+      dataset.forEach(function(val, idx) {
+        const tag = (isOutlier && idx === dataset.length - 1) ? ' (متطرفة)' : (idx === 0 ? ' (مثال المقرر)' : '');
+        tHtml += `<tr>
+          <td>سجل #${idx + 1}${tag}</td>
+          <td class="num-cell">${val}</td>
+          <td class="num-cell">${scaleStandard(val).toFixed(4)}</td>
+          <td class="num-cell">${scaleMinMax(val).toFixed(4)}</td>
+          <td class="num-cell">${scaleRobust(val).toFixed(4)}</td>
+        </tr>`;
+      });
+      tHtml += `</tbody></table>`;
+      tableWrap.innerHTML = tHtml;
+
+      // Render Chart.js
+      const canvas = document.getElementById('scaling-chart');
+      if (!canvas || typeof Chart === 'undefined') return;
+      const ctx = canvas.getContext('2d');
+      if (scalingChartInstance) scalingChartInstance.destroy();
+
+      const labels = dataset.map(function(v, i) { return '#' + (i + 1) + ' (' + v + ')'; });
+      scalingChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Standard Scaling',
+              data: dataset.map(function(v) { return Number(scaleStandard(v).toFixed(3)); }),
+              backgroundColor: getThemeColor('--data-1')
+            },
+            {
+              label: 'Min-Max Scaling',
+              data: dataset.map(function(v) { return Number(scaleMinMax(v).toFixed(3)); }),
+              backgroundColor: getThemeColor('--data-2')
+            },
+            {
+              label: 'Robust Scaling',
+              data: dataset.map(function(v) { return Number(scaleRobust(v).toFixed(3)); }),
+              backgroundColor: getThemeColor('--data-3')
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+              labels: { font: { family: "'IBM Plex Mono', 'Noto Sans Arabic', sans-serif", size: 12 } }
+            }
+          },
+          scales: {
+            y: {
+              grid: { color: getThemeColor('--outline-variant') },
+              ticks: { font: { family: "'IBM Plex Mono', monospace" } }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { font: { family: "'IBM Plex Mono', monospace", size: 11 } }
+            }
+          }
+        }
+      });
+    }
+
+    // =========================================================================
+    // 5. INTERACTIVE LAB 3: TRANSFORMATION, DISCRETIZATION, BMI
+    // =========================================================================
+    const GDP_COUNTRIES = [
+      { name: 'بلد A', gdp: 12 },
+      { name: 'بلد B', gdp: 28 },
+      { name: 'بلد C', gdp: 65 },
+      { name: 'بلد D', gdp: 140 },
+      { name: 'بلد E', gdp: 320 },
+      { name: 'بلد F', gdp: 780 },
+      { name: 'بلد G', gdp: 1850 },
+      { name: 'بلد H', gdp: 4200 },
+      { name: 'بلد I', gdp: 14800 },
+      { name: 'بلد J', gdp: 21400 }
+    ];
+
+    function switchLab3Tab(tab) {
+      const tabs = ['log', 'disc', 'bmi'];
+      tabs.forEach(function(t) {
+        const btn = document.getElementById('tab-btn-' + t);
+        const panel = document.getElementById('lab3-panel-' + t);
+        if (btn) btn.classList.toggle('is-active', t === tab);
+        if (panel) panel.style.display = t === tab ? 'block' : 'none';
+      });
+      if (tab === 'log') renderLogChart();
+      if (tab === 'disc') updateDiscLab();
+      if (tab === 'bmi') updateBmiLab();
+    }
+
+    function setLogView(mode) {
+      appState.logView = mode;
+      persistState();
+      renderLogChart();
+    }
+
+    function renderLogChart() {
+      const btnRaw = document.getElementById('btn-log-raw');
+      const btnLog = document.getElementById('btn-log-trans');
+      const kpiWrap = document.getElementById('lab3-log-kpis');
+      const canvas = document.getElementById('log-chart');
+      if (!btnRaw || !btnLog || !kpiWrap || !canvas) return;
+
+      const isLog = appState.logView === 'log';
+      btnRaw.className = isLog ? 'btn btn-secondary' : 'btn btn-primary';
+      btnLog.className = isLog ? 'btn btn-primary' : 'btn btn-secondary';
+
+      const values = GDP_COUNTRIES.map(function(c) {
+        return isLog ? Number(Math.log(c.gdp).toFixed(3)) : c.gdp;
+      });
+      const minV = Math.min.apply(null, values);
+      const maxV = Math.max.apply(null, values);
+      const ratio = isLog ? (maxV - minV).toFixed(2) + ' (فرق لوغاريتمي)' : Math.round(maxV / minV) + 'x ضعفاً';
+
+      kpiWrap.innerHTML = `
+        <div class="exam-stat-tile exam-stat-tile--lead">
+          <span class="kpi-label">أدنى قيمة</span>
+          <div class="kpi-value" style="font-size: 1.25rem;">${minV}</div>
+        </div>
+        <div class="exam-stat-tile">
+          <span class="kpi-label">أعلى قيمة</span>
+          <div class="kpi-value" style="font-size: 1.25rem;">${maxV}</div>
+        </div>
+        <div class="exam-stat-tile">
+          <span class="kpi-label">التفاوت بين الأعلى والأدنى</span>
+          <div class="kpi-value" style="font-size: 1.25rem;">${ratio}</div>
+        </div>
+      `;
+
+      if (typeof Chart === 'undefined') return;
+      const ctx = canvas.getContext('2d');
+      if (logChartInstance) logChartInstance.destroy();
+
+      logChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: GDP_COUNTRIES.map(function(c) { return c.name; }),
+          datasets: [{
+            label: isLog ? 'np.log(GDP)' : 'GDP الأصلي (مليار دولار)',
+            data: values,
+            backgroundColor: isLog ? getThemeColor('--data-3') : getThemeColor('--data-1')
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'top' }
+          },
+          scales: {
+            y: { grid: { color: getThemeColor('--outline-variant') } },
+            x: { grid: { display: false } }
+          }
+        }
+      });
+    }
+
+    function updateDiscLab() {
+      const modeEl = document.getElementById('lab3-disc-mode');
+      const binsEl = document.getElementById('lab3-disc-bins');
+      const binsWrap = document.getElementById('lab3-bins-wrap');
+      const outEl = document.getElementById('lab3-disc-output');
+      if (!modeEl || !binsEl || !binsWrap || !outEl) return;
+
+      const mode = modeEl.value;
+      binsWrap.style.display = mode === 'adhoc' ? 'none' : 'flex';
+
+      const ages = [18, 19, 21, 22, 24, 25, 28, 30, 34, 38, 42, 47, 55, 62, 70];
+      const hours = [20, 25, 32, 35, 40, 40, 40, 40, 40, 40, 45, 48, 52, 60];
+      const k = parseInt(binsEl.value, 10) || 5;
+
+      let rows = [];
+      if (mode === 'adhoc') {
+        const lt40 = hours.filter(function(h) { return h < 40; });
+        const eq40 = hours.filter(function(h) { return h === 40; });
+        const gt40 = hours.filter(function(h) { return h > 40; });
+        rows = [
+          { bin: 'أقل من 40 ساعة (< 40)', count: lt40.length, items: lt40.join(', ') },
+          { bin: 'يساوي 40 ساعة (= 40)', count: eq40.length, items: eq40.join(', ') },
+          { bin: 'أكثر من 40 ساعة (> 40)', count: gt40.length, items: gt40.join(', ') }
+        ];
+      } else if (mode === 'width') {
+        const minA = Math.min.apply(null, ages);
+        const maxA = Math.max.apply(null, ages);
+        const width = (maxA - minA) / k;
+        for (let i = 0; i < k; i++) {
+          const lo = minA + i * width;
+          const hi = minA + (i + 1) * width;
+          const matched = ages.filter(function(a) {
+            return i === k - 1 ? (a >= lo && a <= hi) : (a >= lo && a < hi);
+          });
+          rows.push({
+            bin: '[' + lo.toFixed(1) + ' , ' + hi.toFixed(1) + ']',
+            count: matched.length,
+            items: matched.join(', ') || '—'
+          });
+        }
+      } else {
+        // Equal frequency
+        const perBin = Math.ceil(ages.length / k);
+        for (let i = 0; i < k; i++) {
+          const slice = ages.slice(i * perBin, (i + 1) * perBin);
+          if (slice.length > 0) {
+            rows.push({
+              bin: '[' + slice[0] + ' – ' + slice[slice.length - 1] + ']',
+              count: slice.length,
+              items: slice.join(', ')
+            });
+          }
+        }
+      }
+
+      let html = `<table class="data-table"><thead><tr><th>الفئة / النطاق</th><th class="num-cell">التكرار (value_counts)</th><th>القيم داخل الفئة</th></tr></thead><tbody>`;
+      rows.forEach(function(r) {
+        html += `<tr><td>${escapeHtml(r.bin)}</td><td class="num-cell">${r.count}</td><td class="num-cell">${escapeHtml(r.items)}</td></tr>`;
+      });
+      html += `</tbody></table>`;
+      outEl.innerHTML = html;
+    }
+
+    function updateBmiLab() {
+      const wEl = document.getElementById('bmi-weight');
+      const hEl = document.getElementById('bmi-height');
+      const resEl = document.getElementById('lab3-bmi-result');
+      if (!wEl || !hEl || !resEl) return;
+
+      const w = parseFloat(wEl.value);
+      const hCm = parseFloat(hEl.value);
+      if (isNaN(w) || isNaN(hCm) || hCm <= 0) {
+        resEl.innerHTML = `<div class="exam-stat-tile"><span>يرجى إدخال وزن وطول صحيحين.</span></div>`;
+        return;
+      }
+      const hM = hCm / 100;
+      const bmi = w / (hM * hM);
+      let cat = 'وزن طبيعي';
+      if (bmi < 18.5) cat = 'نحافة';
+      else if (bmi >= 25 && bmi < 30) cat = 'زيادة وزن';
+      else if (bmi >= 30) cat = 'سمنة';
+
+      resEl.innerHTML = `
+        <div class="exam-stat-tile exam-stat-tile--lead">
+          <span class="kpi-label">السمة الجديدة المشتقة (BMI)</span>
+          <div class="kpi-value">${bmi.toFixed(2)}</div>
+          <span class="kpi-sub">التصنيف: ${cat}</span>
+        </div>
+        <div class="exam-stat-tile" style="grid-column: span 2;">
+          <span class="kpi-label">تطبيق بايثون المكافئ</span>
+          <div class="kpi-value" style="font-size: 0.95rem; direction: ltr; text-align: left;">df['BMI'] = ${w} / (${hM.toFixed(2)} ** 2)  # → ${bmi.toFixed(2)}</div>
+          <span class="kpi-sub">تم اشتقاق سمة جديدة من سمتي Weight و Height</span>
+        </div>
+      `;
+    }
+
+    // =========================================================================
+    // 6. COMPREHENSIVE 30-QUESTION EXAM BANK (10 PER UNIT)
+    // =========================================================================
+    const QUESTIONS = [
+      // ---------------- UNIT 1 (Q1 - Q10) ----------------
+      {
+        id: 1, unit: 1, tag: 'مفاهيم',
+        stem: `ما المقصود بمفهوم ترميز السمات (Feature Encoding) في سياق تحليل البيانات؟`,
+        options: [
+          `حذف الأعمدة النصية تماماً من مجموعة البيانات قبل بناء النموذج`,
+          `تحويل البيانات من صيغة معينة (غالباً نصية أو فئوية) إلى قيم معرفية أو رموز رقمية للتحليل الإحصائي والتعلم الآلي`,
+          `تقليص عدد الصفوف في الجدول عبر أخذ عينة عشوائية منتظمة`,
+          `ضبط قيم البيانات الرقمية لتقع بين 0 و1 باستخدام المتوسط`
+        ],
+        correct: 1,
+        explanation: `ترميز السمات هو عملية تحويل البيانات (مثل النصوص أو الفئات) إلى مجموعة من القيم المعرفية أو الرموز الرقمية أو الثنائية لتتمكن خوارزميات التحليل الإحصائي والتعلم الآلي من معالجتها.`
+      },
+      {
+        id: 2, unit: 1, tag: 'مفاهيم',
+        stem: `أيٌّ مما يلي ليس من الفوائد الأربعة المذكورة لترميز السمات في الوحدة الأولى؟`,
+        options: [
+          `تقليل الحجم والتعقيد لجعل التحليل أسرع وأكثر فعالية`,
+          `تحسين أداء نماذج التحليل الإحصائي والذكاء الاصطناعي`,
+          `تحسين التفاعلية وسرعة استجابة النظام في التطبيقات الذكية`,
+          `حذف جميع القيم المتطرفة تلقائياً باستخدام المدى الربيعي IQR`
+        ],
+        correct: 3,
+        explanation: `الفوائد الأربعة لترميز السمات هي: تقليل الحجم والتعقيد، تحسين الأداء، تجنب المشاكل في التحليل، وتحسين التفاعلية. أما إزالة القيم المتطرفة عبر IQR فتتبع مرحلة تحسين جودة البيانات (الفصل السابع).`
+      },
+      {
+        id: 3, unit: 1, tag: 'One-Hot Encoding',
+        stem: `لدينا حقل Color يحتوي على 4 صفوف بالقيم: [Green, Blue, Red, Blue]. كم عموداً جديداً ينتج عند تطبيق One-Hot Encoding، وما الصف المقابل لقيمة Red؟`,
+        options: [
+          `عمود واحد بقيم [2, 1, 0, 1]`,
+          `3 أعمدة (Red, Blue, Green)، ويكون صف Red هو: Red=1, Blue=0, Green=0`,
+          `4 أعمدة بعدد الصفوف، ويكون صف Red كلها أصفاراً`,
+          `عمودان فقط لأن Blue تكرر مرتين`
+        ],
+        correct: 1,
+        explanation: `يقوم One-Hot Encoding بإنشاء حقل ثنائي (0 و1) لكل فئة فريدة من فئات السمة (3 فئات = 3 أعمدة)، ويضع 1 في العمود المقابل للفئة و0 في بقية الأعمدة.`
+      },
+      {
+        id: 4, unit: 1, tag: 'بايثون',
+        stem: `ما الدالة المستخدمة في مكتبة pandas لتطبيق One-Hot Encoding على حقل gender ذي الفئتين (M, F) كما ورد في المقرر؟`,
+        options: [
+          `pd.label_encode(df['gender'])`,
+          `pd.get_dummies(df['gender'])`,
+          `pd.cut(df['gender'])`,
+          `pd.scale_binary(df['gender'])`
+        ],
+        correct: 1,
+        explanation: `تُستخدم الدالة pd.get_dummies() من مكتبة pandas لتحويل الأعمدة الفئوية إلى متغيرات ثنائية (One-Hot Encoding).`
+      },
+      {
+        id: 5, unit: 1, tag: 'Label Encoding',
+        stem: `ما الاسم الآخر لتقنية Label Encoding، وما طبيعة القيم التي تنتجها؟`,
+        options: [
+          `Log Encoding، وتنتج قيماً عشرية بين 0 و1`,
+          `Integer Encoding، وتنتج قيماً صحيحة متتابعة مثل 0 و1 و2`,
+          `Binary Encoding، وتنتج عموداً منفصلاً لكل فئة`,
+          `Robust Encoding، وتنتج قيماً سالبة وموجبة حول الوسيط`
+        ],
+        correct: 1,
+        explanation: `يُعرف Label Encoding أيضاً باسم Integer Encoding، حيث يرمز الفئات المختلفة في الحقل النوعي بقيم صحيحة متتابعة تبدأ من الصفر (0, 1, 2, ...).`
+      },
+      {
+        id: 6, unit: 1, tag: 'بايثون',
+        stem: `في كود LabelEncoder التالي على حقل department الذي نتجت عنه المصفوفة [1 0 0 2 1 2 1 0 2]، ماذا تعيد الدالة le.inverse_transform([0, 1, 2])؟`,
+        code: `from sklearn.preprocessing import LabelEncoder\nle = LabelEncoder()\nencoded = le.fit_transform(df['department'])`,
+        options: [
+          `تعيد خطأ برمجياً لأن inverse_transform لا تعمل بعد fit_transform`,
+          `تعيد القيم الأصلية المقابلة للرموز: ['Finance', 'Operations', 'Sales']`,
+          `تعيد متوسط القيم الرقمية للأقسام الثلاثة`,
+          `تحول المصفوفة إلى One-Hot Encoding من ثلاثة أعمدة`
+        ],
+        correct: 1,
+        explanation: `بعد استدعاء fit أو fit_transform، تحفظ LabelEncoder الخريطة بين النصوص والأرقام (أبجدياً: 0=Finance، 1=Operations، 2=Sales)، وتُستخدم دالة inverse_transform() لإرجاع الرموز إلى نصوصها الأصلية.`
+      },
+      {
+        id: 7, unit: 1, tag: 'Ordinal Encoding',
+        stem: `ما الفرق الجوهري بين OrdinalEncoder و LabelEncoder عند ترميز حقل مثل درجات الموظفين (G0, G1, G2, G3, G4)؟`,
+        options: [
+          `OrdinalEncoder يراعي الترتيب المحدد عبر المعامل categories، بينما LabelEncoder يرتب الفئات أبجدياً دون مراعاة الترتيب الدلالي`,
+          `LabelEncoder ينتج أعمدة متعددة، بينما OrdinalEncoder ينتج عموداً واحداً`,
+          `OrdinalEncoder يُستخدم للبيانات الرقمية المستمرة فقط`,
+          `لا يوجد أي فرق بينهما سوى اسم المكتبة`
+        ],
+        correct: 0,
+        explanation: `يشبه OrdinalEncoder أداة LabelEncoder في إنتاج أرقام صحيحة، لكنه يسمح بتحديد الترتيب الصحيح للفئات عبر قائمة categories بحيث تأخذ G0 القيمة 0 وG1 القيمة 1 وهكذا.`
+      },
+      {
+        id: 8, unit: 1, tag: 'تطبيق عملي',
+        stem: `إذا كانت لديك سمة "مستوى الرضا" بقيم: (منخفض، متوسط، مرتفع) وتريد استخدامها في نموذج خطي مع الحفاظ على الترتيب الطبيعي، أي تقنية ترميز تختار؟`,
+        options: [
+          `One-Hot Encoding لأنها تتجاهل الترتيب`,
+          `OrdinalEncoder مع تمرير categories=[['منخفض', 'متوسط', 'مرتفع']]`,
+          `Log Transformation باستخدام np.log()`,
+          `LabelEncoder دون تحديد أي ترتيب`
+        ],
+        correct: 1,
+        explanation: `لأن "مستوى الرضا" سمة نوعية ترتيبية (Ordinal)، فإن OrdinalEncoder مع تحديد قائمة categories يحفظ الترتيب (0=منخفض، 1=متوسط، 2=مرتفع)؛ بينما LabelEncoder قد يرتبها أبجدياً ترتيباً غير منطقي.`
+      },
+      {
+        id: 9, unit: 1, tag: 'بايثون',
+        stem: `أي مكتبة فرعية في scikit-learn تضم الفئتين LabelEncoder و OrdinalEncoder؟`,
+        options: [
+          `sklearn.metrics`,
+          `sklearn.decomposition`,
+          `sklearn.preprocessing`,
+          `sklearn.model_selection`
+        ],
+        correct: 2,
+        explanation: `تتوفر جميع أدوات تهيئة وتحويل السمات مثل LabelEncoder وOrdinalEncoder وStandardScaler وMinMaxScaler وRobustScaler ضمن الوحدة الفرعية sklearn.preprocessing.`
+      },
+      {
+        id: 10, unit: 1, tag: 'مفاهيم',
+        stem: `لماذا يُفضَّل تجنب استخدام LabelEncoder لسمة اسمية مستقلة مثل "المدينة" (القاهرة، الرياض، دبي) قبل تدريب نموذج انحدار خطي؟`,
+        options: [
+          `لأن LabelEncoder يحذف القيم المكررة من الجدول`,
+          `لأن إعطاء أرقام 0 و1 و2 يوحي للنموذج الخطي بوجود علاقة ترتيبية وحسابية وهمية (كأن دبي أكبر من الرياض)`,
+          `لأن LabelEncoder لا يعمل مع النصوص العربية أو الإنجليزية`,
+          `لأن pd.get_dummies أسرع دائماً حتى لو كان عدد المدن مليون مدينة`
+        ],
+        correct: 1,
+        explanation: `عند استخدام أرقام متتابعة (0, 1, 2) لسمة اسمية غير مرتبة، قد تعاملها النماذج الرياضية والخطية كأوزان كمية ذات ترتيب (2 > 1 > 0)، ولذلك يُستخدم One-Hot Encoding للسمات الاسمية المستقلة.`
+      },
+
+      // ---------------- UNIT 2 (Q11 - Q20) ----------------
+      {
+        id: 11, unit: 2, tag: 'مفاهيم',
+        stem: `ما التعريف الدقيق لعملية تحجيم السمات (Feature Scaling)؟`,
+        options: [
+          `تحويل السمات النصية إلى رموز صحيحة متتابعة`,
+          `تغيير مقياس البيانات في مجموعة السمات لتوحيد مقياسها أو تحويلها إلى نطاق محدد مثل [0,1] أو متوسط 0 وانحراف معياري 1`,
+          `إزالة الأعمدة التي تحتوي على قيم مفقودة من جدول البيانات`,
+          `تقسيم البيانات إلى مجموعة تدريب ومجموعة اختبار`
+        ],
+        correct: 1,
+        explanation: `تحجيم السمات يغيّر مقياس القيم الرقمية في السمات لتصبح ضمن نطاق متقارب (مثل [0, 1] أو [-1, 1] أو متوسط صفر وانحراف معياري واحد).`
+      },
+      {
+        id: 12, unit: 2, tag: 'مفاهيم',
+        stem: `أيٌّ من الفوائد التالية يُعد سبباً رئيسياً لتطبيق Feature Scaling قبل تدريب خوارزميات مثل الانحدار الخطي والشبكات العصبية؟`,
+        options: [
+          `تحسين أداء النموذج، تسريع التدريب بتقليل عدد الخطوات، وتسهيل فهم العلاقة مع المخرجات`,
+          `زيادة عدد الأعمدة في البيانات لتكبير حجم النموذج`,
+          `تحويل البيانات من نوعية اسمية إلى بيانات ترتيبية`,
+          `منع استخدام دالة fit_transform أثناء التدريب`
+        ],
+        correct: 0,
+        explanation: `أهمية تحجيم السمات تتلخص في ثلاث نقاط: تحسين أداء النموذج (خاصة الانحدار الخطي والشبكات العصبية)، تسريع التدريب بتقليل الخطوات، وتسهيل فهم البيانات.`
+      },
+      {
+        id: 13, unit: 2, tag: 'معادلات وحسابات',
+        stem: `في مثال Standard Scaling لحقل performance_score، إذا كان المتوسط μ = 610.667 والانحراف المعياري σ = 222.194، فما القيمة المحجمة لأول سجل (X₁ = 723)؟`,
+        options: [
+          `0.7901`,
+          `0.3161`,
+          `0.5056`,
+          `-0.5056`
+        ],
+        correct: 2,
+        explanation: `بتطبيق معادلة Z-Score: Z = (X - μ) / σ = (723 - 610.667) / 222.194 = 112.333 / 222.194 = 0.5056.`
+      },
+      {
+        id: 14, unit: 2, tag: 'مفاهيم',
+        stem: `بعد تطبيق StandardScaler على سمة رقمية، ما قيمتا المتوسط الحسابي والانحراف المعياري الجديدتان للسمة الناتجة؟`,
+        options: [
+          `المتوسط = 1 والانحراف المعياري = 0`,
+          `المتوسط = 0 والانحراف المعياري = 1`,
+          `المتوسط = 0.5 والانحراف المعياري = 0.5`,
+          `أقل قيمة = 0 وأكبر قيمة = 1 دائماً`
+        ],
+        correct: 1,
+        explanation: `تقوم طريقة Standard Scaling (Z-Score Normalization) بتحويل البيانات بحيث يصبح متوسطها صفراً (0) وانحرافها المعياري واحداً (1).`
+      },
+      {
+        id: 15, unit: 2, tag: 'معادلات وحسابات',
+        stem: `باستخدام Min-Max Scaling لتحجيم سمة ضمن النطاق [0, 1]، إذا كانت أقل قيمة 53 وأكبر قيمة 901، فما القيمة الجديدة للعنصر x = 723؟`,
+        options: [
+          `0.5056`,
+          `0.7901`,
+          `0.3161`,
+          `0.8024`
+        ],
+        correct: 1,
+        explanation: `حسب معادلة Min-Max: x' = (723 - 53) / (901 - 53) × (1 - 0) + 0 = 670 / 848 ≈ 0.7901.`
+      },
+      {
+        id: 16, unit: 2, tag: 'مفاهيم',
+        stem: `متى يفضل محلل البيانات استخدام طريقة Min-Max Scaling وفقاً للمقرر؟`,
+        options: [
+          `عند وجود قيم متطرفة غير مرغوب بها نريد تجاهل أثرها`,
+          `عندما يكون الانحراف المعياري صغيراً جداً أو في حالة وجود قيمة متطرفة ذات معنى`,
+          `فقط عندما تكون البيانات نصية أو فئوية`,
+          `عندما نريد الحصول على متوسط يساوي 100`
+        ],
+        correct: 1,
+        explanation: `يفضل استخدام Min-Max Scaling في الحالات التي يكون بها الانحراف المعياري صغيراً جداً أو في حالة وجود قيمة متطرفة ذات معنى، كما تتيح تحديد الحد الأدنى والأعلى للنطاق الجديد.`
+      },
+      {
+        id: 17, unit: 2, tag: 'معادلات وحسابات',
+        stem: `إذا أردنا تحجيم درجة طالب قيمتها 70 من نطاق أصلي [0, 100] إلى نطاق جديد [1, 5] باستخدام معادلة Min-Max العامة، فما القيمة الناتجة؟`,
+        options: [
+          `3.5`,
+          `3.8`,
+          `4.2`,
+          `2.8`
+        ],
+        correct: 1,
+        explanation: `x' = ((70 - 0) / (100 - 0)) × (5 - 1) + 1 = 0.7 × 4 + 1 = 2.8 + 1 = 3.8.`
+      },
+      {
+        id: 18, unit: 2, tag: 'معادلات وحسابات',
+        stem: `في مثال Robust Scaling، إذا كانت Q₁ = 556 والوسيط (الربع الثاني) = 674 وQ₃ = 711، فما القيمة المحجمة لأول سجل (x₁ = 723)؟`,
+        options: [
+          `0.3161`,
+          `0.5056`,
+          `0.7901`,
+          `0.1550`
+        ],
+        correct: 0,
+        explanation: `تعتمد معادلة Robust Scaling على (x - Median) / (Q₃ - Q₁) = (723 - 674) / (711 - 556) = 49 / 155 ≈ 0.3161.`
+      },
+      {
+        id: 19, unit: 2, tag: 'تطبيق عملي',
+        stem: `تحتوي مجموعة بيانات الرواتب على قيمة متطرفة شاذة غير مرغوب بها (خطأ إدخال بمليون دولار). أي طريقة تحجيم هي الأكثر مقاومة لهذه القيمة المتطرفة؟`,
+        options: [
+          `Min-Max Scaling لأنها تعتمد على Max و Min`,
+          `Standard Scaling لأنها تعتمد على المتوسط والانحراف المعياري`,
+          `Robust Scaling لأنها تعتمد على الربع الأول Q₁ والوسيط والربع الثالث Q₃`,
+          `جميعها تتأثر بنفس الدرجة`
+        ],
+        correct: 2,
+        explanation: `يُفضل Robust Scaling عند وجود قيم متطرفة غير مرغوب بها لأن الوسيط والأرباع (Q₁ و Q₃) لا تتأثر بوجود قيم شاذة متطرفة بعكس المتوسط وMin وMax.`
+      },
+      {
+        id: 20, unit: 2, tag: 'بايثون',
+        stem: `أي كود بايثون صحيح لتطبيق Robust Scaling على عمود score في إطار بيانات df؟`,
+        options: [
+          `RobustScaler().fit_transform(df[['score']])`,
+          `RobustScaler().get_dummies(df['score'])`,
+          `np.robust(df['score'])`,
+          `pd.scale_robust(df['score'])`
+        ],
+        correct: 0,
+        explanation: `تُستورد RobustScaler من sklearn.preprocessing وتُطبق عبر fit_transform على مصفوفة ثنائية الأبعاد مثل df[['score']].`
+      },
+
+      // ---------------- UNIT 3 (Q21 - Q30) ----------------
+      {
+        id: 21, unit: 3, tag: 'مفاهيم',
+        stem: `أيٌّ مما يلي يصف الهدف الرئيسي من تحويل السمات (Feature Transformation)؟`,
+        options: [
+          `تقليل تأثير القيم المتطرفة، التعامل مع توزيعات البيانات المائلة، وجعل النموذج أكثر قوة`,
+          `حذف جميع الأعمدة الرقمية والاحتفاظ بالأعمدة النصية فقط`,
+          `إعادة تسمية الأعمدة لتطابق أسماء جداول SQL`,
+          `تشفير البيانات لحمايتها من الاختراق`
+        ],
+        correct: 0,
+        explanation: `يؤدي تحويل السمات إلى جعل الميزات بالشكل المطلوب، وتقليل أثر القيم المتطرفة، ومعالجة التوزيعات المائلة (Skewed)، مما يجعل النموذج أكثر قوة.`
+      },
+      {
+        id: 22, unit: 3, tag: 'مفاهيم',
+        stem: `ما الغرض الأساسي من عملية التقطيع (Discretization) وما أهم فوائدها؟`,
+        options: [
+          `تحويل السمات النوعية إلى أرقام عشوائية لتسريع الحفظ`,
+          `تحويل السمات الرقمية إلى مجموعة من الفئات أو النطاقات لتبسيط البيانات والمساعدة في تمثيلها بشكل أفضل`,
+          `تحويل القيم الموجبة إلى لوغاريتم طبيعي`,
+          `حساب المتوسط الحسابي لكل صف في الجدول`
+        ],
+        correct: 1,
+        explanation: `الغرض من Discretization هو تحويل السمات الرقمية المستمرة إلى فئات أو نطاقات (مثل الفئات العمرية)، ومن أهم فوائدها تبسيط البيانات وتمثيلها بصورة أوضح.`
+      },
+      {
+        id: 23, unit: 3, tag: 'Discretization',
+        stem: `في مثال المقرر على بيانات hoursPerWeek، كيف تم تحديد الفئات الثلاث (< 40، = 40، > 40) وما نوع هذا التقطيع؟`,
+        options: [
+          `Equal width باستخدام تقسيم آلي من الصفر`,
+          `Equal frequency باستخدام الوسيط والانحراف المعياري`,
+          `Ad hoc استناداً إلى ملاحظة توزيع البيانات في رسم Histogram عند 40 ساعة`,
+          `Log transformation باستخدام np.log()`
+        ],
+        correct: 2,
+        explanation: `عند عرض Histogram لـ hoursPerWeek لوحظ تركز النسبة الأكبر عند 40 ساعة، فاختار المحلل تقسيمها إلى 3 فئات حول 40 ساعة — وهذا هو أسلوب Ad hoc المعتمد على رؤية المحلل ومعلوماته المسبقة.`
+      },
+      {
+        id: 24, unit: 3, tag: 'بايثون',
+        stem: `بعد تحويل السمة الرقمية hoursPerWeek إلى سمة نوعية عبر التقطيع (Discretization)، أي دالة استخدمت في المقرر لتمثيل تكرارات الفئات الجديدة؟`,
+        options: [
+          `describe()`,
+          `value_counts()`,
+          `inverse_transform()`,
+          `fillna()`
+        ],
+        correct: 1,
+        explanation: `تُستخدم الدالة value_counts() لحساب وتمثيل توزيع التكرارات للفئات الجديدة بعد تحول السمة من رقمية إلى نوعية فئوية.`
+      },
+      {
+        id: 25, unit: 3, tag: 'Discretization',
+        stem: `ما الفرق بين Equal Width Discretization و Equal Frequency Discretization؟`,
+        options: [
+          `Equal Width يقسم النطاق إلى فئات متساوية في الطول الرياضي، بينما Equal Frequency يقسمه إلى فئات تحوي أعداداً متساوية تقريباً من التكرارات`,
+          `Equal Width ينتج 5 فئات دائماً، بينما Equal Frequency ينتج فئتين فقط`,
+          `Equal Frequency يتطلب أن تكون البيانات نصية مسبقاً`,
+          `لا فرق بينهما إذا كانت البيانات مائلة`
+        ],
+        correct: 0,
+        explanation: `Equal Width يقسّم المدى الكلي [Min, Max] إلى نطاقات متساوية العرض، أما Equal Frequency فيقسّمه إلى نطاقات يتساوى فيها تقريباً عدد العناصر (التكرارات) داخل كل فئة.`
+      },
+      {
+        id: 26, unit: 3, tag: 'بايثون',
+        stem: `أي دالة من دوال مكتبة pandas استُخدمت في المقرر لتطبيق التقطيع وتقسيم قيم العمر إلى 5 نطاقات؟`,
+        options: [
+          `pd.merge()`,
+          `pd.cut()`,
+          `pd.to_csv()`,
+          `pd.dropna()`
+        ],
+        correct: 1,
+        explanation: `ذكر المقرر استخدام دالة pd.cut() المتوفرة في pandas لتقسيم قيم العمر إلى 5 نطاقات (كما تتوفر pd.qcut() في pandas لتقسيم التكرارات المتساوية بدقة).`
+      },
+      {
+        id: 27, unit: 3, tag: 'Log Transformation',
+        stem: `في مثال الناتج المحلي الإجمالي (GDP) لعام 2020، أظهر رسم Box plot الكثير من النقاط خارج شوكة الصندوق. لماذا نستخدم Log Transformation في هذه الحالة بدلاً من حذف هذه النقاط؟`,
+        options: [
+          `لأن هذه القيم الكبيرة أو الصغيرة جداً تأتي بشكل طبيعي من مصدر البيانات وليست سجلات خاطئة`,
+          `لأن Box plot لا يدعم الأرقام الأكبر من 100`,
+          `لأن Log Transformation يحول السمة إلى بيانات ثنائية 0 و1`,
+          `لأن حذف النقاط يغير أسماء الأعمدة`
+        ],
+        correct: 0,
+        explanation: `عندما تشهد السمة نمواً أو انخفاضاً هائلاً (مثل GDP الدول)، فإن النقاط البعيدة في Box plot قيم طبيعية حقيقية وليست أخطاء؛ ويعمل التحويل اللوغاريتمي على تقليص الفجوة وضبط التوزيع.`
+      },
+      {
+        id: 28, unit: 3, tag: 'بايثون',
+        stem: `ما الكود الصحيح في بايثون لتطبيق التحويل اللوغاريتمي على حقل GDP كما ورد في الوحدة الثالثة؟`,
+        options: [
+          `df['GDP_log'] = np.log(df['GDP'])`,
+          `df['GDP_log'] = pd.get_dummies(df['GDP'])`,
+          `df['GDP_log'] = StandardScaler(df['GDP'])`,
+          `df['GDP_log'] = df['GDP'].cut()`
+        ],
+        correct: 0,
+        explanation: `تُستخدم دالة اللوغاريتم من مكتبة NumPy عبر الأمر np.log(df['GDP']) لتحويل القيم ذات النمو الهائل.`
+      },
+      {
+        id: 29, unit: 3, tag: 'Attribute Construction',
+        stem: `ما المقصود ببناء السمات (Attribute Construction)، وما المثال التطبيقي الذي شرحه المقرر لهذه العملية؟`,
+        options: [
+          `إنشاء سمة جديدة بناءً على مجموعة من السمات الموجودة، مثل حساب مؤشر كتلة الجسم BMI من الوزن والطول`,
+          `حذف السمات غير المهمة باستخدام اختبار Chi-squared`,
+          `تغيير أسماء الأعمدة باستخدام دالة rename()`,
+          `تحويل الدرجات الوظيفية G0–G4 إلى أرقام صحيحة`
+        ],
+        correct: 0,
+        explanation: `Attribute Construction يعني اشتقاق أو بناء سمة جديدة اعتماداً على سمات موجودة بالفعل، ومثاله في المقرر حساب مؤشر كتلة الجسم BMI = Weight / (Height ** 2).`
+      },
+      {
+        id: 30, unit: 3, tag: 'معادلات وحسابات',
+        stem: `لشخص وزنه 80 كجم وطوله 2 متر، ما قيمة السمة الجديدة BMI التي يتم بناؤها في عملية Attribute Construction؟`,
+        options: [
+          `40`,
+          `20`,
+          `160`,
+          `25`
+        ],
+        correct: 1,
+        explanation: `بتطبيق معادلة مؤشر كتلة الجسم: BMI = الوزن / (الطول بالمتر)² = 80 / (2²) = 80 / 4 = 20.`
+      }
+    ];
+
+    const LETTERS = ['أ', 'ب', 'ج', 'د'];
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function setExamFilter(filterVal) {
+      appState.examFilter = filterVal;
+      persistState();
+      const btns = document.querySelectorAll('.filter-btn');
+      btns.forEach(function(b) {
+        b.classList.toggle('is-active', b.getAttribute('data-filter') === filterVal);
+      });
+      renderQuestions();
+    }
+
+    function selectOption(qId, optIdx) {
+      appState.answers[String(qId)] = optIdx;
+      persistState();
+      updateScoreboards();
+      renderQuestions();
+    }
+
+    function updateScoreboards() {
+      let totalAnswered = 0;
+      let totalCorrect = 0;
+      const unitStats = {
+        1: { done: 0, correct: 0 },
+        2: { done: 0, correct: 0 },
+        3: { done: 0, correct: 0 }
+      };
+
+      QUESTIONS.forEach(function(q) {
+        const key = String(q.id);
+        if (Object.prototype.hasOwnProperty.call(appState.answers, key)) {
+          totalAnswered += 1;
+          unitStats[q.unit].done += 1;
+          if (appState.answers[key] === q.correct) {
+            totalCorrect += 1;
+            unitStats[q.unit].correct += 1;
+          }
+        }
+      });
+
+      const pct = totalAnswered > 0 ? Math.round((totalCorrect / totalAnswered) * 100) : 0;
+
+      const elTotal = document.getElementById('exam-total-score');
+      const elAcc = document.getElementById('exam-accuracy');
+      if (elTotal) elTotal.textContent = totalCorrect + ' / 30';
+      if (elAcc) elAcc.textContent = 'نسبة الدقة: ' + pct + '% (المجاب: ' + totalAnswered + ')';
+
+      [1, 2, 3].forEach(function(u) {
+        const sc = document.getElementById('exam-u' + u + '-score');
+        const dn = document.getElementById('exam-u' + u + '-done');
+        const railU = document.getElementById('rail-u' + u);
+        if (sc) sc.textContent = unitStats[u].correct + ' / 10';
+        if (dn) dn.textContent = 'أجبت على ' + unitStats[u].done + ' من 10';
+        if (railU) railU.textContent = unitStats[u].correct + ' / 10';
+      });
+
+      const railAns = document.getElementById('rail-answered');
+      const railScore = document.getElementById('rail-score');
+      if (railAns) railAns.textContent = totalAnswered + ' / 30';
+      if (railScore) railScore.textContent = String(totalCorrect);
+    }
+
+    function renderQuestions() {
+      const listEl = document.getElementById('question-list');
+      if (!listEl) return;
+
+      const filter = appState.examFilter;
+      const filtered = QUESTIONS.filter(function(q) {
+        const key = String(q.id);
+        const hasAns = Object.prototype.hasOwnProperty.call(appState.answers, key);
+        if (filter === 'all') return true;
+        if (filter === '1' || filter === '2' || filter === '3') return String(q.unit) === filter;
+        if (filter === 'unanswered') return !hasAns;
+        if (filter === 'wrong') return hasAns && appState.answers[key] !== q.correct;
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        listEl.innerHTML = `<div class="layer"><p class="prose">لا توجد أسئلة مطابقة للتصفية الحالية. اختر «الكل (30)» لاستعراض جميع الأسئلة.</p></div>`;
+        return;
+      }
+
+      let html = '';
+      filtered.forEach(function(q) {
+        const key = String(q.id);
+        const hasAns = Object.prototype.hasOwnProperty.call(appState.answers, key);
+        const chosen = hasAns ? appState.answers[key] : -1;
+        const isCorrect = hasAns && chosen === q.correct;
+
+        let cardCls = 'question-card';
+        if (hasAns) cardCls += isCorrect ? ' is-correct' : ' is-wrong';
+
+        const qNumStr = q.id < 10 ? '0' + q.id : String(q.id);
+
+        html += `<article class="${cardCls}" id="q-card-${q.id}">`;
+        html += `<div class="q-meta">`;
+        html += `<span class="q-number">QUESTION ${qNumStr} / 30</span>`;
+        html += `<div class="q-badges">`;
+        html += `<span class="q-badge">الوحدة ${q.unit}</span>`;
+        html += `<span class="q-badge">${escapeHtml(q.tag)}</span>`;
+        html += `</div></div>`;
+
+        html += `<h3 class="q-stem">${escapeHtml(q.stem)}</h3>`;
+        if (q.code) {
+          html += `<pre class="q-code-snippet">${escapeHtml(q.code)}</pre>`;
+        }
+
+        html += `<div class="q-options">`;
+        q.options.forEach(function(opt, idx) {
+          let optCls = 'q-option-btn';
+          if (hasAns) {
+            if (idx === q.correct) optCls += ' opt-correct';
+            else if (idx === chosen) optCls += ' opt-wrong';
+          }
+          html += `<button type="button" class="${optCls}" onclick="selectOption(${q.id}, ${idx})">`;
+          html += `<span class="q-option-key">${LETTERS[idx]}</span>`;
+          html += `<span>${escapeHtml(opt)}</span>`;
+          html += `</button>`;
+        });
+        html += `</div>`;
+
+        const fbCls = 'q-feedback' + (hasAns ? ' is-visible' : '') + (hasAns && !isCorrect ? ' is-error-fb' : '');
+        const fbTitle = isCorrect
+          ? 'إجابة صحيحة'
+          : 'إجابة غير دقيقة — الإجابة الصحيحة هي (' + LETTERS[q.correct] + ')';
+
+        html += `<div class="${fbCls}">`;
+        html += `<div class="q-feedback-status">${fbTitle}</div>`;
+        html += `<p class="q-feedback-text">${escapeHtml(q.explanation)}</p>`;
+        html += `</div>`;
+
+        html += `</article>`;
+      });
+
+      listEl.innerHTML = html;
+    }
+
+    function resetExam(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== 'true') {
+        btn.dataset.armed = 'true';
+        btn.textContent = 'اضغط مرة أخرى لتأكيد المسح';
+        setTimeout(function() {
+          if (btn.dataset.armed === 'true') {
+            btn.dataset.armed = 'false';
+            btn.textContent = 'إعادة الاختبار';
+          }
+        }, 4000);
+        return;
+      }
+      btn.dataset.armed = 'false';
+      btn.textContent = 'إعادة الاختبار';
+      appState.answers = {};
+      appState.examFilter = 'all';
+      persistState();
+      setExamFilter('all');
+      updateScoreboards();
+      const msg = document.getElementById('exam-status-msg');
+      if (msg) {
+        msg.textContent = 'تم مسح جميع الإجابات ويمكنك بدء الاختبار من جديد.';
+        setTimeout(function() { msg.textContent = ''; }, 3000);
+      }
+    }
+
+    function exportExamCsv() {
+      const lines = ['Question,Unit,Tag,Selected,Correct,Status'];
+      QUESTIONS.forEach(function(q) {
+        const key = String(q.id);
+        const hasAns = Object.prototype.hasOwnProperty.call(appState.answers, key);
+        const sel = hasAns ? LETTERS[appState.answers[key]] : 'Unanswered';
+        const cor = LETTERS[q.correct];
+        const status = !hasAns ? 'Unanswered' : (appState.answers[key] === q.correct ? 'Correct' : 'Incorrect');
+        lines.push([q.id, q.unit, '"' + q.tag + '"', sel, cor, status].join(','));
+      });
+      const csvContent = '\uFEFF' + lines.join('\n');
+      const msg = document.getElementById('exam-status-msg');
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.triggerFileDownload === 'function') {
+          window.notebookAppApi.triggerFileDownload({
+            content: csvContent,
+            contentType: 'text/csv',
+            encoding: 'UTF-8',
+            filename: 'chapter8_exam_results.csv'
+          });
+          if (msg) msg.textContent = 'تم تجهيز ملف نتائج الاختبار للتنزيل.';
+        } else {
+          const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'chapter8_exam_results.csv';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          if (msg) msg.textContent = 'تم تنزيل ملف النتائج CSV.';
+        }
+      } catch (e) {
+        if (msg) msg.textContent = 'تعذر تصدير الملف في هذه البيئة.';
+      }
+      setTimeout(function() { if (msg) msg.textContent = ''; }, 3000);
+    }
+
+    // =========================================================================
+    // 7. SIDEBAR SCROLL SPY
+    // =========================================================================
+    function initScrollSpy() {
+      const links = document.querySelectorAll('.rail-link');
+      const targets = ['unit-1', 'lab-1', 'unit-2', 'lab-2', 'unit-3', 'lab-3', 'exam-section'];
+      if (!('IntersectionObserver' in window)) return;
+
+      const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            const id = entry.target.id;
+            links.forEach(function(l) {
+              l.classList.toggle('is-active', l.getAttribute('data-nav') === id);
+            });
+          }
+        });
+      }, { rootMargin: '-20% 0px -65% 0px' });
+
+      targets.forEach(function(id) {
+        const el = document.getElementById(id);
+        if (el) observer.observe(el);
+      });
+    }
+
+    // =========================================================================
+    // 8. INITIALIZATION
+    // =========================================================================
+    async function initApp() {
+      await loadSavedState();
+
+      // Render KaTeX math
+      if (typeof renderMathInElement === 'function') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false }
+          ],
+          throwOnError: false
+        });
+      }
+
+      // Render Lucide icons
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+      }
+
+      // Initialize interactive labs
+      updateEncodingLab();
+      updateScalingLab();
+      renderLogChart();
+      updateDiscLab();
+      updateBmiLab();
+
+      // Initialize exam UI with restored state
+      setExamFilter(appState.examFilter || 'all');
+      updateScoreboards();
+      initScrollSpy();
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === 'function') {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>

@@ -1,0 +1,2083 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="dashboard">
+  <meta name="design-style" content="briefing">
+  <title>دليل المقارنة التفاعلي لخوارزميات التعلم الآلي واختيار السمات</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces: Briefing warm stone-white paper */
+      --background: #faf9f5;
+      --surface-container-low: #ffffff;
+      --surface-container: #f1efe8;
+      --surface-container-high: #e6e2d6;
+
+      /* Ink */
+      --on-surface: #17181a;
+      --on-surface-variant: #56585c;
+
+      /* Rules */
+      --outline: #17181a;
+      --outline-variant: #dedad0;
+      --control-border: #c8c4b8;
+
+      /* Accents */
+      --primary: #17181a;
+      --on-primary: #faf9f5;
+      --primary-container: #f2b705;
+      --on-primary-container: #17181a;
+      --secondary: #1f4e5f;
+      --secondary-soft: #e7eff2;
+      --tertiary: #785008;
+      --tertiary-soft: #f5e6c4;
+      --error: #b42318;
+      --error-soft: #fdecea;
+      --on-error: #ffffff;
+
+      /* Semantic */
+      --positive: #2b6e52;
+      --positive-soft: #e6f2ec;
+      --warning: #b36b00;
+      --warning-soft: #fdf2dc;
+      --focus: #1f4e5f;
+
+      /* Data series */
+      --data-1: #1f4e5f;
+      --data-2: #d99000;
+      --data-3: #2b6e52;
+      --data-4: #b84a39;
+      --data-context: #c4bfb2;
+      --data-1-fill: rgba(31, 78, 95, 0.16);
+      --data-2-fill: rgba(217, 144, 0, 0.18);
+      --data-3-fill: rgba(43, 110, 82, 0.16);
+      --data-4-fill: rgba(184, 74, 57, 0.16);
+
+      /* Fonts (Noto Sans Arabic first for RTL script) */
+      --font-headline: 'Noto Sans Arabic', 'Source Serif 4', serif;
+      --font-body: 'Noto Sans Arabic', 'Plus Jakarta Sans', sans-serif;
+      --font-label: 'Noto Sans Arabic', 'Geist Mono', monospace;
+      --font-mono-num: 'Geist Mono', 'Noto Sans Arabic', monospace;
+
+      /* Type scale (Dashboard) */
+      --display-size: clamp(1.75rem, 1.35rem + 1.3vw, 2.35rem);
+      --headline-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+      --subhead-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+      --body-size: clamp(0.9375rem, 0.9rem + 0.15vw, 1rem);
+      --label-size: 0.78rem;
+
+      /* Shape */
+      --rounded: 0.25rem;
+      --rounded-lg: 0.375rem;
+      --rounded-full: 0.25rem;
+      --badge-radius: 2px;
+
+      /* Style effects */
+      --section-rule: 1.5px solid var(--outline);
+      --card-border: 1px solid var(--outline-variant);
+      --control-outline: 1px solid var(--control-border);
+      --focus-ring: 0 0 0 2px var(--background), 0 0 0 4px var(--focus);
+      --heading-tracking: 0;
+      --label-tracking: 0;
+
+      /* Spacing scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    header { position: static !important; }
+    button, input, select, textarea { font-family: inherit; }
+
+    /* Focus rings */
+    :focus-visible {
+      outline: 2.5px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .page-grid {
+      display: grid;
+      gap: var(--space-xl);
+      padding: var(--space-lg);
+      max-width: 1240px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Dossier Bar */
+    .dossier-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      border-bottom: var(--section-rule);
+      padding-bottom: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+    .dossier-bar-start {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .dossier-pill {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 0.78rem;
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--badge-radius);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .dossier-meta {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      font-weight: 500;
+    }
+    .progress-summary {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--secondary);
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    /* Typography */
+    .title {
+      font-family: var(--font-headline);
+      font-size: var(--display-size);
+      font-weight: 700;
+      line-height: 1.22;
+      color: var(--on-surface);
+      margin: 0;
+    }
+    .standfirst {
+      font-family: var(--font-body);
+      font-size: var(--subhead-size);
+      font-weight: 600;
+      color: var(--secondary);
+      margin: var(--space-sm) 0 0 0;
+      max-width: 70ch;
+      line-height: 1.55;
+    }
+    .section-title {
+      font-family: var(--font-headline);
+      font-size: var(--headline-size);
+      font-weight: 700;
+      color: var(--on-surface);
+      margin: 0;
+      line-height: 1.3;
+    }
+    .section-desc {
+      color: var(--on-surface-variant);
+      margin: var(--space-xs) 0 0 0;
+      max-width: 68ch;
+      font-size: var(--body-size);
+    }
+
+    /* Index Numbers */
+    .index-num {
+      font-family: var(--font-mono-num);
+      font-weight: 600;
+      font-size: var(--label-size);
+      color: var(--secondary);
+      font-variant-numeric: tabular-nums;
+      background: var(--surface-container);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--badge-radius);
+      display: inline-block;
+    }
+
+    /* Quick Nav Strip */
+    .quick-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+      padding-top: var(--space-sm);
+    }
+    .quick-nav a {
+      text-decoration: none;
+      color: var(--on-surface);
+      background: var(--surface-container-low);
+      border: var(--control-outline);
+      border-radius: var(--rounded);
+      padding: var(--space-xs) var(--space-md);
+      font-size: 0.875rem;
+      font-weight: 600;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .quick-nav a:hover {
+      background: var(--surface-container);
+    }
+
+    /* KPI Strip */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+    .figure-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+    }
+    .kpi-card {
+      cursor: pointer;
+      text-align: right;
+      width: 100%;
+      transition: background-color var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      min-height: 44px;
+    }
+    .kpi-card:hover {
+      background: var(--surface-container);
+    }
+    .kpi-card.is-selected {
+      box-shadow: inset 0 -3px 0 var(--primary-container);
+      background: var(--surface-container-low);
+      outline: 1.5px solid var(--outline);
+    }
+    .kpi-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+    .kpi-value {
+      font-family: var(--font-mono-num);
+      font-size: clamp(1.5rem, 1.2rem + 0.8vw, 2rem);
+      font-weight: 700;
+      color: var(--on-surface);
+      font-variant-numeric: tabular-nums;
+      line-height: 1.1;
+    }
+    .kpi-label {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--on-surface);
+    }
+    .kpi-sub {
+      font-size: 0.82rem;
+      color: var(--on-surface-variant);
+      line-height: 1.45;
+    }
+
+    /* Controls & Decision Finder */
+    .controls-panel {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      display: grid;
+      gap: var(--space-md);
+    }
+    .controls-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) auto;
+      gap: var(--space-md);
+      align-items: end;
+    }
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .field-label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--on-surface);
+    }
+    .text-input, .select-input {
+      height: 44px;
+      padding: 0 var(--space-md);
+      border: var(--control-outline);
+      border-radius: var(--rounded);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      font-size: 0.9375rem;
+      width: 100%;
+    }
+    .select-input {
+      padding-left: var(--space-xl);
+      cursor: pointer;
+    }
+
+    /* Buttons */
+    .btn {
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--rounded);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+      border: var(--control-outline);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+    }
+    .btn:hover:not(:disabled) {
+      background: var(--surface-container);
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: var(--on-primary);
+      border: 1px solid var(--primary);
+    }
+    .btn-primary:hover:not(:disabled) {
+      background: var(--secondary);
+      border-color: var(--secondary);
+    }
+    .btn-active {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      border-color: var(--outline);
+    }
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    /* Filter Chips & Scenario Pills */
+    .chips-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: center;
+    }
+    .filter-chip {
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--rounded);
+      border: var(--control-outline);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .filter-chip:hover {
+      background: var(--surface-container);
+    }
+    .filter-chip.is-active {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+
+    .scenario-band {
+      background: var(--surface-container);
+      border-top: var(--section-rule);
+      padding: var(--space-md);
+      border-radius: 0 0 var(--rounded) var(--rounded);
+      display: grid;
+      gap: var(--space-sm);
+    }
+    .scenario-chip {
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--rounded);
+      border: var(--control-outline);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      font-size: 0.83rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: right;
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .scenario-chip:hover {
+      background: var(--tertiary-soft);
+    }
+    .scenario-chip.is-active {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      border-color: var(--outline);
+    }
+    .scenario-answer {
+      background: var(--surface-container-low);
+      border-right: 4px solid var(--secondary);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      font-size: 0.9rem;
+      color: var(--on-surface);
+    }
+
+    /* Algorithm Cards Grid */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(330px, 100%), 1fr));
+      gap: var(--space-lg);
+    }
+    .algo-card-wrap { container-type: inline-size; }
+    .algo-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+      height: 100%;
+      transition: box-shadow var(--dur-short) var(--ease-out), opacity var(--dur-short) var(--ease-out);
+    }
+    .algo-card.is-compared {
+      box-shadow: 0 0 0 2px var(--secondary);
+    }
+    .algo-card.is-scenario-match {
+      box-shadow: 0 0 0 2.5px var(--primary-container);
+    }
+    .algo-card.is-reviewed {
+      background: linear-gradient(to bottom, var(--positive-soft) 0%, var(--surface-container-low) 64px);
+    }
+    .algo-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      border-bottom: var(--card-border);
+      padding-bottom: var(--space-sm);
+    }
+    .algo-titles {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .algo-cat-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 2px var(--space-sm);
+      border-radius: var(--badge-radius);
+      background: var(--tertiary-soft);
+      color: var(--tertiary);
+      width: fit-content;
+    }
+    .algo-cat-tag.cat-unsupervised { background: var(--secondary-soft); color: var(--secondary); }
+    .algo-cat-tag.cat-regression { background: var(--tertiary-soft); color: var(--tertiary); }
+    .algo-cat-tag.cat-classification { background: var(--positive-soft); color: var(--positive); }
+    .algo-cat-tag.cat-features { background: var(--surface-container-high); color: var(--on-surface); }
+
+    .algo-name {
+      margin: 0;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--on-surface);
+      line-height: 1.3;
+    }
+    .algo-en {
+      font-family: var(--font-mono-num);
+      font-size: 0.8rem;
+      color: var(--on-surface-variant);
+      font-weight: 500;
+    }
+    .algo-facts {
+      display: grid;
+      gap: var(--space-sm);
+      flex: 1;
+    }
+    .fact-row {
+      display: grid;
+      gap: 2px;
+    }
+    .fact-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--secondary);
+    }
+    .fact-label.is-pro { color: var(--positive); }
+    .fact-label.is-con { color: var(--error); }
+    .fact-label.is-exam { color: var(--tertiary); }
+    .fact-text {
+      font-size: 0.9rem;
+      color: var(--on-surface);
+      margin: 0;
+      line-height: 1.55;
+    }
+    .exam-callout {
+      background: var(--surface-container);
+      border-radius: var(--rounded);
+      padding: var(--space-sm) var(--space-md);
+      font-size: 0.85rem;
+      border-right: 3px solid var(--primary-container);
+    }
+    .algo-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      padding-top: var(--space-sm);
+      border-top: var(--card-border);
+      justify-content: space-between;
+    }
+    .algo-actions .btn {
+      flex: 1 1 auto;
+      font-size: 0.82rem;
+    }
+
+    /* Comparison Workspace */
+    .compare-box {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      display: grid;
+      gap: var(--space-lg);
+    }
+    .compare-selectors {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      gap: var(--space-md);
+      align-items: end;
+    }
+    .vs-badge {
+      height: 44px;
+      padding: 0 var(--space-md);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono-num);
+      font-weight: 700;
+      font-size: 0.9rem;
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      border-radius: var(--badge-radius);
+    }
+    .compare-table-wrap {
+      overflow-x: auto;
+    }
+    .dossier-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--surface-container-low);
+      font-size: 0.9rem;
+    }
+    .dossier-table th {
+      text-align: right;
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--section-rule);
+      background: var(--surface-container);
+      color: var(--on-surface);
+      font-weight: 700;
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+    .dossier-table td {
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--card-border);
+      vertical-align: top;
+      line-height: 1.55;
+    }
+    .dossier-table tbody tr:hover {
+      background: var(--background);
+    }
+    .col-dim {
+      width: 18%;
+      font-weight: 700;
+      color: var(--secondary);
+      background: var(--background);
+    }
+
+    /* Visual Profile Chart + Summary Matrix */
+    .chart-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+    .chart-container {
+      position: relative;
+      min-height: 360px;
+      width: 100%;
+    }
+    .aside-box {
+      background: var(--surface-container);
+      border-top: var(--section-rule);
+      padding: var(--space-lg);
+      border-radius: 0 0 var(--rounded-lg) var(--rounded-lg);
+      display: grid;
+      gap: var(--space-md);
+    }
+    .trap-item {
+      border-bottom: var(--card-border);
+      padding-bottom: var(--space-sm);
+    }
+    .trap-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .trap-title {
+      font-weight: 700;
+      color: var(--secondary);
+      font-size: 0.95rem;
+      margin: 0 0 var(--space-xs) 0;
+    }
+    .trap-desc {
+      margin: 0;
+      font-size: 0.88rem;
+      color: var(--on-surface);
+      line-height: 1.55;
+    }
+
+    /* Interactive Exam Quiz */
+    .quiz-panel {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      display: grid;
+      gap: var(--space-md);
+    }
+    .quiz-header-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      border-bottom: var(--card-border);
+      padding-bottom: var(--space-sm);
+    }
+    .quiz-options {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-sm);
+    }
+    .quiz-opt-btn {
+      min-height: 48px;
+      text-align: right;
+      padding: var(--space-sm) var(--space-md);
+      border: var(--control-outline);
+      border-radius: var(--rounded);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out);
+      line-height: 1.45;
+    }
+    .quiz-opt-btn:hover:not(:disabled) {
+      background: var(--surface-container);
+    }
+    .quiz-opt-btn.is-correct {
+      background: var(--positive-soft);
+      border-color: var(--positive);
+      color: var(--positive);
+    }
+    .quiz-opt-btn.is-wrong {
+      background: var(--error-soft);
+      border-color: var(--error);
+      color: var(--error);
+    }
+    .quiz-feedback {
+      padding: var(--space-md);
+      border-radius: var(--rounded);
+      font-size: 0.92rem;
+      line-height: 1.6;
+      display: none;
+    }
+    .quiz-feedback.is-visible { display: block; }
+    .quiz-feedback.is-ok {
+      background: var(--positive-soft);
+      border-right: 4px solid var(--positive);
+    }
+    .quiz-feedback.is-err {
+      background: var(--error-soft);
+      border-right: 4px solid var(--error);
+    }
+
+    .empty-state {
+      background: var(--surface-container);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-xl);
+      text-align: center;
+      display: grid;
+      gap: var(--space-sm);
+      justify-items: center;
+    }
+
+    /* Footer */
+    .source-footer {
+      border-top: var(--section-rule);
+      padding-top: var(--space-md);
+      font-size: 0.85rem;
+      color: var(--on-surface-variant);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 960px) {
+      .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .controls-row { grid-template-columns: 1fr; }
+      .chart-layout { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .page-grid { padding: var(--space-md); gap: var(--space-lg); }
+      .kpi-grid { grid-template-columns: 1fr; }
+      .compare-selectors { grid-template-columns: 1fr; }
+      .quiz-options { grid-template-columns: 1fr; }
+      .vs-badge { width: fit-content; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-grid">
+    <!-- Header / Dossier Masthead -->
+    <header>
+      <div class="dossier-bar">
+        <div class="dossier-bar-start">
+          <span class="dossier-pill">ملف المراجعة السريعة</span>
+          <span class="dossier-meta">تحليل وتمثيل البيانات · 16 خوارزمية وأسلوباً · دليل الاختبار</span>
+        </div>
+        <div class="progress-summary">
+          <span id="reviewed-counter">تمت مراجعة: 0 / 16</span>
+          <button type="button" class="btn" id="reset-progress-btn" onclick="handleResetProgress(this)">إعادة ضبط التقدم</button>
+        </div>
+      </div>
+
+      <h1 class="title">الموسوعة التفاعلية للمقارنة بين خوارزميات التعلم الآلي واختيار السمات</h1>
+      <p class="standfirst">
+        مرجع مركّز للتمييز الفوري في الاختبار بين خوارزميات التعلم بدون إشراف، ونماذج الانحدار والتحسين، وخوارزميات التصنيف، وطرق اختيار السمات وتقليص الأبعاد.
+      </p>
+
+      <nav class="quick-nav" aria-label="أقسام الصفحة">
+        <a href="#explorer-section">01 مستكشف الخوارزميات</a>
+        <a href="#compare-section">02 مقارنة وجهاً لوجه</a>
+        <a href="#visual-section">03 المخطط وفخاخ الاختبار</a>
+        <a href="#matrix-section">04 الجدول الجامع</a>
+        <a href="#quiz-section">05 اختبار التمييز السريع</a>
+      </nav>
+    </header>
+
+    <!-- KPI Track Selector Cards -->
+    <section aria-label="ملخص محاور المنهج">
+      <div class="kpi-grid">
+        <button type="button" class="figure-card kpi-card" id="kpi-unsupervised" onclick="selectTrackFilter('unsupervised')">
+          <div class="kpi-top">
+            <span class="index-num">01</span>
+            <span class="kpi-value">3</span>
+          </div>
+          <div class="kpi-label">التعلم بدون إشراف (التجميع)</div>
+          <div class="kpi-sub"><bdi dir="ltr">K-Means · DBSCAN · Hierarchical</bdi></div>
+        </button>
+
+        <button type="button" class="figure-card kpi-card" id="kpi-regression" onclick="selectTrackFilter('regression')">
+          <div class="kpi-top">
+            <span class="index-num">02</span>
+            <span class="kpi-value">5</span>
+          </div>
+          <div class="kpi-label">نماذج الانحدار والتحسين</div>
+          <div class="kpi-sub"><bdi dir="ltr">Linear · Polynomial · Ridge · Lasso · GD</bdi></div>
+        </button>
+
+        <button type="button" class="figure-card kpi-card" id="kpi-classification" onclick="selectTrackFilter('classification')">
+          <div class="kpi-top">
+            <span class="index-num">03</span>
+            <span class="kpi-value">6</span>
+          </div>
+          <div class="kpi-label">خوارزميات التصنيف (بإشراف)</div>
+          <div class="kpi-sub"><bdi dir="ltr">K-NN · Naïve Bayes · Logistic · SVM · Trees · RF</bdi></div>
+        </button>
+
+        <button type="button" class="figure-card kpi-card" id="kpi-features" onclick="selectTrackFilter('features')">
+          <div class="kpi-top">
+            <span class="index-num">04</span>
+            <span class="kpi-value">2</span>
+          </div>
+          <div class="kpi-label">اختيار السمات وتقليصها</div>
+          <div class="kpi-sub"><bdi dir="ltr">Filter Methods · PCA / SVD</bdi></div>
+        </button>
+      </div>
+    </section>
+
+    <!-- Section 1: Controls, Scenario Finder & Cards -->
+    <section id="explorer-section" aria-labelledby="explorer-heading">
+      <div class="dossier-bar">
+        <div class="dossier-bar-start">
+          <span class="index-num">01</span>
+          <h2 class="section-title" id="explorer-heading">مستكشف الخوارزميات ومحدّد القرار السريع</h2>
+        </div>
+        <span class="dossier-meta" id="visible-count-label">عرض 16 من 16</span>
+      </div>
+
+      <div class="controls-panel">
+        <div class="controls-row">
+          <div class="field-group">
+            <label for="search-input" class="field-label">ابحث بالاسم أو بكلمة مفتاحية (مثال: متطرفة، غير خطية، تعددية خطية، صفر، احتمال)</label>
+            <input type="text" id="search-input" class="text-input" placeholder="اكتب للبحث الفوري في جميع الخوارزميات…" oninput="handleSearchInput(this.value)">
+          </div>
+
+          <div class="field-group">
+            <label for="trait-filter" class="field-label">تصفية حسب خاصية اختبارية محددة</label>
+            <select id="trait-filter" class="select-input" onchange="handleTraitFilter(this.value)">
+              <option value="all">كل الخصائص والحالات</option>
+              <option value="nonlinear">تتعامل مع العلاقات غير الخطية</option>
+              <option value="outlier-robust">تقاوم القيم المتطرفة أو تعزل الضجيج</option>
+              <option value="interpretable">سهلة التفسير المباشر</option>
+              <option value="no-hyper">لا تحتاج معاملات فائقة معقدة / سريعة</option>
+              <option value="feature-elim">تقلص الأبعاد أو تستبعد السمات</option>
+            </select>
+          </div>
+
+          <button type="button" class="btn" onclick="resetAllFilters()">إظهار الكل</button>
+        </div>
+
+        <div class="chips-wrap" role="group" aria-label="تصفية حسب المحور">
+          <button type="button" class="filter-chip is-active" data-track="all" onclick="selectTrackFilter('all')">الكل (16)</button>
+          <button type="button" class="filter-chip" data-track="unsupervised" onclick="selectTrackFilter('unsupervised')">بدون إشراف (3)</button>
+          <button type="button" class="filter-chip" data-track="regression" onclick="selectTrackFilter('regression')">الانحدار والتحسين (5)</button>
+          <button type="button" class="filter-chip" data-track="classification" onclick="selectTrackFilter('classification')">التصنيف (6)</button>
+          <button type="button" class="filter-chip" data-track="features" onclick="selectTrackFilter('features')">السمات والأبعاد (2)</button>
+        </div>
+
+        <div class="scenario-band">
+          <div class="field-label">سيناريو الاختبار: اختر حالة المسألة لتمييز الخوارزمية الأنسب لها فوراً</div>
+          <div class="chips-wrap" id="scenario-chips-wrap"></div>
+          <div class="scenario-answer" id="scenario-answer-box" hidden></div>
+        </div>
+      </div>
+
+      <div style="margin-top: var(--space-lg);" id="cards-container" class="card-grid"></div>
+      <div id="empty-cards-state" class="empty-state" hidden>
+        <p style="margin:0; font-weight:700;">لا توجد خوارزميات مطابقة لمعايير البحث الحالية.</p>
+        <p style="margin:0; color:var(--on-surface-variant);">جرّب مسح نص البحث أو اختيار محور آخر.</p>
+        <button type="button" class="btn btn-primary" onclick="resetAllFilters()">إعادة عرض جميع الخوارزميات</button>
+      </div>
+    </section>
+
+    <!-- Section 2: Side-by-Side Comparison -->
+    <section id="compare-section" aria-labelledby="compare-heading">
+      <div class="dossier-bar">
+        <div class="dossier-bar-start">
+          <span class="index-num">02</span>
+          <h2 class="section-title" id="compare-heading">مقارنة خوارزميتين وجهاً لوجه</h2>
+        </div>
+        <span class="dossier-meta">اختر زوجاً من القوائم أو من أزرار المقارنة داخل البطاقات</span>
+      </div>
+
+      <div class="compare-box">
+        <div class="chips-wrap" aria-label="أزواج مقارنة شائعة في الاختبار">
+          <span class="field-label" style="margin-left: var(--space-xs);">مقارنات الاختبار الشائعة:</span>
+          <button type="button" class="filter-chip" onclick="loadComparePreset('ridge', 'lasso')"><bdi dir="ltr">Ridge</bdi> مقابل <bdi dir="ltr">Lasso</bdi></button>
+          <button type="button" class="filter-chip" onclick="loadComparePreset('kmeans', 'dbscan')"><bdi dir="ltr">K-Means</bdi> مقابل <bdi dir="ltr">DBSCAN</bdi></button>
+          <button type="button" class="filter-chip" onclick="loadComparePreset('filter', 'pca')">اختيار السمات مقابل <bdi dir="ltr">PCA</bdi></button>
+          <button type="button" class="filter-chip" onclick="loadComparePreset('linear', 'poly')"><bdi dir="ltr">Linear</bdi> مقابل <bdi dir="ltr">Polynomial</bdi></button>
+          <button type="button" class="filter-chip" onclick="loadComparePreset('logistic', 'svm')"><bdi dir="ltr">Logistic</bdi> مقابل <bdi dir="ltr">SVM</bdi></button>
+          <button type="button" class="filter-chip" onclick="loadComparePreset('dtree', 'rforest')"><bdi dir="ltr">Decision Tree</bdi> مقابل <bdi dir="ltr">Random Forest</bdi></button>
+        </div>
+
+        <div class="compare-selectors">
+          <div class="field-group">
+            <label for="compare-a" class="field-label">الخوارزمية الأولى (أ)</label>
+            <select id="compare-a" class="select-input" onchange="handleCompareSelectChange()"></select>
+          </div>
+          <div class="vs-badge" aria-hidden="true">VS</div>
+          <div class="field-group">
+            <label for="compare-b" class="field-label">الخوارزمية الثانية (ب)</label>
+            <select id="compare-b" class="select-input" onchange="handleCompareSelectChange()"></select>
+          </div>
+        </div>
+
+        <div class="compare-table-wrap">
+          <table class="dossier-table" id="compare-table">
+            <thead>
+              <tr>
+                <th class="col-dim">وجه المقارنة</th>
+                <th id="comp-head-a">الخوارزمية أ</th>
+                <th id="comp-head-b">الخوارزمية ب</th>
+              </tr>
+            </thead>
+            <tbody id="compare-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Visual Radar/Bar Comparison & Exam Traps -->
+    <section id="visual-section" aria-labelledby="visual-heading">
+      <div class="dossier-bar">
+        <div class="dossier-bar-start">
+          <span class="index-num">03</span>
+          <h2 class="section-title" id="visual-heading">المقارنة البصرية للخصائص وأشهر فخاخ الاختبار</h2>
+        </div>
+        <span class="dossier-meta">تقييم نسبي (1 إلى 5) بناءً على خصائص المنهج</span>
+      </div>
+
+      <div class="chart-layout">
+        <div class="figure-card">
+          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:var(--space-sm); margin-bottom:var(--space-md);">
+            <div>
+              <h3 style="margin:0; font-size:1.05rem;">بصمة الأداء للزوج المقارَن حالياً</h3>
+              <span class="dossier-meta" id="chart-subtitle">مقارنة أربع خصائص حاسمة عند اختيار الخوارزمية</span>
+            </div>
+            <div class="chips-wrap">
+              <button type="button" class="filter-chip is-active" id="chart-mode-bar" onclick="setChartMode('bar')">أعمدة مقارنة</button>
+              <button type="button" class="filter-chip" id="chart-mode-radar" onclick="setChartMode('radar')">رادار</button>
+            </div>
+          </div>
+          <div class="chart-container">
+            <canvas id="comparison-chart" aria-label="مخطط مقارنة خصائص الخوارزميتين"></canvas>
+          </div>
+        </div>
+
+        <aside class="aside-box" aria-label="قواعد ذهبية للتمييز في الاختبار">
+          <h3 style="margin:0; font-size:1.08rem;">5 قواعد ذهبية للتمييز في الاختبار</h3>
+          <div class="trap-item">
+            <h4 class="trap-title">1. <bdi dir="ltr">Ridge</bdi> مقابل <bdi dir="ltr">Lasso</bdi></h4>
+            <p class="trap-desc">كلاهما يعالج التعددية الخطية (<bdi dir="ltr">Multicollinearity</bdi>) بإضافة معامل تنظيم <bdi dir="ltr">λ</bdi>، لكن <strong><bdi dir="ltr">Ridge</bdi></strong> يجمع <em>مربعات</em> المعاملات ويقلصها دون تصفيرها، بينما <strong><bdi dir="ltr">Lasso</bdi></strong> يجمع <em>القيم المطلقة</em> فيصفّر المعاملات غير المؤثرة ويقوم باختيار السمات تلقائياً.</p>
+          </div>
+          <div class="trap-item">
+            <h4 class="trap-title">2. اختيار السمات مقابل تقليصها (<bdi dir="ltr">Filter vs PCA</bdi>)</h4>
+            <p class="trap-desc"><strong>اختيار السمات (<bdi dir="ltr">Filter</bdi>)</strong> يحذف سمات بعينها ويبقي أخرى أصلية (مثل الارتباط <bdi dir="ltr">Pearson</bdi>)، بينما <strong>تقليص السمات (<bdi dir="ltr">PCA / SVD</bdi>)</strong> يدمج السمات معاً لتوليد عدد أقل من السمات الجديدة المدمجة مع حفظ غالبية التباين.</p>
+          </div>
+          <div class="trap-item">
+            <h4 class="trap-title">3. <bdi dir="ltr">K-Means</bdi> مقابل <bdi dir="ltr">DBSCAN</bdi></h4>
+            <p class="trap-desc"><strong><bdi dir="ltr">K-Means</bdi></strong> تتطلب تحديد <bdi dir="ltr">K</bdi> مسبقاً (عبر <bdi dir="ltr">Elbow / WCSS</bdi>) وتفشل مع الأشكال غير الخطية وتتاثر بالقيم المتطرفة؛ أما <strong><bdi dir="ltr">DBSCAN</bdi></strong> فتعتمد على الكثافة (<bdi dir="ltr">eps, minPts</bdi>) وتكتشف الأشكال غير الخطية وتعزل القيم المتطرفة كضجيج.</p>
+          </div>
+          <div class="trap-item">
+            <h4 class="trap-title">4. <bdi dir="ltr">Linear</bdi> مقابل <bdi dir="ltr">Logistic Regression</bdi></h4>
+            <p class="trap-desc">الأول للتنبؤ بقيم عددية مستمرة؛ والثاني رغم كلمة <bdi dir="ltr">Regression</bdi> هو نموذج <strong>تصنيف ثنائي</strong> يمرر الناتج الخطي عبر دالة <bdi dir="ltr">Sigmoid</bdi> لإخراج احتمال بين <bdi dir="ltr">0</bdi> و<bdi dir="ltr">1</bdi> (عتبة <bdi dir="ltr">0.5</bdi>).</p>
+          </div>
+          <div class="trap-item">
+            <h4 class="trap-title">5. <bdi dir="ltr">Loss Function</bdi> مقابل <bdi dir="ltr">Gradient Descent</bdi></h4>
+            <p class="trap-desc"><bdi dir="ltr">Loss Function (MSE)</bdi> هي <em>المقياس</em> الذي يحسب معدل الخطأ؛ بينما <bdi dir="ltr">Gradient Descent</bdi> هي <em>آلية البحث الموجّه</em> التي تعدّل المعاملات <bdi dir="ltr">θ</bdi> لتقليل ذلك الخطأ عبر المشتقات.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- Section 4: Master Cramming Table -->
+    <section id="matrix-section" aria-labelledby="matrix-heading">
+      <div class="dossier-bar">
+        <div class="dossier-bar-start">
+          <span class="index-num">04</span>
+          <h2 class="section-title" id="matrix-heading">الجدول الجامع للمراجعة السريعة</h2>
+        </div>
+        <span class="dossier-meta">جميع الخوارزميات الـ 16 في نظرة واحدة</span>
+      </div>
+
+      <div class="figure-card" style="padding: 0; overflow: hidden;">
+        <div class="compare-table-wrap">
+          <table class="dossier-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>الخوارزمية / الأسلوب</th>
+                <th>المحور</th>
+                <th>متى نستخدمها؟</th>
+                <th>أهم ميزة</th>
+                <th>أهم عيب</th>
+              </tr>
+            </thead>
+            <tbody id="master-matrix-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Interactive Exam Quick Quiz -->
+    <section id="quiz-section" aria-labelledby="quiz-heading">
+      <div class="dossier-bar">
+        <div class="dossier-bar-start">
+          <span class="index-num">05</span>
+          <h2 class="section-title" id="quiz-heading">اختبار التمييز السريع (8 أسئلة على نمط الاختبار)</h2>
+        </div>
+        <span class="dossier-meta" id="quiz-score-badge">النتيجة: 0 / 8</span>
+      </div>
+
+      <div class="quiz-panel">
+        <div class="quiz-header-row">
+          <span class="index-num" id="quiz-q-counter">سؤال 1 من 8</span>
+          <div class="chips-wrap">
+            <button type="button" class="btn" id="quiz-prev-btn" onclick="moveQuiz(-1)">السابق</button>
+            <button type="button" class="btn btn-primary" id="quiz-next-btn" onclick="moveQuiz(1)">التالي</button>
+            <button type="button" class="btn" onclick="restartQuiz(this)">إعادة الاختبار</button>
+          </div>
+        </div>
+
+        <h3 id="quiz-question-text" style="margin:0; font-size:1.12rem; line-height:1.5;"></h3>
+        <div class="quiz-options" id="quiz-options-grid"></div>
+        <div class="quiz-feedback" id="quiz-feedback-box" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <footer class="source-footer">
+      <span>المصدر: ملخص مقرر تحليل وتمثيل البيانات (الفصول الأول إلى الحادي عشر) وأسئلة اللقاء المباشر الثالث.</span>
+      <span>صفحة مراجعة تفاعلية للتمييز بين الخوارزميات — لا تتطلب اتصالاً لإجراء التصفية أو المقارنة.</span>
+    </footer>
+  </div>
+
+  <api-shim></api-shim>
+  <script>
+    const ALGORITHMS = [
+      {
+        id: `kmeans`,
+        num: `01`,
+        nameAr: `تجميع المتوسطات المتحركة (K-Means)`,
+        nameEn: `K-Means Clustering`,
+        track: `unsupervised`,
+        trackLabel: `تعلم بدون إشراف`,
+        mechanism: `تقسيم النقاط حول K مركزاً (Centroids) عبر تعيين كل نقطة لأقرب مركز وتحديث المتوسط تكرارياً حتى الثبات.`,
+        whenToUse: `عندما نريد تقسيم بيانات عددية غير موسومة إلى عدد معروف مسبقاً (K) من المجموعات المتجانسة كروياً.`,
+        pro: `سهل الفهم والتطبيق وسريع الكفاءة (زمن التنفيذ خطي بالنسبة لعدد النقاط n والمجموعات K والتكرارات t).`,
+        con: `يتطلب تحديد عدد المجموعات K يدوياً، حساس جداً للقيم المتطرفة، ولا يتعامل مع التجمعات غير الخطية.`,
+        examKey: `يُحدَّد K الأمثل بطريقة المرفق (Elbow Method) عبر مراقبة استقرار WCSS.`,
+        traits: [`no-hyper`],
+        scores: { interpretability: 4, nonlinearity: 1, outlierRobust: 1, speedSimplicity: 5 },
+        outlierNote: `حساس بشدة (القيم المتطرفة تسحب المركز)`,
+        nonlinearNote: `ضعيف (يفترض مجموعات محدبة/كروية)`
+      },
+      {
+        id: `dbscan`,
+        num: `02`,
+        nameAr: `التجميع المكاني المعتمد على الكثافة (DBSCAN)`,
+        nameEn: `DBSCAN Clustering`,
+        track: `unsupervised`,
+        trackLabel: `تعلم بدون إشراف`,
+        mechanism: `يبحث عن مناطق عالية الكثافة ضمن نصف قطر eps وعدد أدنى من النقاط minPts، ويصنف النقاط إلى أساسية وحدية وضجيج.`,
+        whenToUse: `عند وجود بيانات ذات أشكال غير خطية/متداخلة أو عند الحاجة لاكتشاف القيم المتطرفة كضجيج دون تحديد K مسبقاً.`,
+        pro: `يجمع البيانات غير الخطية بنجاح ويتعامل مع القيم المتطرفة بعزلها كنقاط ضجيج (Noise).`,
+        con: `يحتاج قدراً كبيراً من الحسابات، ومن الصعب اختيار المعاملات المناسبة (eps و minPts).`,
+        examKey: `تصنيف النقاط: Core (≥ minPts) و Border (في جوار Core) و Noise (معزولة).`,
+        traits: [`nonlinear`, `outlier-robust`],
+        scores: { interpretability: 3, nonlinearity: 5, outlierRobust: 5, speedSimplicity: 2 },
+        outlierNote: `ممتاز (يعزل القيم المتطرفة كضجيج)`,
+        nonlinearNote: `ممتاز (يلتقط الأشكال الهندسية غير الخطية)`
+      },
+      {
+        id: `hierarchical`,
+        num: `03`,
+        nameAr: `التجميع الهرمي`,
+        nameEn: `Hierarchical Clustering`,
+        track: `unsupervised`,
+        trackLabel: `تعلم بدون إشراف`,
+        mechanism: `بناء تسلسل هرمي للعناقيد إما تصاعدياً (Agglomerative: دمج الأقرب) أو تنازلياً (Divisive: تقسيم الكل) باستخدام Single / Complete / Average / Ward linkage.`,
+        whenToUse: `عند الرغبة في رؤية البنية الشجرية الكاملة للتجمعات دون الالتزام مسبقاً بعدد K ثابت.`,
+        pro: `لا يشترط تحديد عدد المجموعات مسبقاً ويوفر تمثيلاً هرمياً واضحاً للعلاقات والتقارب بين العناقيد.`,
+        con: `مكلف حسابياً مع البيانات الكبيرة وحساس لطريقة الربط المختارة (مثل تأثر Single Linkage بالسلاسل والضجيج).`,
+        examKey: `فرق طرق الربط: Single (أقرب نقطتين)، Complete (أبعد نقطتين)، Average (المتوسط)، Ward (تقليل زيادة التباين).`,
+        traits: [`interpretable`],
+        scores: { interpretability: 4, nonlinearity: 3, outlierRobust: 2, speedSimplicity: 2 },
+        outlierNote: `متوسط إلى حساس (خاصة مع Single/Complete)`,
+        nonlinearNote: `محدود (يعتمد على مقياس المسافة وطريقة الربط)`
+      },
+      {
+        id: `linear`,
+        num: `04`,
+        nameAr: `الانحدار الخطي`,
+        nameEn: `Linear Regression`,
+        track: `regression`,
+        trackLabel: `الانحدار والتحسين`,
+        mechanism: `يمثّل العلاقة بين السمات المستقلة والهدف المستمر بمعادلة خط مستقيم y = θ₁x + θ₂ بتقليل دالة الخطأ (MSE).`,
+        whenToUse: `للتنبؤ بقيمة عددية مستمرة عندما تكون العلاقة بين المتغيرات خطية ولا توجد تعددية خطية قوية.`,
+        pro: `قابلية عالية للتفسير، يستند على أساس رياضي قوي، ولا يحتاج إلى ضبط معاملات فائقة (Hyperparameters).`,
+        con: `يتأثر سلباً إذا كانت العلاقة غير خطية، حساس للقيم المتطرفة ولتعددية المتغيرات، ويتطلب أن يكون عدد الصفوف أكبر من عدد السمات.`,
+        examKey: `نموذج خطي بسيط، يسهل تفسير معاملاته (الميل والانحدار) دون Hyperparameters.`,
+        traits: [`interpretable`, `no-hyper`],
+        scores: { interpretability: 5, nonlinearity: 1, outlierRobust: 1, speedSimplicity: 5 },
+        outlierNote: `حساس بشدة (التربيع في MSE يضخّم الخطأ)`,
+        nonlinearNote: `ضعيف (يفرض علاقة خطية فقط)`
+      },
+      {
+        id: `poly`,
+        num: `05`,
+        nameAr: `الانحدار متعدد الحدود`,
+        nameEn: `Polynomial Regression`,
+        track: `regression`,
+        trackLabel: `الانحدار والتحسين`,
+        mechanism: `تحويل السمات الأصلية إلى قوى أعلى (مثل الدرجة 2 أو 3 عبر PolynomialFeatures) ثم تطبيق الانحدار الخطي عليها.`,
+        whenToUse: `عندما تكون العلاقة بين المتغير المستقل والهدف المستمر غير خطية ولا يمكن تمثيلها بخط مستقيم.`,
+        pro: `يمنح مرونة عالية لالتقاط المنحنيات والعلاقات غير الخطية باستخدام إطار الانحدار الخطي نفسه.`,
+        con: `زيادة درجة كثيرة الحدود بشكل مفرط ترفع خطر فرط التخصيص (Overfitting) والحساسية للقيم المتطرفة.`,
+        examKey: `نحوّل بيانات التدريب أولاً بدالة PolynomialFeatures(degree=...) قبل التدريب.`,
+        traits: [`nonlinear`],
+        scores: { interpretability: 3, nonlinearity: 5, outlierRobust: 1, speedSimplicity: 3 },
+        outlierNote: `حساس (الأسس العالية تتأثر بالقيم الشاذة)`,
+        nonlinearNote: `ممتاز (يمثّل المنحنيات غير الخطية)`
+      },
+      {
+        id: `ridge`,
+        num: `06`,
+        nameAr: `انحدار ريدج (التنظيم L2)`,
+        nameEn: `Ridge Regression`,
+        track: `regression`,
+        trackLabel: `الانحدار والتحسين`,
+        mechanism: `يضيف إلى دالة الخطأ حدّاً تنظيمياً يساوي λ مضروباً في مجموع مربعات المعاملات لكبح تضخمها.`,
+        whenToUse: `عند وجود تعددية خطية (Multicollinearity) بين المتغيرات المستقلة مع الرغبة في الإبقاء على جميع السمات.`,
+        pro: `يثبّت قيم المعاملات ويمنع عدم استقرار النموذج الناتج عن ارتباط المتغيرات المستقلة ببعضها.`,
+        con: `يقلص المعاملات نحو الصفر لكنه لا يصفّرها تماماً، لذلك لا يقوم باختيار السمات تلقائياً.`,
+        examKey: `Ridge = مجموع المربعات (L2)، يعالج التعددية الخطية دون حذف المتغيرات.`,
+        traits: [`interpretable`],
+        scores: { interpretability: 4, nonlinearity: 1, outlierRobust: 2, speedSimplicity: 4 },
+        outlierNote: `حساس نسبياً (مربعات الأخطاء ما زالت موجودة)`,
+        nonlinearNote: `ضعيف (يبقى نموذجاً خطياً)`
+      },
+      {
+        id: `lasso`,
+        num: `07`,
+        nameAr: `انحدار لاسو (التنظيم L1)`,
+        nameEn: `Lasso Regression`,
+        track: `regression`,
+        trackLabel: `الانحدار والتحسين`,
+        mechanism: `يضيف إلى دالة الخطأ حدّاً تنظيمياً يساوي λ مضروباً في مجموع القيم المطلقة للمعاملات.`,
+        whenToUse: `عند وجود تعددية خطية أو عدد كبير من السمات ونريد نموذجاً أبسط يستبعد السمات غير المؤثرة تلقائياً.`,
+        pro: `يقوم ضمنياً بعملية اختيار السمات (Feature Selection) بجعل معاملات السمات الضعيفة مساوية للصفر.`,
+        con: `كلما زادت قيمة λ جداً تصبح معاملات كثيرة صفراً مما قد يحذف معلومات مفيدة، وقد يكون غير مستقر بين سمات شديدة الترابط.`,
+        examKey: `في مثال المبيعات أصبح معامل Newspaper صفراً؛ أي أن Lasso استبعده لضعف تأثيره.`,
+        traits: [`interpretable`, `feature-elim`],
+        scores: { interpretability: 5, nonlinearity: 1, outlierRobust: 2, speedSimplicity: 4 },
+        outlierNote: `حساس نسبياً للقيم المتطرفة`,
+        nonlinearNote: `ضعيف (نموذج خطي ما لم تُضف سمات غير خطية)`
+      },
+      {
+        id: `gd`,
+        num: `08`,
+        nameAr: `خوارزمية النزول التدريجي`,
+        nameEn: `Gradient Descent`,
+        track: `regression`,
+        trackLabel: `الانحدار والتحسين`,
+        mechanism: `عملية بحث تكرارية موجّهة تعدّل المعاملات θ في عكس اتجاه المشتقة الجزئية (∂E/∂θ) لتقليل دالة الخطأ (Loss Function).`,
+        whenToUse: `كخوارزمية تحسين (Optimization) لتدريب النماذج وإيجاد القيم المثلى للمعاملات التي تدنّي دالة الخطأ.`,
+        pro: `تصل للحل الأمثل بسرعة وكفاءة دون بحث عشوائي، وقابلة للتوسع مع مجموعات البيانات الضخمة.`,
+        con: `تتطلب ضبط معدل التعلم (Learning Rate) وقد تتأثر بالحاجة إلى توحيد مقياس البيانات (Feature Scaling) لتسريع التقارب.`,
+        examKey: `ليست نموذج تنبؤ مستقل، بل آلية تحسين لتقليل Loss Function (مثل MSE).`,
+        traits: [`nonlinear`],
+        scores: { interpretability: 3, nonlinearity: 4, outlierRobust: 2, speedSimplicity: 3 },
+        outlierNote: `يتأثر بحساسية دالة الخطأ المستخدمة`,
+        nonlinearNote: `عام (يحسّن النماذج الخطية وغير الخطية)`
+      },
+      {
+        id: `knn`,
+        num: `09`,
+        nameAr: `أقرب الجيران (K-NN)`,
+        nameEn: `K-Nearest Neighbors`,
+        track: `classification`,
+        trackLabel: `التصنيف (بإشراف)`,
+        mechanism: `تصنيف العنصر الجديد بناءً على تصويت الأغلبية لأقرب K جيران له باستخدام مقياس مسافة (الأشهر المسافة الإقليدية).`,
+        whenToUse: `في مهام التصنيف غير الخطية ذات الحجم المتوسط عندما يتشابه الجيران في السمات والوسوم.`,
+        pro: `بسيط الفهم ولا يبني معادلات تدريب معقدة، ويتكيف تلقائياً مع الحدود غير الخطية للبيانات.`,
+        con: `بطيء عند التنبؤ بالبيانات الكبيرة (يحسب المسافة مع كل النقاط)، حساس لاختيار K ولتفاوت المقاييس (Scaling).`,
+        examKey: `لا يبني نموذجاً خارجياً مستقلاً؛ وتغيير K (مثل 3 مقابل 5) قد يغيّر التصنيف تماماً.`,
+        traits: [`nonlinear`],
+        scores: { interpretability: 4, nonlinearity: 5, outlierRobust: 3, speedSimplicity: 3 },
+        outlierNote: `متوسط (يزداد التحصين بزيادة K المناسبة)`,
+        nonlinearNote: `ممتاز (حدود قرار غير خطية طبيعياً)`
+      },
+      {
+        id: `naivebayes`,
+        num: `10`,
+        nameAr: `بايز الساذج`,
+        nameEn: `Naïve Bayes`,
+        track: `classification`,
+        trackLabel: `التصنيف (بإشراف)`,
+        mechanism: `خوارزمية احتمالية تحسب احتمال انتماء العنصر لكل فئة باستخدام نظرية بايز مع افتراض استقلال السمات عن بعضها.`,
+        whenToUse: `للتصنيف السريع جداً خاصة مع البيانات عالية الأبعاد وتصنيف النصوص والبريد المزعج.`,
+        pro: `سريع للغاية في التدريب والتنبؤ، ويعمل بكفاءة حتى مع بيانات تدريب محدودة وأبعاد كثيرة.`,
+        con: `يفترض استقلال السمات شرطياً وهو افتراض قلّما يتحقق في الواقع عند ترابط السمات.`,
+        examKey: `يصنف في المنهج ضمن الخوارزميات المعتمدة على الاحتمالات إلى جانب Logistic Regression.`,
+        traits: [`no-hyper`, `outlier-robust`],
+        scores: { interpretability: 4, nonlinearity: 2, outlierRobust: 4, speedSimplicity: 5 },
+        outlierNote: `جيد نسبياً (الاحتمالات تقلل أثر نقطة منفردة)`,
+        nonlinearNote: `محدود نسبياً (يعتمد على توزيع الاحتمالات)`
+      },
+      {
+        id: `logistic`,
+        num: `11`,
+        nameAr: `الانحدار اللوجستي`,
+        nameEn: `Logistic Regression`,
+        track: `classification`,
+        trackLabel: `التصنيف (بإشراف)`,
+        mechanism: `يطبق دالة Sigmoid على ناتج التركيبة الخطية لتحويلها إلى احتمال بين 0 و 1 ثم التصنيف عند عتبة (غالباً 0.5).`,
+        whenToUse: `للتصنيف الثنائي (فئتان: 0 أو 1) عندما نحتاج تقدير احتمالات واضحة وحد فاصل خطي قابل للتفسير.`,
+        pro: `ينتج احتمالات قابلة للتفسير (Sigmoid)، سريع التدريب وواضح الأثر لكل سمة.`,
+        con: `يفترض حداً فاصلاً خطياً بين الفئات ولا يلتقط العلاقات غير الخطية المعقدة دون هندسة سمات.`,
+        examKey: `رغم اسم Regression هو خوارزمية تصنيف ثنائي تعتمد على الاحتمالات ودالة Sigmoid.`,
+        traits: [`interpretable`, `no-hyper`],
+        scores: { interpretability: 5, nonlinearity: 1, outlierRobust: 3, speedSimplicity: 5 },
+        outlierNote: `أفضل من الخطي (Sigmoid تحد المخرجات بين 0 و 1)`,
+        nonlinearNote: `ضعيف (الحد الفاصل خطي)`
+      },
+      {
+        id: `svm`,
+        num: `12`,
+        nameAr: `آلة المتجهات الداعمة (SVM)`,
+        nameEn: `Support Vector Machine`,
+        track: `classification`,
+        trackLabel: `التصنيف (بإشراف)`,
+        mechanism: `تبحث عن الفاصل الأمثل (wx + b = 0) الذي يعظّم الهامش/المسافة بين الفئتين عبر خوارزميات التحسين (Optimization).`,
+        whenToUse: `في التصنيف عالي الدقة للبيانات المعقدة أو غير الخطية (باستخدام Kernel Trick) وعالية الأبعاد.`,
+        pro: `لها أساس علمي قوي، وكفاءة عالية في معظم الحالات، وتتعامل مع البيانات غير الخطية عبر Kernel Trick.`,
+        con: `مكلفة حسابياً مع مجموعات البيانات الضخمة جداً وحساسة لاختيار دالة Kernel ومعاملاتها، وأقل وضوحاً في التفسير.`,
+        examKey: `تعظّم المسافة بين أقرب نقاط الفئتين (1 و -1)؛ وتستخدم Kernel Trick للبيانات غير الخطية.`,
+        traits: [`nonlinear`, `outlier-robust`],
+        scores: { interpretability: 2, nonlinearity: 5, outlierRobust: 4, speedSimplicity: 2 },
+        outlierNote: `جيد (يهتم بنقاط الهامش الداعمة بالأساس)`,
+        nonlinearNote: `ممتاز (بفضل Kernel Trick)`
+      },
+      {
+        id: `dtree`,
+        num: `13`,
+        nameAr: `أشجار القرار`,
+        nameEn: `Decision Trees`,
+        track: `classification`,
+        trackLabel: `التصنيف (بإشراف)`,
+        mechanism: `خوارزمية تعتمد على البحث لتقسيم البيانات هرمياً عبر سلسلة من القواعد الشرطية (If-Then) وفق السمات الأكثر تمييزاً.`,
+        whenToUse: `عندما يكون التفسير البشري لقواعد القرار أولوية قصوى أو عند وجود علاقات غير خطية وسمات مختلطة.`,
+        pro: `سهلة الفهم والتفسير البصري للغاية، ولا تتطلب توحيد مقياس البيانات (Scaling)، وتلتقط العلاقات غير الخطية.`,
+        con: `شديدة القابلية لفرط التخصيص (Overfitting) وحساسة لأي تغيرات طفيفة في بيانات التدريب.`,
+        examKey: `تصنف في المنهج ضمن خوارزميات التصنيف المعتمدة على البحث (Search-based).`,
+        traits: [`interpretable`, `nonlinear`, `outlier-robust`],
+        scores: { interpretability: 5, nonlinearity: 4, outlierRobust: 4, speedSimplicity: 4 },
+        outlierNote: `جيد (التقسيم يعتمد على العتبات لا المتوسطات)`,
+        nonlinearNote: `جيد جداً (تقسيمات متعامدة غير خطية)`
+      },
+      {
+        id: `rforest`,
+        num: `14`,
+        nameAr: `الغابات العشوائية`,
+        nameEn: `Random Forests`,
+        track: `classification`,
+        trackLabel: `التصنيف (بإشراف)`,
+        mechanism: `تجميع (Ensemble) لعدد كبير من أشجار القرار المستقلة المدربة على عينات وسمات عشوائية، ثم أخذ تصويت الأغلبية.`,
+        whenToUse: `عند الرغبة في دقة تصنيف عالية واستقرار قوي ومقاومة فرط التخصيص في البيانات الجدولية المعقدة.`,
+        pro: `تعالج عيب فرط التخصيص (Overfitting) في الشجرة الواحدة وتحقق دقة وثباتاً عاليين.`,
+        con: `تفقد بساطة التفسير المباشر مقارنة بشجرة واحدة، وتحتاج ذاكرة ووقت تدريب وحساب أكبر.`,
+        examKey: `الحل المباشر لمشكلة Overfitting وعدم استقرار Decision Tree الواحدة.`,
+        traits: [`nonlinear`, `outlier-robust`],
+        scores: { interpretability: 2, nonlinearity: 5, outlierRobust: 5, speedSimplicity: 3 },
+        outlierNote: `ممتاز (تأثير الشاذة يتلاشى عبر تصويت الأشجار)`,
+        nonlinearNote: `ممتاز (حدود معقدة ومستقرة)`
+      },
+      {
+        id: `filter`,
+        num: `15`,
+        nameAr: `طرق التصفية لاختيار السمات`,
+        nameEn: `Filter Methods`,
+        track: `features`,
+        trackLabel: `اختيار وتقليص السمات`,
+        mechanism: `تقييم كل سمة بمقياس إحصائي مستقل (مثل معامل ارتباط بيرسون [-1, +1]) قبل التدريب لحذف السمات الضعيفة أو المكررة.`,
+        whenToUse: `كخطوة سريعة قبل بناء أي نموذج لتقليل عدد السمات مع الإبقاء على السمات الأصلية دون تغيير معناها.`,
+        pro: `سريعة جداً، مستقلة عن خوارزمية التعلم الآلي، وتحافظ على القابلية الكاملة لتفسير السمات الأصلية.`,
+        con: `تقيس علاقة كل سمة منفردة وتتجاهل التفاعلات المركبة بين مجموعة سمات معاً.`,
+        examKey: `اختيار السمات يحذف سمات ويبقي أخرى كما هي؛ ومعامل بيرسون 0 يعني عدم وجود علاقة خطية.`,
+        traits: [`interpretable`, `no-hyper`, `feature-elim`],
+        scores: { interpretability: 5, nonlinearity: 1, outlierRobust: 2, speedSimplicity: 5 },
+        outlierNote: `متوسط (الارتباط الخطي يتأثر بالقيم الشاذة)`,
+        nonlinearNote: `ضعيف (معامل بيرسون يقيس العلاقة الخطية فقط)`
+      },
+      {
+        id: `pca`,
+        num: `16`,
+        nameAr: `تحليل المكونات الرئيسية / التفكيك القيمي`,
+        nameEn: `PCA / SVD`,
+        track: `features`,
+        trackLabel: `اختيار وتقليص السمات`,
+        mechanism: `توسيط البيانات (Mean-centering) ثم استخلاص مكونات رئيسية جديدة عبر مصفوفة التغاير أو SVD لدمج السمات في أبعاد أقل.`,
+        whenToUse: `عند وجود أبعاد عالية وسمات مترابطة ونريد ضغطها في عدد أقل من المتغيرات المدمجة مع حفظ غالبية المعلومات.`,
+        pro: `يقلص الأبعاد بكفاءة مع الحفاظ على غالبية التباين والمعلومات الأصلية ويسرّع تدريب النماذج.`,
+        con: `السمات الجديدة المدمجة تفقد معناها الفيزيائي المباشر (صعبة التفسير)، ويفترض علاقات خطية في صورته القياسية.`,
+        examKey: `الفرق الجوهري: PCA يدمج السمات لتخليق سمات أقل، بينما اختيار السمات يحذف بعضها ويبقي الأخرى.`,
+        traits: [`feature-elim`],
+        scores: { interpretability: 1, nonlinearity: 2, outlierRobust: 2, speedSimplicity: 4 },
+        outlierNote: `حساس (التباين يتأثر بالقيم المتطرفة)`,
+        nonlinearNote: `محدود (تحويل خطي في PCA القياسي)`
+      }
+    ];
+
+    const SCENARIOS = [
+      {
+        id: `sc-nonlinear-cluster`,
+        label: `تجميع بيانات بشكل هلال أو حلقات متداخلة + قيم شاذة`,
+        matches: [`dbscan`],
+        explanation: `نختار DBSCAN لأنها خوارزمية تجميع غير خطية تعتمد على الكثافة وتعزل النقاط الشاذة كضجيج (Noise)، بينما يفشل K-Means في الأشكال غير الخطية ويتأثر بالقيم المتطرفة.`
+      },
+      {
+        id: `sc-multicollinearity-keep`,
+        label: `انحدار خطي مع تعددية خطية دون حذف أي سمة`,
+        matches: [`ridge`],
+        explanation: `نختار Ridge Regression لأنه يضيف معامل تنظيم L2 (مجموع مربعات المعاملات) لمعالجة التعددية الخطية وتثبيت المعاملات دون جعلها صفراً.`
+      },
+      {
+        id: `sc-multicollinearity-drop`,
+        label: `انحدار خطي نريد فيه استبعاد السمات غير المؤثرة تلقائياً`,
+        matches: [`lasso`],
+        explanation: `نختار Lasso Regression لأنه يستخدم القيمة المطلقة للمعاملات (L1)، وعند زيادة λ يصبح معامل السمة غير المؤثرة صفراً (اختيار سمات ضمني).`
+      },
+      {
+        id: `sc-curved-reg`,
+        label: `التنبؤ بقيمة مستمرة لكن العلاقة منحنية (غير خطية)`,
+        matches: [`poly`],
+        explanation: `نختار Polynomial Regression عبر تحويل السمات إلى قوى متعددة الحدود (مثل PolynomialFeatures) لالتقاط الانحناء الذي يعجز عنه الخط المستقيم.`
+      },
+      {
+        id: `sc-prob-binary`,
+        label: `تصنيف ثنائي (نعم/لا) مع الحاجة لاحتمال بين 0 و 1`,
+        matches: [`logistic`],
+        explanation: `نختار Logistic Regression لأنه يطبق دالة Sigmoid لتحويل المخرجات إلى احتمالات بين 0 و 1 والتصنيف عند عتبة مثل 0.5.`
+      },
+      {
+        id: `sc-dim-merge`,
+        label: `تقليص عدد السمات بدمجها مع الحفاظ على غالبية التباين`,
+        matches: [`pca`],
+        explanation: `نختار PCA / SVD لأنه يقوم بتقليص السمات عبر دمجها في مكونات رئيسية جديدة أقل عدداً، على عكس Filter Methods التي تحذف سمات وتبقي أخرى.`
+      },
+      {
+        id: `sc-overfit-tree`,
+        label: `نموذج شجرة قرار يعاني من فرط التخصيص (Overfitting)`,
+        matches: [`rforest`],
+        explanation: `نختار Random Forests لأنها تدمج العديد من أشجار القرار وتأخذ تصويت الأغلبية، مما يخفض التباين ويعالج فرط التخصيص.`
+      }
+    ];
+
+    const QUIZ_QUESTIONS = [
+      {
+        q: `عند استخدام نموذج انحدار Lasso، أصبح المعامل المقابل لإحدى السمات (مثل Newspaper) مساوياً للصفر. ماذا يعني ذلك؟`,
+        options: [
+          `أن البيانات في هذا العمود مفقودة بالكامل`,
+          `أن Lasso استبعد هذه السمة تلقائياً لأنها غير مؤثرة نسبياً`,
+          `أن قيمة λ صغيرة جداً وتساوي صفراً`,
+          `أن النموذج تحول إلى تصنيف ثنائي`
+        ],
+        correct: 1,
+        explain: `في Lasso Regression (تنظيم L1)، كلما زادت λ تُدفع معاملات السمات الضعيفة أو غير المؤثرة لتصبح صفراً، فيقوم النموذج ضمنياً باختيار السمات.`
+      },
+      {
+        q: `ما الفرق الأساسي بين Ridge Regression و Lasso Regression؟`,
+        options: [
+          `Ridge للتصنيف بينما Lasso للانحدار`,
+          `Ridge يستخدم مجموع مربعات المعاملات، بينما Lasso يستخدم مجموع القيم المطلقة`,
+          `Ridge يحذف السمات بينما Lasso لا يحذفها أبداً`,
+          `لا يوجد فرق بينهما سوى سرعة التنفيذ`
+        ],
+        correct: 1,
+        explain: `Ridge (L2) يضيف مجموع مربعات المعاملات، أما Lasso (L1) فيضيف مجموع القيم المطلقة للمعاملات؛ وهذا ما يمكّن Lasso وحده من تصفير بعض المعاملات.`
+      },
+      {
+        q: `لماذا نلجأ إلى خوارزمية DBSCAN بدلاً من K-Means في بعض مجموعات البيانات؟`,
+        options: [
+          `لأن DBSCAN أسرع دائماً ولا يحتاج أي معاملات`,
+          `لأن DBSCAN يستطيع تجميع البيانات غير الخطية وعزل القيم المتطرفة كضجيج`,
+          `لأن DBSCAN يطلب من المستخدم تحديد عدد المجموعات K يدوياً`,
+          `لأن DBSCAN مخصص للانحدار الخطي فقط`
+        ],
+        correct: 1,
+        explain: `من عيوب K-Means حساسيته للقيم المتطرفة وعجزه عن التعامل مع البيانات غير الخطية، بينما يعالج DBSCAN هذين العيبين بالاعتماد على الكثافة (eps و minPts).`
+      },
+      {
+        q: `ما الفرق الجوهري بين "اختيار السمات" (مثل Filter Methods) و "تقليص السمات" (مثل PCA)؟`,
+        options: [
+          `اختيار السمات يحذف سمات ويبقي أخرى، بينما تقليص السمات يدمج السمات لتخليق سمات جديدة أقل`,
+          `تقليص السمات يستخدم للتصنيف فقط`,
+          `اختيار السمات يضاعف عدد الأعمدة في الجدول`,
+          `PCA يحذف الأعمدة دون أي تحويل رياضي`
+        ],
+        correct: 0,
+        explain: `وفق المنهج: اختيار السمات يحذف سمات بعينها ويبقي على سمات أصلية أخرى، بينما تقليص السمات (PCA/SVD) يدمج السمات معاً لتكوين عدد أقل من المكونات الرئيسية.`
+      },
+      {
+        q: `ما الغرض من استخدام خوارزمية Gradient Descent عند بناء نموذج التنبؤ؟`,
+        options: [
+          `تقسيم البيانات إلى تدريب واختبار بنسبة 25%`,
+          `تقليل قيمة Loss Function إلى أدنى مستوى عبر تعديل المعاملات θ بشكل موجّه`,
+          `حساب معامل ارتباط بيرسون بين السمات`,
+          `تحويل القيم المستمرة إلى فئات عمرية (Discretization)`
+        ],
+        correct: 1,
+        explain: `Gradient Descent هي آلية بحث موجّهة تعتمد على المشتقات لتعديل المعاملات θ وتقليل دالة الخطأ (مثل MSE) لأدنى مستوى ممكن.`
+      },
+      {
+        q: `على الرغم من وجود كلمة Regression في اسمه، ما هي الوظيفة الفعلية لـ Logistic Regression؟`,
+        options: [
+          `التنبؤ بدرجات الحرارة كقيم مستمرة`,
+          `تجميع البيانات بدون إشراف`,
+          `نموذج للتصنيف الثنائي يحوّل المخرجات عبر دالة Sigmoid إلى احتمالات بين 0 و 1`,
+          `تقليص الأبعاد باستخدام مصفوفة التغاير`
+        ],
+        correct: 2,
+        explain: `يعمل Logistic Regression كنموذج للتصنيف الثنائي عبر تطبيق دالة Sigmoid لإخراج احتمال في النطاق [0, 1] ثم الفصل عند عتبة مثل 0.5.`
+      },
+      {
+        q: `في خوارزمية K-NN، كيف يتم تحديد تصنيف النقطة الجديدة؟`,
+        options: [
+          `برسم خط فاصل يعظّم الهامش باستخدام Kernel Trick`,
+          `بتصويت الأغلبية من أقرب K جيران بناءً على مقياس المسافة (مثل الإقليدية)`,
+          `بتطبيق دالة كثيرة حدود من الدرجة الثالثة`,
+          `بحساب متوسط المربعات داخل العنقود WCSS`
+        ],
+        correct: 1,
+        explain: `خوارزمية K-NN تحسب المسافة بين النقطة الجديدة وكل نقاط التدريب وتختار أقرب K عناصر ثم تعطيها التصنيف الأكثر شيوعاً بينها، ولهذا قد يتغير القرار بتغير K.`
+      },
+      {
+        q: `أي العبارات التالية تصف التجميع التصاعدي (Agglomerative) وطريقة Ward linkage وصفاً صحيحاً؟`,
+        options: [
+          `يبدأ بعنقود واحد ثم يقسمه، وWard يقيس أبعد نقطتين`,
+          `يبدأ بكل نقطة كعنقود منفصل ثم يدمج الأقرب، وWard يقيس الزيادة في التباين داخل المجموعة عند الدمج`,
+          `يحدد K مسبقاً بطريقة Elbow Method`,
+          `يعمل فقط مع البيانات النصية عبر نظرية بايز`
+        ],
+        correct: 1,
+        explain: `التجميع التصاعدي (Agglomerative) يبدأ بكل نقطة في عنقود منفصل ثم يدمج العناقيد تدريجياً، وتعتمد طريقة Ward linkage على مدى الزيادة في التباين داخل المجموعة عند الدمج.`
+      }
+    ];
+
+    // App State
+    const appState = {
+      track: `all`,
+      search: ``,
+      trait: `all`,
+      activeScenario: null,
+      compareA: `ridge`,
+      compareB: `lasso`,
+      chartMode: `bar`,
+      reviewedIds: [],
+      quizIndex: 0,
+      quizAnswers: {}
+    };
+
+    let chartInstance = null;
+
+    function getCssVar(name) {
+      return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    }
+
+    function getAlgoById(id) {
+      return ALGORITHMS.find(function (a) { return a.id === id; }) || ALGORITHMS[0];
+    }
+
+    async function persistState() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === `function`) {
+        try {
+          await window.notebookAppApi.setAppState({
+            track: appState.track,
+            compareA: appState.compareA,
+            compareB: appState.compareB,
+            chartMode: appState.chartMode,
+            reviewedIds: appState.reviewedIds,
+            quizIndex: appState.quizIndex,
+            quizAnswers: appState.quizAnswers
+          });
+        } catch (err) {
+          // Ignore persistence failure outside host
+        }
+      }
+    }
+
+    function trackClass(track) {
+      if (track === `unsupervised`) return `cat-unsupervised`;
+      if (track === `regression`) return `cat-regression`;
+      if (track === `classification`) return `cat-classification`;
+      return `cat-features`;
+    }
+
+    function renderScenarioChips() {
+      const wrap = document.getElementById(`scenario-chips-wrap`);
+      if (!wrap) return;
+      wrap.innerHTML = SCENARIOS.map(function (sc) {
+        const activeClass = appState.activeScenario === sc.id ? ` is-active` : ``;
+        return `<button type="button" class="scenario-chip${activeClass}" onclick="toggleScenario('${sc.id}')">${sc.label}</button>`;
+      }).join(``);
+
+      const box = document.getElementById(`scenario-answer-box`);
+      if (!box) return;
+      if (appState.activeScenario) {
+        const scObj = SCENARIOS.find(function (s) { return s.id === appState.activeScenario; });
+        if (scObj) {
+          box.hidden = false;
+          box.innerHTML = `<strong>الاختيار الأنسب في الاختبار:</strong> ${scObj.explanation}`;
+        }
+      } else {
+        box.hidden = true;
+        box.textContent = ``;
+      }
+    }
+
+    function getFilteredAlgorithms() {
+      const q = appState.search.trim().toLowerCase();
+      return ALGORITHMS.filter(function (a) {
+        if (appState.track !== `all` && a.track !== appState.track) return false;
+        if (appState.trait !== `all` && a.traits.indexOf(appState.trait) === -1) return false;
+        if (appState.activeScenario) {
+          const scObj = SCENARIOS.find(function (s) { return s.id === appState.activeScenario; });
+          if (scObj && scObj.matches.indexOf(a.id) === -1) return false;
+        }
+        if (q) {
+          const haystack = `${a.nameAr} ${a.nameEn} ${a.trackLabel} ${a.mechanism} ${a.whenToUse} ${a.pro} ${a.con} ${a.examKey}`.toLowerCase();
+          if (haystack.indexOf(q) === -1) return false;
+        }
+        return true;
+      });
+    }
+
+    function updateFilterUI() {
+      const chips = document.querySelectorAll(`.filter-chip[data-track]`);
+      chips.forEach(function (chip) {
+        if (chip.dataset.track === appState.track) {
+          chip.classList.add(`is-active`);
+        } else {
+          chip.classList.remove(`is-active`);
+        }
+      });
+
+      const kpiIds = [`unsupervised`, `regression`, `classification`, `features`];
+      kpiIds.forEach(function (k) {
+        const el = document.getElementById(`kpi-${k}`);
+        if (!el) return;
+        if (appState.track === k) el.classList.add(`is-selected`);
+        else el.classList.remove(`is-selected`);
+      });
+
+      const counterEl = document.getElementById(`reviewed-counter`);
+      if (counterEl) {
+        counterEl.textContent = `تمت مراجعة: ${appState.reviewedIds.length} / ${ALGORITHMS.length}`;
+      }
+    }
+
+    function renderCards() {
+      const container = document.getElementById(`cards-container`);
+      const emptyState = document.getElementById(`empty-cards-state`);
+      const countLabel = document.getElementById(`visible-count-label`);
+      if (!container || !emptyState) return;
+
+      const list = getFilteredAlgorithms();
+      if (countLabel) countLabel.textContent = `عرض ${list.length} من ${ALGORITHMS.length}`;
+
+      if (list.length === 0) {
+        container.innerHTML = ``;
+        emptyState.hidden = false;
+        return;
+      }
+      emptyState.hidden = true;
+
+      const scObj = appState.activeScenario
+        ? SCENARIOS.find(function (s) { return s.id === appState.activeScenario; })
+        : null;
+
+      container.innerHTML = list.map(function (a) {
+        const isComp = appState.compareA === a.id || appState.compareB === a.id;
+        const isReviewed = appState.reviewedIds.indexOf(a.id) !== -1;
+        const isScMatch = scObj && scObj.matches.indexOf(a.id) !== -1;
+        const cardClasses = [
+          `algo-card`,
+          isComp ? `is-compared` : ``,
+          isReviewed ? `is-reviewed` : ``,
+          isScMatch ? `is-scenario-match` : ``
+        ].filter(Boolean).join(` `);
+
+        return `
+          <div class="algo-card-wrap">
+            <article class="${cardClasses}">
+              <div class="algo-head">
+                <div class="algo-titles">
+                  <span class="algo-cat-tag ${trackClass(a.track)}">${a.trackLabel}</span>
+                  <h3 class="algo-name">${a.nameAr}</h3>
+                  <span class="algo-en"><bdi dir="ltr">${a.nameEn}</bdi></span>
+                </div>
+                <span class="index-num">${a.num}</span>
+              </div>
+
+              <div class="algo-facts">
+                <div class="fact-row">
+                  <span class="fact-label">متى نستخدمها؟</span>
+                  <p class="fact-text">${a.whenToUse}</p>
+                </div>
+                <div class="fact-row">
+                  <span class="fact-label is-pro">أهم ميزة</span>
+                  <p class="fact-text">${a.pro}</p>
+                </div>
+                <div class="fact-row">
+                  <span class="fact-label is-con">أهم عيب</span>
+                  <p class="fact-text">${a.con}</p>
+                </div>
+                <div class="exam-callout">
+                  <span class="fact-label is-exam">مفتاح الاختبار: </span>${a.examKey}
+                </div>
+              </div>
+
+              <div class="algo-actions">
+                <button type="button" class="btn ${isComp ? `btn-active` : ``}" onclick="assignToCompare('${a.id}')">
+                  ${isComp ? `في المقارنة ✓` : `قارن مع غيرها`}
+                </button>
+                <button type="button" class="btn ${isReviewed ? `btn-primary` : ``}" onclick="toggleReviewed('${a.id}')">
+                  ${isReviewed ? `تمت المراجعة ✓` : `تحديد كمراجع`}
+                </button>
+              </div>
+            </article>
+          </div>
+        `;
+      }).join(``);
+    }
+
+    function populateCompareSelects() {
+      const selA = document.getElementById(`compare-a`);
+      const selB = document.getElementById(`compare-b`);
+      if (!selA || !selB) return;
+
+      const optionsHtml = ALGORITHMS.map(function (a) {
+        return `<option value="${a.id}">${a.num} — ${a.nameAr} (${a.nameEn})</option>`;
+      }).join(``);
+
+      selA.innerHTML = optionsHtml;
+      selB.innerHTML = optionsHtml;
+      selA.value = appState.compareA;
+      selB.value = appState.compareB;
+    }
+
+    function renderComparisonTable() {
+      const a = getAlgoById(appState.compareA);
+      const b = getAlgoById(appState.compareB);
+      const headA = document.getElementById(`comp-head-a`);
+      const headB = document.getElementById(`comp-head-b`);
+      const tbody = document.getElementById(`compare-tbody`);
+      if (!headA || !headB || !tbody) return;
+
+      headA.innerHTML = `${a.nameAr} <span class="dossier-meta">(<bdi dir="ltr">${a.nameEn}</bdi>)</span>`;
+      headB.innerHTML = `${b.nameAr} <span class="dossier-meta">(<bdi dir="ltr">${b.nameEn}</bdi>)</span>`;
+
+      const rows = [
+        [`المحور / نوع التعلم`, a.trackLabel, b.trackLabel],
+        [`فكرة العمل الأساسية`, a.mechanism, b.mechanism],
+        [`متى نختارها؟`, a.whenToUse, b.whenToUse],
+        [`أهم ميزة`, a.pro, b.pro],
+        [`أهم عيب`, a.con, b.con],
+        [`التعامل مع العلاقات غير الخطية`, a.nonlinearNote, b.nonlinearNote],
+        [`الحساسية للقيم المتطرفة`, a.outlierNote, b.outlierNote],
+        [`علامة التمييز في الاختبار`, a.examKey, b.examKey]
+      ];
+
+      tbody.innerHTML = rows.map(function (r) {
+        return `
+          <tr>
+            <td class="col-dim">${r[0]}</td>
+            <td>${r[1]}</td>
+            <td>${r[2]}</td>
+          </tr>
+        `;
+      }).join(``);
+    }
+
+    function renderComparisonChart() {
+      const canvas = document.getElementById(`comparison-chart`);
+      const subtitle = document.getElementById(`chart-subtitle`);
+      if (!canvas || typeof Chart === `undefined`) return;
+
+      const a = getAlgoById(appState.compareA);
+      const b = getAlgoById(appState.compareB);
+      if (subtitle) {
+        subtitle.textContent = `${a.nameAr} مقابل ${b.nameAr} (مقياس نسبي 1 = منخفض، 5 = مرتفع)`;
+      }
+
+      const labels = [
+        `سهولة التفسير`,
+        `التعامل مع غير الخطية`,
+        `مقاومة القيم المتطرفة`,
+        `السرعة والبساطة الحسابية`
+      ];
+
+      const dataA = [
+        a.scores.interpretability,
+        a.scores.nonlinearity,
+        a.scores.outlierRobust,
+        a.scores.speedSimplicity
+      ];
+      const dataB = [
+        b.scores.interpretability,
+        b.scores.nonlinearity,
+        b.scores.outlierRobust,
+        b.scores.speedSimplicity
+      ];
+
+      const color1 = getCssVar(`--data-1`);
+      const color2 = getCssVar(`--data-2`);
+      const fill1 = getCssVar(`--data-1-fill`);
+      const fill2 = getCssVar(`--data-2-fill`);
+      const gridColor = getCssVar(`--outline-variant`);
+      const textColor = getCssVar(`--on-surface`);
+      const fontFamily = getCssVar(`--font-body`);
+
+      if (chartInstance) {
+        chartInstance.destroy();
+      }
+
+      const isRadar = appState.chartMode === `radar`;
+      chartInstance = new Chart(canvas, {
+        type: isRadar ? `radar` : `bar`,
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: a.nameAr,
+              data: dataA,
+              backgroundColor: isRadar ? fill1 : color1,
+              borderColor: color1,
+              borderWidth: 2
+            },
+            {
+              label: b.nameAr,
+              data: dataB,
+              backgroundColor: isRadar ? fill2 : color2,
+              borderColor: color2,
+              borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: `top`,
+              labels: {
+                color: textColor,
+                font: { family: fontFamily, size: 13, weight: `600` }
+              }
+            }
+          },
+          scales: isRadar
+            ? {
+                r: {
+                  min: 0,
+                  max: 5,
+                  ticks: { stepSize: 1, backdropColor: `transparent`, color: textColor },
+                  grid: { color: gridColor },
+                  pointLabels: { color: textColor, font: { family: fontFamily, size: 12, weight: `600` } }
+                }
+              }
+            : {
+                y: {
+                  min: 0,
+                  max: 5,
+                  ticks: { stepSize: 1, color: textColor },
+                  grid: { color: gridColor }
+                },
+                x: {
+                  ticks: { color: textColor, font: { family: fontFamily, size: 12, weight: `600` } },
+                  grid: { display: false }
+                }
+              }
+        }
+      });
+    }
+
+    function renderMasterMatrix() {
+      const tbody = document.getElementById(`master-matrix-tbody`);
+      if (!tbody) return;
+      tbody.innerHTML = ALGORITHMS.map(function (a) {
+        return `
+          <tr>
+            <td><span class="index-num">${a.num}</span></td>
+            <td><strong>${a.nameAr}</strong><br><span class="dossier-meta"><bdi dir="ltr">${a.nameEn}</bdi></span></td>
+            <td><span class="algo-cat-tag ${trackClass(a.track)}">${a.trackLabel}</span></td>
+            <td>${a.whenToUse}</td>
+            <td>${a.pro}</td>
+            <td>${a.con}</td>
+          </tr>
+        `;
+      }).join(``);
+    }
+
+    function renderQuiz() {
+      const q = QUIZ_QUESTIONS[appState.quizIndex];
+      const counterEl = document.getElementById(`quiz-q-counter`);
+      const textEl = document.getElementById(`quiz-question-text`);
+      const gridEl = document.getElementById(`quiz-options-grid`);
+      const fbEl = document.getElementById(`quiz-feedback-box`);
+      const scoreEl = document.getElementById(`quiz-score-badge`);
+      const prevBtn = document.getElementById(`quiz-prev-btn`);
+      const nextBtn = document.getElementById(`quiz-next-btn`);
+
+      if (!q || !textEl || !gridEl || !fbEl) return;
+
+      let totalCorrect = 0;
+      Object.keys(appState.quizAnswers).forEach(function (idxStr) {
+        const idx = Number(idxStr);
+        if (QUIZ_QUESTIONS[idx] && appState.quizAnswers[idxStr] === QUIZ_QUESTIONS[idx].correct) {
+          totalCorrect += 1;
+        }
+      });
+
+      if (scoreEl) scoreEl.textContent = `النتيجة: ${totalCorrect} / ${QUIZ_QUESTIONS.length}`;
+      if (counterEl) counterEl.textContent = `سؤال ${appState.quizIndex + 1} من ${QUIZ_QUESTIONS.length}`;
+      if (prevBtn) prevBtn.disabled = appState.quizIndex === 0;
+      if (nextBtn) nextBtn.disabled = appState.quizIndex === QUIZ_QUESTIONS.length - 1;
+
+      textEl.textContent = q.q;
+      const chosen = appState.quizAnswers[String(appState.quizIndex)];
+      const hasAnswered = typeof chosen === `number`;
+
+      gridEl.innerHTML = q.options.map(function (opt, idx) {
+        let cls = `quiz-opt-btn`;
+        if (hasAnswered) {
+          if (idx === q.correct) cls += ` is-correct`;
+          else if (idx === chosen) cls += ` is-wrong`;
+        }
+        return `<button type="button" class="${cls}" ${hasAnswered ? `disabled` : ``} onclick="answerQuiz(${idx})">${opt}</button>`;
+      }).join(``);
+
+      if (hasAnswered) {
+        const isOk = chosen === q.correct;
+        fbEl.className = `quiz-feedback is-visible ${isOk ? `is-ok` : `is-err`}`;
+        fbEl.innerHTML = `<strong>${isOk ? `إجابة صحيحة:` : `إجابة غير دقيقة:`}</strong> ${q.explain}`;
+      } else {
+        fbEl.className = `quiz-feedback`;
+        fbEl.textContent = ``;
+      }
+    }
+
+    // Interactive Handlers (Hoisted function declarations)
+    function selectTrackFilter(track) {
+      appState.track = (appState.track === track && track !== `all`) ? `all` : track;
+      appState.activeScenario = null;
+      updateFilterUI();
+      renderScenarioChips();
+      renderCards();
+      persistState();
+    }
+
+    function handleSearchInput(val) {
+      appState.search = val || ``;
+      renderCards();
+    }
+
+    function handleTraitFilter(val) {
+      appState.trait = val || `all`;
+      renderCards();
+    }
+
+    function toggleScenario(scId) {
+      appState.activeScenario = appState.activeScenario === scId ? null : scId;
+      if (appState.activeScenario) {
+        appState.track = `all`;
+        appState.trait = `all`;
+        const traitEl = document.getElementById(`trait-filter`);
+        if (traitEl) traitEl.value = `all`;
+      }
+      updateFilterUI();
+      renderScenarioChips();
+      renderCards();
+    }
+
+    function resetAllFilters() {
+      appState.track = `all`;
+      appState.search = ``;
+      appState.trait = `all`;
+      appState.activeScenario = null;
+      const sInput = document.getElementById(`search-input`);
+      const tSel = document.getElementById(`trait-filter`);
+      if (sInput) sInput.value = ``;
+      if (tSel) tSel.value = `all`;
+      updateFilterUI();
+      renderScenarioChips();
+      renderCards();
+      persistState();
+    }
+
+    function assignToCompare(id) {
+      if (appState.compareA === id || appState.compareB === id) {
+        const sec = document.getElementById(`compare-section`);
+        if (sec) sec.scrollIntoView({ behavior: `smooth` });
+        return;
+      }
+      appState.compareA = appState.compareB;
+      appState.compareB = id;
+      const selA = document.getElementById(`compare-a`);
+      const selB = document.getElementById(`compare-b`);
+      if (selA) selA.value = appState.compareA;
+      if (selB) selB.value = appState.compareB;
+      renderCards();
+      renderComparisonTable();
+      renderComparisonChart();
+      persistState();
+      const sec = document.getElementById(`compare-section`);
+      if (sec) sec.scrollIntoView({ behavior: `smooth` });
+    }
+
+    function loadComparePreset(idA, idB) {
+      appState.compareA = idA;
+      appState.compareB = idB;
+      const selA = document.getElementById(`compare-a`);
+      const selB = document.getElementById(`compare-b`);
+      if (selA) selA.value = idA;
+      if (selB) selB.value = idB;
+      renderCards();
+      renderComparisonTable();
+      renderComparisonChart();
+      persistState();
+    }
+
+    function handleCompareSelectChange() {
+      const selA = document.getElementById(`compare-a`);
+      const selB = document.getElementById(`compare-b`);
+      if (!selA || !selB) return;
+      appState.compareA = selA.value;
+      appState.compareB = selB.value;
+      renderCards();
+      renderComparisonTable();
+      renderComparisonChart();
+      persistState();
+    }
+
+    function setChartMode(mode) {
+      appState.chartMode = mode;
+      const btnBar = document.getElementById(`chart-mode-bar`);
+      const btnRadar = document.getElementById(`chart-mode-radar`);
+      if (btnBar && btnRadar) {
+        btnBar.classList.toggle(`is-active`, mode === `bar`);
+        btnRadar.classList.toggle(`is-active`, mode === `radar`);
+      }
+      renderComparisonChart();
+      persistState();
+    }
+
+    function toggleReviewed(id) {
+      const idx = appState.reviewedIds.indexOf(id);
+      if (idx === -1) appState.reviewedIds.push(id);
+      else appState.reviewedIds.splice(idx, 1);
+      updateFilterUI();
+      renderCards();
+      persistState();
+    }
+
+    function handleResetProgress(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.textContent = `تأكيد إعادة الضبط؟`;
+        return;
+      }
+      btn.dataset.armed = `false`;
+      btn.textContent = `إعادة ضبط التقدم`;
+      appState.reviewedIds = [];
+      appState.quizAnswers = {};
+      appState.quizIndex = 0;
+      updateFilterUI();
+      renderCards();
+      renderQuiz();
+      persistState();
+    }
+
+    function answerQuiz(optIdx) {
+      appState.quizAnswers[String(appState.quizIndex)] = optIdx;
+      renderQuiz();
+      persistState();
+    }
+
+    function moveQuiz(delta) {
+      const next = appState.quizIndex + delta;
+      if (next >= 0 && next < QUIZ_QUESTIONS.length) {
+        appState.quizIndex = next;
+        renderQuiz();
+        persistState();
+      }
+    }
+
+    function restartQuiz(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.textContent = `اضغط مجدداً للتأكيد`;
+        return;
+      }
+      btn.dataset.armed = `false`;
+      btn.textContent = `إعادة الاختبار`;
+      appState.quizAnswers = {};
+      appState.quizIndex = 0;
+      renderQuiz();
+      persistState();
+    }
+
+    async function initApp() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === `function`) {
+        try {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === `object`) {
+            if (saved.track) appState.track = saved.track;
+            if (saved.compareA) appState.compareA = saved.compareA;
+            if (saved.compareB) appState.compareB = saved.compareB;
+            if (saved.chartMode) appState.chartMode = saved.chartMode;
+            if (Array.isArray(saved.reviewedIds)) appState.reviewedIds = saved.reviewedIds;
+            if (typeof saved.quizIndex === `number`) appState.quizIndex = saved.quizIndex;
+            if (saved.quizAnswers && typeof saved.quizAnswers === `object`) appState.quizAnswers = saved.quizAnswers;
+          }
+        } catch (err) {
+          // Fall back to default state
+        }
+      }
+
+      populateCompareSelects();
+      updateFilterUI();
+      renderScenarioChips();
+      renderCards();
+      renderComparisonTable();
+      setChartMode(appState.chartMode);
+      renderMasterMatrix();
+      renderQuiz();
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    document.addEventListener(`DOMContentLoaded`, initApp);
+  </script>
+</body>
+</html>

@@ -1,649 +1,3199 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>الفصل الحادي عشر الشامل (100%) | تحليل وتمثيل البيانات</title>
-<style>
-:root{
-  --bg:#f0f5ff;
-  --card:#ffffff;
-  --ink:#0f172a;
-  --muted:#475569;
-  --accent:#1d4ed8;
-  --accent-dark:#1e3a8a;
-  --accent2:#dbeafe;
-  --line:#cbd5e1;
-  --good:#059669;
-  --good-bg:#ecfdf5;
-  --bad:#dc2626;
-  --bad-bg:#fef2f2;
-  --warn:#d97706;
-  --warn-bg:#fffbeb;
-}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
-header{background:linear-gradient(135deg,#0f172a,#1d4ed8);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(15,23,42,0.2)}
-.wrap{max-width:1040px;margin:auto;padding:0 16px}
-.eyebrow{opacity:.92;font-size:.9rem;background:rgba(255,255,255,0.16);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
-h1{margin:5px 0;font-size:clamp(1.5rem,4vw,2.25rem)}
-header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
-nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
-nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:var(--accent2);color:var(--accent-dark);font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
-nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
-nav button.active,.btn.primary{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
-main .btn.primary{background:var(--accent);color:white}
-main{padding:22px 0 48px}
-.panel{display:none}
-.panel.active{display:block;animation:fadeIn .25s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(15,23,42,0.04)}
-h2{font-size:1.35rem;margin:0 0 12px;color:#0f172a}
-h3{font-size:1.08rem;margin:0 0 8px;color:var(--accent-dark)}
-small,.muted{color:var(--muted)}
-ul,ol{padding-right:22px;margin:8px 0}
-li{margin:6px 0}
-details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
-summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f8fafc;color:#0f172a;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
-details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
-.details-body{padding:16px 18px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
-.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
-.badge-new{display:inline-block;background:var(--warn-bg);color:var(--warn);border:1px solid #fcd34d;font-size:.78rem;padding:1px 8px;border-radius:6px;margin-right:6px;font-weight:bold}
-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
-th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
-th{background:#eff6ff;color:#1e3a8a;font-weight:bold}
-tr:last-child td{border-bottom:0}
-.note{border-right:4px solid var(--accent);padding:10px 14px;background:#eff6ff;border-radius:8px;margin:10px 0}
-.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
-.math-box{background:#f8fafc;border:2px solid #93c5fd;border-radius:12px;padding:12px 16px;margin:10px 0;text-align:center;font-size:1.03rem;font-weight:bold;color:#1e3a8a;direction:ltr}
-.step-box{background:#f0fdf4;border:1px solid #86efac;border-right:4px solid var(--good);border-radius:10px;padding:12px 16px;margin:10px 0;font-size:.95rem}
-.code-box{background:#0f172a;color:#e2e8f0;padding:14px 18px;border-radius:12px;font-family:Consolas,Monaco,monospace;direction:ltr;text-align:left;overflow-x:auto;margin:10px 0;border:1px solid #334155;line-height:1.65;font-size:.91rem}
-.code-box .kw{color:#38bdf8;font-weight:bold}
-.code-box .str{color:#4ade80}
-.code-box .num{color:#f472b6}
-.code-box .cmt{color:#94a3b8;font-style:italic}
-.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
-.options{display:grid;gap:8px;margin-top:12px}
-.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
-.option:hover:not(:disabled){border-color:var(--accent);background:#eff6ff}
-.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
-.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
-.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
-.feedback.good{color:var(--good);background:var(--good-bg)}
-.feedback.bad{color:var(--bad);background:var(--bad-bg)}
-.progress{height:10px;background:#cbd5e1;border-radius:9px;overflow:hidden;margin:12px 0}
-.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
-.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#dbeafe);border:2px solid #93c5fd;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
-.flashcard:hover{transform:scale(1.005)}
-.flashcard .term{font-size:1.32rem;font-weight:bold;color:#1e3a8a}
-.flashcard .answer{margin-top:16px;font-size:1.04rem;color:#0f172a;background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04);white-space:pre-line}
-.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
-.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
-footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
-@media(max-width:600px){
-  .card{padding:14px}
-  nav button{flex:1 1 calc(50% - 8px);text-align:center}
-  .flashcard{min-height:200px;padding:18px}
-  th,td{padding:8px 10px;font-size:.88rem}
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="briefing">
+  <title>الفصل الحادي عشر: التعلم الآلي بإشراف (الجزء الأول) — دليل تفاعلي شامل</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/contrib/auto-render.min.js"></script>
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* 1. Briefing Style Tokens */
+      --background: #faf9f5;
+      --surface-container-low: #ffffff;
+      --surface-container: #f1efe8;
+      --surface-container-high: #e6e2d6;
+
+      --on-surface: #17181a;
+      --on-surface-variant: #56585c;
+
+      --outline: #17181a;
+      --outline-variant: #dedad0;
+
+      --primary: #17181a;
+      --on-primary: #faf9f5;
+      --primary-container: #f2b705;
+      --on-primary-container: #17181a;
+      --secondary: #1f4e5f;
+      --tertiary: #785008;
+      --error: #b42318;
+      --on-error: #ffffff;
+
+      /* Data series */
+      --data-1: #1f4e5f;
+      --data-2: #d99000;
+      --data-3: #2b6e52;
+      --data-4: #b84a39;
+      --data-context: #c4bfb2;
+
+      /* Fonts (Arabic-first per RTL guidelines) */
+      --font-headline: 'Amiri', 'IBM Plex Sans Arabic', serif;
+      --font-body: 'IBM Plex Sans Arabic', sans-serif;
+      --font-label: 'IBM Plex Mono', 'IBM Plex Sans Arabic', monospace;
+
+      /* Shape & Effects */
+      --rounded: 0.25rem;
+      --rounded-lg: 0.375rem;
+      --rounded-full: 0.25rem;
+      --section-rule: 1.5px solid var(--outline);
+      --card-border: 1px solid var(--outline-variant);
+      --badge-radius: 2px;
+
+      /* 3. Shared Foundation Tokens */
+      --positive: #2b6e52;
+      --positive-tint: color-mix(in srgb, #2b6e52 12%, var(--surface-container-low));
+      --warning: #b86b00;
+      --warning-tint: color-mix(in srgb, #f2b705 18%, var(--surface-container-low));
+      --error-tint: color-mix(in srgb, #b42318 10%, var(--surface-container-low));
+      --secondary-tint: color-mix(in srgb, #1f4e5f 9%, var(--surface-container-low));
+      --gold-tint: color-mix(in srgb, #f2b705 20%, var(--surface-container-low));
+      --focus: #1f4e5f;
+
+      /* Type Scale (Narrative) */
+      --display-size: clamp(2.2rem, 1.35rem + 2.6vw, 3.6rem);
+      --headline-size: clamp(1.625rem, 1.25rem + 1.3vw, 2.25rem);
+      --subhead-size: clamp(1.1875rem, 1.05rem + 0.45vw, 1.4rem);
+      --body-size: clamp(1.03125rem, 0.98rem + 0.2vw, 1.125rem);
+      --label-size: clamp(0.75rem, 0.72rem + 0.12vw, 0.8125rem);
+
+      /* Spacing Scale */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.65;
+      scroll-behavior: smooth;
+    }
+    header { position: static !important; }
+
+    button, input, select, textarea {
+      font-family: inherit;
+      font-size: inherit;
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-xl);
+      padding: var(--space-lg);
+      max-width: 1140px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Briefing Dossier Header & Sections */
+    .dossier-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      border-bottom: var(--section-rule);
+      padding-bottom: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+    .dossier-bar-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .dossier-pill {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: var(--label-size);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--badge-radius);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .dossier-pill.secondary-pill {
+      background: var(--secondary);
+      color: var(--on-primary);
+    }
+    .dossier-meta {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    .hero-title {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: var(--display-size);
+      line-height: 1.15;
+      color: var(--on-surface);
+      margin: 0 0 var(--space-sm) 0;
+    }
+    .standfirst {
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: var(--subhead-size);
+      color: var(--secondary);
+      margin: 0 0 var(--space-lg) 0;
+      max-width: 72ch;
+      line-height: 1.55;
+    }
+
+    h2.unit-title {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: var(--headline-size);
+      line-height: 1.2;
+      color: var(--on-surface);
+      margin: 0 0 var(--space-sm) 0;
+    }
+    h3.sub-title {
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: var(--subhead-size);
+      line-height: 1.35;
+      color: var(--on-surface);
+      margin: 0 0 var(--space-sm) 0;
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .index-num {
+      font-family: var(--font-label);
+      font-weight: 600;
+      font-size: var(--label-size);
+      color: var(--secondary);
+      background: var(--surface-container);
+      border: var(--card-border);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--badge-radius);
+      flex-shrink: 0;
+    }
+
+    p {
+      margin: 0 0 var(--space-md) 0;
+      max-width: 68ch;
+    }
+
+    /* Figures & Cards */
+    .figure-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+    }
+    .aside-box {
+      background: var(--surface-container);
+      border-top: var(--section-rule);
+      padding: var(--space-md) var(--space-lg);
+      border-radius: 0 0 var(--rounded) var(--rounded);
+    }
+    .callout-gold {
+      background: var(--gold-tint);
+      border-right: 4px solid var(--primary-container);
+      padding: var(--space-md) var(--space-lg);
+      border-radius: var(--rounded);
+      margin: var(--space-md) 0;
+    }
+    .callout-teal {
+      background: var(--secondary-tint);
+      border-right: 4px solid var(--secondary);
+      padding: var(--space-md) var(--space-lg);
+      border-radius: var(--rounded);
+      margin: var(--space-md) 0;
+    }
+
+    /* Grids */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .split-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.25fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+    .card-wrapper { container-type: inline-size; }
+    .card-inner {
+      display: grid;
+      gap: var(--space-md);
+    }
+    @container (min-width: 560px) {
+      .card-inner.two-col { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    }
+    @container (max-width: 559px) {
+      .card-inner.two-col { grid-template-columns: minmax(0, 1fr); }
+    }
+
+    /* Stat Readout */
+    .stat-label {
+      font-family: var(--font-body);
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--on-surface-variant);
+      margin-bottom: var(--space-xs);
+    }
+    .stat-value {
+      font-family: var(--font-label);
+      font-weight: 600;
+      font-size: clamp(1.35rem, 1.1rem + 0.8vw, 1.85rem);
+      font-variant-numeric: tabular-nums;
+      color: var(--on-surface);
+      line-height: 1.2;
+    }
+    .stat-note {
+      font-size: var(--label-size);
+      color: var(--secondary);
+      margin-top: var(--space-xs);
+      font-weight: 500;
+    }
+
+    /* Progress Bar */
+    .progress-track {
+      width: 100%;
+      height: 10px;
+      background: var(--surface-container-high);
+      border-radius: var(--rounded);
+      overflow: hidden;
+      margin: var(--space-sm) 0;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--secondary);
+      width: 0%;
+      transition: width var(--dur-long) var(--ease-out);
+    }
+    .progress-fill.gold {
+      background: var(--primary-container);
+    }
+
+    /* Buttons & Interactive Controls */
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: center;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      font-weight: 600;
+      font-size: 0.9375rem;
+      cursor: pointer;
+      border: 1px solid var(--outline);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      text-decoration: none;
+      transition: background-color var(--dur-micro) var(--ease-out), transform var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+    }
+    .btn:hover:not(:disabled) {
+      background: var(--surface-container);
+    }
+    .btn:active:not(:disabled) {
+      transform: translateY(1px);
+    }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+    .btn-primary:hover:not(:disabled) {
+      background: var(--secondary);
+      border-color: var(--secondary);
+    }
+    .btn-secondary {
+      background: var(--secondary);
+      color: var(--on-primary);
+      border-color: var(--secondary);
+    }
+    .btn-secondary:hover:not(:disabled) {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+    .btn-gold {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      border-color: var(--outline);
+    }
+    .btn-gold:hover:not(:disabled) {
+      background: var(--surface-container-high);
+    }
+    .btn-done {
+      background: var(--positive);
+      color: var(--on-primary);
+      border-color: var(--positive);
+    }
+    .btn-sm {
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      font-size: var(--label-size);
+    }
+
+    /* Quick Jump Chips */
+    .nav-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+    }
+    .nav-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      background: var(--surface-container);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded);
+      color: var(--on-surface);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .nav-chip:hover {
+      background: var(--surface-container-high);
+      border-color: var(--outline);
+    }
+
+    /* Form Controls */
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      margin-bottom: var(--space-md);
+    }
+    .control-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      font-size: 0.9375rem;
+      color: var(--on-surface);
+    }
+    .control-row {
+      display: flex;
+      align-items: end;
+      gap: var(--space-sm);
+    }
+    input[type="range"] {
+      flex: 1;
+      accent-color: var(--secondary);
+      min-height: 44px;
+      cursor: pointer;
+    }
+    input[type="number"], select {
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline);
+      border-radius: var(--rounded);
+      padding: var(--space-xs) var(--space-sm);
+      min-height: 44px;
+      color: var(--on-surface);
+      font-family: var(--font-label);
+      font-variant-numeric: tabular-nums;
+      width: 96px;
+      direction: ltr;
+      text-align: center;
+    }
+    select {
+      width: auto;
+      min-width: 180px;
+      direction: rtl;
+      text-align: right;
+      padding-left: var(--space-lg);
+      font-family: var(--font-body);
+    }
+
+    /* Tables */
+    .table-wrap {
+      overflow-x: auto;
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      background: var(--surface-container-low);
+      margin: var(--space-md) 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: right;
+      font-size: 0.95rem;
+    }
+    thead th {
+      background: var(--surface-container);
+      border-bottom: var(--section-rule);
+      padding: var(--space-sm) var(--space-md);
+      font-weight: 700;
+      color: var(--on-surface);
+      white-space: nowrap;
+    }
+    tbody td {
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: 1px solid var(--outline-variant);
+      vertical-align: top;
+    }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background: var(--surface-container); }
+    .num-cell {
+      font-family: var(--font-label);
+      font-variant-numeric: tabular-nums;
+      direction: ltr;
+      text-align: left;
+    }
+
+    /* Math & Code Blocks */
+    .math-block {
+      background: var(--surface-container);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+      margin: var(--space-md) 0;
+      direction: ltr;
+      text-align: center;
+      overflow-x: auto;
+      font-size: 1.05rem;
+    }
+    .katex, .katex-display {
+      direction: ltr;
+      unicode-bidi: isolate;
+    }
+    .code-card {
+      background: var(--on-surface);
+      color: var(--background);
+      border-radius: var(--rounded-lg);
+      overflow: hidden;
+      margin: var(--space-md) 0;
+      border: 1px solid var(--outline);
+    }
+    .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--secondary);
+      color: var(--on-primary);
+      font-size: var(--label-size);
+    }
+    .code-header-title {
+      font-family: var(--font-body);
+      font-weight: 600;
+    }
+    .copy-btn {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      border: none;
+      border-radius: var(--badge-radius);
+      padding: var(--space-xs) var(--space-sm);
+      font-weight: 700;
+      font-size: var(--label-size);
+      cursor: pointer;
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .copy-btn:hover { background: var(--background); }
+    pre.code-body {
+      margin: 0;
+      padding: var(--space-md);
+      direction: ltr;
+      text-align: left;
+      font-family: var(--font-label);
+      font-size: 0.875rem;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    /* SVG Charts */
+    .chart-box {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+      min-height: 290px;
+    }
+    .chart-title {
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: var(--space-xs);
+    }
+    .chart-sub {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      margin-bottom: var(--space-sm);
+    }
+    svg.viz-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      direction: ltr;
+    }
+    .legend-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      margin-top: var(--space-sm);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+    }
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .legend-swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+      display: inline-block;
+    }
+
+    /* Toggle Switch & Pills */
+    .toggle-btn {
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      border: 1px solid var(--outline-variant);
+      background: var(--surface-container);
+      color: var(--on-surface);
+      border-radius: var(--rounded);
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .toggle-btn.active {
+      background: var(--secondary);
+      color: var(--on-primary);
+      border-color: var(--secondary);
+    }
+    .toggle-btn:hover:not(.active) {
+      background: var(--surface-container-high);
+    }
+
+    /* Split Method Visual Blocks */
+    .split-visual-track {
+      display: grid;
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+      gap: var(--space-xs);
+      margin: var(--space-sm) 0;
+      direction: ltr;
+    }
+    .sample-block {
+      height: 28px;
+      border-radius: var(--badge-radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: 1px solid var(--outline-variant);
+    }
+    .sample-train {
+      background: var(--secondary);
+      color: var(--on-primary);
+      border-color: var(--secondary);
+    }
+    .sample-test {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      border-color: var(--outline);
+    }
+
+    /* Quizzes */
+    .quiz-shell {
+      background: var(--surface-container-low);
+      border: 1.5px solid var(--outline);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      margin-top: var(--space-lg);
+    }
+    .quiz-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-md);
+      border-bottom: var(--card-border);
+      padding-bottom: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+    .question-card {
+      padding: var(--space-md);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      background: var(--background);
+      margin-bottom: var(--space-md);
+    }
+    .question-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-sm);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+    }
+    .question-text {
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin-bottom: var(--space-md);
+      color: var(--on-surface);
+    }
+    .options-list {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-sm);
+    }
+    .option-btn {
+      width: 100%;
+      min-height: 46px;
+      text-align: right;
+      padding: var(--space-sm) var(--space-md);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .option-btn:hover:not(:disabled) {
+      background: var(--surface-container);
+      border-color: var(--outline);
+    }
+    .option-btn:disabled {
+      cursor: default;
+    }
+    .option-letter {
+      font-family: var(--font-label);
+      font-weight: 600;
+      font-size: var(--label-size);
+      width: 26px;
+      height: 26px;
+      border-radius: var(--badge-radius);
+      background: var(--surface-container);
+      border: 1px solid var(--outline-variant);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .option-btn.correct {
+      background: var(--positive-tint);
+      border-color: var(--positive);
+      color: var(--on-surface);
+      font-weight: 600;
+    }
+    .option-btn.correct .option-letter {
+      background: var(--positive);
+      color: var(--on-primary);
+      border-color: var(--positive);
+    }
+    .option-btn.wrong {
+      background: var(--error-tint);
+      border-color: var(--error);
+      color: var(--on-surface);
+    }
+    .option-btn.wrong .option-letter {
+      background: var(--error);
+      color: var(--on-error);
+      border-color: var(--error);
+    }
+    .explanation-box {
+      margin-top: var(--space-md);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      font-size: 0.95rem;
+      display: none;
+    }
+    .explanation-box.visible { display: block; }
+    .explanation-box.is-correct {
+      background: var(--positive-tint);
+      border-right: 4px solid var(--positive);
+    }
+    .explanation-box.is-wrong {
+      background: var(--error-tint);
+      border-right: 4px solid var(--error);
+    }
+
+    /* Section spacing & dividers */
+    .unit-section {
+      padding-top: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+    .sub-block {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .unit-footer-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-md);
+      background: var(--surface-container);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--badge-radius);
+      font-size: var(--label-size);
+      font-weight: 700;
+      background: var(--surface-container);
+      color: var(--on-surface-variant);
+    }
+    .status-badge.done {
+      background: var(--positive-tint);
+      color: var(--positive);
+    }
+    .status-badge.warn {
+      background: var(--warning-tint);
+      color: var(--tertiary);
+    }
+
+    /* Lists */
+    ul.styled-list {
+      margin: 0 0 var(--space-md) 0;
+      padding-right: var(--space-lg);
+    }
+    ul.styled-list li {
+      margin-bottom: var(--space-xs);
+    }
+
+    /* Responsive Breakpoint */
+    @media (max-width: 640px) {
+      .page-grid { padding: var(--space-md); gap: var(--space-lg); }
+      .split-grid { grid-template-columns: minmax(0, 1fr); }
+      .figure-card { padding: var(--space-md); }
+      .quiz-shell { padding: var(--space-md); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
 </head>
 <body>
-<header>
-  <div class="wrap">
-    <div class="eyebrow">نسخة شاملة ومحدثة 100% • مقرر تحليل وتمثيل البيانات</div>
-    <h1>الفصل الحادي عشر: التعلم الآلي بإشراف - الجزء الأول (الانحدار Regression)</h1>
-    <p>يغطي التنبؤ الخطي ودالة الفقد، خوارزمية انحدار الميل (Gradient Descent) ومعدل التعلم، الانحدار الخطي المتعدد وكثير الحدود، مقاييس الخطأ الأربعة (SAE, MAE, SSE, MSE)، انحدار Ridge و Lasso، وطرق تقسيم البيانات الخمس</p>
-    <nav>
-      <button class="active" data-tab="summary">الشرح والقوانين والأكواد (100%)</button>
-      <button data-tab="tables">جداول المقارنات والمعادلات</button>
-      <button data-tab="terms">قاموس المصطلحات والدوال</button>
-      <button data-tab="cards">البطاقات (28)</button>
-      <button data-tab="quiz">الاختبار العشوائي (25)</button>
-    </nav>
-  </div>
-</header>
 
-<main class="wrap">
-  <section id="summary" class="panel active">
-    <div class="card">
-      <h2>خريطة الفصل الحادي عشر (الوحدات الثلاث الكاملة)</h2>
-      <div class="grid">
-        <div>
-          <span class="tag">الوحدة الأولى</span>
-          <h3>التنبؤ الخطي، دالة الفقد، وانحدار الميل</h3>
-          <p>معادلة الخط المستقيم ومسألة التنبؤ باستهلاك الكهرباء، دالة الفقد/الهدف (<span dir="ltr">Loss Function</span>)، وخوارزمية انحدار الميل (<span dir="ltr">Gradient Descent</span>) ودور معدل التعلم ($\alpha$).</p>
-        </div>
-        <div>
-          <span class="tag">الوحدة الثانية</span>
-          <h3>الانحدار المتعدد، كثير الحدود، و Ridge &amp; Lasso</h3>
-          <p>دالة الفرضية والخسارة، مقاييس كفاءة التنبؤ الأربعة (<span dir="ltr">SAE, MAE, SSE, MSE</span>)، الانحدار كثير الحدود (<span dir="ltr">Polynomial</span>)، وعلاج التعددية الخطية بـ <span dir="ltr">Ridge</span> و <span dir="ltr">Lasso</span>.</p>
-        </div>
-        <div>
-          <span class="tag">الوحدة الثالثة</span>
-          <h3>طرق تقسيم البيانات الخمس والتطبيق البرمجي</h3>
-          <p>طرق تقسيم البيانات الخمس (<span dir="ltr">Holdout, Random sub-sampling, K-fold, Leave-one-out, Bootstrap</span>)، والتطبيق البرمجي الكامل بـ <span dir="ltr">Scikit-learn</span> على بيانات الإعلانات.</p>
-        </div>
+<main class="page-grid">
+
+  <!-- OPENING DOSSIER HEADER -->
+  <header>
+    <div class="dossier-bar">
+      <div class="dossier-bar-group">
+        <span class="dossier-pill">الفصل الحادي عشر</span>
+        <span class="dossier-meta">تحليل وتمثيل البيانات · التعلم الآلي بإشراف (الجزء الأول)</span>
       </div>
+      <span class="dossier-meta">3 وحدات دراسية · 2 محاكيات تفاعلية · 45 سؤالاً</span>
     </div>
 
-    <!-- ==================== الوحدة الأولى ==================== -->
-    <details open>
-      <summary>الوحدة الأولى: التنبؤ الخطي البسيط، دالة الفقد (Loss Function)، وخوارزمية انحدار الميل (Gradient Descent)</summary>
-      <div class="details-body">
-        <h3>1) مفهوم الانحدار البسيط ومعادلة الخط المستقيم (مثال استهلاك الكهرباء)</h3>
-        <ul>
-          <li><b>مفهوم الانحدار (<span dir="ltr">Regression</span>):</b> هو أحد فروع التعلم الآلي بإشراف (<span dir="ltr">Supervised Learning</span>)، ويُستخدم عندما تكون <b>سمة الهدف ($Y$) قيمة كمية رقمية متصلة</b> (مثل التنبؤ باستهلاك الكهرباء، أو سعر منزل، أو حجم المبيعات).</li>
-          <li><b>معادلة الانحدار الخطي البسيط (<span dir="ltr">Simple Linear Regression</span>):</b> تربط بين متغير مستقل واحد ($x$) ومتغير تابع ($y$) بمعادلة خط مستقيم، والتي تسمى <b>دالة الفرضية (<span dir="ltr">Hypothesis Function - $h_\theta(x)$</span>)</b>:</li>
-        </ul>
-        <div class="math-box">
-          h<sub>&theta;</sub>(x) = &theta;<sub>1</sub> x + &theta;<sub>2</sub> &nbsp;&nbsp;&nbsp; (أو بالصورة: Peak Demand = &theta;<sub>1</sub> &middot; Temp + &theta;<sub>2</sub>)
-        </div>
-        <ul>
-          <li>حيث: <b>$\theta_1$ (أو $w_1$)</b> هو <b>ميل الخط المستقيم (<span dir="ltr">Slope / Weight</span>)</b>، و <b>$\theta_2$ (أو $w_0$)</b> هو <b>الجزء المقطوع من محور الصادات (<span dir="ltr">Intercept / Bias</span>)</b>.</li>
-        </ul>
-        <div class="step-box">
-          <b>مسألة تعويض مباشر (مثال استهلاك الكهرباء بدلالة درجة الحرارة في الملزمة):</b><br>
-          إذا كانت معادلة التنبؤ بذروة الطلب على الكهرباء هي: $\text{Peak Demand} = 0.15 \times \text{Temp} - 8.5$، فكم يبلغ الطلب المتوقع عندما تكون درجة الحرارة $\text{Temp} = 90^\circ\text{F}$؟<br>
-          • نعوض مباشرة: $\text{Peak Demand} = (0.15 \times 90) - 8.5 = 13.5 - 8.5 = \mathbf{5.0\text{ GW}}$.
-        </div>
+    <h1 class="hero-title">التعلّم الآلي بإشراف: من الانحدار الخطي إلى ضبط النماذج وتقييمها</h1>
+    <p class="standfirst">
+      مرجع تعليمي تفاعلي يغطي الوحدات الثلاث كاملةً: التنبؤ باستهلاك الكهرباء وخوارزمية Gradient Descent، والانحدار متعدد المتغيرات والتنظيم عبر Ridge وLasso، وطرق تقسيم البيانات الخمس والتطبيق العملي بلغة Python.
+    </p>
 
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
-
-        <h3>2) دالة الفقد / دالة الهدف (<span dir="ltr">Loss / Objective / Cost Function</span>)</h3>
-        <ul>
-          <li><b>كيف نختار أفضل خط مستقيم يمر بين النقاط؟</b> نختار المعاملات ($\theta_1, \theta_2$) التي تجعل <b>مجموع مربعات الأخطاء (الفروق بين القيمة المتوقعة $h_\theta(x_i)$ والقيمة الحقيقية $y_i$) أقل ما يمكن</b>!</li>
-          <li>تُعرف هذه الدالة بـ <b>دالة الفقد أو دالة التكلفة (<span dir="ltr">Loss / Cost Function - $E(\theta)$</span>)</b> وتُحسَب بطريقة متوسط مربع الخطأ:</li>
-        </ul>
-        <div class="math-box">
-          E(&theta;) = ( 1 / 2n ) &sum;<sub>i=1</sub><sup>n</sup> ( h<sub>&theta;</sub>(x<sub>i</sub>) &minus; y<sub>i</sub> )<sup>2</sup>
+    <!-- PROGRESS DASHBOARD -->
+    <section class="figure-card" aria-label="لوحة التقدم والتنقل السريع">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-md);">
+        <div>
+          <div class="stat-label">مؤشر التقدم الإجمالي في الفصل الحادي عشر</div>
+          <div style="display: flex; align-items: baseline; gap: var(--space-sm);">
+            <span class="stat-value" id="overall-progress-pct">0%</span>
+            <span class="dossier-meta" id="overall-progress-label">ابدأ استكشاف الوحدات وأجب عن الاختبارات لتسجيل تقدمك تلقائياً</span>
+          </div>
         </div>
-
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
-
-        <h3>3) خوارزمية انحدار الميل (<span dir="ltr">Gradient Descent Algorithm</span>) ودور معدل التعلم ($\alpha$)</h3>
-        <div class="exam-alert">
-          <b>🔥🔥 سؤال امتحاني مؤكد حول خوارزمية انحدار الميل (<span dir="ltr">Gradient Descent</span>):</b><br>
-          • <b>وظيفتها:</b> هي خوارزمية تحسين تكرارية (<span dir="ltr">Optimization Algorithm</span>) تُستخدم لإيجاد <b>أفضل قيم لمعاملات النموذج ($\theta$) التي تقلل دالة الفقد $E(\theta)$ إلى أدنى قيمة ممكنة (<span dir="ltr">Minimum</span>)</b>.<br>
-          • <b>قاعدة تحديث المعاملات في كل خطوة:</b>
-        </div>
-        <div class="math-box">
-          &theta;<sub>j</sub> &larr; &theta;<sub>j</sub> &minus; &alpha; &middot; [ &part;E(&theta;) / &part;&theta;<sub>j</sub> ]
-        </div>
-        <ul>
-          <li><b>دور معدل التعلم ($\alpha$ - <span dir="ltr">Learning Rate</span>) وأثر قيمته:</b>
-            <ol>
-              <li>يحدد المعامل $\alpha$ <b>حجم الخطوة (<span dir="ltr">Step size</span>)</b> التي نتحرك بها نحو القاع في كل تكرار.</li>
-              <li><b>إذا كان معدل التعلم $\alpha$ صغيراً جداً:</b> ستكون الخطوات قصيرة جداً، مما يجعل الخوارزمية <b>بطيئة جداً وتستغرق وقتاً طويلاً</b> للوصول إلى الحل الأمثل.</li>
-              <li><b>إذا كان معدل التعلم $\alpha$ كبيراً جداً:</b> ستكون الخطوات واسعة جداً، مما قد يؤدي إلى <b>تجاوز نقطة القاع (<span dir="ltr">Overshooting</span>) والفشل في التقارب (التباعد <span dir="ltr">Divergence</span>)</b>!</li>
-            </ol>
-          </li>
-        </ul>
+        <button type="button" class="btn btn-sm" id="reset-progress-btn" onclick="handleResetProgress(this)">
+          <i data-lucide="rotate-ccw" aria-hidden="true" width="16" height="16"></i>
+          <span>إعادة ضبط التقدم</span>
+        </button>
       </div>
-    </details>
 
-    <!-- ==================== الوحدة الثانية ==================== -->
-    <details>
-      <summary>الوحدة الثانية: الانحدار المتعدد، مقاييس الخطأ الأربعة (SAE, MAE, SSE, MSE)، كثير الحدود، و Ridge &amp; Lasso</summary>
-      <div class="details-body">
-        <h3>1) الانحدار الخطي المتعدد ومقاييس كفاءة التنبؤ الأربعة</h3>
-        <ul>
-          <li><b>الانحدار الخطي المتعدد (<span dir="ltr">Multiple Linear Regression</span>):</b> يعمم الانحدار البسيط ليتنبأ بالهدف $y$ باستخدام <b>أكثر من سمة مستقلة واحدة ($x_1, x_2, \dots, x_p$)</b>:
-            <div class="math-box">
-              y&#770; = w<sub>0</sub> + w<sub>1</sub>x<sub>1</sub> + w<sub>2</sub>x<sub>2</sub> + ... + w<sub>p</sub>x<sub>p</sub>
-            </div>
-          </li>
-        </ul>
+      <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="overall-progressbar">
+        <div class="progress-fill gold" id="overall-progress-fill"></div>
+      </div>
 
-        <div class="exam-alert">
-          <b>🔥🔥 القوانين الأربعة لقياس خطأ التنبؤ في الانحدار (مؤكدة في المسائل الحسابية بالاختبار!):</b><br>
-          ليكن الخطأ في العينة $i$ هو الفرق بين القيمة الحقيقية $y_i$ والقيمة المتوقعة $\hat{y}_i$ (أي $e_i = y_i - \hat{y}_i$):
+      <div class="metrics-grid" style="margin-top: var(--space-md);">
+        <div class="aside-box">
+          <div class="stat-label">الوحدات المكتملة</div>
+          <div class="stat-value" id="stat-units-done">0 / 3</div>
+          <div class="stat-note" id="stat-units-note">الوحدات 1 و2 و3</div>
         </div>
+        <div class="aside-box">
+          <div class="stat-label">الأسئلة المجابة</div>
+          <div class="stat-value" id="stat-questions-answered">0 / 45</div>
+          <div class="stat-note">30 للوحدات + 15 شامل</div>
+        </div>
+        <div class="aside-box">
+          <div class="stat-label">الإجابات الصحيحة</div>
+          <div class="stat-value" id="stat-correct-total">0</div>
+          <div class="stat-note" id="stat-accuracy-note">الدقة: —</div>
+        </div>
+        <div class="aside-box">
+          <div class="stat-label">الاختبار الشامل</div>
+          <div class="stat-value" id="stat-final-score">0 / 15</div>
+          <div class="stat-note" id="stat-final-note">لم يبدأ بعد</div>
+        </div>
+      </div>
+
+      <nav class="nav-strip" aria-label="الانتقال السريع بين الوحدات والاختبارات">
+        <a class="nav-chip" href="#unit-1">
+          <span class="index-num">01</span>
+          <span>الوحدة 1: الانحدار وGradient Descent</span>
+        </a>
+        <a class="nav-chip" href="#unit-2">
+          <span class="index-num">02</span>
+          <span>الوحدة 2: النماذج المتعددة والتنظيم</span>
+        </a>
+        <a class="nav-chip" href="#unit-3">
+          <span class="index-num">03</span>
+          <span>الوحدة 3: تقسيم البيانات والتطبيق</span>
+        </a>
+        <a class="nav-chip" href="#comprehensive-quiz">
+          <span class="dossier-pill">شامل</span>
+          <span>الاختبار الشامل (15 سؤالاً)</span>
+        </a>
+      </nav>
+    </section>
+  </header>
+
+  <!-- =================================================================== -->
+  <!-- UNIT 1                                                              -->
+  <!-- =================================================================== -->
+  <section id="unit-1" class="unit-section">
+    <div class="dossier-bar">
+      <div class="dossier-bar-group">
+        <span class="dossier-pill">الوحدة (1)</span>
+        <span class="dossier-meta">التنبؤ باستهلاك الكهرباء · دالة الخسارة · Gradient Descent</span>
+      </div>
+      <span class="status-badge" id="badge-unit-1">قيد الدراسة</span>
+    </div>
+
+    <h2 class="unit-title">التنبؤ باستهلاك الكهرباء، النموذج الخطي، وخوارزمية Gradient Descent</h2>
+
+    <!-- 1.1 Electricity Problem -->
+    <div class="sub-block">
+      <h3 class="sub-title"><span class="index-num">01</span> المقدمة — مسألة التنبؤ باستهلاك الكهرباء</h3>
+      <p>
+        عندما نريد التنبؤ بذروة استهلاك الكهرباء (<bdi dir="ltr">Peak Demand</bdi>)، من الصعب بناء نموذج «قبلي» (<bdi dir="ltr">A priori</bdi>) انطلاقاً من المبادئ الفيزيائية الأولى فقط بسبب تعدد العوامل المؤثرة في سلوك المستهلكين والشبكة. وبدلاً من ذلك، نلجأ إلى تسجيل البيانات التاريخية للاستهلاك مع العوامل المؤثرة فيه مثل درجة الحرارة القصوى اليومية.
+      </p>
+
+      <div class="table-wrap">
         <table>
           <thead>
             <tr>
-              <th>مقياس الخطأ</th>
-              <th>الاختصار والمصطلح الإنجليزي</th>
-              <th>المعادلة الرياضية</th>
-              <th>طريقة حسابه بكلمتين</th>
+              <th>التاريخ (<bdi dir="ltr">Date</bdi>)</th>
+              <th>درجة الحرارة القصوى (<bdi dir="ltr">High Temperature °F</bdi>)</th>
+              <th>ذروة الطلب على الكهرباء (<bdi dir="ltr">Peak Demand GW</bdi>)</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><b>1. مجموع الأخطاء المطلقة</b></td>
-              <td dir="ltr"><b>SAE</b> (Sum of Absolute Errors)</td>
-              <td dir="ltr">$\text{SAE} = \sum_{i=1}^{n} |y_i - \hat{y}_i|$</td>
-              <td>جمع الفروق المطلقة <b>بدون قسمة</b>.</td>
+              <td class="num-cell">2011-06-01</td>
+              <td class="num-cell">84.0</td>
+              <td class="num-cell">2.651</td>
             </tr>
             <tr>
-              <td><b>2. متوسط الخطأ المطلق</b></td>
-              <td dir="ltr"><b>MAE</b> (Mean Absolute Error)</td>
-              <td dir="ltr">$\text{MAE} = \frac{1}{n}\sum_{i=1}^{n} |y_i - \hat{y}_i|$</td>
-              <td>قسمة <span dir="ltr">SAE</span> على عدد العينات $n$.</td>
+              <td class="num-cell">2011-06-02</td>
+              <td class="num-cell">73.0</td>
+              <td class="num-cell">2.081</td>
             </tr>
             <tr>
-              <td><b>3. مجموع مربعات الأخطاء</b></td>
-              <td dir="ltr"><b>SSE</b> (Sum of Squared Errors)</td>
-              <td dir="ltr">$\text{SSE} = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2$</td>
-              <td>تربيع الفروق وجمعها <b>بدون قسمة</b>.</td>
+              <td class="num-cell">2011-06-03</td>
+              <td class="num-cell">75.2</td>
+              <td class="num-cell">1.844</td>
             </tr>
             <tr>
-              <td><b>4. متوسط مربع الخطأ</b></td>
-              <td dir="ltr"><b>MSE</b> (Mean Squared Error)</td>
-              <td dir="ltr">$\text{MSE} = \frac{1}{n}\sum_{i=1}^{n} (y_i - \hat{y}_i)^2$</td>
-              <td>قسمة <span dir="ltr">SSE</span> على عدد العينات $n$.</td>
+              <td class="num-cell">2011-06-04</td>
+              <td class="num-cell">84.9</td>
+              <td class="num-cell">1.959</td>
             </tr>
           </tbody>
         </table>
+      </div>
+      <p>
+        باعتبار درجة الحرارة هي العامل المؤثر، يمكن تمثيل العلاقة بين درجة الحرارة والاستهلاك عبر مخطط الانتشار (<bdi dir="ltr">Scatter Plot</bdi>)، ونلاحظ أن هذه العلاقة يمكن تقريبها وتمثيلها بخط مستقيم يمر بين النقاط.
+      </p>
+    </div>
 
-        <div class="step-box">
-          <b>مسألة حسابية شاملة للمقاييس الأربعة (SAE, MAE, SSE, MSE):</b><br>
-          لنفترض أن لدينا $n = 2$ عينتين: القيم الحقيقية هي $y = [10, 20]$، والقيم المتوقعة من النموذج هي $\hat{y} = [12, 16]$:<br>
-          • <b>حساب الفروق $|y_i - \hat{y}_i|$:</b> للعينة الأولى $|10 - 12| = \mathbf{2}$ ، وللعينة الثانية $|20 - 16| = \mathbf{4}$.<br>
-          1) <b>$\text{SAE}$</b> = $2 + 4 = \mathbf{6}$.<br>
-          2) <b>$\text{MAE}$</b> = $\text{SAE} \div 2 = 6 \div 2 = \mathbf{3.0}$.<br>
-          • <b>حساب مربعات الفروق $(y_i - \hat{y}_i)^2$:</b> للعينة الأولى $(2)^2 = \mathbf{4}$ ، وللعينة الثانية $(4)^2 = \mathbf{16}$.<br>
-          3) <b>$\text{SSE}$</b> = $4 + 16 = \mathbf{20}$.<br>
-          4) <b>$\text{MSE}$</b> = $\text{SSE} \div 2 = 20 \div 2 = \mathbf{10.0}$.
+    <!-- 1.2 Linear Hypothesis -->
+    <div class="sub-block">
+      <h3 class="sub-title"><span class="index-num">02</span> الفرضية: النموذج الخطي وإجراء التنبؤ</h3>
+      <p>
+        يُصاغ الخط المستقيم الذي يربط استهلاك الكهرباء بدرجة الحرارة بالمعادلة الخطية التالية:
+      </p>
+      <div class="math-block" dir="ltr">
+        $$\text{Peak Demand} = \theta_1 \times \text{High Temperature} + \theta_2$$
+      </div>
+      <div class="card-grid">
+        <div class="figure-card">
+          <div class="stat-label">المعامل الأول <bdi dir="ltr">θ₁ (Slope)</bdi></div>
+          <p style="margin: 0;">يمثل <strong>الميل</strong>، أي مقدار التغير في استهلاك الكهرباء مقابل زيادة درجة الحرارة بمقدار درجة واحدة.</p>
         </div>
+        <div class="figure-card">
+          <div class="stat-label">المعامل الثاني <bdi dir="ltr">θ₂ (Intercept)</bdi></div>
+          <p style="margin: 0;">يمثل <strong>نقطة التقاطع / منحدر الميل</strong> مع المحور الرأسي عندما تكون قيمة المتغير المستقل صفراً.</p>
+        </div>
+      </div>
 
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+      <div class="callout-gold">
+        <strong>مثال التنبؤ من المنهج:</strong> إذا حصلنا بعد تدريب النموذج على قيم المعاملات
+        <bdi dir="ltr">θ₁ = 0.05</bdi> و <bdi dir="ltr">θ₂ = -1.9</bdi>، وكانت درجة الحرارة المتوقعة غداً هي <bdi dir="ltr">72°F</bdi>، فإن الاستهلاك المتوقع يُحسب كما يلي:
+        <div class="math-block" dir="ltr" style="margin-bottom: 0;">
+          $$\text{Peak Demand} = 0.05 \times 72 - 1.9 = 3.6 - 1.9 = 1.7\text{ GW}$$
+        </div>
+      </div>
+    </div>
 
-        <h3>2) الانحدار كثير الحدود (<span dir="ltr">Polynomial Regression</span>)</h3>
-        <ul>
-          <li><b>متى نستخدمه؟</b> عندما تكون العلاقة بين المتغير المستقل $x$ والمتغير التابع $y$ <b>علاقة غير خطية (منحنية <span dir="ltr">Non-linear</span>)</b> لا يمكن تمثيلها بخط مستقيم؛ فنقوم بإضافة قوى (أسس) للمتغير المستقل ($x^2, x^3, \dots, x^m$):</li>
+    <!-- 1.3 Loss Function & MSE -->
+    <div class="sub-block">
+      <h3 class="sub-title"><span class="index-num">03</span> حساب معدل الخطأ ودالة الخسارة (<bdi dir="ltr">Loss Function / MSE</bdi>)</h3>
+      <p>
+        في بداية بناء النموذج تكون المعاملات عشوائية أو ابتدائية، فيكون معدل الخطأ مرتفعاً؛ ثم تُعدّل المعاملات تدريجياً حتى يقل الخطأ. المقياس الرياضي الذي يحسب الفرق الإجمالي بين القيم الفعلية والقيم المستنتجة من النموذج يُسمى <strong>دالة الخسارة</strong> (<bdi dir="ltr">Loss Function</bdi>) أو <strong>دالة الهدف</strong> (<bdi dir="ltr">Objective Function</bdi>).
+      </p>
+      <p>
+        في حالة الانحدار الخطي نستخدم <strong>متوسط مربعات الخطأ (<bdi dir="ltr">Mean Squared Error - MSE</bdi>)</strong>:
+      </p>
+      <div class="math-block" dir="ltr">
+        $$E(\theta) = \text{MSE} = \frac{1}{N} \sum_{i=1}^{N} \left( y_i - (\theta_1 x_i + \theta_2) \right)^2$$
+      </div>
+      <p>
+        يُربّع الفرق لتفادي إلغاء الأخطاء الموجبة للسالبة ولمضاعفة أثر الأخطاء الكبيرة، والهدف الرئيسي لعملية التدريب هو إيجاد قيم <bdi dir="ltr">θ₁, θ₂</bdi> التي تجعل <bdi dir="ltr">E(θ)</bdi> أقل ما يمكن.
+      </p>
+    </div>
+
+    <!-- 1.4 Gradient Descent & Normalization -->
+    <div class="sub-block">
+      <h3 class="sub-title"><span class="index-num">04</span> بناء النموذج: خوارزمية <bdi dir="ltr">Gradient Descent</bdi> وتوحيد المقياس (<bdi dir="ltr">Normalization</bdi>)</h3>
+      <p>
+        تتمثل عملية بناء النموذج في البحث داخل فراغ الدالة <bdi dir="ltr">E(θ)</bdi> عن القيم المثلى للمعاملات <bdi dir="ltr">θ₁, θ₂</bdi>. وللحصول على أفضل النتائج بسرعة، لا يكون البحث عشوائياً بل يكون <strong>موجّهاً</strong> في الاتجاه الذي ينقص فيه الخطأ باستخدام خوارزمية <strong>النزول التدريجي (<bdi dir="ltr">Gradient Descent</bdi>)</strong> عبر تكرار معادلتي التحديث التاليتين:
+      </p>
+      <div class="math-block" dir="ltr">
+        $$\theta_1 := \theta_1 - \alpha \frac{\partial E}{\partial \theta_1}, \qquad \theta_2 := \theta_2 - \alpha \frac{\partial E}{\partial \theta_2}$$
+      </div>
+
+      <div class="card-grid">
+        <div class="figure-card">
+          <div class="stat-label">المشتقات الجزئية (<bdi dir="ltr">∂E/∂θ₁, ∂E/∂θ₂</bdi>)</div>
+          <p style="margin: 0;">تمثل ميل سطح دالة الخسارة <bdi dir="ltr">E</bdi> بالنسبة لكل معامل، وتحدد الاتجاه الصاعد؛ لذا نطرحها لنتجه نحو القاع (أقل خطأ).</p>
+        </div>
+        <div class="figure-card">
+          <div class="stat-label">معدل التعلم (<bdi dir="ltr">α - Learning Rate</bdi>)</div>
+          <p style="margin: 0;">قيمة صغيرة تتحكم في حجم الخطوة وسرعة البحث. القيمة الصغيرة جداً تبطئ الوصول، والكبيرة جداً قد تسبب تشتت النموذج وتجاوزه للحد الأدنى.</p>
+        </div>
+        <div class="figure-card">
+          <div class="stat-label">توحيد المقياس (<bdi dir="ltr">Normalization</bdi>)</div>
+          <p style="margin: 0;">يجب توحيد مقياس السمات المختلفة قبل بدء التدريب حتى لا يتحيز النموذج تجاه سمة ذات أرقام كبيرة (مثل درجة الحرارة مقابل قياس آخر صغير) ولتسريع التقارب.</p>
+        </div>
+      </div>
+
+      <div class="aside-box" style="margin-top: var(--space-md);">
+        <strong>تطور الدورات في Gradient Descent:</strong>
+        <ul class="styled-list" style="margin-top: var(--space-xs); margin-bottom: 0;">
+          <li><strong>الدورة الأولى:</strong> يبدأ الخط بعيداً عن النقاط وتكون قيمة <bdi dir="ltr">E(θ)</bdi> مرتفعة، فتُحسب المشتقة وتُحدث الخطوة الأولى انزياحاً كبيراً نحو النقاط.</li>
+          <li><strong>الدورة الثانية والثالثة:</strong> يقترب الخط المستقيم تدريجياً من سحابة النقاط وتتناقص مسافات الخطأ العمودية (<bdi dir="ltr">Residuals</bdi>) بشكل ملحوظ.</li>
+          <li><strong>الدورة العاشرة وما بعدها:</strong> يستقر الخط تقريباً عند أفضل ملاءمة خطية، وتصغر قيمة المشتقة فتتباطأ التعديلات معلنةً الاقتراب من التقارب (<bdi dir="ltr">Convergence</bdi>).</li>
         </ul>
-        <div class="math-box">
-          y&#770; = w<sub>0</sub> + w<sub>1</sub>x + w<sub>2</sub>x<sup>2</sup> + ... + w<sub>m</sub>x<sup>m</sup>
-        </div>
-        <ul>
-          <li><b>ملاحظة هامة:</b> زيادة درجة كثيرة الحدود ($m$) بشكل مبالغ فيه يؤدي إلى مشكلة <b>الإفراط في التخصيص / الحفظ (<span dir="ltr">Overfitting</span>)</b>!</li>
-        </ul>
-
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
-
-        <h3>3) علاج التعددية الخطية والـ Overfitting: انحدار (<span dir="ltr">Ridge</span>) مقابل انحدار (<span dir="ltr">Lasso</span>)</h3>
-        <div class="exam-alert">
-          <b>🔥🔥 مقارنة امتحانية مؤكدة 100% بين <span dir="ltr">Ridge Regression</span> و <span dir="ltr">Lasso Regression</span>:</b><br>
-          عند وجود ارتباط عالٍ بين المتغيرات المستقلة (مشكلة <b>التعددية الخطية <span dir="ltr">Multicollinearity</span></b>) أو مشكلة <b><span dir="ltr">Overfitting</span></b>، نضيف حد عقوبة (<span dir="ltr">Penalty / Regularization term</span>) مضروباً في معامل التنظيم $\lambda$ (أو <code dir="ltr">alpha</code>) إلى دالة الخسارة لتقليص المعاملات $w_j$:<br><br>
-          <b>1) انحدار ريدج (<span dir="ltr">Ridge Regression - L2 Regularization</span>):</b><br>
-          • <b>حد العقوبة المضاف:</b> يضيف <b>مجموع مربعات المعاملات</b>: $\lambda \sum_{j=1}^{p} w_j^2$.<br>
-          • <b>تأثيره على المعاملات:</b> يقلص المعاملات غير المهمة لتقترب جداً من الصفر، ولكنه <b>لا يجعلها تساوي صفراً تماماً</b> (يحتفظ بجميع المتغيرات).<br><br>
-          <b>2) انحدار لاسو (<span dir="ltr">Lasso Regression - L1 Regularization</span>):</b><br>
-          • <b>حد العقوبة المضاف:</b> يضيف <b>مجموع القيم المطلقة للمعاملات</b>: $\lambda \sum_{j=1}^{p} |w_j|$.<br>
-          • <b>تأثيره على المعاملات (ميزة فريدة!):</b> يستطيع تقليص معاملات المتغيرات غير المهمة لتصبح <b>مساوية للصفر تماماً ($w_j = 0$)</b>، وبالتالي يقوم بعملية <b>اختيار السمات واستبعاد المتغيرات الزائدة تلقائياً (<span dir="ltr">Feature Selection</span>)</b>!
-        </div>
-      </div>
-    </details>
-
-    <!-- ==================== الوحدة الثالثة ==================== -->
-    <details>
-      <summary>الوحدة الثالثة: طرق تقسيم البيانات الخمس للتدريب والتقييم، والتطبيق البرمجي بـ Scikit-learn</summary>
-      <div class="details-body">
-        <h3>1) طرق تقسيم البيانات الخمس للتدريب والاختبار (<span dir="ltr">Data Splitting Methods</span>)</h3>
-        <div class="exam-alert">
-          <b>🌟 احفظي الطرق الخمس لتقسيم البيانات والفرق الدقيق بين كل طريقة:</b>
-        </div>
-        <ol>
-          <li><b>1. طريقة الاحتجاز / التقسيم الثابت (<span dir="ltr">Holdout Method</span>):</b>
-            <ul>
-              <li>أبسط الطرق؛ تقسم مجموعة البيانات مرة واحدة عشوائياً إلى مجموعتين منفصلتين: مجموعة تدريب (<span dir="ltr">Training set</span> مثلاً $70\%$ أو $80\%$) ومجموعة اختبار (<span dir="ltr">Testing set</span> مثلاً $30\%$ أو $20\%$).</li>
-            </ul>
-          </li>
-          <li><b>2. أخذ العينات الفرعية العشوائي المتكرر (<span dir="ltr">Random Sub-sampling</span>):</b>
-            <ul>
-              <li>تكرر طريقة الـ <span dir="ltr">Holdout</span> عدة مرات ($K$ مرات) بتقسيمات عشوائية مختلفة، وتأخذ متوسط دقة التقييم النهائي.</li>
-            </ul>
-          </li>
-          <li><b>3. التحقق المتقاطع ذو الـ $K$ طيات (<span dir="ltr">K-Fold Cross-Validation</span>):</b>
-            <ul>
-              <li>تقسم البيانات إلى <b>$K$ من الأجزاء (الطيات) المتساوية الحجم</b>؛ وفي كل مرة نستخدم <b>$(K - 1)$ جزءاً للتدريب</b> وجزءاً <b>واحداً فقط للاختبار</b>، ونكرر العملية $K$ مرات بالتناوب حتى يُختبر كل جزء مرة واحدة بالضبط.</li>
-            </ul>
-          </li>
-          <li><b>4. طريقة استبعاد عينة واحدة (<span dir="ltr">Leave-One-Out Cross-Validation - LOOCV</span>):</b>
-            <ul>
-              <li>هي حالة خاصة من <span dir="ltr">K-Fold</span> حيث يكون عدد الأجزاء مساوياً لعدد جميع العينات ($K = N$)؛ أي في كل مرة <b>ندرب النموذج على $(N - 1)$ عينة ونختبره على عينة واحدة فقط</b>! (دقيقة لكنها مكلفة جداً حسابياً).</li>
-            </ul>
-          </li>
-          <li><b>5. طريقة البوتستراب (<span dir="ltr">Bootstrap Method</span>):</b>
-            <ul>
-              <li>تقوم باختيار عينات التدريب عشوائياً <b>مع الإرجاع (<span dir="ltr">Sampling with replacement</span>)</b> (أي يمكن اختيار نفس العينة أكثر من مرة في مجموعة التدريب)، والعينات التي لم يتم اختيارها أبداً تُستخدم كمجموعة اختبار!</li>
-            </ul>
-          </li>
-        </ol>
-
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
-
-        <h3>2) التطبيق البرمجي الكامل للانحدار على بيانات الإعلانات (<span dir="ltr">Advertising.csv</span>)</h3>
-        <div class="code-box">
-<span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> train_test_split<br>
-<span class="kw">from</span> sklearn.linear_model <span class="kw">import</span> LinearRegression, Lasso, Ridge<br>
-<span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> PolynomialFeatures<br>
-<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> mean_squared_error, r2_score<br><br>
-<span class="cmt"># 1. تقسيم البيانات إلى تدريب واختبار (Holdout)</span><br>
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="num">0.2</span>, random_state=<span class="num">42</span>)<br><br>
-<span class="cmt"># 2. بناء وتدريب نموذج الانحدار الخطي المتعدد (LinearRegression)</span><br>
-lr = LinearRegression()<br>
-lr.fit(X_train, y_train)<br>
-y_pred = lr.predict(X_test)<br>
-<span class="kw">print</span>(<span class="str">"Intercept (w0):"</span>, lr.intercept_, <span class="str">"Coefficients (w):"</span>, lr.coef_)<br>
-<span class="kw">print</span>(<span class="str">"MSE:"</span>, mean_squared_error(y_test, y_pred), <span class="str">"R2:"</span>, r2_score(y_test, y_pred))<br><br>
-<span class="cmt"># 3. تطبيق انحدار Lasso لاستبعاد السمات غير المهمة</span><br>
-lasso = Lasso(alpha=<span class="num">0.1</span>)<br>
-lasso.fit(X_train, y_train)<br><br>
-<span class="cmt"># 4. تطبيق الانحدار كثير الحدود من الدرجة الثانية (Polynomial Regression)</span><br>
-poly = PolynomialFeatures(degree=<span class="num">2</span>)<br>
-X_poly_train = poly.fit_transform(X_train)<br>
-X_poly_test  = poly.transform(X_test)<br>
-poly_reg = LinearRegression()<br>
-poly_reg.fit(X_poly_train, y_train)
-        </div>
-      </div>
-    </details>
-  </section>
-
-  <!-- التبويب الثاني: جداول المقارنات والمعادلات -->
-  <section id="tables" class="panel">
-    <div class="card">
-      <h2>1. مقارنة شاملة لأنواع الانحدار الأربعة في الفصل الحادي عشر</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>نوع الانحدار</th>
-            <th>الفئة البرمجية في Scikit-learn</th>
-            <th>الخصائص ومتى يُستخدم</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><b>1. الانحدار الخطي (<span dir="ltr">Linear Regression</span>)</b></td>
-            <td dir="ltr"><code>LinearRegression()</code></td>
-            <td>يمثل العلاقة الخطية المباشرة؛ بسيط وسريع لكنه يتأثر بالتعددية الخطية والقيم المتطرفة ولا يلتقط العلاقات المنحنية.</td>
-          </tr>
-          <tr>
-            <td><b>2. الانحدار كثير الحدود (<span dir="ltr">Polynomial</span>)</b></td>
-            <td dir="ltr"><code>PolynomialFeatures(degree=m)</code><br>مع <code>LinearRegression()</code></td>
-            <td>يلتقط <b>العلاقات غير الخطية (المنحنية)</b> بإضافة أسس للمتغيرات ($x^2, x^3\dots$)، والمبالغة في درجته تسبب <span dir="ltr">Overfitting</span>.</td>
-          </tr>
-          <tr>
-            <td><b>3. انحدار ريدج (<span dir="ltr">Ridge - L2</span>)</b></td>
-            <td dir="ltr"><code>Ridge(alpha=...)</code></td>
-            <td>يعالج التعددية الخطية والـ <span dir="ltr">Overfitting</span> بإضافة <b>مجموع مربعات المعاملات ($\lambda \sum w_j^2$)</b>؛ يقلص المعاملات دون تصفيرها.</td>
-          </tr>
-          <tr>
-            <td><b>4. انحدار لاسو (<span dir="ltr">Lasso - L1</span>)</b></td>
-            <td dir="ltr"><code>Lasso(alpha=...)</code></td>
-            <td>يضيف <b>مجموع القيم المطلقة للمعاملات ($\lambda \sum |w_j|$)</b>؛ يصفر معاملات السمات غير المهمة ($w_j=0$) فيقوم باختيار السمات تلقائياً.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="card">
-      <h2>2. مقارنة طرق تقسيم البيانات الخمس (Data Splitting Methods)</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>طريقة التقسيم</th>
-            <th>آلية العمل باختصار</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><b>1. <span dir="ltr">Holdout</span></b></td>
-            <td>تقسيم البيانات مرة واحدة عشوائياً إلى مجموعة تدريب (مثلاً $80\%$) ومجموعة اختبار ($20\%$).</td>
-          </tr>
-          <tr>
-            <td><b>2. <span dir="ltr">Random Sub-sampling</span></b></td>
-            <td>تكرار تقسيم الـ <span dir="ltr">Holdout</span> العشوائي عدة مرات وأخذ متوسط دقة الاختبار.</td>
-          </tr>
-          <tr>
-            <td><b>3. <span dir="ltr">K-Fold Cross-Validation</span></b></td>
-            <td>تقسيم البيانات إلى $K$ طيات متساوية؛ التدريب على $(K-1)$ والاختبار على طية واحدة بالتناوب $K$ مرات.</td>
-          </tr>
-          <tr>
-            <td><b>4. <span dir="ltr">Leave-One-Out (LOOCV)</span></b></td>
-            <td>التدريب على $(N-1)$ عينة والاختبار على عينة واحدة فقط في كل مرة وتكرار ذلك $N$ مرات.</td>
-          </tr>
-          <tr>
-            <td><b>5. <span dir="ltr">Bootstrap</span></b></td>
-            <td>اختيار عينات التدريب عشوائياً <b>مع الإرجاع (<span dir="ltr">With replacement</span>)</b>، واختبار النموذج على العينات التي لم تُختر.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- التبويب الثالث: قاموس المصطلحات والدوال -->
-  <section id="terms" class="panel">
-    <div class="card">
-      <h2>قاموس المصطلحات والدوال الشامل للفصل الحادي عشر</h2>
-      <p class="muted">جميع المفاهيم الرياضية والخوارزميات والدوال البرمجية الخاصة بالانحدار:</p>
-      <div id="termsGrid" class="grid"></div>
-    </div>
-  </section>
-
-  <!-- التبويب الرابع: البطاقات التعليمية -->
-  <section id="cards" class="panel">
-    <div class="card">
-      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
-      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
-      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
-        <div class="term" id="flashTerm"></div>
-        <div class="answer" id="flashAnswer" hidden></div>
-        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
-      </div>
-      <div class="row" style="margin-top:14px">
-        <button class="btn" id="prevCard">السابق</button>
-        <span id="cardCount" class="muted"></span>
-        <button class="btn primary" id="nextCard">التالي</button>
       </div>
     </div>
-  </section>
 
-  <!-- التبويب الخامس: الاختبار الذاتي العشوائي -->
-  <section id="quiz" class="panel">
-    <div class="card">
-      <div class="row">
+    <!-- 1.5 INTERACTIVE SIMULATOR: LINEAR REGRESSION & GRADIENT DESCENT -->
+    <div class="sub-block">
+      <h3 class="sub-title"><span class="index-num">05</span> المحاكي التفاعلي للانحدار الخطي وخوارزمية <bdi dir="ltr">Gradient Descent</bdi></h3>
+      <p>
+        جرّب تعديل الميل <bdi dir="ltr">θ₁</bdi> والتقاطع <bdi dir="ltr">θ₂</bdi> يدوياً لترى أثرهما على الخط المستقيم ومربعات الخطأ، أو شغّل خوارزمية Gradient Descent خطوة بخطوة (الدورة 1، 2، 3... 10) مع ملاحظة تأثير معدل التعلم <bdi dir="ltr">α</bdi> وتفعيل الـ <bdi dir="ltr">Normalization</bdi>.
+      </p>
+
+      <div class="figure-card">
+        <div class="split-grid">
+          <!-- Controls Column -->
+          <div>
+            <div class="control-group">
+              <div class="control-label">
+                <label for="sim-theta1-num">الميل <bdi dir="ltr">θ₁ (Slope)</bdi></label>
+                <span class="dossier-meta">الأمثل المرجعي ≈ 0.050</span>
+              </div>
+              <div class="control-row">
+                <input type="range" id="sim-theta1-slider" min="-0.05" max="0.15" step="0.001" value="0.01" oninput="onTheta1Slider(this.value)">
+                <input type="number" id="sim-theta1-num" min="-0.05" max="0.15" step="0.001" value="0.01" oninput="onTheta1Number(this.value)">
+              </div>
+            </div>
+
+            <div class="control-group">
+              <div class="control-label">
+                <label for="sim-theta2-num">التقاطع <bdi dir="ltr">θ₂ (Intercept)</bdi></label>
+                <span class="dossier-meta">الأمثل المرجعي ≈ -1.90</span>
+              </div>
+              <div class="control-row">
+                <input type="range" id="sim-theta2-slider" min="-6.0" max="4.0" step="0.05" value="1.20" oninput="onTheta2Slider(this.value)">
+                <input type="number" id="sim-theta2-num" min="-6.0" max="4.0" step="0.05" value="1.20" oninput="onTheta2Number(this.value)">
+              </div>
+            </div>
+
+            <div class="control-group">
+              <div class="control-label">
+                <label for="sim-alpha-select">معدل التعلم (<bdi dir="ltr">α</bdi>) وخيار توحيد المقياس</label>
+              </div>
+              <div class="btn-row">
+                <select id="sim-alpha-select" onchange="onAlphaChange(this.value)">
+                  <option value="0.05">α = 0.05 (بطيء ومنضبط)</option>
+                  <option value="0.2" selected>α = 0.20 (متوازن)</option>
+                  <option value="0.5">α = 0.50 (سريع)</option>
+                  <option value="0.95">α = 0.95 (كبير — تذبذب محتمل)</option>
+                </select>
+                <button type="button" class="toggle-btn active" id="sim-norm-btn" onclick="toggleNormalization()">
+                  Normalization: مُفعّل
+                </button>
+              </div>
+              <div class="dossier-meta" id="sim-norm-hint">
+                عند تفعيل Normalization تُقيّس درجات الحرارة حول المتوسط مما يمنع انفجار المشتقات ويسرّع التقارب.
+              </div>
+            </div>
+
+            <div class="btn-row" style="margin-bottom: var(--space-md);">
+              <button type="button" class="btn btn-primary" onclick="stepGradientDescent(1)">
+                <i data-lucide="step-forward" aria-hidden="true" width="16" height="16"></i>
+                <span>خطوة (+1 دورة)</span>
+              </button>
+              <button type="button" class="btn btn-secondary" id="sim-play-btn" onclick="toggleAutoDescent()">
+                <i data-lucide="play" aria-hidden="true" width="16" height="16"></i>
+                <span>تشغيل الدورات تلقائياً</span>
+              </button>
+              <button type="button" class="btn btn-gold" onclick="jumpToIteration10()">
+                <span>الوصول للدورة 10</span>
+              </button>
+              <button type="button" class="btn" onclick="applyTextbookOptimal()">
+                <span>قيم المنهج (0.05, -1.9)</span>
+              </button>
+              <button type="button" class="btn" onclick="resetSimulator()">
+                <span>إعادة تعيين</span>
+              </button>
+            </div>
+
+            <!-- Live Readouts & Temp Predictor -->
+            <div class="metrics-grid">
+              <div class="aside-box">
+                <div class="stat-label">الدورة الحالية</div>
+                <div class="stat-value" id="sim-iter-val">0</div>
+              </div>
+              <div class="aside-box">
+                <div class="stat-label">دالة الخسارة (MSE)</div>
+                <div class="stat-value" id="sim-mse-val">0.000</div>
+              </div>
+            </div>
+
+            <div class="callout-teal" style="margin-bottom: 0;">
+              <div class="control-label" style="margin-bottom: var(--space-xs);">
+                <label for="sim-test-temp">حاسبة التنبؤ الفوري لاستهلاك الكهرباء:</label>
+                <span class="dossier-meta">نموذجك الحالي</span>
+              </div>
+              <div class="control-row">
+                <input type="range" id="sim-test-temp-slider" min="60" max="100" step="1" value="72" oninput="onTestTempSlider(this.value)">
+                <input type="number" id="sim-test-temp" min="50" max="110" step="1" value="72" oninput="onTestTempNumber(this.value)">
+              </div>
+              <div style="margin-top: var(--space-sm); font-weight: 700;" id="sim-pred-output">
+                عند درجة <bdi dir="ltr">72°F</bdi> ← الاستهلاك المتوقع = <bdi dir="ltr">1.920 GW</bdi>
+              </div>
+            </div>
+          </div>
+
+          <!-- Charts Column -->
+          <div style="display: flex; flex-direction: column; gap: var(--space-md);">
+            <div class="chart-box">
+              <div class="chart-title">ملاءمة الخط المستقيم لنقاط استهلاك الكهرباء وخطوط الخطأ</div>
+              <div class="chart-sub" id="sim-eq-subtitle">Peak Demand = 0.010 × Temp + 1.20</div>
+              <svg id="sim-scatter-svg" class="viz-svg" viewBox="0 0 540 310" role="img" aria-label="رسم بياني تفاعلي للانحدار الخطي واستهلاك الكهرباء"></svg>
+              <div class="legend-row">
+                <span class="legend-item"><span class="legend-swatch" style="background: var(--data-1);"></span> البيانات التاريخية</span>
+                <span class="legend-item"><span class="legend-swatch" style="background: var(--data-2);"></span> خط النموذج الحالي</span>
+                <span class="legend-item"><span class="legend-swatch" style="background: var(--data-4);"></span> أخطاء التنبؤ (Residuals)</span>
+                <span class="legend-item"><span class="legend-swatch" style="background: var(--data-context);"></span> خط المنهج المرجعي</span>
+              </div>
+            </div>
+
+            <div class="chart-box" style="min-height: 210px;">
+              <div class="chart-title">منحنى تقارب دالة الخسارة <bdi dir="ltr">E(θ) = MSE</bdi> عبر الدورات</div>
+              <div class="chart-sub">انخفاض معدل الخطأ من الدورة الأولى حتى التقارب</div>
+              <svg id="sim-loss-svg" class="viz-svg" viewBox="0 0 540 175" role="img" aria-label="منحنى تغير دالة الخسارة عبر دورات Gradient Descent"></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1.6 UNIT 1 QUIZ (10 QUESTIONS) -->
+    <div class="quiz-shell" id="quiz-unit-1-container">
+      <div class="quiz-header">
         <div>
-          <h2>الاختبار الشامل المتغير للفصل الحادي عشر (25 سؤالاً) <span class="badge-new">ترتيب عشوائي ذكي 🎲</span></h2>
-          <p class="muted">يختبر فهمك لـ Gradient Descent، وحسابات SAE/MAE/SSE/MSE، والفرق بين Ridge و Lasso، وطرق تقسيم البيانات مع تعليل فوري!</p>
+          <span class="dossier-pill">اختبار الوحدة (1)</span>
+          <h3 class="sub-title" style="margin-top: var(--space-xs); margin-bottom: 0;">10 أسئلة تفاعلية — النموذج الخطي وGradient Descent</h3>
         </div>
-        <div class="score" id="score">النتيجة: 0 / 25</div>
+        <div class="btn-row">
+          <span class="status-badge" id="quiz-u1-score">النتيجة: 0 / 10</span>
+          <button type="button" class="btn btn-sm" onclick="resetQuiz('u1')">إعادة الاختبار</button>
+        </div>
       </div>
-      <div class="progress"><div id="progressBar"></div></div>
-      <div id="quizArea"></div>
-      <div class="row">
-        <button class="btn" id="resetQuiz">إعادة الاختبار بترتيب عشوائي جديد 🔀</button>
-        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
-      </div>
-      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
+      <div id="quiz-u1-questions"></div>
+    </div>
+
+    <div class="unit-footer-bar">
+      <span class="dossier-meta">نهاية الوحدة الأولى — تأكد من استيعاب المعادلات وتجربة المحاكي قبل الانتقال للوحدة الثانية.</span>
+      <button type="button" class="btn btn-primary" id="btn-complete-u1" onclick="toggleUnitComplete('u1')">
+        <i data-lucide="check-circle" aria-hidden="true" width="16" height="16"></i>
+        <span>تحديد الوحدة (1) كمكتملة</span>
+      </button>
     </div>
   </section>
+
+  <!-- =================================================================== -->
+  <!-- UNIT 2                                                              -->
+  <!-- =================================================================== -->
+  <section id="unit-2" class="unit-section">
+    <div class="dossier-bar">
+      <div class="dossier-bar-group">
+        <span class="dossier-pill">الوحدة (2)</span>
+        <span class="dossier-meta">الانحدار متعدد المتغيرات · Polynomial · Ridge · Lasso</span>
+      </div>
+      <span class="status-badge" id="badge-unit-2">قيد الدراسة</span>
+    </div>
+
+    <h2 class="unit-title">المفهوم الرئيسي للتعلم الآلي بإشراف، الانحدار المتعدد، والتنظيم</h2>
+
+    <!-- 2.1 Core Concept -->
+    <div class="sub-block">
+      <h3 class="sub-title"><span class="index-num">01</span> المفهوم الرئيسي للتعلم الآلي بإشراف والمصطلحات الأساسية</h3>
+      <p>
+        الهدف الرئيسي للتعلم الآلي بإشراف هو <strong>بناء نماذج وحساب المعاملات المثلى لها</strong> بناءً على مجموعة من البيانات التي تشمل متغيرات مستقلة (سمات) ومتغير هدف. وتقوم هذه العملية على ركيزتين رياضيتين أساسيتين:
+      </p>
+      <div class="card-grid">
+        <div class="figure-card">
+          <div class="stat-label"><bdi dir="ltr">Hypothesis Function</bdi> (دالة الفرضية)</div>
+          <p style="margin: 0;">هي الدالة التي تقوم باستقبال المتغيرات/السمات المستقلة وتُنتج القيمة المتوقعة للسمة الهدف.</p>
+        </div>
+        <div class="figure-card">
+          <div class="stat-label"><bdi dir="ltr">Loss / Objective Function</bdi> (دالة الخسارة/الهدف)</div>
+          <p style="margin: 0;">دالة تُستخدم في حساب معدل الخطأ بين القيم الفعلية والمستنتجة، والغرض الرئيسي للتعلم هو تقليل معدل الخطأ إلى أدنى مستوى عبر إيجاد أفضل قيم لمعاملات دالة الفرضية.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2.2 Multiple Linear Regression & Metrics & Pros/Cons -->
+    <div class="sub-block">
+      <h3 class="sub-title"><span class="index-num">02</span> الانحدار الخطي متعدد المتغيرات ومقاييس الكفاءة والمميزات والعيوب</h3>
+      <p>
+        في حالة السمة الهدف المستمرة (أي عدد حقيقي)، يمكن صياغة التنبؤ مع عدة متغيرات مستقلة <bdi dir="ltr">X = (x₁, x₂, ..., xₚ)</bdi> على صورة انحدار خطي متعدد المتغيرات يمثل خطاً/مستوياً في الفراغ ذي البعد <bdi dir="ltr">p</bdi>:
+      </p>
+      <div class="math-block" dir="ltr">
+        $$y = \theta_0 + \theta_1 x_1 + \theta_2 x_2 + \dots + \theta_p x_p$$
+      </div>
+      <div class="callout-teal">
+        <strong>نموذج الطول والوزن من المنهج:</strong> <bdi dir="ltr">Height = 128.017 + 0.611 × Weight</bdi>
+        <div class="control-row" style="margin-top: var(--space-sm); flex-wrap: wrap;">
+          <label for="u2-weight-input" style="font-weight: 600;">جرّب وزن الشخص (كجم):</label>
+          <input type="number" id="u2-weight-input" min="20" max="200" step="1" value="70" oninput="calcHeightFromWeight(this.value)">
+          <span id="u2-height-result" style="font-weight: 700; color: var(--secondary);">
+            الطول المتوقع = <bdi dir="ltr">170.787</bdi> سم
+          </span>
+        </div>
+      </div>
+
+      <h4 style="margin: var(--space-md) 0 var(--space-xs) 0; font-size: 1.05rem;">مقاييس كفاءة التنبؤ (<bdi dir="ltr">Evaluation Metrics</bdi>)</h4>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>المقياس</th>
+              <th>الصيغة الرياضية</th>
+              <th>الدلالة والتفسير</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong><bdi dir="ltr">MAE</bdi></strong> (متوسط الخطأ المطلق)</td>
+              <td class="num-cell"><bdi dir="ltr">(1/N) Σ |yᵢ - ŷᵢ|</bdi></td>
+              <td>يقيس متوسط مقدار الأخطاء دون تربيعها، وبنفس وحدة السمة الهدف، وأقل حساسية للقيم المتطرفة.</td>
+            </tr>
+            <tr>
+              <td><strong><bdi dir="ltr">MSE</bdi></strong> (متوسط مربعات الخطأ)</td>
+              <td class="num-cell"><bdi dir="ltr">(1/N) Σ (yᵢ - ŷᵢ)²</bdi></td>
+              <td>يُعاقب الأخطاء الكبيرة بشكل مضاعف بسبب التربيع؛ وهو الأساس الشائع لدالة الخسارة أثناء التدريب.</td>
+            </tr>
+            <tr>
+              <td><strong><bdi dir="ltr">RMSE</bdi></strong> (الجذر التربيعي لـ MSE)</td>
+              <td class="num-cell"><bdi dir="ltr">√MSE</bdi></td>
+              <td>يُعيد الخطأ إلى نفس وحدة القياس الأصلية للهدف مع إبقاء الحساسية العالية للأخطاء الكبيرة.</td>
+            </tr>
+            <tr>
+              <td><strong><bdi dir="ltr">R²</bdi></strong> (معامل التحديد)</td>
+              <td class="num-cell"><bdi dir="ltr">1 - Σ(yᵢ - ŷᵢ)² / Σ(yᵢ - ȳ)²</bdi></td>
+              <td>يقيس نسبة التباين في الهدف التي يفسرها النموذج (تتراوح عادة بين 0 و 1، وكلما اقتربت من 1 كان أفضل).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card-grid" style="margin-top: var(--space-sm);">
+        <div class="figure-card" style="border-top: 3px solid var(--positive);">
+          <div class="stat-label" style="color: var(--positive);">مميزات الانحدار الخطي</div>
+          <ul class="styled-list" style="margin-bottom: 0;">
+            <li><strong>القابلية للتفسير:</strong> يمكن فهم وتفسير طريقة إجراء التنبؤ وأثر كل سمة بسهولة ويسر.</li>
+            <li><strong>لا يحتاج إلى <bdi dir="ltr">Hyperparameters</bdi>:</strong> يعمل مباشرة بإيجاد المعاملات المثلى دون ضبط إعدادات معقدة.</li>
+            <li><strong>أساس رياضي قوي:</strong> يستند على نظرية إحصائية ورياضية راسخة وواضحة.</li>
+          </ul>
+        </div>
+        <div class="figure-card" style="border-top: 3px solid var(--error);">
+          <div class="stat-label" style="color: var(--error);">عيوب الانحدار الخطي</div>
+          <ul class="styled-list" style="margin-bottom: 0;">
+            <li>تتأثر النتائج سلباً بشكل كبير إذا كانت العلاقة بين المتغيرات <strong>غير خطية</strong>.</li>
+            <li>لا بد أن يكون <strong>عدد العناصر أكبر من عدد السمات</strong> لكي يعمل النموذج بشكل جيد.</li>
+            <li>تتأثر النتائج في حال اعتماد المتغيرات المستقلة على بعضها البعض (<strong>التعددية الخطية</strong>).</li>
+            <li><strong>حساس لوجود القيم المتطرفة (<bdi dir="ltr">Outliers</bdi>)</strong> التي تسحب الخط المستقيم نحوها.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2.3 Polynomial, Ridge & Lasso -->
+    <div class="sub-block">
+      <h3 class="sub-title"><span class="index-num">03</span> الانحدار متعدد الحدود (<bdi dir="ltr">Polynomial</bdi>) والتنظيم عبر <bdi dir="ltr">Ridge</bdi> و <bdi dir="ltr">Lasso</bdi></h3>
+      <div class="card-grid">
+        <div class="figure-card">
+          <div class="dossier-pill secondary-pill" style="margin-bottom: var(--space-sm);">Polynomial Regression</div>
+          <p>
+            عندما تكون العلاقة بين المتغيرات غير خطية ولا يمكن تمثيلها بخط مستقيم، نحتاج لنموذج أكثر مرونة يضيف قوى أعلى للمتغيرات (مثل الدرجة 2 أو 3):
+          </p>
+          <div class="math-block" dir="ltr" style="margin-bottom: var(--space-sm);">
+            $$y = a_0 + a_1 x + a_2 x^2 + \dots + a_n x^n$$
+          </div>
+          <p style="margin: 0; font-size: 0.92rem; color: var(--on-surface-variant);">
+            تبقى المهمة إيجاد قيم المعاملات <bdi dir="ltr">aᵢ</bdi> التي تقلل الخطأ إلى أدنى مستوى (مثلاً تمثيل البيانات بمنحنى من الدرجة 3).
+          </p>
+        </div>
+
+        <div class="figure-card">
+          <div class="dossier-pill" style="margin-bottom: var(--space-sm);">Ridge Regression (L2)</div>
+          <p>
+            يُستخدم عند وجود <strong>تعددية خطية (<bdi dir="ltr">Multicollinearity</bdi>)</strong> أي ارتباط قوي بين المتغيرات المستقلة مما يجعل المعاملات كبيرة جداً وغير مستقرة. يضيف قيمة تنظيمية من <strong>مجموع مربع المعاملات</strong>:
+          </p>
+          <div class="math-block" dir="ltr" style="margin-bottom: var(--space-sm);">
+            $$\text{Loss}_{\text{Ridge}} = \sum (y_i - \hat{y}_i)^2 + \lambda \sum_{j=1}^{p} \theta_j^2$$
+          </div>
+          <p style="margin: 0; font-size: 0.92rem; color: var(--on-surface-variant);">
+            حيث <bdi dir="ltr">λ</bdi> يحدد أهمية التنظيم؛ يقلص Ridge المعاملات نحو الصفر ليحفظ الاستقرار دون إلغائها تماماً.
+          </p>
+        </div>
+
+        <div class="figure-card">
+          <div class="dossier-pill secondary-pill" style="margin-bottom: var(--space-sm);">Lasso Regression (L1)</div>
+          <p>
+            يشبه Ridge لكنه يعتمد على <strong>مجموع القيم المطلقة للمعاملات</strong> بدلاً من مربعاتها:
+          </p>
+          <div class="math-block" dir="ltr" style="margin-bottom: var(--space-sm);">
+            $$\text{Loss}_{\text{Lasso}} = \sum (y_i - \hat{y}_i)^2 + \lambda \sum_{j=1}^{p} |\theta_j|$$
+          </div>
+          <p style="margin: 0; font-size: 0.92rem; color: var(--on-surface-variant);">
+            كلما زادت <bdi dir="ltr">λ</bdi> قل عدد المتغيرات الفعالة (غير الصفرية)؛ لذلك يقوم Lasso ضمنياً بعملية <strong>اختيار السمات واستبعاد غير المؤثرة</strong> بجعل معاملاتها صفراً.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2.4 INTERACTIVE LAB: POLYNOMIAL & RIDGE vs LASSO -->
+    <div class="sub-block">
+      <h3 class="sub-title"><span class="index-num">04</span> المختبر التفاعلي: <bdi dir="ltr">Polynomial Degree</bdi> ومقارنة <bdi dir="ltr">Ridge</bdi> و <bdi dir="ltr">Lasso</bdi></h3>
+
+      <div class="card-wrapper">
+        <div class="card-inner two-col">
+          <!-- Polynomial Interactive Card -->
+          <div class="figure-card">
+            <div class="chart-title">مختبر الانحدار متعدد الحدود (<bdi dir="ltr">Polynomial Regression</bdi>)</div>
+            <div class="chart-sub">اختر درجة كثير الحدود لملاحظة تحسن الملاءمة على بيانات غير خطية</div>
+            <div class="btn-row" style="margin-bottom: var(--space-sm);">
+              <button type="button" class="toggle-btn" id="poly-deg-1" onclick="setPolyDegree(1)">الدرجة 1 (خط مستقيم)</button>
+              <button type="button" class="toggle-btn" id="poly-deg-2" onclick="setPolyDegree(2)">الدرجة 2 (تربيعي)</button>
+              <button type="button" class="toggle-btn active" id="poly-deg-3" onclick="setPolyDegree(3)">الدرجة 3 (تكعيبي)</button>
+            </div>
+            <svg id="poly-lab-svg" class="viz-svg" viewBox="0 0 480 250" role="img" aria-label="رسم بياني لمقارنة درجات Polynomial Regression"></svg>
+            <div class="aside-box" style="margin-top: var(--space-sm); display: flex; justify-content: space-between; align-items: center;">
+              <span id="poly-lab-desc" style="font-weight: 600;">الدرجة 3: يتبع الانحناء غير الخطي بدقة عالية</span>
+              <span class="stat-value" style="font-size: 1.15rem;" id="poly-lab-mse">MSE: 0.08</span>
+            </div>
+          </div>
+
+          <!-- Ridge vs Lasso Interactive Card -->
+          <div class="figure-card">
+            <div class="chart-title">أثر معامل التنظيم <bdi dir="ltr">λ</bdi> في <bdi dir="ltr">Ridge</bdi> مقابل <bdi dir="ltr">Lasso</bdi></div>
+            <div class="chart-sub">اسحب معامل التنظيم <bdi dir="ltr">λ</bdi> وشاهد استبعاد السمات غير المؤثرة في Lasso</div>
+
+            <div class="control-group" style="margin-bottom: var(--space-sm);">
+              <div class="control-label">
+                <label for="lambda-num">معامل التنظيم <bdi dir="ltr">λ</bdi></label>
+                <span class="dossier-meta" id="lambda-active-features">السمات الفعالة في Lasso: 4 من 4</span>
+              </div>
+              <div class="control-row">
+                <input type="range" id="lambda-slider" min="0" max="100" step="1" value="25" oninput="onLambdaSlider(this.value)">
+                <input type="number" id="lambda-num" min="0" max="100" step="1" value="25" oninput="onLambdaNumber(this.value)">
+              </div>
+            </div>
+
+            <svg id="reg-lab-svg" class="viz-svg" viewBox="0 0 480 225" role="img" aria-label="مخطط مقارنة تقليص المعاملات بين Ridge وLasso"></svg>
+            <div class="legend-row">
+              <span class="legend-item"><span class="legend-swatch" style="background: var(--data-1);"></span> <bdi dir="ltr">Ridge (L2)</bdi>: يقلص المعاملات دون تصفير كامل</span>
+              <span class="legend-item"><span class="legend-swatch" style="background: var(--data-2);"></span> <bdi dir="ltr">Lasso (L1)</bdi>: يصفّر السمات غير المؤثرة (= 0)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2.5 UNIT 2 QUIZ (10 QUESTIONS) -->
+    <div class="quiz-shell" id="quiz-unit-2-container">
+      <div class="quiz-header">
+        <div>
+          <span class="dossier-pill">اختبار الوحدة (2)</span>
+          <h3 class="sub-title" style="margin-top: var(--space-xs); margin-bottom: 0;">10 أسئلة تفاعلية — الانحدار المتعدد، Polynomial، Ridge وLasso</h3>
+        </div>
+        <div class="btn-row">
+          <span class="status-badge" id="quiz-u2-score">النتيجة: 0 / 10</span>
+          <button type="button" class="btn btn-sm" onclick="resetQuiz('u2')">إعادة الاختبار</button>
+        </div>
+      </div>
+      <div id="quiz-u2-questions"></div>
+    </div>
+
+    <div class="unit-footer-bar">
+      <span class="dossier-meta">نهاية الوحدة الثانية — راجع الفروق بين L1 وL2 قبل الانتقال إلى طرق تقسيم البيانات والتطبيق العملي.</span>
+      <button type="button" class="btn btn-primary" id="btn-complete-u2" onclick="toggleUnitComplete('u2')">
+        <i data-lucide="check-circle" aria-hidden="true" width="16" height="16"></i>
+        <span>تحديد الوحدة (2) كمكتملة</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- =================================================================== -->
+  <!-- UNIT 3                                                              -->
+  <!-- =================================================================== -->
+  <section id="unit-3" class="unit-section">
+    <div class="dossier-bar">
+      <div class="dossier-bar-group">
+        <span class="dossier-pill">الوحدة (3)</span>
+        <span class="dossier-meta">طرق تقسيم البيانات الخمس · التطبيق العملي في Python</span>
+      </div>
+      <span class="status-badge" id="badge-unit-3">قيد الدراسة</span>
+    </div>
+
+    <h2 class="unit-title">طرق تقسيم البيانات الخمس والتطبيق العملي للتنبؤ بالمبيعات</h2>
+
+    <!-- 3.1 Five Data Splitting Methods -->
+    <div class="sub-block">
+      <h3 class="sub-title"><span class="index-num">01</span> جميع طرق تقسيم البيانات الخمس (<bdi dir="ltr">Data Splitting Methods</bdi>)</h3>
+      <p>
+        لبناء النماذج وتقييم قدرتها على التعميم دون تحيّز، يجب تقسيم البيانات إلى مجموعة <strong>التدريب (<bdi dir="ltr">Training Set</bdi>)</strong> ومجموعة <strong>التقييم/الاختبار (<bdi dir="ltr">Testing Set</bdi>)</strong>. في ما يلي الطرق الخمس كاملةً، وآلية عمل كل منها، والفرق بينها، ومتى تُستخدم:
+      </p>
+
+      <!-- Interactive Split Visualizer -->
+      <div class="figure-card">
+        <div class="chart-title">المستعرض البصري لآلية تقسيم البيانات عبر الطرق الخمس</div>
+        <div class="chart-sub">اختر إحدى الطرق الخمس لمشاهدة توزيع 10 عينات بين التدريب (أزرق) والتقييم (ذهبي)</div>
+        <div class="btn-row" style="margin-bottom: var(--space-md);">
+          <button type="button" class="toggle-btn active" id="split-btn-holdout" onclick="selectSplitMethod('holdout')">1. Holdout</button>
+          <button type="button" class="toggle-btn" id="split-btn-random" onclick="selectSplitMethod('random')">2. Random Sub-sampling</button>
+          <button type="button" class="toggle-btn" id="split-btn-kfold" onclick="selectSplitMethod('kfold')">3. K-fold Cross-Validation</button>
+          <button type="button" class="toggle-btn" id="split-btn-loocv" onclick="selectSplitMethod('loocv')">4. Leave-One-Out (LOOCV)</button>
+          <button type="button" class="toggle-btn" id="split-btn-bootstrap" onclick="selectSplitMethod('bootstrap')">5. Bootstrap</button>
+        </div>
+
+        <div id="split-visual-display"></div>
+
+        <div class="legend-row" style="margin-top: var(--space-md);">
+          <span class="legend-item"><span class="legend-swatch" style="background: var(--secondary);"></span> عينات التدريب (<bdi dir="ltr">Train</bdi>)</span>
+          <span class="legend-item"><span class="legend-swatch" style="background: var(--primary-container); border: 1px solid var(--outline);"></span> عينات التقييم/الاختبار (<bdi dir="ltr">Test / Out-of-Bag</bdi>)</span>
+        </div>
+      </div>
+
+      <!-- Complete Comparison Table of all 5 methods -->
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>الطريقة</th>
+              <th>آلية العمل</th>
+              <th>الفرق الجوهري</th>
+              <th>متى تُستخدم؟</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1. <bdi dir="ltr">Holdout</bdi></strong></td>
+              <td>تقسيم البيانات عشوائياً <strong>مرة واحدة</strong> إلى جزء للتدريب (مثل 75%) وجزء للتقييم (مثل 25%).</td>
+              <td>سريعة وبسيطة لكنها تتأثر بعشوائية التقسيم الواحد.</td>
+              <td>عندما تكون مجموعة البيانات كبيرة جداً ونحتاج سرعة في التدريب والتقييم.</td>
+            </tr>
+            <tr>
+              <td><strong>2. <bdi dir="ltr">Random Sub-sampling</bdi></strong></td>
+              <td>تكرار عملية الـ Holdout عشوائياً لعدة مرات (k مرة) وحساب متوسط أداء النموذج عبر التكرارات.</td>
+              <td>تقلل تحيّز التقسيم الواحد، لكن قد تظهر بعض العينات في الاختبار مراراً ولا تظهر عينات أخرى مطلقاً.</td>
+              <td>عندما نريد تقييماً أكثر استقراراً من Holdout مع مرونة في حجم عينة الاختبار.</td>
+            </tr>
+            <tr>
+              <td><strong>3. <bdi dir="ltr">K-fold Cross-Validation</bdi></strong></td>
+              <td>تقسيم البيانات إلى <bdi dir="ltr">K</bdi> أجزاء متساوية (مثل 5 أو 10)؛ يُستخدم جزء للاختبار و<bdi dir="ltr">K-1</bdi> للتدريب وتُكرر <bdi dir="ltr">K</bdi> مرات.</td>
+              <td>تضمن مشاركة <strong>كل عينة في الاختبار مرة واحدة فقط</strong> دون تكرار أو إغفال.</td>
+              <td>الطريقة القياسية للبيانات المتوسطة الحجم لتحقيق توازن ممتاز بين الدقة والتكلفة الحسابية.</td>
+            </tr>
+            <tr>
+              <td><strong>4. <bdi dir="ltr">Leave-One-Out (LOOCV)</bdi></strong></td>
+              <td>حالة خاصة من K-fold حيث <bdi dir="ltr">K = N</bdi> (عدد العينات الكلي)؛ تُختبر عينة واحدة ويُدرّب على <bdi dir="ltr">N-1</bdi>.</td>
+              <td>أعلى استغلال لبيانات التدريب وأقل تحيز، لكنها مكلفة حسابياً جداً (<bdi dir="ltr">N</bdi> نموذج).</td>
+              <td>تُستخدم حصراً مع <strong>البيانات الصغيرة جداً</strong> حيث لا نحتمل خسارة أي عينة من التدريب.</td>
+            </tr>
+            <tr>
+              <td><strong>5. <bdi dir="ltr">Bootstrap</bdi></strong></td>
+              <td>سحب عشوائي <strong>مع الإرجاع</strong> لعينة تدريب بحجم <bdi dir="ltr">N</bdi> (تغطي ~63.2% من البيانات الفريدة)، والاختبار على الباقي (<bdi dir="ltr">Out-of-Bag ~36.8%</bdi>).</td>
+              <td>العينة نفسها قد تتكرر داخل مجموعة التدريب في نفس الدورة بسبب السحب مع الإرجاع.</td>
+              <td>ممتازة للبيانات الصغيرة، وتقدير تباين النموذج، وأساس لخوارزميات التجميع مثل <bdi dir="ltr">Random Forest</bdi>.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 3.2 Practical Python Implementation -->
+    <div class="sub-block">
+      <h3 class="sub-title"><span class="index-num">02</span> التطبيق العملي الكامل في Python: التنبؤ بالمبيعات من الإنفاق الإعلاني</h3>
+      <p>
+        في هذا التطبيق العملي نتنبأ بحجم المبيعات (<bdi dir="ltr">Sales</bdi>) اعتماداً على الإنفاق الإعلاني في ثلاث وسائل: التلفاز (<bdi dir="ltr">TV</bdi>)، والراديو (<bdi dir="ltr">Radio</bdi>)، والصحف المقروءة (<bdi dir="ltr">Newspaper</bdi>).
+      </p>
+
+      <div class="code-card">
+        <div class="code-header">
+          <span class="code-header-title">الخطوة 1 و2: تحميل البيانات، فحص القيم المفقودة، وتقسيم البيانات (25% للتقييم)</span>
+          <button type="button" class="copy-btn" onclick="copyCodeBlock('code-step-1', this)">نسخ الكود</button>
+        </div>
+        <pre class="code-body" id="code-step-1">import pandas as pd
+from sklearn.model_selection import train_test_split
+
+# 1. تحميل البيانات وفحص القيم المفقودة
+df = pd.read_csv('Advertising.csv')
+print(df.info())
+print(df.isnull().sum())  # يتضح أنه لا توجد قيم مفقودة
+
+# 2. فصل السمات المستقلة (X) عن السمة الهدف (y)
+X = df[['TV', 'Radio', 'Newspaper']]
+y = df['Sales']
+
+# تقسيم البيانات بنسبة 25% للتقييم و 75% للتدريب
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.25, random_state=42
+)</pre>
+      </div>
+
+      <div class="code-card">
+        <div class="code-header">
+          <span class="code-header-title">الخطوة 3: بناء وتقييم نموذج الانحدار الخطي (<bdi dir="ltr">Linear Regression</bdi>)</span>
+          <button type="button" class="copy-btn" onclick="copyCodeBlock('code-step-2', this)">نسخ الكود</button>
+        </div>
+        <pre class="code-body" id="code-step-2">from sklearn.linear_model import LinearRegression
+from sklearn import metrics
+import numpy as np
+
+# بناء وتدريب النموذج الخطي على بيانات التدريب
+lm = LinearRegression()
+lm.fit(X_train, y_train)
+
+print("Intercept:", lm.intercept_)
+print("Coefficients:", lm.coef_)  # [TV, Radio, Newspaper]
+
+# التنبؤ باستخدام بيانات التقييم وحساب مقاييس الأداء
+predictions = lm.predict(X_test)
+print("MAE:", metrics.mean_absolute_error(y_test, predictions))
+print("MSE:", metrics.mean_squared_error(y_test, predictions))
+print("RMSE:", np.sqrt(metrics.mean_squared_error(y_test, predictions)))</pre>
+      </div>
+
+      <div class="code-card">
+        <div class="code-header">
+          <span class="code-header-title">الخطوة 4: تطبيق <bdi dir="ltr">Lasso Regression</bdi> واستبعاد سمة <bdi dir="ltr">Newspaper</bdi> تلقائياً</span>
+          <button type="button" class="copy-btn" onclick="copyCodeBlock('code-step-3', this)">نسخ الكود</button>
+        </div>
+        <pre class="code-body" id="code-step-3">from sklearn.linear_model import Lasso
+
+# بناء وتدريب نموذج Lasso بنفس طريقة الانحدار الخطي
+lasso = Lasso(alpha=1.0)
+lasso.fit(X_train, y_train)
+
+print("Lasso Coefficients:", lasso.coef_)
+# ملاحظة المنهج: المعامل الثالث المقابل لـ Newspaper يصبح 0.0
+# وهذا يعني أنه تم استبعاده تلقائياً من عملية التنبؤ لضعف تأثيره
+
+lasso_pred = lasso.predict(X_test)
+print("Lasso RMSE:", np.sqrt(metrics.mean_squared_error(y_test, lasso_pred)))</pre>
+      </div>
+
+      <div class="code-card">
+        <div class="code-header">
+          <span class="code-header-title">الخطوة 5: تطبيق <bdi dir="ltr">Polynomial Regression (degree=2)</bdi></span>
+          <button type="button" class="copy-btn" onclick="copyCodeBlock('code-step-4', this)">نسخ الكود</button>
+        </div>
+        <pre class="code-body" id="code-step-4">from sklearn.preprocessing import PolynomialFeatures
+
+# 1. تحويل بيانات التدريب باستخدام دالة polynomial من الدرجة 2
+poly = PolynomialFeatures(degree=2, include_bias=False)
+X_train_poly = poly.fit_transform(X_train)
+
+# 2. بناء نموذج انحدار خطي على البيانات المحولة
+poly_model = LinearRegression()
+poly_model.fit(X_train_poly, y_train)
+
+# 3. هام جداً: تحويل بيانات التقييم بنفس المحوّل (transform فقط وليس fit_transform)
+X_test_poly = poly.transform(X_test)
+poly_pred = poly_model.predict(X_test_poly)
+
+print("Polynomial RMSE:", np.sqrt(metrics.mean_squared_error(y_test, poly_pred)))</pre>
+      </div>
+
+      <!-- Interactive Comparison of the 3 Models on Advertising -->
+      <div class="figure-card">
+        <div class="chart-title">مقارنة مخرجات النماذج الثلاثة في التطبيق العملي على بيانات الإعلانات</div>
+        <div class="chart-sub">انقر على كل نموذج لاستعراض معاملات السمات وأثر التنظيم أو التحويل</div>
+        <div class="btn-row" style="margin-bottom: var(--space-md);">
+          <button type="button" class="toggle-btn active" id="adv-btn-linear" onclick="selectAdvModel('linear')">Linear Regression</button>
+          <button type="button" class="toggle-btn" id="adv-btn-lasso" onclick="selectAdvModel('lasso')">Lasso Regression (α = 1.0)</button>
+          <button type="button" class="toggle-btn" id="adv-btn-poly" onclick="selectAdvModel('poly')">Polynomial (degree = 2)</button>
+        </div>
+        <div id="adv-model-panel"></div>
+      </div>
+    </div>
+
+    <!-- 3.3 UNIT 3 QUIZ (10 QUESTIONS) -->
+    <div class="quiz-shell" id="quiz-unit-3-container">
+      <div class="quiz-header">
+        <div>
+          <span class="dossier-pill">اختبار الوحدة (3)</span>
+          <h3 class="sub-title" style="margin-top: var(--space-xs); margin-bottom: 0;">10 أسئلة تفاعلية — طرق تقسيم البيانات والتطبيق العملي في Python</h3>
+        </div>
+        <div class="btn-row">
+          <span class="status-badge" id="quiz-u3-score">النتيجة: 0 / 10</span>
+          <button type="button" class="btn btn-sm" onclick="resetQuiz('u3')">إعادة الاختبار</button>
+        </div>
+      </div>
+      <div id="quiz-u3-questions"></div>
+    </div>
+
+    <div class="unit-footer-bar">
+      <span class="dossier-meta">نهاية الوحدة الثالثة — أنت الآن جاهز لاجتياز الاختبار الشامل للفصل الحادي عشر.</span>
+      <button type="button" class="btn btn-primary" id="btn-complete-u3" onclick="toggleUnitComplete('u3')">
+        <i data-lucide="check-circle" aria-hidden="true" width="16" height="16"></i>
+        <span>تحديد الوحدة (3) كمكتملة</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- =================================================================== -->
+  <!-- COMPREHENSIVE CHAPTER 11 QUIZ (15 QUESTIONS)                        -->
+  <!-- =================================================================== -->
+  <section id="comprehensive-quiz" class="unit-section">
+    <div class="dossier-bar">
+      <div class="dossier-bar-group">
+        <span class="dossier-pill">الاختبار الشامل</span>
+        <span class="dossier-meta">تقييم شامل للوحدات الثلاث · 15 سؤالاً نظرياً وحسابياً وبرمجياً</span>
+      </div>
+      <span class="status-badge" id="quiz-final-badge">0 / 15</span>
+    </div>
+
+    <h2 class="unit-title">الاختبار الشامل للفصل الحادي عشر: التعلم الآلي بإشراف (الجزء الأول)</h2>
+    <p>
+      يجمع هذا الاختبار بين المسائل الحسابية (حساب التنبؤ، الخطأ، و<bdi dir="ltr">MSE</bdi>) والمفاهيم النظرية والتطبيقية في الوحدات الثلاث، مع تصحيح فوري وشرح تفصيلي لكل سؤال.
+    </p>
+
+    <div class="quiz-shell" id="quiz-final-container">
+      <div class="quiz-header">
+        <div>
+          <div class="stat-label">التقدم في الاختبار الشامل</div>
+          <div style="display: flex; align-items: baseline; gap: var(--space-sm);">
+            <span class="stat-value" id="quiz-final-score">0 / 15</span>
+            <span class="dossier-meta" id="quiz-final-feedback">أجب عن الأسئلة للحصول على التقييم الفوري</span>
+          </div>
+        </div>
+        <button type="button" class="btn btn-sm" onclick="resetQuiz('final')">إعادة الاختبار الشامل</button>
+      </div>
+      <div class="progress-track" style="margin-bottom: var(--space-lg);">
+        <div class="progress-fill" id="quiz-final-bar"></div>
+      </div>
+
+      <div id="quiz-final-questions"></div>
+    </div>
+  </section>
+
+  <!-- FOOTER & SOURCES -->
+  <footer class="aside-box" style="margin-top: var(--space-lg);">
+    <div class="dossier-meta">
+      <strong>المصادر العلمية:</strong> الفصل الحادي عشر (الوحدات 1، 2، 3: التعلم الآلي بإشراف — الجزء الأول) من مقرر تحليل وتمثيل البيانات، وتدريبات ومسائل اللقاء المباشر الثالث.
+    </div>
+  </footer>
+
 </main>
 
-<footer>مبني بالكامل (100%) على محتوى الفصل الحادي عشر (التعلم الآلي بإشراف - الانحدار) من مقرر تحليل وتمثيل البيانات</footer>
-
+<api-shim></api-shim>
 <script>
-const terms = [
-  ["Regression (الانحدار)", "أحد أساليب التعلم الآلي بإشراف يُستخدم للتنبؤ بقيمة سمة هدف كمية رقمية متصلة (Continuous target)."],
-  ["Hypothesis Function h_θ(x)", "دالة الفرضية: المعادلة الرياضية التي يستخدمها النموذج لإجراء التنبؤ (مثل معادلة الخط المستقيم θ1*x + θ2)."],
-  ["Loss / Objective Function E(θ)", "دالة الفقد أو الهدف: تقيس مقدار الخطأ بين توقعات النموذج والقيم الحقيقية، ونسعى لتقليلها لأدنى قيمة."],
-  ["Gradient Descent (انحدار الميل)", "خوارزمية تحسين تكرارية تحدث معاملات النموذج في عكس اتجاه الميل للوصول إلى أقل قيمة لدالة الفقد."],
-  ["Learning Rate (α - معدل التعلم)", "معامل يحدد حجم الخطوة في خوارزمية انحدار الميل أثناء تحديث المعاملات."],
-  ["SAE & MAE", "مجموع الأخطاء المطلقة SAE = Σ|y - ŷ|، ومتوسط الخطأ المطلق MAE = (1/n) Σ|y - ŷ|."],
-  ["SSE & MSE", "مجموع مربعات الأخطاء SSE = Σ(y - ŷ)²، ومتوسط مربع الخطأ MSE = (1/n) Σ(y - ŷ)²."],
-  ["Polynomial Regression", "الانحدار كثير الحدود: يُستخدم لنمذجة العلاقات غير الخطية بإضافة أسس للمتغيرات المستقلة (x², x³...)."],
-  ["Multicollinearity (التعددية الخطية)", "مشكلة وجود ارتباط خطي قوي بين متغيرين مستقلين أو أكثر، وتُعالج باستخدام انحدار Ridge أو Lasso."],
-  ["Ridge Regression (L2)", "انحدار يضيف مجموع مربعات المعاملات (λ Σ w²) لدالة الخسارة لتقليص المعاملات وتقليل الـ Overfitting دون تصفيرها."],
-  ["Lasso Regression (L1)", "انحدار يضيف مجموع القيم المطلقة للمعاملات (λ Σ |w|) لدالة الخسارة، ويتميز بقدرته على تصفير معاملات السمات غير المهمة."],
-  ["Holdout & K-Fold Cross-Validation", "طرق تقسيم البيانات: Holdout تقسمها مرة واحدة، و K-Fold تقسمها لـ K طيات وتدرب على K-1 وتختبر على طية بالتناوب."],
-  ["Leave-One-Out & Bootstrap", "LOOCV تختبر عينة واحدة في كل مرة (K=N)، و Bootstrap تختار عينات التدريب عشوائياً مع الإرجاع (with replacement)."]
-];
+  // =========================================================================
+  // GLOBAL STATE & PERSISTENCE (Gemini Notebook Shim API)
+  // =========================================================================
+  const appState = {
+    completedUnits: { u1: false, u2: false, u3: false },
+    quizAnswers: { u1: {}, u2: {}, u3: {}, final: {} },
+    sim: {
+      theta1: 0.01,
+      theta2: 1.20,
+      alpha: 0.20,
+      normalize: true,
+      iter: 0,
+      testTemp: 72,
+      lossHistory: []
+    },
+    polyDegree: 3,
+    lambdaVal: 25,
+    splitMethod: 'holdout',
+    advModel: 'linear'
+  };
 
-const cards = [
-  ["متى نستخدم خوارزميات الانحدار (Regression) في التعلم الآلي بإشراف؟", "عندما تكون سمة الهدف (Y) المراد التنبؤ بها قيمة كمية رقمية متصلة (مثل درجة الحرارة، السعر، المبيعات، أو استهلاك الكهرباء)."],
-  ["ما هي معادلة الانحدار الخطي البسيط (دالة الفرضية Hypothesis function)؟", "h_θ(x) = θ1 * x + θ2\nحيث θ1 هو ميل الخط (Slope)، و θ2 هو الجزء المقطوع من محور الصادات (Intercept)."],
-  ["[مسألة حسابية] إذا كانت معادلة التنبؤ بالمبيعات هي: y = 3x + 10، فكم تبلغ المبيعات المتوقعة عندما تكون ميزانية الإعلان x = 20؟", "y = (3 × 20) + 10 = 60 + 10 = 70."],
-  ["ما هي دالة الفقد / الهدف (Loss / Objective Function) في الانحدار الخطي؟", "هي الدالة التي تقيس متوسط مربعات الأخطاء بين القيم المتوقعة h_θ(x) والقيم الحقيقية y:\nE(θ) = (1 / 2n) * Σ (h_θ(x_i) - y_i)²\nوالهدف من التدريب هو تقليل هذه الدالة لأدنى قيمة ممكنة."],
-  ["ما هي وظيفة خوارزمية انحدار الميل (Gradient Descent)؟ وما معادلة تحديث المعاملات فيها؟", "هي خوارزمية تحسين تكرارية تبحث عن أفضل قيم للمعاملات θ التي تقلل دالة الفقد لأدنى قيمة.\nومعادلتها: θ_j ← θ_j - α * (∂E / ∂θ_j)"],
-  ["ما هو دور معدل التعلم (α - Learning rate) في انحدار الميل؟ وماذا يحدث إذا كان صغيراً جداً أو كبيراً جداً؟", "يحدد حجم الخطوة في كل تكرار:\n• إذا كان صغيراً جداً: يصبح التقارب بطيئاً جداً ويستغرق وقتاً طويلاً.\n• إذا كان كبيراً جداً: قد يتجاوز نقطة القاع (Overshooting) ويفشل في التقارب (يتباعد)."],
-  ["ما الفرق بين المقاييس الأربعة لخطأ التنبؤ: (SAE)، (MAE)، (SSE)، و (MSE)؟", "• SAE: مجموع الأخطاء المطلقة Σ|y - ŷ|\n• MAE: متوسط الخطأ المطلق (1/n) Σ|y - ŷ|\n• SSE: مجموع مربعات الأخطاء Σ(y - ŷ)²\n• MSE: متوسط مربع الخطأ (1/n) Σ(y - ŷ)²"],
-  ["[مسألة حسابية] إذا كانت القيم الحقيقية لعينتين هي [5, 10]، والقيم المتوقعة هي [4, 13]، فاحسبي: SAE و MAE و SSE و MSE.", "• الفروق المطلقة: |5-4| = 1 ، و |10-13| = 3.\n1) SAE = 1 + 3 = 4.\n2) MAE = 4 / 2 = 2.0.\n• مربعات الفروق: (1)² = 1 ، و (3)² = 9.\n3) SSE = 1 + 9 = 10.\n4) MSE = 10 / 2 = 5.0."],
-  ["متى نستخدم الانحدار كثير الحدود (Polynomial Regression)؟ وما الفئة البرمجية المستخدمة لإنشاء حدوده في Scikit-learn؟", "نستخدمه عندما تكون العلاقة بين X و Y غير خطية (منحنية).\nوالفئة البرمجية هي: PolynomialFeatures(degree=...) من sklearn.preprocessing."],
-  ["ما هي المشكلة التي تحدث إذا رفعنا درجة الانحدار كثير الحدود (degree) إلى رقم كبير جداً؟", "تحدث مشكلة الإفراط في التخصيص / الحفظ (Overfitting)، حيث يحفظ النموذج ضجيج بيانات التدريب ويفشل في التعميم على بيانات الاختبار."],
-  ["ما المقصود بمشكلة التعددية الخطية (Multicollinearity) في الانحدار المتعدد؟ وكيف نعالجها؟", "هي وجود ارتباط خطي قوي بين متغيرين مستقلين أو أكثر، مما يجعل تقدير المعاملات غير مستقر.\nونعالجها باستخدام انحدار التنظيم: Ridge Regression أو Lasso Regression."],
-  ["ما الفرق الرياضي والعملي بين انحدار (Ridge) وانحدار (Lasso)؟", "• Ridge (L2): يضيف مجموع مربعات المعاملات (λ Σ w²)؛ يقلص المعاملات لتقترب من الصفر دون أن يلغيها.\n• Lasso (L1): يضيف مجموع القيم المطلقة للمعاملات (λ Σ |w|)؛ يستطيع تصفير معاملات السمات غير المهمة تماماً (w = 0) فيقوم باختيار السمات!"],
-  ["ما هي الطرق الخمس لتقسيم البيانات للتدريب والتقييم؟", "1) Holdout method.\n2) Random sub-sampling.\n3) K-fold cross-validation.\n4) Leave-one-out (LOOCV).\n5) Bootstrap."],
-  ["كيف تعمل طريقة (K-fold cross-validation)؟", "تقسم البيانات إلى K أجزاء متساوية؛ وتقوم بالتدريب K مرات بحيث تستخدم في كل مرة (K - 1) جزءاً للتدريب وجزءاً واحداً فقط للاختبار بالتناوب."],
-  ["ما هي طريقة (Leave-One-Out - LOOCV)؟ وكم مرة يتم تدريب النموذج فيها إذا كان لدينا 100 عينة؟", "هي حالة خاصة من K-fold حيث K = N؛ فيتم التدريب على (N - 1) عينة والاختبار على عينة واحدة فقط.\nوإذا كان لدينا 100 عينة يتم تدريب النموذج 100 مرة!"],
-  ["بماذا تتميز طريقة البوتستراب (Bootstrap) في سحب عينات التدريب؟", "تتميز بسحب عينات التدريب عشوائياً مع الإرجاع (Sampling with replacement)، أي يمكن أن تتكرر نفس العينة أكثر من مرة في مجموعة التدريب."],
-  ["بعد تدريب نموذج LinearRegression() في Scikit-learn، كيف نستخرج قيمة الجزء المقطوع (w0) وقيم المعاملات/الأوزان (w)؟", "• الجزء المقطوع: model.intercept_\n• أوزان/معاملات السمات: model.coef_"],
-  ["من أي وحدة في مكتبة Scikit-learn نستورد الدالة train_test_split؟ ومن أي وحدة نستورد LinearRegression و Lasso؟", "• train_test_split من: sklearn.model_selection\n• LinearRegression و Lasso من: sklearn.linear_model"]
-];
-
-const masterQuestions = [
-  {q:"أي نوع من خوارزميات التعلم الآلي بإشراف يُستخدم عندما تكون سمة الهدف (Y) المراد التنبؤ بها (قيمة كمية رقمية متصلة مثل استهلاك الكهرباء أو المبيعات)؟",o:["الانحدار (Regression)","التجميع بدون إشراف (Clustering)","الترميز الثنائي (One-hot)","خريطة الحرارة (Heatmap)"],a:0,e:"يُستخدم الانحدار (Regression) للتنبؤ بمتغير تابع كمي متصل، بينما يُستخدم التصنيف (Classification) للتنبؤ بفئات منفصلة."},
-  {q:"[مسألة حسابية] إذا كانت معادلة خط الانحدار للتنبؤ بالطلب على الكهرباء هي: Peak Demand = 0.2 * Temp - 5 ، فكم يبلغ الطلب المتوقع عند درجة حرارة Temp = 100؟",o:["15 (لأن 0.2 × 100 - 5 = 20 - 5 = 15)","20","25","95"],a:0,e:"نعوض عن Temp بـ 100 في المعادلة: (0.2 × 100) - 5 = 20 - 5 = 15."},
-  {q:"ماذا نسمي الدالة الرياضية E(θ) = (1 / 2n) Σ (h_θ(x_i) - y_i)² التي تقيس مقدار الخطأ بين توقعات النموذج والقيم الحقيقية ونسعى لتقليلها؟",o:["دالة الفقد / دالة الهدف (Loss / Objective Function)","دالة التجميع الهرمي (Dendrogram)","دالة التقطيع (Discretization)","مصفوفة الارتباك (Confusion Matrix)"],a:0,e:"الدالة التي تحسب خطأ النموذج ونهدف لتقليلها أثناء التدريب تُسمى دالة الفقد أو دالة التكلفة/الهدف (Loss / Objective Function)."},
-  {q:"ما هي الخوارزمية التكرارية التي تُستخدم لتحديث معاملات النموذج (θ) تدريجياً في عكس اتجاه المشتقة للوصول إلى أقل قيمة ممكنة لدالة الفقد؟",o:["خوارزمية انحدار الميل (Gradient Descent)","خوارزمية DBSCAN","خوارزمية K-means","طريقة المرفق (Elbow Method)"],a:0,e:"خوارزمية انحدار الميل (Gradient Descent) تحدث المعاملات بالمعادلة θ ← θ - α (∂E/∂θ) لتقليل دالة الفقد."},
-  {q:"في خوارزمية انحدار الميل (Gradient Descent)، ماذا يحدث إذا تم اختيار معدل التعلم (α - Learning rate) بقيمة كبيرة جداً؟",o:["قد يتجاوز النموذج نقطة القاع الصغرى (Overshooting) ويفشل في التقارب (يتباعد)","سيصل إلى الحل الأمثل بدقة متناهية في خطوة واحدة دائماً","سيتحول النموذج إلى تجميع هرمي","ستصبح جميع البيانات صفراً"],a:0,e:"إذا كان معدل التعلم α صغيراً جداً يصبح التقارب بطيئاً جداً، وإذا كان كبيراً جداً يقفز فوق نقطة القاع ويفشل في التقارب."},
-  {q:"[مسألة حسابية] إذا كانت القيم الحقيقية لثلاث عينات هي [10, 20, 30]، والقيم المتوقعة من نموذج الانحدار هي [12, 18, 33]، فكم تبلغ قيمة مجموع الأخطاء المطلقة (SAE)؟",o:["7 (لأن |10-12| + |20-18| + |30-33| = 2 + 2 + 3 = 7)","17","3","2.33"],a:0,e:"نحسب الفروق المطلقة: |10-12|=2، و |20-18|=2، و |30-33|=3. مجموعها SAE = 2 + 2 + 3 = 7."},
-  {q:"[مسألة حسابية] لنفس العينات الثلاث السابقة (حيث الفروق المطلقة هي 2 و 2 و 3)، كم تبلغ قيمة مجموع مربعات الأخطاء (SSE)؟",o:["17 (لأن 2² + 2² + 3² = 4 + 4 + 9 = 17)","7","49","5.67"],a:0,e:"نربع كل فرق ثم نجمع: (2)^2 + (2)^2 + (3)^2 = 4 + 4 + 9 = 17."},
-  {q:"[مسألة حسابية] إذا كان مجموع مربعات الأخطاء (SSE) لنموذج انحدار على (n = 5) عينات يساوي (40)، فكم تبلغ قيمة متوسط مربع الخطأ (MSE)؟",o:["8.0 (لأن MSE = SSE / n = 40 / 5 = 8)","200.0","40.0","2.0"],a:0,e:"متوسط مربع الخطأ (MSE) يساوي مجموع مربعات الأخطاء (SSE) مقسوماً على عدد العينات (n): 40 / 5 = 8.0."},
-  {q:"متى نلجأ لاستخدام (الانحدار كثير الحدود - Polynomial Regression) بدلاً من الانحدار الخطي البسيط؟",o:["عندما تكون العلاقة بين المتغير المستقل X والمتغير التابع Y علاقة غير خطية (منحنية)","عندما تكون جميع البيانات نصية غير مرقمة","عندما لا توجد سمة هدف Y في البيانات","عندما نريد رسم مخطط دائري"],a:0,e:"يُستخدم الانحدار كثير الحدود لنمذجة البيانات ذات الاتجاه المنحني غير الخطي عبر إضافة حدود مرفوعة لأسس (x², x³...)."},
-  {q:"ما الفرق الجوهري بين انحدار (Ridge) وانحدار (Lasso) في معالجة التعددية الخطية والإفراط في التخصيص (Overfitting)؟",o:["Ridge يضيف مجموع مربعات المعاملات (L2) ويقلصها دون تصفيرها، بينما Lasso يضيف مجموع القيم المطلقة للمعاملات (L1) ويستطيع تصفير معاملات السمات غير المهمة تماماً (Feature Selection)","Ridge يصفر جميع المعاملات دائماً، و Lasso يضاعف قيمتها","كلاهما يستخدمان فقط في التجميع بدون إشراف","لا يوجد أي فرق في معادلتيهما"],a:0,e:"يتميز Lasso (L1) بقدرته على جعل معاملات المتغيرات غير المهمة تساوي صفراً تماماً، مما يحقق اختيار السمات تلقائياً."},
-  {q:"أي طريقة من طرق تقسيم البيانات تقوم بتقسيم البيانات إلى K أجزاء متساوية، وتدرب النموذج على (K - 1) جزءاً وتختبره على جزء واحد بالتناوب K مرات؟",o:["التحقق المتقاطع ذو الـ K طيات (K-Fold Cross-Validation)","طريقة الاحتجاز البسيطة (Holdout Method)","طريقة البوتستراب (Bootstrap)","طريقة المرفق (Elbow Method)"],a:0,e:"في K-Fold Cross-Validation تُقسم البيانات إلى K طيات، وتُستخدم كل طية كاختبار مرة واحدة والباقي للتدريب."},
-  {q:"أي طريقة من طرق تقسيم البيانات تقوم باختيار عينات التدريب عشوائياً (مع الإرجاع - Sampling with replacement)، وتستخدم العينات التي لم يتم اختيارها كمجموعة اختبار؟",o:["طريقة البوتستراب (Bootstrap Method)","طريقة الاحتجاز (Holdout Method)","طريقة استبعاد عينة واحدة (Leave-One-Out)","طريقة K-Fold"],a:0,e:"السمة المميزة لطريقة Bootstrap هي السحب العشوائي مع الإرجاع (with replacement)."},
-  {q:"في طريقة استبعاد عينة واحدة (Leave-One-Out Cross-Validation - LOOCV)، إذا كان لدينا جدول بيانات يضم 50 عينة، فكم عينة تُستخدم للتدريب وكم عينة للاختبار في كل تكرار؟",o:["49 عينة للتدريب وعينة واحدة (1) فقط للاختبار في كل مرة (ويتكرر ذلك 50 مرة)","25 عينة للتدريب و 25 للاختبار مرة واحدة","50 عينة للتدريب و 0 للاختبار","عينة واحدة للتدريب و 49 للاختبار"],a:0,e:"في LOOCV نترك عينة واحدة فقط للاختبار وندرب على باقي العينات (N - 1 = 49)، ونكرر العملية بعدد العينات N."},
-  {q:"في مكتبة Scikit-learn، ما هي الفئة المستخدمة لتوليد الحدود الأسية ($x^2, x^3\dots$) قبل تدريب نموذج الانحدار كثير الحدود؟",o:["PolynomialFeatures من sklearn.preprocessing","StandardScaler من sklearn.preprocessing","KMeans من sklearn.cluster","SelectKBest من sklearn.feature_selection"],a:0,e:"تُستخدم الفئة PolynomialFeatures(degree=...) لتحويل السمات الأصلية إلى سمات مرفوعة لأسس متعددة."},
-  {q:"بعد تدريب نموذج الانحدار الخطي lr = LinearRegression() في Scikit-learn، ما اسم الخاصيتين اللتين نستخدمهما لاستخراج (الجزء المقطوع w0) و (معاملات/أوزان السمات w) على التوالي؟",o:["lr.intercept_ ثم lr.coef_","lr.inertia_ ثم lr.cluster_centers_","lr.mean_ ثم lr.std_","lr.min_ ثم lr.max_"],a:0,e:"في نماذج الانحدار الخطي بـ Scikit-learn: تُخزن قيمة التقاطع في intercept_ وتُخزن مصفوفة المعاملات في coef_."},
-  {q:"[مسألة حسابية] إذا كان مجموع الأخطاء المطلقة (SAE) لنموذج انحدار على 10 عينات يساوي 25، فكم تبلغ قيمة متوسط الخطأ المطلق (MAE)؟",o:["2.5 (لأن MAE = SAE / n = 25 / 10 = 2.5)","250","5.0","0.4"],a:0,e:"متوسط الخطأ المطلق MAE يساوي مجموع الأخطاء المطلقة SAE مقسوماً على عدد العينات n: 25 / 10 = 2.5."},
-  {q:"ما اسم المشكلة التي تنشأ في الانحدار الخطي المتعدد عندما يكون هناك ارتباط خطي قوي جداً بين متغيرين مستقلين أو أكثر (تُحل بواسطة Ridge و Lasso)؟",o:["التعددية الخطية (Multicollinearity)","القيم المفقودة عشوائياً (MCAR)","انحدار الميل (Gradient Descent)","الترميز الاسمي (Nominal Encoding)"],a:0,e:"وجود ارتباط قوي بين المتغيرات المستقلة نفسها يُعرف بمشكلة التعددية الخطية (Multicollinearity)."},
-  {q:"في الكود: X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)، ماذا يعني المعامل (test_size=0.2)؟",o:["تخصيص 20% من البيانات لمجموعة الاختبار، و 80% لمجموعة التدريب (طريقة Holdout)","تخصيص 2% فقط للاختبار","تكرار التدريب 20 مرة","حذف 20 عموداً من البيانات"],a:0,e:"المعامل test_size=0.2 يحدد نسبة بيانات الاختبار بـ 20% (0.20) والباقي 80% للتدريب."},
-  {q:"ما الذي يحدث لنموذج الانحدار كثير الحدود (Polynomial Regression) إذا اخترنا درجة عالية جداً لكثيرة الحدود (مثلاً degree = 20) مع عدد قليل من العينات؟",o:["يقع النموذج في مشكلة الإفراط في التخصيص (Overfitting)؛ فيكون خطؤه على التدريب قريباً من الصفر ولكنه يفشل بشدة على بيانات الاختبار الجديدة","يصبح النموذج خطاً مستقيماً أفقياً","تزداد سرعة التدريب وتقل الذاكرة","يتحول إلى خوارزمية تجميع K-means"],a:0,e:"رفع درجة كثيرة الحدود بشكل مفرط يجعل المنحنى يتعرج بشدة ليمر بكل نقطة تدريب شاملاً الضجيج، وهو ما يُعرف بالـ Overfitting."},
-  {q:"في معادلة تحديث المعاملات بانحدار الميل: θ_j ← θ_j - α * (∂E / ∂θ_j) ، إلى ماذا يرمز الحرف اللاتيني (α - ألفا)؟",o:["معدل التعلم (Learning rate)","المدى الربعي (IQR)","معامل الارتباط (Correlation)","عدد العناقيد (Clusters)"],a:0,e:"يرمز α (ألفا) في خوارزمية Gradient Descent إلى معدل التعلم (Learning Rate) الذي يضبط طول خطوة التحديث."},
-  {q:"أي مقياس من مقاييس خطأ الانحدار الأربعة يُعاقب بشكل أكبر وأشد على الأخطاء الكبيرة (القيم الشاذة في الخطأ) بسبب تربيعه للفروق مع أخذ المتوسط؟",o:["متوسط مربع الخطأ (MSE)","متوسط الخطأ المطلق (MAE)","مجموع الأخطاء المطلقة (SAE)","الوسيط الحسابي"],a:0,e:"تربيع الفروق في MSE و SSE يضخم الأخطاء الكبيرة مقارنة بأخذ القيمة المطلقة في MAE و SAE."},
-  {q:"لتقييم دقة وكفاءة نموذج الانحدار في مكتبة Scikit-learn، نستورد الدالتين mean_squared_error و r2_score من الوحدة:",o:["sklearn.metrics","sklearn.cluster","sklearn.preprocessing","sklearn.decomposition"],a:0,e:"جميع دوال قياس الأداء والخطأ في Scikit-learn توجد داخل الوحدة الفرعية sklearn.metrics."},
-  {q:"في الكود: lasso = Lasso(alpha=0.1) ، ماذا يمثل المعامل (alpha) داخل فئة Lasso أو Ridge في مكتبة Scikit-learn؟",o:["معامل قوة التنظيم / العقوبة (λ) الذي يتحكم في مقدار تقليص المعاملات","شفافية النقاط في الرسم البياني","عدد طيات التحقق المتقاطع","درجة كثيرة الحدود"],a:0,e:"يُسمى معامل العقوبة التنظيمي (λ) في فئتي Ridge و Lasso بمكتبة Scikit-learn باسم alpha."},
-  {q:"إذا قمنا بتدريب نموذج Lasso Regression ووجدنا أن معامل الميزة الثالثة أصبح مساوياً للصفر (w3 = 0)، فماذا يعني ذلك؟",o:["أن خوارزمية Lasso قامت باستبعاد الميزة الثالثة تلقائياً لعدم أهميتها في التنبؤ بالهدف","أن الميزة الثالثة هي أهم ميزة في الجدول","أن هناك خطأ برمجياً في الكود","أن جميع قيم الميزة الثالثة مفقودة"],a:0,e:"عندما يصفر Lasso معامل ميزة معينة (w = 0)، فهذا يعني أن ضربها في المعادلة سيعطي صفراً، أي تم استبعادها تماماً."},
-  {q:"ما الفرق بين المرحلة التي نستخدم فيها الدالة fit() والمرحلة التي نستخدم فيها الدالة predict() في نماذج الانحدار بـ Scikit-learn؟",o:["نستخدم fit(X_train, y_train) لتدريب النموذج وتعلم المعاملات من بيانات التدريب، ونستخدم predict(X_test) للتنبؤ بقيم الهدف لبيانات الاختبار","نستخدم predict للتدريب و fit لحذف البيانات","كلاهما يستخدمان لرسم المخطط الدائري فقط","لا نحتاج لاستخدام دالة fit قبل predict"],a:0,e:"الدالة fit() تقوم بعملية التدريب وحساب الأوزان، والدالة predict() تطبق المعادلة المتعلمة لإنتاج التوقعات."}
-];
-
-const termsGrid = document.getElementById("termsGrid");
-terms.forEach(([en, ar]) => {
-  const d = document.createElement("div");
-  d.className = "card";
-  d.style.margin = "0";
-  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
-  termsGrid.appendChild(d);
-});
-
-let ci = 0, showAnswer = false;
-function renderCard() {
-  document.getElementById("flashTerm").textContent = cards[ci][0];
-  document.getElementById("flashAnswer").textContent = cards[ci][1];
-  document.getElementById("flashAnswer").hidden = !showAnswer;
-  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
-  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
-}
-document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
-document.getElementById("flashcard").addEventListener("keydown", e => {
-  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
-});
-document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
-document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
-renderCard();
-
-document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
-  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
-  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
-  window.scrollTo({ top: 0, behavior: "smooth" });
-});
-
-function shuffleArray(arr) {
-  const copy = [...arr];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
+  async function persistState() {
+    try {
+      if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === 'function') {
+        await window.notebookAppApi.setAppState(appState);
+      }
+    } catch (err) {
+      // Fail quietly in non-hosted environments
+    }
   }
-  return copy;
-}
 
-let currentQuestions = [];
-let answers = {};
+  // =========================================================================
+  // ELECTRICITY DATA & UNIT 1 SIMULATOR
+  // =========================================================================
+  const electricityData = [
+    { temp: 73.0, demand: 2.081, date: `2011-06-02` },
+    { temp: 75.2, demand: 1.844, date: `2011-06-03` },
+    { temp: 78.5, demand: 2.050, date: `2011-06-05` },
+    { temp: 81.0, demand: 2.210, date: `2011-06-06` },
+    { temp: 84.0, demand: 2.651, date: `2011-06-01` },
+    { temp: 84.9, demand: 1.959, date: `2011-06-04` },
+    { temp: 88.0, demand: 2.520, date: `2011-06-07` },
+    { temp: 91.5, demand: 2.710, date: `2011-06-08` }
+  ];
 
-function prepareShuffledQuiz() {
-  currentQuestions = shuffleArray(masterQuestions).map(item => {
-    const optsWithFlag = item.o.map((text, idx) => ({ text, isCorrect: idx === item.a }));
-    const shuffledOpts = shuffleArray(optsWithFlag);
-    return {
-      q: item.q,
-      o: shuffledOpts.map(x => x.text),
-      a: shuffledOpts.findIndex(x => x.isCorrect),
-      e: item.e
-    };
-  });
-}
+  // Precompute mean and std of temp for normalization
+  const tempMean = electricityData.reduce(function(acc, p) { return acc + p.temp; }, 0) / electricityData.length;
+  const tempStd = Math.sqrt(electricityData.reduce(function(acc, p) { return acc + Math.pow(p.temp - tempMean, 2); }, 0) / electricityData.length);
 
-function renderQuiz() {
-  prepareShuffledQuiz();
-  const area = document.getElementById("quizArea");
-  area.innerHTML = "";
-  const letters = ["أ", "ب", "ج", "د"];
-  currentQuestions.forEach((item, i) => {
-    const box = document.createElement("div");
-    box.className = "qbox";
-    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
-    const opts = box.querySelector(".options");
-    item.o.forEach((opt, j) => {
-      const btn = document.createElement("button");
-      btn.className = "option";
-      btn.textContent = `${letters[j]}) ${opt}`;
-      btn.onclick = () => {
-        answers[i] = j;
-        [...opts.children].forEach((x, k) => {
-          x.classList.remove("correct", "wrong");
-          x.disabled = true;
-          if (k === item.a) x.classList.add("correct");
-          if (k === j && j !== item.a) x.classList.add("wrong");
-        });
-        const fb = document.getElementById("fb" + i);
-        fb.hidden = false;
-        fb.className = "feedback " + (j === item.a ? "good" : "bad");
-        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
-        updateScore();
-      };
-      opts.appendChild(btn);
+  let autoTimer = null;
+
+  function computeMSE(t1, t2) {
+    let sum = 0;
+    for (let i = 0; i < electricityData.length; i++) {
+      const p = electricityData[i];
+      const pred = t1 * p.temp + t2;
+      const diff = p.demand - pred;
+      sum += diff * diff;
+    }
+    return sum / electricityData.length;
+  }
+
+  function syncSimulatorInputs() {
+    const t1Slider = document.getElementById('sim-theta1-slider');
+    const t1Num = document.getElementById('sim-theta1-num');
+    const t2Slider = document.getElementById('sim-theta2-slider');
+    const t2Num = document.getElementById('sim-theta2-num');
+    const alphaSel = document.getElementById('sim-alpha-select');
+    const normBtn = document.getElementById('sim-norm-btn');
+    const normHint = document.getElementById('sim-norm-hint');
+    const tempSlider = document.getElementById('sim-test-temp-slider');
+    const tempNum = document.getElementById('sim-test-temp');
+
+    if (t1Slider) t1Slider.value = appState.sim.theta1.toFixed(3);
+    if (t1Num) t1Num.value = appState.sim.theta1.toFixed(3);
+    if (t2Slider) t2Slider.value = appState.sim.theta2.toFixed(2);
+    if (t2Num) t2Num.value = appState.sim.theta2.toFixed(2);
+    if (alphaSel) alphaSel.value = String(appState.sim.alpha);
+    if (tempSlider) tempSlider.value = String(appState.sim.testTemp);
+    if (tempNum) tempNum.value = String(appState.sim.testTemp);
+
+    if (normBtn) {
+      if (appState.sim.normalize) {
+        normBtn.classList.add('active');
+        normBtn.textContent = `Normalization: مُفعّل`;
+      } else {
+        normBtn.classList.remove('active');
+        normBtn.textContent = `Normalization: معطّل`;
+      }
+    }
+    if (normHint) {
+      normHint.textContent = appState.sim.normalize
+        ? `عند تفعيل Normalization تُقيّس درجات الحرارة حول المتوسط مما يمنع انفجار المشتقات ويسرّع التقارب.`
+        : `عند تعطيل Normalization يكون نطاق درجة الحرارة (~82) أكبر بكثير من المقياس الثابت، لذا تُستخدم خطوة صغيرة جداً لتجنب التشتت.`;
+    }
+  }
+
+  function renderSimulator() {
+    syncSimulatorInputs();
+    const t1 = appState.sim.theta1;
+    const t2 = appState.sim.theta2;
+    const mse = computeMSE(t1, t2);
+
+    const iterEl = document.getElementById('sim-iter-val');
+    const mseEl = document.getElementById('sim-mse-val');
+    const eqSub = document.getElementById('sim-eq-subtitle');
+    const predOut = document.getElementById('sim-pred-output');
+
+    if (iterEl) iterEl.textContent = String(appState.sim.iter);
+    if (mseEl) mseEl.textContent = mse.toFixed(4);
+    if (eqSub) {
+      const sign = t2 >= 0 ? `+` : `-`;
+      eqSub.textContent = `Peak Demand = ${t1.toFixed(3)} × Temp ${sign} ${Math.abs(t2).toFixed(2)}`;
+    }
+    if (predOut) {
+      const predVal = t1 * appState.sim.testTemp + t2;
+      predOut.innerHTML = `عند درجة <bdi dir="ltr">${appState.sim.testTemp}°F</bdi> ← الاستهلاك المتوقع = <bdi dir="ltr">${predVal.toFixed(3)} GW</bdi>`;
+    }
+
+    drawScatterSVG(t1, t2);
+    drawLossSVG();
+  }
+
+  function drawScatterSVG(t1, t2) {
+    const svg = document.getElementById('sim-scatter-svg');
+    if (!svg) return;
+
+    const w = 540, h = 310;
+    const padL = 48, padR = 24, padT = 20, padB = 40;
+    const minX = 70, maxX = 94;
+    const minY = 1.2, maxY = 3.1;
+
+    function sx(x) { return padL + ((x - minX) / (maxX - minX)) * (w - padL - padR); }
+    function sy(y) { return h - padB - ((y - minY) / (maxY - minY)) * (h - padT - padB); }
+
+    let html = ``;
+    // Gridlines
+    const yTicks = [1.5, 2.0, 2.5, 3.0];
+    for (let i = 0; i < yTicks.length; i++) {
+      const yy = sy(yTicks[i]);
+      html += `<line x1="${padL}" y1="${yy}" x2="${w - padR}" y2="${yy}" stroke="var(--outline-variant)" stroke-dasharray="3 3" stroke-width="1" />`;
+      html += `<text x="${padL - 8}" y="${yy + 4}" text-anchor="end" fill="var(--on-surface-variant)" font-family="var(--font-label)" font-size="11">${yTicks[i].toFixed(1)}</text>`;
+    }
+    const xTicks = [72, 76, 80, 84, 88, 92];
+    for (let i = 0; i < xTicks.length; i++) {
+      const xx = sx(xTicks[i]);
+      html += `<line x1="${xx}" y1="${padT}" x2="${xx}" y2="${h - padB}" stroke="var(--outline-variant)" stroke-dasharray="3 3" stroke-width="1" />`;
+      html += `<text x="${xx}" y="${h - padB + 16}" text-anchor="middle" fill="var(--on-surface-variant)" font-family="var(--font-label)" font-size="11">${xTicks[i]}°F</text>`;
+    }
+
+    // Axes baseline
+    html += `<line x1="${padL}" y1="${h - padB}" x2="${w - padR}" y2="${h - padB}" stroke="var(--on-surface)" stroke-width="1.5" />`;
+    html += `<line x1="${padL}" y1="${padT}" x2="${padL}" y2="${h - padB}" stroke="var(--on-surface)" stroke-width="1.5" />`;
+    html += `<text x="${(padL + w - padR) / 2}" y="${h - 6}" text-anchor="middle" fill="var(--on-surface-variant)" font-family="var(--font-body)" font-size="11">درجة الحرارة القصوى (°F)</text>`;
+    html += `<text x="14" y="${(padT + h - padB) / 2}" text-anchor="middle" transform="rotate(-90 14 ${(padT + h - padB) / 2})" fill="var(--on-surface-variant)" font-family="var(--font-label)" font-size="11">GW</text>`;
+
+    // Textbook reference line (0.05 * x - 1.9)
+    const refY1 = 0.05 * minX - 1.9;
+    const refY2 = 0.05 * maxX - 1.9;
+    html += `<line x1="${sx(minX)}" y1="${sy(refY1)}" x2="${sx(maxX)}" y2="${sy(refY2)}" stroke="var(--data-context)" stroke-width="2" stroke-dasharray="6 4" />`;
+
+    // Residual lines
+    for (let i = 0; i < electricityData.length; i++) {
+      const p = electricityData[i];
+      const pred = t1 * p.temp + t2;
+      const cx = sx(p.temp);
+      const cyActual = sy(p.demand);
+      const cyPred = Math.max(padT, Math.min(h - padB, sy(pred)));
+      html += `<line x1="${cx}" y1="${cyActual}" x2="${cx}" y2="${cyPred}" stroke="var(--data-4)" stroke-width="1.8" opacity="0.85" />`;
+    }
+
+    // Current model line
+    const yStart = t1 * minX + t2;
+    const yEnd = t1 * maxX + t2;
+    html += `<line x1="${sx(minX)}" y1="${sy(yStart)}" x2="${sx(maxX)}" y2="${sy(yEnd)}" stroke="var(--data-2)" stroke-width="3" />`;
+
+    // Data points
+    for (let i = 0; i < electricityData.length; i++) {
+      const p = electricityData[i];
+      html += `<circle cx="${sx(p.temp)}" cy="${sy(p.demand)}" r="5.5" fill="var(--data-1)" stroke="var(--surface-container-low)" stroke-width="1.5" />`;
+    }
+
+    // Predicted point for testTemp
+    if (appState.sim.testTemp >= minX && appState.sim.testTemp <= maxX) {
+      const tpPred = t1 * appState.sim.testTemp + t2;
+      if (tpPred >= minY - 0.3 && tpPred <= maxY + 0.3) {
+        html += `<circle cx="${sx(appState.sim.testTemp)}" cy="${sy(tpPred)}" r="6" fill="var(--primary-container)" stroke="var(--on-surface)" stroke-width="2" />`;
+      }
+    }
+
+    svg.innerHTML = html;
+  }
+
+  function drawLossSVG() {
+    const svg = document.getElementById('sim-loss-svg');
+    if (!svg) return;
+
+    const w = 540, h = 175;
+    const padL = 48, padR = 20, padT = 16, padB = 28;
+    const hist = appState.sim.lossHistory;
+
+    if (hist.length === 0) {
+      svg.innerHTML = `<rect x="${padL}" y="${padT}" width="${w - padL - padR}" height="${h - padT - padB}" fill="var(--surface-container)" rx="4" />
+        <text x="${w / 2}" y="${h / 2}" text-anchor="middle" fill="var(--on-surface-variant)" font-family="var(--font-body)" font-size="13">اضغط "خطوة (+1 دورة)" أو "تشغيل الدورات تلقائياً" لرسم انخفاض الخسارة عبر الدورات</text>`;
+      return;
+    }
+
+    const maxLoss = Math.max(0.25, Math.max.apply(null, hist) * 1.1);
+    const minLoss = 0;
+    const count = Math.max(10, hist.length - 1);
+
+    function sx(idx) { return padL + (idx / count) * (w - padL - padR); }
+    function sy(val) { return h - padB - ((val - minLoss) / (maxLoss - minLoss)) * (h - padT - padB); }
+
+    let html = ``;
+    // Baseline & grid
+    html += `<line x1="${padL}" y1="${h - padB}" x2="${w - padR}" y2="${h - padB}" stroke="var(--on-surface)" stroke-width="1.5" />`;
+    html += `<line x1="${padL}" y1="${padT}" x2="${padL}" y2="${h - padB}" stroke="var(--on-surface)" stroke-width="1.5" />`;
+
+    const midLoss = maxLoss / 2;
+    html += `<line x1="${padL}" y1="${sy(midLoss)}" x2="${w - padR}" y2="${sy(midLoss)}" stroke="var(--outline-variant)" stroke-dasharray="3 3" />`;
+    html += `<text x="${padL - 6}" y="${sy(midLoss) + 4}" text-anchor="end" fill="var(--on-surface-variant)" font-family="var(--font-label)" font-size="10">${midLoss.toFixed(2)}</text>`;
+    html += `<text x="${padL - 6}" y="${sy(maxLoss) + 8}" text-anchor="end" fill="var(--on-surface-variant)" font-family="var(--font-label)" font-size="10">${maxLoss.toFixed(2)}</text>`;
+    html += `<text x="${padL - 6}" y="${h - padB + 4}" text-anchor="end" fill="var(--on-surface-variant)" font-family="var(--font-label)" font-size="10">0.00</text>`;
+
+    let pathD = ``;
+    for (let i = 0; i < hist.length; i++) {
+      const cmd = i === 0 ? `M` : `L`;
+      pathD += `${cmd} ${sx(i).toFixed(1)} ${sy(hist[i]).toFixed(1)} `;
+    }
+    html += `<path d="${pathD}" fill="none" stroke="var(--data-1)" stroke-width="2.5" />`;
+
+    for (let i = 0; i < hist.length; i++) {
+      if (i === hist.length - 1 || i === 0 || i % 2 === 0) {
+        html += `<circle cx="${sx(i)}" cy="${sy(hist[i])}" r="3.5" fill="${i === hist.length - 1 ? 'var(--data-2)' : 'var(--data-1)'}" />`;
+      }
+    }
+    html += `<text x="${(padL + w - padR) / 2}" y="${h - 6}" text-anchor="middle" fill="var(--on-surface-variant)" font-family="var(--font-body)" font-size="11">رقم الدورة (Iteration)</text>`;
+    svg.innerHTML = html;
+  }
+
+  function stepGradientDescent(steps) {
+    if (appState.sim.lossHistory.length === 0) {
+      appState.sim.lossHistory.push(computeMSE(appState.sim.theta1, appState.sim.theta2));
+    }
+    for (let s = 0; s < steps; s++) {
+      let t1 = appState.sim.theta1;
+      let t2 = appState.sim.theta2;
+      const n = electricityData.length;
+
+      if (appState.sim.normalize) {
+        // Compute in normalized x_z = (temp - mean) / std, map back seamlessly
+        let w = t1 * tempStd;
+        let b = t1 * tempMean + t2;
+        let dw = 0;
+        let db = 0;
+        for (let i = 0; i < n; i++) {
+          const xz = (electricityData[i].temp - tempMean) / tempStd;
+          const pred = w * xz + b;
+          const err = pred - electricityData[i].demand;
+          dw += (2 / n) * err * xz;
+          db += (2 / n) * err;
+        }
+        w = w - appState.sim.alpha * dw;
+        b = b - appState.sim.alpha * db;
+        t1 = w / tempStd;
+        t2 = b - t1 * tempMean;
+      } else {
+        // Unnormalized GD needs scaled step so it stays viewable
+        const effAlpha = appState.sim.alpha * 0.00014;
+        let dt1 = 0;
+        let dt2 = 0;
+        for (let i = 0; i < n; i++) {
+          const p = electricityData[i];
+          const err = (t1 * p.temp + t2) - p.demand;
+          dt1 += (2 / n) * err * p.temp;
+          dt2 += (2 / n) * err;
+        }
+        t1 = t1 - effAlpha * dt1;
+        t2 = t2 - appState.sim.alpha * 0.1 * dt2;
+      }
+
+      appState.sim.theta1 = Math.max(-0.2, Math.min(0.3, t1));
+      appState.sim.theta2 = Math.max(-12, Math.min(12, t2));
+      appState.sim.iter += 1;
+      appState.sim.lossHistory.push(computeMSE(appState.sim.theta1, appState.sim.theta2));
+    }
+    renderSimulator();
+    persistState();
+  }
+
+  function toggleAutoDescent() {
+    const btn = document.getElementById('sim-play-btn');
+    if (autoTimer) {
+      clearInterval(autoTimer);
+      autoTimer = null;
+      if (btn) btn.innerHTML = `<i data-lucide="play" aria-hidden="true" width="16" height="16"></i><span>تشغيل الدورات تلقائياً</span>`;
+      if (window.lucide) window.lucide.createIcons();
+      return;
+    }
+    if (btn) btn.innerHTML = `<i data-lucide="pause" aria-hidden="true" width="16" height="16"></i><span>إيقاف التشغيل</span>`;
+    if (window.lucide) window.lucide.createIcons();
+    autoTimer = setInterval(function() {
+      if (appState.sim.iter >= 30) {
+        toggleAutoDescent();
+        return;
+      }
+      stepGradientDescent(1);
+    }, 320);
+  }
+
+  function jumpToIteration10() {
+    if (autoTimer) toggleAutoDescent();
+    if (appState.sim.iter < 10) {
+      stepGradientDescent(10 - appState.sim.iter);
+    } else {
+      resetSimulator();
+      stepGradientDescent(10);
+    }
+  }
+
+  function applyTextbookOptimal() {
+    if (autoTimer) toggleAutoDescent();
+    appState.sim.theta1 = 0.05;
+    appState.sim.theta2 = -1.90;
+    appState.sim.iter = 10;
+    appState.sim.lossHistory = [computeMSE(0.01, 1.2), computeMSE(0.025, 0.1), computeMSE(0.038, -0.9), computeMSE(0.05, -1.9)];
+    renderSimulator();
+    persistState();
+  }
+
+  function resetSimulator() {
+    if (autoTimer) toggleAutoDescent();
+    appState.sim.theta1 = 0.01;
+    appState.sim.theta2 = 1.20;
+    appState.sim.iter = 0;
+    appState.sim.lossHistory = [];
+    renderSimulator();
+    persistState();
+  }
+
+  // Dedicated dual-input sync handlers (prevents slider snap-back)
+  function onTheta1Slider(val) {
+    const num = parseFloat(val);
+    if (isNaN(num)) return;
+    appState.sim.theta1 = num;
+    const el = document.getElementById('sim-theta1-num');
+    if (el) el.value = num.toFixed(3);
+    renderSimulator();
+  }
+  function onTheta1Number(val) {
+    const num = parseFloat(val);
+    if (isNaN(num)) return;
+    appState.sim.theta1 = num;
+    const el = document.getElementById('sim-theta1-slider');
+    if (el) el.value = num;
+    renderSimulator();
+  }
+  function onTheta2Slider(val) {
+    const num = parseFloat(val);
+    if (isNaN(num)) return;
+    appState.sim.theta2 = num;
+    const el = document.getElementById('sim-theta2-num');
+    if (el) el.value = num.toFixed(2);
+    renderSimulator();
+  }
+  function onTheta2Number(val) {
+    const num = parseFloat(val);
+    if (isNaN(num)) return;
+    appState.sim.theta2 = num;
+    const el = document.getElementById('sim-theta2-slider');
+    if (el) el.value = num;
+    renderSimulator();
+  }
+  function onTestTempSlider(val) {
+    const num = parseFloat(val);
+    if (isNaN(num)) return;
+    appState.sim.testTemp = num;
+    const el = document.getElementById('sim-test-temp');
+    if (el) el.value = num;
+    renderSimulator();
+  }
+  function onTestTempNumber(val) {
+    const num = parseFloat(val);
+    if (isNaN(num)) return;
+    appState.sim.testTemp = num;
+    const el = document.getElementById('sim-test-temp-slider');
+    if (el) el.value = num;
+    renderSimulator();
+  }
+  function onAlphaChange(val) {
+    appState.sim.alpha = parseFloat(val) || 0.2;
+    persistState();
+  }
+  function toggleNormalization() {
+    appState.sim.normalize = !appState.sim.normalize;
+    renderSimulator();
+    persistState();
+  }
+
+  // =========================================================================
+  // UNIT 2 LABS: HEIGHT CALCULATOR, POLYNOMIAL LAB, RIDGE VS LASSO LAB
+  // =========================================================================
+  function calcHeightFromWeight(val) {
+    const w = parseFloat(val);
+    const out = document.getElementById('u2-height-result');
+    if (!out) return;
+    if (isNaN(w)) {
+      out.textContent = `أدخل وزناً صحيحاً`;
+      return;
+    }
+    const h = 128.017 + 0.611 * w;
+    out.innerHTML = `الطول المتوقع = <bdi dir="ltr">${h.toFixed(3)}</bdi> سم`;
+  }
+
+  const polyPoints = [
+    { x: 1, y: 1.4 }, { x: 2, y: 2.8 }, { x: 3, y: 3.1 },
+    { x: 4, y: 2.3 }, { x: 5, y: 2.1 }, { x: 6, y: 3.5 },
+    { x: 7, y: 5.4 }, { x: 8, y: 7.2 }
+  ];
+
+  function setPolyDegree(deg) {
+    appState.polyDegree = deg;
+    renderPolyLab();
+    persistState();
+  }
+
+  function renderPolyLab() {
+    const deg = appState.polyDegree;
+    [1, 2, 3].forEach(function(d) {
+      const btn = document.getElementById('poly-deg-' + d);
+      if (btn) btn.classList.toggle('active', d === deg);
     });
-    area.appendChild(box);
-  });
-  updateScore();
-}
 
-function updateScore() {
-  let correct = 0;
-  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
-  document.getElementById("score").textContent = `النتيجة: ${correct} / ${currentQuestions.length}`;
-  document.getElementById("progressBar").style.width = (Object.keys(answers).length / currentQuestions.length * 100) + "%";
-}
+    const svg = document.getElementById('poly-lab-svg');
+    const desc = document.getElementById('poly-lab-desc');
+    const mseEl = document.getElementById('poly-lab-mse');
+    if (!svg) return;
 
-document.getElementById("resetQuiz").onclick = () => {
-  answers = {};
-  document.getElementById("finalResult").textContent = "";
-  renderQuiz();
-  window.scrollTo({ top: 0, behavior: "smooth" });
-};
+    function evalCurve(x, d) {
+      if (d === 1) return 0.72 * x + 0.22;
+      if (d === 2) return 0.145 * x * x - 0.59 * x + 2.45;
+      return 0.058 * x * x * x - 0.67 * x * x + 2.42 * x - 0.35;
+    }
 
-document.getElementById("finishQuiz").onclick = () => {
-  let correct = 0;
-  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
-  const pct = Math.round(correct / currentQuestions.length * 100);
-  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${currentQuestions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! أنتِ مستعدة تماماً للاختبار في هذا الفصل." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
-};
+    let mse = 0;
+    for (let i = 0; i < polyPoints.length; i++) {
+      const diff = polyPoints[i].y - evalCurve(polyPoints[i].x, deg);
+      mse += diff * diff;
+    }
+    mse = mse / polyPoints.length;
 
-renderQuiz();
+    if (desc) {
+      if (deg === 1) desc.textContent = `الدرجة 1: خط مستقيم يعجز عن التقاط الانحناء (Underfitting)`;
+      else if (deg === 2) desc.textContent = `الدرجة 2: التواء تربيعي واحد يلتقط الصعود العام لكنه يفوت التموج`;
+      else desc.textContent = `الدرجة 3: يتبع الانحناء غير الخطي بدقة عالية`;
+    }
+    if (mseEl) mseEl.textContent = `MSE: ${mse.toFixed(2)}`;
+
+    const w = 480, h = 250, padL = 38, padR = 16, padT = 16, padB = 28;
+    const minX = 0.5, maxX = 8.5, minY = 0, maxY = 8;
+    function sx(x) { return padL + ((x - minX) / (maxX - minX)) * (w - padL - padR); }
+    function sy(y) { return h - padB - ((y - minY) / (maxY - minY)) * (h - padT - padB); }
+
+    let html = `<line x1="${padL}" y1="${h - padB}" x2="${w - padR}" y2="${h - padB}" stroke="var(--on-surface)" stroke-width="1.5" />`;
+    html += `<line x1="${padL}" y1="${padT}" x2="${padL}" y2="${h - padB}" stroke="var(--on-surface)" stroke-width="1.5" />`;
+
+    let pathD = ``;
+    for (let step = 0; step <= 60; step++) {
+      const xv = minX + (step / 60) * (maxX - minX);
+      const yv = evalCurve(xv, deg);
+      pathD += (step === 0 ? `M ` : `L `) + `${sx(xv).toFixed(1)} ${sy(yv).toFixed(1)} `;
+    }
+    html += `<path d="${pathD}" fill="none" stroke="var(--data-2)" stroke-width="3" />`;
+
+    for (let i = 0; i < polyPoints.length; i++) {
+      const p = polyPoints[i];
+      html += `<circle cx="${sx(p.x)}" cy="${sy(p.y)}" r="5" fill="var(--data-1)" stroke="var(--surface-container-low)" stroke-width="1.5" />`;
+    }
+    svg.innerHTML = html;
+  }
+
+  function onLambdaSlider(val) {
+    const num = parseFloat(val);
+    if (isNaN(num)) return;
+    appState.lambdaVal = num;
+    const el = document.getElementById('lambda-num');
+    if (el) el.value = num;
+    renderRegLab();
+  }
+  function onLambdaNumber(val) {
+    const num = parseFloat(val);
+    if (isNaN(num)) return;
+    appState.lambdaVal = Math.max(0, Math.min(100, num));
+    const el = document.getElementById('lambda-slider');
+    if (el) el.value = appState.lambdaVal;
+    renderRegLab();
+  }
+
+  function renderRegLab() {
+    const lam = appState.lambdaVal;
+    const svg = document.getElementById('reg-lab-svg');
+    const activeLabel = document.getElementById('lambda-active-features');
+    if (!svg) return;
+
+    const features = [
+      { name: `x1 (قوية)`, base: 9.0, ridgeRate: 0.008, lassoThreshold: 92 },
+      { name: `x2 (مرتبطة)`, base: 6.5, ridgeRate: 0.012, lassoThreshold: 60 },
+      { name: `x3 (ضعيفة)`, base: 3.8, ridgeRate: 0.016, lassoThreshold: 32 },
+      { name: `x4 (غير مؤثرة)`, base: 1.8, ridgeRate: 0.020, lassoThreshold: 14 }
+    ];
+
+    let activeLassoCount = 0;
+    const w = 480, h = 225, padL = 36, padR = 16, padT = 22, padB = 42;
+    const maxCoef = 10;
+
+    let html = `<line x1="${padL}" y1="${h - padB}" x2="${w - padR}" y2="${h - padB}" stroke="var(--on-surface)" stroke-width="1.5" />`;
+    html += `<line x1="${padL}" y1="${padT}" x2="${padL}" y2="${h - padB}" stroke="var(--on-surface)" stroke-width="1.5" />`;
+
+    const groupWidth = (w - padL - padR) / features.length;
+    const barW = 28;
+
+    for (let i = 0; i < features.length; i++) {
+      const f = features[i];
+      const ridgeVal = f.base / (1 + f.ridgeRate * lam);
+      const lassoVal = Math.max(0, f.base * (1 - lam / f.lassoThreshold));
+      if (lassoVal > 0.02) activeLassoCount++;
+
+      const gx = padL + i * groupWidth + groupWidth / 2;
+      const chartH = h - padT - padB;
+      const ridgeH = (ridgeVal / maxCoef) * chartH;
+      const lassoH = (lassoVal / maxCoef) * chartH;
+
+      // Ridge bar
+      html += `<rect x="${gx - barW - 3}" y="${h - padB - ridgeH}" width="${barW}" height="${ridgeH}" fill="var(--data-1)" rx="2" />`;
+      html += `<text x="${gx - barW / 2 - 3}" y="${h - padB - ridgeH - 5}" text-anchor="middle" fill="var(--data-1)" font-family="var(--font-label)" font-size="10">${ridgeVal.toFixed(1)}</text>`;
+
+      // Lasso bar
+      const isZero = lassoVal <= 0.02;
+      html += `<rect x="${gx + 3}" y="${h - padB - lassoH}" width="${barW}" height="${Math.max(2, lassoH)}" fill="${isZero ? 'var(--error)' : 'var(--data-2)'}" rx="2" />`;
+      html += `<text x="${gx + barW / 2 + 3}" y="${h - padB - lassoH - 5}" text-anchor="middle" fill="${isZero ? 'var(--error)' : 'var(--tertiary)'}" font-family="var(--font-label)" font-size="10">${isZero ? '0.0' : lassoVal.toFixed(1)}</text>`;
+
+      html += `<text x="${gx}" y="${h - padB + 16}" text-anchor="middle" fill="var(--on-surface)" font-family="var(--font-body)" font-size="11">${f.name}</text>`;
+    }
+
+    if (activeLabel) {
+      activeLabel.textContent = `السمات الفعالة في Lasso: ${activeLassoCount} من 4 (تُستبعد السمات الصفرية تلقائياً)`;
+    }
+    svg.innerHTML = html;
+  }
+
+  // =========================================================================
+  // UNIT 3: 5 SPLIT METHODS EXPLORER & ADVERTISING MODEL PANEL
+  // =========================================================================
+  const splitDetails = {
+    holdout: {
+      title: `1. طريقة Holdout (التقسيم لمرة واحدة)`,
+      desc: `تُقسّم البيانات عشوائياً لمرة واحدة إلى نسبة للتدريب (مثلاً 70%–80%) ونسبة للاختبار (20%–30%).`,
+      rows: [
+        { label: `التقسيم الوحيد`, train: [1,2,3,4,5,6,7], test: [8,9,10] }
+      ]
+    },
+    random: {
+      title: `2. طريقة Random Sub-sampling (التكرار العشوائي)`,
+      desc: `تكرار تقسيم Holdout عدة مرات باختيار عشوائي جديد في كل مرة؛ لاحظ أن العينة رقم 3 مثلاً قد تتكرر في الاختبار بينما قد لا تدخل العينة 1 الاختبار أبداً.`,
+      rows: [
+        { label: `التكرار 1`, train: [1,2,4,5,6,8,9], test: [3,7,10] },
+        { label: `التكرار 2`, train: [1,3,4,6,7,9,10], test: [2,5,8] },
+        { label: `التكرار 3`, train: [1,2,5,6,7,8,9], test: [3,4,10] }
+      ]
+    },
+    kfold: {
+      title: `3. طريقة K-fold Cross-Validation (عند K = 5)`,
+      desc: `تُقسّم البيانات إلى 5 أجزاء متساوية؛ في كل دورة يُختبر جزء واحد وتشارك كل العشرة عينات في الاختبار مرة واحدة فقط دون تكرار.`,
+      rows: [
+        { label: `الدورة 1 (Fold 1)`, train: [3,4,5,6,7,8,9,10], test: [1,2] },
+        { label: `الدورة 2 (Fold 2)`, train: [1,2,5,6,7,8,9,10], test: [3,4] },
+        { label: `الدورة 3 (Fold 3)`, train: [1,2,3,4,7,8,9,10], test: [5,6] },
+        { label: `الدورة 4 (Fold 4)`, train: [1,2,3,4,5,6,9,10], test: [7,8] },
+        { label: `الدورة 5 (Fold 5)`, train: [1,2,3,4,5,6,7,8], test: [9,10] }
+      ]
+    },
+    loocv: {
+      title: `4. طريقة Leave-One-Out Cross-Validation (LOOCV)`,
+      desc: `حالة خاصة من K-fold حيث K = N (10 دورات لـ 10 عينات)؛ في كل دورة تُختبر عينة واحدة فقط وتُستخدم N-1 للتدريب. دقيقة لكنها ثقيلة حسابياً.`,
+      rows: [
+        { label: `الدورة 1`, train: [2,3,4,5,6,7,8,9,10], test: [1] },
+        { label: `الدورة 2`, train: [1,3,4,5,6,7,8,9,10], test: [2] },
+        { label: `الدورة 3`, train: [1,2,4,5,6,7,8,9,10], test: [3] },
+        { label: `... حتى الدورة 10`, train: [1,2,3,4,5,6,7,8,9], test: [10] }
+      ]
+    },
+    bootstrap: {
+      title: `5. طريقة Bootstrap (السحب العشوائي مع الإرجاع)`,
+      desc: `تُسحب N عينة مع الإرجاع لتكوين مجموعة التدريب (تتكرر بعض العينات مثل 2 و5)، وتُترك العينات غير المختارة (Out-of-Bag) للاختبار.`,
+      rows: [
+        { label: `عينة Bootstrap 1`, customTrain: [1,2,2,4,5,5,7,8,8,10], test: [3,6,9] },
+        { label: `عينة Bootstrap 2`, customTrain: [1,1,3,4,6,6,7,9,9,10], test: [2,5,8] }
+      ]
+    }
+  };
+
+  function selectSplitMethod(key) {
+    appState.splitMethod = key;
+    ['holdout', 'random', 'kfold', 'loocv', 'bootstrap'].forEach(function(k) {
+      const btn = document.getElementById('split-btn-' + k);
+      if (btn) btn.classList.toggle('active', k === key);
+    });
+    const box = document.getElementById('split-visual-display');
+    const info = splitDetails[key];
+    if (!box || !info) return;
+
+    let rowsHtml = ``;
+    for (let r = 0; r < info.rows.length; r++) {
+      const row = info.rows[r];
+      let blocksHtml = ``;
+      if (row.customTrain) {
+        for (let i = 0; i < row.customTrain.length; i++) {
+          blocksHtml += `<div class="sample-block sample-train">${row.customTrain[i]}</div>`;
+        }
+        blocksHtml += `<div class="sample-block" style="grid-column: span 10; background: var(--gold-tint); color: var(--on-surface);">Out-of-Bag للاختبار: العينات (${row.test.join('، ')})</div>`;
+      } else {
+        for (let num = 1; num <= 10; num++) {
+          const isTest = row.test.indexOf(num) !== -1;
+          blocksHtml += `<div class="sample-block ${isTest ? 'sample-test' : 'sample-train'}">${num}</div>`;
+        }
+      }
+      rowsHtml += `<div style="margin-bottom: var(--space-sm);">
+        <div class="dossier-meta" style="margin-bottom: 2px;">${row.label}</div>
+        <div class="split-visual-track">${blocksHtml}</div>
+      </div>`;
+    }
+
+    box.innerHTML = `<h4 style="margin: 0 0 var(--space-xs) 0;">${info.title}</h4>
+      <p style="margin-bottom: var(--space-md);">${info.desc}</p>${rowsHtml}`;
+  }
+
+  function selectAdvModel(key) {
+    appState.advModel = key;
+    ['linear', 'lasso', 'poly'].forEach(function(k) {
+      const btn = document.getElementById('adv-btn-' + k);
+      if (btn) btn.classList.toggle('active', k === key);
+    });
+    const panel = document.getElementById('adv-model-panel');
+    if (!panel) return;
+
+    if (key === 'linear') {
+      panel.innerHTML = `<div class="metrics-grid">
+        <div class="aside-box"><div class="stat-label">معامل <bdi dir="ltr">TV</bdi></div><div class="stat-value">0.045</div><div class="stat-note">تأثير قوي ومستقر</div></div>
+        <div class="aside-box"><div class="stat-label">معامل <bdi dir="ltr">Radio</bdi></div><div class="stat-value">0.191</div><div class="stat-note">تأثير مرتفع لكل وحدة</div></div>
+        <div class="aside-box"><div class="stat-label">معامل <bdi dir="ltr">Newspaper</bdi></div><div class="stat-value">0.002</div><div class="stat-note">تأثير شبه معدوم</div></div>
+      </div>
+      <p style="margin-top: var(--space-md); margin-bottom: 0;">النموذج الخطي يُبقي جميع السمات الثلاث حتى ذات التأثير الضعيف جداً مثل الصحف (<bdi dir="ltr">Newspaper</bdi>).</p>`;
+    } else if (key === 'lasso') {
+      panel.innerHTML = `<div class="metrics-grid">
+        <div class="aside-box"><div class="stat-label">معامل <bdi dir="ltr">TV</bdi></div><div class="stat-value">0.045</div><div class="stat-note">مُحتفظ به</div></div>
+        <div class="aside-box"><div class="stat-label">معامل <bdi dir="ltr">Radio</bdi></div><div class="stat-value">0.184</div><div class="stat-note">مُحتفظ به</div></div>
+        <div class="aside-box" style="border-top-color: var(--error);"><div class="stat-label">معامل <bdi dir="ltr">Newspaper</bdi></div><div class="stat-value" style="color: var(--error);">0.000</div><div class="stat-note">تم استبعاده تلقائياً</div></div>
+      </div>
+      <p style="margin-top: var(--space-md); margin-bottom: 0;">قام <bdi dir="ltr">Lasso</bdi> بتصفير معامل <bdi dir="ltr">Newspaper</bdi> تلقائياً مما أثبت أنه غير مؤثر نسبياً وبسّط النموذج دون خسارة في الدقة.</p>`;
+    } else {
+      panel.innerHTML = `<div class="metrics-grid">
+        <div class="aside-box"><div class="stat-label">درجة التحويل</div><div class="stat-value">degree = 2</div><div class="stat-note">يولد حدوداً تربيعية وتفاعلية</div></div>
+        <div class="aside-box"><div class="stat-label">تفاعل <bdi dir="ltr">TV × Radio</bdi></div><div class="stat-value" style="color: var(--positive);">فعّال</div><div class="stat-note">يرصد الأثر التآزري للإعلانين</div></div>
+        <div class="aside-box"><div class="stat-label">تحويل <bdi dir="ltr">X_test</bdi></div><div class="stat-value">transform()</div><div class="stat-note">بنفس المحوّل المدرب على X_train</div></div>
+      </div>
+      <p style="margin-top: var(--space-md); margin-bottom: 0;">التحويل من الدرجة 2 يلتقط العلاقة غير الخطية والتآزر بين التلفاز والراديو، مما يخفض خطأ التنبؤ (<bdi dir="ltr">RMSE</bdi>) بشكل ملحوظ مقارنة بالخط المستقيم.</p>`;
+    }
+  }
+
+  function copyCodeBlock(preId, btn) {
+    const pre = document.getElementById(preId);
+    if (!pre) return;
+    const text = pre.textContent || ``;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function() {
+        btn.textContent = `تم النسخ`;
+        setTimeout(function() { btn.textContent = `نسخ الكود`; }, 1600);
+      });
+    } else {
+      btn.textContent = `جاهز للنسخ`;
+      setTimeout(function() { btn.textContent = `نسخ الكود`; }, 1600);
+    }
+  }
+
+  // =========================================================================
+  // QUIZ BANK (45 QUESTIONS: 10 U1 + 10 U2 + 10 U3 + 15 FINAL)
+  // =========================================================================
+  const quizBank = {
+    u1: [
+      {
+        q: `لماذا نعتمد في مسألة التنبؤ باستهلاك الكهرباء على البيانات التاريخية المسجلة بدلاً من بناء نموذج «قبلي» من المبادئ الفيزيائية الأولى؟`,
+        opts: [
+          `لأن المبادئ الأولى لا تنطبق على الطاقة الكهربائية نهائياً`,
+          `لصعوبة بناء نموذج قبلي يفسر جميع العوامل البشرية والمناخية، بينما تكشف البيانات التاريخية العلاقة الفعلية كدرجة الحرارة`,
+          `لأن البيانات التاريخية لا تحتوي على أي أخطاء قياس`,
+          `لأن درجة الحرارة هي العامل الوحيد الذي يؤثر في الكهرباء`
+        ],
+        ans: 1,
+        exp: `يؤكد المنهج صعوبة بناء نموذج «قبلي» من المبادئ الأولى للإجابة عن استهلاك الكهرباء، لذا نسجل بيانات الاستهلاك السابقة مع العوامل المؤثرة مثل درجة الحرارة القصوى.`
+      },
+      {
+        q: `في معادلة النموذج الخطي Peak Demand = θ₁ × High Temperature + θ₂، ماذا يمثل المعامل θ₁؟`,
+        opts: [
+          `قيمة الاستهلاك عند درجة حرارة صفر`,
+          `الميل (Slope) الذي يعبر عن مقدار تغير الاستهلاك مقابل تغير درجة الحرارة`,
+          `معدل الخطأ الكلي في النموذج`,
+          `معدل التعلم α`
+        ],
+        ans: 1,
+        exp: `يمثل θ₁ الميل (Slope)، بينما يمثل θ₂ منحدر الميل أو التقاطع (Intercept)، وتتحدد قيمتهما بناءً على البيانات التاريخية.`
+      },
+      {
+        q: `إذا كانت قيم المعاملات θ₁ = 0.05 و θ₂ = -1.9، فما قيمة استهلاك الكهرباء المتوقعة عند درجة حرارة 72 فهرنهايت؟`,
+        opts: [
+          `1.5 GW`,
+          `1.7 GW`,
+          `3.6 GW`,
+          `5.5 GW`
+        ],
+        ans: 1,
+        exp: `بالتعويض المباشر: 0.05 × 72 - 1.9 = 3.6 - 1.9 = 1.7 جيجاواط.`
+      },
+      {
+        q: `ما المقصود بدالة الخسارة (Loss Function) في تدريب النموذج الخطي؟`,
+        opts: [
+          `دالة لحذف القيم المتطرفة من الجدول`,
+          `دالة تقيس معدل الخطأ والفرق بين القيم الفعلية والقيم المستنتجة من النموذج`,
+          `دالة لترتيب البيانات تصاعدياً`,
+          `دالة لتحويل النصوص إلى أرقام`
+        ],
+        ans: 1,
+        exp: `دالة الخسارة (Loss / Objective function) تقيس الفارق بين القيمة الفعلية والقيمة المتوقعة؛ والهدف تقليل قيمتها إلى أدنى حد.`
+      },
+      {
+        q: `في دالة الخسارة MSE (Mean Squared Error)، لماذا يُربّع الفرق بين القيمة الفعلية والمتوقعة؟`,
+        opts: [
+          `لتكبير قيم درجات الحرارة`,
+          `لمنع إلغاء الأخطاء الموجبة للسالبة ولمعاقبة الأخطاء الكبيرة بشكل أكبر`,
+          `لجعل الناتج مساوياً للصفر دائماً`,
+          `لاستبعاد المعامل θ₂`
+        ],
+        ans: 1,
+        exp: `التربيع يضمن أن جميع الأخطاء موجبة فلا يلغي بعضها بعضاً، ويضاعف أثر الأخطاء الكبيرة مما يدفع النموذج لتفاديها، ويجعل الدالة سلسة قابلة للاشتقاق.`
+      },
+      {
+        q: `ما الغرض الأساسي من استخدام خوارزمية Gradient Descent؟`,
+        opts: [
+          `رسم مخطط الانتشار فقط`,
+          `تقليل قيمة دالة الخسارة إلى أدنى مستوى عبر التحديث الموجّه للمعاملات θ`,
+          `تقسيم البيانات إلى تدريب واختبار`,
+          `حساب معامل الارتباط بين متغيرين`
+        ],
+        ans: 1,
+        exp: `تبحث Gradient Descent بشكل موجّه (عكس اتجاه المشتقة) في فراغ الدالة E(θ) لتحديث θ₁ وθ₂ حتى تقل قيمة الخسارة إلى أدنى حد.`
+      },
+      {
+        q: `في معادلة التحديث θ₁ := θ₁ - α (∂E/∂θ₁)، ماذا يتحكم المعامل α في تحديده؟`,
+        opts: [
+          `عدد نقاط البيانات في الجدول`,
+          `سرعة عملية البحث وحجم الخطوة في كل دورة (معدل التعلم)`,
+          `درجة كثير الحدود`,
+          `نسبة مجموعة الاختبار`
+        ],
+        ans: 1,
+        exp: `α هي قيمة صغيرة تُسمى معدل التعلم (Learning Rate) وتتحكم في سرعة وحجم خطوة البحث في كل دورة.`
+      },
+      {
+        q: `ماذا يحدث عادةً إذا اخترنا قيمة كبيرة جداً لمعدل التعلم α أثناء تشغيل Gradient Descent؟`,
+        opts: [
+          `يتوقف النموذج عند الدورة الأولى بدقة مثالية`,
+          `قد يتجاوز النموذج نقطة الحد الأدنى ويتذبذب أو يتشتت بدلاً من التقارب`,
+          `تتحول البيانات تلقائياً إلى بيانات مصنفة`,
+          `تنخفض قيمة MSE إلى قيمة سالبة`
+        ],
+        ans: 1,
+        exp: `اختيار α كبيرة جداً يجعل الخطوات ضخمة فتقفز فوق قاع دالة الخسارة وتسبب تذبذباً أو ابتعاداً عن الحل الأمثل.`
+      },
+      {
+        q: `لماذا يُنصح بعمل Normalization للسمات المختلفة قبل الشروع في بناء النموذج بـ Gradient Descent؟`,
+        opts: [
+          `لزيادة عدد السمات المستقلة`,
+          `حتى لا يكون النموذج متحيزاً تجاه إحدى السمات ذات القيم الكبيرة ولتسريع التقارب`,
+          `لأن البايثون يرفض الأرقام العشرية دونها`,
+          `لتحويل الانحدار إلى تصنيف ثنائي`
+        ],
+        ans: 1,
+        exp: `توحيد المقياس يمنع سيطرة سمة ذات نطاق رقمي واسع على حسابات التدرج، ويمنع تحيز النموذج ويسرّع وصول Gradient Descent إلى الحل.`
+      },
+      {
+        q: `ماذا يُلاحظ على نموذج الانحدار عند الانتقال من الدورة الأولى إلى الدورة العاشرة في Gradient Descent؟`,
+        opts: [
+          `تزداد قيمة الخطأ E(θ) في كل دورة`,
+          `يتحرك الخط المستقيم تدريجياً ليقترب من تمثيل النقاط وتنخفض قيمة الخسارة`,
+          `تبقى قيم المعاملات θ₁ وθ₂ ثابتة لا تتغير`,
+          `تنخفض عدد نقاط البيانات إلى النصف`
+        ],
+        ans: 1,
+        exp: `في كل دورة تُحدّث المعاملات في اتجاه تناقص الخطأ، فيقترب الخط من سحابة النقاط وتنخفض قيمة E(θ) حتى تتقارب بحلول الدورة العاشرة.`
+      }
+    ],
+
+    u2: [
+      {
+        q: `ما المقصود بمصطلح Hypothesis Function في التعلم الآلي بإشراف؟`,
+        opts: [
+          `الدالة التي تحسب معدل الخطأ بعد التدريب`,
+          `الدالة التي تستقبل المتغيرات/السمات المستقلة وتنتج القيمة المتوقعة للسمة الهدف`,
+          `خوارزمية تقسيم البيانات العشوائي`,
+          `أداة رسم الصندوق في seaborn`
+        ],
+        ans: 1,
+        exp: `Hypothesis function هي دالة النموذج التي تأخذ السمات المستقلة كمدخلات وتخرج التنبؤ للسمة الهدف.`
+      },
+      {
+        q: `في الانحدار الخطي متعدد المتغيرات لعدد p من السمات، ماذا يمثل النموذج في الفراغ؟`,
+        opts: [
+          `مجموعة دوائر متداخلة`,
+          `خطاً أو مستوياً في الفراغ ذي البعد p`,
+          `شجرة قرارات ثنائية`,
+          `جدول ارتباط عشوائي`
+        ],
+        ans: 1,
+        exp: `يمثل الانحدار الخطي بـ p من المتغيرات علاقة خطية (خط أو مستوٍ فائق) في الفراغ ذي البعد p.`
+      },
+      {
+        q: `باستخدام النموذج الخطي من المنهج: Height = 128.017 + 0.611 × Weight، ما الطول المتوقع لشخص وزنه 70 كجم؟`,
+        opts: [
+          `150.787`,
+          `170.787`,
+          `198.017`,
+          `128.017`
+        ],
+        ans: 1,
+        exp: `Height = 128.017 + 0.611 × 70 = 128.017 + 42.77 = 170.787.`
+      },
+      {
+        q: `أيٌّ مما يلي يُعد من مميزات الانحدار الخطي المذكورة في المنهج؟`,
+        opts: [
+          `يتعامل تلقائياً مع العلاقات غير الخطية المعقدة دون تعديل`,
+          `القابلية للتفسير، وعدم الحاجة إلى hyperparameters، والاستناد إلى أساس رياضي قوي`,
+          `لا يتأثر مطلقاً بالقيم المتطرفة`,
+          `يعمل بدقة حتى لو كان عدد السمات أكبر من عدد العناصر`
+        ],
+        ans: 1,
+        exp: `مميزات الانحدار الخطي الثلاث في المنهج هي: القابلية للتفسير، وعدم الحاجة إلى hyperparameters، واستناده على أساس رياضي قوي.`
+      },
+      {
+        q: `أيٌّ من التالي يُعد من عيوب الانحدار الخطي؟`,
+        opts: [
+          `يحتاج إلى ملايين من الـ hyperparameters`,
+          `حساسيته لوجود القيم المتطرفة وتأثره سلباً إذا كانت العلاقة غير خطية أو عند اعتماد المتغيرات على بعضها`,
+          `لا يمكن تفسير معاملاته رياضياً`,
+          `لا يصلح أبداً للتنبؤ بالقيم المستمرة`
+        ],
+        ans: 1,
+        exp: `من عيوب الانحدار الخطي: ضعف أدائه في العلاقات غير الخطية، اشتراط عدد عناصر أكبر من السمات، تأثره بالتعددية الخطية، وحساسيته للقيم المتطرفة.`
+      },
+      {
+        q: `ما الشرط اللازم حول حجم البيانات وعدد السمات لكي يعمل الانحدار الخطي بشكل جيد؟`,
+        opts: [
+          `أن يكون عدد السمات أكبر من عدد العناصر`,
+          `أن يكون عدد العناصر (العينات) أكبر من عدد السمات`,
+          `أن يتساوى عدد الصفوف والأعمدة`,
+          `لا يوجد أي شرط على عدد العناصر`
+        ],
+        ans: 1,
+        exp: `ينص المنهج صراحةً على أن من عيوب الانحدار الخطي ضرورة أن يكون عدد العناصر أكبر من عدد السمات لكي يعمل بشكل جيد.`
+      },
+      {
+        q: `متى نستخدم Polynomial Regression؟`,
+        opts: [
+          `عندما تكون العلاقة بين المتغيرات خطية تماماً`,
+          `عندما تكون العلاقة غير خطية ولا يمكن تمثيلها بخط مستقيم`,
+          `عند الرغبة في تصفير جميع معاملات النموذج`,
+          `عندما تكون السمة الهدف نصية`
+        ],
+        ans: 1,
+        exp: `عندما تكون العلاقة ليست خطية ولا يكفي خط مستقيم لتمثيلها، نبني نموذج Polynomial أكثر مرونة يحتوي قوى أعلى للسمات.`
+      },
+      {
+        q: `ما المشكلة الرئيسية التي صُمّم Ridge Regression لمعالجتها؟`,
+        opts: [
+          `نقص القيم المفقودة في الجداول`,
+          `التعددية الخطية (Multicollinearity) بين المتغيرات المستقلة التي تجعل المعاملات كبيرة وغير مستقرة`,
+          `تحويل بيانات الاختبار إلى بيانات تدريب`,
+          `تجميع البيانات غير المشرفة`
+        ],
+        ans: 1,
+        exp: `عند ارتباط المتغيرات المستقلة ببعضها بشدة (التعددية الخطية)، تتضخم المعاملات؛ فيضيف Ridge عقوبة L2 لتثبيت وتقليص المعاملات.`
+      },
+      {
+        q: `ما الفرق الرئيسي بين دالة التنظيم في Ridge و Lasso؟`,
+        opts: [
+          `Ridge يستخدم مجموع مربعات المعاملات، بينما Lasso يستخدم مجموع القيم المطلقة للمعاملات`,
+          `Ridge يلغي المتغيرات إلى الصفر دائماً، بينما Lasso لا يغير المعاملات`,
+          `لا يوجد أي فرق رياضي بينهما`,
+          `Ridge لا يستخدم المعامل λ`
+        ],
+        ans: 0,
+        exp: `يضيف Ridge مجموع مربعات المعاملات (L2) مضروباً في λ، بينما يضيف Lasso مجموع القيم المطلقة للمعاملات (L1) مضروباً في λ.`
+      },
+      {
+        q: `في Lasso Regression، ماذا يحدث للمعاملات عند زيادة قيمة معامل التنظيم λ بشكل كبير؟`,
+        opts: [
+          `تتضاعف قيم جميع المعاملات`,
+          `تصبح كثير من المعاملات صفراً، مما يعني استبعاد السمات غير المؤثرة ضمنياً`,
+          `تتحول المعاملات إلى أعداد تخيلية`,
+          `تثبت عند القيمة 1.0`
+        ],
+        ans: 1,
+        exp: `كلما زادت قيمة λ في Lasso قلّ عدد المتغيرات الفعالة غير الصفرية في النموذج، ولذا يقوم ضمنياً بعملية اختيار للمعاملات.`
+      }
+    ],
+
+    u3: [
+      {
+        q: `في طريقة Holdout لتقسيم البيانات، كم مرة تُنفذ عملية التقسيم والتدريب؟`,
+        opts: [
+          `تُكرر بعدد العينات N`,
+          `تُكرر K مرة حسب عدد الطيات`,
+          `تُكرر مرة واحدة فقط`,
+          `تُكرر 100 مرة مع الإرجاع`
+        ],
+        ans: 2,
+        exp: `في Holdout نختار جزءاً من البيانات عشوائياً للتدريب وجزءاً آخر للتقييم وتتم العملية مرة واحدة فقط.`
+      },
+      {
+        q: `ما الفرق الدقيق بين Random Sub-sampling و K-fold Cross-Validation؟`,
+        opts: [
+          `في Random Sub-sampling لا نستخدم بيانات اختبار`,
+          `في Random Sub-sampling قد تتكرر بعض العينات في الاختبار وتغيب أخرى، بينما في K-fold تُختبر كل عينة مرة واحدة فقط`,
+          `في K-fold تُستخدم عينة واحدة فقط للتدريب`,
+          `لا يوجد فرق بينهما في المبدأ`
+        ],
+        ans: 1,
+        exp: `تقسم K-fold البيانات إلى K أجزاء متنافية فتمر كل عينة في الاختبار مرة واحدة، بخلاف التكرار العشوائي المستقل في Random Sub-sampling.`
+      },
+      {
+        q: `إذا كانت لدينا 500 عينة وطبقنا 5-fold Cross-Validation، فكم عينة تُستخدم للاختبار في كل دورة؟`,
+        opts: [
+          `5 عينات`,
+          `50 عينة`,
+          `100 عينة`,
+          `400 عينة`
+        ],
+        ans: 2,
+        exp: `500 ÷ 5 = 100 عينة للاختبار (جزء واحد) و 400 عينة للتدريب (4 أجزاء) في كل دورة.`
+      },
+      {
+        q: `متى يُنصح باستخدام طريقة Leave-One-Out (LOOCV) ومتى نتجنبها؟`,
+        opts: [
+          `تُستخدم مع البيانات الصغيرة جداً، ونتجنبها مع البيانات الكبيرة لارتفاع تكلفتها الحسابية`,
+          `تُستخدم مع البيانات الضخمة فقط لأنها الأسرع`,
+          `تُستخدم فقط مع الانحدار اللوجستي`,
+          `نتجنبها دائماً مع البيانات الصغيرة`
+        ],
+        ans: 0,
+        exp: `لأن LOOCV تدرّب النموذج N مرة (بعدَد العينات)، فهي مثالية للبيانات الصغيرة جداً وبطيئة ومكلفة جداً للبيانات الكبيرة.`
+      },
+      {
+        q: `ما الميزة المميزة لطريقة Bootstrap عند بناء مجموعة التدريب؟`,
+        opts: [
+          `استبعاد 90% من البيانات نهائياً`,
+          `أخذ العينات عشوائياً مع الإرجاع (Sampling with replacement)، واستخدام العينات غير المختارة للاختبار`,
+          `تقسيم البيانات زمنياً فقط`,
+          `ترتيب البيانات أبجدياً قبل السحب`
+        ],
+        ans: 1,
+        exp: `تعتمد Bootstrap على السحب العشوائي مع الإرجاع بحجم N (~63.2% عينات فريدة للتدريب)، وتُختبر الدقة على العينات المتبقية (Out-of-Bag).`
+      },
+      {
+        q: `في التطبيق العملي للتنبؤ بالمبيعات في المنهج، ما أول خطوة نقوم بها بعد تحميل البيانات؟`,
+        opts: [
+          `تدريب نموذج Polynomial فوراً`,
+          `فحص البيانات للتأكد من عدم وجود قيم مفقودة والتعرف على السمات المستقلة والهدف`,
+          `حذف عمود المبيعات`,
+          `تعيين λ = 100`
+        ],
+        ans: 1,
+        exp: `نلقي نظرة عامة على البيانات للتأكد من عدم وجود قيم مفقودة والتحقق من السمات المستقلة الثلاث والسمة الهدف.`
+      },
+      {
+        q: `في كود البايثون من المنهج، ما نتيجة تنفيذ train_test_split بنسبة 25%؟`,
+        opts: [
+          `تخصيص 25% للتدريب و 75% للاختبار`,
+          `تخصيص 75% للتدريب و 25% لتقييم النموذج`,
+          `حذف 25% من البيانات المفقودة`,
+          `إنشاء 25 عموداً جديداً`
+        ],
+        ans: 1,
+        exp: `تُستخدم الدالة لتقسيم البيانات إلى 75% للتدريب و 25% للتقييم (test_size=0.25).`
+      },
+      {
+        q: `عند تطبيق Lasso Regression على بيانات الإعلانات في المنهج، أصبح معامل Newspaper صفراً. ماذا نستنتج؟`,
+        opts: [
+          `أن بيانات Newspaper مفقودة في الملف`,
+          `أن Lasso استبعد سمة Newspaper تلقائياً لأنها غير مؤثرة نسبياً في التنبؤ بالمبيعات`,
+          `أن هناك خطأ برمجياً في دالة fit`,
+          `أن Newspaper هي أهم سمة في النموذج`
+        ],
+        ans: 1,
+        exp: `تصفير المعامل الثالث المقابل لـ Newspaper في Lasso يعني استبعاده تلقائياً من معادلة التنبؤ لضعف أثره مقارنة بـ TV و Radio.`
+      },
+      {
+        q: `عند تطبيق Polynomial Regression، كيف يجب تحويل بيانات التقييم X_test؟`,
+        opts: [
+          `باستخدام fit_transform(X_test) لإنشاء محوّل جديد مستقل`,
+          `باستخدام transform(X_test) بنفس نموذج PolynomialFeatures الذي بُني من بيانات التدريب`,
+          `لا يتم تحويل X_test إطلاقاً`,
+          `باستخدام دالة Lasso.fit(X_test)`
+        ],
+        ans: 1,
+        exp: `ينبّه المنهج أن بيانات التقييم تُحوّل بنفس النموذج المحوّل الذي تم بناؤه من بيانات التدريب (أي transform فقط دون إعادة fit).`
+      },
+      {
+        q: `أيٌّ من الاستدعاءات التالية في scikit-learn يُستخدم لتحويل بيانات التدريب قبل تطبيق Polynomial Regression من الدرجة 2؟`,
+        opts: [
+          `model.fit()`,
+          `PolynomialFeatures(degree=2).fit_transform(X_train)`,
+          `train_test_split(X, y)`,
+          `Lasso(alpha=2)`
+        ],
+        ans: 1,
+        exp: `نستخدم PolynomialFeatures(degree=2).fit_transform(X_train) لإنتاج السمات التربيعية والتفاعلية قبل تمريرها لنموذج LinearRegression.`
+      }
+    ],
+
+    final: [
+      {
+        q: `إذا كانت معادلة الانحدار الخطي هي y = 3 + 2x، فما القيمة المتوقعة لـ y عندما تكون x = 7؟`,
+        opts: [`4`, `5`, `12`, `17`],
+        ans: 3,
+        exp: `بالتعويض: y = 3 + 2 × 7 = 3 + 14 = 17.`
+      },
+      {
+        q: `إذا كانت معادلة الانحدار y = 5 + 3x، ورصدنا x = 10 والقيمة الفعلية y = 37، فما مقدار الخطأ في هذا الرصد؟`,
+        opts: [`12`, `10`, `2`, `0`],
+        ans: 2,
+        exp: `القيمة المتوقعة = 5 + 3 × 10 = 35، والخطأ = الفعلية − المتوقعة = 37 − 35 = 2.`
+      },
+      {
+        q: `إذا كانت القيم الفعلية [10, 20, 30] والقيم المتوقعة [12, 18, 33]، احسب قيمة MSE الدقيقة:`,
+        opts: [`3.00`, `5.67`, `9.00`, `17.00`],
+        ans: 1,
+        exp: `مربعات الأخطاء: (10-12)² = 4، (20-18)² = 4، (30-33)² = 9. المجموع = 17، وبقسمته على 3 نحصل على MSE = 17/3 ≈ 5.67.`
+      },
+      {
+        q: `ما هو اسم الدالة التي تقيس معدل الخطأ بين القيم الفعلية والقيم المتوقعة في النموذج الخطي؟`,
+        opts: [`Hypothesis function`, `Loss function (أو MSE)`, `Gradient Descent`, `Normalization`],
+        ans: 1,
+        exp: `تُسمى Loss function (أو Objective function) وهي التي تقيس الخطأ وتوجّه عملية التعلم لتقليله.`
+      },
+      {
+        q: `ما الغرض الأساسي من خوارزمية Gradient Descent؟`,
+        opts: [
+          `رسم البيانات في بعدين`,
+          `تقليل قيمة Loss Function إلى أدنى مستوى عن طريق تعديل المعاملات θ تدريجياً`,
+          `تقسيم البيانات إلى K أجزاء`,
+          `طباعة ملخص الإحصاءات الوصفية`
+        ],
+        ans: 1,
+        exp: `تستخدم Gradient Descent المشتقات الجزئية لتحديث المعاملات θ في الاتجاه الذي يقلص دالة الخسارة إلى الحد الأدنى.`
+      },
+      {
+        q: `ماذا يحدد المعامل α (Learning Rate) في خوارزمية Gradient Descent؟`,
+        opts: [
+          `درجة كثير الحدود في النموذج`,
+          `سرعة عملية البحث وحجم الخطوة عند تحديث المعاملات`,
+          `نسبة العينة المخصصة للاختبار`,
+          `عدد الطيات في Cross-Validation`
+        ],
+        ans: 1,
+        exp: `α هو معدل التعلم الذي يتحكم في حجم الخطوة وسرعة التقارب نحو أقل قيمة لدالة الخسارة.`
+      },
+      {
+        q: `لماذا نُجري Normalization للسمات قبل تدريب نموذج الانحدار عبر Gradient Descent؟`,
+        opts: [
+          `لتقليل عدد الصفوف في مجموعة التدريب`,
+          `لتفادي تحيز النموذج للسمات ذات النطاق العددي الأكبر وتسريع عملية التقارب`,
+          `لاستبدال القيم المفقودة بالأصفار`,
+          `لتحويل Lasso إلى Ridge`
+        ],
+        ans: 1,
+        exp: `توحيد المقياس يجعل السمات في نطاق متقارب، فيمنع التحيز ويسرّع وصول Gradient Descent إلى القاع.`
+      },
+      {
+        q: `إذا كان لدينا النموذج الخطي Height = 128.017 + 0.611 × Weight، فأي عبارة تصف المعامل 0.611 بدقة؟`,
+        opts: [
+          `يمثل الطول عندما يكون الوزن صفراً`,
+          `يمثل الميل: أي زيادة متوقعة قدرها 0.611 سم في الطول لكل 1 كجم إضافي في الوزن`,
+          `يمثل قيمة الخطأ التربيعي`,
+          `يمثل معامل التنظيم λ`
+        ],
+        ans: 1,
+        exp: `المعامل المضروب في المتغير المستقل Weight يمثل الميل (Slope) ومعدل التغير في السمة الهدف لكل وحدة تغير في الوزن.`
+      },
+      {
+        q: `أي من النماذج التالية يعالج التعددية الخطية (Multicollinearity) عبر إضافة مجموع مربعات المعاملات (L2) دون استبعادها تماماً؟`,
+        opts: [
+          `Linear Regression البسيط`,
+          `Ridge Regression`,
+          `Lasso Regression`,
+          `K-fold Cross-Validation`
+        ],
+        ans: 1,
+        exp: `Ridge يضيف عقوبة L2 (مجموع مربع المعاملات) ليقلص المعاملات ويثبتها أمام التعددية الخطية دون جعلها صفراً غالباً.`
+      },
+      {
+        q: `في نموذج Lasso، إذا جعلنا قيمة λ كبيرة جداً، فماذا يحدث للمعاملات؟`,
+        opts: [
+          `تصبح جميعها موجبة وكبيرة جداً`,
+          `تصبح كثير منها صفراً مما يؤدي لاستبعاد سمات من النموذج`,
+          `لا تتغير نهائياً`,
+          `تتضاعف دقة جميع السمات الضعيفة`
+        ],
+        ans: 1,
+        exp: `زيادة λ تزيد عقوبة القيم المطلقة للمعاملات في Lasso، فتتجه معاملات السمات الأقل تأثيراً إلى الصفر.`
+      },
+      {
+        q: `متى نستخدم Polynomial Regression بدلاً من الانحدار الخطي البسيط؟`,
+        opts: [
+          `عندما تكون العلاقة خطية تماماً`,
+          `عندما تكون العلاقة غير خطية ولا يمكن تمثيلها بخط مستقيم`,
+          `عند وجود قيم مفقودة كثيرة`,
+          `عند الحاجة لحساب مصفوفة الارتباك`
+        ],
+        ans: 1,
+        exp: `يوفر Polynomial Regression مرونة أعلى عبر إضافة قوى أعلى للمتغيرات لتمثيل المنحنيات غير الخطية.`
+      },
+      {
+        q: `أي طريقة من طرق تقسيم البيانات تُعد الأنسب عندما يكون حجم البيانات صغيراً جداً ونريد ألا نخسر عينات من التدريب؟`,
+        opts: [
+          `Holdout بنسبة 50%`,
+          `Leave-One-Out (LOOCV) أو Bootstrap`,
+          `حذف نصف العينات`,
+          `استخدام بيانات التدريب نفسها للاختبار`
+        ],
+        ans: 1,
+        exp: `تُبقي LOOCV جميع العينات ما عدا واحدة للتدريب (N-1)، كما تُعد Bootstrap مناسبة للبيانات الصغيرة.`
+      },
+      {
+        q: `أي مما يلي يُعد وصفاً صحيحاً لطريقة Bootstrap؟`,
+        opts: [
+          `تقسيم البيانات إلى K أجزاء متنافية دون إرجاع`,
+          `السحب العشوائي مع الإرجاع لبناء مجموعة التدريب واستخدام العينات غير المختارة للاختبار`,
+          `تقسيم البيانات لمرة واحدة فقط`,
+          `إجراء الاختبار قبل تدريب النموذج`
+        ],
+        ans: 1,
+        exp: `Bootstrap تسحب عينات عشوائية مع الإرجاع بحجم البيانات الأصلية وتترك العينات غير المسحوبة (Out-of-Bag) للاختبار.`
+      },
+      {
+        q: `في التطبيق العملي للانحدار متعدد الحدود في البايثون، لماذا لا نستدعي fit_transform على X_test؟`,
+        opts: [
+          `لأن scikit-learn لا تدعمها`,
+          `لضمان تحويل بيانات الاختبار بنفس القواعد المستخلصة من التدريب فقط ومنع تسرب البيانات`,
+          `لأن X_test لا تحتاج إلى أي تحويل`,
+          `لأن transform أبطأ من fit_transform`
+        ],
+        ans: 1,
+        exp: `نستدعي poly.transform(X_test) فقط لنطبق نفس التحويل المبني على X_train دون إشراك بيانات الاختبار في حساب معلمات التحويل.`
+      },
+      {
+        q: `أيٌّ من العبارات التالية تلخص المسار الصحيح لبناء نموذج انحدار في التعلم الآلي بإشراف؟`,
+        opts: [
+          `التنبؤ مباشرة ← تقسيم البيانات ← تدريب النموذج`,
+          `فحص البيانات وتقسيمها ← تحجيم السمات عند الحاجة ← تحديد الفرضية ودالة الخسارة ← التدريب لتقليل الخسارة ← التقييم على بيانات الاختبار`,
+          `حذف جميع الأعمدة ← تطبيق Lasso ← تجاهل التقييم`,
+          `بناء النموذج على بيانات الاختبار ثم التدريب على كامل الجدول`
+        ],
+        ans: 1,
+        exp: `المسار العلمي السليم يبدأ بفهم وفحص البيانات وتقسيمها، ثم المعالجة والتحجيم، ثم التدريب عبر تقليل دالة الخسارة، وأخيراً التقييم الموضوعي على بيانات لم يرها النموذج.`
+      }
+    ]
+  };
+
+  const arabicLetters = [`أ`, `ب`, `ج`, `د`];
+
+  function renderQuiz(quizKey) {
+    const container = document.getElementById('quiz-' + quizKey + '-questions');
+    if (!container) return;
+    const questions = quizBank[quizKey];
+    const saved = appState.quizAnswers[quizKey] || {};
+    let html = ``;
+
+    for (let i = 0; i < questions.length; i++) {
+      const qObj = questions[i];
+      const userAns = saved[i];
+      const hasAnswered = typeof userAns === 'number';
+      const isCorrect = hasAnswered && userAns === qObj.ans;
+
+      let optsHtml = ``;
+      for (let j = 0; j < qObj.opts.length; j++) {
+        let cls = `option-btn`;
+        if (hasAnswered) {
+          if (j === qObj.ans) cls += ` correct`;
+          else if (j === userAns && userAns !== qObj.ans) cls += ` wrong`;
+        }
+        optsHtml += `<button type="button" class="${cls}" ${hasAnswered ? 'disabled' : ''} onclick="answerQuestion('${quizKey}', ${i}, ${j})">
+          <span class="option-letter">${arabicLetters[j]}</span>
+          <span>${qObj.opts[j]}</span>
+        </button>`;
+      }
+
+      let expHtml = ``;
+      if (hasAnswered) {
+        expHtml = `<div class="explanation-box visible ${isCorrect ? 'is-correct' : 'is-wrong'}">
+          <strong>${isCorrect ? 'إجابة صحيحة:' : 'إجابة غير صحيحة:'}</strong> ${qObj.exp}
+        </div>`;
+      } else {
+        expHtml = `<div class="explanation-box" id="exp-${quizKey}-${i}"></div>`;
+      }
+
+      html += `<article class="question-card" id="qcard-${quizKey}-${i}">
+        <div class="question-meta">
+          <span>السؤال ${i + 1} من ${questions.length}</span>
+          <span>${hasAnswered ? (isCorrect ? 'صحيح ✓' : 'تحتاج مراجعة') : 'بانتظار الإجابة'}</span>
+        </div>
+        <div class="question-text">${qObj.q}</div>
+        <div class="options-list">${optsHtml}</div>
+        ${expHtml}
+      </article>`;
+    }
+
+    container.innerHTML = html;
+    updateQuizHeader(quizKey);
+  }
+
+  function answerQuestion(quizKey, qIndex, optIndex) {
+    if (!appState.quizAnswers[quizKey]) appState.quizAnswers[quizKey] = {};
+    if (typeof appState.quizAnswers[quizKey][qIndex] === 'number') return;
+
+    appState.quizAnswers[quizKey][qIndex] = optIndex;
+    renderQuiz(quizKey);
+    updateGlobalProgress();
+    persistState();
+  }
+
+  function resetQuiz(quizKey) {
+    appState.quizAnswers[quizKey] = {};
+    renderQuiz(quizKey);
+    updateGlobalProgress();
+    persistState();
+  }
+
+  function updateQuizHeader(quizKey) {
+    const questions = quizBank[quizKey];
+    const saved = appState.quizAnswers[quizKey] || {};
+    let answered = 0;
+    let correct = 0;
+    for (let i = 0; i < questions.length; i++) {
+      if (typeof saved[i] === 'number') {
+        answered++;
+        if (saved[i] === questions[i].ans) correct++;
+      }
+    }
+
+    if (quizKey === 'final') {
+      const scoreEl = document.getElementById('quiz-final-score');
+      const badgeEl = document.getElementById('quiz-final-badge');
+      const fbEl = document.getElementById('quiz-final-feedback');
+      const barEl = document.getElementById('quiz-final-bar');
+      if (scoreEl) scoreEl.textContent = `${correct} / ${questions.length}`;
+      if (badgeEl) badgeEl.textContent = `${correct} / ${questions.length}`;
+      if (barEl) barEl.style.width = `${Math.round((answered / questions.length) * 100)}%`;
+      if (fbEl) {
+        if (answered === 0) fbEl.textContent = `أجب عن الأسئلة للحصول على التقييم الفوري`;
+        else if (answered < questions.length) fbEl.textContent = `تمت الإجابة عن ${answered} من ${questions.length} سؤالاً`;
+        else {
+          const pct = Math.round((correct / questions.length) * 100);
+          fbEl.textContent = pct >= 80
+            ? `أداء ممتاز (${pct}%) — إتقان شامل للفصل الحادي عشر`
+            : `النتيجة النهائية (${pct}%) — راجع الشروحات التفصيلية أعلاه لتعزيز نقاط الضعف`;
+        }
+      }
+    } else {
+      const scoreEl = document.getElementById('quiz-' + quizKey + '-score');
+      if (scoreEl) {
+        scoreEl.textContent = `النتيجة: ${correct} / ${questions.length}`;
+        scoreEl.classList.toggle('done', answered === questions.length && correct >= 7);
+      }
+    }
+  }
+
+  // =========================================================================
+  // PROGRESS TRACKER & UNIT COMPLETION
+  // =========================================================================
+  function toggleUnitComplete(unitKey) {
+    appState.completedUnits[unitKey] = !appState.completedUnits[unitKey];
+    updateUnitButtons();
+    updateGlobalProgress();
+    persistState();
+  }
+
+  function updateUnitButtons() {
+    ['u1', 'u2', 'u3'].forEach(function(u, idx) {
+      const done = Boolean(appState.completedUnits[u]);
+      const btn = document.getElementById('btn-complete-' + u);
+      const badge = document.getElementById('badge-unit-' + (idx + 1));
+      if (btn) {
+        btn.classList.toggle('btn-done', done);
+        btn.classList.toggle('btn-primary', !done);
+        btn.innerHTML = done
+          ? `<i data-lucide="check" aria-hidden="true" width="16" height="16"></i><span>تم إتمام الوحدة (${idx + 1}) ✓</span>`
+          : `<i data-lucide="check-circle" aria-hidden="true" width="16" height="16"></i><span>تحديد الوحدة (${idx + 1}) كمكتملة</span>`;
+      }
+      if (badge) {
+        badge.textContent = done ? `مكتملة ✓` : `قيد الدراسة`;
+        badge.classList.toggle('done', done);
+      }
+    });
+    if (window.lucide) window.lucide.createIcons();
+  }
+
+  function updateGlobalProgress() {
+    let unitsDone = 0;
+    ['u1', 'u2', 'u3'].forEach(function(u) {
+      if (appState.completedUnits[u]) unitsDone++;
+    });
+
+    let totalAnswered = 0;
+    let totalCorrect = 0;
+    let finalAnswered = 0;
+    let finalCorrect = 0;
+
+    ['u1', 'u2', 'u3', 'final'].forEach(function(k) {
+      const qs = quizBank[k];
+      const saved = appState.quizAnswers[k] || {};
+      for (let i = 0; i < qs.length; i++) {
+        if (typeof saved[i] === 'number') {
+          totalAnswered++;
+          if (saved[i] === qs[i].ans) totalCorrect++;
+          if (k === 'final') {
+            finalAnswered++;
+            if (saved[i] === qs[i].ans) finalCorrect++;
+          }
+        }
+      }
+    });
+
+    // Weight: 30% units (10% each), 70% questions (45 questions)
+    const pct = Math.min(100, Math.round((unitsDone / 3) * 30 + (totalAnswered / 45) * 70));
+
+    const pctEl = document.getElementById('overall-progress-pct');
+    const barEl = document.getElementById('overall-progressbar');
+    const fillEl = document.getElementById('overall-progress-fill');
+    const labelEl = document.getElementById('overall-progress-label');
+    const unitsEl = document.getElementById('stat-units-done');
+    const ansEl = document.getElementById('stat-questions-answered');
+    const corrEl = document.getElementById('stat-correct-total');
+    const accEl = document.getElementById('stat-accuracy-note');
+    const finalEl = document.getElementById('stat-final-score');
+    const finalNoteEl = document.getElementById('stat-final-note');
+
+    if (pctEl) pctEl.textContent = `${pct}%`;
+    if (barEl) barEl.setAttribute('aria-valuenow', String(pct));
+    if (fillEl) fillEl.style.width = `${pct}%`;
+    if (labelEl) {
+      labelEl.textContent = pct === 0
+        ? `ابدأ استكشاف الوحدات وأجب عن الاختبارات لتسجيل تقدمك تلقائياً`
+        : pct === 100
+          ? `أحسنت! أتممت جميع وحدات الفصل الحادي عشر واختباراته بنجاح.`
+          : `أنجزت ${unitsDone} من 3 وحدات وأجبت عن ${totalAnswered} من 45 سؤالاً.`;
+    }
+    if (unitsEl) unitsEl.textContent = `${unitsDone} / 3`;
+    if (ansEl) ansEl.textContent = `${totalAnswered} / 45`;
+    if (corrEl) corrEl.textContent = String(totalCorrect);
+    if (accEl) {
+      accEl.textContent = totalAnswered > 0
+        ? `الدقة: ${Math.round((totalCorrect / totalAnswered) * 100)}%`
+        : `الدقة: —`;
+    }
+    if (finalEl) finalEl.textContent = `${finalCorrect} / 15`;
+    if (finalNoteEl) {
+      finalNoteEl.textContent = finalAnswered === 0
+        ? `لم يبدأ بعد`
+        : finalAnswered < 15
+          ? `تم حل ${finalAnswered} من 15`
+          : `اكتمل (${Math.round((finalCorrect / 15) * 100)}%)`;
+    }
+  }
+
+  function handleResetProgress(btn) {
+    if (!btn) return;
+    if (btn.dataset.armed !== 'true') {
+      btn.dataset.armed = 'true';
+      btn.classList.add('btn-gold');
+      btn.textContent = `اضغط مرة أخرى لتأكيد المسح`;
+      setTimeout(function() {
+        if (btn.dataset.armed === 'true') {
+          btn.dataset.armed = 'false';
+          btn.classList.remove('btn-gold');
+          btn.innerHTML = `<i data-lucide="rotate-ccw" aria-hidden="true" width="16" height="16"></i><span>إعادة ضبط التقدم</span>`;
+          if (window.lucide) window.lucide.createIcons();
+        }
+      }, 4000);
+      return;
+    }
+
+    btn.dataset.armed = 'false';
+    btn.classList.remove('btn-gold');
+    btn.innerHTML = `<i data-lucide="rotate-ccw" aria-hidden="true" width="16" height="16"></i><span>إعادة ضبط التقدم</span>`;
+    if (window.lucide) window.lucide.createIcons();
+
+    appState.completedUnits = { u1: false, u2: false, u3: false };
+    appState.quizAnswers = { u1: {}, u2: {}, u3: {}, final: {} };
+    resetSimulator();
+    ['u1', 'u2', 'u3', 'final'].forEach(renderQuiz);
+    updateUnitButtons();
+    updateGlobalProgress();
+    persistState();
+  }
+
+  // =========================================================================
+  // INITIALIZATION
+  // =========================================================================
+  function renderMathSafely() {
+    try {
+      if (typeof renderMathInElement === 'function') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false }
+          ],
+          throwOnError: false
+        });
+      }
+    } catch (e) {
+      // Fallback leaves LaTeX readable if offline
+    }
+  }
+
+  async function initApp() {
+    try {
+      if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === 'function') {
+        const saved = await window.notebookAppApi.getAppState();
+        if (saved && typeof saved === 'object') {
+          if (saved.completedUnits) appState.completedUnits = Object.assign(appState.completedUnits, saved.completedUnits);
+          if (saved.quizAnswers) appState.quizAnswers = Object.assign(appState.quizAnswers, saved.quizAnswers);
+          if (saved.sim) appState.sim = Object.assign(appState.sim, saved.sim);
+          if (typeof saved.polyDegree === 'number') appState.polyDegree = saved.polyDegree;
+          if (typeof saved.lambdaVal === 'number') appState.lambdaVal = saved.lambdaVal;
+          if (typeof saved.splitMethod === 'string') appState.splitMethod = saved.splitMethod;
+          if (typeof saved.advModel === 'string') appState.advModel = saved.advModel;
+        }
+      }
+    } catch (err) {
+      // Proceed with default state
+    }
+
+    renderSimulator();
+    renderPolyLab();
+    onLambdaNumber(appState.lambdaVal);
+    selectSplitMethod(appState.splitMethod);
+    selectAdvModel(appState.advModel);
+
+    ['u1', 'u2', 'u3', 'final'].forEach(renderQuiz);
+    updateUnitButtons();
+    updateGlobalProgress();
+    renderMathSafely();
+
+    if (window.lucide && typeof window.lucide.createIcons === 'function') {
+      window.lucide.createIcons();
+    }
+
+    try {
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === 'function') {
+        window.notebookAppApi.notifyAppReady();
+      }
+    } catch (err) {
+      // Ignore if outside host
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', initApp);
 </script>
 </body>
 </html>

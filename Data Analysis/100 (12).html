@@ -1,704 +1,2980 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>الفصل الثالث عشر الشامل (100%) | تحليل وتمثيل البيانات</title>
-<style>
-:root{
-  --bg:#f0f5ff;
-  --card:#ffffff;
-  --ink:#0f172a;
-  --muted:#475569;
-  --accent:#1d4ed8;
-  --accent-dark:#1e3a8a;
-  --accent2:#dbeafe;
-  --line:#cbd5e1;
-  --good:#059669;
-  --good-bg:#ecfdf5;
-  --bad:#dc2626;
-  --bad-bg:#fef2f2;
-  --warn:#d97706;
-  --warn-bg:#fffbeb;
-}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
-header{background:linear-gradient(135deg,#0f172a,#1d4ed8);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(15,23,42,0.2)}
-.wrap{max-width:1040px;margin:auto;padding:0 16px}
-.eyebrow{opacity:.92;font-size:.9rem;background:rgba(255,255,255,0.16);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
-h1{margin:5px 0;font-size:clamp(1.5rem,4vw,2.25rem)}
-header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
-nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
-nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:var(--accent2);color:var(--accent-dark);font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
-nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
-nav button.active,.btn.primary{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
-main .btn.primary{background:var(--accent);color:white}
-main{padding:22px 0 48px}
-.panel{display:none}
-.panel.active{display:block;animation:fadeIn .25s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(15,23,42,0.04)}
-h2{font-size:1.35rem;margin:0 0 12px;color:#0f172a}
-h3{font-size:1.08rem;margin:0 0 8px;color:var(--accent-dark)}
-small,.muted{color:var(--muted)}
-ul,ol{padding-right:22px;margin:8px 0}
-li{margin:6px 0}
-details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
-summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f8fafc;color:#0f172a;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
-details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
-.details-body{padding:16px 18px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
-.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
-.badge-new{display:inline-block;background:var(--warn-bg);color:var(--warn);border:1px solid #fcd34d;font-size:.78rem;padding:1px 8px;border-radius:6px;margin-right:6px;font-weight:bold}
-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
-th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
-th{background:#eff6ff;color:#1e3a8a;font-weight:bold}
-tr:last-child td{border-bottom:0}
-.note{border-right:4px solid var(--accent);padding:10px 14px;background:#eff6ff;border-radius:8px;margin:10px 0}
-.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
-.math-box{background:#f8fafc;border:2px solid #93c5fd;border-radius:12px;padding:12px 16px;margin:10px 0;text-align:center;font-size:1.03rem;font-weight:bold;color:#1e3a8a;direction:ltr}
-.step-box{background:#f0fdf4;border:1px solid #86efac;border-right:4px solid var(--good);border-radius:10px;padding:12px 16px;margin:10px 0;font-size:.95rem}
-.code-box{background:#0f172a;color:#e2e8f0;padding:14px 18px;border-radius:12px;font-family:Consolas,Monaco,monospace;direction:ltr;text-align:left;overflow-x:auto;margin:10px 0;border:1px solid #334155;line-height:1.65;font-size:.91rem}
-.code-box .kw{color:#38bdf8;font-weight:bold}
-.code-box .str{color:#4ade80}
-.code-box .num{color:#f472b6}
-.code-box .cmt{color:#94a3b8;font-style:italic}
-.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
-.options{display:grid;gap:8px;margin-top:12px}
-.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
-.option:hover:not(:disabled){border-color:var(--accent);background:#eff6ff}
-.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
-.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
-.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
-.feedback.good{color:var(--good);background:var(--good-bg)}
-.feedback.bad{color:var(--bad);background:var(--bad-bg)}
-.progress{height:10px;background:#cbd5e1;border-radius:9px;overflow:hidden;margin:12px 0}
-.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
-.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#dbeafe);border:2px solid #93c5fd;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
-.flashcard:hover{transform:scale(1.005)}
-.flashcard .term{font-size:1.32rem;font-weight:bold;color:#1e3a8a}
-.flashcard .answer{margin-top:16px;font-size:1.04rem;color:#0f172a;background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04);white-space:pre-line}
-.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
-.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
-footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
-@media(max-width:600px){
-  .card{padding:14px}
-  nav button{flex:1 1 calc(50% - 8px);text-align:center}
-  .flashcard{min-height:200px;padding:18px}
-  th,td{padding:8px 10px;font-size:.88rem}
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="carbon">
+  <title>الفصل الثالث عشر: التعلم الآلي بإشراف — الجزء الثالث | مرجع تفاعلي واختبارات</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Carbon surfaces */
+      --background: #ffffff;
+      --surface-container-low: #f4f4f4;
+      --surface-container: #f4f4f4;
+      --surface-container-high: #e0e0e0;
+
+      /* Carbon ink */
+      --on-surface: #161616;
+      --on-surface-variant: #525252;
+
+      /* Carbon rules */
+      --outline: #8d8d8d;
+      --outline-variant: #e0e0e0;
+
+      /* Carbon accents */
+      --primary: #0f62fe;
+      --on-primary: #ffffff;
+      --primary-container: #d0e2ff;
+      --on-primary-container: #161616;
+      --secondary: #6f6f6f;
+      --tertiary: #198038;
+      --error: #da1e28;
+      --on-error: #ffffff;
+
+      /* Semantic & status surfaces (derived cleanly as tokens) */
+      --positive: #198038;
+      --positive-bg: #defbe6;
+      --warning: #b28600;
+      --warning-bg: #fcf4d6;
+      --error-bg: #fff1f1;
+      --focus: #0f62fe;
+      --code-bg: #161616;
+      --code-fg: #f4f4f4;
+      --code-muted: #a8a8a8;
+
+      /* Data series */
+      --data-1: #0f62fe;
+      --data-2: #6929c4;
+      --data-3: #005d5d;
+      --data-4: #9f1853;
+      --data-5: #198038;
+      --data-context: #8d8d8d;
+
+      /* Typography */
+      --font-headline: 'IBM Plex Sans Arabic', 'IBM Plex Sans', sans-serif;
+      --font-body: 'IBM Plex Sans Arabic', 'IBM Plex Sans', sans-serif;
+      --font-label: 'IBM Plex Mono', 'IBM Plex Sans Arabic', monospace;
+
+      /* Shape (Carbon strict) */
+      --rounded: 0.125rem;
+      --rounded-lg: 0.25rem;
+      --rounded-full: 0.75rem;
+
+      /* Style effects */
+      --shadow-1: 0 2px 6px rgb(0 0 0 / 0.1);
+      --shadow-2: 0 4px 12px rgb(0 0 0 / 0.12);
+      --rule: 1px solid var(--outline-variant);
+      --field-rule: 1px solid var(--outline);
+      --indicator: 2px solid var(--primary);
+      --status-bar-pos: 3px solid var(--tertiary);
+      --status-bar-err: 3px solid var(--error);
+      --status-bar-info: 3px solid var(--primary);
+
+      /* Narrative Type Scale */
+      --display-size: clamp(2rem, 1.35rem + 2.4vw, 3.25rem);
+      --headline-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.125rem);
+      --subhead-size: clamp(1.125rem, 1rem + 0.45vw, 1.375rem);
+      --body-size: clamp(1rem, 0.96rem + 0.18vw, 1.09375rem);
+      --label-size: 0.75rem;
+
+      /* Spacing scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+    header { position: static !important; }
+    button, input, select, textarea {
+      font-family: inherit;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-xl);
+      padding: var(--space-lg);
+      max-width: 1180px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Header & Dossier Top */
+    .hero-header {
+      border-bottom: var(--rule);
+      padding-bottom: var(--space-xl);
+      display: grid;
+      gap: var(--space-lg);
+    }
+    .kicker-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      height: 1.5rem;
+      padding: 0 var(--space-sm);
+      border-radius: var(--rounded-full);
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-size: var(--label-size);
+      font-weight: 500;
+    }
+    .tag-neutral {
+      background: var(--surface-container-high);
+      color: var(--on-surface);
+    }
+    .mono-meta {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      direction: ltr;
+      unicode-bidi: isolate;
+    }
+
+    .headline {
+      font-family: var(--font-headline);
+      font-weight: 300;
+      font-size: var(--display-size);
+      line-height: 1.2;
+      margin: 0;
+      color: var(--on-surface);
+    }
+    .headline strong {
+      font-weight: 600;
+    }
+    .standfirst {
+      margin: 0;
+      max-width: 65ch;
+      color: var(--on-surface-variant);
+      font-size: var(--subhead-size);
+      font-weight: 400;
+      line-height: 1.55;
+    }
+
+    /* Progress KPI strip */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(185px, 100%), 1fr));
+      gap: var(--space-sm);
+    }
+    .kpi-tile {
+      background: var(--surface-container);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      border-bottom: 2px solid transparent;
+    }
+    .kpi-tile.is-active {
+      border-bottom: var(--indicator);
+    }
+    .kpi-label {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      font-weight: 500;
+    }
+    .kpi-value {
+      font-family: var(--font-label);
+      font-weight: 300;
+      font-size: 1.75rem;
+      line-height: 1.15;
+      color: var(--on-surface);
+      font-variant-numeric: tabular-nums;
+      direction: ltr;
+      text-align: start;
+    }
+    .kpi-sub {
+      font-size: var(--label-size);
+      color: var(--secondary);
+    }
+
+    /* Quick jump nav */
+    .jump-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      padding-top: var(--space-sm);
+      border-top: var(--rule);
+    }
+    .jump-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+    }
+    .jump-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding: 0 var(--space-md);
+      background: var(--surface-container);
+      color: var(--on-surface);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border-bottom: 2px solid transparent;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .jump-link:hover {
+      background: var(--surface-container-high);
+      border-bottom-color: var(--primary);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-lg);
+      border-radius: var(--rounded);
+      font-size: 0.9375rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+    .btn-primary:hover {
+      background: color-mix(in srgb, var(--primary), var(--on-surface) 20%);
+    }
+    .btn-secondary {
+      background: var(--background);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+    .btn-secondary:hover {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    .btn-ghost {
+      background: var(--surface-container);
+      color: var(--on-surface);
+      border-color: var(--outline-variant);
+    }
+    .btn-ghost:hover {
+      background: var(--surface-container-high);
+    }
+    .btn-sm {
+      min-height: 38px;
+      padding: var(--space-xs) var(--space-md);
+      font-size: 0.875rem;
+    }
+
+    /* Sections */
+    .unit-section {
+      display: grid;
+      gap: var(--space-xl);
+      padding-top: var(--space-lg);
+      border-top: 2px solid var(--on-surface);
+    }
+    .section-head {
+      border-bottom: var(--rule);
+      padding-bottom: var(--space-md);
+      display: grid;
+      gap: var(--space-xs);
+    }
+    .section-kicker {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--primary);
+      font-weight: 600;
+    }
+    .section-title {
+      font-family: var(--font-headline);
+      font-weight: 300;
+      font-size: var(--headline-size);
+      line-height: 1.25;
+      margin: 0;
+    }
+    .section-title strong {
+      font-weight: 600;
+    }
+    .section-desc {
+      margin: 0;
+      max-width: 65ch;
+      color: var(--on-surface-variant);
+    }
+
+    .sub-block {
+      display: grid;
+      gap: var(--space-md);
+    }
+    .sub-heading {
+      font-family: var(--font-headline);
+      font-weight: 600;
+      font-size: var(--subhead-size);
+      margin: 0;
+      padding-bottom: var(--space-xs);
+      border-bottom: var(--rule);
+      color: var(--on-surface);
+    }
+    .prose {
+      max-width: 65ch;
+      margin: 0;
+      color: var(--on-surface);
+    }
+
+    /* Flat Carbon Layers */
+    .layer {
+      background: var(--surface-container);
+      padding: var(--space-lg);
+      display: grid;
+      gap: var(--space-md);
+    }
+    .layer-nested {
+      background: var(--surface-container-high);
+      padding: var(--space-md);
+    }
+
+    /* Notification / Callout Strip */
+    .callout {
+      background: var(--surface-container);
+      padding: var(--space-md) var(--space-lg);
+      border-inline-start: var(--status-bar-info);
+      display: grid;
+      gap: var(--space-xs);
+    }
+    .callout-pos {
+      border-inline-start: var(--status-bar-pos);
+    }
+    .callout-err {
+      border-inline-start: var(--status-bar-err);
+    }
+    .callout-title {
+      font-weight: 600;
+      font-size: 0.9375rem;
+      color: var(--on-surface);
+    }
+
+    /* Two-column asymmetrical grids */
+    .split-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+    .split-grid-equal {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+
+    /* Metric cards */
+    .metric-card {
+      background: var(--surface-container);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      border-top: 2px solid var(--outline-variant);
+    }
+    .metric-card.is-focal {
+      border-top-color: var(--primary);
+    }
+    .metric-name {
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--on-surface);
+    }
+    .metric-en {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      direction: ltr;
+      text-align: start;
+    }
+    .math-box {
+      background: var(--background);
+      padding: var(--space-sm) var(--space-md);
+      border: var(--rule);
+      direction: ltr;
+      text-align: center;
+      overflow-x: auto;
+    }
+
+    /* Interactive Confusion Matrix */
+    .cm-inputs-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-sm);
+    }
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .field-label {
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--on-surface-variant);
+    }
+    .field-input {
+      height: 42px;
+      padding: 0 var(--space-md);
+      background: var(--background);
+      border: none;
+      border-bottom: var(--field-rule);
+      border-radius: var(--rounded);
+      color: var(--on-surface);
+      font-family: var(--font-label);
+      font-size: 1rem;
+      direction: ltr;
+      text-align: start;
+      width: 100%;
+    }
+    .field-input:focus {
+      border-bottom: 2px solid var(--primary);
+      outline: none;
+    }
+
+    .cm-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--background);
+      font-size: 0.9375rem;
+    }
+    .cm-table th, .cm-table td {
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--rule);
+      text-align: center;
+    }
+    .cm-table thead th {
+      background: var(--surface-container-high);
+      font-weight: 600;
+      font-size: var(--label-size);
+      color: var(--on-surface);
+    }
+    .cm-cell-tp {
+      background: var(--positive-bg);
+      color: var(--positive);
+      font-weight: 600;
+    }
+    .cm-cell-tn {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-weight: 600;
+    }
+    .cm-cell-err {
+      background: var(--error-bg);
+      color: var(--error);
+      font-weight: 600;
+    }
+    .cm-cell-fp {
+      background: var(--warning-bg);
+      color: var(--on-surface);
+      font-weight: 600;
+    }
+    .cm-num {
+      font-family: var(--font-label);
+      font-size: 1.125rem;
+      display: block;
+      direction: ltr;
+    }
+
+    .live-metrics-list {
+      display: grid;
+      gap: var(--space-sm);
+    }
+    .live-metric-row {
+      background: var(--background);
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--rule);
+      display: grid;
+      gap: var(--space-xs);
+    }
+    .live-metric-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: var(--space-sm);
+    }
+    .live-metric-val {
+      font-family: var(--font-label);
+      font-weight: 600;
+      color: var(--primary);
+      direction: ltr;
+    }
+    .bar-track {
+      height: 6px;
+      background: var(--surface-container-high);
+      width: 100%;
+    }
+    .bar-fill {
+      height: 100%;
+      background: var(--primary);
+      transition: width var(--dur-short) var(--ease-out);
+    }
+
+    /* Data tables */
+    .data-table-wrap {
+      overflow-x: auto;
+      background: var(--background);
+      border-top: 2px solid var(--on-surface);
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9375rem;
+    }
+    .data-table th, .data-table td {
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--rule);
+      text-align: start;
+      vertical-align: top;
+    }
+    .data-table thead th {
+      background: var(--surface-container-high);
+      font-weight: 600;
+      font-size: 0.8125rem;
+      color: var(--on-surface);
+    }
+    .data-table tbody tr:nth-child(even) {
+      background: var(--surface-container-low);
+    }
+    .data-table .num-col {
+      font-family: var(--font-label);
+      direction: ltr;
+      text-align: start;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Code blocks (LTR always) */
+    .code-panel {
+      background: var(--code-bg);
+      color: var(--code-fg);
+      border-top: 2px solid var(--primary);
+      direction: ltr;
+      text-align: left;
+    }
+    .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: 1px solid var(--on-surface-variant);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--code-muted);
+    }
+    .copy-btn {
+      background: transparent;
+      color: var(--code-fg);
+      border: 1px solid var(--outline);
+      border-radius: var(--rounded);
+      padding: var(--space-xs) var(--space-sm);
+      font-family: var(--font-body);
+      font-size: var(--label-size);
+      cursor: pointer;
+      min-height: 32px;
+      direction: rtl;
+    }
+    .copy-btn:hover {
+      background: var(--on-surface-variant);
+    }
+    pre.code-body {
+      margin: 0;
+      padding: var(--space-md);
+      overflow-x: auto;
+      font-family: var(--font-label);
+      font-size: 0.875rem;
+      line-height: 1.55;
+      tab-size: 4;
+    }
+    code.inline-code {
+      font-family: var(--font-label);
+      font-size: 0.875em;
+      background: var(--surface-container-high);
+      color: var(--on-surface);
+      padding: 0.1rem 0.35rem;
+      border-radius: var(--rounded);
+      direction: ltr;
+      unicode-bidi: isolate;
+      display: inline-block;
+    }
+
+    /* Chart containers */
+    .chart-card {
+      background: var(--surface-container);
+      padding: var(--space-lg);
+      display: grid;
+      gap: var(--space-md);
+    }
+    .chart-wrap {
+      position: relative;
+      min-height: 340px;
+      background: var(--background);
+      padding: var(--space-md);
+      border: var(--rule);
+    }
+
+    /* Inline interactive switcher tabs (scoped strictly to lab panels) */
+    .lab-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      border-bottom: var(--rule);
+      gap: var(--space-xs);
+    }
+    .lab-tab {
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--on-surface-variant);
+      font-weight: 500;
+      font-size: 0.9375rem;
+      cursor: pointer;
+      transition: color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .lab-tab:hover {
+      color: var(--on-surface);
+      background: var(--surface-container-high);
+    }
+    .lab-tab.is-active {
+      color: var(--primary);
+      font-weight: 600;
+      border-bottom: var(--indicator);
+    }
+
+    /* Slider control */
+    .slider-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: var(--space-md);
+      align-items: end;
+    }
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--primary);
+      height: 36px;
+      cursor: pointer;
+    }
+
+    /* Quiz System */
+    .quiz-section {
+      background: var(--surface-container);
+      padding: var(--space-lg);
+      border-top: 2px solid var(--primary);
+      display: grid;
+      gap: var(--space-lg);
+    }
+    .quiz-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-md);
+      padding-bottom: var(--space-md);
+      border-bottom: var(--rule);
+    }
+    .quiz-score-pill {
+      font-family: var(--font-label);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      background: var(--background);
+      padding: var(--space-xs) var(--space-md);
+      border-bottom: var(--indicator);
+      direction: ltr;
+    }
+    .quiz-list {
+      display: grid;
+      gap: var(--space-md);
+    }
+    .q-card {
+      background: var(--background);
+      padding: var(--space-lg);
+      border: var(--rule);
+      display: grid;
+      gap: var(--space-md);
+    }
+    .q-card.is-correct {
+      border-inline-start: var(--status-bar-pos);
+    }
+    .q-card.is-wrong {
+      border-inline-start: var(--status-bar-err);
+    }
+    .q-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: var(--space-sm);
+    }
+    .q-num {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--primary);
+      font-weight: 600;
+    }
+    .q-status {
+      font-size: var(--label-size);
+      font-weight: 600;
+    }
+    .q-status.ok { color: var(--positive); }
+    .q-status.bad { color: var(--error); }
+    .q-stem {
+      margin: 0;
+      font-weight: 600;
+      font-size: 1.03125rem;
+      color: var(--on-surface);
+    }
+    .q-options {
+      display: grid;
+      gap: var(--space-sm);
+    }
+    .q-opt {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      width: 100%;
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded);
+      color: var(--on-surface);
+      text-align: start;
+      font-size: 0.9375rem;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .q-opt:hover:not(:disabled) {
+      background: var(--surface-container-high);
+      border-color: var(--primary);
+    }
+    .q-opt:disabled {
+      cursor: default;
+    }
+    .q-opt.opt-correct {
+      background: var(--positive-bg);
+      border-color: var(--positive);
+      color: var(--on-surface);
+      font-weight: 600;
+    }
+    .q-opt.opt-wrong {
+      background: var(--error-bg);
+      border-color: var(--error);
+      color: var(--on-surface);
+    }
+    .q-opt-letter {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      min-width: 1.5rem;
+      color: var(--on-surface-variant);
+    }
+    .q-feedback {
+      background: var(--surface-container);
+      padding: var(--space-sm) var(--space-md);
+      font-size: 0.9375rem;
+      color: var(--on-surface);
+      border-inline-start: 3px solid var(--outline);
+      display: none;
+    }
+    .q-feedback.is-visible {
+      display: block;
+    }
+    .q-feedback.ok {
+      border-inline-start-color: var(--positive);
+    }
+    .q-feedback.bad {
+      border-inline-start-color: var(--error);
+    }
+
+    /* Filter row in Final Exam */
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+      align-items: center;
+    }
+
+    /* Footer */
+    .page-footer {
+      border-top: var(--rule);
+      padding: var(--space-lg) 0 var(--space-2xl);
+      color: var(--on-surface-variant);
+      font-size: 0.875rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 860px) {
+      .split-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-md);
+        gap: var(--space-lg);
+      }
+      .cm-inputs-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .layer, .quiz-section, .chart-card {
+        padding: var(--space-md);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
 </head>
 <body>
-<header>
-  <div class="wrap">
-    <div class="eyebrow">نسخة شاملة ومحدثة 100% • مقرر تحليل وتمثيل البيانات</div>
-    <h1>الفصل الثالث عشر: التعلم الآلي بإشراف - الجزء الثالث (تقييم وبناء المصنفات)</h1>
-    <p>يغطي مصفوفة الارتباك (TP, TN, FP, FN) للثنائي ومتعدد الفئات، مقاييس الكفاءة الستة (Accuracy, Precision, NPV, Recall, Specificity, F1-score)، طرق المتوسط (Macro, Weighted, Micro)، منحنى ROC و AUC، والتطبيق البرمجي الشامل بـ Scikit-learn</p>
-    <nav>
-      <button class="active" data-tab="summary">الشرح والقوانين والأكواد (100%)</button>
-      <button data-tab="tables">ملخص القوانين والمقارنات</button>
-      <button data-tab="terms">قاموس المصطلحات والدوال</button>
-      <button data-tab="cards">البطاقات (28)</button>
-      <button data-tab="quiz">الاختبار العشوائي (25)</button>
-    </nav>
-  </div>
-</header>
+  <main class="page-grid" id="top">
+    <!-- HEADER -->
+    <header class="hero-header">
+      <div class="kicker-row">
+        <span class="tag">الفصل الثالث عشر</span>
+        <span class="tag tag-neutral">التعلم الآلي بإشراف — الجزء الثالث</span>
+        <span class="mono-meta">CH13 // UNITS 1–3 + 45 QUESTIONS</span>
+      </div>
 
-<main class="wrap">
-  <section id="summary" class="panel active">
-    <div class="card">
-      <h2>خريطة الفصل الثالث عشر (الوحدات الثلاث الكاملة)</h2>
-      <div class="grid">
-        <div>
-          <span class="tag">الوحدة الأولى</span>
-          <h3>مصفوفة الارتباك، المقاييس، ومنحنى ROC</h3>
-          <p>المكونات الأربعة لمصفوفة الارتباك، قوانين المقاييس الستة، مسألة الفئات المتعددة (الأرقام 0-9)، طرق الدمج (<span dir="ltr">Macro, Weighted, Micro</span>)، ومنحنى <span dir="ltr">ROC</span> والمساحة <span dir="ltr">AUC</span>.</p>
+      <h1 class="headline">مرجع المذاكرة والاختبار التفاعلي: <strong>تقييم نماذج التصنيف وبناء المصنفات التطبيقية</strong></h1>
+
+      <p class="standfirst">
+        دليل دراسي شامل يغطي الوحدات الثلاث للفصل الثالث عشر بالترتيب: أساسيات قياس كفاءة التصنيف ومصفوفة الارتباك ومنحنى <bdi dir="ltr">ROC</bdi>، ثم إعداد البيانات وتطبيق مصنفات <bdi dir="ltr">K-NN</bdi> و <bdi dir="ltr">Naive Bayes</bdi> و <bdi dir="ltr">SVM</bdi>، وصولاً إلى <bdi dir="ltr">Decision Tree</bdi> و <bdi dir="ltr">Random Forests</bdi> وأدوات التقييم في <bdi dir="ltr">scikit-learn</bdi> — مع مختبرات تفاعلية و45 سؤالاً بتصحيح فوري وشرح مفصل.
+      </p>
+
+      <div class="kpi-grid" aria-label="ملخص التقدم في الاختبارات">
+        <div class="kpi-tile is-active">
+          <span class="kpi-label">الإجمالي المكتمل</span>
+          <span class="kpi-value" id="kpi-total">0 / 45</span>
+          <span class="kpi-sub" id="kpi-total-pct">الدقة الكلية: —</span>
         </div>
-        <div>
-          <span class="tag">الوحدة الثانية</span>
-          <h3>التطبيق البرمجي لـ K-NN و Naive Bayes و SVM</h3>
-          <p>تقسيم البيانات مع المعامل <span dir="ltr">stratify=target</span>، وبناء وتدريب وتقييم مصنفات <span dir="ltr">KNeighborsClassifier</span>، و <span dir="ltr">GaussianNB</span>، و <span dir="ltr">SVC (linear &amp; poly)</span>.</p>
+        <div class="kpi-tile">
+          <span class="kpi-label">اختبار الوحدة الأولى</span>
+          <span class="kpi-value" id="kpi-u1">0 / 10</span>
+          <span class="kpi-sub">مقاييس التقييم و ROC</span>
         </div>
-        <div>
-          <span class="tag">الوحدة الثالثة</span>
-          <h3>التطبيق البرمجي للأشجار والغابات والتقارير المرئية</h3>
-          <p>بناء <span dir="ltr">DecisionTreeClassifier</span> و <span dir="ltr">RandomForestClassifier</span> وأثر <span dir="ltr">n_estimators</span>، وعرض <span dir="ltr">ConfusionMatrixDisplay</span> و <span dir="ltr">classification_report</span> ومنحنيات <span dir="ltr">roc_curve</span>.</p>
+        <div class="kpi-tile">
+          <span class="kpi-label">اختبار الوحدة الثانية</span>
+          <span class="kpi-value" id="kpi-u2">0 / 10</span>
+          <span class="kpi-sub">K-NN و NB و SVM</span>
+        </div>
+        <div class="kpi-tile">
+          <span class="kpi-label">اختبار الوحدة الثالثة</span>
+          <span class="kpi-value" id="kpi-u3">0 / 10</span>
+          <span class="kpi-sub">الأشجار والغابات والتقارير</span>
+        </div>
+        <div class="kpi-tile">
+          <span class="kpi-label">الاختبار الشامل للفصل</span>
+          <span class="kpi-value" id="kpi-final">0 / 15</span>
+          <span class="kpi-sub">تقييم شامل للوحدات الثلاث</span>
         </div>
       </div>
-    </div>
 
-    <!-- ==================== الوحدة الأولى ==================== -->
-    <details open>
-      <summary>الوحدة الأولى: مصفوفة الارتباك (Confusion Matrix)، مقاييس الكفاءة الستة، الفئات المتعددة، ومنحنى ROC &amp; AUC</summary>
-      <div class="details-body">
-        <h3>1) مصفوفة الارتباك الثنائية (<span dir="ltr">Binary Confusion Matrix</span>) ومكوناتها الأربعة</h3>
-        <ul>
-          <li><b>مفهوم مصفوفة الارتباك (<span dir="ltr">Confusion Matrix</span>):</b> هي جدول يقارن بين <b>الفئات الحقيقية الفعلية (<span dir="ltr">Actual / True Classes</span>)</b> و<b>الفئات المتوقعة من المصنف (<span dir="ltr">Predicted Classes</span>)</b> لتوضيح أين أصاب المصنف وأين أخطأ بالتفصيل.</li>
-          <li><b>المكونات الأربعة الأساسية لمصفوفة الارتباك الثنائية:</b>
-            <ol>
-              <li><b>1. إيجابي صحيح (<span dir="ltr">True Positive - TP</span>):</b> العينة <b>موجبة فعلياً</b> ($1$)، وتوقعها المصنف بشكل صحيح على أنها <b>موجبة</b> ($1$) (مثلاً: مريض بالسكري وشخّصه النموذج بأنه مريض).</li>
-              <li><b>2. سلبي صحيح (<span dir="ltr">True Negative - TN</span>):</b> العينة <b>سالبة فعلياً</b> ($0$)، وتوقعها المصنف بشكل صحيح على أنها <b>سالبة</b> ($0$) (مثلاً: شخص سليم وشخّصه النموذج بأنه سليم).</li>
-              <li><b>3. إيجابي كاذب (<span dir="ltr">False Positive - FP</span>) — (خطأ من النوع الأول <span dir="ltr">Type I Error</span>):</b> العينة <b>سالبة فعلياً</b> ($0$ سليم)، ولكن أخطأ المصنف وتوقع أنها <b>موجبة</b> ($1$ مريض) (إنذار كاذب!).</li>
-              <li><b>4. سلبي كاذب (<span dir="ltr">False Negative - FN</span>) — (خطأ من النوع الثاني <span dir="ltr">Type II Error</span>):</b> العينة <b>موجبة فعلياً</b> ($1$ مريض)، ولكن أخطأ المصنف وتوقع أنها <b>سالبة</b> ($0$ سليم) (وهو الأخطر طبياً!).</li>
-            </ol>
-          </li>
-        </ul>
-
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
-
-        <h3>2) القوانين الرياضية الستة لمقاييس كفاءة التصنيف (حفظ 100% للاختبار!)</h3>
-        <div class="exam-alert">
-          <b>🔥🔥 سؤال امتحاني مؤكد: احفظي القوانين الستة التالية وطريقة حسابها من أرقام مصفوفة الارتباك:</b>
+      <nav class="jump-bar" aria-label="التنقل السريع بين الوحدات والاختبارات">
+        <div class="jump-links">
+          <a class="jump-link" href="#unit-1">الوحدة 1: مقاييس التقييم</a>
+          <a class="jump-link" href="#quiz-1">اختبار الوحدة 1</a>
+          <a class="jump-link" href="#unit-2">الوحدة 2: K-NN و NB و SVM</a>
+          <a class="jump-link" href="#quiz-2">اختبار الوحدة 2</a>
+          <a class="jump-link" href="#unit-3">الوحدة 3: الأشجار و ROC</a>
+          <a class="jump-link" href="#quiz-3">اختبار الوحدة 3</a>
+          <a class="jump-link" href="#final-exam">الاختبار الشامل (15 سؤالاً)</a>
         </div>
-        <table>
-          <thead>
-            <tr>
-              <th>اسم المقياس</th>
-              <th>المصطلح الإنجليزي والرموز البديلة</th>
-              <th>المعادلة الرياضية</th>
-              <th>المعنى الدقيق للمقياس</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><b>1. الدقة الكلية</b></td>
-              <td dir="ltr"><b>Accuracy</b></td>
-              <td dir="ltr">$\frac{TP + TN}{TP + TN + FP + FN}$</td>
-              <td>نسبة جميع التوقعات الصحيحة (الموجبة والسالبة) من إجمالي العينات الكلي.</td>
-            </tr>
-            <tr>
-              <td><b>2. الضبط / القيمة التنبؤية الإيجابية</b></td>
-              <td dir="ltr"><b>Precision</b><br><small>(Positive Predictive Value - <b>PPV</b>)</small></td>
-              <td dir="ltr">$\frac{TP}{TP + FP}$</td>
-              <td>من بين كل ما <b>توقع المصنف أنه موجب</b>، كم كانت نسبة الموجب الصحيح فعلياً؟</td>
-            </tr>
-            <tr>
-              <td><b>3. القيمة التنبؤية السلبية</b></td>
-              <td dir="ltr"><b>NPV</b><br><small>(Negative Predictive Value)</small></td>
-              <td dir="ltr">$\frac{TN}{TN + FN}$</td>
-              <td>من بين كل ما <b>توقع المصنف أنه سالب</b>، كم كانت نسبة السالب الصحيح فعلياً؟</td>
-            </tr>
-            <tr>
-              <td><b>4. الاستدعاء / الحساسية</b></td>
-              <td dir="ltr"><b>Recall / Sensitivity</b><br><small>(True Positive Rate - <b>TPR</b>)</small></td>
-              <td dir="ltr">$\frac{TP}{TP + FN}$</td>
-              <td>من بين جميع <b>العينات الموجبة الفعلية في الواقع</b>، كم نجح المصنف في اكتشافه؟</td>
-            </tr>
-            <tr>
-              <td><b>5. الخصوصية</b></td>
-              <td dir="ltr"><b>Specificity</b><br><small>(True Negative Rate - <b>TNR</b>)</small></td>
-              <td dir="ltr">$\frac{TN}{TN + FP}$</td>
-              <td>من بين جميع <b>العينات السالبة الفعلية في الواقع</b>، كم نجح المصنف في تشخيصه كسالب؟</td>
-            </tr>
-            <tr>
-              <td><b>6. مقياس F1 المتوازن</b></td>
-              <td dir="ltr"><b>F1-Score</b></td>
-              <td dir="ltr">$2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}$</td>
-              <td><b>المتوسط التوافقي (<span dir="ltr">Harmonic Mean</span>)</b> بين الـ <span dir="ltr">Precision</span> والـ <span dir="ltr">Recall</span> (ممتاز للبيانات غير المتوازنة).</td>
-            </tr>
-          </tbody>
-        </table>
+        <div style="display:flex; gap: var(--space-sm); flex-wrap: wrap;">
+          <button type="button" class="btn btn-ghost btn-sm" onclick="exportSummaryReport()">تصدير تقرير النتائج</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="reset-all-btn" onclick="resetAllProgress(this)">إعادة ضبط الإجابات</button>
+        </div>
+      </nav>
+    </header>
 
-        <div class="step-box">
-          <b>مسألة حسابية شاملة على المقاييس الستة (مهمة جداً للاختبار!):</b><br>
-          لنفترض أن مصنفاً طبياً اختبر $N = 100$ شخص، فكانت عناصر مصفوفة الارتباك كالتالي:<br>
-          $\mathbf{TP = 40}$ ، $\mathbf{TN = 30}$ ، $\mathbf{FP = 10}$ ، $\mathbf{FN = 20}$:<br>
-          1) <b>الدقة الكلية (<span dir="ltr">Accuracy</span>):</b> $\frac{40 + 30}{40 + 30 + 10 + 20} = \frac{70}{100} = \mathbf{0.70 \text{ (70\%)}}$.<br>
-          2) <b>الضبط (<span dir="ltr">Precision / PPV</span>):</b> $\frac{TP}{TP + FP} = \frac{40}{40 + 10} = \frac{40}{50} = \mathbf{0.80 \text{ (80\%)}}$.<br>
-          3) <b>القيمة التنبؤية السلبية (<span dir="ltr">NPV</span>):</b> $\frac{TN}{TN + FN} = \frac{30}{30 + 20} = \frac{30}{50} = \mathbf{0.60 \text{ (60\%)}}$.<br>
-          4) <b>الاستدعاء / الحساسية (<span dir="ltr">Recall / Sensitivity</span>):</b> $\frac{TP}{TP + FN} = \frac{40}{40 + 20} = \frac{40}{60} \approx \mathbf{0.667 \text{ (66.7\%)}}$.<br>
-          5) <b>الخصوصية (<span dir="ltr">Specificity</span>):</b> $\frac{TN}{TN + FP} = \frac{30}{30 + 10} = \frac{30}{40} = \mathbf{0.75 \text{ (75\%)}}$.<br>
-          6) <b>مقياس <span dir="ltr">F1-Score</span>:</b> $2 \times \frac{0.80 \times 0.667}{0.80 + 0.667} = \frac{1.067}{1.467} \approx \mathbf{0.727 \text{ (72.7\%)}}$.
+    <!-- ===================================================================== -->
+    <!-- UNIT 1 -->
+    <!-- ===================================================================== -->
+    <section class="unit-section" id="unit-1" aria-labelledby="u1-title">
+      <div class="section-head">
+        <span class="section-kicker">UNIT 01 // CLASSIFICATION METRICS &amp; ROC</span>
+        <h2 class="section-title" id="u1-title">الوحدة الأولى: <strong>أساسيات قياس كفاءة نماذج التصنيف</strong></h2>
+        <p class="section-desc">
+          تأسيس نظري وحسابي كامل لفهم مصفوفة الارتباك الثنائية ومتعددة الفئات، واشتقاق مقاييس الأداء الستة، وقراءة تقرير التصنيف، وتفسير منحنى <bdi dir="ltr">ROC</bdi> وقيم <bdi dir="ltr">AUC</bdi>.
+        </p>
+      </div>
+
+      <!-- 1.1 Binary Confusion Matrix + Interactive Lab -->
+      <div class="sub-block">
+        <h3 class="sub-heading">1.1 مصفوفة الارتباك للتصنيف الثنائي (<bdi dir="ltr">Confusion Matrix</bdi>)</h3>
+        <p class="prose">
+          تعتمد جميع مقاييس تقييم نماذج التصنيف على القيم المستخرجة من <strong>مصفوفة الارتباك</strong>، وهي جدول يعرض الوسوم الحقيقية (<bdi dir="ltr">Actual Labels</bdi>) مقابل التوقعات التي أصدرها النموذج (<bdi dir="ltr">Predictions</bdi>). في التصنيف الثنائي (وجود فئتين فقط: إيجابية <bdi dir="ltr">P</bdi> وسلبية <bdi dir="ltr">N</bdi>) تتكون المصفوفة من أربعة مكونات رئيسية:
+        </p>
+
+        <div class="card-grid">
+          <div class="metric-card is-focal">
+            <div>
+              <div class="metric-name">الإيجابي الصحيح (<bdi dir="ltr">TP — True Positive</bdi>)</div>
+              <p class="prose" style="margin-top:var(--space-xs); color:var(--on-surface-variant);">عدد العينات الإيجابية في الواقع والتي صنفها النموذج بشكل صحيح على أنها إيجابية.</p>
+            </div>
+          </div>
+          <div class="metric-card is-focal">
+            <div>
+              <div class="metric-name">السلبي الصحيح (<bdi dir="ltr">TN — True Negative</bdi>)</div>
+              <p class="prose" style="margin-top:var(--space-xs); color:var(--on-surface-variant);">عدد العينات السلبية في الواقع والتي صنفها النموذج بشكل صحيح على أنها سلبية.</p>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div>
+              <div class="metric-name">الإيجابي الكاذب (<bdi dir="ltr">FP — False Positive</bdi>)</div>
+              <p class="prose" style="margin-top:var(--space-xs); color:var(--on-surface-variant);">عدد العينات السلبية في الواقع التي صنفها النموذج خطأً على أنها إيجابية.</p>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div>
+              <div class="metric-name">السلبي الكاذب (<bdi dir="ltr">FN — False Negative</bdi>)</div>
+              <p class="prose" style="margin-top:var(--space-xs); color:var(--on-surface-variant);">عدد العينات الإيجابية في الواقع التي صنفها النموذج خطأً على أنها سلبية.</p>
+            </div>
+          </div>
         </div>
 
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+        <!-- Interactive Confusion Matrix Lab -->
+        <div class="layer" aria-label="مختبر مصفوفة الارتباك التفاعلي">
+          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:var(--space-sm);">
+            <div>
+              <div class="metric-name">مختبر مصفوفة الارتباك التفاعلي وحاسبة المقاييس</div>
+              <div style="font-size:0.875rem; color:var(--on-surface-variant);">عدّل قيم <bdi dir="ltr">TP, TN, FP, FN</bdi> أو اختر سيناريو جاهزاً لملاحظة تغير جميع المقاييس فوراً.</div>
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:var(--space-xs);">
+              <button type="button" class="btn btn-ghost btn-sm" onclick="applyCMPreset(85, 95, 12, 8)">نموذج متوازن</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="applyCMPreset(10, 940, 10, 40)">بيانات غير متوازنة (فخ الدقة)</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="applyCMPreset(96, 70, 30, 4)">فحص طبي عالي الحساسية</button>
+            </div>
+          </div>
 
-        <h3>3) مصفوفة الارتباك متعددة الفئات (<span dir="ltr">Multi-class Confusion Matrix</span>) ومسألة الأرقام (0-9)</h3>
-        <div class="exam-alert">
-          <b>🌟 كيف نستخرج ($TP, FP, FN, TN$) لأي فئة معينة $k$ (مثل الفئة 0 أو الفئة 7) من مصفوفة متعددة الفئات؟</b><br>
-          إذا كانت الصفوف تمثل الفئات الحقيقية (<span dir="ltr">Actual / True</span>) والأعمدة تمثل الفئات المتوقعة (<span dir="ltr">Predicted</span>):<br>
-          • <b>$TP_k$ (إيجابي صحيح للفئة $k$):</b> هو الرقم الواقع على <b>القطر الرئيسي</b> عند تقاطع الصف $k$ مع العمود $k$.<br>
-          • <b>$FN_k$ (سلبي كاذب للفئة $k$):</b> هو مجموع <b>باقي الأرقام في صف الفئة الحقيقية $k$</b> (باستثناء $TP_k$).<br>
-          • <b>$FP_k$ (إيجابي كاذب للفئة $k$):</b> هو مجموع <b>باقي الأرقام في عمود الفئة المتوقعة $k$</b> (باستثناء $TP_k$).<br>
-          • <b>$TN_k$ (سلبي صحيح للفئة $k$):</b> هو مجموع كافة الأرقام المتبقية في الجدول خارج صف وعمود الفئة $k$.<br>
-          <i>(ملاحظة: إذا كانت المصفوفة المرسومة تضع Predicted على الصفوف و Actual على الأعمدة كما في بعض رسوم الكتاب، فإن مجموع صف التوقع يعطي $TP + FP$ ومجموع عمود الحقيقة يعطي $TP + FN$!).</i>
-        </div>
+          <div class="split-grid">
+            <div style="display:grid; gap:var(--space-md);">
+              <div class="cm-inputs-grid">
+                <div class="field-group">
+                  <label class="field-label" for="cm-tp">True Positive (TP)</label>
+                  <input class="field-input" type="number" id="cm-tp" min="0" value="85" oninput="updateConfusionLab()">
+                </div>
+                <div class="field-group">
+                  <label class="field-label" for="cm-fn">False Negative (FN)</label>
+                  <input class="field-input" type="number" id="cm-fn" min="0" value="8" oninput="updateConfusionLab()">
+                </div>
+                <div class="field-group">
+                  <label class="field-label" for="cm-fp">False Positive (FP)</label>
+                  <input class="field-input" type="number" id="cm-fp" min="0" value="12" oninput="updateConfusionLab()">
+                </div>
+                <div class="field-group">
+                  <label class="field-label" for="cm-tn">True Negative (TN)</label>
+                  <input class="field-input" type="number" id="cm-tn" min="0" value="95" oninput="updateConfusionLab()">
+                </div>
+              </div>
 
-        <div class="step-box">
-          <b>مثال مسألة الأرقام (الفئة 0 والفئة 7) كما في الملزمة:</b><br>
-          • <b>بالنسبة للفئة (0):</b> إذا كان العنصر القطري (الصحيح) للفئة 0 هو $TP_0 = 37$، ولم يخطئ المصنف في أي عنصر في صفها أو عمودها ($FP_0 = 0$ و $FN_0 = 0$)، فإن:<br>
-          - $\text{Precision}_0 = \frac{37}{37 + 0} = \mathbf{1.0 \text{ (100\%)}}$ ، و $\text{Recall}_0 = \frac{37}{37 + 0} = \mathbf{1.0 \text{ (100\%)}}$.<br>
-          • <b>بالنسبة للفئة (7):</b> إذا كان العنصر القطري الصحيح $TP_7 = 37$، وكان مجموع الأخطاء في التوقع كـ 7 هو $FP_7 = 1$، ومجموع الأخطاء في الحقيقة لـ 7 هو $FN_7 = 2$:<br>
-          - $\text{Precision}_7 = \frac{37}{37 + 1} = \frac{37}{38} \approx \mathbf{0.974}$ ، و $\text{Recall}_7 = \frac{37}{37 + 2} = \frac{37}{39} \approx \mathbf{0.949}$.
-        </div>
+              <table class="cm-table" aria-label="جدول مصفوفة الارتباك المحسوبة">
+                <thead>
+                  <tr>
+                    <th>الوسم الحقيقي \ التوقع</th>
+                    <th>توقع إيجابي (<bdi dir="ltr">P</bdi>)</th>
+                    <th>توقع سلبي (<bdi dir="ltr">N</bdi>)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>حقيقي إيجابي (<bdi dir="ltr">P</bdi>)</th>
+                    <td class="cm-cell-tp"><span class="cm-num" id="cm-disp-tp">85</span><span style="font-size:0.75rem;">TP</span></td>
+                    <td class="cm-cell-err"><span class="cm-num" id="cm-disp-fn">8</span><span style="font-size:0.75rem;">FN</span></td>
+                  </tr>
+                  <tr>
+                    <th>حقيقي سلبي (<bdi dir="ltr">N</bdi>)</th>
+                    <td class="cm-cell-fp"><span class="cm-num" id="cm-disp-fp">12</span><span style="font-size:0.75rem;">FP</span></td>
+                    <td class="cm-cell-tn"><span class="cm-num" id="cm-disp-tn">95</span><span style="font-size:0.75rem;">TN</span></td>
+                  </tr>
+                </tbody>
+              </table>
 
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+              <div class="callout" id="cm-insight-box">
+                <span class="callout-title">تحليل الأداء المباشر</span>
+                <span id="cm-insight-text">إجمالي العينات 200 عينة؛ يحقق النموذج توازناً جيداً بين استدعاء الإيجابيات (Recall) ودقة التنبؤات الإيجابية (Precision).</span>
+              </div>
+            </div>
 
-        <h3>4) طرق دمج النتائج في تقرير التصنيف (<span dir="ltr">Macro, Weighted, and Micro Average</span>)</h3>
-        <ul>
-          <li>عند تقييم مصنف متعدد الفئات، يعرض تقرير التصنيف (<code dir="ltr">classification_report</code>) ثلاث طرق لدمج وحساب متوسط المقاييس عبر الفئات:
-            <ol>
-              <li><b>1. المتوسط الكلي البسيط (<span dir="ltr">Macro Average</span>):</b>
-                <ul>
-                  <li>يحسب المقياس (مثل <span dir="ltr">Precision</span> أو <span dir="ltr">F1</span>) لكل فئة على حدة، ثم يأخذ <b>المتوسط الحسابي البسيط غير الموزون</b> لها: $\frac{M_1 + M_2 + \dots + M_C}{C}$.</li>
-                  <li><b>سمته المميزة:</b> يعطي <b>نفس الوزن والأهمية لجميع الفئات بالتساوي</b> بغض النظر عن عدد عينات كل فئة.</li>
-                </ul>
-              </li>
-              <li><b>2. المتوسط الموزون (<span dir="ltr">Weighted Average</span>):</b>
-                <ul>
-                  <li>يحسب المقياس لكل فئة، ثم يضرب مقياس كل فئة في <b>عدد عيناتها الفعلية (<span dir="ltr">Support</span>)</b> ويقسم على إجمالي عدد العينات الكلي.</li>
-                  <li><b>سمته المميزة:</b> يأخذ في الاعتبار <b>عدم توازن الفئات (<span dir="ltr">Class Imbalance</span>)</b>، فتكون الفئات ذات العينات الأكثر صاحبة التأثير الأكبر في المتوسط.</li>
-                </ul>
-              </li>
-              <li><b>3. المتوسط الجزئي / الدقيق (<span dir="ltr">Micro Average</span>):</b>
-                <ul>
-                  <li>يجمع إجمالي $TP$ وإجمالي $FP$ وإجمالي $FN$ عبر <b>جميع الفئات معاً أولاً</b>، ثم يطبق القانون مرة واحدة: $\frac{\sum TP_i}{\sum TP_i + \sum FP_i}$ (وفي التصنيف أحادي التسمية تتساوى قيمة <span dir="ltr">Micro Average</span> مع الدقة الكلية <span dir="ltr">Accuracy</span>!).</li>
-                </ul>
-              </li>
-            </ol>
-          </li>
-        </ul>
-
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
-
-        <h3>5) منحنى (<span dir="ltr">ROC Curve</span>) والمساحة تحت المنحنى (<span dir="ltr">AUC</span>)</h3>
-        <div class="exam-alert">
-          <b>🔥🔥 نقاط امتحانية هامة جداً حول منحنى <span dir="ltr">ROC</span> والمساحة <span dir="ltr">AUC</span>:</b><br>
-          • <b>ما هو منحنى <span dir="ltr">ROC</span> (<span dir="ltr">Receiver Operating Characteristic</span>)؟</b> هو رسم بياني يوضح أداء المصنف الثنائي عند تغيير عتبة التصنيف (<span dir="ltr">Threshold</span>)، ويربط بين:<br>
-          &nbsp;&nbsp;- <b>المحور الرأسي ($Y$):</b> معدل الإيجابي الصحيح <b><span dir="ltr">TPR (True Positive Rate = Recall / Sensitivity)</span></b>.<br>
-          &nbsp;&nbsp;- <b>المحور الأفقي ($X$):</b> معدل الإيجابي الكاذب <b><span dir="ltr">FPR (False Positive Rate = $1 - \text{Specificity} = \frac{FP}{FP + TN}$)</span></b>.<br>
-          • <b>ما هي <span dir="ltr">AUC</span> (<span dir="ltr">Area Under the Curve</span>)؟ وما دلالات قيمها الأربع في الملزمة؟</b><br>
-          هي المساحة الواقعة تحت منحنى <span dir="ltr">ROC</span> وتتراوح بين $0$ و $1$:<br>
-          1) <b>$\text{AUC} = 1.0$:</b> مصنف <b>مثالي تماماً (<span dir="ltr">Perfect Classifier</span>)</b> يفصل بين الفئتين بنسبة 100% دون أي خطأ.<br>
-          2) <b>$0.5 < \text{AUC} < 1.0$:</b> مصنف <b>جيد وأفضل من التخمين العشوائي</b> (وكلما اقتربت من $1$ كان المصنف أفضل).<br>
-          3) <b>$\text{AUC} = 0.5$:</b> مصنف <b>عشوائي تماماً (<span dir="ltr">Random Classifier</span>)</b> لا يمتلك أي قدرة تمييزية (يمثله الخط القطري المتقطع).<br>
-          4) <b>$\text{AUC} < 0.5$:</b> مصنف <b>أسوأ من التخمين العشوائي</b> (يعكس الفئات).
+            <div class="live-metrics-list" aria-label="المقاييس الستة المحسوبة">
+              <div class="live-metric-row">
+                <div class="live-metric-top"><span>الدقة الكلية (<bdi dir="ltr">Accuracy</bdi>)</span><span class="live-metric-val" id="m-acc">90.00%</span></div>
+                <div class="bar-track"><div class="bar-fill" id="bar-acc" style="width:90%"></div></div>
+              </div>
+              <div class="live-metric-row">
+                <div class="live-metric-top"><span>الضبط / القيمة التنبؤية الموجبة (<bdi dir="ltr">Precision / PPV</bdi>)</span><span class="live-metric-val" id="m-prec">87.63%</span></div>
+                <div class="bar-track"><div class="bar-fill" id="bar-prec" style="width:87.63%"></div></div>
+              </div>
+              <div class="live-metric-row">
+                <div class="live-metric-top"><span>الحساسية / الاستدعاء (<bdi dir="ltr">Recall / Sensitivity</bdi>)</span><span class="live-metric-val" id="m-rec">91.40%</span></div>
+                <div class="bar-track"><div class="bar-fill" id="bar-rec" style="width:91.4%"></div></div>
+              </div>
+              <div class="live-metric-row">
+                <div class="live-metric-top"><span>النوعية (<bdi dir="ltr">Specificity</bdi>)</span><span class="live-metric-val" id="m-spec">88.79%</span></div>
+                <div class="bar-track"><div class="bar-fill" id="bar-spec" style="width:88.79%"></div></div>
+              </div>
+              <div class="live-metric-row">
+                <div class="live-metric-top"><span>القيمة التنبؤية السالبة (<bdi dir="ltr">NPV</bdi>)</span><span class="live-metric-val" id="m-npv">92.23%</span></div>
+                <div class="bar-track"><div class="bar-fill" id="bar-npv" style="width:92.23%"></div></div>
+              </div>
+              <div class="live-metric-row">
+                <div class="live-metric-top"><span>درجة <bdi dir="ltr">F1-score</bdi></span><span class="live-metric-val" id="m-f1">89.47%</span></div>
+                <div class="bar-track"><div class="bar-fill" id="bar-f1" style="width:89.47%"></div></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </details>
 
-    <!-- ==================== الوحدة الثانية ==================== -->
-    <details>
-      <summary>الوحدة الثانية: التطبيق البرمجي لمصنفات K-NN، و Naive Bayes، و SVM على بيانات السكري</summary>
-      <div class="details-body">
-        <h3>1) إعداد وتقسيم البيانات مع المعامل (<span dir="ltr">stratify</span>)</h3>
-        <div class="exam-alert">
-          <b>🌟 سؤال برمجي مهم جداً: ما وظيفة المعامل <code dir="ltr">stratify=target</code> داخل دالة <code dir="ltr">train_test_split</code>؟</b><br>
-          يضمن المعامل <b><code dir="ltr">stratify=target</code></b> (التقسيم الطبقي المتوازن) أن تحتوي كل من مجموعة التدريب ومجموعة الاختبار على <b>نفس النسبة المئوية لتوزيع فئات الهدف ($0$ و $1$)</b> الموجودة في البيانات الأصلية؛ لمنع انحياز التقسيم العشوائي خاصة في البيانات غير المتوازنة!
+      <!-- 1.2 Six Metrics Formulas -->
+      <div class="sub-block">
+        <h3 class="sub-heading">1.2 معادلات مقاييس كفاءة التصنيف الستة</h3>
+        <div class="card-grid">
+          <div class="metric-card is-focal">
+            <div class="metric-name">1. الدقة (<bdi dir="ltr">Accuracy</bdi>)</div>
+            <p class="prose" style="font-size:0.9375rem;">نسبة العينات المصنفة بشكل صحيح (إيجابية وسلبية) من إجمالي العينات الكلي.</p>
+            <div class="math-box">$$\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}$$</div>
+          </div>
+
+          <div class="metric-card is-focal">
+            <div class="metric-name">2. الدقة الإيجابية (<bdi dir="ltr">Precision / PPV</bdi>)</div>
+            <p class="prose" style="font-size:0.9375rem;">نسبة العينات الصحيحة فعلاً من بين جميع العينات التي توقع النموذج أنها إيجابية.</p>
+            <div class="math-box">$$\text{Precision} = \frac{TP}{TP + FP}$$</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-name">3. القيمة التنبؤية السالبة (<bdi dir="ltr">NPV</bdi>)</div>
+            <p class="prose" style="font-size:0.9375rem;">نسبة العينات السلبية الصحيحة من بين جميع العينات التي صنفها النموذج كسلبية.</p>
+            <div class="math-box">$$\text{NPV} = \frac{TN}{TN + FN}$$</div>
+          </div>
+
+          <div class="metric-card is-focal">
+            <div class="metric-name">4. الحساسية / الاستدعاء (<bdi dir="ltr">Sensitivity / Recall</bdi>)</div>
+            <p class="prose" style="font-size:0.9375rem;">نسبة العينات الإيجابية الحقيقية التي نجح النموذج في اكتشافها وتصنيفها بشكل صحيح.</p>
+            <div class="math-box">$$\text{Recall} = \frac{TP}{TP + FN}$$</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-name">5. النوعية (<bdi dir="ltr">Specificity</bdi>)</div>
+            <p class="prose" style="font-size:0.9375rem;">نسبة العينات السلبية التي تم تصنيفها بشكل صحيح إلى إجمالي العينات السلبية الفعلية.</p>
+            <div class="math-box">$$\text{Specificity} = \frac{TN}{TN + FP}$$</div>
+          </div>
+
+          <div class="metric-card is-focal">
+            <div class="metric-name">6. مقياس <bdi dir="ltr">F1-score</bdi></div>
+            <p class="prose" style="font-size:0.9375rem;">المتوسط التوافقي لـ <bdi dir="ltr">Precision</bdi> و <bdi dir="ltr">Recall</bdi>؛ يُعطي قياساً عادلاً للأداء عندما يكون توزيع الفئات غير متوازن.</p>
+            <div class="math-box">$$F_1 = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}$$</div>
+          </div>
         </div>
 
-        <div class="code-box">
-<span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> train_test_split<br><br>
-<span class="cmt"># تقسيم البيانات (80% تدريب و 20% اختبار) مع الحفاظ على توازن نسب الفئات بـ stratify</span><br>
-X_train, X_test, y_train, y_test = train_test_split(<br>
-    features, target, test_size=<span class="num">0.2</span>, random_state=<span class="num">42</span>, stratify=target<br>
-)
-        </div>
-
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
-
-        <h3>2) بناء وتدريب المصنفات الثلاثة: K-NN، و Naive Bayes، و SVM</h3>
-        <ul>
-          <li><b>أولاً: مصنف أقرب الجيران (<span dir="ltr">K-Nearest Neighbors - K-NN</span>):</b>
-            <ul>
-              <li>نستورد الفئة <b><code dir="ltr">KNeighborsClassifier</code></b> من الوحدة <b><code dir="ltr">sklearn.neighbors</code></b>، ونحدد عدد الجيران بالمعامل <code dir="ltr">n_neighbors=3</code>.</li>
-            </ul>
-          </li>
-          <li><b>ثانياً: مصنف بايز الساذج الطبيعي (<span dir="ltr">Gaussian Naive Bayes</span>):</b>
-            <ul>
-              <li>نستورد الفئة <b><code dir="ltr">GaussianNB</code></b> من الوحدة <b><code dir="ltr">sklearn.naive_bayes</code></b> (وهي مخصصة للسمات الرقمية المتصلة التي تتبع التوزيع الطبيعي).</li>
-            </ul>
-          </li>
-          <li><b>ثالثاً: مصنف آلات المتجهات الداعمة (<span dir="ltr">Support Vector Classifier - SVC</span>):</b>
-            <ul>
-              <li>نستورد الفئة <b><code dir="ltr">SVC</code></b> من الوحدة <b><code dir="ltr">sklearn.svm</code></b>، ونحدد نوع دالة النواة عبر المعامل <b><code dir="ltr">kernel</code></b> (مثل <code dir="ltr">kernel='linear'</code> للنواة الخطية، أو <code dir="ltr">kernel='poly'</code> للنواة كثيرة الحدود، أو <code dir="ltr">kernel='rbf'</code>).</li>
-            </ul>
-          </li>
-        </ul>
-
-        <div class="code-box">
-<span class="kw">from</span> sklearn.neighbors <span class="kw">import</span> KNeighborsClassifier<br>
-<span class="kw">from</span> sklearn.naive_bayes <span class="kw">import</span> GaussianNB<br>
-<span class="kw">from</span> sklearn.svm <span class="kw">import</span> SVC<br>
-<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> accuracy_score<br><br>
-<span class="cmt"># 1. مصنف أقرب الجيران (K-NN) عند K = 3</span><br>
-knn = KNeighborsClassifier(n_neighbors=<span class="num">3</span>)<br>
-knn.fit(X_train, y_train)<br>
-y_pred_knn = knn.predict(X_test)<br>
-<span class="kw">print</span>(<span class="str">"KNN Accuracy:"</span>, accuracy_score(y_test, y_pred_knn))<br><br>
-<span class="cmt"># 2. مصنف بايز الساذج (Gaussian Naive Bayes)</span><br>
-nb = GaussianNB()<br>
-nb.fit(X_train, y_train)<br>
-y_pred_nb = nb.predict(X_test)<br>
-<span class="kw">print</span>(<span class="str">"Naive Bayes Accuracy:"</span>, accuracy_score(y_test, y_pred_nb))<br><br>
-<span class="cmt"># 3. مصنف آلات المتجهات الداعمة (SVM) بنواة خطية (linear) وبنواة كثيرة حدود (poly)</span><br>
-svm_lin = SVC(kernel=<span class="str">'linear'</span>, probability=<span class="kw">True</span>)<br>
-svm_lin.fit(X_train, y_train)<br><br>
-svm_poly = SVC(kernel=<span class="str">'poly'</span>, probability=<span class="kw">True</span>)<br>
-svm_poly.fit(X_train, y_train)
+        <div class="callout callout-pos">
+          <span class="callout-title">تنبيه للمذاكرة الدقيقة</span>
+          <span>تذكّر أن <strong>Recall</strong> يركز على الصف الإيجابي الحقيقي (<bdi dir="ltr">TP / (TP + FN)</bdi>) بينما يركز <strong>Specificity</strong> على الصف السلبي الحقيقي (<bdi dir="ltr">TN / (TN + FP)</bdi>)؛ وكلاهما يختلفان عن <bdi dir="ltr">Precision</bdi> و <bdi dir="ltr">NPV</bdi> اللذين يقسمان على أعمدة التوقعات.</span>
         </div>
       </div>
-    </details>
 
-    <!-- ==================== الوحدة الثالثة ==================== -->
-    <details>
-      <summary>الوحدة الثالثة: التطبيق البرمجي لأشجار القرار والغابات العشوائية، وعرض المصفوفة والتقارير ومنحنى ROC</summary>
-      <div class="details-body">
-        <h3>1) بناء وتقييم شجرة القرار (<span dir="ltr">Decision Tree</span>) والغابات العشوائية (<span dir="ltr">Random Forest</span>)</h3>
-        <ul>
-          <li><b>1. شجرة القرار (<code dir="ltr">DecisionTreeClassifier</code>):</b> نستوردها من الوحدة <b><code dir="ltr">sklearn.tree</code></b>.</li>
-          <li><b>2. الغابات العشوائية (<code dir="ltr">RandomForestClassifier</code>):</b> نستوردها من الوحدة <b><code dir="ltr">sklearn.ensemble</code></b>، ونتحكم في عدد الأشجار داخل الغابة عبر المعامل <b><code dir="ltr">n_estimators</code></b>.</li>
-          <li><b>أثر زيادة عدد الأشجار (<code dir="ltr">n_estimators</code>: من $10 \rightarrow 50 \rightarrow 100$):</b>
-            <ul>
-              <li>تُظهر التجربة العملية في الملزمة أن زيادة عدد الأشجار في الغابة العشوائية (مثلاً من 10 أشجار إلى 50 ثم 100 شجرة) يؤدي إلى <b>تحسين دقة التصنيف واستقرار النموذج وتقليل مشكلة الإفراط في التخصيص (<span dir="ltr">Overfitting</span>)</b> مقارنةً بشجرة القرار المفردة!</li>
-            </ul>
-          </li>
-        </ul>
+      <!-- 1.3 Multi-class Confusion Matrix -->
+      <div class="sub-block">
+        <h3 class="sub-heading">1.3 مصفوفة الارتباك للفئات المتعددة (<bdi dir="ltr">Multi-Class Confusion Matrix</bdi>)</h3>
+        <p class="prose">
+          عندما يحتوي التصنيف على أكثر من فئتين (مثل تصنيف صور الأرقام من <bdi dir="ltr">0</bdi> إلى <bdi dir="ltr">9</bdi>)، تضم مصفوفة الارتباك عدداً من الصفوف والأعمدة مساوياً لعدد الفئات. يُعد تركز الأرقام الكبيرة على <strong>القطر الرئيسي</strong> مؤشراً قوياً على جودة النموذج. لحساب <bdi dir="ltr">TP, FP, FN, TN</bdi> لأي فئة، نعتبر تلك الفئة هي الفئة الموجبة وباقي الفئات سالبة:
+        </p>
 
-        <div class="code-box">
-<span class="kw">from</span> sklearn.tree <span class="kw">import</span> DecisionTreeClassifier<br>
-<span class="kw">from</span> sklearn.ensemble <span class="kw">import</span> RandomForestClassifier<br><br>
-<span class="cmt"># 1. تدريب شجرة قرار واحدة</span><br>
-dt = DecisionTreeClassifier(random_state=<span class="num">42</span>)<br>
-dt.fit(X_train, y_train)<br><br>
-<span class="cmt"># 2. تدريب الغابات العشوائية ومقارنة أثر زيادة عدد الأشجار (n_estimators: 10, 50, 100)</span><br>
-rf_10  = RandomForestClassifier(n_estimators=<span class="num">10</span>, random_state=<span class="num">42</span>).fit(X_train, y_train)<br>
-rf_50  = RandomForestClassifier(n_estimators=<span class="num">50</span>, random_state=<span class="num">42</span>).fit(X_train, y_train)<br>
-rf_100 = RandomForestClassifier(n_estimators=<span class="num">100</span>, random_state=<span class="num">42</span>).fit(X_train, y_train)
-        </div>
+        <div class="split-grid">
+          <div class="layer">
+            <div class="metric-name">قاعدة الاستخراج من المصفوفة متعددة الفئات (مثال تصنيف الأرقام 0–9)</div>
+            <div class="lab-tabs" role="tablist" aria-label="اختر فئة المثال">
+              <button type="button" class="lab-tab is-active" id="mc-tab-0" onclick="selectMultiClassExample('0')">مثال الفئة (0)</button>
+              <button type="button" class="lab-tab" id="mc-tab-7" onclick="selectMultiClassExample('7')">مثال الفئة (7)</button>
+            </div>
+            <div id="mc-detail-panel" class="layer-nested">
+              <!-- Populated by JS -->
+            </div>
+          </div>
 
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
-
-        <h3>2) عرض مصفوفة الارتباك مرئياً، وتقرير التصنيف، ورسم منحنى ROC</h3>
-        <div class="exam-alert">
-          <b>🌟 احفظي الدوال الأربع لتقييم وعرض نتائج المصنفات في <code dir="ltr">sklearn.metrics</code>:</b><br>
-          1) <b><code dir="ltr">confusion_matrix(y_test, y_pred)</code>:</b> تحسب مصفوفة الارتباك كأرقام.<br>
-          2) <b><code dir="ltr">ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=...)</code>:</b> ترسم مصفوفة الارتباك بشكل مرئي ملون عند استدعاء <code dir="ltr">.plot()</code>.<br>
-          3) <b><code dir="ltr">classification_report(y_test, y_pred)</code>:</b> تطبع جدولاً نصياً شاملاً يتضمن (<span dir="ltr">precision, recall, f1-score, support</span>) لكل فئة بالإضافة إلى (<span dir="ltr">accuracy, macro avg, weighted avg</span>).<br>
-          4) <b><code dir="ltr">roc_curve(y_test, y_probs)</code> و <code dir="ltr">roc_auc_score(y_test, y_probs)</code>:</b> لحساب إحداثيات منحنى <span dir="ltr">ROC</span> (<code dir="ltr">fpr, tpr, thresholds</code>) وحساب المساحة تحت المنحنى <span dir="ltr">AUC</span>.
-        </div>
-
-        <div class="code-box">
-<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> (<br>
-    confusion_matrix, ConfusionMatrixDisplay,<br>
-    classification_report, roc_curve, roc_auc_score<br>
-)<br><br>
-<span class="cmt"># 1. حساب ورسم مصفوفة الارتباك بشكل مرئي</span><br>
-cm = confusion_matrix(y_test, y_pred)<br>
-disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=[<span class="str">'Normal'</span>, <span class="str">'Diabetic'</span>])<br>
-disp.plot(cmap=<span class="str">'Blues'</span>)<br>
-plt.show()<br><br>
-<span class="cmt"># 2. طباعة تقرير التصنيف الشامل</span><br>
-<span class="kw">print</span>(classification_report(y_test, y_pred))<br><br>
-<span class="cmt"># 3. حساب احتمالات الفئة الموجبة ورسم منحنى ROC وحساب المساحة AUC</span><br>
-y_probs = rf_100.predict_proba(X_test)[:, <span class="num">1</span>]<br>
-fpr, tpr, thresholds = roc_curve(y_test, y_probs)<br>
-auc_val = roc_auc_score(y_test, y_probs)<br><br>
-plt.plot(fpr, tpr, label=<span class="str">f'Random Forest (AUC = {auc_val:.2f})'</span>)<br>
-plt.plot([<span class="num">0</span>, <span class="num">1</span>], [<span class="num">0</span>, <span class="num">1</span>], linestyle=<span class="str">'--'</span>, color=<span class="str">'gray'</span>, label=<span class="str">'Random (AUC = 0.5)'</span>)<br>
-plt.xlabel(<span class="str">'False Positive Rate (FPR)'</span>)<br>
-plt.ylabel(<span class="str">'True Positive Rate (TPR)'</span>)<br>
-plt.legend()<br>
-plt.show()
+          <div class="data-table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>العنصر</th>
+                  <th>كيفية استخراجه من المصفوفة</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="num-col">TP</td>
+                  <td>القيمة الواقعة عند تقاطع صف الفئة مع عمودها (على القطر الرئيسي).</td>
+                </tr>
+                <tr>
+                  <td class="num-col">FP</td>
+                  <td>مجموع القيم في <strong>عمود الفئة</strong> باستثناء القيمة الواقعة على القطر (عينات من فئات أخرى صُنِّفت خطأً ضمن هذه الفئة).</td>
+                </tr>
+                <tr>
+                  <td class="num-col">FN</td>
+                  <td>مجموع القيم في <strong>صف الفئة</strong> باستثناء القيمة الواقعة على القطر (عينات من هذه الفئة صُنِّفت خطأً كفئات أخرى).</td>
+                </tr>
+                <tr>
+                  <td class="num-col">TN</td>
+                  <td>مجموع عناصر القطر الرئيسي لبقية الفئات الأخرى باستثناء قيمة الفئة المدروسة.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-    </details>
-  </section>
 
-  <!-- التبويب الثاني: ملخص القوانين والمقارنات -->
-  <section id="tables" class="panel">
-    <div class="card">
-      <h2>1. الجدول المرجعي الشامل لجميع فئات ودوال التصنيف والتقييم في Scikit-learn</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>الأداة / الفئة البرمجية</th>
-            <th>الوحدة في Scikit-learn</th>
-            <th>الوظيفة وأهم المعاملات</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td dir="ltr"><code>train_test_split</code></td>
-            <td dir="ltr"><code>sklearn.model_selection</code></td>
-            <td>تقسيم البيانات مع <code dir="ltr">stratify=target</code> للحفاظ على توازن نسب الفئات.</td>
-          </tr>
-          <tr>
-            <td dir="ltr"><code>KNeighborsClassifier</code></td>
-            <td dir="ltr"><code>sklearn.neighbors</code></td>
-            <td>مصنف أقرب الجيران؛ يُحدد عدد الجيران بالمعامل <code dir="ltr">n_neighbors=3</code>.</td>
-          </tr>
-          <tr>
-            <td dir="ltr"><code>GaussianNB</code></td>
-            <td dir="ltr"><code>sklearn.naive_bayes</code></td>
-            <td>مصنف بايز الساذج للبيانات الرقمية المتصلة.</td>
-          </tr>
-          <tr>
-            <td dir="ltr"><code>SVC</code></td>
-            <td dir="ltr"><code>sklearn.svm</code></td>
-            <td>مصنف آلات المتجهات الداعمة؛ يحدد نوع النواة بـ <code dir="ltr">kernel='linear'</code> أو <code dir="ltr">'poly'</code> أو <code dir="ltr">'rbf'</code>.</td>
-          </tr>
-          <tr>
-            <td dir="ltr"><code>DecisionTreeClassifier</code></td>
-            <td dir="ltr"><code>sklearn.tree</code></td>
-            <td>مصنف شجرة القرار.</td>
-          </tr>
-          <tr>
-            <td dir="ltr"><code>RandomForestClassifier</code></td>
-            <td dir="ltr"><code>sklearn.ensemble</code></td>
-            <td>مصنف الغابات العشوائية؛ يحدد عدد الأشجار بالمعامل <code dir="ltr">n_estimators=100</code>.</td>
-          </tr>
-          <tr>
-            <td dir="ltr"><code>ConfusionMatrixDisplay</code></td>
-            <td dir="ltr"><code>sklearn.metrics</code></td>
-            <td>عرض ورسم مصفوفة الارتباك بشكل مرئي ملون.</td>
-          </tr>
-          <tr>
-            <td dir="ltr"><code>classification_report</code></td>
-            <td dir="ltr"><code>sklearn.metrics</code></td>
-            <td>طباعة تقرير يشمل <span dir="ltr">Precision, Recall, F1, Support</span> والمتوسطات (<span dir="ltr">Macro, Weighted</span>).</td>
-          </tr>
-          <tr>
-            <td dir="ltr"><code>roc_curve</code> &amp; <code>roc_auc_score</code></td>
-            <td dir="ltr"><code>sklearn.metrics</code></td>
-            <td>حساب إحداثيات منحنى <span dir="ltr">ROC</span> (<code dir="ltr">fpr, tpr</code>) وحساب المساحة تحت المنحنى <span dir="ltr">AUC</span>.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- التبويب الثالث: قاموس المصطلحات والدوال -->
-  <section id="terms" class="panel">
-    <div class="card">
-      <h2>قاموس المصطلحات والدوال الشامل للفصل الثالث عشر</h2>
-      <p class="muted">جميع مصطلحات تقييم المصنفات والدوال البرمجية الواردة في الوحدات الثلاث:</p>
-      <div id="termsGrid" class="grid"></div>
-    </div>
-  </section>
-
-  <!-- التبويب الرابع: البطاقات التعليمية -->
-  <section id="cards" class="panel">
-    <div class="card">
-      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
-      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
-      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
-        <div class="term" id="flashTerm"></div>
-        <div class="answer" id="flashAnswer" hidden></div>
-        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
-      </div>
-      <div class="row" style="margin-top:14px">
-        <button class="btn" id="prevCard">السابق</button>
-        <span id="cardCount" class="muted"></span>
-        <button class="btn primary" id="nextCard">التالي</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- التبويب الخامس: الاختبار الذاتي العشوائي -->
-  <section id="quiz" class="panel">
-    <div class="card">
-      <div class="row">
-        <div>
-          <h2>الاختبار الشامل المتغير للفصل الثالث عشر (25 سؤالاً) <span class="badge-new">ترتيب عشوائي ذكي 🎲</span></h2>
-          <p class="muted">يختبر فهمك لحسابات مصفوفة الارتباك، المقاييس الستة، طرق المتوسط، منحنى ROC و AUC، وأكواد المصنفات مع تعليل فوري!</p>
+      <!-- 1.4 Classification Report & Averages -->
+      <div class="sub-block">
+        <h3 class="sub-heading">1.4 تقرير التصنيف (<bdi dir="ltr">Classification Report</bdi>) وطرق دمج النتائج</h3>
+        <p class="prose">
+          يعرض تقرير التصنيف مقاييس <bdi dir="ltr">Precision</bdi> و <bdi dir="ltr">Recall</bdi> و <bdi dir="ltr">F1-score</bdi> وعدد العينات الفعلية (<bdi dir="ltr">Support</bdi>) لكل فئة على حدة، كما يدمج الأداء الكلي في رقم واحد عبر ثلاث طرق رئيسية:
+        </p>
+        <div class="card-grid">
+          <div class="metric-card">
+            <div class="metric-name">المتوسط الكلي البسيط (<bdi dir="ltr">Macro Average</bdi>)</div>
+            <p class="prose" style="font-size:0.9375rem;">يُحسب عبر أخذ المتوسط الحسابي غير الموزون للمقياس عبر جميع الفئات بالتساوي بغض النظر عن حجم كل فئة.</p>
+          </div>
+          <div class="metric-card is-focal">
+            <div class="metric-name">المتوسط الموزون (<bdi dir="ltr">Weighted Average</bdi>)</div>
+            <p class="prose" style="font-size:0.9375rem;">يُحسب بمتوسط المقاييس لكل فئة موزوناً بنسبة عدد العينات (<bdi dir="ltr">Support</bdi>) الموجودة في تلك الفئة؛ مناسب عند تفاوت أحجام الفئات.</p>
+          </div>
+          <div class="metric-card">
+            <div class="metric-name">المتوسط الدقيق (<bdi dir="ltr">Micro Average</bdi>)</div>
+            <p class="prose" style="font-size:0.9375rem;">تُجمع أولاً قيم <bdi dir="ltr">TP</bdi> و <bdi dir="ltr">FP</bdi> و <bdi dir="ltr">FN</bdi> لجميع الفئات معاً ثم تُستخدم المجاميع لحساب المقاييس الكلية.</p>
+          </div>
         </div>
-        <div class="score" id="score">النتيجة: 0 / 25</div>
       </div>
-      <div class="progress"><div id="progressBar"></div></div>
-      <div id="quizArea"></div>
-      <div class="row">
-        <button class="btn" id="resetQuiz">إعادة الاختبار بترتيب عشوائي جديد 🔀</button>
-        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+
+      <!-- 1.5 ROC Curve & Interactive Threshold Simulator -->
+      <div class="sub-block">
+        <h3 class="sub-heading">1.5 منحنى خاصية التشغيل للمستقبِل (<bdi dir="ltr">ROC Curve</bdi>) والمساحة تحت المنحنى (<bdi dir="ltr">AUC</bdi>)</h3>
+        <p class="prose">
+          أداة تحليلية لتقييم أداء مصنفات التصنيف الثنائي عبر <strong>عتبات تصنيف مختلفة (<bdi dir="ltr">Thresholds</bdi>)</strong>. يرسم المنحنى العلاقة بين معدل الإيجابية الكاذبة <bdi dir="ltr">FPR = 1 − Specificity</bdi> على المحور السيني (<bdi dir="ltr">x</bdi>) ومعدل الإيجابية الحقيقية <bdi dir="ltr">TPR = Recall</bdi> على المحور الصادي (<bdi dir="ltr">y</bdi>).
+        </p>
+
+        <div class="split-grid">
+          <div class="chart-card">
+            <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:var(--space-sm);">
+              <div>
+                <div class="metric-name">محاكاة تفاعلية لمنحنى <bdi dir="ltr">ROC</bdi> وتأثير عتبة القرار (<bdi dir="ltr">Threshold</bdi>)</div>
+                <div class="mono-meta">x: FPR (1 - Specificity) // y: TPR (Recall)</div>
+              </div>
+              <div style="display:flex; gap:var(--space-xs); flex-wrap:wrap;">
+                <button type="button" class="btn btn-ghost btn-sm" id="roc-m-high" onclick="setRocModel('high')">نموذج ممتاز (0.94)</button>
+                <button type="button" class="btn btn-ghost btn-sm" id="roc-m-mid" onclick="setRocModel('mid')">نموذج متوسط (0.76)</button>
+                <button type="button" class="btn btn-ghost btn-sm" id="roc-m-rand" onclick="setRocModel('rand')">عشوائي (0.50)</button>
+              </div>
+            </div>
+
+            <div class="chart-wrap">
+              <canvas id="u1-roc-canvas" aria-label="رسم تفاعلي لمنحنى ROC"></canvas>
+            </div>
+
+            <div class="slider-row">
+              <div class="field-group">
+                <label class="field-label" for="roc-threshold-slider">عتبة التصنيف (<bdi dir="ltr">Classification Threshold</bdi>) — حرك المؤشر لتتبع النقطة على المنحنى</label>
+                <input type="range" id="roc-threshold-slider" min="0.10" max="0.90" step="0.05" value="0.50" oninput="updateRocThreshold(this.value)">
+              </div>
+              <div class="quiz-score-pill" id="roc-threshold-readout">Threshold = 0.50</div>
+            </div>
+            <div class="split-grid-equal">
+              <div class="layer-nested">
+                <div class="kpi-label">معدل الإيجابية الحقيقية (<bdi dir="ltr">TPR / Recall</bdi>)</div>
+                <div class="kpi-value" id="roc-tpr-val" style="font-size:1.375rem;">0.86</div>
+              </div>
+              <div class="layer-nested">
+                <div class="kpi-label">معدل الإيجابية الكاذبة (<bdi dir="ltr">FPR = 1 - Specificity</bdi>)</div>
+                <div class="kpi-value" id="roc-fpr-val" style="font-size:1.375rem;">0.14</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="data-table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>قيمة <bdi dir="ltr">AUC</bdi></th>
+                  <th>تفسير كفاءة النموذج</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="num-col">AUC = 1</td>
+                  <td>نموذج مثالي يفصل بين الفئتين بدون أي أخطاء تصنيف عبر العتبة المناسبة.</td>
+                </tr>
+                <tr>
+                  <td class="num-col">0.5 &lt; AUC &lt; 1</td>
+                  <td>نموذج جيد وأفضل من التوقع العشوائي؛ وكلما اقتربت القيمة من 1 زادت الجودة.</td>
+                </tr>
+                <tr>
+                  <td class="num-col">AUC = 0.5</td>
+                  <td>نموذج عشوائي يكافئ التخمين (ينطبق على الخط القطري المستقيم).</td>
+                </tr>
+                <tr>
+                  <td class="num-col">AUC &lt; 0.5</td>
+                  <td>نموذج أسوأ من النموذج العشوائي، ويمكن تحسينه مباشرة عبر عكس التوقعات.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
-      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
-    </div>
-  </section>
-</main>
 
-<footer>مبني بالكامل (100%) على محتوى الفصل الثالث عشر (تقييم وبناء المصنفات) من مقرر تحليل وتمثيل البيانات</footer>
+      <!-- UNIT 1 QUIZ -->
+      <div class="quiz-section" id="quiz-1">
+        <div class="quiz-header">
+          <div>
+            <span class="section-kicker">QUIZ 01 // 10 QUESTIONS</span>
+            <h3 class="sub-heading" style="border:none; padding:0; margin-top:var(--space-xs);">اختبار الوحدة الأولى: مقاييس التقييم ومصفوفة الارتباك و <bdi dir="ltr">ROC</bdi></h3>
+          </div>
+          <div class="quiz-score-pill" id="score-pill-u1">0 / 10</div>
+        </div>
+        <div class="quiz-list" id="quiz-container-u1"></div>
+      </div>
+    </section>
 
-<script>
-const terms = [
-  ["Confusion Matrix (مصفوفة الارتباك)", "جدول لتقييم أداء نماذج التصنيف يقارن بين الفئات الحقيقية (Actual) والفئات المتوقعة (Predicted) ويتكون من TP, TN, FP, FN."],
-  ["TP & TN", "الإيجابي الصحيح (TP: عينة موجبة تُوقعت موجبة) والسلبي الصحيح (TN: عينة سالبة تُوقعت سالبة)."],
-  ["FP & FN", "الإيجابي الكاذب (FP: عينة سالبة تُوقعت خطأً كموجبة) والسلبي الكاذب (FN: عينة موجبة تُوقعت خطأً كسالبة)."],
-  ["Accuracy (الدقة الكلية)", "نسبة التوقعات الصحيحة الكلية: (TP + TN) / (TP + TN + FP + FN)."],
-  ["Precision / PPV (الضبط)", "القيمة التنبؤية الإيجابية: نسبة العينات الموجبة الصحيحة من إجمالي ما توقعه المصنف كموجب: TP / (TP + FP)."],
-  ["NPV (القيمة التنبؤية السلبية)", "نسبة العينات السالبة الصحيحة من إجمالي ما توقعه المصنف كسالب: TN / (TN + FN)."],
-  ["Recall / Sensitivity / TPR", "الاستدعاء أو الحساسية: نسبة العينات الموجبة التي نجح المصنف في اكتشافها من إجمالي الموجب الفعلي: TP / (TP + FN)."],
-  ["Specificity / TNR (الخصوصية)", "نسبة العينات السالبة التي نجح المصنف في تشخيصها من إجمالي السالب الفعلي: TN / (TN + FP)."],
-  ["F1-Score", "المتوسط التوافقي بين الضبط (Precision) والاستدعاء (Recall): 2 * (Precision * Recall) / (Precision + Recall)."],
-  ["Macro Average vs Weighted Average", "في تقرير التصنيف: Macro يحسب المتوسط البسيط لجميع الفئات بالتساوي، بينما Weighted يحسب المتوسط الموزون بعدد عينات كل فئة (Support)."],
-  ["ROC Curve & AUC", "منحنى ROC يرسم TPR مقابل FPR عند عتبات مختلفة، و AUC هي المساحة تحت المنحنى (1 = مثالي، 0.5 = عشوائي)."],
-  ["stratify=target", "معامل في دالة train_test_split يضمن الحفاظ على نفس نسبة توزيع الفئات في مجموعتي التدريب والاختبار."],
-  ["KNeighborsClassifier & GaussianNB & SVC", "فئات المصنفات في Scikit-learn لأقرب الجيران، وبايز الساذج، وآلات المتجهات الداعمة."],
-  ["RandomForestClassifier(n_estimators=100)", "مصنف الغابات العشوائية في sklearn.ensemble، ويحدد المعامل n_estimators عدد الأشجار في الغابة."]
-];
+    <!-- ===================================================================== -->
+    <!-- UNIT 2 -->
+    <!-- ===================================================================== -->
+    <section class="unit-section" id="unit-2" aria-labelledby="u2-title">
+      <div class="section-head">
+        <span class="section-kicker">UNIT 02 // DATA PREP + KNN, NAIVE BAYES, SVM</span>
+        <h2 class="section-title" id="u2-title">الوحدة الثانية: <strong>إعداد البيانات وبناء مصنفات <bdi dir="ltr">K-NN</bdi> و <bdi dir="ltr">Naive Bayes</bdi> و <bdi dir="ltr">SVM</bdi></strong></h2>
+        <p class="section-desc">
+          الانتقال إلى التطبيق العملي باستخدام <bdi dir="ltr">scikit-learn</bdi> على بيانات مرضى السكري: فحص جودة البيانات، التقسيم الطبقي <bdi dir="ltr">stratify</bdi>، وتدريب وتقييم ثلاثة مصنفات رئيسية ومقارنة سلوكها.
+        </p>
+      </div>
 
-const cards = [
-  ["ما هي المكونات الأربعة لمصفوفة الارتباك الثنائية (Confusion Matrix)؟", "1) TP (إيجابي صحيح): موجب فعلياً وتُوقع موجب.\n2) TN (سلبي صحيح): سالب فعلياً وتُوقع سالب.\n3) FP (إيجابي كاذب): سالب فعلياً وتُوقع خطأً كموجب.\n4) FN (سلبي كاذب): موجب فعلياً وتُوقع خطأً كسالب."],
-  ["ما هي معادلة الدقة الكلية (Accuracy)؟", "Accuracy = (TP + TN) / (TP + TN + FP + FN)"],
-  ["ما الفرق بين معادلة الضبط (Precision / PPV) ومعادلة الاستدعاء (Recall / Sensitivity)؟", "• Precision (PPV) = TP / (TP + FP) — يركز على صحة التوقعات الموجبة (يقلل الإيجابي الكاذب FP).\n• Recall (Sensitivity) = TP / (TP + FN) — يركز على اكتشاف جميع الحالات الموجبة الفعلية (يقلل السلبي الكاذب FN)."],
-  ["ما الفرق بين معادلة القيمة التنبؤية السلبية (NPV) ومعادلة الخصوصية (Specificity)؟", "• NPV = TN / (TN + FN) — نسبة السالب الصحيح من كل ما توقعه المصنف كسالب.\n• Specificity = TN / (TN + FP) — نسبة السالب المكتشف من إجمالي السالب الحقيقي في الواقع."],
-  ["ما هي معادلة مقياس (F1-score)؟ ولماذا نستخدمه؟", "F1-score = 2 * (Precision * Recall) / (Precision + Recall)\nوهو المتوسط التوافقي بين الضبط والاستدعاء، ويُستخدم للحصول على مقياس متوازن خاصة عندما تكون الفئات غير متوازنة."],
-  ["[مسألة حسابية] إذا كان TP = 30، و TN = 50، و FP = 10، و FN = 10، فكم تبلغ قيمة كل من: Accuracy و Precision و Recall؟", "• المجموع الكلي = 30 + 50 + 10 + 10 = 100.\n• Accuracy = (30 + 50) / 100 = 80%.\n• Precision = 30 / (30 + 10) = 30 / 40 = 75%.\n• Recall = 30 / (30 + 10) = 30 / 40 = 75%."],
-  ["[مسألة حسابية] إذا كان Precision = 0.80 و Recall = 0.80، فكم تبلغ قيمة مقياس F1-score؟", "F1 = 2 * (0.8 * 0.8) / (0.8 + 0.8) = 1.28 / 1.6 = 0.80 (عندما يتساوى الضبط والاستدعاء فإن F1 يساوي نفس القيمة!)."],
-  ["في مصفوفة الارتباك متعددة الفئات (مثل الأرقام من 0 إلى 9)، أين تقع قيم التوقعات الصحيحة (TP) لكل فئة؟", "تقع على القطر الرئيسي للمصفوفة (Main Diagonal)؛ حيث يتقاطع الصف الفعلي للفئة مع العمود المتوقع لنفس الفئة."],
-  ["ما الفرق بين (Macro Average) و (Weighted Average) و (Micro Average) في تقرير التصنيف؟", "• Macro Average: يحسب المتوسط الحسابي البسيط لمقاييس الفئات بالتساوي دون النظر لحجم كل فئة.\n• Weighted Average: يحسب المتوسط الموزون بضرب مقياس كل فئة في عدد عيناتها (Support).\n• Micro Average: يجمع TP و FP و FN لكل الفئات أولاً ثم يحسب المقياس."],
-  ["ماذا يمثل المحور الرأسي والمحور الأفقي في منحنى (ROC Curve)؟", "• المحور الرأسي (Y): معدل الإيجابي الصحيح TPR (Recall / Sensitivity).\n• المحور الأفقي (X): معدل الإيجابي الكاذب FPR (والذي يساوي 1 - Specificity)."],
-  ["ما هي الدلالات الأربع لقيمة المساحة تحت المنحنى (AUC)؟", "1) AUC = 1.0: مصنف مثالي تماماً (Perfect).\n2) 0.5 < AUC < 1.0: مصنف جيد وأفضل من التخمين العشوائي.\n3) AUC = 0.5: مصنف عشوائي تماماً (مثل رمي العملة).\n4) AUC < 0.5: مصنف أسوأ من التخمين العشوائي."],
-  ["ما هي وظيفة المعامل (stratify=target) داخل الدالة train_test_split()؟", "يحافظ على نفس نسبة توزيع الفئات (التوازن الطبقي للفئات) في كل من مجموعة التدريب ومجموعة الاختبار كما هي في البيانات الأصلية."],
-  ["كيف نهيئ مصنف أقرب الجيران (K-NN) بعدد 3 جيران في مكتبة Scikit-learn؟ ومن أي وحدة نستورده؟", "نستورده من: from sklearn.neighbors import KNeighborsClassifier\nونهيئه بـ: knn = KNeighborsClassifier(n_neighbors=3)"],
-  ["ما اسم الفئة البرمجية لمصنف بايز الساذج المستخدم للبيانات الرقمية المتصلة في Scikit-learn؟", "GaussianNB (من الوحدة sklearn.naive_bayes)."],
-  ["كيف نغير نوع دالة النواة في مصنف آلات المتجهات الداعمة SVC() بين النواة الخطية وكثيرة الحدود؟", "• للنواة الخطية: SVC(kernel='linear')\n• للنواة كثيرة الحدود: SVC(kernel='poly')"],
-  ["ما أثر زيادة عدد الأشجار (n_estimators) في مصنف الغابات العشوائية RandomForestClassifier من 10 إلى 50 ثم 100 شجرة؟", "تؤدي زيادة عدد الأشجار إلى رفع دقة التصنيف وزيادة استقرار النموذج وتقليل الإفراط في التخصيص (Overfitting)."],
-  ["ما هي الدالة والفئة المستخدمتان في sklearn.metrics لحساب ورسم مصفوفة الارتباك بشكل مرئي؟", "• للحساب الرقمي: cm = confusion_matrix(y_test, y_pred)\n• للرسم المرئي: ConfusionMatrixDisplay(confusion_matrix=cm).plot()"],
-  ["ما هي الدالة التي تطبع جدولاً نصياً شاملاً يتضمن Precision و Recall و F1-score و Support لكل فئة؟", "classification_report(y_test, y_pred) من الوحدة sklearn.metrics."]
-];
+      <!-- 2.1 Data Preparation -->
+      <div class="sub-block">
+        <h3 class="sub-heading">2.1 إعداد البيانات لبناء نماذج التصنيف (دراسة حالة مرض السكري)</h3>
+        <p class="prose">
+          تبدأ مرحلة التطبيق بقراءة ملف البيانات من تنسيق <bdi dir="ltr">CSV</bdi> عبر مكتبة <bdi dir="ltr">pandas</bdi>، ثم إلقاء نظرة شاملة على ملخص السمات وتوزيع السمة الهدف للتأكد من خلو البيانات من القيم المفقودة. رغم ملاحظة وجود عدم اتزان نسبي بين فئتي السمة الهدف (مصاب / غير مصاب)، يُعد هذا شائعاً في البيانات الطبية.
+        </p>
 
-const masterQuestions = [
-  {q:"في مصفوفة الارتباك (Confusion Matrix)، ماذا نسمي الحالة التي تكون فيها العينة (سالبة فعلياً في الواقع - مثل شخص سليم)، ولكن المصنف أخطأ وتوقع أنها (موجبة - مريض)؟",o:["إيجابي كاذب (False Positive - FP)","سلبي كاذب (False Negative - FN)","إيجابي صحيح (True Positive - TP)","سلبي صحيح (True Negative - TN)"],a:0,e:"بما أن توقع المصنف كان (إيجابياً) ولكنه توقع خاطئ (كاذب لأن الشخص سليم فعلياً)، فإنه يُسمى إيجابياً كاذباً (False Positive - FP)."},
-  {q:"ما هي المعادلة الرياضية الصحيحة لحساب الدقة الكلية للمصنف (Accuracy) من مكونات مصفوفة الارتباك؟",o:["(TP + TN) / (TP + TN + FP + FN)","TP / (TP + FP)","TP / (TP + FN)","TN / (TN + FP)"],a:0,e:"الدقة الكلية (Accuracy) هي مجموع التوقعات الصحيحة بشقيها (TP + TN) مقسوماً على إجمالي كافة العينات."},
-  {q:"أي مقياس من مقاييس تقييم التصنيف يُعرف أيضاً بـ (القيمة التنبؤية الإيجابية - PPV)، ويُحسب بالمعادلة: TP / (TP + FP) ؟",o:["الضبط (Precision)","الاستدعاء / الحساسية (Recall / Sensitivity)","الخصوصية (Specificity)","القيمة التنبؤية السلبية (NPV)"],a:0,e:"الضبط (Precision أو PPV) يقيس نسبة العينات الموجبة الصحيحة من إجمالي ما توقعه المصنف كموجب: TP / (TP + FP)."},
-  {q:"أي مقياس من مقاييس تقييم التصنيف يُعرف بـ (الحساسية - Sensitivity أو معدل الإيجابي الصحيح TPR)، ويُحسب بالمعادلة: TP / (TP + FN) ؟",o:["الاستدعاء (Recall)","الضبط (Precision)","الخصوصية (Specificity)","القيمة التنبؤية السلبية (NPV)"],a:0,e:"الاستدعاء (Recall / Sensitivity / TPR) يقيس قدرة المصنف على اكتشاف الحالات الموجبة الفعلية: TP / (TP + FN)."},
-  {q:"ما الفرق بين معادلة (الخصوصية - Specificity) ومعادلة (القيمة التنبؤية السلبية - NPV)؟",o:["الخصوصية (Specificity) = TN / (TN + FP)، بينما القيمة التنبؤية السلبية (NPV) = TN / (TN + FN)","الخصوصية = TP / (TP + FP)، و NPV = TP / (TP + FN)","كلاهما يساويان (FP + FN)","الخصوصية تقسم على FN، و NPV تقسم على FP"],a:0,e:"الخصوصية تقيس نسبة السالب المكتشف من إجمالي السالب الفعلي (TN + FP)، بينما NPV تقيس نسبة السالب الصحيح من إجمالي ما تُوقع كسالب (TN + FN)."},
-  {q:"[مسألة حسابية] إذا كانت عناصر مصفوفة الارتباك لمصنف هي: TP = 60 ، TN = 20 ، FP = 15 ، FN = 5 ، فكم تبلغ الدقة الكلية (Accuracy) لهذا المصنف؟",o:["80% (لأن (60 + 20) / (60 + 20 + 15 + 5) = 80 / 100 = 0.80)","60%","75%","95%"],a:0,e:"نجمع التوقعات الصحيحة: TP + TN = 60 + 20 = 80، ونقسمها على المجموع الكلي (100): 80 / 100 = 80%."},
-  {q:"[مسألة حسابية] بناءً على الأرقام السابقة (TP = 60 ، TN = 20 ، FP = 15 ، FN = 5)، كم تبلغ قيمة الضبط (Precision) وقيمة الاستدعاء (Recall) على التوالي؟",o:["Precision = 60 / (60 + 15) = 80% ، و Recall = 60 / (60 + 5) ≈ 92.3%","Precision = 20% ، و Recall = 15%","Precision = 92.3% ، و Recall = 80%","كلاهما يساويان 50%"],a:0,e:"الضبط Precision = TP / (TP + FP) = 60 / 75 = 0.80 (80%)، والاستدعاء Recall = TP / (TP + FN) = 60 / 65 ≈ 92.3%."},
-  {q:"ما هو المقياس الذي يمثل (المتوسط التوافقي - Harmonic Mean) بين الضبط (Precision) والاستدعاء (Recall) وتُكتب معادلته: 2 * (Precision * Recall) / (Precision + Recall) ؟",o:["مقياس F1 (F1-score)","المساحة تحت المنحنى (AUC)","معامل جيني (Gini Gain)","المدى الربعي (IQR)"],a:0,e:"مقياس F1-score يجمع بين Precision و Recall في رقم واحد متوازن عبر المتوسط التوافقي."},
-  {q:"[مسألة حسابية] إذا كان الضبط لمصنف هو (Precision = 0.6) والاستدعاء هو (Recall = 0.3)، فكم تبلغ قيمة مقياس (F1-score)؟",o:["0.40 (لأن 2 × (0.6 × 0.3) / (0.6 + 0.3) = 0.36 / 0.9 = 0.4)","0.45","0.90","0.18"],a:0,e:"نطبق القانون: البسط = 2 × 0.6 × 0.3 = 0.36، والمقام = 0.6 + 0.3 = 0.9. إذن F1 = 0.36 / 0.9 = 0.40."},
-  {q:"في مصفوفة الارتباك متعددة الفئات (مثل تصنيف الأرقام من 0 إلى 9)، أين تقع أعداد العينات التي تم تصنيفها بشكل صحيح تماماً (True Positives) لكل فئة؟",o:["تقع على القطر الرئيسي للمصفوفة (Main Diagonal)","تقع في العمود الأول فقط","تقع في الصف الأخير فقط","تكون قيمتها صفراً دائماً"],a:0,e:"العناصر الواقعة على القطر الرئيسي لمصفوفة الارتباك تمثل التطابق بين الفئة الحقيقية والفئة المتوقعة (أي التوقعات الصحيحة TP لكل فئة)."},
-  {q:"في تقرير التصنيف (Classification Report) متعدد الفئات، ما الفرق بين (Macro Average) و (Weighted Average)؟",o:["Macro Average يحسب المتوسط البسيط غير الموزون لجميع الفئات بالتساوي، بينما Weighted Average يحسب المتوسط الموزون بضرب مقياس كل فئة في عدد عيناتها الفعلية (Support)","Weighted Average يتجاهل حجم الفئات تماماً، و Macro يضرب في عدد العينات","كلاهما يعطيان نفس الرقم دائماً حتى لو كانت الفئات غير متوازنة","لا يظهران في تقرير التصنيف"],a:0,e:"يعامل Macro Average جميع الفئات بالتساوي، بينما يزن Weighted Average كل فئة بعدد عيناتها (Support) لمراعاة عدم توازن الفئات."},
-  {q:"يرسم منحنى (ROC Curve) العلاقة البيانية عند عتبات تصنيف مختلفة بين محورين هما:",o:["معدل الإيجابي الصحيح (TPR / Sensitivity) على المحور الرأسي، ومعدل الإيجابي الكاذب (FPR = 1 - Specificity) على المحور الأفقي","الدقة على المحور الرأسي، والوقت على المحور الأفقي","المتوسط الحسابي على الرأسي، والانحراف المعياري على الأفقي","عدد الأشجار على الرأسي، وعدد الجيران على الأفقي"],a:0,e:"يربط منحنى ROC بين TPR (الحساسية) على محور Y وبين FPR (1 ناقص الخصوصية) على محور X."},
-  {q:"عند تقييم مصنف باستخدام المساحة تحت منحنى ROC (AUC - Area Under the Curve)، ماذا تعني قيمة (AUC = 1.0) وقيمة (AUC = 0.5) على التوالي؟",o:["AUC = 1.0 تعني مصنفاً مثالياً تماماً، و AUC = 0.5 تعني مصنفاً عشوائياً تماماً (مثل التخمين العشوائي)","AUC = 1.0 تعني مصنفاً فاشلاً، و AUC = 0.5 تعني مصنفاً مثالياً","كلتاهما تعنيان أن دقة المصنف 0%","لا يمكن أن تزيد قيمة AUC عن 0.2"],a:0,e:"أعلى قيمة لـ AUC هي 1.0 وتمثل المصنف المثالي، بينما القيمة 0.5 تمثل الخط القطري العشوائي الذي لا يميز بين الفئتين."},
-  {q:"عند تقسيم البيانات بالدالة train_test_split(features, target, test_size=0.2, stratify=target)، ما هي الفائدة الأساسية من تمرير المعامل (stratify=target)؟",o:["ضمان احتواء مجموعتي التدريب والاختبار على نفس نسب توزيع الفئات الموجودة في البيانات الأصلية (توازن طبقي)","حذف 20% من الأعمدة عشوائياً","تحويل الأرقام إلى نصوص","ترتيب البيانات تصاعدياً حسب العمر"],a:0,e:"يمنع المعامل stratify حدوث خلل في نسب الفئات عند التقسيم العشوائي، فيحافظ على نفس نسبة الفئات في التدريب والاختبار."},
-  {q:"ما هو الكود الصحيح في مكتبة Scikit-learn لإنشاء مصنف أقرب الجيران (K-NN) بحيث يعتمد على 3 جيران؟",o:["KNeighborsClassifier(n_neighbors=3)","KMeans(n_clusters=3)","SVC(kernel='3')","RandomForestClassifier(n_estimators=3)"],a:0,e:"تُستخدم الفئة KNeighborsClassifier من sklearn.neighbors مع المعامل n_neighbors=3."},
-  {q:"ما اسم الفئة البرمجية في مكتبة Scikit-learn المستخدمة لبناء مصنف (بايز الساذج - Naive Bayes) للبيانات الرقمية المتصلة في الفصل الثالث عشر؟",o:["GaussianNB (من sklearn.naive_bayes)","SVC (من sklearn.svm)","DecisionTreeClassifier (من sklearn.tree)","LogisticRegression (من sklearn.linear_model)"],a:0,e:"الفئة GaussianNB في وحدة sklearn.naive_bayes تُطبق مصنف بايز الساذج بافتراض التوزيع الطبيعي للسمات الرقمية."},
-  {q:"في مصنف آلات المتجهات الداعمة SVC() بمكتبة Scikit-learn، كيف نحدد استخدام (النواة الخطية) أو (النواة كثيرة الحدود)؟",o:["بتمرير المعامل kernel='linear' أو kernel='poly'","بتمرير المعامل n_neighbors='linear'","بتمرير المعامل n_estimators='poly'","بتمرير المعامل stratify='linear'"],a:0,e:"يتحكم المعامل kernel داخل فئة SVC في نوع دالة النواة المستخدمة للفصل بين الفئات."},
-  {q:"في مصنف الغابات العشوائية RandomForestClassifier(n_estimators=100)، ماذا يحدد المعامل (n_estimators=100)؟ وما أثر زيادته من 10 إلى 100؟",o:["يحدد عدد أشجار القرار في الغابة (100 شجرة)، وتؤدي زيادته إلى تحسين دقة التصنيف واستقراره وتقليل الـ Overfitting","يحدد عدد القيم المتطرفة المسموح بها","يحدد عدد المكونات الرئيسية في PCA","يؤدي إلى حذف 100 صف من البيانات"],a:0,e:"المعامل n_estimators يحدد عدد الأشجار التي ستصوت بالأغلبية داخل الغابة العشوائية."},
-  {q:"أي فئة في وحدة sklearn.metrics تُستخدم لعرض ورسم مصفوفة الارتباك بشكل مرئي ملون باستخدام الدالة .plot()؟",o:["ConfusionMatrixDisplay","classification_report","roc_auc_score","SelectKBest"],a:0,e:"تُستخدم الفئة ConfusionMatrixDisplay(confusion_matrix=cm) لرسم مصفوفة الارتباك بيانياً."},
-  {q:"ما هي الدالة التي تطبع جدولاً نصياً يتضمن المقاييس (precision, recall, f1-score, support) لكل فئة بالإضافة إلى المتوسطات الكلية؟",o:["classification_report(y_test, y_pred)","confusion_matrix(y_test, y_pred)","roc_curve(y_test, y_pred)","accuracy_score(y_test, y_pred)"],a:0,e:"الدالة classification_report تولد التقرير النصي المتكامل لكافة مقاييس التصنيف."},
-  {q:"لحساب إحداثيات رسم منحنى ROC (وهي fpr و tpr و thresholds) في مكتبة Scikit-learn، نستخدم الدالة:",o:["fpr, tpr, thresholds = roc_curve(y_test, y_probs)","cm = confusion_matrix(y_test, y_pred)","auc = accuracy_score(y_test, y_pred)","pca = PCA(n_components=2)"],a:0,e:"تُرجع الدالة roc_curve() المصفوفات الثلاث: معدل الإيجابي الكاذب fpr، ومعدل الإيجابي الصحيح tpr، والعتبات thresholds."},
-  {q:"إذا حصلنا بعد تقييم ثلاثة مصنفات على قيم المساحة تحت المنحنى التالية: المصنف الأول AUC = 0.94، المصنف الثاني AUC = 0.78، المصنف الثالث AUC = 0.51، فأي المصنفات هو الأفضل أداءً؟",o:["المصنف الأول (لأن قيمة AUC = 0.94 هي الأقرب إلى 1.0)","المصنف الثالث (لأنه الأقرب إلى 0.5)","المصنف الثاني","جميعها متساوية الكفاءة"],a:0,e:"كلما اقتربت المساحة تحت المنحنى (AUC) من القيمة المثالية (1.0)، كان المصنف أكثر كفاءة وقدرة على التمييز بين الفئات."},
-  {q:"في التشخيص الطبي للأمراض الخطيرة (مثل السرطان)، أي خطأ في مصفوفة الارتباك يُعد الأكثر خطورة، وأي مقياس نسعى لتعظيمه لتقليل هذا الخطأ؟",o:["السلبي الكاذب (FN - مريض يُشخص خطأً بأنه سليم)، ونسعى لتعظيم مقياس الحساسية / الاستدعاء (Recall / Sensitivity)","الإيجابي الصحيح (TP)، ونسعى لتقليل الدقة","السلبي الصحيح (TN)، ونسعى لتصفير الاستدعاء","لا فرق بين الأخطاء في التشخيص الطبي"],a:0,e:"إغفال تشخيص مريض فعلي (FN) هو الأخطر طبياً، وبما أن Recall = TP / (TP + FN) فإن تعظيمه يقلل FN إلى أدنى حد."},
-  {q:"[مسألة حسابية] في مصفوفة ارتباك متعددة الفئات، إذا كانت الفئة (7) قد تم توقعها بشكل صحيح 37 مرة (TP=37)، وتم توقع فئات أخرى بالخطأ على أنها 7 مرة واحدة (FP=1)، فكم يبلغ الضبط (Precision) للفئة 7؟",o:["37 / (37 + 1) = 37 / 38 ≈ 97.4%","37 / 100 = 37%","1 / 37 = 2.7%","0%"],a:0,e:"قانون الضبط لأي فئة هو: Precision = TP / (TP + FP) = 37 / (37 + 1) = 37 / 38 ≈ 97.4%."},
-  {q:"من أي وحدات في مكتبة Scikit-learn نستورد كلاً من: DecisionTreeClassifier و RandomForestClassifier على التوالي؟",o:["الأولى من sklearn.tree ، والثانية من sklearn.ensemble","كلتاهما من sklearn.neighbors","الأولى من sklearn.svm ، والثانية من sklearn.naive_bayes","كلتاهما من sklearn.decomposition"],a:0,e:"توجد شجرة القرار في وحدة sklearn.tree، بينما توجد الغابات العشوائية ضمن الطرق التجميعية في وحدة sklearn.ensemble."}
-];
+        <div class="callout callout-pos">
+          <span class="callout-title">لماذا نستخدم <bdi dir="ltr">stratify=target</bdi> عند التقسيم بنسبة 70% / 30%؟</span>
+          <span>بسبب عدم اتزان الفئات في بيانات السكري، نمرر المعامل <bdi dir="ltr">stratify=y</bdi> (أو <bdi dir="ltr">stratify=target</bdi>) إلى دالة <bdi dir="ltr">train_test_split</bdi> لضمان الحفاظ على نفس نسبة الفئتين في كل من مجموعة التدريب (70%) ومجموعة التقييم (30%).</span>
+        </div>
+      </div>
 
-const termsGrid = document.getElementById("termsGrid");
-terms.forEach(([en, ar]) => {
-  const d = document.createElement("div");
-  d.className = "card";
-  d.style.margin = "0";
-  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
-  termsGrid.appendChild(d);
-});
+      <!-- 2.2-2.4 Classifiers Comparison & Code Explorer -->
+      <div class="sub-block">
+        <h3 class="sub-heading">2.2 التطبيق العملي للمصنفات الثلاثة ومقارنة النتائج</h3>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>المصنف</th>
+                <th>المكتبة الفرعية في <bdi dir="ltr">scikit-learn</bdi></th>
+                <th>الإعدادات المستخدمة في الشرح</th>
+                <th>أبرز ملاحظات الأداء والمقارنة</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong><bdi dir="ltr">K-Nearest Neighbors (K-NN)</bdi></strong></td>
+                <td class="num-col">sklearn.neighbors</td>
+                <td class="num-col">KNeighborsClassifier(n_neighbors=3)</td>
+                <td>يحسب المسافة (مثل الإقليدية) ويصنف بالتصويت للأقرب؛ تتأثر النتيجة باختيار قيمة <bdi dir="ltr">K</bdi>.</td>
+              </tr>
+              <tr>
+                <td><strong><bdi dir="ltr">Gaussian Naive Bayes</bdi></strong></td>
+                <td class="num-col">sklearn.naive_bayes</td>
+                <td class="num-col">GaussianNB()</td>
+                <td>سريع ويقاوم الضجيج عند استقلال السمات؛ <strong>أظهر تحسناً في التصنيف مقارنة بـ K-NN</strong>.</td>
+              </tr>
+              <tr>
+                <td><strong><bdi dir="ltr">Support Vector Machines (SVM)</bdi></strong></td>
+                <td class="num-col">sklearn.svm</td>
+                <td class="num-col">SVC(kernel='linear') vs SVC(kernel='poly')</td>
+                <td>أعطت نواة <bdi dir="ltr">polynomial</bdi> نتائج أسوأ من <bdi dir="ltr">linear</bdi>، مما يدل على أن البيانات خطية إلى حد كبير.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-let ci = 0, showAnswer = false;
-function renderCard() {
-  document.getElementById("flashTerm").textContent = cards[ci][0];
-  document.getElementById("flashAnswer").textContent = cards[ci][1];
-  document.getElementById("flashAnswer").hidden = !showAnswer;
-  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
-  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
-}
-document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
-document.getElementById("flashcard").addEventListener("keydown", e => {
-  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
-});
-document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
-document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
-renderCard();
+        <!-- Interactive Code Walkthrough for Unit 2 -->
+        <div class="layer">
+          <div class="metric-name">مستعرض أكواد التطبيق العملي للوحدة الثانية (<bdi dir="ltr">scikit-learn</bdi>)</div>
+          <div class="lab-tabs" role="tablist" aria-label="اختر كود الوحدة الثانية">
+            <button type="button" class="lab-tab is-active" id="u2-tab-prep" onclick="selectU2Code('prep')">1. إعداد وتقسيم البيانات</button>
+            <button type="button" class="lab-tab" id="u2-tab-knn" onclick="selectU2Code('knn')">2. مصنف K-NN</button>
+            <button type="button" class="lab-tab" id="u2-tab-nb" onclick="selectU2Code('nb')">3. مصنف Naive Bayes</button>
+            <button type="button" class="lab-tab" id="u2-tab-svm" onclick="selectU2Code('svm')">4. مصنف SVM (Linear / Poly)</button>
+          </div>
 
-document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
-  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
-  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
-  window.scrollTo({ top: 0, behavior: "smooth" });
-});
+          <div class="code-panel">
+            <div class="code-header">
+              <span id="u2-code-filename">01_data_preparation.py</span>
+              <button type="button" class="copy-btn" onclick="copyCodeBlock('u2-code-content', this)">نسخ الكود</button>
+            </div>
+            <pre class="code-body" id="u2-code-content"></pre>
+          </div>
 
-function shuffleArray(arr) {
-  const copy = [...arr];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-}
+          <div class="callout" id="u2-code-note">
+            <span class="callout-title" id="u2-note-title">شرح الخطوة</span>
+            <span id="u2-note-body"></span>
+          </div>
+        </div>
+      </div>
 
-let currentQuestions = [];
-let answers = {};
+      <!-- UNIT 2 QUIZ -->
+      <div class="quiz-section" id="quiz-2">
+        <div class="quiz-header">
+          <div>
+            <span class="section-kicker">QUIZ 02 // 10 QUESTIONS</span>
+            <h3 class="sub-heading" style="border:none; padding:0; margin-top:var(--space-xs);">اختبار الوحدة الثانية: إعداد البيانات ومصنفات <bdi dir="ltr">K-NN</bdi> و <bdi dir="ltr">Naive Bayes</bdi> و <bdi dir="ltr">SVM</bdi></h3>
+          </div>
+          <div class="quiz-score-pill" id="score-pill-u2">0 / 10</div>
+        </div>
+        <div class="quiz-list" id="quiz-container-u2"></div>
+      </div>
+    </section>
 
-function prepareShuffledQuiz() {
-  currentQuestions = shuffleArray(masterQuestions).map(item => {
-    const optsWithFlag = item.o.map((text, idx) => ({ text, isCorrect: idx === item.a }));
-    const shuffledOpts = shuffleArray(optsWithFlag);
-    return {
-      q: item.q,
-      o: shuffledOpts.map(x => x.text),
-      a: shuffledOpts.findIndex(x => x.isCorrect),
-      e: item.e
+    <!-- ===================================================================== -->
+    <!-- UNIT 3 -->
+    <!-- ===================================================================== -->
+    <section class="unit-section" id="unit-3" aria-labelledby="u3-title">
+      <div class="section-head">
+        <span class="section-kicker">UNIT 03 // TREES, RANDOM FORESTS &amp; SKLEARN EVALUATION</span>
+        <h2 class="section-title" id="u3-title">الوحدة الثالثة: <strong>أشجار القرار والغابات العشوائية وأدوات التقييم البرمجية</strong></h2>
+        <p class="section-desc">
+          بناء مصنف <bdi dir="ltr">Decision Tree</bdi> والانتقال إلى خوارزمية التجميع <bdi dir="ltr">Random Forests</bdi> وتأثير زيادة عدد الأشجار (<bdi dir="ltr">n_estimators</bdi>)، ثم تطبيق مصفوفة الارتباك وتقرير التصنيف ومنحنى <bdi dir="ltr">ROC</bdi> برمجياً لمقارنة النماذج.
+        </p>
+      </div>
+
+      <!-- 3.1 & 3.2 Decision Tree vs Random Forest -->
+      <div class="sub-block">
+        <h3 class="sub-heading">3.1 شجرة القرار (<bdi dir="ltr">Decision Tree</bdi>) والغابات العشوائية (<bdi dir="ltr">Random Forests</bdi>)</h3>
+        <p class="prose">
+          تُستدعى شجرة القرار من المكتبة الفرعية <code class="inline-code">sklearn.tree</code> عبر الفئة <code class="inline-code">DecisionTreeClassifier</code>. أما <strong>الغابات العشوائية</strong> فهي خوارزمية تجميعية (<bdi dir="ltr">Ensemble</bdi>) تُستدعى من <code class="inline-code">sklearn.ensemble</code> عبر <code class="inline-code">RandomForestClassifier</code>، وتبني <bdi dir="ltr">t</bdi> شجرة قرار على عينات عشوائية بالإحلال (<bdi dir="ltr">Bootstrap</bdi>) مع اختيار سمات عشوائية عند كل عقدة، ثم دمج قراراتها بالتصويت بالأغلبية.
+        </p>
+
+        <div class="split-grid">
+          <div class="chart-card">
+            <div>
+              <div class="metric-name">تأثير زيادة عدد الأشجار (<bdi dir="ltr">n_estimators</bdi>) على كفاءة <bdi dir="ltr">Random Forest</bdi></div>
+              <div class="mono-meta">Decision Tree vs Random Forest (n_estimators = 10, 50, 100)</div>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="u3-rf-canvas" aria-label="رسم مقارنة أداء شجرة القرار مع الغابات العشوائية"></canvas>
+            </div>
+          </div>
+
+          <div style="display:grid; gap:var(--space-md);">
+            <div class="callout callout-pos">
+              <span class="callout-title">تدرج التحسن في التجربة العملية</span>
+              <span>أعطت الغابة العشوائية عند <bdi dir="ltr">n_estimators=10</bdi> أداءً أفضل من شجرة القرار المنفردة؛ وعند رفع العدد إلى <bdi dir="ltr">50</bdi> تحسنت النتائج أكثر، ومع <bdi dir="ltr">100</bdi> شجرة ظهر تحسن ملحوظ في مقاييس التقييم.</span>
+            </div>
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>النموذج / الإعداد</th>
+                    <th>المكتبة الفرعية</th>
+                    <th>الملاحظة العملية</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><bdi dir="ltr">DecisionTreeClassifier()</bdi></td>
+                    <td class="num-col">sklearn.tree</td>
+                    <td>نموذج أساسي يعتمد على شجرة واحدة.</td>
+                  </tr>
+                  <tr>
+                    <td><bdi dir="ltr">RandomForestClassifier(n_estimators=10)</bdi></td>
+                    <td class="num-col">sklearn.ensemble</td>
+                    <td>يتفوق على شجرة القرار الواحدة.</td>
+                  </tr>
+                  <tr>
+                    <td><bdi dir="ltr">RandomForestClassifier(n_estimators=50)</bdi></td>
+                    <td class="num-col">sklearn.ensemble</td>
+                    <td>تحسن إضافي في التعميم والدقة.</td>
+                  </tr>
+                  <tr>
+                    <td><bdi dir="ltr">RandomForestClassifier(n_estimators=100)</bdi></td>
+                    <td class="num-col">sklearn.ensemble</td>
+                    <td>تحسن ملحوظ واستقرار أعلى في النتائج.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3.3-3.5 Practical Sklearn Tools Code Explorer -->
+      <div class="sub-block">
+        <h3 class="sub-heading">3.2 أدوات التقييم البرمجية في <bdi dir="ltr">sklearn.metrics</bdi> ومنحنى مقارنة النماذج</h3>
+
+        <div class="layer">
+          <div class="metric-name">مستعرض أكواد الوحدة الثالثة: الأشجار، مصفوفة الارتباك، تقرير التصنيف، ومنحنى <bdi dir="ltr">ROC</bdi></div>
+          <div class="lab-tabs" role="tablist" aria-label="اختر كود الوحدة الثالثة">
+            <button type="button" class="lab-tab is-active" id="u3-tab-dt" onclick="selectU3Code('dt')">1. Decision Tree &amp; RF</button>
+            <button type="button" class="lab-tab" id="u3-tab-cm" onclick="selectU3Code('cm')">2. مصفوفة الارتباك</button>
+            <button type="button" class="lab-tab" id="u3-tab-cr" onclick="selectU3Code('cr')">3. تقرير التصنيف</button>
+            <button type="button" class="lab-tab" id="u3-tab-roc" onclick="selectU3Code('roc')">4. منحنى ROC ومقارنة النماذج</button>
+          </div>
+
+          <div class="code-panel">
+            <div class="code-header">
+              <span id="u3-code-filename">01_trees_and_forests.py</span>
+              <button type="button" class="copy-btn" onclick="copyCodeBlock('u3-code-content', this)">نسخ الكود</button>
+            </div>
+            <pre class="code-body" id="u3-code-content"></pre>
+          </div>
+
+          <div class="callout" id="u3-code-note">
+            <span class="callout-title" id="u3-note-title">شرح الأداة البرمجية</span>
+            <span id="u3-note-body"></span>
+          </div>
+        </div>
+
+        <!-- Multi-model ROC comparison chart -->
+        <div class="chart-card">
+          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:var(--space-sm);">
+            <div>
+              <div class="metric-name">مقارنة منحنيات <bdi dir="ltr">ROC</bdi> لعدة مصنفات في نفس الشكل</div>
+              <div class="mono-meta">Click model toggles below to compare curves against random baseline</div>
+            </div>
+            <div class="filter-row">
+              <button type="button" class="btn btn-primary btn-sm" id="toggle-roc-rf" onclick="toggleCompareCurve('rf')">Random Forest (100)</button>
+              <button type="button" class="btn btn-primary btn-sm" id="toggle-roc-svm" onclick="toggleCompareCurve('svm')">SVM (Linear)</button>
+              <button type="button" class="btn btn-primary btn-sm" id="toggle-roc-nb" onclick="toggleCompareCurve('nb')">Naive Bayes</button>
+              <button type="button" class="btn btn-primary btn-sm" id="toggle-roc-knn" onclick="toggleCompareCurve('knn')">K-NN (K=3)</button>
+              <button type="button" class="btn btn-primary btn-sm" id="toggle-roc-dt" onclick="toggleCompareCurve('dt')">Decision Tree</button>
+            </div>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="u3-multi-roc-canvas" aria-label="رسم مقارنة منحنيات ROC لنماذج التصنيف"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- UNIT 3 QUIZ -->
+      <div class="quiz-section" id="quiz-3">
+        <div class="quiz-header">
+          <div>
+            <span class="section-kicker">QUIZ 03 // 10 QUESTIONS</span>
+            <h3 class="sub-heading" style="border:none; padding:0; margin-top:var(--space-xs);">اختبار الوحدة الثالثة: الأشجار والغابات العشوائية وأدوات التقييم</h3>
+          </div>
+          <div class="quiz-score-pill" id="score-pill-u3">0 / 10</div>
+        </div>
+        <div class="quiz-list" id="quiz-container-u3"></div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- COMPREHENSIVE FINAL EXAM -->
+    <!-- ===================================================================== -->
+    <section class="unit-section" id="final-exam" aria-labelledby="final-title">
+      <div class="section-head">
+        <span class="section-kicker">COMPREHENSIVE EXAM // 15 QUESTIONS ACROSS CHAPTER 13</span>
+        <h2 class="section-title" id="final-title">الاختبار الشامل للفصل الثالث عشر: <strong>15 سؤالاً تطبيقياً وحسابياً</strong></h2>
+        <p class="section-desc">
+          اختبار متكامل يدمج مهارات الوحدات الثلاث: مسائل حسابية من مصفوفة الارتباك، وتحليل منحنيات <bdi dir="ltr">ROC</bdi>، واختيار المعاملات والمكتبات الصحيحة في <bdi dir="ltr">scikit-learn</bdi>.
+        </p>
+      </div>
+
+      <div class="quiz-section">
+        <div class="quiz-header">
+          <div class="filter-row" role="group" aria-label="تصفية أسئلة الاختبار الشامل">
+            <button type="button" class="btn btn-primary btn-sm" id="filter-all" onclick="setFinalFilter('all')">جميع الأسئلة (15)</button>
+            <button type="button" class="btn btn-ghost btn-sm" id="filter-unanswered" onclick="setFinalFilter('unanswered')">غير المجابة</button>
+            <button type="button" class="btn btn-ghost btn-sm" id="filter-wrong" onclick="setFinalFilter('wrong')">الأخطاء للمراجعة</button>
+          </div>
+          <div class="quiz-score-pill" id="score-pill-final">0 / 15</div>
+        </div>
+
+        <div class="kpi-grid" aria-label="تفصيل أداء الاختبار الشامل حسب الوحدة">
+          <div class="kpi-tile">
+            <span class="kpi-label">أسئلة الوحدة 1 (في الشامل)</span>
+            <span class="kpi-value" id="final-u1-sub">0 / 5</span>
+          </div>
+          <div class="kpi-tile">
+            <span class="kpi-label">أسئلة الوحدة 2 (في الشامل)</span>
+            <span class="kpi-value" id="final-u2-sub">0 / 5</span>
+          </div>
+          <div class="kpi-tile">
+            <span class="kpi-label">أسئلة الوحدة 3 (في الشامل)</span>
+            <span class="kpi-value" id="final-u3-sub">0 / 5</span>
+          </div>
+        </div>
+
+        <div class="quiz-list" id="quiz-container-final"></div>
+      </div>
+    </section>
+
+    <footer class="page-footer">
+      <span>المصدر: ملخص مقرر تحليل وتمثيل البيانات — الفصل الثالث عشر (التعلم الآلي بإشراف: الجزء الثالث، الوحدات 1 و 2 و 3).</span>
+      <span class="mono-meta">SUPERVISED ML // PART 3 // INTERACTIVE STUDY GUIDE</span>
+    </footer>
+  </main>
+
+  <api-shim></api-shim>
+
+  <script>
+    // =========================================================================
+    // STATE & PERSISTENCE
+    // =========================================================================
+    const appState = {
+      answers: {}, // key: questionId -> selected index (number)
+      rocModel: 'high',
+      rocThreshold: 0.50,
+      u2CodeTab: 'prep',
+      u3CodeTab: 'dt',
+      mcExample: '0',
+      finalFilter: 'all',
+      compareCurves: { rf: true, svm: true, nb: true, knn: true, dt: true }
     };
-  });
-}
 
-function renderQuiz() {
-  prepareShuffledQuiz();
-  const area = document.getElementById("quizArea");
-  area.innerHTML = "";
-  const letters = ["أ", "ب", "ج", "د"];
-  currentQuestions.forEach((item, i) => {
-    const box = document.createElement("div");
-    box.className = "qbox";
-    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
-    const opts = box.querySelector(".options");
-    item.o.forEach((opt, j) => {
-      const btn = document.createElement("button");
-      btn.className = "option";
-      btn.textContent = `${letters[j]}) ${opt}`;
-      btn.onclick = () => {
-        answers[i] = j;
-        [...opts.children].forEach((x, k) => {
-          x.classList.remove("correct", "wrong");
-          x.disabled = true;
-          if (k === item.a) x.classList.add("correct");
-          if (k === j && j !== item.a) x.classList.add("wrong");
+    function hasNotebookApi() {
+      return typeof window.notebookAppApi !== 'undefined' && window.notebookAppApi !== null;
+    }
+
+    async function persistState() {
+      if (!hasNotebookApi()) return;
+      try {
+        await window.notebookAppApi.setAppState({
+          answers: appState.answers,
+          rocModel: appState.rocModel,
+          rocThreshold: appState.rocThreshold,
+          u2CodeTab: appState.u2CodeTab,
+          u3CodeTab: appState.u3CodeTab,
+          mcExample: appState.mcExample,
+          compareCurves: appState.compareCurves
         });
-        const fb = document.getElementById("fb" + i);
-        fb.hidden = false;
-        fb.className = "feedback " + (j === item.a ? "good" : "bad");
-        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
-        updateScore();
+      } catch (e) {
+        // Ignore persistence failure outside host
+      }
+    }
+
+    // =========================================================================
+    // INTERACTIVE DATA: CODE SNIPPETS & MULTI-CLASS EXAMPLES
+    // =========================================================================
+    const mcExamples = {
+      '0': {
+        title: `تفصيل الحسابات للفئة (0) من مصفوفة تصنيف الأرقام (0–9)`,
+        rows: [
+          { label: `TP (التقاطع عند القطر للفئة 0)`, val: `977`, note: `العينات المصنفة بشكل صحيح كرقم 0` },
+          { label: `FP (مجموع عمود الفئة 0 عدا القطر)`, val: `16`, note: `أرقام أخرى صُنِّفت خطأً كرقم 0` },
+          { label: `FN (مجموع صف الفئة 0 عدا القطر)`, val: `3`, note: `أرقام 0 حقيقية صُنِّفت خطأً كأرقام أخرى` },
+          { label: `TN (مجموع أقطار الفئات من 1 إلى 9)`, val: `8930`, note: `العينات في الفئات الأخرى المصنفة بشكل صحيح` }
+        ],
+        summary: `Recall = 977 / (977 + 3) = 99.69%  |  Precision = 977 / (977 + 16) = 98.39%`
+      },
+      '7': {
+        title: `تفصيل الحسابات للفئة (7) من مصفوفة تصنيف الأرقام (0–9)`,
+        rows: [
+          { label: `TP (التقاطع عند القطر للفئة 7)`, val: `1010`, note: `عينات الرقم 7 المصنفة بشكل صحيح` },
+          { label: `FP (مجموع عمود الفئة 7 عدا القطر)`, val: `7`, note: `عينات من فئات أخرى صُنِّفت خطأً كرقم 7` },
+          { label: `FN (مجموع صف الفئة 7 عدا القطر)`, val: `18`, note: `عينات حقيقية للرقم 7 صُنِّفت خطأً كفئات أخرى` }
+        ],
+        summary: `Recall = 1010 / (1010 + 18) = 98.24%  |  Precision = 1010 / (1010 + 7) = 99.31%`
+      }
+    };
+
+    const u2Codes = {
+      prep: {
+        file: `01_data_preparation.py`,
+        code: `import pandas as pd
+from sklearn.model_selection import train_test_split
+
+# 1. قراءة بيانات مرضى السكري من ملف CSV
+df = pd.read_csv('diabetes.csv')
+
+# 2. فحص الجودة وعدم وجود قيم مفقودة وتوزيع السمة الهدف
+print(df.info())
+print(df['Outcome'].value_counts())
+
+# 3. فصل السمات المستقلة (X) عن السمة الهدف (target)
+X = df.drop('Outcome', axis=1)
+target = df['Outcome']
+
+# 4. تقسيم البيانات: 70% تدريب و 30% تقييم مع stratify للحفاظ على توازن الفئات
+X_train, X_test, y_train, y_test = train_test_split(
+    X, target, test_size=0.30, stratify=target, random_state=42
+)`,
+        title: `إعداد البيانات وتقسيمها الطَبَقي`,
+        body: `استخدام stratify=target ضروري هنا لأن السمة الهدف غير متوازنة؛ وبذلك نضمن بقاء نسبة المصابين إلى غير المصابين متماثلة في التدريب (70%) والتقييم (30%).`
+      },
+      knn: {
+        file: `02_knn_classifier.py`,
+        code: `from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
+# إنشاء نموذج K-NN بتحديد 3 جيران أقرب
+knn_model = KNeighborsClassifier(n_neighbors=3)
+
+# تدريب النموذج على بيانات التدريب
+knn_model.fit(X_train, y_train)
+
+# التنبؤ بوسوم بيانات التقييم
+predictions_knn = knn_model.predict(X_test)
+
+# تقييم الأداء بمقاييس sklearn.metrics
+print("Accuracy:", accuracy_score(y_test, predictions_knn))
+print("Precision:", precision_score(y_test, predictions_knn))
+print("Recall:", recall_score(y_test, predictions_knn))
+print("F1-score:", f1_score(y_test, predictions_knn))`,
+        title: `مصنف الجيران الأقرب K-NN`,
+        body: `يُستدعى من المكتبة الفرعية sklearn.neighbors. تم تحديد n_neighbors=3، ثم التدريب عبر fit والتنبؤ عبر predict.`
+      },
+      nb: {
+        file: `03_naive_bayes_classifier.py`,
+        code: `from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
+# إنشاء مصنف Gaussian Naive Bayes بالمعاملات الافتراضية
+nb_model = GaussianNB()
+
+# تدريب النموذج
+nb_model.fit(X_train, y_train)
+
+# التنبؤ على مجموعة التقييم
+predictions_nb = nb_model.predict(X_test)
+
+# حساب مقاييس الكفاءة ومقارنتها مع K-NN
+print("Accuracy:", accuracy_score(y_test, predictions_nb))
+print("F1-score:", f1_score(y_test, predictions_nb))`,
+        title: `مصنف Gaussian Naive Bayes`,
+        body: `يُستدعى من sklearn.naive_bayes بالمعاملات الافتراضية. في التجربة العملية على بيانات السكري، حقق Naive Bayes تحسناً واضحاً مقارنة بـ K-NN.`
+      },
+      svm: {
+        file: `04_svm_kernels.py`,
+        code: `from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score, f1_score
+
+# النموذج الأول: نواة خطية (Linear Kernel)
+svm_linear = SVC(kernel='linear')
+svm_linear.fit(X_train, y_train)
+predictions_linear = svm_linear.predict(X_test)
+
+# النموذج الثاني: نواة متعددة الحدود (Polynomial Kernel)
+svm_poly = SVC(kernel='poly')
+svm_poly.fit(X_train, y_train)
+predictions_poly = svm_poly.predict(X_test)
+
+print("Linear Accuracy:", accuracy_score(y_test, predictions_linear))
+print("Poly Accuracy:", accuracy_score(y_test, predictions_poly))`,
+        title: `آلات المتجهات الداعمة SVM ومقارنة النوى`,
+        body: `أعطت نواة polynomial نتائج أسوأ من linear kernel على هذه البيانات، مما يوضح أن البيانات خطية إلى حد كبير (مع احتمال تغير ذلك في مجموعات بيانات أخرى).`
+      }
+    };
+
+    const u3Codes = {
+      dt: {
+        file: `01_trees_and_random_forests.py`,
+        code: `from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, f1_score
+
+# 1. مصنف شجرة القرار
+dt_model = DecisionTreeClassifier(random_state=42)
+dt_model.fit(X_train, y_train)
+pred_dt = dt_model.predict(X_test)
+
+# 2. مصنف الغابات العشوائية بتدرج عدد الأشجار (10 -> 50 -> 100)
+for n in [10, 50, 100]:
+    rf_model = RandomForestClassifier(n_estimators=n, random_state=42)
+    rf_model.fit(X_train, y_train)
+    pred_rf = rf_model.predict(X_test)
+    print(f"RF (n={n}) Accuracy:", accuracy_score(y_test, pred_rf),
+          "F1:", f1_score(y_test, pred_rf))`,
+        title: `شجرة القرار والغابات العشوائية`,
+        body: `تتفوق Random Forests على شجرة القرار المنفردة، وبزيادة n_estimators من 10 إلى 50 ثم 100 تتحسن النتائج بشكل ملحوظ بفضل التصويت بالأغلبية عبر الأشجار.`
+      },
+      cm: {
+        file: `02_confusion_matrix_display.py`,
+        code: `from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+import matplotlib.pyplot as plt
+
+# حساب مصفوفة الارتباك بين القيم الحقيقية والتوقعات
+cm = confusion_matrix(y_test, pred_rf)
+
+# عرض المصفوفة بيانياً
+disp = ConfusionMatrixDisplay(confusion_matrix=cm)
+disp.plot()
+plt.show()`,
+        title: `حساب وعرض مصفوفة الارتباك`,
+        body: `نستخدم confusion_matrix لحساب المصفوفة الرقمية ثم ConfusionMatrixDisplay من sklearn.metrics لعرضها بصرياً.`
+      },
+      cr: {
+        file: `03_classification_report.py`,
+        code: `from sklearn.metrics import classification_report
+
+# إنشاء تقرير التصنيف الشامل لجميع الفئات والمتوسطات
+report = classification_report(y_test, pred_rf)
+print(report)`,
+        title: `تقرير التصنيف الشامل`,
+        body: `تعرض دالة classification_report قيم Precision و Recall و F1-score و Support لكل فئة، مع الدقة الكلية و Macro Avg و Weighted Avg.`
+      },
+      roc: {
+        file: `04_roc_curve_comparison.py`,
+        code: `from sklearn.metrics import roc_curve, roc_auc_score
+import matplotlib.pyplot as plt
+
+# نحتاج إلى احتمالات الفئة الموجبة [:, 1] وليس التصنيف الثابت
+prob_knn = knn_model.predict_proba(X_test)[:, 1]
+prob_nb  = nb_model.predict_proba(X_test)[:, 1]
+prob_rf  = rf_model.predict_proba(X_test)[:, 1]
+
+for name, probs in [('K-NN', prob_knn), ('Naive Bayes', prob_nb), ('Random Forest', prob_rf)]:
+    fpr, tpr, thresholds = roc_curve(y_test, probs)
+    score = roc_auc_score(y_test, probs)
+    plt.plot(fpr, tpr, label=f"{name} (AUC = {score:.2f})")
+
+plt.plot([0, 1], [0, 1], linestyle='--')
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.legend()
+plt.show()`,
+        title: `رسم منحنى ROC ومقارنة النماذج`,
+        body: `يعتمد roc_curve على الاحتمالات المستخرجة من predict_proba لتجربة عتبات متعددة وحساب FPR مقابل TPR، مما يتيح مقارنة عدة نماذج على نفس الرسم.`
+      }
+    };
+
+    // =========================================================================
+    // QUESTION BANK: 10 (U1) + 10 (U2) + 10 (U3) + 15 (FINAL) = 45 QUESTIONS
+    // =========================================================================
+    const quizzes = {
+      u1: [
+        {
+          id: `u1_q1`,
+          stem: `في مصفوفة الارتباك للتصنيف الثنائي، ماذا تمثل قيمة الإيجابي الكاذب (False Positive - FP)؟`,
+          options: [
+            `العينات الإيجابية في الواقع التي صنفها النموذج بشكل صحيح كإيجابية`,
+            `العينات السلبية في الواقع التي صنفها النموذج خطأً على أنها إيجابية`,
+            `العينات الإيجابية في الواقع التي صنفها النموذج خطأً على أنها سلبية`,
+            `العينات السلبية في الواقع التي صنفها النموذج بشكل صحيح كسلبية`
+          ],
+          correct: 1,
+          explanation: `الإيجابي الكاذب (FP) يعني أن النموذج تنبأ بـ "إيجابي"، لكن الحقيقة الفعلية للعينة هي "سلبية" (إنذار كاذب).`
+        },
+        {
+          id: `u1_q2`,
+          stem: `إذا كانت قيم مصفوفة الارتباك لنموذج تصنيف هي: TP = 80، TN = 90، FP = 20، FN = 10، فما قيمة الدقة الكلية (Accuracy)؟`,
+          options: [`80%`, `85%`, `88.9%`, `90%`],
+          correct: 1,
+          explanation: `Accuracy = (TP + TN) / (TP + TN + FP + FN) = (80 + 90) / (80 + 90 + 20 + 10) = 170 / 200 = 0.85 أي 85%.`
+        },
+        {
+          id: `u1_q3`,
+          stem: `ما المقياس الذي يحسب نسبة العينات الإيجابية الحقيقية التي نجح النموذج في اكتشافها من بين كل الإيجابيات الفعلية؟`,
+          options: [
+            `Precision (القيمة التنبؤية الموجبة)`,
+            `Specificity (النوعية)`,
+            `Sensitivity / Recall (الحساسية / الاستدعاء)`,
+            `NPV (القيمة التنبؤية السالبة)`
+          ],
+          correct: 2,
+          explanation: `الحساسية أو الاستدعاء Recall = TP / (TP + FN) تقيس قدرة النموذج على التقاط جميع الحالات الإيجابية الفعلية.`
+        },
+        {
+          id: `u1_q4`,
+          stem: `لماذا نلجأ إلى مقياس F1-score بدلاً من الاكتفاء بـ Accuracy عند عدم توازن الفئات؟`,
+          options: [
+            `لأنه لا يتطلب حساب مصفوفة الارتباك`,
+            `لأنه يمثل المتوسط التوافقي بين Precision و Recall فيعاقب النماذج المنحازة لفئة الأغلبية`,
+            `لأنه يقيس فقط العينات السلبية الصحيحة TN`,
+            `لأنه يساوي دائماً 1.0 في البيانات غير المتوازنة`
+          ],
+          correct: 1,
+          explanation: `F1-score = 2 × (Precision × Recall) / (Precision + Recall)، وهو متوسط توافقي ينخفض بشدة إذا انخفض أي من Precision أو Recall.`
+        },
+        {
+          id: `u1_q5`,
+          stem: `في مصفوفة الارتباك متعددة الفئات (مثل تصنيف الأرقام 0–9)، على ماذا يدل تركز الأرقام الكبيرة على القطر الرئيسي؟`,
+          options: [
+            `على أن النموذج يعاني من فرط التخصيص (Overfitting) الشديد`,
+            `على أن النموذج يصنف معظم العينات في فئاتها الصحيحة ويعمل بشكل جيد`,
+            `على أن البيانات تحتوي على قيم مفقودة`,
+            `على أن جميع الفئات متساوية في عدد العينات بالضرورة`
+          ],
+          correct: 1,
+          explanation: `القطر الرئيسي في المصفوفة يمثل تقاطع كل فئة حقيقية مع التوقع المطابق لها (TP لكل فئة)، لذا فإن تركز القيم عليه يعني كفاءة عالية.`
+        },
+        {
+          id: `u1_q6`,
+          stem: `في مثال تصنيف الأرقام (0–9)، إذا كانت قيم الفئة 7 هي: TP = 1010، FP = 7، FN = 18، فما قيمة Precision للفئة 7؟`,
+          options: [`98.24%`, `99.31%`, `97.58%`, `99.90%`],
+          correct: 1,
+          explanation: `Precision = TP / (TP + FP) = 1010 / (1010 + 7) = 1010 / 1017 ≈ 99.31%.`
+        },
+        {
+          id: `u1_q7`,
+          stem: `عند استخراج القيم لفئة محددة من مصفوفة ارتباك متعددة الفئات، كيف تُحسب قيمة FN (False Negative) لتلك الفئة؟`,
+          options: [
+            `مجموع قيم عمود الفئة باستثناء القطر الرئيسي`,
+            `مجموع قيم صف الفئة باستثناء القيمة الواقعة على القطر الرئيسي`,
+            `القيمة الواقعة على القطر الرئيسي فقط`,
+            `مجموع عناصر القطر الرئيسي لباقي الفئات`
+          ],
+          correct: 1,
+          explanation: `صف الفئة يمثل عيناتها الحقيقية؛ لذا فإن كل ما خرج عن القطر في هذا الصف صُنِّف خطأً كفئات أخرى ويمثل FN.`
+        },
+        {
+          id: `u1_q8`,
+          stem: `ما الطريقة التي تحسب المتوسط الكلي في Classification Report عبر جمع TP و FP و FN لجميع الفئات أولاً ثم حساب المقاييس؟`,
+          options: [`Macro Average`, `Weighted Average`, `Micro Average`, `Harmonic Average`],
+          correct: 2,
+          explanation: `Micro Average يجمع أولاً قيم TP و FP و FN عبر جميع الفئات، ثم يحسب المقياس من المجاميع الكلية.`
+        },
+        {
+          id: `u1_q9`,
+          stem: `في منحنى ROC، ما المتغير المرسوم على المحور السيني (x) وما المتغير المرسوم على المحور الصادي (y)؟`,
+          options: [
+            `Accuracy على المحور x و F1-score على المحور y`,
+            `FPR (أي 1 − Specificity) على المحور x و TPR (أي Recall) على المحور y`,
+            `Precision على المحور x و Recall على المحور y`,
+            `Threshold على المحور x و Precision على المحور y`
+          ],
+          correct: 1,
+          explanation: `يرسم منحنى ROC العلاقة بين معدل الإيجابية الكاذبة FPR = 1 − Specificity على المحور x، ومعدل الإيجابية الحقيقية TPR = Recall على المحور y عبر عتبات مختلفة.`
+        },
+        {
+          id: `u1_q10`,
+          stem: `إذا كانت المساحة تحت منحنى ROC تساوي AUC = 0.30، فما التفسير الصحيح لهذا النموذج؟`,
+          options: [
+            `نموذج مثالي لا يخطئ أبداً`,
+            `نموذج عشوائي تماماً`,
+            `نموذج أسوأ من العشوائي، ويمكن تحسينه بعكس التوقعات`,
+            `نموذج جيد لأن القيمة موجبة`
+          ],
+          correct: 2,
+          explanation: `عندما يكون AUC < 0.5 فهذا يعني أن النموذج يضع درجات أعلى للفئة السالبة مقارنة بالموجبة، أي أسوأ من التخمين العشوائي، وعكس توقعاته يرفع AUC إلى 0.70.`
+        }
+      ],
+
+      u2: [
+        {
+          id: `u2_q1`,
+          stem: `في التطبيق العملي لتصنيف مرضى السكري، لماذا نمرر المعامل stratify=target إلى دالة train_test_split؟`,
+          options: [
+            `لإزالة القيم المفقودة تلقائياً قبل التدريب`,
+            `للحفاظ على نفس نسبة توزيع الفئات غير المتوازنة في مجموعتي التدريب والتقييم`,
+            `لتحويل البيانات النصية إلى أرقام`,
+            `لزيادة عدد العينات في ملف البيانات الأصلي`
+          ],
+          correct: 1,
+          explanation: `بما أن فئات مرض السكري غير متوازنة، يضمن stratify=target مطابقة توزيع الفئات في جزئي التدريب والتقييم لتوزيعها الأصلي.`
+        },
+        {
+          id: `u2_q2`,
+          stem: `ما نسبة تقسيم البيانات المعتمدة في مثال إعداد بيانات مرضى السكري في الوحدة الثانية؟`,
+          options: [
+            `80% للتدريب و 20% للتقييم`,
+            `70% للتدريب و 30% للتقييم`,
+            `75% للتدريب و 25% للتقييم`,
+            `50% للتدريب و 50% للتقييم`
+          ],
+          correct: 1,
+          explanation: `في مثال الفصل الثالث عشر (بيانات السكري)، تم تقسيم البيانات بنسبة 70% للتدريب و30% للتقييم.`
+        },
+        {
+          id: `u2_q3`,
+          stem: `ما الخطوة الأولى التي ننفذها بعد قراءة ملف CSV لبيانات السكري وقبل بناء أي نموذج؟`,
+          options: [
+            `رسم منحنى ROC مباشرة`,
+            `فحص ملخص السمات وتوزيع السمة الهدف للتأكد من عدم وجود قيم مفقودة وفهم توازن الفئات`,
+            `تطبيق خوارزمية Random Forest بـ 100 شجرة`,
+            `حذف السمة الهدف من جدول البيانات بالكامل`
+          ],
+          correct: 1,
+          explanation: `فحص جودة البيانات وتوزيع الفئات والتأكد من خلوها من القيم المفقودة خطوة أساسية لضمان عمل المصنفات بشكل سليم.`
+        },
+        {
+          id: `u2_q4`,
+          stem: `من أي مكتبة فرعية في scikit-learn يتم استيراد مصنف الجيران الأقرب (K-NN)؟`,
+          options: [`sklearn.tree`, `sklearn.neighbors`, `sklearn.naive_bayes`, `sklearn.ensemble`],
+          correct: 1,
+          explanation: `يوجد KNeighborsClassifier داخل المكتبة الفرعية sklearn.neighbors.`
+        },
+        {
+          id: `u2_q5`,
+          stem: `في التطبيق العملي لمصنف K-NN في الوحدة الثانية، ما عدد الجيران المحدد وما الدالة المستخدمة لتدريب النموذج؟`,
+          options: [
+            `عدد الجيران 5، والدالة train()`,
+            `عدد الجيران 3، والدالة fit()`,
+            `عدد الجيران 10، والدالة predict()`,
+            `عدد الجيران 1، والدالة transform()`
+          ],
+          correct: 1,
+          explanation: `تم إنشاء نموذج K-NN بتحديد عدد الجيران بـ 3 (n_neighbors=3) ثم استدعاء الدالة fit للتدريب على بيانات التدريب.`
+        },
+        {
+          id: `u2_q6`,
+          stem: `أي مكتبة فرعية في scikit-learn تحتوي على مصنف Gaussian Naive Bayes؟`,
+          options: [`sklearn.svm`, `sklearn.naive_bayes`, `sklearn.linear_model`, `sklearn.metrics`],
+          correct: 1,
+          explanation: `تُستورد الفئة GaussianNB من المكتبة الفرعية sklearn.naive_bayes.`
+        },
+        {
+          id: `u2_q7`,
+          stem: `عند مقارنة نتائج Naive Bayes مع K-NN على بيانات السكري، ما النتيجة التي تم رصدها في الشرح العملي؟`,
+          options: [
+            `أعطى Naive Bayes نتائج أسوأ من K-NN`,
+            `تطابقت النتائج تماماً بين النموذجين`,
+            `ظهر تحسن في عملية التصنيف باستخدام Naive Bayes مقارنة بـ K-NN`,
+            `فشل Naive Bayes في العمل لعدم وجود نوى خطية`
+          ],
+          correct: 2,
+          explanation: `يذكر المقرر صراحةً أنه بمقارنة نتائج GaussianNB مع K-NN نلاحظ وجود تحسن في عملية التصنيف.`
+        },
+        {
+          id: `u2_q8`,
+          stem: `ما إحدى نقاط الضعف المعروفة في خوارزمية Naive Bayes عند التعامل مع السمات؟`,
+          options: [
+            `تحتاج إلى وقت تدريب طويل جداً مقارنة بجميع الخوارزميات`,
+            `تتجاهل العلاقة والارتباط بين المتغيرات المستقلة (تفترض استقلالها)`,
+            `لا تعمل مطلقاً في التصنيف الثنائي`,
+            `لا يمكن استخدامها مع بيانات نصية`
+          ],
+          correct: 1,
+          explanation: `سميت "ساذجة" لأنها تفترض استقلال السمات عن بعضها، وبالتالي تتجاهل العلاقة بين المتغيرات إن وجدت.`
+        },
+        {
+          id: `u2_q9`,
+          stem: `من أي مكتبة فرعية في scikit-learn يتم استيراد مصنف Support Vector Machines (SVC)؟`,
+          options: [`sklearn.svm`, `sklearn.vectors`, `sklearn.tree`, `sklearn.neighbors`],
+          correct: 0,
+          explanation: `يتم استدعاء مصنفات SVM عبر المكتبة الفرعية sklearn.svm.`
+        },
+        {
+          id: `u2_q10`,
+          stem: `في تجربة SVM على بيانات السكري، أعطت polynomial kernel نتائج أسوأ من linear kernel. ما الاستنتاج الصحيح؟`,
+          options: [
+            `أن نواة polynomial دائماً سيئة في كل المسائل`,
+            `أن هذه البيانات خطية بشكل كبير (أكثر ملاءمة للفاصل الخطي)، وقد يختلف ذلك باختلاف البيانات`,
+            `أن بيانات التدريب تحتوي على قيم مفقودة`,
+            `أن SVM لا يصلح للتصنيف الثنائي`
+          ],
+          correct: 1,
+          explanation: `تفوق linear kernel على polynomial kernel يدل على أن البيانات المدروسة ذات طبيعة خطية إلى حد كبير، مع التنبيه بأن ذلك يعتمد على طبيعة كل مجموعة بيانات.`
+        }
+      ],
+
+      u3: [
+        {
+          id: `u3_q1`,
+          stem: `من أي مكتبة فرعية في scikit-learn نستدعي مصنف شجرة القرار (DecisionTreeClassifier)؟`,
+          options: [`sklearn.ensemble`, `sklearn.tree`, `sklearn.forest`, `sklearn.metrics`],
+          correct: 1,
+          explanation: `تُستورد الفئة DecisionTreeClassifier من المكتبة الفرعية sklearn.tree.`
+        },
+        {
+          id: `u3_q2`,
+          stem: `كيف تصنف خوارزمية Random Forests العينات الجديدة بعد بناء عدد t من أشجار القرار؟`,
+          options: [
+            `باختيار قرار الشجرة الأولى فقط`,
+            `بحساب المسافة الإقليدية إلى أقرب شجرة`,
+            `عن طريق تجميع نتائج الأشجار الأساسية والتصويت بالأغلبية`,
+            `بضرب احتمالات جميع السمات معاً`
+          ],
+          correct: 2,
+          explanation: `تُبنى الأشجار باستخدام عينات Bootstrap وسمات عشوائية، وعند التصنيف يُتخذ القرار النهائي بالتصويت بالأغلبية.`
+        },
+        {
+          id: `u3_q3`,
+          stem: `من أي مكتبة فرعية في scikit-learn يتم استيراد RandomForestClassifier؟`,
+          options: [`sklearn.tree`, `sklearn.ensemble`, `sklearn.neighbors`, `sklearn.svm`],
+          correct: 1,
+          explanation: `تُعد Random Forests خوارزمية تجميعية، ولذلك توجد في المكتبة الفرعية sklearn.ensemble.`
+        },
+        {
+          id: `u3_q4`,
+          stem: `في الكود العملي لـ RandomForestClassifier، ماذا يحدد المعامل n_estimators؟`,
+          options: [
+            `نسبة بيانات الاختبار إلى التدريب`,
+            `عدد أشجار القرار (Decision Trees) المستخدمة في النموذج`,
+            `عدد الجيران الأقرب في الفضاء`,
+            `درجة متعددة الحدود لنواة SVM`
+          ],
+          correct: 1,
+          explanation: `المعامل n_estimators يحدد عدد أشجار القرار التي يتم بناؤها وتجميع تصويتها في الغابة العشوائية.`
+        },
+        {
+          id: `u3_q5`,
+          stem: `ماذا حدث لأداء Random Forest على بيانات السكري عند زيادة n_estimators من 10 إلى 50 ثم إلى 100؟`,
+          options: [
+            `تدهور الأداء تدريجياً حتى أصبح عشوائياً`,
+            `بقي ثابتاً تماماً دون أي تغيير`,
+            `تحسن الأداء مقارنة بشجرة القرار الواحدة، وزاد التحسن بشكل ملحوظ عند 100 شجرة`,
+            `توقف النموذج عن التدريب بسبب زيادة الأشجار`
+          ],
+          correct: 2,
+          explanation: `في التجربة العملية تحسنت النتائج عند n_estimators=10 مقارنة بـ Decision Tree، ثم تحسنت أكثر عند 50، ثم زاد التحسن بشكل ملحوظ عند 100.`
+        },
+        {
+          id: `u3_q6`,
+          stem: `ما الأداتان المستخدمتان من sklearn.metrics لحساب مصفوفة الارتباك وعرضها بيانياً؟`,
+          options: [
+            `roc_curve و roc_auc_score`,
+            `confusion_matrix و ConfusionMatrixDisplay`,
+            `classification_report و train_test_split`,
+            `accuracy_score و f1_score`
+          ],
+          correct: 1,
+          explanation: `نستخدم confusion_matrix لحساب المصفوفة، ثم ConfusionMatrixDisplay لعرضها بشكل رسم بياني واضح.`
+        },
+        {
+          id: `u3_q7`,
+          stem: `ما الغرض من استدعاء دالة classification_report من sklearn.metrics؟`,
+          options: [
+            `تقسيم البيانات إلى تدريب واختبار`,
+            `عرض تقرير شامل يضم Precision و Recall و F1-score و Support لكل فئة والمتوسطات المجمعة`,
+            `رسم منحنى ROC فقط`,
+            `تنظيف القيم المفقودة من الجدول`
+          ],
+          correct: 1,
+          explanation: `تُخرج classification_report جدولاً متكاملاً لمقاييس كل فئة بالإضافة إلى Accuracy و Macro Average و Weighted Average.`
+        },
+        {
+          id: `u3_q8`,
+          stem: `ما المدخل الذي يتطلبه حساب ورسم منحنى ROC عبر roc_curve في التصنيف الثنائي؟`,
+          options: [
+            `القيم الفعلية مع التوقعات الثنائية الحاسمة (0 و 1) فقط`,
+            `القيم الفعلية مع احتمالات انتماء العينات للفئة الموجبة (عبر predict_proba)`,
+            `أسماء الأعمدة النصية في DataFrame`,
+            `قيم MSE و RMSE فقط`
+          ],
+          correct: 1,
+          explanation: `منحنى ROC يختبر عدة عتبات (thresholds) مختلفة، وهذا يتطلب الحصول على احتمالات الفئة الموجبة وليس القيم الثنائية النهائية.`
+        },
+        {
+          id: `u3_q9`,
+          stem: `لماذا نرسم منحنيات ROC لعدة نماذج في نفس الشكل البياني؟`,
+          options: [
+            `لحساب عدد الجيران في K-NN`,
+            `لمقارنة كفاءة النماذج المختلفة بصرياً عبر جميع العتبات واختيار النموذج ذي المساحة الأكبر تحت المنحنى`,
+            `لإجبار النماذج على مشاركة نفس المعاملات`,
+            `لتحويل مشكلة التصنيف إلى مشكلة انحدار`
+          ],
+          correct: 1,
+          explanation: `عرض عدة منحنيات ROC في رسم واحد يكشف بوضوح أي نموذج يقترب أكثر من الزاوية العلوية اليسرى ويحقق AUC أعلى.`
+        },
+        {
+          id: `u3_q10`,
+          stem: `أي دالة تُستخدم في جميع مصنفات scikit-learn (مثل SVC و DecisionTree و RandomForest) لإصدار التوقعات على بيانات الاختبار؟`,
+          options: [`fit()`, `predict()`, `split()`, `report()`],
+          correct: 1,
+          explanation: `بعد تدريب أي مصنف باستخدام fit(X_train, y_train)، نستخدم predict(X_test) لتصنيف بيانات التقييم.`
+        }
+      ],
+
+      final: [
+        {
+          id: `fin_q1`,
+          unit: `u1`,
+          stem: `في مصفوفة ارتباك ثنائية: TP = 45، FN = 5، FP = 15، TN = 135. ما قيمة الحساسية (Recall) وقيمة Precision على الترتيب؟`,
+          options: [
+            `Recall = 90% و Precision = 75%`,
+            `Recall = 75% و Precision = 90%`,
+            `Recall = 90% و Precision = 90%`,
+            `Recall = 75% و Precision = 75%`
+          ],
+          correct: 0,
+          explanation: `Recall = 45 / (45 + 5) = 45/50 = 90%. Precision = 45 / (45 + 15) = 45/60 = 75%.`
+        },
+        {
+          id: `fin_q2`,
+          unit: `u1`,
+          stem: `إذا كانت Specificity لنموذج تشخيص مرض ما تساوي 0.88، فما الإحداثي السيني (FPR) المناظر لها على منحنى ROC؟`,
+          options: [`0.88`, `0.12`, `0.44`, `1.88`],
+          correct: 1,
+          explanation: `المحور السيني في ROC هو FPR = 1 − Specificity = 1 − 0.88 = 0.12.`
+        },
+        {
+          id: `fin_q3`,
+          unit: `u1`,
+          stem: `أي من المتوسطات التالية في Classification Report يعطي وزناً متساوياً لكل فئة حتى لو كانت إحدى الفئات تضم 10 عينات والأخرى 1000 عينة؟`,
+          options: [`Weighted Average`, `Macro Average`, `Micro Average`, `Support Average`],
+          correct: 1,
+          explanation: `Macro Average يجمع المقاييس لكل الفئات ويقسم على عدد الفئات بالتساوي دون اعتبار لحجم Support.`
+        },
+        {
+          id: `fin_q4`,
+          unit: `u1`,
+          stem: `في مصفوفة ارتباك متعددة الفئات للأرقام (0–9)، إذا كانت قيمة القطر للفئة 0 هي 977 ومجموع عمودها 993 ومجموع صفها 980، فما قيمتا FP و FN للفئة 0؟`,
+          options: [
+            `FP = 3 و FN = 16`,
+            `FP = 16 و FN = 3`,
+            `FP = 16 و FN = 16`,
+            `FP = 977 و FN = 8930`
+          ],
+          correct: 1,
+          explanation: `FP = مجموع العمود − القطر = 993 − 977 = 16. FN = مجموع الصف − القطر = 980 − 977 = 3.`
+        },
+        {
+          id: `fin_q5`,
+          unit: `u1`,
+          stem: `لماذا لا يكفي مقياس الدقة (Accuracy) وحده لتقييم نموذج يكشف مرضاً نادراً يصيب 2% فقط من المرضى؟`,
+          options: [
+            `لأن Accuracy لا يمكن حسابها في التصنيف الثنائي`,
+            `لأن نموذجاً يتوقع دائماً "غير مصاب" سيحقق Accuracy = 98% رغم فشله التام في اكتشاف أي مريض (Recall = 0%)`,
+            `لأن Accuracy تتطلب احتمالات predict_proba`,
+            `لأن Accuracy تساوي دائماً F1-score`
+          ],
+          correct: 1,
+          explanation: `في البيانات غير المتوازنة تنخدع Accuracy بفئة الأغلبية، لذا نعتمد على Recall و Precision و F1-score و ROC-AUC.`
+        },
+        {
+          id: `fin_q6`,
+          unit: `u2`,
+          stem: `ما الترتيب الصحيح لخطوات إعداد وبناء نموذج تصنيف في scikit-learn كما ورد في الوحدة الثانية؟`,
+          options: [
+            `fit -> train_test_split -> read_csv -> predict`,
+            `read_csv -> فحص الجودة وفصل X عن target -> train_test_split(stratify) -> fit -> predict -> metrics`,
+            `predict -> fit -> train_test_split -> read_csv`,
+            `roc_curve -> read_csv -> fit -> stratify`
+          ],
+          correct: 1,
+          explanation: `نقرأ البيانات أولاً ونفحصها، ثم نفصل السمات عن الهدف ونقسمها بـ train_test_split مع stratify، ثم ندرب بـ fit ونتنبأ بـ predict ثم نقيم بـ metrics.`
+        },
+        {
+          id: `fin_q7`,
+          unit: `u2`,
+          stem: `أي جملة استيراد صحيحة لتدريب نموذج Naive Bayes على سمات رقمية مستمرة مثل قياسات مرض السكري؟`,
+          options: [
+            `from sklearn.neighbors import GaussianNB`,
+            `from sklearn.naive_bayes import GaussianNB`,
+            `from sklearn.svm import GaussianNB`,
+            `from sklearn.metrics import GaussianNB`
+          ],
+          correct: 1,
+          explanation: `توجد الفئة GaussianNB داخل المكتبة الفرعية sklearn.naive_bayes.`
+        },
+        {
+          id: `fin_q8`,
+          unit: `u2`,
+          stem: `في تصنيف K-NN، إذا جربنا K = 3 ثم غيّرناها إلى K = 5، فما الذي يتغير؟`,
+          options: [
+            `تتغير دالة الخسارة إلى Binary Cross Entropy`,
+            `يتغير عدد الجيران الأقرب المشاركين في تصويت الأغلبية لتحديد تصنيف النقطة الجديدة`,
+            `يتحول النموذج إلى Random Forest`,
+            `تُحذف بيانات الاختبار تلقائياً`
+          ],
+          correct: 1,
+          explanation: `قيمة K تحدد عدد أقرب الجيران الذين يُؤخذ تصويتهم عند تصنيف أي عينة جديدة، وقد تتغير النتيجة بتغير K.`
+        },
+        {
+          id: `fin_q9`,
+          unit: `u2`,
+          stem: `عند مقارنة SVC(kernel='linear') مع SVC(kernel='poly') على بيانات السكري، أي العبارات أدق؟`,
+          options: [
+            `نواة poly تفوقت لأنها أكثر تعقيداً دائماً`,
+            `نواة linear تفوقت على poly مما يشير إلى خطية البيانات بدرجة كبيرة`,
+            `النواتان أعطتا نفس النتيجة لأن SVM لا يتأثر بالنواة`,
+            `يجب استخدام SVC داخل sklearn.tree`
+          ],
+          correct: 1,
+          explanation: `تفسير تفوق النواة الخطية على متعددة الحدود في بيانات السكري هو أن الفاصل بين الفئات خطي إلى حد كبير.`
+        },
+        {
+          id: `fin_q10`,
+          unit: `u2`,
+          stem: `ما المعامل الذي يضمن في train_test_split عدم اختلال نسبة فئة المصابين بالسكري بين مجموعتي التدريب (70%) والتقييم (30%)؟`,
+          options: [`n_estimators`, `kernel='linear'`, `stratify=target`, `n_neighbors=3`],
+          correct: 2,
+          explanation: `stratify=target يحافظ على التوزيع الطبقي للفئات في كلا الجزئين.`
+        },
+        {
+          id: `fin_q11`,
+          unit: `u3`,
+          stem: `أي مما يلي يُفسِّر تفوق RandomForestClassifier(n_estimators=100) على DecisionTreeClassifier في بيانات السكري؟`,
+          options: [
+            `لأن Random Forest تعتمد على شجرة واحدة فقط أعمق`,
+            `لأنها تبني 100 شجرة على عينات Bootstrap وسمات عشوائية وتدمجها بالتصويت بالأغلبية مما يقلل التباين ويحسن التعميم`,
+            `لأنها لا تستخدم دالة fit()`,
+            `لأنها تحذف جميع القيم الإيجابية`
+          ],
+          correct: 1,
+          explanation: `فكرة الغابات العشوائية التجميعية تقلل أخطاء الشجرة الفردية وتزداد استقراراً ودقة مع زيادة عدد الأشجار.`
+        },
+        {
+          id: `fin_q12`,
+          unit: `u3`,
+          stem: `إذا أراد مطوّر استخدام ConfusionMatrixDisplay لعرض المصفوفة، فما الخطوة التي تسبقها مباشرة؟`,
+          options: [
+            `حساب المصفوفة بدالة confusion_matrix(y_test, predictions)`,
+            `استدعاء GaussianNB()`,
+            `حساب AUC أقل من 0.5`,
+            `إعادة تقسيم البيانات بنسبة 50%`
+          ],
+          correct: 0,
+          explanation: `يتم أولاً حساب مصفوفة الأرقام عبر confusion_matrix ثم تمريرها إلى ConfusionMatrixDisplay لرسمها.`
+        },
+        {
+          id: `fin_q13`,
+          unit: `u3`,
+          stem: `ما الخطأ البرمجي الشائع عند محاولة رسم منحنى ROC في scikit-learn؟`,
+          options: [
+            `استخدام train_test_split`,
+            `تمرير التوقعات الثنائية من predict() بدلاً من احتمالات الفئة الموجبة من predict_proba()[:, 1]`,
+            `استيراد roc_curve من sklearn.metrics`,
+            `مقارنة أكثر من نموذج في نفس الشكل`
+          ],
+          correct: 1,
+          explanation: `حساب ROC عبر عتبات متعددة يتطلب درجات الاحتمال المستمرة للفئة الموجبة عبر predict_proba(X_test)[:, 1].`
+        },
+        {
+          id: `fin_q14`,
+          unit: `u3`,
+          stem: `أي مكتبتين فرعيتين نحتاج لاستيراد DecisionTreeClassifier و RandomForestClassifier على الترتيب؟`,
+          options: [
+            `sklearn.ensemble ثم sklearn.tree`,
+            `sklearn.tree ثم sklearn.ensemble`,
+            `sklearn.neighbors ثم sklearn.svm`,
+            `sklearn.metrics ثم sklearn.naive_bayes`
+          ],
+          correct: 1,
+          explanation: `DecisionTreeClassifier تنتمي إلى sklearn.tree، بينما RandomForestClassifier تنتمي إلى sklearn.ensemble.`
+        },
+        {
+          id: `fin_q15`,
+          unit: `u3`,
+          stem: `في رسم بياني يجمع منحنيات ROC لكل من K-NN و Naive Bayes و Random Forest، كيف نحدد النموذج الأفضل؟`,
+          options: [
+            `النموذج الذي يقع منحناه أسفل الخط القطري المتقطع`,
+            `النموذج الذي يقترب منحناه أكثر من الزاوية العلوية اليسرى (TPR مرتفع و FPR منخفض) ويحقق أعلى AUC`,
+            `النموذج الذي يمر من النقطة (1, 0) فقط`,
+            `النموذج ذو الخط المستقيم عند AUC = 0.5`
+          ],
+          correct: 1,
+          explanation: `الزاوية العلوية اليسرى تمثل TPR = 1 و FPR = 0 (تصنيف مثالي)، وكلما اقترب المنحنى منها زادت المساحة AUC وكفاءة النموذج.`
+        }
+      ]
+    };
+
+    // =========================================================================
+    // UNIT 1: CONFUSION MATRIX LAB & MULTI-CLASS EXAMPLE
+    // =========================================================================
+    function applyCMPreset(tp, tn, fp, fn) {
+      const elTp = document.getElementById('cm-tp');
+      const elTn = document.getElementById('cm-tn');
+      const elFp = document.getElementById('cm-fp');
+      const elFn = document.getElementById('cm-fn');
+      if (elTp) elTp.value = tp;
+      if (elTn) elTn.value = tn;
+      if (elFp) elFp.value = fp;
+      if (elFn) elFn.value = fn;
+      updateConfusionLab();
+    }
+
+    function updateConfusionLab() {
+      const tp = Math.max(0, Number(document.getElementById('cm-tp')?.value || 0));
+      const tn = Math.max(0, Number(document.getElementById('cm-tn')?.value || 0));
+      const fp = Math.max(0, Number(document.getElementById('cm-fp')?.value || 0));
+      const fn = Math.max(0, Number(document.getElementById('cm-fn')?.value || 0));
+
+      const setTxt = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = val;
       };
-      opts.appendChild(btn);
-    });
-    area.appendChild(box);
-  });
-  updateScore();
-}
+      setTxt('cm-disp-tp', tp);
+      setTxt('cm-disp-tn', tn);
+      setTxt('cm-disp-fp', fp);
+      setTxt('cm-disp-fn', fn);
 
-function updateScore() {
-  let correct = 0;
-  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
-  document.getElementById("score").textContent = `النتيجة: ${correct} / ${currentQuestions.length}`;
-  document.getElementById("progressBar").style.width = (Object.keys(answers).length / currentQuestions.length * 100) + "%";
-}
+      const total = tp + tn + fp + fn;
+      const acc = total > 0 ? (tp + tn) / total : 0;
+      const prec = (tp + fp) > 0 ? tp / (tp + fp) : 0;
+      const rec = (tp + fn) > 0 ? tp / (tp + fn) : 0;
+      const spec = (tn + fp) > 0 ? tn / (tn + fp) : 0;
+      const npv = (tn + fn) > 0 ? tn / (tn + fn) : 0;
+      const f1 = (prec + rec) > 0 ? (2 * prec * rec) / (prec + rec) : 0;
 
-document.getElementById("resetQuiz").onclick = () => {
-  answers = {};
-  document.getElementById("finalResult").textContent = "";
-  renderQuiz();
-  window.scrollTo({ top: 0, behavior: "smooth" });
-};
+      const updateBar = (valId, barId, ratio) => {
+        const pct = (ratio * 100).toFixed(2) + '%';
+        setTxt(valId, pct);
+        const bar = document.getElementById(barId);
+        if (bar) bar.style.width = Math.min(100, Math.max(0, ratio * 100)) + '%';
+      };
 
-document.getElementById("finishQuiz").onclick = () => {
-  let correct = 0;
-  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
-  const pct = Math.round(correct / currentQuestions.length * 100);
-  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${currentQuestions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! أنتِ مستعدة تماماً للاختبار في هذا الفصل." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
-};
+      updateBar('m-acc', 'bar-acc', acc);
+      updateBar('m-prec', 'bar-prec', prec);
+      updateBar('m-rec', 'bar-rec', rec);
+      updateBar('m-spec', 'bar-spec', spec);
+      updateBar('m-npv', 'bar-npv', npv);
+      updateBar('m-f1', 'bar-f1', f1);
 
-renderQuiz();
-</script>
+      const box = document.getElementById('cm-insight-box');
+      const txt = document.getElementById('cm-insight-text');
+      if (box && txt) {
+        box.classList.remove('callout-pos', 'callout-err');
+        if (total === 0) {
+          txt.textContent = `أدخل قيماً موجبة لعناصر المصفوفة لحساب المقاييس.`;
+        } else if (acc > 0.85 && f1 < 0.45) {
+          box.classList.add('callout-err');
+          txt.textContent = `تحذير فخ الدقة! الدقة الكلية مرتفعة (${(acc * 100).toFixed(1)}%) لكن F1-score منخفضة (${(f1 * 100).toFixed(1)}%) لأن البيانات غير متوازنة والنموذج يُهمل الفئة الإيجابية.`;
+        } else if (rec >= 0.90 && prec < 0.80) {
+          txt.textContent = `حساسية عالية جداً (${(rec * 100).toFixed(1)}%): النموذج يكتشف معظم الحالات الإيجابية (مفيد في الفحوص الطبية) مقابل ارتفاع نسبي في الإنذارات الكاذبة (FP = ${fp}).`;
+        } else {
+          box.classList.add('callout-pos');
+          txt.textContent = `إجمالي العينات ${total} عينة؛ يحقق النموذج F1-score قدرها ${(f1 * 100).toFixed(2)}% مع حساسية ${(rec * 100).toFixed(2)}% وضبط ${(prec * 100).toFixed(2)}%.`;
+        }
+      }
+    }
+
+    function selectMultiClassExample(cls) {
+      appState.mcExample = cls;
+      const t0 = document.getElementById('mc-tab-0');
+      const t7 = document.getElementById('mc-tab-7');
+      if (t0) t0.classList.toggle('is-active', cls === '0');
+      if (t7) t7.classList.toggle('is-active', cls === '7');
+
+      const data = mcExamples[cls];
+      const panel = document.getElementById('mc-detail-panel');
+      if (!panel || !data) return;
+
+      let html = `<div style="font-weight:600; margin-bottom:var(--space-sm);">${data.title}</div>`;
+      html += `<div style="display:grid; gap:var(--space-xs);">`;
+      data.rows.forEach(r => {
+        html += `<div style="display:flex; justify-content:space-between; gap:var(--space-sm); padding:var(--space-xs) 0; border-bottom:var(--rule);">
+          <span><strong>${r.label}</strong><br><small style="color:var(--on-surface-variant);">${r.note}</small></span>
+          <span class="mono-meta" style="font-size:1rem; font-weight:600; color:var(--primary);">${r.val}</span>
+        </div>`;
+      });
+      html += `</div>`;
+      html += `<div class="mono-meta" style="margin-top:var(--space-sm); color:var(--on-surface); font-weight:600;">${data.summary}</div>`;
+      panel.innerHTML = html;
+      persistState();
+    }
+
+    // =========================================================================
+    // CODE EXPLORER SWITCHERS (UNIT 2 & UNIT 3)
+    // =========================================================================
+    function selectU2Code(key) {
+      appState.u2CodeTab = key;
+      ['prep', 'knn', 'nb', 'svm'].forEach(k => {
+        const el = document.getElementById('u2-tab-' + k);
+        if (el) el.classList.toggle('is-active', k === key);
+      });
+      const item = u2Codes[key];
+      if (!item) return;
+      const fn = document.getElementById('u2-code-filename');
+      const body = document.getElementById('u2-code-content');
+      const nt = document.getElementById('u2-note-title');
+      const nb = document.getElementById('u2-note-body');
+      if (fn) fn.textContent = item.file;
+      if (body) body.textContent = item.code;
+      if (nt) nt.textContent = item.title;
+      if (nb) nb.textContent = item.body;
+      persistState();
+    }
+
+    function selectU3Code(key) {
+      appState.u3CodeTab = key;
+      ['dt', 'cm', 'cr', 'roc'].forEach(k => {
+        const el = document.getElementById('u3-tab-' + k);
+        if (el) el.classList.toggle('is-active', k === key);
+      });
+      const item = u3Codes[key];
+      if (!item) return;
+      const fn = document.getElementById('u3-code-filename');
+      const body = document.getElementById('u3-code-content');
+      const nt = document.getElementById('u3-note-title');
+      const nb = document.getElementById('u3-note-body');
+      if (fn) fn.textContent = item.file;
+      if (body) body.textContent = item.code;
+      if (nt) nt.textContent = item.title;
+      if (nb) nb.textContent = item.body;
+      persistState();
+    }
+
+    function copyCodeBlock(preId, btn) {
+      const pre = document.getElementById(preId);
+      if (!pre || !btn) return;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(pre.textContent).then(() => {
+          btn.textContent = `تم النسخ`;
+          setTimeout(() => { btn.textContent = `نسخ الكود`; }, 1400);
+        }).catch(() => {
+          btn.textContent = `حدّد النص للنسخ`;
+        });
+      }
+    }
+
+    // =========================================================================
+    // CHARTS (CHART.JS BOUND TO CSS TOKENS)
+    // =========================================================================
+    function getToken(name) {
+      return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    }
+
+    let u1RocChart = null;
+    let u3RfChart = null;
+    let u3MultiRocChart = null;
+
+    function rocPointFor(modelKey, threshold) {
+      // Smooth parametric ROC curve y = x^(1/k) where k determines AUC = k/(k+1)
+      // As threshold increases (0.1 -> 0.9), FPR decreases monotonically from ~0.88 down to ~0.04
+      const t = (threshold - 0.10) / 0.80; // 0..1
+      const fpr = Math.max(0.02, Math.min(0.95, 0.88 * Math.pow(1 - t, 1.35)));
+      let power = 0.06; // AUC ~ 0.94
+      if (modelKey === 'mid') power = 0.31; // AUC ~ 0.76
+      if (modelKey === 'rand') power = 1.00; // AUC = 0.50
+      const tpr = Math.pow(fpr, power);
+      return { x: Number(fpr.toFixed(3)), y: Number(tpr.toFixed(3)) };
+    }
+
+    function buildRocSeries(power) {
+      const pts = [];
+      for (let i = 0; i <= 40; i++) {
+        const x = i / 40;
+        pts.push({ x: Number(x.toFixed(3)), y: Number(Math.pow(x, power).toFixed(3)) });
+      }
+      return pts;
+    }
+
+    function initU1RocChart() {
+      const canvas = document.getElementById('u1-roc-canvas');
+      if (!canvas || typeof Chart === 'undefined') return;
+
+      const cPrimary = getToken('--data-1');
+      const cContext = getToken('--data-context');
+      const cInk = getToken('--on-surface');
+      const cGrid = getToken('--outline-variant');
+
+      const powerMap = { high: 0.06, mid: 0.31, rand: 1.00 };
+      const labelMap = {
+        high: `نموذج ممتاز (AUC ≈ 0.94)`,
+        mid: `نموذج متوسط (AUC ≈ 0.76)`,
+        rand: `نموذج عشوائي (AUC = 0.50)`
+      };
+
+      const opPt = rocPointFor(appState.rocModel, appState.rocThreshold);
+
+      if (u1RocChart) u1RocChart.destroy();
+      u1RocChart = new Chart(canvas, {
+        type: 'scatter',
+        data: {
+          datasets: [
+            {
+              label: `الخط العشوائي (AUC = 0.50)`,
+              data: [{ x: 0, y: 0 }, { x: 1, y: 1 }],
+              showLine: true,
+              borderColor: cContext,
+              borderDash: [6, 5],
+              borderWidth: 1.5,
+              pointRadius: 0
+            },
+            {
+              label: labelMap[appState.rocModel],
+              data: buildRocSeries(powerMap[appState.rocModel]),
+              showLine: true,
+              borderColor: cPrimary,
+              backgroundColor: cPrimary,
+              borderWidth: 2.5,
+              pointRadius: 0
+            },
+            {
+              label: `نقطة العتبة الحالية`,
+              data: [opPt],
+              borderColor: cInk,
+              backgroundColor: cInk,
+              pointRadius: 7,
+              pointHoverRadius: 9
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: false,
+          scales: {
+            x: {
+              type: 'linear',
+              min: 0,
+              max: 1,
+              title: { display: true, text: 'False Positive Rate (1 - Specificity)', color: cInk },
+              grid: { color: cGrid }
+            },
+            y: {
+              type: 'linear',
+              min: 0,
+              max: 1,
+              title: { display: true, text: 'True Positive Rate (Recall)', color: cInk },
+              grid: { color: cGrid }
+            }
+          },
+          plugins: {
+            legend: { position: 'top', align: 'start' }
+          }
+        }
+      });
+
+      const tprEl = document.getElementById('roc-tpr-val');
+      const fprEl = document.getElementById('roc-fpr-val');
+      const rdEl = document.getElementById('roc-threshold-readout');
+      if (tprEl) tprEl.textContent = opPt.y.toFixed(2);
+      if (fprEl) fprEl.textContent = opPt.x.toFixed(2);
+      if (rdEl) rdEl.textContent = `Threshold = ${Number(appState.rocThreshold).toFixed(2)}`;
+    }
+
+    function setRocModel(modelKey) {
+      appState.rocModel = modelKey;
+      ['high', 'mid', 'rand'].forEach(k => {
+        const btn = document.getElementById('roc-m-' + k);
+        if (btn) {
+          btn.classList.toggle('btn-primary', k === modelKey);
+          btn.classList.toggle('btn-ghost', k !== modelKey);
+        }
+      });
+      initU1RocChart();
+      persistState();
+    }
+
+    function updateRocThreshold(val) {
+      appState.rocThreshold = Number(val);
+      initU1RocChart();
+      persistState();
+    }
+
+    function initU3RfChart() {
+      const canvas = document.getElementById('u3-rf-canvas');
+      if (!canvas || typeof Chart === 'undefined') return;
+      const c1 = getToken('--data-1');
+      const c3 = getToken('--data-3');
+      const cGrid = getToken('--outline-variant');
+      const cInk = getToken('--on-surface');
+
+      if (u3RfChart) u3RfChart.destroy();
+      u3RfChart = new Chart(canvas, {
+        type: 'bar',
+        data: {
+          labels: [
+            `Decision Tree`,
+            `RF (n_estimators=10)`,
+            `RF (n_estimators=50)`,
+            `RF (n_estimators=100)`
+          ],
+          datasets: [
+            {
+              label: `اتجاه تحسن الدقة (Accuracy — تمثيل توضيحي لتدرج التجربة)`,
+              data: [71, 74, 77, 80],
+              backgroundColor: c1,
+              barPercentage: 0.55
+            },
+            {
+              label: `اتجاه تحسن F1-score`,
+              data: [62, 66, 70, 74],
+              backgroundColor: c3,
+              barPercentage: 0.55
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              min: 50,
+              max: 90,
+              title: { display: true, text: 'نسبة الكفاءة التوضيحية (%)', color: cInk },
+              grid: { color: cGrid }
+            },
+            x: {
+              grid: { display: false }
+            }
+          },
+          plugins: {
+            legend: { position: 'top', align: 'start' }
+          }
+        }
+      });
+    }
+
+    function initU3MultiRocChart() {
+      const canvas = document.getElementById('u3-multi-roc-canvas');
+      if (!canvas || typeof Chart === 'undefined') return;
+      const cGrid = getToken('--outline-variant');
+      const cInk = getToken('--on-surface');
+      const cContext = getToken('--data-context');
+
+      const defs = [
+        { key: 'rf', label: `Random Forest (n=100)`, power: 0.14, color: getToken('--data-1') },
+        { key: 'svm', label: `SVM (Linear Kernel)`, power: 0.19, color: getToken('--data-2') },
+        { key: 'nb', label: `Gaussian Naive Bayes`, power: 0.23, color: getToken('--data-3') },
+        { key: 'knn', label: `K-NN (n_neighbors=3)`, power: 0.34, color: getToken('--data-4') },
+        { key: 'dt', label: `Decision Tree`, power: 0.42, color: getToken('--data-5') }
+      ];
+
+      const datasets = [
+        {
+          label: `خط الأساس العشوائي (AUC = 0.50)`,
+          data: [{ x: 0, y: 0 }, { x: 1, y: 1 }],
+          showLine: true,
+          borderColor: cContext,
+          borderDash: [5, 5],
+          borderWidth: 1.5,
+          pointRadius: 0
+        }
+      ];
+
+      defs.forEach(d => {
+        if (appState.compareCurves[d.key]) {
+          datasets.push({
+            label: d.label,
+            data: buildRocSeries(d.power),
+            showLine: true,
+            borderColor: d.color,
+            backgroundColor: d.color,
+            borderWidth: 2.2,
+            pointRadius: 0
+          });
+        }
+      });
+
+      if (u3MultiRocChart) u3MultiRocChart.destroy();
+      u3MultiRocChart = new Chart(canvas, {
+        type: 'scatter',
+        data: { datasets },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: false,
+          scales: {
+            x: {
+              type: 'linear', min: 0, max: 1,
+              title: { display: true, text: 'False Positive Rate (FPR)', color: cInk },
+              grid: { color: cGrid }
+            },
+            y: {
+              type: 'linear', min: 0, max: 1,
+              title: { display: true, text: 'True Positive Rate (TPR)', color: cInk },
+              grid: { color: cGrid }
+            }
+          },
+          plugins: {
+            legend: { position: 'top', align: 'start' }
+          }
+        }
+      });
+    }
+
+    function toggleCompareCurve(key) {
+      appState.compareCurves[key] = !appState.compareCurves[key];
+      const btn = document.getElementById('toggle-roc-' + key);
+      if (btn) {
+        btn.classList.toggle('btn-primary', appState.compareCurves[key]);
+        btn.classList.toggle('btn-ghost', !appState.compareCurves[key]);
+      }
+      initU3MultiRocChart();
+      persistState();
+    }
+
+    // =========================================================================
+    // QUIZ RENDERER & SCORING ENGINE
+    // =========================================================================
+    const arabicLetters = [`أ`, `ب`, `ج`, `د`];
+
+    function renderQuizGroup(groupKey, containerId) {
+      const container = document.getElementById(containerId);
+      const list = quizzes[groupKey];
+      if (!container || !list) return;
+
+      let html = '';
+      list.forEach((q, idx) => {
+        const chosen = appState.answers[q.id];
+        const isAnswered = typeof chosen === 'number';
+        const isCorrect = isAnswered && chosen === q.correct;
+
+        if (groupKey === 'final') {
+          if (appState.finalFilter === 'unanswered' && isAnswered) return;
+          if (appState.finalFilter === 'wrong' && (!isAnswered || isCorrect)) return;
+        }
+
+        const cardCls = isAnswered ? (isCorrect ? 'q-card is-correct' : 'q-card is-wrong') : 'q-card';
+        const unitBadge = q.unit ? ` — من الوحدة ${q.unit === 'u1' ? 'الأولى' : q.unit === 'u2' ? 'الثانية' : 'الثالثة'}` : '';
+
+        html += `<article class="${cardCls}" id="card-${q.id}">`;
+        html += `<div class="q-top">
+          <span class="q-num">سؤال ${idx + 1}${unitBadge}</span>
+          <span class="q-status ${isAnswered ? (isCorrect ? 'ok' : 'bad') : ''}">${isAnswered ? (isCorrect ? 'إجابة صحيحة' : 'إجابة غير صحيحة') : 'بانتظار الإجابة'}</span>
+        </div>`;
+        html += `<p class="q-stem">${q.stem}</p>`;
+        html += `<div class="q-options">`;
+
+        q.options.forEach((opt, optIdx) => {
+          let optCls = 'q-opt';
+          if (isAnswered) {
+            if (optIdx === q.correct) optCls += ' opt-correct';
+            else if (optIdx === chosen) optCls += ' opt-wrong';
+          }
+          html += `<button type="button" class="${optCls}" ${isAnswered ? 'disabled' : ''} onclick="answerQuestion('${groupKey}', '${q.id}', ${optIdx})">
+            <span class="q-opt-letter">${arabicLetters[optIdx]}</span>
+            <span>${opt}</span>
+          </button>`;
+        });
+
+        html += `</div>`;
+        html += `<div class="q-feedback ${isAnswered ? 'is-visible ' + (isCorrect ? 'ok' : 'bad') : ''}">
+          <strong>التفسير:</strong> ${q.explanation}
+        </div>`;
+        html += `</article>`;
+      });
+
+      if (groupKey === 'final' && html === '') {
+        html = `<div class="layer"><p class="prose">لا توجد أسئلة مطابقة لهذا الفلتر حالياً. يمكنك عرض جميع الأسئلة أو استكمال الأسئلة المتبقية.</p></div>`;
+      }
+
+      container.innerHTML = html;
+    }
+
+    function answerQuestion(groupKey, qId, optIdx) {
+      if (typeof appState.answers[qId] === 'number') return;
+      appState.answers[qId] = optIdx;
+      const containerMap = {
+        u1: 'quiz-container-u1',
+        u2: 'quiz-container-u2',
+        u3: 'quiz-container-u3',
+        final: 'quiz-container-final'
+      };
+      renderQuizGroup(groupKey, containerMap[groupKey]);
+      updateAllScores();
+      persistState();
+    }
+
+    function computeGroupStats(list) {
+      let answered = 0;
+      let correct = 0;
+      list.forEach(q => {
+        if (typeof appState.answers[q.id] === 'number') {
+          answered++;
+          if (appState.answers[q.id] === q.correct) correct++;
+        }
+      });
+      return { answered, correct, total: list.length };
+    }
+
+    function updateAllScores() {
+      const s1 = computeGroupStats(quizzes.u1);
+      const s2 = computeGroupStats(quizzes.u2);
+      const s3 = computeGroupStats(quizzes.u3);
+      const sf = computeGroupStats(quizzes.final);
+
+      const totAns = s1.answered + s2.answered + s3.answered + sf.answered;
+      const totCor = s1.correct + s2.correct + s3.correct + sf.correct;
+      const totAll = s1.total + s2.total + s3.total + sf.total;
+
+      const setTxt = (id, v) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = v;
+      };
+
+      setTxt('kpi-total', `${totAns} / ${totAll}`);
+      setTxt('kpi-total-pct', totAns > 0 ? `الصحيح: ${totCor} (${Math.round((totCor / totAns) * 100)}%)` : `الدقة الكلية: —`);
+      setTxt('kpi-u1', `${s1.correct} / ${s1.total}`);
+      setTxt('kpi-u2', `${s2.correct} / ${s2.total}`);
+      setTxt('kpi-u3', `${s3.correct} / ${s3.total}`);
+      setTxt('kpi-final', `${sf.correct} / ${sf.total}`);
+
+      setTxt('score-pill-u1', `${s1.correct} / ${s1.total}`);
+      setTxt('score-pill-u2', `${s2.correct} / ${s2.total}`);
+      setTxt('score-pill-u3', `${s3.correct} / ${s3.total}`);
+      setTxt('score-pill-final', `${sf.correct} / ${sf.total}`);
+
+      // Breakdown inside Final Exam by unit
+      ['u1', 'u2', 'u3'].forEach(u => {
+        const sub = quizzes.final.filter(q => q.unit === u);
+        const st = computeGroupStats(sub);
+        setTxt(`final-${u}-sub`, `${st.correct} / ${st.total}`);
+      });
+    }
+
+    function setFinalFilter(mode) {
+      appState.finalFilter = mode;
+      ['all', 'unanswered', 'wrong'].forEach(m => {
+        const btn = document.getElementById('filter-' + m);
+        if (btn) {
+          btn.classList.toggle('btn-primary', m === mode);
+          btn.classList.toggle('btn-ghost', m !== mode);
+        }
+      });
+      renderQuizGroup('final', 'quiz-container-final');
+    }
+
+    function resetAllProgress(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== 'true') {
+        btn.dataset.armed = 'true';
+        btn.textContent = `اضغط مرة أخرى لتأكيد المسح`;
+        setTimeout(() => {
+          if (btn.dataset.armed === 'true') {
+            btn.dataset.armed = 'false';
+            btn.textContent = `إعادة ضبط الإجابات`;
+          }
+        }, 3500);
+        return;
+      }
+      btn.dataset.armed = 'false';
+      btn.textContent = `إعادة ضبط الإجابات`;
+      appState.answers = {};
+      renderQuizGroup('u1', 'quiz-container-u1');
+      renderQuizGroup('u2', 'quiz-container-u2');
+      renderQuizGroup('u3', 'quiz-container-u3');
+      renderQuizGroup('final', 'quiz-container-final');
+      updateAllScores();
+      persistState();
+    }
+
+    function exportSummaryReport() {
+      const s1 = computeGroupStats(quizzes.u1);
+      const s2 = computeGroupStats(quizzes.u2);
+      const s3 = computeGroupStats(quizzes.u3);
+      const sf = computeGroupStats(quizzes.final);
+      const lines = [
+        `القسم,المجاب,الصحيح,الإجمالي`,
+        `الوحدة الأولى (مقاييس التقييم و ROC),${s1.answered},${s1.correct},${s1.total}`,
+        `الوحدة الثانية (K-NN و Naive Bayes و SVM),${s2.answered},${s2.correct},${s2.total}`,
+        `الوحدة الثالثة (الأشجار والغابات وأدوات التقييم),${s3.answered},${s3.correct},${s3.total}`,
+        `الاختبار الشامل للفصل الثالث عشر,${sf.answered},${sf.correct},${sf.total}`
+      ].join('\n');
+
+      if (hasNotebookApi() && typeof window.notebookAppApi.triggerFileDownload === 'function') {
+        window.notebookAppApi.triggerFileDownload({
+          content: '\uFEFF' + lines,
+          contentType: 'text/csv',
+          encoding: 'UTF-8',
+          filename: 'chapter13_ml_part3_results.csv'
+        });
+      }
+    }
+
+    // =========================================================================
+    // INITIALIZATION
+    // =========================================================================
+    async function initApp() {
+      if (hasNotebookApi()) {
+        try {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === 'object') {
+            if (saved.answers && typeof saved.answers === 'object') appState.answers = saved.answers;
+            if (saved.rocModel) appState.rocModel = saved.rocModel;
+            if (typeof saved.rocThreshold === 'number') appState.rocThreshold = saved.rocThreshold;
+            if (saved.u2CodeTab) appState.u2CodeTab = saved.u2CodeTab;
+            if (saved.u3CodeTab) appState.u3CodeTab = saved.u3CodeTab;
+            if (saved.mcExample) appState.mcExample = saved.mcExample;
+            if (saved.compareCurves && typeof saved.compareCurves === 'object') {
+              appState.compareCurves = saved.compareCurves;
+            }
+          }
+        } catch (e) {
+          // Proceed with defaults
+        }
+      }
+
+      updateConfusionLab();
+      selectMultiClassExample(appState.mcExample);
+      selectU2Code(appState.u2CodeTab);
+      selectU3Code(appState.u3CodeTab);
+
+      const slider = document.getElementById('roc-threshold-slider');
+      if (slider) slider.value = appState.rocThreshold;
+      setRocModel(appState.rocModel);
+
+      Object.keys(appState.compareCurves).forEach(k => {
+        const btn = document.getElementById('toggle-roc-' + k);
+        if (btn) {
+          btn.classList.toggle('btn-primary', appState.compareCurves[k]);
+          btn.classList.toggle('btn-ghost', !appState.compareCurves[k]);
+        }
+      });
+
+      initU3RfChart();
+      initU3MultiRocChart();
+
+      renderQuizGroup('u1', 'quiz-container-u1');
+      renderQuizGroup('u2', 'quiz-container-u2');
+      renderQuizGroup('u3', 'quiz-container-u3');
+      renderQuizGroup('final', 'quiz-container-final');
+      updateAllScores();
+
+      if (typeof renderMathInElement === 'function') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false }
+          ]
+        });
+      }
+
+      if (typeof lucide !== 'undefined' && typeof lucide.createIcons === 'function') {
+        lucide.createIcons();
+      }
+
+      if (hasNotebookApi() && typeof window.notebookAppApi.notifyAppReady === 'function') {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initApp);
+  </script>
 </body>
 </html>

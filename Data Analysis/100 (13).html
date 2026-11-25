@@ -1,671 +1,2809 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>الفصل الرابع عشر الشامل (100%) | تحليل وتمثيل البيانات</title>
-<style>
-:root{
-  --bg:#f0f5ff;
-  --card:#ffffff;
-  --ink:#0f172a;
-  --muted:#475569;
-  --accent:#1d4ed8;
-  --accent-dark:#1e3a8a;
-  --accent2:#dbeafe;
-  --line:#cbd5e1;
-  --good:#059669;
-  --good-bg:#ecfdf5;
-  --bad:#dc2626;
-  --bad-bg:#fef2f2;
-  --warn:#d97706;
-  --warn-bg:#fffbeb;
-}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
-header{background:linear-gradient(135deg,#0f172a,#1d4ed8);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(15,23,42,0.2)}
-.wrap{max-width:1040px;margin:auto;padding:0 16px}
-.eyebrow{opacity:.92;font-size:.9rem;background:rgba(255,255,255,0.16);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
-h1{margin:5px 0;font-size:clamp(1.5rem,4vw,2.25rem)}
-header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
-nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
-nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:var(--accent2);color:var(--accent-dark);font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
-nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
-nav button.active,.btn.primary{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
-main .btn.primary{background:var(--accent);color:white}
-main{padding:22px 0 48px}
-.panel{display:none}
-.panel.active{display:block;animation:fadeIn .25s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(15,23,42,0.04)}
-h2{font-size:1.35rem;margin:0 0 12px;color:#0f172a}
-h3{font-size:1.08rem;margin:0 0 8px;color:var(--accent-dark)}
-small,.muted{color:var(--muted)}
-ul,ol{padding-right:22px;margin:8px 0}
-li{margin:6px 0}
-details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
-summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f8fafc;color:#0f172a;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
-details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
-.details-body{padding:16px 18px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
-.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
-.badge-new{display:inline-block;background:var(--warn-bg);color:var(--warn);border:1px solid #fcd34d;font-size:.78rem;padding:1px 8px;border-radius:6px;margin-right:6px;font-weight:bold}
-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
-th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
-th{background:#eff6ff;color:#1e3a8a;font-weight:bold}
-tr:last-child td{border-bottom:0}
-.note{border-right:4px solid var(--accent);padding:10px 14px;background:#eff6ff;border-radius:8px;margin:10px 0}
-.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
-.math-box{background:#f8fafc;border:2px solid #93c5fd;border-radius:12px;padding:12px 16px;margin:10px 0;text-align:center;font-size:1.03rem;font-weight:bold;color:#1e3a8a;direction:ltr}
-.step-box{background:#f0fdf4;border:1px solid #86efac;border-right:4px solid var(--good);border-radius:10px;padding:12px 16px;margin:10px 0;font-size:.95rem}
-.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
-.options{display:grid;gap:8px;margin-top:12px}
-.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
-.option:hover:not(:disabled){border-color:var(--accent);background:#eff6ff}
-.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
-.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
-.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
-.feedback.good{color:var(--good);background:var(--good-bg)}
-.feedback.bad{color:var(--bad);background:var(--bad-bg)}
-.progress{height:10px;background:#cbd5e1;border-radius:9px;overflow:hidden;margin:12px 0}
-.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
-.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#dbeafe);border:2px solid #93c5fd;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
-.flashcard:hover{transform:scale(1.005)}
-.flashcard .term{font-size:1.32rem;font-weight:bold;color:#1e3a8a}
-.flashcard .answer{margin-top:16px;font-size:1.04rem;color:#0f172a;background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04);white-space:pre-line}
-.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
-.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
-footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
-@media(max-width:600px){
-  .card{padding:14px}
-  nav button{flex:1 1 calc(50% - 8px);text-align:center}
-  .flashcard{min-height:200px;padding:18px}
-  th,td{padding:8px 10px;font-size:.88rem}
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="briefing">
+  <title>الفصل الرابع عشر: إعداد تقارير البيانات — مرجع واختبار تفاعلي شامل</title>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Noto+Naskh+Arabic:wght@400;600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* 1. Briefing style palette */
+      --background: #faf9f5;
+      --surface-container-low: #ffffff;
+      --surface-container: #f1efe8;
+      --surface-container-high: #e6e2d6;
+
+      /* Ink */
+      --on-surface: #17181a;
+      --on-surface-variant: #56585c;
+
+      /* Rules */
+      --outline: #17181a;
+      --outline-variant: #dedad0;
+      --border-soft: #c8c4b8;
+
+      /* Accents */
+      --primary: #17181a;
+      --on-primary: #faf9f5;
+      --primary-container: #f2b705;
+      --on-primary-container: #17181a;
+      --secondary: #1f4e5f;
+      --tertiary: #785008;
+      --error: #b42318;
+      --on-error: #ffffff;
+
+      /* Data series */
+      --data-1: #1f4e5f;
+      --data-2: #d99000;
+      --data-3: #2b6e52;
+      --data-4: #b84a39;
+      --data-context: #c4bfb2;
+
+      /* Semantic & subtle tints */
+      --positive: #2b6e52;
+      --on-positive: #ffffff;
+      --warning: #d99000;
+      --focus: #1f4e5f;
+      --gold-tag-bg: #f5e6c4;
+      --positive-bg: #e8f3ee;
+      --error-bg: #fbeae8;
+      --info-bg: #e9f0f3;
+      --clutter-bg: #f9f3e3;
+
+      /* Fonts (Arabic-first with Briefing editorial fallbacks) */
+      --font-headline: 'Noto Naskh Arabic', 'Source Serif 4', serif;
+      --font-body: 'Noto Sans Arabic', 'Plus Jakarta Sans', sans-serif;
+      --font-label: 'Noto Sans Arabic', 'Geist Mono', monospace;
+      --font-mono: 'Geist Mono', 'Noto Sans Arabic', monospace;
+
+      /* Shape */
+      --rounded: 0.25rem;
+      --rounded-lg: 0.375rem;
+      --rounded-full: 0.25rem;
+
+      /* Effects */
+      --section-rule: 1.5px solid var(--outline);
+      --card-border: 1px solid var(--outline-variant);
+      --badge-radius: 2px;
+      --heading-tracking: 0;
+      --label-tracking: 0;
+
+      /* Type scale (Narrative) */
+      --display-size: clamp(2rem, 1.4rem + 2.5vw, 3.1rem);
+      --headline-size: clamp(1.5rem, 1.2rem + 1.4vw, 2.15rem);
+      --subhead-size: clamp(1.15rem, 1.05rem + 0.5vw, 1.4rem);
+      --body-size: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+      --label-size: clamp(0.75rem, 0.72rem + 0.15vw, 0.8125rem);
+
+      /* Spacing scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 5.5rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.65;
+      scroll-behavior: smooth;
+    }
+    header { position: static !important; }
+    button, input, select, textarea { font-family: inherit; }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-xl);
+      padding: var(--space-lg);
+      max-width: 1160px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Focus rings */
+    :focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* Typography */
+    h1, h2, h3, h4 {
+      font-family: var(--font-headline);
+      color: var(--on-surface);
+      letter-spacing: var(--heading-tracking);
+      margin: 0;
+    }
+    p {
+      margin: 0 0 var(--space-md) 0;
+      max-width: 72ch;
+    }
+    p:last-child { margin-bottom: 0; }
+
+    .mono-num {
+      font-family: var(--font-mono);
+      font-variant-numeric: lining-nums tabular-nums;
+      direction: ltr;
+      unicode-bidi: isolate;
+      display: inline-block;
+    }
+
+    /* Briefing Treatments */
+    .dossier-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      border-bottom: var(--section-rule);
+      padding-bottom: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+    .dossier-bar-start {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .dossier-pill {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: var(--label-size);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--badge-radius);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .dossier-meta {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--on-surface-variant);
+    }
+
+    .hero-block {
+      padding-top: var(--space-md);
+      padding-bottom: var(--space-lg);
+      border-bottom: var(--card-border);
+    }
+    .hero-title {
+      font-size: var(--display-size);
+      font-weight: 700;
+      line-height: 1.18;
+      margin-bottom: var(--space-sm);
+    }
+    .standfirst {
+      font-family: var(--font-body);
+      font-size: var(--subhead-size);
+      font-weight: 600;
+      color: var(--secondary);
+      line-height: 1.5;
+      max-width: 68ch;
+      margin-bottom: var(--space-lg);
+    }
+
+    /* Quick-jump index & progress strip */
+    .toc-strip {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: var(--space-md);
+      align-items: center;
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+    }
+    .toc-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    .toc-link {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--rounded);
+      background: var(--background);
+      color: var(--on-surface);
+      text-decoration: none;
+      font-size: var(--label-size);
+      font-weight: 600;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .toc-link:hover {
+      background: var(--surface-container);
+      border-color: var(--outline);
+    }
+    .toc-link--exam {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+    .toc-link--exam:hover {
+      background: var(--secondary);
+      border-color: var(--secondary);
+    }
+
+    .mastery-summary {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      flex-wrap: wrap;
+    }
+    .mastery-badge {
+      display: inline-flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      background: var(--surface-container);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      border-right: 3px solid var(--secondary);
+    }
+    .mastery-label {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      font-weight: 600;
+    }
+    .mastery-value {
+      font-family: var(--font-headline);
+      font-size: var(--subhead-size);
+      font-weight: 700;
+      color: var(--on-surface);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      font-size: var(--label-size);
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out), transform var(--dur-micro) var(--ease-out);
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn-primary {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+    .btn-primary:hover { background: var(--secondary); border-color: var(--secondary); }
+    .btn-secondary {
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      border-color: var(--border-soft);
+    }
+    .btn-secondary:hover { background: var(--surface-container); border-color: var(--outline); }
+    .btn-danger-outline {
+      background: var(--surface-container-low);
+      color: var(--error);
+      border-color: var(--error);
+    }
+    .btn-danger-outline:hover { background: var(--error-bg); }
+    .btn[disabled] {
+      opacity: 0.48;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Section Architecture */
+    .unit-section {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+      padding-top: var(--space-lg);
+    }
+    .section-heading {
+      font-size: var(--headline-size);
+      font-weight: 700;
+      line-height: 1.22;
+    }
+    .sub-heading {
+      font-size: var(--subhead-size);
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--secondary);
+      margin-bottom: var(--space-sm);
+    }
+
+    /* Cards & Grids */
+    .card-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+      gap: var(--space-lg);
+    }
+    .card-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .card-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+
+    .figure-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .figure-card--accent-top {
+      border-top: 3px solid var(--secondary);
+    }
+    .figure-card--gold-top {
+      border-top: 3px solid var(--primary-container);
+    }
+
+    .card-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      border-bottom: var(--card-border);
+      padding-bottom: var(--space-sm);
+      margin-bottom: var(--space-xs);
+    }
+    .index-num {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      font-size: var(--label-size);
+      color: var(--secondary);
+      background: var(--surface-container);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--badge-radius);
+    }
+    .tag-warm {
+      background: var(--gold-tag-bg);
+      color: var(--tertiary);
+      font-size: var(--label-size);
+      font-weight: 700;
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--rounded);
+    }
+    .tag-positive {
+      background: var(--positive-bg);
+      color: var(--positive);
+      font-size: var(--label-size);
+      font-weight: 700;
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--rounded);
+    }
+    .tag-error {
+      background: var(--error-bg);
+      color: var(--error);
+      font-size: var(--label-size);
+      font-weight: 700;
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--rounded);
+    }
+
+    .aside-box {
+      background: var(--surface-container);
+      border-top: var(--section-rule);
+      padding: var(--space-md) var(--space-lg);
+      border-radius: var(--rounded);
+    }
+    .aside-box--gold {
+      border-top-color: var(--tertiary);
+      background: var(--gold-tag-bg);
+    }
+
+    /* Pros & Cons Lists */
+    .split-lists {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr));
+      gap: var(--space-md);
+      margin-top: var(--space-xs);
+    }
+    .list-box {
+      padding: var(--space-md);
+      border-radius: var(--rounded);
+      border: var(--card-border);
+    }
+    .list-box--pros { background: var(--positive-bg); }
+    .list-box--cons { background: var(--error-bg); }
+    .list-box h4 {
+      font-family: var(--font-body);
+      font-size: var(--label-size);
+      font-weight: 700;
+      margin-bottom: var(--space-xs);
+    }
+    .list-box--pros h4 { color: var(--positive); }
+    .list-box--cons h4 { color: var(--error); }
+
+    ul.clean-list {
+      margin: 0;
+      padding-right: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    ul.clean-list li { line-height: 1.55; }
+
+    /* Interactive Modules */
+    .interactive-panel {
+      background: var(--surface-container-low);
+      border: 1.5px solid var(--secondary);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .interactive-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      border-bottom: var(--card-border);
+      padding-bottom: var(--space-sm);
+    }
+    .interactive-title {
+      font-family: var(--font-headline);
+      font-size: var(--subhead-size);
+      font-weight: 700;
+      color: var(--on-surface);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    /* Static vs Dynamic Simulation */
+    .sim-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .sim-box {
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .sim-counter {
+      font-family: var(--font-headline);
+      font-size: var(--headline-size);
+      font-weight: 700;
+      color: var(--secondary);
+    }
+    .sim-status {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      min-height: 2.5em;
+    }
+
+    /* Scenario Matcher & Stepper Buttons */
+    .pill-selector {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    .choice-chip {
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--rounded);
+      border: 1px solid var(--border-soft);
+      background: var(--background);
+      color: var(--on-surface);
+      font-size: var(--label-size);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+    }
+    .choice-chip:hover {
+      background: var(--surface-container);
+      border-color: var(--outline);
+    }
+    .choice-chip.is-active {
+      background: var(--secondary);
+      color: var(--on-primary);
+      border-color: var(--secondary);
+    }
+
+    .detail-stage {
+      background: var(--surface-container);
+      border-right: 4px solid var(--secondary);
+      border-radius: var(--rounded);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    /* Data Table */
+    .table-wrap {
+      overflow-x: auto;
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+    }
+    table.dossier-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: right;
+    }
+    table.dossier-table th {
+      background: var(--surface-container);
+      font-size: var(--label-size);
+      font-weight: 700;
+      color: var(--on-surface);
+      padding: var(--space-md);
+      border-bottom: var(--section-rule);
+    }
+    table.dossier-table td {
+      padding: var(--space-md);
+      border-bottom: var(--card-border);
+      vertical-align: top;
+    }
+    table.dossier-table tr:last-child td { border-bottom: none; }
+
+    /* Robotics Filter Lab */
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+      gap: var(--space-sm);
+    }
+    .check-card {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--background);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--rounded);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: var(--label-size);
+      user-select: none;
+    }
+    .check-card input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--secondary);
+      cursor: pointer;
+    }
+
+    /* Scope Slider */
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .control-label {
+      font-size: var(--label-size);
+      font-weight: 700;
+      color: var(--on-surface);
+    }
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--secondary);
+      cursor: pointer;
+      min-height: 36px;
+    }
+
+    /* Design Lab Preview */
+    .design-lab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+      gap: var(--space-lg);
+      align-items: start;
+    }
+    .design-controls {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .design-preview-card {
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      min-height: 320px;
+      transition: background-color var(--dur-short) var(--ease-out);
+    }
+    .design-preview-card.is-harsh-contrast {
+      background: var(--primary);
+      color: var(--primary-container);
+    }
+    .design-preview-card.is-ornate {
+      font-family: var(--font-headline);
+      font-style: italic;
+    }
+    .preview-sample-text {
+      margin-bottom: var(--space-md);
+    }
+    .preview-sample-text.size-small { font-size: 0.72rem; }
+    .preview-sample-text.size-valid { font-size: 1rem; }
+    .preview-sample-text.tight-lead { line-height: 1.05; }
+    .preview-sample-text.good-lead { line-height: 1.6; }
+
+    .chart-box {
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+      background: var(--background);
+      min-height: 220px;
+    }
+    .chart-box.is-cluttered {
+      background: var(--clutter-bg);
+    }
+    .svg-chart {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Interactive Quiz Engine */
+    .quiz-module {
+      background: var(--surface-container-low);
+      border: 1.5px solid var(--outline);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+      margin-top: var(--space-sm);
+    }
+    .quiz-module--exam {
+      border-width: 2px;
+      border-top: 5px solid var(--primary-container);
+    }
+    .quiz-top-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      border-bottom: var(--section-rule);
+      padding-bottom: var(--space-md);
+    }
+    .quiz-progress-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      flex: 1 1 260px;
+    }
+    .quiz-progress-track {
+      width: 100%;
+      height: 8px;
+      background: var(--surface-container);
+      border-radius: var(--rounded);
+      overflow: hidden;
+    }
+    .quiz-progress-fill {
+      height: 100%;
+      background: var(--secondary);
+      width: 0%;
+      transition: width var(--dur-short) var(--ease-out);
+    }
+    .quiz-controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .q-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+    }
+    .q-pill {
+      min-width: 36px;
+      min-height: 36px;
+      padding: var(--space-xs);
+      border-radius: var(--rounded);
+      border: 1px solid var(--border-soft);
+      background: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-mono);
+      font-size: var(--label-size);
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .q-pill.is-current {
+      outline: 2px solid var(--primary);
+      outline-offset: 1px;
+      font-weight: 700;
+    }
+    .q-pill.is-correct {
+      background: var(--positive);
+      color: var(--on-positive);
+      border-color: var(--positive);
+    }
+    .q-pill.is-wrong {
+      background: var(--error);
+      color: var(--on-error);
+      border-color: var(--error);
+    }
+
+    .question-card {
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .question-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+    .question-prompt {
+      font-family: var(--font-headline);
+      font-size: var(--subhead-size);
+      font-weight: 700;
+      line-height: 1.45;
+      color: var(--on-surface);
+    }
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .option-btn {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      width: 100%;
+      min-height: 48px;
+      text-align: right;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--surface-container-low);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--rounded);
+      color: var(--on-surface);
+      font-size: var(--body-size);
+      line-height: 1.5;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .option-btn:hover:not([disabled]) {
+      background: var(--surface-container);
+      border-color: var(--outline);
+    }
+    .option-letter {
+      flex: 0 0 auto;
+      width: 28px;
+      height: 28px;
+      border-radius: var(--badge-radius);
+      background: var(--surface-container);
+      color: var(--secondary);
+      font-weight: 700;
+      font-size: var(--label-size);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+    .option-btn.is-correct-choice {
+      background: var(--positive-bg);
+      border-color: var(--positive);
+      box-shadow: inset 0 0 0 1px var(--positive);
+    }
+    .option-btn.is-correct-choice .option-letter {
+      background: var(--positive);
+      color: var(--on-positive);
+    }
+    .option-btn.is-wrong-choice {
+      background: var(--error-bg);
+      border-color: var(--error);
+      box-shadow: inset 0 0 0 1px var(--error);
+    }
+    .option-btn.is-wrong-choice .option-letter {
+      background: var(--error);
+      color: var(--on-error);
+    }
+
+    .feedback-box {
+      padding: var(--space-md);
+      border-radius: var(--rounded);
+      border-right: 4px solid var(--secondary);
+      background: var(--info-bg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .feedback-box.is-correct {
+      background: var(--positive-bg);
+      border-right-color: var(--positive);
+    }
+    .feedback-box.is-wrong {
+      background: var(--error-bg);
+      border-right-color: var(--error);
+    }
+    .feedback-title {
+      font-weight: 700;
+      font-size: var(--label-size);
+    }
+    .feedback-box.is-correct .feedback-title { color: var(--positive); }
+    .feedback-box.is-wrong .feedback-title { color: var(--error); }
+
+    .quiz-nav-footer {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      padding-top: var(--space-sm);
+      border-top: var(--card-border);
+    }
+
+    .quiz-summary-banner {
+      background: var(--surface-container);
+      border: var(--card-border);
+      border-right: 4px solid var(--primary-container);
+      border-radius: var(--rounded);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    /* Footer */
+    .source-footer {
+      border-top: var(--section-rule);
+      padding-top: var(--space-lg);
+      padding-bottom: var(--space-xl);
+      color: var(--on-surface-variant);
+      font-size: var(--label-size);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 640px) {
+      .page-grid { padding: var(--space-md); gap: var(--space-lg); }
+      .toc-strip { grid-template-columns: 1fr; }
+      .figure-card, .interactive-panel, .quiz-module, .question-card { padding: var(--space-md); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
 </head>
 <body>
-<header>
-  <div class="wrap">
-    <div class="eyebrow">نسخة شاملة ومحدثة 100% • مقرر تحليل وتمثيل البيانات</div>
-    <h1>الفصل الرابع عشر: إعداد تقارير البيانات (Data Reporting)</h1>
-    <p>يغطي أنواع التقارير (الثابتة والديناميكية، المخصصة والبحثية، الخدمة الذاتية والمتكررة)، الأدوات التحليلية الأربعة، خطوات إنشاء التقرير، متطلبات العمل (ومثال شركة الروبوتات) ولوحة المعلومات، والعناصر الستة للتقرير وتسليمه وقواعد تصميمه الفني</p>
-    <nav>
-      <button class="active" data-tab="summary">الشرح الشامل والمقارنات (100%)</button>
-      <button data-tab="tables">جداول المقارنات والقواعد الذهبية</button>
-      <button data-tab="terms">قاموس المصطلحات والأدوات</button>
-      <button data-tab="cards">البطاقات (28)</button>
-      <button data-tab="quiz">الاختبار العشوائي (25)</button>
-    </nav>
-  </div>
-</header>
+  <div class="page-grid">
 
-<main class="wrap">
-  <section id="summary" class="panel active">
-    <div class="card">
-      <h2>خريطة الفصل الرابع عشر (الوحدات الثلاث الكاملة)</h2>
-      <div class="grid">
-        <div>
-          <span class="tag">الوحدة الأولى</span>
-          <h3>أنواع تقارير البيانات والأدوات التحليلية</h3>
-          <p>المقارنة الشاملة بين التقارير الثابتة والديناميكية، والفرق بين التقارير المخصصة والبحثية، وتقارير الخدمة الذاتية (<span dir="ltr">Dashboard</span>) والمتكررة، والأدوات التحليلية الأربعة (<span dir="ltr">SQL, Excel, Python, Tableau/Power BI</span>).</p>
+    <!-- ==================== HEADER / DOSSIER MASTHEAD ==================== -->
+    <header class="hero-block">
+      <div class="dossier-bar">
+        <div class="dossier-bar-start">
+          <span class="dossier-pill">ملف المرجع الشامل</span>
+          <span class="dossier-meta">الفصل الرابع عشر • الوحدات الثلاث • <span class="mono-num">45</span> سؤالاً تفاعلياً</span>
         </div>
-        <div>
-          <span class="tag">الوحدة الثانية</span>
-          <h3>خطوات إنشاء التقرير ومتطلبات العمل</h3>
-          <p>الخطوات الأربع لإنشاء التقرير (ومكونات الخطة الأربعة)، نقاط فهم متطلبات العمل الست (ومثال شركة الروبوتات وحساب السرعة)، ومتطلبات لوحة المعلومات (<span dir="ltr">Live vs Extract</span>).</p>
-        </div>
-        <div>
-          <span class="tag">الوحدة الثالثة</span>
-          <h3>عناصر التقرير، تسليمه، وقواعد تصميمه</h3>
-          <p>العناصر الستة للتقرير (الغلاف، الإصدار، المصادر، التواريخ، <span dir="ltr">FAQs</span>، والملحق)، اعتبارات التسليم (متى وكيف)، وقواعد التصميم الفني (حجم الخط $\ge 11$، المخطط، وعناصر الرسم البياني الثلاثة).</p>
+        <div class="dossier-meta" id="persistence-status">حالة التقدم: جاهز</div>
+      </div>
+
+      <h1 class="hero-title">إعداد تقارير البيانات: الأنواع، دورة الإنشاء، والتصميم الفعّال</h1>
+      <p class="standfirst">مرجع دراسي متكامل يغطي كل جزئية في الفصل الرابع عشر عبر ثلاث وحدات منظمة، مدعوماً بمختبرات تفاعلية واختبارات فورية التصحيح والشرح.</p>
+
+      <div class="toc-strip">
+        <nav class="toc-links" aria-label="التنقل السريع بين الوحدات والاختبارات">
+          <a class="toc-link" href="#unit-1">الوحدة 01: الأنواع والأدوات</a>
+          <a class="toc-link" href="#quiz-u1">اختبار الوحدة 1</a>
+          <a class="toc-link" href="#unit-2">الوحدة 02: الإنشاء والمتطلبات</a>
+          <a class="toc-link" href="#quiz-u2">اختبار الوحدة 2</a>
+          <a class="toc-link" href="#unit-3">الوحدة 03: العناصر والتصميم</a>
+          <a class="toc-link" href="#quiz-u3">اختبار الوحدة 3</a>
+          <a class="toc-link toc-link--exam" href="#final-exam">الاختبار الشامل (15 سؤالاً)</a>
+        </nav>
+
+        <div class="mastery-summary">
+          <div class="mastery-badge">
+            <span class="mastery-label">إجمالي الإجابات الصحيحة</span>
+            <span class="mastery-value" id="global-score-display"><span class="mono-num">0 / 45</span></span>
+          </div>
+          <button type="button" class="btn btn-danger-outline" id="global-reset-btn" onclick="handleGlobalReset(this)">إعادة تعيين التقدم</button>
         </div>
       </div>
-    </div>
+    </header>
 
-    <!-- ==================== الوحدة الأولى ==================== -->
-    <details open>
-      <summary>الوحدة الأولى: أنواع تقارير البيانات (الثابتة، الديناميكية، المخصصة، البحثية، الخدمة الذاتية، والمتكررة) والأدوات التحليلية</summary>
-      <div class="details-body">
-        <h3>1) أولاً: التقارير الثابتة (<span dir="ltr">Static Reports</span>) مقابل التقارير الديناميكية (<span dir="ltr">Dynamic Reports</span>)</h3>
-        <div class="exam-alert">
-          <b>🔥🔥 مقارنة امتحانية مؤكدة 100%: احفظي الفروق، الأمثلة، الإيجابيات، والسلبيات بين التقارير الثابتة والديناميكية:</b>
+    <!-- ==================== UNIT 1 ==================== -->
+    <section id="unit-1" class="unit-section" aria-labelledby="unit-1-title">
+      <div class="dossier-bar">
+        <div class="dossier-bar-start">
+          <span class="dossier-pill">الوحدة 01</span>
+          <span class="dossier-meta">الفصل الرابع عشر: إعداد تقارير البيانات</span>
         </div>
-        <table>
-          <thead>
-            <tr>
-              <th>وجه المقارنة</th>
-              <th>التقارير الثابتة (<span dir="ltr">Static Reports</span>)</th>
-              <th>التقارير الديناميكية (<span dir="ltr">Dynamic / Interactive Reports</span>)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><b>المفهوم الأساسي</b></td>
-              <td>تقارير تعرض <b>لقطة ثابتة للبيانات في نقطة زمنية محددة</b>، ولا تتغير بياناتها تلقائياً ولا تسمح للمستخدم بالتفاعل معها أو تصفيتها.</td>
-              <td>تقارير <b>تفاعلية ومتصلة بمصادر البيانات</b>؛ تتحدث بياناتها تلقائياً وتسمح للمستخدم بالتفاعل والفلترة والتعمق في التفاصيل (<span dir="ltr">Drill-down</span>).</td>
-            </tr>
-            <tr>
-              <td><b>الأمثلة</b></td>
-              <td>ملفات <b><span dir="ltr">PDF</span></b>، المستندات الورقية المطبوعة، عروض <span dir="ltr">PowerPoint</span>، أو لقطات الشاشة الثابتة.</td>
-              <td>لوحات المعلومات التفاعلية (<b><span dir="ltr">Dashboards</span></b>) على الويب المصممة بأدوات مثل <span dir="ltr">Tableau</span> أو <span dir="ltr">Power BI</span> أو مكتبة <span dir="ltr">Bokeh</span>.</td>
-            </tr>
-            <tr>
-              <td><b>الإيجابيات (المزايا)</b></td>
-              <td>1) سهلة الإنشاء والمشاركة والطباعة.<br>2) تضمن أن جميع المستفيدين يرون <b>نفس الأرقام التاريخية بالضبط</b> دون تغيير.<br>3) آمنة ولا تتطلب اتصالاً مباشراً بقاعدة البيانات.</td>
-              <td>1) توفر <b>بيانات محدثة في الوقت الفعلي</b> (أو شبه الفعلي).<br>2) تمكّن المستخدم من التفاعل والفلترة وتخصيص العرض.<br>3) تختصر الوقت وتغني عن إنشاء عشرات التقارير المنفصلة.</td>
-            </tr>
-            <tr>
-              <td><b>السلبيات (العيوب)</b></td>
-              <td>1) تصبح قديمة بسرعة ولا تعكس التغييرات اللحظية.<br>2) لا تسمح للمستخدم بالاستكشاف أو التصفية.<br>3) تتطلب جهداً يدوياً لإعادة إنشائها عند تغير البيانات.</td>
-              <td>1) أكثر تعقيداً وتكلفة في التصميم والإنشاء.<br>2) تتطلب بنية تحتية واتصالاً بمصادر البيانات وإدارة صلاحيات أمنية.<br>3) قد يربك كثرة الخيارات المستخدم غير المتمرس.</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
-
-        <h3>2) ثانياً: التقارير المخصصة والبحثية وتقارير الخدمة الذاتية والمتكررة</h3>
-        <ul>
-          <li><b>1. التقارير المخصصة / لمرة واحدة (<span dir="ltr">Ad-hoc / Custom Reports</span>) مقابل التقارير البحثية (<span dir="ltr">Research Reports</span>):</b>
-            <ul>
-              <li><b>التقارير المخصصة (<span dir="ltr">Ad-hoc Reports</span>):</b> تُنشأ <b>لمرة واحدة فقط عند الطلب</b> للإجابة عن سؤال عمل محدد وطارئ (مثل: طلب المدير تقريراً عاجلاً عن سبب انخفاض المبيعات في فرع معين خلال الأسبوع الماضي).</li>
-              <li><b>التقارير البحثية (<span dir="ltr">Research Reports</span>):</b> تقارير معمقة وشاملة تتطلب <b>دراسة تحليلية وإحصائية طويلة</b> لاكتشاف العلاقات والأسباب الجذرية وتقديم استنتاجات وتوصيات استراتيجية (مثل دراسة جدوى دخول سوق جديد).</li>
-            </ul>
-          </li>
-          <li><b>2. تقارير الخدمة الذاتية (<span dir="ltr">Self-Service Reports</span>) مقابل التقارير المتكررة (<span dir="ltr">Recurring Reports</span>):</b>
-            <ul>
-              <li><b>تقارير الخدمة الذاتية (<span dir="ltr">Self-Service Reports</span> — مثل لوحة المعلومات <span dir="ltr">Dashboard</span>):</b> تتيح للمستخدم النهائي (المستفيد) الدخول بنفسه في أي وقت وتصفية البيانات وتخصيص المؤشرات التي يريد رؤيتها دون الرجوع لمحلل البيانات في كل مرة.</li>
-              <li><b>التقارير المتكررة / الدورية (<span dir="ltr">Recurring / Scheduled Reports</span>):</b> تقارير قياسية يتم إنتاجها وإرسالها <b>بشكل دوري منتظم ومجدول</b> (يومياً، أسبوعياً، شهرياً، أو سنوياً) لمتابعة الأداء التشغيلي المستمر (مثل تقرير المبيعات الشهري).</li>
-            </ul>
-          </li>
-        </ul>
-
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
-
-        <h3>3) الأدوات التحليلية الأربعة لبناء وإنشاء التقارير (<span dir="ltr">4 Analytical Tools</span>)</h3>
-        <div class="exam-alert">
-          <b>🌟 احفظي الأدوات التحليلية الأربع والأمثلة التابعة لكل فئة كما وردت في الملزمة:</b>
-        </div>
-        <ol>
-          <li><b>1. أدوات الاستعلام وقواعد البيانات (<span dir="ltr">Query Tools</span>):</b> مثل لغة الاستعلام الهيكلية <b><span dir="ltr">SQL</span></b> وأنظمة إدارة قواعد البيانات العلائقية (<b><span dir="ltr">RDBMS</span></b> مثل <span dir="ltr">Oracle, MySQL, SQL Server</span>) لاستخراج وتجميع البيانات من المصدر.</li>
-          <li><b>2. أدوات جداول البيانات (<span dir="ltr">Spreadsheet Tools</span>):</b> مثل برنامج <b><span dir="ltr">Microsoft Excel</span></b> و <span dir="ltr">Google Sheets</span> (ممتازة للتحليلات السريعة والجداول المحورية والمخططات البسيطة).</li>
-          <li><b>3. أدوات لغات البرمجة الإحصائية (<span dir="ltr">Programming Languages</span>):</b> مثل لغة <b><span dir="ltr">Python</span></b> (ومكتباتها <span dir="ltr">Pandas, Matplotlib, Seaborn, Bokeh</span>) ولغة <b><span dir="ltr">R</span></b> لإجراء التحليلات المتقدمة وتعلم الآلة.</li>
-          <li><b>4. أدوات التمثيل المرئي وذكاء الأعمال (<span dir="ltr">BI &amp; Visualization Tools</span>):</b> مثل منصتي <b><span dir="ltr">Tableau</span></b> و <b><span dir="ltr">Microsoft Power BI</span></b> (المتخصصتين في بناء لوحات المعلومات التفاعلية <span dir="ltr">Dashboards</span> والتقارير المؤسسية).</li>
-        </ol>
+        <span class="dossier-meta">أنواع التقارير والأدوات التحليلية</span>
       </div>
-    </details>
 
-    <!-- ==================== الوحدة الثانية ==================== -->
-    <details>
-      <summary>الوحدة الثانية: خطوات إنشاء التقرير الأربع، نقاط فهم متطلبات العمل الست (مثال الروبوتات)، ومتطلبات الـ Dashboard</summary>
-      <div class="details-body">
-        <h3>1) الخطوات الأربع لإنشاء التقرير (<span dir="ltr">4 Steps to Create a Report</span>)</h3>
-        <div class="exam-alert">
-          <b>🔥 ترتيب الخطوات الأربع لإنشاء التقرير، والمكونات الأربعة للخطوة الأولى (إنشاء الخطة) موضع سؤال مؤكد!</b>
-        </div>
-        <ol>
-          <li><b>الخطوة (1): إنشاء الخطة (<span dir="ltr">Create the Plan</span>):</b>
-            <p style="margin:4px 0">قبل البدء ببرمجة أو تصميم التقرير الفعلي، نضع خطة تصميمية تشمل <b>4 عناصر أساسية</b>:</p>
-            <ul>
-              <li><b>أ) النماذج الأولية / الإطارات السلكية (<span dir="ltr">Mockups / Wireframes</span>):</b> رسم تخطيطي أولي (مسودة مرئية) يوضح شكل التقرير وتوزيع المخططات والجداول قبل التنفيذ الفعلي.</li>
-              <li><b>ب) التخطيط والعرض (<span dir="ltr">Layout / Presentation</span>):</b> تحديد كيفية ترتيب العناصر وأحجامها وألوانها لسهولة القراءة.</li>
-              <li><b>ج) التدفق (<span dir="ltr">Flow</span>):</b> التسلسل المنطقي لعرض المعلومات والانتقال البصري من الملخص العام إلى التفاصيل.</li>
-              <li><b>د) التنقل (<span dir="ltr">Navigation - Nav</span>):</b> آلية تنقل المستخدم بين صفحات أو تبويبات التقرير وعناصر التحكم والفلاتر.</li>
-            </ul>
-          </li>
-          <li><b>الخطوة (2): الحصول على الموافقة على الخطة (<span dir="ltr">Get Approval on the Plan</span>):</b> عرض الخطة والـ <span dir="ltr">Mockup</span> على أصحاب المصلحة (المستفيدين) واعتمادها قبل استهلاك الوقت في البناء لتجنب إعادة العمل.</li>
-          <li><b>الخطوة (3): القيام بإنشاء وبناء التقرير (<span dir="ltr">Build / Create the Report</span>):</b> ربط مصادر البيانات وتطبيق الفلاتر وبناء المخططات واختبار صحة الأرقام.</li>
-          <li><b>الخطوة (4): تسليم التقرير (<span dir="ltr">Deliver the Report</span>):</b> نشر التقرير وإتاحته للمستفيدين في الوقت وبالطريقة المتفق عليها.</li>
-        </ol>
+      <h2 id="unit-1-title" class="section-heading">التقارير الثابتة والديناميكية، فئات التقارير المتخصصة، والأدوات التحليلية</h2>
 
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
-
-        <h3>2) النقاط الست لفهم متطلبات العمل (<span dir="ltr">6 Points of Understanding Business Requirements</span>)</h3>
-        <ol>
-          <li><b>1. محتوى البيانات (<span dir="ltr">Data Content</span>) — [مثال شركة الروبوتات الهام جداً!]:</b>
-            <div class="step-box">
-              <b>🤖 مثال شركة الروبوتات في الملزمة (كيف نختار المتغيرات الضرورية فقط؟):</b><br>
-              تريد شركة تصنيع روبوتات إنشاء تقرير يقيس <b>"تطور سرعة الروبوت بمرور الوقت (عبر الأيام)"</b>.<br>
-              • نحن نعلم رياضياً أن قانون السرعة هو:
-              <div class="math-box" style="margin:6px 0">Speed (السرعة) = Distance (المسافة) / Time (الزمن)</div>
-              • إذا كانت قاعدة البيانات تحتوي على عشرات الحقول (لون الروبوت، وزنه، المصنع، التكلفة، المسافة، الزمن، التاريخ...)، فما هي <b>المتغيرات الثلاثة فقط</b> التي نحتاج لاستخراجها في محتوى بيانات هذا التقرير؟<br>
-              ✅ نحتاج فقط إلى: <b>(1) المسافة (<span dir="ltr">Distance</span>)، و (2) الوقت/الزمن (<span dir="ltr">Time</span>)</b> [لحساب السرعة]، و <b>(3) التاريخ (<span dir="ltr">Date</span>)</b> [لتتبع تطورها عبر الأيام]! ونستبعد أي حقول أخرى غير لازمة.
+      <!-- 1.1 Static vs Dynamic -->
+      <div>
+        <h3 class="sub-heading">أولاً: التقارير الثابتة مقابل التقارير الديناميكية</h3>
+        <div class="card-grid-2">
+          <article class="figure-card figure-card--accent-top">
+            <div class="card-header-row">
+              <h4>التقارير الثابتة (Static Reports)</h4>
+              <span class="index-num">01</span>
             </div>
-          </li>
-          <li><b>2. الفلترة / التصفية (<span dir="ltr">Filtering</span>):</b> تحديد المعايير التي تُصفى بها البيانات (مثلاً: عرض بيانات منطقة جغرافية معينة أو سنة محددة فقط).</li>
-          <li><b>3. طرق العرض في قواعد البيانات (<span dir="ltr">Database Views</span>):</b>
-            <ul>
-              <li><b>لماذا نستخدم طرق العرض (<span dir="ltr">Views</span>) عند ربط التقرير بقاعدة البيانات؟</b> (1) <b>لحماية البيانات الأصلية</b> وإخفاء الأعمدة الحساسة، (2) ولجعل البيانات <b>للقراءة فقط (<span dir="ltr">Read-Only</span>)</b> بحيث لا يتمكن منشئ أو مستخدم التقرير من تعديل أو حذف البيانات الأصلية بالخطأ، (3) ولتبسيط الاستعلامات المعقدة!</li>
-            </ul>
-          </li>
-          <li><b>4. نطاق البيانات (<span dir="ltr">Data Scope</span>) وعلاقته العكسية بتحديد السؤال:</b>
-            <ul>
-              <li>توجد <b>علاقة عكسية</b> بين مدى تحديد سؤال العمل وبين نطاق البيانات المطلوب:</li>
-              <li><b>كلما كان السؤال أكثر تحديداً ووضوحاً</b> &larr; كان نطاق البيانات المطلوب <b>أصغر وأضيق</b> (أكثر تركيزاً).</li>
-              <li><b>وكلما كان السؤال عاماً وواسعاً</b> &larr; كان نطاق البيانات المطلوب <b>أكبر وأوسع</b>!</li>
-            </ul>
-          </li>
-          <li><b>5. التكرار / الدورية (<span dir="ltr">Frequency</span>):</b> تحديد عدد مرات تحديث أو إصدار التقرير (لحظي، يومي، أسبوعي، شهري).</li>
-          <li><b>6. المستفيدون / الجمهور المستهدف (<span dir="ltr">Stakeholders / Audience</span>):</b> معرفة مَن سيقرأ التقرير (إدارة عليا تحتاج لملخص تنفيذي سريع، أم فريق فني يحتاج لتفاصيل دقيقة).</li>
-        </ol>
-
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
-
-        <h3>3) متطلبات خاصة بلوحة المعلومات (<span dir="ltr">Dashboard Requirements</span>)</h3>
-        <ul>
-          <li>عند تصميم لوحة معلومات تفاعلية (<span dir="ltr">Dashboard</span>)، يجب مراعاة أمرين أساسيين بخصوص البيانات:
-            <ol>
-              <li><b>طبيعة الاتصال بمصادر البيانات (<span dir="ltr">Data Sources Connection</span>):</b>
-                <ul>
-                  <li><b>أ) الاتصال المباشر الحي (<span dir="ltr">Live / Direct Connection</span>):</b> يتصل الـ <span dir="ltr">Dashboard</span> بقاعدة البيانات مباشرة ويعرض التغييرات لحظياً في الوقت الفعلي، ولكنه قد يسبب بطئاً وحملاً عالياً على قاعدة البيانات.</li>
-                  <li><b>ب) المستخرج الأخير (<span dir="ltr">Data Extract / Cached Snapshot</span>):</b> يأخذ نسخة مستخرجة من البيانات يتم تحديثها دورياً (مثلاً كل ساعة أو كل ليلة)؛ وهو <b>أسرع بكثير في الأداء</b> ويخفف العبء عن قاعدة البيانات الأصلية.</li>
+            <p><strong>المفهوم:</strong> هي التقارير التي تضم البيانات ذات الصلة <strong>بنقطة زمنية محددة</strong>، وغالباً ما توجد في رسائل البريد الإلكتروني.</p>
+            <p><strong>الفكرة الأساسية:</strong> بمجرد أن تقوم بجمع البيانات وتثبيتها وتحليلها ثم تقديمها، فقد أنشأت تقريراً ثابتاً؛ ففي اللحظة التي تتوقف فيها عن جمع البيانات، تصبح البيانات ثابتة لا تتغير.</p>
+            <div class="aside-box">
+              <strong>الأمثلة التطبيقية:</strong>
+              <ul class="clean-list">
+                <li><strong>تقرير الصيانة الشهرية أو السنوية المخططة:</strong> يعرض المهام التي كُلّفت بها وحالتها (متأخرة أم قادمة خلال الشهر أو السنة).</li>
+                <li><strong>التقارير اليومية:</strong> تقدم إحصائيات يوم الإنتاج لفهم ما حدث؛ فهي تتعامل مع بيانات الماضي لتكشف كيف تغيرت العملية وما يجب التركيز عليه لتحقيق نتائج أفضل.</li>
+              </ul>
+            </div>
+            <div class="split-lists">
+              <div class="list-box list-box--pros">
+                <h4>الإيجابيات</h4>
+                <ul class="clean-list">
+                  <li>يتم إنشاؤها بشكل سريع.</li>
+                  <li>يمكن الإجابة على أسئلة معقدة.</li>
+                  <li>يمكن استخدام تحليلات متعمقة وأكثر تعقيداً.</li>
                 </ul>
-              </li>
-              <li><b>نوعية وجودة البيانات (<span dir="ltr">Data Quality</span>):</b> التأكد من نظافة البيانات واتساقها قبل عرضها في لوحة المعلومات.</li>
-            </ol>
-          </li>
-        </ul>
-      </div>
-    </details>
+              </div>
+              <div class="list-box list-box--cons">
+                <h4>السلبيات</h4>
+                <ul class="clean-list">
+                  <li>يتم عرض البيانات فقط عند نقطة معينة وليست محدثة.</li>
+                  <li>غالباً ما يحتاج إلى أن يتم إنشاؤه عدة مرات.</li>
+                </ul>
+              </div>
+            </div>
+          </article>
 
-    <!-- ==================== الوحدة الثالثة ==================== -->
-    <details>
-      <summary>الوحدة الثالثة: العناصر الستة للتقرير، اعتبارات التسليم (متى وكيف)، وقواعد التصميم الفني (الخطوط والمخططات)</summary>
-      <div class="details-body">
-        <h3>1) العناصر الستة الأساسية للتقرير الاحترافي (<span dir="ltr">6 Elements of a Report</span>)</h3>
-        <div class="exam-alert">
-          <b>🔥🔥 تنبيه امتحاني هام جداً: انتبهي للشروط الخاصة بعنصري (رقم الإصدار) و (الأسئلة المتداولة FAQs) متى يظهران في التقرير!</b>
+          <article class="figure-card figure-card--gold-top">
+            <div class="card-header-row">
+              <h4>التقارير الديناميكية (Dynamic Reports)</h4>
+              <span class="index-num">02</span>
+            </div>
+            <p><strong>المفهوم:</strong> تقارير تقوم بإنشاء أو تحديث نفسها تلقائياً بناءً على التغييرات التي تطرأ على مصادر البيانات الأساسية، استجابةً لإضافة البيانات أو تعديلها أو حذفها من المصدر.</p>
+            <p><strong>الفكرة الأساسية:</strong> للتقارير الديناميكية <strong>اتصال مباشر بالبيانات</strong>؛ أي أنها تتحدث تلقائياً كلما حدث تغيير في البيانات دون إعادة إنشاء يدوي.</p>
+            <div class="aside-box">
+              <strong>المثال التطبيقي:</strong>
+              <p>صفحة ويب تعرض مجموع عدد النقرات على زر موجود عليها؛ في اللحظة التي تنقر فيها على الزر يظهر رقم جديد مباشرةً، لأن التغير في البيانات (عدد النقرات) ينعكس فوراً في التقرير.</p>
+            </div>
+            <div class="split-lists">
+              <div class="list-box list-box--pros">
+                <h4>الإيجابيات</h4>
+                <ul class="clean-list">
+                  <li>البيانات محدثة دائماً قدر الإمكان.</li>
+                  <li>غالباً ما يوفر الوقت على المدى الطويل.</li>
+                </ul>
+              </div>
+              <div class="list-box list-box--cons">
+                <h4>السلبيات</h4>
+                <ul class="clean-list">
+                  <li>يقتصر على تحليلات بسيطة نسبياً.</li>
+                  <li>يقتصر على الإجابة على أسئلة بسيطة نسبياً.</li>
+                  <li>قد يستغرق إعداده وقتاً طويلاً.</li>
+                </ul>
+              </div>
+            </div>
+          </article>
         </div>
-        <ol>
-          <li><b>1. صفحة الغلاف (<span dir="ltr">Cover Page</span>):</b> تتضمن عنوان التقرير، اسم المؤسسة، اسم المعد، والملخص التنفيذي.</li>
-          <li><b>2. رقم الإصدار (<span dir="ltr">Version Number</span>):</b> يوضع <b>في التقارير المحدثة / المتغيرة فقط (<span dir="ltr">Updated Reports Only</span>)</b> لتتبع التعديلات ومعرفة النسخة الأحدث من التقرير.</li>
-          <li><b>3. مصادر البيانات المرجعية (<span dir="ltr">Reference Data Sources</span>):</b> توثيق الأنظمة وقواعد البيانات التي أُخذت منها الأرقام لزيادة الموثوقية.</li>
-          <li><b>4. التواريخ المرجعية (<span dir="ltr">Reference Dates</span>) — وتشمل تاريخين مختلفين:</b>
-            <ul>
-              <li><b>أ) تاريخ إنشاء التقرير (<span dir="ltr">Report Creation Date</span>):</b> متى تم بناء أو تصميم هذا التقرير.</li>
-              <li><b>ب) تاريخ تحديث البيانات (<span dir="ltr">Data Refresh / Update Date</span>):</b> متى تم آخر سحب أو تحديث للبيانات المعروضة داخل التقرير.</li>
-            </ul>
-          </li>
-          <li><b>5. الأسئلة المتداولة (<span dir="ltr">FAQs - Frequently Asked Questions</span>):</b> تُدرج <b>في تقارير الخدمة الذاتية (<span dir="ltr">Self-Service</span>) والتقارير المتكررة (<span dir="ltr">Recurring Reports</span>) فقط</b>؛ للإجابة المسبقة عن استفسارات المستخدمين المتكررة حول كيفية قراءة المؤشرات أو طريقة حسابها دون الحاجة للاتصال بمعد التقرير.</li>
-          <li><b>6. الملحق (<span dir="ltr">Appendix</span>):</b> يوضع في نهاية التقرير ويضم الجداول التفصيلية المطولة، المعادلات، أو الشروحات الإضافية لمن يرغب في التعمق دون إرباك جسم التقرير الرئيسي.</li>
-        </ol>
+      </div>
 
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+      <!-- Interactive Simulator: Static vs Dynamic Click Demo -->
+      <div class="interactive-panel" aria-labelledby="sim-sd-title">
+        <div class="interactive-header">
+          <div class="interactive-title" id="sim-sd-title">مختبر تفاعلي: محاكاة الفرق بين التقرير الثابت والديناميكي</div>
+          <span class="tag-warm">مثال النقر على الزر</span>
+        </div>
+        <p>انقر على زر تسجيل الحدث أدناه لملاحظة كيف يتصرف كل تقرير عند تغير البيانات الأساسية في المصدر:</p>
+        <div class="quiz-controls-row">
+          <button type="button" class="btn btn-primary" onclick="triggerSourceClick()">إضافة نقرة جديدة للمصدر (+1)</button>
+          <button type="button" class="btn btn-secondary" onclick="regenerateStaticReport()">إعادة إنشاء التقرير الثابت الآن</button>
+          <span class="dossier-meta">العدد الفعلي في قاعدة البيانات: <strong class="mono-num" id="source-db-clicks">12</strong></span>
+        </div>
+        <div class="sim-grid">
+          <div class="sim-box">
+            <div class="card-header-row">
+              <strong>التقرير الثابت (لقطة زمنية)</strong>
+              <span class="tag-error" id="static-sync-tag">متوقف عند اللقطة</span>
+            </div>
+            <div class="sim-counter mono-num" id="static-sim-val">12</div>
+            <div class="sim-status" id="static-sim-status">ثابت عند لحظة سحب البيانات؛ لا يعكس النقرات الجديدة حتى تعيد إنشاءه.</div>
+          </div>
+          <div class="sim-box">
+            <div class="card-header-row">
+              <strong>التقرير الديناميكي (اتصال مباشر)</strong>
+              <span class="tag-positive">محدّث لحظياً</span>
+            </div>
+            <div class="sim-counter mono-num" id="dynamic-sim-val">12</div>
+            <div class="sim-status" id="dynamic-sim-status">متصل مباشرة بالمصدر؛ يعكس أي إضافة أو تعديل أو حذف فوراً.</div>
+          </div>
+        </div>
+      </div>
 
-        <h3>2) اعتبارات تسليم التقرير (<span dir="ltr">Report Delivery Considerations: When &amp; How</span>)</h3>
-        <ul>
-          <li><b>أولاً: متى يُسلّم التقرير؟ (<span dir="ltr">When to Deliver</span>):</b>
-            <ul>
-              <li>يعتمد على وتيرة العمل، ويتم تنظيمه آلياً عبر ميزتين: <b>الاشتراك (<span dir="ltr">Subscription</span>)</b> و<b>الجدولة التلقائية (<span dir="ltr">Automated Scheduling</span>)</b> لإرسال التقرير للمستفيدين في أوقات محددة (مثلاً صباح كل يوم أحد).</li>
-            </ul>
-          </li>
-          <li><b>ثانياً: كيف يُسلّم التقرير؟ (<span dir="ltr">How to Deliver</span>):</b>
-            <ul>
-              <li>يُسلم إما عبر البريد الإلكتروني (للملفات الثابتة)، أو عبر <b>واجهة الويب / البوابة الإلكترونية (<span dir="ltr">Web Interface / Portal</span>)</b> للتقارير التفاعلية.</li>
-              <li><b>شرط أمني حاسم عند التسليم:</b> يجب ضبط <b>أذونات وصلاحيات الوصول الأمنية (<span dir="ltr">Security Access Permissions</span>)</b> لضمان أن كل مستخدم لا يرى إلا البيانات المصرح له بالاطلاع عليها فقط!</li>
-            </ul>
-          </li>
-        </ul>
+      <!-- 1.2 Ad-hoc, Research, Self-service, Recurring -->
+      <div>
+        <h3 class="sub-heading">ثانياً: التقارير المخصصة، البحثية، الخدمة الذاتية، والمتكررة</h3>
+        <div class="card-grid-2">
+          <article class="figure-card">
+            <div class="card-header-row">
+              <h4>التقارير المخصصة (Ad-hoc)</h4>
+              <span class="index-num">01</span>
+            </div>
+            <p><strong>التعريف:</strong> تقارير يتم إنشاؤها <strong>عند الطلب</strong>، وعادةً ما تُعد لاستخدام محدد أو للإجابة على سؤال محدد بشكل <strong>مباشر وسريع</strong>.</p>
+            <div class="aside-box">
+              <strong>مثال:</strong> الحصول على معلومات تفصيلية حول سجل الشراء الخاص بعميل معين، أو إنشاء تقرير بجميع الموظفين الذين يعملون في الشركة لأكثر من خمس سنوات.
+            </div>
+          </article>
 
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+          <article class="figure-card">
+            <div class="card-header-row">
+              <h4>التقارير البحثية (Research)</h4>
+              <span class="index-num">02</span>
+            </div>
+            <p><strong>التعريف:</strong> تقرير <strong>كبير ومتعمق</strong> يجيب على أسئلة الأعمال الكبيرة والمعقدة باستخدام كل ما يلزم من <strong>أساليب التحليل الإحصائي المتقدمة</strong>.</p>
+            <div class="aside-box">
+              <strong>الاعتبار الزمني:</strong> يمكن أن يستغرق إنشاؤها الكثير من الوقت والجهد مقارنة بالتقارير المخصصة.
+            </div>
+          </article>
 
-        <h3>3) القواعد الفنية لتصميم التقرير (<span dir="ltr">Report Design Rules: Fonts, Layout, &amp; Charts</span>)</h3>
-        <div class="exam-alert">
-          <b>🌟 رقم وقواعد ذهبية في الاختبار حول تصميم التقرير:</b><br>
-          • <b>حجم الخط (<span dir="ltr">Font Size</span>):</b> يجب <b>ألا يقل حجم الخط عن 11 نقطة (<span dir="ltr">At least 11 pt</span>)</b> لضمان سهولة القراءة!<br>
-          • <b>عناصر الرسم البياني الثلاثة الواجب توفرها دائماً:</b> (1) <b>العنوان (<span dir="ltr">Title</span>)</b>، (2) <b>التسميات (<span dir="ltr">Labels</span>)</b>، (3) <b>وسائل الإيضاح / مفتاح الرسم (<span dir="ltr">Legend</span>)</b>.
+          <article class="figure-card">
+            <div class="card-header-row">
+              <h4>تقارير الخدمة الذاتية ولوحة المعلومات</h4>
+              <span class="index-num">03</span>
+            </div>
+            <p><strong>التعريف:</strong> تتيح للمستخدمين إمكانية الوصول إلى البيانات والعثور على إجابات لأسئلة البيانات الخاصة بهم <strong>بأنفسهم</strong> بدلاً من الاعتماد على علماء البيانات أو الإحصائيين المحترفين.</p>
+            <div class="aside-box">
+              <strong>المثال (لوحة المعلومات <bdi dir="ltr">Dashboard</bdi>):</strong> أداة تحليل تفاعلية تستخدمها الشركات لتتبع ومراقبة أداء استراتيجياتها؛ تعتمد على برنامج أو تطبيق أو خدمة ويب لمنح <strong>وصول محدود</strong> إلى مقاييس أو بيانات أو تصورات محددة.
+            </div>
+          </article>
+
+          <article class="figure-card">
+            <div class="card-header-row">
+              <h4>التقارير المتكررة (Recurring)</h4>
+              <span class="index-num">04</span>
+            </div>
+            <p><strong>التعريف:</strong> هي التقارير التي تحدث على <strong>فترات منتظمة</strong>.</p>
+            <div class="aside-box">
+              <strong>الآلية والفائدة:</strong> طريقة فعالة لتوفير الوقت عبر جدولة التقارير التي تعمل دورياً (مثل إحصائيات التوزيع الشهري وتسجيل المستفيد الشهري). عند إعداد تقرير ليعمل شهرياً، تتلقى رسالة <strong>بريد إلكتروني</strong> تُعلمك بأن التقرير قد تم تشغيله بنجاح.
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- 1.3 Analytical Tools -->
+      <div>
+        <h3 class="sub-heading">ثالثاً: الأدوات التحليلية الهامة في بناء التقارير</h3>
+        <div class="card-grid-4">
+          <article class="figure-card figure-card--accent-top">
+            <div class="card-header-row">
+              <h4>أدوات الاستعلام</h4>
+              <span class="tag-warm"><bdi dir="ltr">SQL</bdi></span>
+            </div>
+            <p><strong><bdi dir="ltr">Structured Query Language</bdi>:</strong> لغة برمجة مصممة للعمل مع نظام إدارة قواعد البيانات العلائقية (<bdi dir="ltr">RDBMS</bdi>)، وتُستخدم للوصول إلى قواعد البيانات ومعالجتها.</p>
+          </article>
+
+          <article class="figure-card figure-card--accent-top">
+            <div class="card-header-row">
+              <h4>أدوات جداول البيانات</h4>
+              <span class="tag-warm"><bdi dir="ltr">Excel</bdi></span>
+            </div>
+            <p><strong><bdi dir="ltr">Microsoft Excel</bdi>:</strong> محرر جداول بيانات طورته Microsoft لأنظمة <bdi dir="ltr">Windows, iOS, Android, macOS</bdi>، ويتميز بقدرات الحساب وأدوات الرسوم البيانية.</p>
+          </article>
+
+          <article class="figure-card figure-card--accent-top">
+            <div class="card-header-row">
+              <h4>أدوات لغة البرمجة</h4>
+              <span class="tag-warm"><bdi dir="ltr">Python</bdi></span>
+            </div>
+            <p>أدوات تتضمن كتابة التعليمات البرمجية (<bdi dir="ltr">code</bdi>)، ومثالها <strong><bdi dir="ltr">Python</bdi></strong> وهي لغة برمجة عالية المستوى للأغراض العامة.</p>
+          </article>
+
+          <article class="figure-card figure-card--accent-top">
+            <div class="card-header-row">
+              <h4>أدوات التمثيل المرئي</h4>
+              <span class="tag-warm"><bdi dir="ltr">Power BI / Tableau</bdi></span>
+            </div>
+            <p>غرضها الرئيسي سرعة وسهولة إنشاء تصورات بواجهات سهلة للتفاعل، وهي من أفضل الأدوات لصنع لوحات المعلومات (<bdi dir="ltr">Dashboards</bdi>).</p>
+          </article>
+        </div>
+      </div>
+
+      <!-- Interactive Scenario Recommender -->
+      <div class="interactive-panel" aria-labelledby="matcher-title">
+        <div class="interactive-header">
+          <div class="interactive-title" id="matcher-title">مختبر مطابقة السيناريوهات: اختر الموقف التحليلي</div>
+          <span class="dossier-meta">اربط نوع التقرير بالأداة الأنسب</span>
+        </div>
+        <div class="pill-selector" id="u1-scenario-buttons">
+          <button type="button" class="choice-chip is-active" onclick="selectScenario(0)">طلب عاجل لسجل عميل</button>
+          <button type="button" class="choice-chip" onclick="selectScenario(1)">دراسة إحصائية معقدة للسوق</button>
+          <button type="button" class="choice-chip" onclick="selectScenario(2)">لوحة متابعة تفاعلية للمديرين</button>
+          <button type="button" class="choice-chip" onclick="selectScenario(3)">إحصائية تسجيل شهرية تلقائية</button>
+          <button type="button" class="choice-chip" onclick="selectScenario(4)">سحب ومعالجة بيانات من RDBMS</button>
+        </div>
+        <div class="detail-stage" id="u1-scenario-output"></div>
+      </div>
+
+      <!-- Unit 1 Quiz (10 Questions) -->
+      <div id="quiz-u1" class="quiz-module" aria-labelledby="quiz-u1-title"></div>
+    </section>
+
+    <!-- ==================== UNIT 2 ==================== -->
+    <section id="unit-2" class="unit-section" aria-labelledby="unit-2-title">
+      <div class="dossier-bar">
+        <div class="dossier-bar-start">
+          <span class="dossier-pill">الوحدة 02</span>
+          <span class="dossier-meta">الفصل الرابع عشر: إعداد تقارير البيانات</span>
+        </div>
+        <span class="dossier-meta">خطوات الإنشاء، متطلبات العمل، ولوحة المعلومات</span>
+      </div>
+
+      <h2 id="unit-2-title" class="section-heading">عملية إنشاء التقرير الأربع، متطلبات العمل، واعتبارات لوحة المعلومات</h2>
+
+      <!-- 2.1 Four Steps of Report Creation -->
+      <div class="interactive-panel" aria-labelledby="steps-title">
+        <div class="interactive-header">
+          <div class="interactive-title" id="steps-title">أولاً: عملية إنشاء التقرير (الخطوات الأربع القياسية)</div>
+          <span class="tag-warm">اضغط على أي خطوة للتفاصيل</span>
         </div>
 
-        <ul>
-          <li><b>1. قواعد الخطوط (<span dir="ltr">Fonts</span>) — 4 قواعد:</b>
-            <ol>
-              <li><b>حجم الخط:</b> ألا يقل عن <b>11</b> للنصوص الأساسية (مع تكبير العناوين).</li>
-              <li><b>تباعد الأسطر (<span dir="ltr">Line Spacing</span>):</b> ترك مسافة مريحة بين الأسطر لمنع تداخل الكلمات.</li>
-              <li><b>تباين الألوان (<span dir="ltr">Color Contrast</span>):</b> استخدام لون خط داكن وواضح جداً على خلفية فاتحة (أو العكس) لتجنب إجهاد العين.</li>
-              <li><b>نوع الخط (<span dir="ltr">Font Type</span>):</b> اختيار خط رسمي واحترافي واضح (مثل <span dir="ltr">Arial, Tahoma, Calibri</span>) وتجنب الخطوط الزخرفية المعقدة.</li>
-            </ol>
-          </li>
-          <li><b>2. قواعد المخطط العام (<span dir="ltr">Layout</span>):</b>
-            <ul>
-              <li><b>عدم الازدحام (<span dir="ltr">Avoid Clutter</span>):</b> ترك مساحات بيضاء كافية (<span dir="ltr">White space</span>) وعدم حشر عدد كبير من الرسوم والجداول في صفحة واحدة.</li>
-            </ul>
-          </li>
-          <li><b>3. العناصر الثلاثة الأساسية لأي رسم بياني (<span dir="ltr">3 Chart Elements</span>):</b>
-            <ol>
-              <li><b>العنوان (<span dir="ltr">Title</span>):</b> يوضح موضوع الرسم البياني بدقة.</li>
-              <li><b>التسميات (<span dir="ltr">Axis Labels</span>):</b> توضح أسماء المحاور ($X$ و $Y$) ووحدات القياس.</li>
-              <li><b>وسائل الإيضاح (<span dir="ltr">Legend</span>):</b> توضح دلالة كل لون أو رمز مستخدم في الرسم.</li>
-            </ol>
-          </li>
-        </ul>
-      </div>
-    </details>
-  </section>
+        <div class="pill-selector" id="u2-step-buttons">
+          <button type="button" class="choice-chip is-active" onclick="selectCreationStep(0)">01. إنشاء الخطة</button>
+          <button type="button" class="choice-chip" onclick="selectCreationStep(1)">02. الحصول على الموافقة</button>
+          <button type="button" class="choice-chip" onclick="selectCreationStep(2)">03. القيام بإنشاء التقرير</button>
+          <button type="button" class="choice-chip" onclick="selectCreationStep(3)">04. تسليم التقرير</button>
+        </div>
 
-  <!-- التبويب الثاني: جداول المقارنات والقواعد الذهبية -->
-  <section id="tables" class="panel">
-    <div class="card">
-      <h2>1. ملخص مقارنة أنواع التقارير الستة في الفصل الرابع عشر</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>نوع التقرير</th>
-            <th>السمة المميزة والغرض منه</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><b>1. التقارير الثابتة (<span dir="ltr">Static</span>)</b></td>
-            <td>لقطة جامدة في وقت محدد (مثل <span dir="ltr">PDF</span> أو مطبوعات)؛ لا تقبل التفاعل ولا تتحدث تلقائياً.</td>
-          </tr>
-          <tr>
-            <td><b>2. التقارير الديناميكية (<span dir="ltr">Dynamic</span>)</b></td>
-            <td>تقارير تفاعلية متصلة بالبيانات؛ تتحدث تلقائياً وتسمح بالفلترة والتعمق في التفاصيل.</td>
-          </tr>
-          <tr>
-            <td><b>3. التقارير المخصصة (<span dir="ltr">Ad-hoc / Custom</span>)</b></td>
-            <td>تُنشأ <b>لمرة واحدة فقط عند الطلب</b> للإجابة عن سؤال عمل محدد وطارئ.</td>
-          </tr>
-          <tr>
-            <td><b>4. التقارير البحثية (<span dir="ltr">Research</span>)</b></td>
-            <td>دراسات تحليلية وإحصائية معمقة وطويلة لاكتشاف الأسباب الجذرية وتقديم توصيات استراتيجية.</td>
-          </tr>
-          <tr>
-            <td><b>5. تقارير الخدمة الذاتية (<span dir="ltr">Self-Service</span>)</b></td>
-            <td>مثل لوحة المعلومات (<span dir="ltr">Dashboard</span>)؛ تمكّن المستفيد من تصفية واستكشاف البيانات بنفسه.</td>
-          </tr>
-          <tr>
-            <td><b>6. التقارير المتكررة (<span dir="ltr">Recurring</span>)</b></td>
-            <td>تُنتج وتُرسل بشكل دوري مجدول ومنتظم (يومياً، أسبوعياً، شهرياً).</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+        <div class="detail-stage" id="u2-step-detail"></div>
 
-    <div class="card">
-      <h2>2. ملخص القواعد الذهبية في إعداد وتصميم التقارير (مواضع أسئلة الاختبار)</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>البند في المنهج</th>
-            <th>القاعدة الذهبية للحفظ الفوري</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><b>مكونات خطة التقرير (الخطوة 1)</b></td>
-            <td>تشمل 4 عناصر: <b dir="ltr">Mockups/Wireframes</b> (النماذج الأولية)، <b dir="ltr">Layout</b> (التخطيط)، <b dir="ltr">Flow</b> (التدفق)، و <b dir="ltr">Nav</b> (التنقل).</td>
-          </tr>
-          <tr>
-            <td><b>فائدة طرق العرض (<span dir="ltr">Views</span>)</b></td>
-            <td>حماية البيانات الأصلية وجعلها <b>للقراءة فقط (<span dir="ltr">Read-Only</span>)</b> لمنع التعديل أو الحذف غير المصرح به.</td>
-          </tr>
-          <tr>
-            <td><b>العلاقة بين تحديد السؤال ونطاق البيانات</b></td>
-            <td><b>علاقة عكسية:</b> كلما كان سؤال العمل أكثر تحديداً، كان نطاق البيانات المطلوب <b>أصغر (أضيق)</b>.</td>
-          </tr>
-          <tr>
-            <td><b>متى يوضع رقم الإصدار (<span dir="ltr">Version Number</span>)؟</b></td>
-            <td>في <b>التقارير المحدثة فقط (<span dir="ltr">Updated Reports Only</span>)</b>.</td>
-          </tr>
-          <tr>
-            <td><b>متى توضع الأسئلة المتداولة (<span dir="ltr">FAQs</span>)؟</b></td>
-            <td>في <b>تقارير الخدمة الذاتية (<span dir="ltr">Self-Service</span>) والتقارير المتكررة (<span dir="ltr">Recurring</span>) فقط</b>.</td>
-          </tr>
-          <tr>
-            <td><b>الحد الأدنى لحجم الخط في التقرير</b></td>
-            <td>يجب ألا يقل حجم الخط عن <b>11 نقطة (<span dir="ltr">11 pt</span>)</b>.</td>
-          </tr>
-          <tr>
-            <td><b>عناصر الرسم البياني الثلاثة</b></td>
-            <td>1) <b>العنوان (<span dir="ltr">Title</span>)</b> • 2) <b>التسميات (<span dir="ltr">Labels</span>)</b> • 3) <b>وسائل الإيضاح (<span dir="ltr">Legend</span>)</b>.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- التبويب الثالث: قاموس المصطلحات والأدوات -->
-  <section id="terms" class="panel">
-    <div class="card">
-      <h2>قاموس المصطلحات والأدوات الشامل للفصل الرابع عشر</h2>
-      <p class="muted">جميع المفاهيم والأدوات التحليلية وعناصر تصميم التقارير الواردة في الوحدات الثلاث:</p>
-      <div id="termsGrid" class="grid"></div>
-    </div>
-  </section>
-
-  <!-- التبويب الرابع: البطاقات التعليمية -->
-  <section id="cards" class="panel">
-    <div class="card">
-      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
-      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
-      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
-        <div class="term" id="flashTerm"></div>
-        <div class="answer" id="flashAnswer" hidden></div>
-        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
-      </div>
-      <div class="row" style="margin-top:14px">
-        <button class="btn" id="prevCard">السابق</button>
-        <span id="cardCount" class="muted"></span>
-        <button class="btn primary" id="nextCard">التالي</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- التبويب الخامس: الاختبار الذاتي العشوائي -->
-  <section id="quiz" class="panel">
-    <div class="card">
-      <div class="row">
+        <!-- Always-visible reference grid for the 4 plan components -->
         <div>
-          <h2>الاختبار الشامل المتغير للفصل الرابع عشر (25 سؤالاً) <span class="badge-new">ترتيب عشوائي ذكي 🎲</span></h2>
-          <p class="muted">يختبر فهمك لأنواع التقارير، الأدوات التحليلية، خطوات ومتطلبات العمل، وعناصر وتصميم التقرير مع تعليل فوري!</p>
+          <h4 class="sub-heading">ملخص المكونات الأربعة داخل مرحلة «إنشاء الخطة»</h4>
+          <div class="card-grid-4">
+            <div class="figure-card">
+              <div class="card-header-row">
+                <strong><bdi dir="ltr">Mockups / Wireframes</bdi></strong>
+                <span class="tag-warm">حصرياً للوحة البيانات</span>
+              </div>
+              <p>النماذج الأولية والمخططات السلكية التي توضح مخطط كيفية إنشاء لوحة البيانات (<bdi dir="ltr">dashboard</bdi>).</p>
+            </div>
+            <div class="figure-card">
+              <div class="card-header-row">
+                <strong><bdi dir="ltr">Layout / Presentation</bdi></strong>
+                <span class="index-num">التخطيط</span>
+              </div>
+              <p>التخطيط والعرض الذي يوضح طريقة تقديم البيانات في ملف التقرير.</p>
+            </div>
+            <div class="figure-card">
+              <div class="card-header-row">
+                <strong><bdi dir="ltr">Flow</bdi></strong>
+                <span class="index-num">التدفق</span>
+              </div>
+              <p>الترتيب المنطقي الذي تقدم به نتائجك داخل التقرير.</p>
+            </div>
+            <div class="figure-card">
+              <div class="card-header-row">
+                <strong><bdi dir="ltr">Nav</bdi></strong>
+                <span class="index-num">التنقل</span>
+              </div>
+              <p>الطريقة التي تسمح بها للمستخدم بالتنقل عبر لوحة المعلومات.</p>
+            </div>
+          </div>
         </div>
-        <div class="score" id="score">النتيجة: 0 / 25</div>
       </div>
-      <div class="progress"><div id="progressBar"></div></div>
-      <div id="quizArea"></div>
-      <div class="row">
-        <button class="btn" id="resetQuiz">إعادة الاختبار بترتيب عشوائي جديد 🔀</button>
-        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
+
+      <!-- 2.2 Business Requirements -->
+      <div>
+        <h3 class="sub-heading">ثانياً: النقاط الواجب مراعاتها عند إعداد التقرير (متطلبات العمل)</h3>
+        <div class="card-grid-3">
+          <article class="figure-card">
+            <div class="card-header-row">
+              <h4>1. محتوى البيانات</h4>
+              <span class="index-num">01</span>
+            </div>
+            <p>تضم المتغيرات أو الجداول أو الرسوم المضمّنة في التقرير. القاعدة الذهبية: ضمّن المعلومات المطلوبة للإجابة على السؤال <strong>فقط</strong> دون أي إضافات؛ لأن الزيادة غير الضرورية ترفع التعقيد وتشوش التقرير وتقلل فهم الجمهور.</p>
+          </article>
+
+          <article class="figure-card">
+            <div class="card-header-row">
+              <h4>2. الفلترة أو التصفية</h4>
+              <span class="index-num">02</span>
+            </div>
+            <p>تتم باستخدام المرشحات لإبقاء محتوى البيانات المطلوب فقط. وفي لوحات المعلومات وتقارير الخدمة الذاتية، تُضاف القدرة على التصفية لمنح المستخدم تحكماً تفاعلياً في تحديد ما يريد رؤيته.</p>
+          </article>
+
+          <article class="figure-card">
+            <div class="card-header-row">
+              <h4>3. طرق العرض (<bdi dir="ltr">Views</bdi>)</h4>
+              <span class="index-num">03</span>
+            </div>
+            <p>وظائف في أدوات البيانات مثل <strong><bdi dir="ltr">SQL</bdi></strong> و<strong><bdi dir="ltr">Power BI</bdi></strong> تحفظ نتيجة الاستعلام ككائن بيانات منفصل. <strong>السبب الرئيسي: حماية البيانات</strong> بعرضها <strong>للقراءة فقط</strong> تجنباً لخطر حذف المستخدم مجموعة البيانات بالخطأ أثناء العرض.</p>
+          </article>
+
+          <article class="figure-card">
+            <div class="card-header-row">
+              <h4>4. نطاق البيانات</h4>
+              <span class="index-num">04</span>
+            </div>
+            <p>يتعلق بكمية البيانات المضمّنة (نطاقات زمنية أو جغرافية أو غيرها). القاعدة العامة: كلما كان السؤال أكثر تحديداً كان نطاق البيانات <strong>أصغر</strong>، وكلما كان السؤال أكثر غموضاً كان نطاق البيانات <strong>أكبر</strong>.</p>
+          </article>
+
+          <article class="figure-card">
+            <div class="card-header-row">
+              <h4>5. التكرار</h4>
+              <span class="index-num">05</span>
+            </div>
+            <p>هو عدد مرات تقديم التقرير المتكرر، ويرتبط مباشرةً بالغرض من التقرير: هل يُقدَّم كل عام، أم ربع سنة، أم شهر، أم أسبوع، أم يوم، أم كل ساعة؟</p>
+          </article>
+
+          <article class="figure-card">
+            <div class="card-header-row">
+              <h4>6. المستفيدون</h4>
+              <span class="index-num">06</span>
+            </div>
+            <p>هم مستقبِلو التقرير. <strong>لا تُقدِّم تقريراً أبداً لمن لا يحتاج إليه</strong>؛ لأن ذلك يضيع وقت الجميع، ويسبب ارتباكاً غير ضروري، وقد يسبب تسرباً لمعلومات سرية، ويثير مشكلات قانونية مع البيانات المحمية. فكر: ماذا يحتاجون؟ وكم؟ ومن تحديداً؟</p>
+          </article>
+        </div>
       </div>
-      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
-    </div>
-  </section>
-</main>
 
-<footer>مبني بالكامل (100%) على محتوى الفصل الرابع عشر والأخير (إعداد تقارير البيانات) من مقرر تحليل وتمثيل البيانات</footer>
+      <!-- Interactive Labs for Unit 2: Robotics Example + Scope Slider -->
+      <div class="card-grid-2">
+        <div class="interactive-panel" aria-labelledby="robotics-lab-title">
+          <div class="interactive-header">
+            <div class="interactive-title" id="robotics-lab-title">تطبيق عملي: مثال شركة الروبوتات</div>
+            <span class="tag-warm">السرعة = المسافة / الزمن</span>
+          </div>
+          <p>يريد فريق روبوتات تقريراً أسبوعياً متكرراً لمعرفة هل يصبح الروبوت أسرع من الأسبوع الماضي أم لا. اختر المتغيرات التي يجب إدراجها فقط في التقرير:</p>
+          <div class="checkbox-grid" id="robotics-checkboxes">
+            <label class="check-card"><input type="checkbox" value="distance" onchange="evaluateRoboticsVars()"> المسافة</label>
+            <label class="check-card"><input type="checkbox" value="time" onchange="evaluateRoboticsVars()"> الوقت</label>
+            <label class="check-card"><input type="checkbox" value="date" onchange="evaluateRoboticsVars()"> التاريخ</label>
+            <label class="check-card"><input type="checkbox" value="color" onchange="evaluateRoboticsVars()"> لون الروبوت</label>
+            <label class="check-card"><input type="checkbox" value="supervisor" onchange="evaluateRoboticsVars()"> اسم المشرف</label>
+            <label class="check-card"><input type="checkbox" value="cost" onchange="evaluateRoboticsVars()"> تكلفة الشحن</label>
+          </div>
+          <div class="feedback-box" id="robotics-feedback" aria-live="polite">
+            <div class="feedback-title">التشخيص التحليلي</div>
+            <div>حدد المتغيرات اللازمة أعلاه لاختبار تطبيق قاعدة «محتوى البيانات دون إضافات».</div>
+          </div>
+        </div>
 
-<script>
-const terms = [
-  ["Static Reports (التقارير الثابتة)", "تقارير تعرض لقطة ثابتة للبيانات في وقت محدد (مثل ملفات PDF والمطبوعات) ولا تسمح للمستخدم بالتفاعل أو الفلترة."],
-  ["Dynamic Reports (التقارير الديناميكية)", "تقارير تفاعلية متصلة بمصادر البيانات تتحدث تلقائياً وتسمح للمستخدم بالتصفية والتعمق في التفاصيل."],
-  ["Ad-hoc / Custom Reports", "التقارير المخصصة: تُنشأ لمرة واحدة فقط عند الطلب للإجابة عن سؤال عمل محدد وعاجل."],
-  ["Research Reports (التقارير البحثية)", "تقارير تحليلية وإحصائية معمقة تدرس الأسباب الجذرية لمشكلة ما وتقدم توصيات استراتيجية."],
-  ["Self-Service Reports (Dashboard)", "تقارير الخدمة الذاتية (مثل لوحة المعلومات): تتيح للمستفيد استكشاف وتصفية البيانات بنفسه دون الرجوع للمحلل."],
-  ["Recurring Reports (التقارير المتكررة)", "تقارير قياسية تُصدر وتُرسل بشكل دوري منتظم (يومياً، أسبوعياً، شهرياً)."],
-  ["SQL & RDBMS", "أدوات الاستعلام وقواعد البيانات العلائقية المستخدمة لاستخراج وتجميع البيانات من المصدر."],
-  ["Tableau & Power BI", "أشهر أدوات التمثيل المرئي وذكاء الأعمال (BI) المتخصصة في بناء لوحات المعلومات التفاعلية والتقارير المؤسسية."],
-  ["Mockups / Wireframes", "النماذج الأولية أو الإطارات السلكية: مسودة تخطيطية مرئية توضح شكل التقرير وتوزيع عناصره ضمن خطوة (إنشاء الخطة)."],
-  ["Layout, Flow, & Nav", "عناصر خطة التقرير: التخطيط والعرض (Layout)، التدفق المنطقي للمعلومات (Flow)، وآلية التنقل بين الصفحات والفلاتر (Nav)."],
-  ["Database Views (طرق العرض)", "جداول افتراضية في قاعدة البيانات تُستخدم لحماية البيانات الأصلية وجعلها للقراءة فقط (Read-Only) عند ربطها بالتقارير."],
-  ["Live Connection vs Data Extract", "في لوحة المعلومات: الاتصال المباشر (Live) يعرض البيانات لحظياً، بينما المستخرج الأخير (Extract) يأخذ نسخة دورية سريعة الأداء."],
-  ["FAQs (الأسئلة المتداولة)", "قسم يُدرج في تقارير الخدمة الذاتية والتقارير المتكررة فقط للإجابة عن استفسارات المستخدمين الشائعة حول التقرير."],
-  ["Appendix (الملحق)", "قسم في نهاية التقرير يضم الجداول التفصيلية المطولة أو المعادلات الإضافية لعدم إرباك جسم التقرير الرئيسي."]
-];
+        <div class="interactive-panel" aria-labelledby="scope-lab-title">
+          <div class="interactive-header">
+            <div class="interactive-title" id="scope-lab-title">مختبر العلاقة بين السؤال ونطاق البيانات</div>
+            <span class="dossier-meta">نطاق زمني / جغرافي</span>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="scope-slider">درجة تحديد السؤال البحثي (<span id="scope-level-text">متوسط التحديد</span>)</label>
+            <input type="range" id="scope-slider" min="1" max="3" step="1" value="2" oninput="updateScopeLab(this.value)">
+          </div>
+          <div class="detail-stage" id="scope-output"></div>
+        </div>
+      </div>
 
-const cards = [
-  ["ما الفرق الجوهري بين التقارير الثابتة (Static Reports) والتقارير الديناميكية (Dynamic Reports)؟ مع ذكر مثال لكل منهما.", "• التقارير الثابتة: تعرض لقطة ثابتة للبيانات في وقت محدد ولا تقبل التفاعل أو التحديث التلقائي (مثل ملفات PDF والمطبوعات).\n• التقارير الديناميكية: تقارير تفاعلية متصلة بالبيانات تتحدث تلقائياً وتسمح بالفلترة (مثل لوحات المعلومات التفاعلية Dashboards)."],
-  ["ما هي أبرز إيجابيات وسلبيات التقارير الثابتة (Static Reports)؟", "• الإيجابيات: سهلة الإنشاء والمشاركة والطباعة، وتضمن رؤية الجميع لنفس الأرقام التاريخية الثابتة، وآمنة.\n• السلبيات: تصبح قديمة بسرعة، ولا تسمح للمستخدم بالفلترة أو التفاعل."],
-  ["ما الفرق بين التقارير المخصصة (Ad-hoc Reports) والتقارير البحثية (Research Reports)؟", "• التقارير المخصصة (Ad-hoc): تُنشأ لمرة واحدة فقط عند الطلب للإجابة عن سؤال عمل محدد وطارئ.\n• التقارير البحثية (Research): دراسات تحليلية وإحصائية معمقة وطويلة لاكتشاف الأسباب الجذرية وتقديم توصيات."],
-  ["ما الفرق بين تقارير الخدمة الذاتية (Self-Service Reports) والتقارير المتكررة (Recurring Reports)؟", "• تقارير الخدمة الذاتية (مثل Dashboard): تتيح للمستفيد الدخول وتصفية البيانات بنفسه في أي وقت.\n• التقارير المتكررة: تقارير قياسية تُنتج وتُرسل بشكل دوري مجدول (يومياً، أسبوعياً، شهرياً)."],
-  ["ما هي الفئات الأربع للأدوات التحليلية المستخدمة في بناء التقارير؟ مع ذكر مثال لكل فئة.", "1) أدوات الاستعلام وقواعد البيانات: مثل SQL و RDBMS.\n2) أدوات جداول البيانات: مثل Microsoft Excel.\n3) أدوات لغات البرمجة: مثل Python و R.\n4) أدوات التمثيل المرئي وذكاء الأعمال: مثل Tableau و Power BI."],
-  ["ما هي الخطوات الأربع الأساسية لإنشاء التقرير بالترتيب؟", "1) إنشاء الخطة (Create the plan).\n2) الحصول على الموافقة على الخطة (Get approval).\n3) القيام بإنشاء وبناء التقرير (Build the report).\n4) تسليم التقرير (Deliver the report)."],
-  ["ماذا تشمل الخطوة الأولى (إنشاء الخطة) من عناصر تصميمية أربعة؟", "1) النماذج الأولية / الإطارات السلكية (Mockups / Wireframes).\n2) التخطيط والعرض (Layout / Presentation).\n3) التدفق المنطقي للمعلومات (Flow).\n4) آلية التنقل (Navigation - Nav)."],
-  ["لماذا تُعد الخطوة الثانية (الحصول على الموافقة على الخطة من المستفيدين) خطوة حاسمة قبل بناء التقرير؟", "للتأكد من أن تصميم ومحتوى التقرير يلبي متطلبات المستفيدين منذ البداية، وتجنب إهدار الوقت والجهد في بناء تقرير كامل ثم إعادة تصميمه من الصفر."],
-  ["ما هي النقاط الست لفهم متطلبات العمل عند إعداد التقرير؟", "1) محتوى البيانات.\n2) الفلترة / التصفية.\n3) طرق العرض (Views).\n4) نطاق البيانات.\n5) التكرار / الدورية.\n6) المستفيدون."],
-  ["في مثال شركة الروبوتات بالملزمة، إذا أردنا تقريراً يقيس (تطور سرعة الروبوت عبر الأيام)، فما هي المتغيرات الثلاثة فقط التي نختارها لمحتوى البيانات؟ ولماذا؟", "نختار 3 متغيرات فقط:\n1) المسافة (Distance)\n2) الوقت/الزمن (Time) -> لأن السرعة = المسافة ÷ الزمن.\n3) التاريخ (Date) -> لتتبع التطور عبر الأيام."],
-  ["لماذا نستخدم طرق العرض (Views) في قواعد البيانات عند ربطها بالتقارير؟", "لحماية البيانات الأصلية وإخفاء الأعمدة الحساسة، ولجعل البيانات (للقراءة فقط - Read-Only) حتى لا يتم تعديلها أو حذفها بالخطأ، ولتبسيط الاستعلامات."],
-  ["ما طبيعة العلاقة بين (مدى تحديد سؤال العمل) وبين (نطاق البيانات المطلوب للتقرير)؟", "علاقة عكسية:\n• كلما كان سؤال العمل أكثر تحديداً ووضوحاً، كان نطاق البيانات المطلوب أصغر وأضيق.\n• وكلما كان السؤال عاماً، كان نطاق البيانات أكبر وأوسع."],
-  ["في متطلبات لوحة المعلومات (Dashboard)، ما الفرق بين (الاتصال المباشر Live Connection) و(المستخرج الأخير Data Extract)؟", "• الاتصال المباشر: يعرض البيانات لحظياً في الوقت الفعلي ولكنه قد يبطئ الأداء ويزيد الحمل على قاعدة البيانات.\n• المستخرج الأخير: يأخذ نسخة دورية محفوظة من البيانات، وهو أسرع بكثير في الأداء ويخفف العبء عن قاعدة البيانات."],
-  ["ما هي العناصر الستة الأساسية التي يتكون منها التقرير الاحترافي؟", "1) صفحة الغلاف (Cover page).\n2) رقم الإصدار (Version number).\n3) مصادر البيانات المرجعية.\n4) التواريخ المرجعية.\n5) الأسئلة المتداولة (FAQs).\n6) الملحق (Appendix)."],
-  ["متى يتم وضع عنصر (رقم الإصدار - Version Number) في التقرير؟", "يوضع في (التقارير المحدثة فقط - Updated Reports Only) لتتبع النسخ والتعديلات المتعاقبة."],
-  ["ما هما التاريخان اللذان يشملهما عنصر (التواريخ المرجعية) في التقرير؟", "1) تاريخ إنشاء التقرير (متى صُمم أو أُنشئ التقرير).\n2) تاريخ تحديث البيانات (متى تم آخر سحب أو تحديث للبيانات المعروضة في التقرير)."],
-  ["في أي نوع من التقارير يتم إدراج قسم (الأسئلة المتداولة - FAQs) فقط؟ ولماذا؟", "يُدرج في (تقارير الخدمة الذاتية Self-Service) و(التقارير المتكررة Recurring Reports) فقط؛ للإجابة المسبقة عن الأسئلة الشائعة للمستخدمين حول المؤشرات."],
-  ["ما هي وظيفة قسم (الملحق - Appendix) في نهاية التقرير؟", "يوضع فيه الجداول التفصيلية الكبيرة أو المعادلات والشروحات الإضافية لمن يرغب في التعمق، حتى يظل جسم التقرير الرئيسي مختصراً وواضحاً."],
-  ["ما هي الاعتبارات المتعلقة بـ (متى يُسلم التقرير) و(كيف يُسلم التقرير)؟", "• متى يُسلم: عبر تفعيل ميزة الاشتراك (Subscription) والجدولة التلقائية (Automated scheduling).\n• كيف يُسلم: عبر البريد أو واجهة الويب (Web interface) مع ضبط أذونات الوصول الأمنية (Security permissions)."],
-  ["ما هي القواعد الأربع الخاصة بتصميم (الخطوط - Fonts) في التقرير؟ وكم يبلغ الحد الأدنى لحجم الخط؟", "1) ألا يقل حجم الخط عن (11 نقطة - 11 pt).\n2) تباعد الأسطر المناسب.\n3) تباين الألوان الواضح بين النص والخلفية.\n4) اختيار نوع خط احترافي ورسمي."],
-  ["ما هي القاعدة الأساسية لتصميم المخطط العام لصفحة التقرير (Layout)؟", "عدم الازدحام (Avoid clutter) وترك مساحات فارغة مريحة للعين حتى يسهل استيعاب المعلومات."],
-  ["ما هي العناصر الثلاثة الأساسية الواجب توفرها في أي رسم بياني داخل التقرير؟", "1) العنوان (Title).\n2) التسميات للمحاور (Labels).\n3) وسائل الإيضاح / مفتاح الرسم (Legend)."],
-  ["أي أداة تحليلية تُعد الأنسب لبناء لوحات معلومات تفاعلية للمؤسسات، وأي أداة تُعد الأنسب لاستعلام قواعد البيانات الضخمة؟", "• للوحات المعلومات التفاعلية: Tableau و Power BI.\n• لاستعلام قواعد البيانات العلائقية: لغة SQL."],
-  ["ما خطورة تسليم تقرير عبر واجهة الويب دون ضبط (أذونات الوصول الأمنية - Access Permissions)؟", "قد يتمكن مستخدمون غير مخولين من الاطلاع على بيانات سرية أو حساسة تخص أقساماً أخرى لا صلاحية لهم لرؤيتها."],
-  ["إذا طلب منك مدير التسويق تقريراً شهرياً يُرسل تلقائياً في اليوم الأول من كل شهر، فما نوع هذا التقرير؟", "تقرير متكرر / دوري (Recurring Report)."],
-  ["إذا أردتِ تصميم مسودة أولية بالقلم والورق أو ببرنامج تصميم لتوضيح أماكن وضع الرسوم البيانية قبل بناء الـ Dashboard، فماذا تُسمى هذه المسودة؟", "تُسمى النموذج الأولي أو الإطار السلكي (Mockup / Wireframe)."],
-  ["لماذا يُعد ذكر (مصادر البيانات المرجعية) داخل التقرير أمراً مهماً؟", "لأنه يعزز موثوقية التقرير ومصداقيته أمام صناع القرار، ويمكّن المراجعين من معرفة من أين جاءت الأرقام والتحقق منها عند الحاجة."],
-  ["هل يكفي وضع تاريخ إنشاء التقرير فقط دون ذكر تاريخ تحديث البيانات؟ ولماذا؟", "لا يكفي؛ لأن التقرير قد يكون منشأً اليوم ولكن البيانات المسحوبة بداخله تعود للشهر الماضي، لذا يجب ذكر التاريخين معاً لعدم تضليل القارئ."]
-];
+      <!-- 2.3 Dashboard Specific Requirements -->
+      <div>
+        <h3 class="sub-heading">ثالثاً: المتطلبات الخاصة بلوحة المعلومات (<bdi dir="ltr">Dashboard</bdi>)</h3>
+        <div class="card-grid-2">
+          <article class="figure-card figure-card--accent-top">
+            <div class="card-header-row">
+              <h4>1. مصادر البيانات وطرق الاتصال</h4>
+              <span class="index-num">01</span>
+            </div>
+            <p>يتناول جانبين أساسيين: أولاً، ما هي قواعد البيانات التي نحصل منها على البيانات؟ وثانياً، كيف ستتصل هذه البيانات بلوحة المعلومات؟</p>
+            <ul class="clean-list">
+              <li><strong>الاتصال المباشر:</strong> يعني تقريراً <strong>ديناميكياً</strong> أو في الوقت الفعلي.</li>
+              <li><strong>المستخرج الأخير:</strong> يعرض تقريراً <strong>ثابتاً</strong> مع تاريخ محدد على وجه التحديد عند آخر تعديل للبيانات.</li>
+            </ul>
+          </article>
 
-const masterQuestions = [
-  {q:"التقارير التي تعرض لقطة جامدة للبيانات في نقطة زمنية محددة (مثل ملفات PDF والمستندات الورقية المطبوعة) ولا تسمح للمستخدم بالتفاعل معها أو تصفيتها تُسمى:",o:["التقارير الثابتة (Static Reports)","التقارير الديناميكية التفاعلية (Dynamic Reports)","تقارير الخدمة الذاتية (Self-Service Dashboards)","قواعد البيانات العلائقية"],a:0,e:"التقارير الثابتة (Static Reports) تعرض البيانات بشكل ثابت غير قابل للتفاعل أو التحديث التلقائي."},
-  {q:"أي مما يلي يُعد من أبرز الإيجابيات (المزايا) للتقارير الثابتة (Static Reports) مقارنة بالتقارير الديناميكية؟",o:["سهلة الإنشاء والمشاركة والطباعة، وتضمن أن جميع المستفيدين يرون نفس الأرقام التاريخية بالضبط في تلك النقطة الزمنية","تتحدث بياناتها تلقائياً في كل ثانية وتسمح بالفلترة الفورية","تغني عن إنشاء أي تقارير أخرى في المستقبل","تتطلب اتصالاً حياً ومستمراً بقاعدة البيانات"],a:0,e:"تتميز التقارير الثابتة بسهولة مشاركتها وثبات أرقامها التاريخية لجميع القراء دون حاجة لاتصال بقاعدة البيانات."},
-  {q:"التقارير التي يتم إنشاؤها (لمرة واحدة فقط عند الطلب) للإجابة عن سؤال عمل محدد وطارئ تُعرف بـ:",o:["التقارير المخصصة (Ad-hoc / Custom Reports)","التقارير المتكررة الدورية (Recurring Reports)","تقارير الخدمة الذاتية المستمرة","الجداول المحورية فقط"],a:0,e:"التقارير المخصصة (Ad-hoc Reports) تُبنى خصيصاً لمرة واحدة استجابة لطلب أو موقف عمل طارئ ومحدد."},
-  {q:"ما الفرق بين (تقارير الخدمة الذاتية - Self-Service Reports) و (التقارير المتكررة - Recurring Reports)؟",o:["تقارير الخدمة الذاتية (مثل Dashboard) تتيح للمستفيد استكشاف وتصفية البيانات بنفسه في أي وقت، بينما التقارير المتكررة تُنتج وتُرسل بشكل دوري مجدول (يومياً أو أسبوعياً أو شهرياً)","التقارير المتكررة تُنشأ لمرة واحدة فقط في عمر الشركة","تقارير الخدمة الذاتية هي أوراق مطبوعة لا تقبل الفلترة","لا يوجد أي فرق بينهما"],a:0,e:"الخدمة الذاتية تمكّن المستخدم من التفاعل والفلترة بنفسه عبر Dashboard، بينما المتكررة تصدر بجدول زمني منتظم."},
-  {q:"تُصنف منصتا (Tableau) و (Power BI) ضمن الأدوات التحليلية الأربعة لبناء التقارير تحت فئة:",o:["أدوات التمثيل المرئي وذكاء الأعمال (BI & Visualization Tools)","أدوات الاستعلام وقواعد البيانات (Query Tools مثل SQL)","أدوات جداول البيانات البسيطة (Spreadsheets)","بروتوكولات التشفير اللاسلكي"],a:0,e:"الأدوات الأربع هي: أدوات الاستعلام (SQL)، جداول البيانات (Excel)، لغات البرمجة (Python)، وأدوات التمثيل المرئي (Tableau و Power BI)."},
-  {q:"ما هو الترتيب الصحيح للخطوات الأربع الأساسية لإنشاء التقرير كما وردت في الوحدة الثانية؟",o:["1) إنشاء الخطة -> 2) الحصول على الموافقة على الخطة -> 3) القيام بإنشاء التقرير -> 4) تسليم التقرير","1) تسليم التقرير -> 2) إنشاء التقرير -> 3) إنشاء الخطة -> 4) الحصول على الموافقة","1) إنشاء التقرير -> 2) تسليم التقرير -> 3) الحصول على الموافقة -> 4) إنشاء الخطة","لا يحتاج إنشاء التقرير إلى خطة أو موافقة مسبقة"],a:0,e:"تبدأ العملية بإنشاء الخطة، ثم اعتمادها بالموافقة عليها، ثم بناء التقرير، وأخيراً تسليمه."},
-  {q:"تشمل الخطوة الأولى (إنشاء الخطة) أربعة مكونات تصميمية لتوضيح شكل التقرير وتدفقه هي:",o:["النماذج الأولية (Mockups/Wireframes)، التخطيط والعرض (Layout/Presentation)، التدفق (Flow)، والتنقل (Nav)","الحذف، الاستبدال، التحجيم، والترميز","المتوسط، الوسيط، المنوال، والتباين","الغلاف، الملحق، الخطوط، والجدولة"],a:0,e:"تتضمن خطة التقرير إعداد الـ Mockups/Wireframes، وتحديد الـ Layout، والـ Flow، وآلية الـ Nav."},
-  {q:"[مسألة ومثال تطبيقي] في مثال شركة الروبوتات بالملزمة، إذا أرادت الشركة تقريراً يوضح (تطور سرعة الروبوت بمرور الأيام)، فما هي المتغيرات الثلاثة فقط التي يجب اختيارها ضمن محتوى بيانات التقرير؟",o:["المسافة، والوقت (الزمن)، والتاريخ — (لأن السرعة = المسافة / الزمن، والتاريخ لتتبع الأيام)","لون الروبوت، ووزنه، واسم المصنع فقط","التكلفة المالية، وعدد العجلات، واسم المهندس","جميع الـ 50 عموداً الموجودة في قاعدة البيانات دون استثناء"],a:0,e:"بما أن السرعة = المسافة ÷ الزمن، فنحن نحتاج لمتغيري المسافة والوقت لحسابها، ومتغير التاريخ لمعرفة تطورها عبر الزمن."},
-  {q:"ضمن نقاط فهم متطلبات العمل، لماذا يُنصح باستخدام (طرق العرض - Database Views) عند ربط التقرير بقاعدة البيانات؟",o:["لحماية البيانات الأصلية وإخفاء الحقول الحساسة، ولجعل البيانات (للقراءة فقط - Read-Only) لمنع تعديلها أو حذفها بالخطأ","لتمكين المستخدمين من حذف جداول قاعدة البيانات الأصلية بسهولة","لإبطاء سرعة التقرير وزيادة حجمه","لتغيير ألوان الخطوط في التقرير"],a:0,e:"توفر الـ Views طبقة أمان وحماية للبيانات الأصلية وتجعلها للقراءة فقط (Read-Only) بالنسبة للتقرير."},
-  {q:"ما هي العلاقة الصحيحة بين (مدى تحديد سؤال العمل) وبين (نطاق البيانات - Data Scope) المطلوب في التقرير؟",o:["علاقة عكسية: كلما كان سؤال العمل أكثر تحديداً، كان نطاق البيانات المطلوب أصغر (أضيق)، وكلما كان السؤال عاماً كان النطاق أكبر","علاقة طردية: كلما كان السؤال محدداً جداً احتجنا لقاعدة البيانات كلها","لا توجد أي علاقة بين سؤال العمل ونطاق البيانات","نطاق البيانات ثابت دائماً لكل الأسئلة"],a:0,e:"السؤال المحدد بدقة يتطلب نطاق بيانات ضيقاً ومركزاً، بينما السؤال العام الواسع يتطلب نطاق بيانات كبيراً."},
-  {q:"عند تصميم لوحة معلومات (Dashboard)، ما الفرق بين الاتصال المباشر (Live Connection) والمستخرج الأخير (Data Extract)؟",o:["الاتصال المباشر يعرض البيانات لحظياً في الوقت الفعلي، بينما المستخرج الأخير يعتمد على نسخة دورية محفوظة مما يجعله أسرع أداءً وأخف عبئاً على قاعدة البيانات","المستخرج الأخير يحذف جميع البيانات، والاتصال المباشر يعمل بدون قاعدة بيانات","كلاهما يعرضان بيانات ورقية مطبوعة فقط","لا يمكن ربط لوحة المعلومات بمصادر البيانات"],a:0,e:"تُوازن متطلبات الـ Dashboard بين حداثة البيانات اللحظية في (الاتصال المباشر) وسرعة الأداء العالية في (المستخرج الأخير)."},
-  {q:"جميع ما يلي يُعد من العناصر الستة الأساسية للتقرير الاحترافي في الوحدة الثالثة ما عدا:",o:["خوارزمية انحدار الميل (Gradient Descent)","صفحة الغلاف (Cover Page) ورقم الإصدار (Version Number)","مصادر البيانات المرجعية والتواريخ المرجعية","الأسئلة المتداولة (FAQs) والملحق (Appendix)"],a:0,e:"العناصر الستة للتقرير هي: الغلاف، رقم الإصدار، مصادر البيانات، التواريخ المرجعية، الأسئلة المتداولة FAQs، والملحق."},
-  {q:"في أي نوع من التقارير يتم وضع عنصر (رقم الإصدار - Version Number) فقط كما نصت عليه الملزمة؟",o:["في التقارير المحدثة / المتغيرة فقط (Updated Reports Only) لتتبع النسخ والتعديلات","في التقارير التي تُنشأ لمرة واحدة ولا تتغير أبداً","في المخطط الدائري فقط","في قاعدة البيانات قبل إنشاء التقرير"],a:0,e:"رقم الإصدار ضروري في التقارير المحدثة فقط لتمييز النسخة الحالية عن النسخ السابقة."},
-  {q:"في أي نوعين من التقارير يتم إدراج عنصر (الأسئلة المتداولة - FAQs) فقط؟",o:["في تقارير الخدمة الذاتية (Self-Service) والتقارير المتكررة (Recurring Reports) فقط","في التقارير المخصصة لمرة واحدة فقط","في ملفات الكود البرمجي فقط","لا توضع الأسئلة المتداولة في أي تقرير"],a:0,e:"تُوضع الـ FAQs في تقارير الخدمة الذاتية والتقارير المتكررة فقط للإجابة المسبقة عن استفسارات المستخدمين المتكررة."},
-  {q:"ماذا يشمل عنصر (التواريخ المرجعية - Reference Dates) الواجب توضيحه في التقرير؟",o:["يشمل تاريخين: تاريخ إنشاء التقرير، وتاريخ تحديث البيانات المعروضة في التقرير","يشمل تاريخ ميلاد محلل البيانات فقط","يشمل تاريخ تأسيس الشركة فقط","لا حاجة لذكر أي تواريخ في التقرير"],a:0,e:"يجب التفريق في التواريخ المرجعية بين تاريخ إنشاء التقرير نفسه وتاريخ آخر تحديث للبيانات التي بُني عليها."},
-  {q:"أين يوضع قسم (الملحق - Appendix) في التقرير؟ وما الغرض منه؟",o:["يوضع في نهاية التقرير، ويضم الجداول التفصيلية المطولة أو المعادلات والشروحات الإضافية لمن يرغب في التعمق دون إرباك التقرير الرئيسي","يوضع في الصفحة الأولى قبل الغلاف","يُستخدم لحذف الرسوم البيانية من التقرير","يُستخدم لتشفير التقرير بكلمة مرور"],a:0,e:"الملحق (Appendix) يُحفظ في نهاية التقرير ليحتوي على التفاصيل الإضافية والمطولة بعيداً عن المتن الرئيسي."},
-  {q:"عند النظر في اعتبارات (متى يُسلم التقرير) و(كيف يُسلم التقرير)، ما هي الآليات والأمور الأمنية الواجب مراعاتها؟",o:["الاشتراك والجدولة التلقائية (لمتى يُسلم)، وواجهة الويب مع ضبط أذونات الوصول الأمنية (لكيف يُسلم)","ترك التقرير متاحاً لجميع الغرباء بدون أذونات وصول أمنية","تسليم التقرير شفهياً فقط دون توثيق","منع المستفيدين من رؤية التقرير"],a:0,e:"يُنظم وقت التسليم عبر الاشتراك والجدولة التلقائية، وتُنظم طريقة التسليم عبر واجهة الويب مع تقييد أذونات الوصول الأمنية."},
-  {q:"وفقاً لقواعد تصميم الخطوط (Fonts) في التقرير، ما هو الحد الأدنى لحجم الخط الذي يجب ألا يقل عنه النص لضمان وضوح القراءة؟",o:["ألا يقل حجم الخط عن 11 نقطة (11 pt)","ألا يزيد حجم الخط عن 4 نقاط","أن يكون حجم الخط 2 نقطة فقط","لا توجد أي قاعدة لحجم الخط"],a:0,e:"تنص قواعد التصميم الفني للتقرير في الملزمة على ألا يقل حجم الخط عن 11، مع مراعاة تباعد الأسطر وتباين الألوان ونوع الخط الاحترافي."},
-  {q:"جميع ما يلي يُعد من القواعد الأربع لتصميم الخطوط (Fonts) في التقرير ما عدا:",o:["استخدام لون خط مطابق تماماً للون الخلفية بحيث يختفي النص (انعدام التباين) واستخدام حجم خط 5","ألا يقل حجم الخط عن 11","مراعاة تباعد الأسطر المناسب","وضوح تباين الألوان بين النص والخلفية واختيار نوع خط احترافي"],a:0,e:"قواعد الخطوط الأربع هي: حجم خط لا يقل عن 11، تباعد الأسطر، تباين الألوان الجيد، ونوع الخط الاحترافي."},
-  {q:"ما هي القاعدة الأساسية التي يجب مراعاتها في (المخطط العام لصفحة التقرير - Layout) عند توزيع الرسوم والجداول؟",o:["عدم الازدحام (Avoid Clutter) وتجنب تكديس العناصر","حشر 50 رسماً بيانياً في صفحة واحدة صغيرة","إلغاء جميع المساحات الفارغة","وضع الجداول فوق الرسوم البيانية بحيث تغطيها"],a:0,e:"تجنب الازدحام (Avoid Clutter) وترتيب المخطط بشكل مريح بصرياً هو القاعدة الأساسية لتصميم المخطط."},
-  {q:"ما هي العناصر الثلاثة الأساسية الواجب توفرها دائماً في أي (رسم بياني - Chart) داخل التقرير؟",o:["1) العنوان (Title)، 2) التسميات (Labels)، 3) وسائل الإيضاح / مفتاح الرسم (Legend)","1) صفحة الغلاف، 2) الملحق، 3) الأسئلة المتداولة","1) الكود البرمجي، 2) قاعدة البيانات، 3) السيرفر","1) الصوت، 2) الفيديو، 3) الحركة"],a:0,e:"لكي يكون أي رسم بياني مفهوماً بذاته داخل التقرير، يجب أن يتضمن 3 عناصر: العنوان، التسميات على المحاور، ووسائل الإيضاح (Legend)."},
-  {q:"ما المقصود بـ (النماذج الأولية / الإطارات السلكية - Mockups / Wireframes) التي تُعد في خطوة إنشاء خطة التقرير؟",o:["رسم تخطيطي أولي (مسودة مرئية) يوضح هيكل التقرير وأماكن توزيع المخططات والجداول قبل البدء ببنائه فعلياً","النسخة النهائية المطبوعة بعد تسليم التقرير بسنة","كود لغة SQL لاستخراج البيانات","أذونات الحماية الأمنية للخادم"],a:0,e:"الـ Mockup أو Wireframe هو التصميم التخطيطي المبدئي للتقرير الذي يُعرض على المستفيدين للموافقة عليه قبل التنفيذ."},
-  {q:"إذا طُلب منك إجراء دراسة تحليلية وإحصائية معمقة وطويلة المدى لاكتشاف الأسباب الجذرية لعزوف العملاء وتقديم توصيات استراتيجية لمجلس الإدارة، فما نوع هذا التقرير؟",o:["تقرير بحثي (Research Report)","تقرير متكرر يومي (Daily Recurring Report)","نموذج سلكي فارغ (Wireframe)","جدول بيانات غير منظم"],a:0,e:"التقارير البحثية (Research Reports) تختص بالدراسات التحليلية والإحصائية المعمقة لاستخلاص الاستنتاجات والتوصيات."},
-  {q:"أي فئة من الأدوات التحليلية تشمل كلاً من لغة (SQL) وأنظمة إدارة قواعد البيانات العلائقية (RDBMS)؟",o:["أدوات الاستعلام (Query Tools)","أدوات جداول البيانات (Spreadsheet Tools)","أدوات التمثيل المرئي (Visualization Tools)","أدوات تحرير الصور"],a:0,e:"تُصنف SQL و RDBMS ضمن أدوات الاستعلام (Query Tools) المخصصة لاسترجاع البيانات من قواعد البيانات."},
-  {q:"لماذا نحدد (المستفيدين - Stakeholders / Audience) كإحدى النقاط الست لفهم متطلبات العمل قبل إنشاء التقرير؟",o:["لتكييف مستوى التفاصيل وطريقة العرض ولغة التقرير بما يناسب طبيعة القارئ (إدارة تنفيذية عليا أم فريق فني مختص) وضمان منحه صلاحيات الوصول المناسبة","لحذف أسمائهم من قاعدة البيانات","لإجبارهم على كتابة كود البايثون بأنفسهم","لا أهمية لمعرفة من سيقرأ التقرير"],a:0,e:"معرفة المستفيدين تحدد مستوى التجريد أو التفصيل في التقرير، وتحدد متى وكيف يُسلم التقرير وأذونات الوصول الخاصة به."}
-];
+          <article class="figure-card figure-card--gold-top">
+            <div class="card-header-row">
+              <h4>2. نوعية البيانات</h4>
+              <span class="index-num">02</span>
+            </div>
+            <p>تحديد طبيعة البيانات التي ستُعرض في لوحة المعلومات، وهل هي <strong>بيانات نوعية</strong> (وصفية/تصنيفية) أم <strong>بيانات كمية</strong> (رقمية قابلة للقياس).</p>
+            <div class="aside-box">
+              <strong>تذكّر:</strong> هذا الاعتبار يختص بتصميم لوحات المعلومات ولا ينطبق بالصورة نفسها على أنواع التقارير الأخرى.
+            </div>
+          </article>
+        </div>
+      </div>
 
-const termsGrid = document.getElementById("termsGrid");
-terms.forEach(([en, ar]) => {
-  const d = document.createElement("div");
-  d.className = "card";
-  d.style.margin = "0";
-  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
-  termsGrid.appendChild(d);
-});
+      <!-- Unit 2 Quiz (10 Questions) -->
+      <div id="quiz-u2" class="quiz-module" aria-labelledby="quiz-u2-title"></div>
+    </section>
 
-let ci = 0, showAnswer = false;
-function renderCard() {
-  document.getElementById("flashTerm").textContent = cards[ci][0];
-  document.getElementById("flashAnswer").textContent = cards[ci][1];
-  document.getElementById("flashAnswer").hidden = !showAnswer;
-  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
-  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
-}
-document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
-document.getElementById("flashcard").addEventListener("keydown", e => {
-  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
-});
-document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
-document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
-renderCard();
+    <!-- ==================== UNIT 3 ==================== -->
+    <section id="unit-3" class="unit-section" aria-labelledby="unit-3-title">
+      <div class="dossier-bar">
+        <div class="dossier-bar-start">
+          <span class="dossier-pill">الوحدة 03</span>
+          <span class="dossier-meta">الفصل الرابع عشر: متابعة إعداد تقارير البيانات</span>
+        </div>
+        <span class="dossier-meta">عناصر التقرير، التسليم، وقواعد التصميم</span>
+      </div>
 
-document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
-  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
-  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
-  window.scrollTo({ top: 0, behavior: "smooth" });
-});
+      <h2 id="unit-3-title" class="section-heading">عناصر التقرير الستة، اعتبارات التسليم، وقواعد التصميم البصري</h2>
 
-function shuffleArray(arr) {
-  const copy = [...arr];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-}
+      <!-- 3.1 Six Report Elements -->
+      <div>
+        <h3 class="sub-heading">أولاً: عناصر التقرير الستة</h3>
+        <div class="card-grid-3">
+          <article class="figure-card">
+            <div class="card-header-row">
+              <h4>1. صفحة الغلاف</h4>
+              <span class="index-num">01</span>
+            </div>
+            <p>تحتوي على العناصر الأساسية المميزة للتقرير مثل: <strong>عنوان التقرير</strong>، و<strong>رقم الإصدار</strong>، و<strong>نوع التقرير</strong>، وغيرها من المعلومات التعريفية.</p>
+          </article>
 
-let currentQuestions = [];
-let answers = {};
+          <article class="figure-card">
+            <div class="card-header-row">
+              <h4>2. رقم الإصدار</h4>
+              <span class="index-num">02</span>
+            </div>
+            <p><strong>لا تحتوي كافة التقارير على رقم إصدار</strong> لأنه ليس كل التقارير تحتاج إليه؛ فقط التقارير التي يتم تحديثها أو تغييرها سيكون لها أكثر من إصدار وتتطلب رقم إصدار.</p>
+          </article>
 
-function prepareShuffledQuiz() {
-  currentQuestions = shuffleArray(masterQuestions).map(item => {
-    const optsWithFlag = item.o.map((text, idx) => ({ text, isCorrect: idx === item.a }));
-    const shuffledOpts = shuffleArray(optsWithFlag);
-    return {
-      q: item.q,
-      o: shuffledOpts.map(x => x.text),
-      a: shuffledOpts.findIndex(x => x.isCorrect),
-      e: item.e
+          <article class="figure-card">
+            <div class="card-header-row">
+              <h4>3. مصادر البيانات المرجعية</h4>
+              <span class="index-num">03</span>
+            </div>
+            <p>تشير ببساطة إلى مصادر البيانات التي تم استخدامها في إنشاء التقرير لتوثيق المرجعية.</p>
+          </article>
+
+          <article class="figure-card figure-card--accent-top">
+            <div class="card-header-row">
+              <h4>4. التواريخ المرجعية</h4>
+              <span class="index-num">04</span>
+            </div>
+            <ul class="clean-list">
+              <li><strong>تاريخ إنشاء التقرير:</strong> في <strong>التقارير الثابتة</strong> هو التاريخ الفعلي لإنشائه؛ أما في <strong>لوحة المعلومات</strong> فهو آخر وقت تم فيه استخدام التقرير.</li>
+              <li><strong>تاريخ تحديث البيانات:</strong> تاريخ آخر مرة سُحبت فيها البيانات، ولذلك ينطبق <strong>فقط على التقارير الثابتة</strong>.</li>
+            </ul>
+          </article>
+
+          <article class="figure-card">
+            <div class="card-header-row">
+              <h4>5. الأسئلة المتداولة (<bdi dir="ltr">FAQs</bdi>)</h4>
+              <span class="index-num">05</span>
+            </div>
+            <p>قسم في <strong>نهاية التقرير</strong> يجيب عن الأسئلة المتكررة حوله. وجوده يعني أنه إما <strong>تقرير خدمة ذاتية</strong> أو <strong>تقرير متكرر</strong>، ولا تجده بشكل عام في <strong>التقارير المخصصة أو البحثية</strong>.</p>
+          </article>
+
+          <article class="figure-card">
+            <div class="card-header-row">
+              <h4>6. الملحق (<bdi dir="ltr">Appendix</bdi>)</h4>
+              <span class="index-num">06</span>
+            </div>
+            <p>الجزء الذي تُدخل فيه أي معلومات إضافية متعلقة بالتقرير، مثل <strong>التعريفات أو اللوائح</strong> التي تضيف قيمة إذا كان القارئ مهتماً، لكنه <strong>غير مطلوب</strong> (اختياري).</p>
+          </article>
+        </div>
+
+        <!-- Comparison Table for Dates & Elements -->
+        <div class="table-wrap" style="margin-top: var(--space-md);">
+          <table class="dossier-table">
+            <thead>
+              <tr>
+                <th>العنصر المرجعي</th>
+                <th>في التقارير الثابتة</th>
+                <th>في لوحات المعلومات / التقارير الأخرى</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>تاريخ إنشاء التقرير</strong></td>
+                <td>التاريخ الذي قمت فيه فعلياً بإنشاء التقرير.</td>
+                <td>في لوحة المعلومات: آخر وقت تم فيه استخدام التقرير.</td>
+              </tr>
+              <tr>
+                <td><strong>تاريخ تحديث البيانات</strong></td>
+                <td>تاريخ آخر مرة تم فيها سحب البيانات (ينطبق هنا فقط).</td>
+                <td>لا ينطبق (اللوحات المتصلة مباشرة تتحدث تلقائياً).</td>
+              </tr>
+              <tr>
+                <td><strong>رقم الإصدار</strong></td>
+                <td>يُضاف فقط إذا تم تحديث التقرير أو تغييره (أكثر من إصدار).</td>
+                <td>التقرير ذو الإصدار الواحد غير المحدّث لا يحتاج رقم إصدار.</td>
+              </tr>
+              <tr>
+                <td><strong>الأسئلة المتداولة (<bdi dir="ltr">FAQs</bdi>)</strong></td>
+                <td>تظهر في التقارير المتكررة أو الخدمة الذاتية.</td>
+                <td>لا توجد بشكل عام في التقارير المخصصة أو البحثية.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 3.2 Report Delivery Considerations -->
+      <div>
+        <h3 class="sub-heading">ثانياً: قائمة اعتبارات تسليم التقرير</h3>
+        <div class="card-grid-2">
+          <article class="figure-card figure-card--gold-top">
+            <div class="card-header-row">
+              <h4>متى يتم تسليم التقرير؟ (الاشتراك)</h4>
+              <span class="tag-warm">الجدولة التلقائية</span>
+            </div>
+            <p><strong>الاشتراك (<bdi dir="ltr">Subscription</bdi>):</strong> وسيلة لجدولة لوحة المعلومات ليتم تشغيلها تلقائياً وتحديثها وإرسالها إلى مستلمين محددين عبر وسيلة من اختيارك، وعادةً ما تكون عبر <strong>البريد الإلكتروني</strong>.</p>
+            <div class="aside-box">
+              <strong>مثال:</strong> كل يوم اثنين الساعة <bdi dir="ltr">7:00</bdi> صباحاً، سيتم تحديث لوحة المعلومات وإرسال بريد إلكتروني إلى الجميع على قائمة الاتصال.
+            </div>
+          </article>
+
+          <article class="figure-card figure-card--accent-top">
+            <div class="card-header-row">
+              <h4>كيف يتم تسليم التقرير؟ (الويب والأذونات)</h4>
+              <span class="tag-warm">الأمان والوصول</span>
+            </div>
+            <ul class="clean-list">
+              <li><strong>واجهة الويب:</strong> تُستخدم إذا كانت لوحة المعلومات مستضافة على الويب، عادةً بواسطة شركة أو خدمة برمجيات تابعة لجهة خارجية.</li>
+              <li><strong>أذونات الوصول:</strong> ميزة أمان لضمان ألا يصل إلى اللوحة سوى <strong>الفئة المستهدفة</strong>؛ فعند نشر معلومات سرية على الويب، يجب التأكد من أن المستفيدين فقط هم من يصلون إليها ويرونها.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+
+      <!-- 3.3 Report Design Rules + Interactive Design Lab -->
+      <div>
+        <h3 class="sub-heading">ثالثاً: قواعد تصميم التقرير وعناصر الرسم البياني</h3>
+        <div class="card-grid-3" style="margin-bottom: var(--space-lg);">
+          <article class="figure-card">
+            <div class="card-header-row">
+              <h4>قواعد الخطوط (الأربعة)</h4>
+              <span class="index-num">01</span>
+            </div>
+            <p><strong>القاعدة الأولى:</strong> أن يكون المستفيدون قادرين على قراءتها بوضوح عبر 4 ضوابط:</p>
+            <ul class="clean-list">
+              <li><strong>حجم الخط:</strong> ألا يكون صغيراً جداً؛ حاول ألا تقل عن <strong>حجم الخط <bdi dir="ltr">11</bdi></strong>.</li>
+              <li><strong>تباعد الأسطر:</strong> إذا تقاربت الأسطر جداً صعبت القراءة.</li>
+              <li><strong>تباين الألوان:</strong> لون الخط مقابل الخلفية؛ تباين مناسب ولكن ليس مفرطاً كثيراً.</li>
+              <li><strong>نوع الخط:</strong> خطوط احترافية بدون نقوش أو أشكال غير اعتيادية.</li>
+            </ul>
+          </article>
+
+          <article class="figure-card">
+            <div class="card-header-row">
+              <h4>المخطط وعدم التكديس</h4>
+              <span class="index-num">02</span>
+            </div>
+            <p>يجب مراعاة <strong>ألا يكون التقرير مزدحماً بالبيانات</strong> قدر الإمكان؛ لأن تكديس الكثير من الأشياء في مساحة صغيرة يجعل استيعابها أكثر صعوبة على القارئ.</p>
+          </article>
+
+          <article class="figure-card">
+            <div class="card-header-row">
+              <h4>عناصر الرسم البياني</h4>
+              <span class="index-num">03</span>
+            </div>
+            <ul class="clean-list">
+              <li><strong>العناصر / العنوان:</strong> العنوان هو اسم المخطط.</li>
+              <li><strong>التسميات (<bdi dir="ltr">Labels</bdi>):</strong> تحدد أشياء مثل المحاور.</li>
+              <li><strong>وسائل الإيضاح (<bdi dir="ltr">Legend</bdi>):</strong> جدول يحدد عناصر المخطط الأخرى.</li>
+            </ul>
+          </article>
+        </div>
+
+        <!-- Interactive Design & Chart Elements Lab -->
+        <div class="interactive-panel" aria-labelledby="design-lab-title">
+          <div class="interactive-header">
+            <div class="interactive-title" id="design-lab-title">مختبر تصميم التقرير وعناصر الرسم البياني</div>
+            <span class="tag-positive" id="design-health-badge">تصميم مطابق للمعايير</span>
+          </div>
+
+          <div class="design-lab-grid">
+            <div class="design-controls">
+              <div class="control-group">
+                <label class="control-label" for="lab-font-size">حجم الخط: <span class="mono-num" id="lab-font-size-val">12</span></label>
+                <input type="range" id="lab-font-size" min="8" max="16" step="1" value="12" oninput="updateDesignLab()">
+              </div>
+
+              <div class="checkbox-grid">
+                <label class="check-card"><input type="checkbox" id="lab-tight-lines" onchange="updateDesignLab()"> تباعد أسطر ضيق جداً</label>
+                <label class="check-card"><input type="checkbox" id="lab-ornate-font" onchange="updateDesignLab()"> خط بنقوش غير اعتيادية</label>
+                <label class="check-card"><input type="checkbox" id="lab-harsh-contrast" onchange="updateDesignLab()"> تباين لوني مفرط</label>
+                <label class="check-card"><input type="checkbox" id="lab-clutter" onchange="updateDesignLab()"> تكديس بيانات مزدحم</label>
+              </div>
+
+              <div class="control-group">
+                <span class="control-label">إظهار عناصر الرسم البياني الثلاثة:</span>
+                <div class="checkbox-grid">
+                  <label class="check-card"><input type="checkbox" id="lab-show-title" checked onchange="updateDesignLab()"> العنوان</label>
+                  <label class="check-card"><input type="checkbox" id="lab-show-labels" checked onchange="updateDesignLab()"> التسميات (المحاور)</label>
+                  <label class="check-card"><input type="checkbox" id="lab-show-legend" checked onchange="updateDesignLab()"> وسيلة الإيضاح</label>
+                </div>
+              </div>
+
+              <div class="feedback-box" id="design-lab-diagnosis" aria-live="polite"></div>
+            </div>
+
+            <div class="design-preview-card" id="design-preview-card">
+              <div class="preview-sample-text size-valid good-lead" id="preview-sample-text">
+                <strong>نموذج فقرة التقرير:</strong> يُظهر تقرير المبيعات الربعي استقراراً في نمو الطلبات المباشرة مع وضوح القراءة عند احترام حجم الخط (<bdi dir="ltr">≥ 11</bdi>) وتباعد الأسطر المتوازن.
+              </div>
+              <div class="chart-box" id="preview-chart-box">
+                <svg class="svg-chart" viewBox="0 0 360 190" role="img" aria-label="رسم بياني تفاعلي لعناصر المخطط">
+                  <g id="svg-chart-title">
+                    <text x="180" y="20" text-anchor="middle" fill="currentColor" font-size="13" font-weight="700">مقارنة المبيعات حسب الفئة (عنوان المخطط)</text>
+                  </g>
+                  <g id="svg-chart-legend">
+                    <rect x="24" y="34" width="12" height="10" fill="var(--data-1)"></rect>
+                    <text x="42" y="43" fill="currentColor" font-size="10">الربع الأول</text>
+                    <rect x="108" y="34" width="12" height="10" fill="var(--data-2)"></rect>
+                    <text x="126" y="43" fill="currentColor" font-size="10">الربع الثاني (وسيلة الإيضاح)</text>
+                  </g>
+                  <line x1="48" y1="150" x2="335" y2="150" stroke="currentColor" stroke-width="1.5"></line>
+                  <line x1="48" y1="56" x2="48" y2="150" stroke="currentColor" stroke-width="1.5"></line>
+                  <rect x="78" y="88" width="26" height="62" fill="var(--data-1)"></rect>
+                  <rect x="108" y="72" width="26" height="78" fill="var(--data-2)"></rect>
+                  <rect x="174" y="102" width="26" height="48" fill="var(--data-1)"></rect>
+                  <rect x="204" y="80" width="26" height="70" fill="var(--data-2)"></rect>
+                  <rect x="268" y="70" width="26" height="80" fill="var(--data-1)"></rect>
+                  <rect x="298" y="60" width="26" height="90" fill="var(--data-2)"></rect>
+                  <g id="svg-clutter-bars" style="display: none;">
+                    <rect x="64" y="64" width="10" height="86" fill="var(--data-4)"></rect>
+                    <rect x="138" y="68" width="10" height="82" fill="var(--data-3)"></rect>
+                    <rect x="160" y="62" width="10" height="88" fill="var(--data-4)"></rect>
+                    <rect x="234" y="66" width="10" height="84" fill="var(--data-3)"></rect>
+                    <rect x="254" y="58" width="10" height="92" fill="var(--data-4)"></rect>
+                  </g>
+                  <g id="svg-chart-labels">
+                    <text x="105" y="166" text-anchor="middle" fill="currentColor" font-size="10">الأجهزة</text>
+                    <text x="200" y="166" text-anchor="middle" fill="currentColor" font-size="10">الشاشات</text>
+                    <text x="295" y="166" text-anchor="middle" fill="currentColor" font-size="10">الملحقات</text>
+                    <text x="190" y="182" text-anchor="middle" fill="var(--secondary)" font-size="10" font-weight="700">تسمية المحور الأفقي: الفئات</text>
+                    <text x="18" y="104" text-anchor="middle" fill="var(--secondary)" font-size="10" font-weight="700" transform="rotate(-90 18 104)">القيمة (تسمية)</text>
+                  </g>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Unit 3 Quiz (10 Questions) -->
+      <div id="quiz-u3" class="quiz-module" aria-labelledby="quiz-u3-title"></div>
+    </section>
+
+    <!-- ==================== COMPREHENSIVE FINAL EXAM (15 QUESTIONS) ==================== -->
+    <section id="final-exam" class="unit-section" aria-labelledby="final-exam-title">
+      <div class="dossier-bar">
+        <div class="dossier-bar-start">
+          <span class="dossier-pill">الاختبار الشامل</span>
+          <span class="dossier-meta">الفصل الرابع عشر كاملاً • <span class="mono-num">15</span> سؤالاً تكاملياً</span>
+        </div>
+        <span class="dossier-meta">تصحيح فوري وشرح تفصيلي</span>
+      </div>
+
+      <h2 id="final-exam-title" class="section-heading">الاختبار الشامل للفصل الرابع عشر (إعداد تقارير البيانات)</h2>
+      <p>يقيس هذا الاختبار قدرتك على الربط بين الوحدات الثلاث: اختيار نوع التقرير والأداة التحليلية المناسبة، إدارة دورة الإنشاء ومتطلبات العمل وحماية البيانات، وتطبيق معايير العناصر الستة والتسليم والتصميم البصري.</p>
+
+      <div id="quiz-final" class="quiz-module quiz-module--exam"></div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="source-footer">
+      <span>المصدر: الفصل الرابع عشر (إعداد تقارير البيانات — الوحدات 1، 2، 3) من ملخص مادة تحليل وتمثيل البيانات.</span>
+      <span>جميع الاختبارات مزودة بتصحيح فوري وتفسيرات تعليمية وحفظ تلقائي للتقدم.</span>
+    </footer>
+
+  </div>
+
+  <api-shim></api-shim>
+  <script>
+    /* ==================== DATA: INTERACTIVE SCENARIOS & STEPS ==================== */
+    const u1Scenarios = [
+      {
+        title: `طلب عاجل لسجل عميل`,
+        reportType: `تقرير مخصص (Ad-hoc) — وغالباً ثابت`,
+        tool: `SQL أو Excel`,
+        reason: `التقرير المخصص يُنشأ عند الطلب للإجابة على سؤال محدد بشكل مباشر وسريع (مثل سجل شراء عميل)، وتُستخدم SQL لسحب السجلات من قواعد البيانات العلائقية أو Excel لتلخيصها.`
+      },
+      {
+        title: `دراسة إحصائية معقدة للسوق`,
+        reportType: `تقرير بحثي (Research Report) + ثابت متعمق`,
+        tool: `Python أو SQL للبيانات الكبيرة`,
+        reason: `التقرير البحثي كبير ومتعمق يجيب على أسئلة الأعمال المعقدة باستخدام أساليب التحليل الإحصائي المتقدمة، ويستغرق وقتاً وجهداً كبيرين، وهو ما يتناسب مع قدرات البرمجة في Python والتحليل الثابت المتعمق.`
+      },
+      {
+        title: `لوحة متابعة تفاعلية للمديرين`,
+        reportType: `تقرير خدمة ذاتية (Self-Service) / لوحة معلومات (Dashboard)`,
+        tool: `Power BI أو Tableau`,
+        reason: `لوحة المعلومات تمنح المديرين وصولاً ذاتياً ومحدوداً لمؤشرات الأداء عبر واجهة تفاعلية مع مرشحات تصفية دون الاعتماد المستمر على علماء البيانات.`
+      },
+      {
+        title: `إحصائية تسجيل شهرية تلقائية`,
+        reportType: `تقرير متكرر (Recurring Report)`,
+        tool: `Power BI / SQL مع الجدولة والاشتراك`,
+        reason: `التقارير المتكررة تعمل على فترات منتظمة لتوفير الوقت (مثل التسجيل الشهري)، ويُرسل نظام الجدولة رسالة بريد إلكتروني تفيد بنجاح التشغيل.`
+      },
+      {
+        title: `سحب ومعالجة بيانات من RDBMS`,
+        reportType: `قاعدة تجهيز لأي تقرير ثابت أو ديناميكي`,
+        tool: `SQL (Structured Query Language)`,
+        reason: `SQL مصممة خصيصاً للعمل مع أنظمة إدارة قواعد البيانات العلائقية (RDBMS) للوصول إلى البيانات ومعالجتها قبل عرضها.`
+      }
+    ];
+
+    const u2CreationSteps = [
+      {
+        num: `01`,
+        title: `إنشاء الخطة`,
+        body: `تشمل هذه المرحلة أربع عمليات تنظيمية قبل البدء بالتنفيذ: تحديد النماذج الأولية/المخططات السلكية (Mockups / Wireframes) حصرياً للوحة البيانات، وتصميم التخطيط والعرض (Layout / Presentation) لملف التقرير، وترتيب تدفق النتائج (Flow)، وتحديد آلية التنقل (Nav) داخل لوحة المعلومات.`
+      },
+      {
+        num: `02`,
+        title: `الحصول على الموافقة على الخطة`,
+        body: `تأخذ الخطة إلى رئيسك في العمل أو طالب التقرير للتأكد من تطابقها مع ما يريده ويحتاجه فعلاً. انتبه: أنت لا تحصل على موافقة على نتيجة محددة، بل تتحقق فقط من الأسئلة الواجب الإجابة عليها وكيفية عرض النتائج. والجانب السلبي أنك تلتزم بتسليم ما تمت الموافقة عليه تحديداً.`
+      },
+      {
+        num: `03`,
+        title: `القيام بإنشاء التقرير`,
+        body: `بعد الموافقة على الخطة يبدأ التنفيذ الفعلي: اجمع بياناتك، ونظّفها، وناقشها، وقم بتحليلها، ثم ادمج النتائج في مخطط لطيف الشكل وسهل الاستخدام.`
+      },
+      {
+        num: `04`,
+        title: `تسليم التقرير`,
+        body: `تُسلم النتيجة النهائية لطالبها؛ فبالنسبة للوحة المعلومات تقوم بنشرها (Publish)، أما التقارير الأخرى فغالباً ما تُعرض نتائجها وتُشرح أثناء الاجتماع أو في سياق غير رسمي، وتعتمد الطريقة على نوع التقرير ومن طلبه وكيفية رغبته في استلامه.`
+      }
+    ];
+
+    const scopeLevels = [
+      {
+        label: `سؤال عام وغامض جداً`,
+        scope: `نطاق بيانات كبير جداً`,
+        example: `مثال: «كيف حال مبيعات الشركة؟» — غير محدد زمنياً أو جغرافياً، لذا يتطلب سحب بيانات واسعة وكبيرة.`
+      },
+      {
+        label: `متوسط التحديد`,
+        scope: `نطاق بيانات متوسط`,
+        example: `مثال: «ما أداء مبيعات المنطقة الوسطى خلال العام الماضي؟» — محدد بمنطقة وعام واحد.`
+      },
+      {
+        label: `سؤال محدد بدقة عالية`,
+        scope: `نطاق بيانات صغير ومركز`,
+        example: `مثال: «ما معدل سرعة الروبوت في الأسبوع الحالي مقارنة بالأسبوع الماضي؟» — كلما زاد التحديد صغر نطاق البيانات.`
+      }
+    ];
+
+    /* ==================== QUIZ DATA (45 QUESTIONS) ==================== */
+    const quizzesMeta = {
+      u1: {
+        containerId: `quiz-u1`,
+        titleId: `quiz-u1-title`,
+        title: `اختبار الوحدة الأولى: أنواع التقارير والأدوات التحليلية`,
+        badge: `10 أسئلة`,
+        questions: [
+          {
+            q: `متى تتحول بيانات التقرير الثابت إلى حالة السكون ولا تعود قابلة للتحديث التلقائي؟`,
+            opts: [
+              `فور نشر التقرير على خادم الويب الخارجي`,
+              `في اللحظة التي تتوقف فيها عن جمع البيانات وتثبيتها لتحليلها وتقديمها`,
+              `عند تغيير أداة العرض من Excel إلى Power BI`,
+              `بعد مرور شهر كامل على آخر عملية تسجيل للمستفيد`
+            ],
+            ans: 1,
+            exp: `الفكرة الأساسية للتقرير الثابت أنك تجمع البيانات وتثبتها وتحللها ثم تقدمها؛ وفي اللحظة التي تتوقف فيها عن جمع البيانات يصبح التقرير ثابتاً عند تلك النقطة الزمنية.`
+          },
+          {
+            q: `أي من الأمثلة التالية يمثل تقريراً ثابتاً وفق ما ورد في الوحدة الأولى؟`,
+            opts: [
+              `عداد نقرات حي على صفحة ويب يزيد مع كل ضغطة`,
+              `لوحة معلومات متصلة مباشرة بقاعدة بيانات المبيعات اللحظية`,
+              `تقرير الصيانة الشهرية المخططة الذي يوضح المهام المتأخرة والقادمة`,
+              `واجهة تفاعلية تحدث الأرقام تلقائياً عند حذف سجل من المصدر`
+            ],
+            ans: 2,
+            exp: `تقرير الصيانة الشهرية أو السنوية المخططة، وكذلك التقارير اليومية لإحصائيات يوم الإنتاج الماضي، من الأمثلة الصريحة على التقارير الثابتة.`
+          },
+          {
+            q: `ما الميزة التحليلية الأبرز للتقارير الثابتة مقارنة بالتقارير الديناميكية؟`,
+            opts: [
+              `أنها متصلة مباشرة بقاعدة البيانات وتتحدث تلقائياً`,
+              `قدرتها على الإجابة على أسئلة معقدة واستخدام تحليلات متعمقة`,
+              `أنها لا تحتاج أبداً إلى إعادة إنشاء متكرر`,
+              `أنها تمنع المستخدمين من الوصول المباشر عبر البريد الإلكتروني`
+            ],
+            ans: 1,
+            exp: `من إيجابيات التقارير الثابتة: سرعة إنشائها، وقدرتها على الإجابة على أسئلة معقدة، وإمكانية استخدام تحليلات متعمقة وأكثر تعقيداً، بخلاف الديناميكية المحدودة بأسئلة بسيطة نسبياً.`
+          },
+          {
+            q: `ما السلبية الرئيسية التي تتصف بها التقارير الثابتة؟`,
+            opts: [
+              `تقتصر على تحليلات بسيطة جداً ولا تدعم النماذج الإحصائية`,
+              `تستغرق وقتاً طويلاً جداً في التجهيز الأولي مقارنة بالديناميكية`,
+              `تعرض البيانات عند نقطة زمنية محددة وليست محدثة وغالباً يُعاد إنشاؤها عدة مرات`,
+              `تتطلب اتصالاً مباشراً دائماً مع قواعد البيانات السحابية`
+            ],
+            ans: 2,
+            exp: `سلبيات التقرير الثابت أنه يعرض البيانات عند نقطة معينة فقط فتصبح غير محدثة، وغالباً ما يحتاج المحلل إلى إعادة إنشائه عدة مرات.`
+          },
+          {
+            q: `في مثال صفحة الويب التي تحسب عدد النقرات على زر معين وتعرض الرقم الجديد لحظياً فور النقر، أي نوع من التقارير يُعد هذا؟`,
+            opts: [
+              `تقرير ثابت يومي`,
+              `تقرير ديناميكي متصل مباشرة بالبيانات`,
+              `تقرير بحثي إحصائي متقدم`,
+              `تقرير مخصص غير متصل بالمصدر`
+            ],
+            ans: 1,
+            exp: `التقرير الديناميكي له اتصال مباشر بالبيانات، فبمجرد تغير عدد النقرات (إضافة/تعديل/حذف في المصدر) ينعكس التغير تلقائياً في التقرير.`
+          },
+          {
+            q: `أي مما يلي يُعد من سلبيات التقارير الديناميكية؟`,
+            opts: [
+              `لا تتحدث بياناتها عند تعديل المصدر الأساسي`,
+              `تقتصر على تحليلات وأسئلة بسيطة نسبياً وقد يستغرق إعدادها وقتاً طويلاً`,
+              `ترسل إشعاراً بالبريد الإلكتروني كل شهر فقط`,
+              `لا يمكن عرضها داخل متصفحات الويب الحديثة`
+            ],
+            ans: 1,
+            exp: `رغم أن التقرير الديناميكي يبقي البيانات محدثة ويوفر الوقت على المدى الطويل، فإن من سلبياته اقتصاره على تحليلات وأسئلة بسيطة نسبياً وأنه قد يستغرق وقتاً طويلاً في الإعداد.`
+          },
+          {
+            q: `طلبت الإدارة فوراً قائمة بالموظفين الذين عملوا في الشركة لأكثر من خمس سنوات للإجابة على سؤال محدد وسريع. ما تصنيف هذا التقرير؟`,
+            opts: [
+              `تقرير مخصص (Ad-hoc)`,
+              `تقرير بحثي (Research)`,
+              `تقرير متكرر شهري`,
+              `ملحق تعريفي (Appendix)`
+            ],
+            ans: 0,
+            exp: `التقارير المخصصة تُنشأ عند الطلب للإجابة على سؤال محدد بشكل مباشر وسريع، ومن أمثلتها سجل شراء عميل أو قائمة الموظفين ذوي الخبرة أكثر من 5 سنوات.`
+          },
+          {
+            q: `ما الفرق الجوهري بين التقرير البحثي (Research) وتقارير الخدمة الذاتية (Self-Service)؟`,
+            opts: [
+              `البحثي يقتصر على أسئلة بسيطة، والخدمة الذاتية تتطلب علماء بيانات لإعداد كل استفسار`,
+              `البحثي متعمق ويستخدم أساليب إحصائية متقدمة ويستغرق وقتاً وجهداً، بينما الخدمة الذاتية تمكّن المستخدم من إيجاد الإجابات بنفسه مثل لوحات المعلومات`,
+              `الخدمة الذاتية ترسل بالبريد الإلكتروني فقط دون واجهات تفاعلية`,
+              `لا يوجد فرق؛ فكلاهما يُنشأ عند الطلب في دقائق معدودة`
+            ],
+            ans: 1,
+            exp: `التقرير البحثي يجيب على أسئلة الأعمال الكبيرة والمعقدة بأساليب إحصائية متقدمة ويحتاج وقتاً وجهداً كبيرين، أما الخدمة الذاتية (ومثالها لوحة المعلومات) فتسمح للمستخدم بالوصول للبيانات وإيجاد الإجابات بنفسه.`
+          },
+          {
+            q: `ما الميزة التشغيلية التي تميز التقارير المتكررة (Recurring Reports) عند جدولتها شهرياً؟`,
+            opts: [
+              `إلغاء الحاجة إلى أي مصادر بيانات مرجعية`,
+              `توفير الوقت عبر التشغيل المنتظم وتلقي رسالة بريد إلكتروني تُعلم بنجاح تشغيل التقرير`,
+              `تحويل التقرير تلقائياً إلى دراسة إحصائية بحثية معقدة`,
+              `منع أي مستخدم من تطبيق مرشحات التصفية`
+            ],
+            ans: 1,
+            exp: `التقارير المتكررة تعمل على فترات منتظمة لتوفير الوقت (مثل إحصائيات التوزيع الشهري)، وعند جدولة تقرير شهري تتلقى رسالة بريد إلكتروني تُعلمك بأن التقرير قد تم تشغيله بنجاح.`
+          },
+          {
+            q: `ما الأداة التحليلية الأنسب من الأدوات الأربع المذكورة في الوحدة الأولى للعمل مع أنظمة إدارة قواعد البيانات العلائقية (RDBMS)؟`,
+            opts: [
+              `Tableau`,
+              `Microsoft Excel`,
+              `SQL (Structured Query Language)`,
+              `Power BI`
+            ],
+            ans: 2,
+            exp: `SQL هي أداة الاستعلام المصممة خصيصاً للعمل مع أنظمة إدارة قواعد البيانات العلائقية (RDBMS) للوصول إلى قواعد البيانات ومعالجتها، بينما Power BI وTableau للتمثيل المرئي وصنع Dashboards.`
+          }
+        ]
+      },
+      u2: {
+        containerId: `quiz-u2`,
+        titleId: `quiz-u2-title`,
+        title: `اختبار الوحدة الثانية: عملية الإنشاء ومتطلبات العمل ولوحة المعلومات`,
+        badge: `10 أسئلة`,
+        questions: [
+          {
+            q: `ما الترتيب الصحيح للخطوات الأربع في عملية إنشاء التقرير؟`,
+            opts: [
+              `إنشاء التقرير ← إنشاء الخطة ← الموافقة ← التسليم`,
+              `إنشاء الخطة ← الحصول على الموافقة على الخطة ← القيام بإنشاء التقرير ← تسليم التقرير`,
+              `الموافقة ← جمع البيانات ← تصميم المخطط السلكي ← النشر`,
+              `إنشاء الخطة ← تسليم التقرير ← الموافقة على النتيجة ← التعديل`
+            ],
+            ans: 1,
+            exp: `العملية تتكون من أربع خطوات متتابعة: (1) إنشاء الخطة، (2) الحصول على الموافقة على الخطة، (3) القيام بإنشاء التقرير، (4) تسليم التقرير.`
+          },
+          {
+            q: `أي من مكونات مرحلة «إنشاء الخطة» يُستخدم حصرياً مع لوحة البيانات (Dashboard)؟`,
+            opts: [
+              `Layout / Presentation`,
+              `Flow`,
+              `Mockups / Wireframes`,
+              `Appendix`
+            ],
+            ans: 2,
+            exp: `النماذج الأولية والمخططات السلكية (Mockups / Wireframes) تُستخدم حصرياً مع لوحة البيانات وتشير إلى مخطط كيفية إنشاء لوحة البيانات، بينما Layout/Presentation يخص تقديم البيانات في ملف التقرير.`
+          },
+          {
+            q: `في مرحلة «إنشاء الخطة»، ما المصطلح الذي يشير إلى الترتيب الذي تقدم به نتائجك داخل التقرير؟`,
+            opts: [
+              `التنقل (Nav)`,
+              `التدفق (Flow)`,
+              `طرق العرض (Views)`,
+              `الفلترة (Filtering)`
+            ],
+            ans: 1,
+            exp: `التدفق (Flow) هو الترتيب الذي تقدم به نتائجك، أما التنقل (Nav) فهو الطريقة التي تسمح للمستخدم بالتنقل عبر لوحة المعلومات.`
+          },
+          {
+            q: `ما الحقيقة الدقيقة بشأن خطوة «الحصول على الموافقة على الخطة»؟`,
+            opts: [
+              `تأخذ موافقة المدير على الرقم النهائي الذي ستحصل عليه قبل التحليل`,
+              `تتحقق فقط من الأسئلة التي يجب الإجابة عليها وكيفية عرض النتائج، وتلتزم بتسليم ما تمت الموافقة عليه تحديداً`,
+              `يمكنك تغيير شكل التقرير والأسئلة بعد الموافقة دون إبلاغ الطالب`,
+              `تُنفَّذ بعد تسليم التقرير النهائي في الاجتماع`
+            ],
+            ans: 1,
+            exp: `الموافقة ليست على نتيجة محددة، بل على الأسئلة التي يجب الإجابة عليها وكيفية عرض النتائج، والجانب السلبي أنك ملزم بتسليم ما تمت الموافقة عليه على وجه التحديد.`
+          },
+          {
+            q: `كيف تختلف خطوة «تسليم التقرير» في لوحة المعلومات عن التقارير الأخرى؟`,
+            opts: [
+              `لوحة المعلومات تُطبع ورقياً دائماً، والتقارير الأخرى تُرسل بالبريد فقط`,
+              `لوحة المعلومات يتم نشرها (Publish)، بينما التقارير الأخرى غالباً ما تُعرض نتائجها وتُشرح أثناء الاجتماع أو في سياق غير رسمي`,
+              `لوحة المعلومات لا تُسلَّم للمستفيدين نهائياً`,
+              `كلاهما يتبع طريقة تسليم واحدة إلزامية دون اعتبار لطالب التقرير`
+            ],
+            ans: 1,
+            exp: `بالنسبة للوحة المعلومات تقوم بنشرها، أما التقارير الأخرى فغالباً يتم عرض النتائج وشرحها أثناء الاجتماع أو في سياق غير رسمي، وتعتمد الطريقة على التقرير ومن طلبه.`
+          },
+          {
+            q: `في مثال شركة الروبوتات (معادلة السرعة = المسافة / الزمن) التي تريد تقريراً أسبوعياً لقياس هل الروبوت أصبح أسرع من الأسبوع الماضي، ما المتغيرات التي يجب تضمينها فقط؟`,
+            opts: [
+              `المسافة والوقت فقط`,
+              `المسافة والوقت والتاريخ فقط`,
+              `السرعة والتكلفة واسم المهندس والتاريخ`,
+              `جميع الأعمدة المتاحة في قاعدة بيانات الشركة`
+            ],
+            ans: 1,
+            exp: `نحتاج المسافة والوقت لحساب السرعة، ونحتاج متغير التاريخ لمقارنة النتائج من أسبوع إلى آخر؛ وأي متغيرات إضافية تجعل التقرير أكثر تعقيداً وتشويشاً.`
+          },
+          {
+            q: `ما السبب الرئيسي لاستخدام «طرق العرض (Views)» في أدوات مثل SQL وPower BI؟`,
+            opts: [
+              `إضافة رسوم متحركة ثلاثية الأبعاد للتقرير`,
+              `حماية البيانات عبر حفظ نتيجة الاستعلام ككائن منفصل وعرضها للقراءة فقط لمنع الحذف العرضي`,
+              `تغيير نوع البيانات من كمية إلى نوعية تلقائياً`,
+              `ضغط حجم الملف قبل إرساله بالبريد الإلكتروني`
+            ],
+            ans: 1,
+            exp: `طرق العرض (Views) تحفظ نتيجة الاستعلام ككائن بيانات منفصل، والسبب الرئيسي لاستخدامها هو حماية البيانات بعرضها للقراءة فقط حتى لا يحذف المستخدم مجموعة البيانات عن طريق الخطأ.`
+          },
+          {
+            q: `ما العلاقة الصحيحة بين درجة وضوح سؤال التقرير و«نطاق البيانات» المطلوب؟`,
+            opts: [
+              `كلما كان السؤال أكثر تحديداً كان نطاق البيانات أكبر`,
+              `كلما كان السؤال أكثر تحديداً كان نطاق البيانات أصغر، وكلما كان أكثر غموضاً كان نطاق البيانات أكبر`,
+              `نطاق البيانات ثابت دائماً ولا يتأثر بطبيعة السؤال`,
+              `السؤال الغامض يقتصر على بيانات ساعة واحدة فقط`
+            ],
+            ans: 1,
+            exp: `بشكل عام، كلما كان السؤال أكثر تحديداً كان نطاق البيانات أصغر، وكلما كان السؤال أكثر غموضاً كان نطاق البيانات أكبر.`
+          },
+          {
+            q: `ما المخاطر المترتبة على تقديم التقرير إلى شخص لا يحتاج إليه (مخالفة قاعدة المستفيدين)؟`,
+            opts: [
+              `زيادة دقة البيانات وتحسين الأمان`,
+              `إضاعة وقت الجميع، وارتباك غير ضروري، واحتمال تسرب معلومات سرية، ومشكلات قانونية للبيانات المحمية`,
+              `انخفاض سرعة استعلامات SQL فقط`,
+              `تحويل التقرير الديناميكي إلى تقرير ثابت`
+            ],
+            ans: 1,
+            exp: `تقديم التقرير لمن لا يحتاج إليه يضيع وقت الجميع، ويسبب ارتباكاً غير ضروري، وقد يؤدي لتسرب معلومات سرية أو مشكلات قانونية إذا كانت البيانات محمية.`
+          },
+          {
+            q: `عند إعداد لوحة معلومات باستخدام «المستخرج الأخير» بدلاً من «الاتصال المباشر» بمصدر البيانات، ما نوع التقرير الناتج؟`,
+            opts: [
+              `تقرير ديناميكي في الوقت الفعلي`,
+              `تقرير ثابت يعرض البيانات عند تاريخ محدد هو آخر تعديل للبيانات`,
+              `تقرير بحثي إحصائي بدون تواريخ`,
+              `تقرير خدمة ذاتية مفتوح للعامة دون أذونات`
+            ],
+            ans: 1,
+            exp: `الاتصال المباشر ينتج تقريراً ديناميكياً أو في الوقت الفعلي، بينما المستخرج الأخير يعرض تقريراً ثابتاً مع تاريخ محدد على وجه التحديد عند آخر تعديل للبيانات.`
+          }
+        ]
+      },
+      u3: {
+        containerId: `quiz-u3`,
+        titleId: `quiz-u3-title`,
+        title: `اختبار الوحدة الثالثة: عناصر التقرير، التسليم، وقواعد التصميم`,
+        badge: `10 أسئلة`,
+        questions: [
+          {
+            q: `أي من المعلومات التالية ينتمي إلى «صفحة الغلاف» في التقرير؟`,
+            opts: [
+              `جدول اللوائح والتعريفات الاختيارية`,
+              `عنوان التقرير ورقم الإصدار ونوع التقرير`,
+              `قائمة الأسئلة المتداولة في نهاية التقرير`,
+              `أكواد لغة Python المستخدمة في التنظيف`
+            ],
+            ans: 1,
+            exp: `تحتوي صفحة الغلاف على العناصر الأساسية المميزة للتقرير مثل عنوان التقرير ورقم الإصدار ونوع التقرير وغيرها من المعلومات.`
+          },
+          {
+            q: `ما القاعدة الصحيحة بشأن وجود «رقم الإصدار» في التقارير؟`,
+            opts: [
+              `يجب أن يحتوي كل تقرير على رقم إصدار دون استثناء`,
+              `تحتوي عليه فقط التقارير التي يتم تحديثها أو تغييرها ويكون لها أكثر من إصدار`,
+              `يُضاف رقم الإصدار في الملحق فقط وليس في الغلاف`,
+              `يُستخدم حصرياً مع التقارير المخصصة التي تُنشأ لمرة واحدة`
+            ],
+            ans: 1,
+            exp: `لا تحتوي كافة التقارير على رقم إصدار لأن ليس كل التقارير تحتاج إليه؛ فقط التقارير التي يتم تحديثها أو التي تم تغييرها سيكون لها أكثر من إصدار وتتطلب رقم إصدار.`
+          },
+          {
+            q: `ماذا يمثل «تاريخ إنشاء التقرير» في حالة لوحة المعلومات (Dashboard) مقارنة بالتقرير الثابت؟`,
+            opts: [
+              `في لوحة المعلومات هو تاريخ أول تثبيت للنظام`,
+              `في لوحة المعلومات هو آخر وقت تم فيه استخدام التقرير، بينما في الثابت هو التاريخ الفعلي لإنشائه`,
+              `لا يوجد تاريخ إنشاء للوحة المعلومات وإنما تاريخ تحديث بيانات فقط`,
+              `كلاهما يشير دائماً إلى تاريخ سحب البيانات الأول قبل سنة`
+            ],
+            ans: 1,
+            exp: `تاريخ إنشاء التقرير هو تاريخ الإنشاء الفعلي في التقارير الثابتة، أما بالنسبة للوحة المعلومات فيكون تاريخ إنشاء التقرير هو آخر وقت تم فيه استخدام التقرير.`
+          },
+          {
+            q: `على أي نوع من التقارير ينطبق «تاريخ تحديث البيانات» (تاريخ آخر مرة تم فيها سحب البيانات)؟`,
+            opts: [
+              `ينطبق على لوحات المعلومات ذات الاتصال المباشر فقط`,
+              `ينطبق فقط على التقارير الثابتة`,
+              `ينطبق على جميع التقارير الديناميكية والبحثية بالتساوي`,
+              `ينطبق فقط على قسم الأسئلة المتداولة`
+            ],
+            ans: 1,
+            exp: `تاريخ تحديث البيانات هو تاريخ آخر مرة تم فيها سحب البيانات، لذا فهو ينطبق فقط على التقارير الثابتة.`
+          },
+          {
+            q: `إذا وجدت قسم «الأسئلة المتداولة (FAQs)» في نهاية تقرير ما، فما نوع ذلك التقرير على الأرجح؟`,
+            opts: [
+              `تقرير مخصص (Ad-hoc) أُنشئ لطلب فردي طارئ`,
+              `تقرير خدمة ذاتية أو تقرير متكرر`,
+              `تقرير بحثي إحصائي متقدم أُعد لمرة واحدة`,
+              `مخطط سلكي (Wireframe) أولي`
+            ],
+            ans: 1,
+            exp: `قسم الأسئلة المتداولة (FAQs) في نهاية التقرير يجيب على الأسئلة التي تكررت حوله؛ ووجوده يعني أنه إما تقرير خدمة ذاتية أو تقرير متكرر، ولا يُوجد عادةً في التقارير المخصصة أو البحثية.`
+          },
+          {
+            q: `ما الغرض من «الملحق (Appendix)» وما حكم تضمينه في التقرير؟`,
+            opts: [
+              `عرض مصادر البيانات المرجعية وهو إلزامي في كل التقارير`,
+              `إدخال معلومات إضافية مثل التعريفات أو اللوائح لإضافة قيمة إن اهتم القارئ، وهو غير مطلوب (اختياري)`,
+              `استبدال صفحة الغلاف عند غياب رقم الإصدار`,
+              `حماية البيانات من الحذف عبر جعله للقراءة فقط`
+            ],
+            ans: 1,
+            exp: `الملحق (Appendix) يُستخدم لإدخال معلومات إضافية تتعلق بالتقرير كالتعريفات أو اللوائح التي قد تضيف قيمة للقارئ المهتم، لكنه ليس مطلوباً.`
+          },
+          {
+            q: `ما المقصود بـ «الاشتراك (Subscription)» ضمن اعتبارات تسليم التقرير؟`,
+            opts: [
+              `شراء ترخيص لغة Python لتشغيل التحليل`,
+              `وسيلة لجدولة لوحة المعلومات للتشغيل والتحديث تلقائياً وإرسالها لمستلمين محددين (غالباً بالبريد الإلكتروني)`,
+              `منع المستخدمين من تصفية البيانات في لوحة المعلومات`,
+              `تحديد حجم الخط بألا يقل عن 11`
+            ],
+            ans: 1,
+            exp: `الاشتراك هو وسيلة لجدولة لوحة المعلومات لتعمل تلقائياً وتتحدث وتُرسل إلى مستلمين محددين عبر وسيلة مثل البريد الإلكتروني (مثال: كل يوم اثنين الساعة 7:00 صباحاً).`
+          },
+          {
+            q: `عند استضافة لوحة معلومات تحتوي معلومات سرية عبر «واجهة الويب»، ما الآلية الأساسية لحماية تلك المعلومات؟`,
+            opts: [
+              `إزالة العنوان والتسميات من الرسم البياني`,
+              `تطبيق أذونات الوصول بحيث لا يتمكن من الوصول والرؤية سوى الفئة المستهدفة والمستفيدين فقط`,
+              `تغيير حجم الخط إلى أقل من 11 لإخفاء التفاصيل`,
+              `حذف قسم الملحق من نهاية التقرير`
+            ],
+            ans: 1,
+            exp: `أذونات الوصول هي ميزة أمان تضمن عدم تمكن سوى الفئة المستهدفة والمستفيدين المخوّلين من الوصول إلى لوحة المعلومات المستضافة على الويب ورؤية البيانات السرية.`
+          },
+          {
+            q: `أي من المواصفات التالية يخالف قواعد الخطوط في تصميم التقرير؟`,
+            opts: [
+              `استخدام حجم خط 12 وتباعد أسطر مريح`,
+              `استخدام خط احترافي خالٍ من النقوش غير الاعتيادية`,
+              `تطبيق تباين لوني متوازن بين النص والخلفية`,
+              `استخدام حجم خط 9 أو خط مزخرف بنقوش مع تباين مفرط جداً`
+            ],
+            ans: 3,
+            exp: `قواعد الخطوط تشترط القابلية للقراءة: ألا يقل حجم الخط عن 11، وألا تتقارب الأسطر جداً، وأن يكون هناك تباين لوني مناسب ولكن ليس كثيراً مفرطاً، وأن يكون الخط احترافياً بلا نقوش أو أشكال غير اعتيادية.`
+          },
+          {
+            q: `ما الدور الصحيح لـ «وسيلة الإيضاح (Legend)» ضمن عناصر الرسم البياني الثلاثة؟`,
+            opts: [
+              `هي اسم المخطط الرئيسي في الأعلى`,
+              `هي التسميات التي تحدد المحاور الأفقية والرأسية`,
+              `هي جدول يحدد عناصر المخطط الأخرى`,
+              `هي جدول البيانات الخام المرفق في الملحق`
+            ],
+            ans: 2,
+            exp: `عناصر الرسم البياني الثلاثة: العنوان (اسم المخطط)، التسميات (تحدد أشياء مثل المحاور)، ووسيلة الإيضاح (جدول يحدد عناصر المخطط الأخرى).`
+          }
+        ]
+      },
+      final: {
+        containerId: `quiz-final`,
+        titleId: `final-exam-title`,
+        title: `الاختبار الشامل للفصل الرابع عشر (15 سؤالاً)`,
+        badge: `15 سؤالاً`,
+        questions: [
+          {
+            unit: `الوحدة 1`,
+            q: `تريد شركة إجراء دراسة إحصائية متعمقة لتفسير سبب تغير ولاء العملاء خلال السنوات الثلاث الماضية وتوقع الاتجاهات المعقدة. أي وصف يجمع الخصائص الأنسب؟`,
+            opts: [
+              `تقرير ديناميكي سريع لأن الديناميكية متخصصة في التحليلات الإحصائية العميقة`,
+              `تقرير بحثي (ثابت متعمق) يقبل التحليل الإحصائي المتقدم رغم أنه يستغرق وقتاً وجهداً`,
+              `تقرير خدمة ذاتية يتيح لكل موظف تعديل النماذج الإحصائية بنفسه دون تحليل`,
+              `تقرير مخصص بسيط يُنجز في دقائق لإجابة سؤال روتيني`
+            ],
+            ans: 1,
+            exp: `التقارير البحثية تجيب على أسئلة الأعمال الكبيرة والمعقدة بأساليب إحصائية متقدمة وتستغرق وقتاً وجهداً، كما أن التقارير الثابتة هي التي تدعم التحليلات المتعمقة والمعقدة مقارنة بالديناميكية المحدودة بأسئلة بسيطة.`
+          },
+          {
+            unit: `الوحدة 1`,
+            q: `في فريق تحليل البيانات، يحتاج المحلل أولاً إلى استخراج سجلات المبيعات من قاعدة بيانات علائقية (<bdi dir="ltr">RDBMS</bdi>)، ثم بناء لوحة تفاعلية سريعة للمديرين. ما الثنائي الأداتي الأنسب بالترتيب؟`,
+            opts: [
+              `Excel ثم Python`,
+              `SQL ثم Power BI أو Tableau`,
+              `Tableau ثم SQL`,
+              `Python ثم ملف نصي ثابت`
+            ],
+            ans: 1,
+            exp: `تُستخدم SQL للوصول إلى قواعد البيانات العلائقية (RDBMS) ومعالجتها، بينما تُعد Power BI وTableau من أفضل أدوات التمثيل المرئي لصنع لوحات المعلومات التفاعلية.`
+          },
+          {
+            unit: `الوحدة 1`,
+            q: `تلقى رئيس القسم رسالة بريد إلكتروني تلقائية صباح أول يوم من كل شهر تفيد بنجاح تشغيل إحصائيات التوزيع. ما نوع هذا التقرير؟`,
+            opts: [
+              `تقرير متكرر (Recurring Report)`,
+              `تقرير مخصص عند الطلب (Ad-hoc)`,
+              `تقرير بحثي لمرة واحدة`,
+              `ملحق لوائح (Appendix)`
+            ],
+            ans: 0,
+            exp: `التقارير المتكررة تُجدول على فترات منتظمة لتوفير الوقت (مثل إحصائيات التوزيع الشهري)، ويتلقى المسؤول رسالة بريد إلكتروني تفيد بنجاح التشغيل.`
+          },
+          {
+            unit: `الوحدة 2`,
+            q: `أعدّ محلل مخططاً سلكياً (<bdi dir="ltr">Wireframe</bdi>) لملف تقرير نصي مطبوع غير تفاعلي، ثم قدّم الخطة للموافقة عليها وطلب اعتماد الرقم النهائي للأرباح مسبقاً. كم خطأً ارتكبه وفق الوحدة الثانية؟`,
+            opts: [
+              `لم يرتكب أي خطأ`,
+              `خطأ واحد فقط: طلب اعتماد الرقم النهائي`,
+              `خطآن: استخدام Wireframe لغير لوحة البيانات (حيث تخص Dashboard فقط)، وطلب الموافقة على نتيجة محددة بدلاً من الموافقة على الأسئلة وطريقة العرض`,
+              `خطأ واحد: عدم استخدام لغة Python`
+            ],
+            ans: 2,
+            exp: `المخططات السلكية Mockups/Wireframes تُستخدم حصرياً مع لوحة البيانات (Dashboard) بينما ملف التقرير يعتمد Layout/Presentation؛ كما أن الموافقة على الخطة تكون على الأسئلة وطريقة العرض لا على نتيجة محددة.`
+          },
+          {
+            unit: `الوحدة 2`,
+            q: `في مرحلة «الحصول على الموافقة على الخطة»، لماذا يُذكر وجود جانب سلبي لهذه الخطوة؟`,
+            opts: [
+              `لأنها تمنع استخدام أي رسوم بيانية في التقرير`,
+              `لأنه بمجرد الموافقة على الخطة يجب عليك تسليم ما تمت الموافقة عليه على وجه التحديد`,
+              `لأنها تجعل التقرير ديناميكياً تلقائياً`,
+              `لأنها تلزمك بتضمين جميع بيانات الشركة في الملحق`
+            ],
+            ans: 1,
+            exp: `الجانب السلبي لخطوة الموافقة على الخطة هو الالتزام الصارم بتسليم ما تمت الموافقة عليه على وجه التحديد دون انحراف عما اتُّفق عليه.`
+          },
+          {
+            unit: `الوحدة 2`,
+            q: `أضاف محلل بيانات عمودَي «لون هيكل الروبوت» و«اسم المورد» إلى التقرير الأسبوعي لقياس تطور سرعة الروبوتات. ما الأثر المتوقع؟`,
+            opts: [
+              `تحسين دقة معادلة السرعة`,
+              `زيادة تعقيد التقرير وتشويشه وإضعاف فهم الجمهور له لوجود بيانات غير مطلوبة للإجابة على السؤال`,
+              `تحويل التقرير إلى لوحة معلومات مباشرة`,
+              `تقليص نطاق البيانات إلى أصغر حجم ممكن`
+            ],
+            ans: 1,
+            exp: `القاعدة في «محتوى البيانات» تقضي بتضمين المتغيرات اللازمة للإجابة على السؤال فقط (المسافة والوقت والتاريخ في مثال الروبوتات)؛ لأن إضافة أشياء لا نحتاجها تجعل التقرير معقداً ومشوشاً.`
+          },
+          {
+            unit: `الوحدة 2`,
+            q: `كيف تضمن عند عرض نتائج استعلام SQL أو Power BI على مستخدمين غير تقنيين ألا يقوم أحدهم بحذف مجموعة البيانات الأصلية عن طريق الخطأ؟`,
+            opts: [
+              `بإضافة قسم FAQs في نهاية التقرير`,
+              `باستخدام طرق العرض (Views) التي تحفظ نتيجة الاستعلام ككائن منفصل وتُعرض للقراءة فقط`,
+              `بإرسال التقرير عبر الاشتراك الأسبوعي بالبريد الإلكتروني`,
+              `بتصغير حجم الخط إلى أقل من 11`
+            ],
+            ans: 1,
+            exp: `السبب الرئيسي لاستخدام طرق العرض (Views) في SQL أو Power BI هو حماية البيانات؛ فحفظ الاستعلام ككائن منفصل وعرضه للقراءة فقط يمنع مخاطر الحذف العرضي للبيانات.`
+          },
+          {
+            unit: `الوحدة 2`,
+            q: `قارن بين سؤالين: (أ) «ما وضع المبيعات؟» و(ب) «ما مبيعات فرع جدة للمنتج س خلال الربع الأول؟». أي منهما يتطلب نطاق بيانات أكبر ولماذا؟`,
+            opts: [
+              `السؤال (ب) لأن التحديد يوسع نطاق البيانات`,
+              `السؤال (أ) لأن السؤال الأكثر غموضاً يتطلب نطاق بيانات أكبر، بينما التحديد يصغّر النطاق`,
+              `كلاهما يتطلب النطاق نفسه تماماً`,
+              `السؤال (أ) لا يحتاج بيانات مطلقاً`
+            ],
+            ans: 1,
+            exp: `وفق قاعدة «نطاق البيانات»: كلما كان السؤال أكثر تحديداً كان نطاق البيانات أصغر، وكلما كان السؤال أكثر غموضاً كان نطاق البيانات أكبر.`
+          },
+          {
+            unit: `الوحدة 2`,
+            q: `عند التخطيط للوحة معلومات (<bdi dir="ltr">Dashboard</bdi>)، ما السؤالان اللذان يجب الإجابة عنهما تحت بند «مصادر البيانات»؟`,
+            opts: [
+              `ما حجم الخط وما نوعه؟`,
+              `ما قواعد البيانات التي نحصل منها على البيانات؟ وكيف ستتصل هذه البيانات بلوحة المعلومات (اتصال مباشر أم مستخرج أخير)؟`,
+              `هل يوجد ملحق أم لا؟ وهل أُرسل بالبريد؟`,
+              `من صمم صفحة الغلاف وما رقم الإصدار؟`
+            ],
+            ans: 1,
+            exp: `عند الحديث عن مصادر البيانات في لوحة المعلومات نتناول أمرين: قواعد البيانات المصدرية، وكيفية اتصالها باللوحة (اتصال مباشر لتقرير ديناميكي أم مستخرج أخير لتقرير ثابت).`
+          },
+          {
+            unit: `الوحدة 3`,
+            q: `أُنشئت لوحة معلومات تفاعلية عام 2025، وفتحها المدير العام في 15 نوفمبر 2026، بينما لم تتغير مصادرها الثابتة إلا يدوياً. ما الذي يمثله «تاريخ إنشاء التقرير» في هذه اللوحة؟`,
+            opts: [
+              `تاريخ تأسيس الشركة`,
+              `آخر وقت تم فيه استخدام التقرير (أي 15 نوفمبر 2026)`,
+              `تاريخ أول مسودة Wireframe عام 2025`,
+              `لوحة المعلومات لا تمتلك تاريخ إنشاء مطلقاً`
+            ],
+            ans: 1,
+            exp: `في التقارير الثابتة يكون تاريخ إنشاء التقرير هو تاريخ الإنشاء الفعلي، أما في لوحة المعلومات فيكون تاريخ إنشاء التقرير هو آخر وقت تم فيه استخدام التقرير.`
+          },
+          {
+            unit: `الوحدة 3`,
+            q: `لديك تقرير بحثي متعمق أُنجز لمرة واحدة ولم يطرأ عليه أي تعديل أو إصدار لاحق، وأُرسل لمرة واحدة للإدارة العليا. أي عنصرين من عناصر التقرير الستة لن يتوفرا فيه غالباً؟`,
+            opts: [
+              `صفحة الغلاف ومصادر البيانات المرجعية`,
+              `رقم الإصدار (لأنه لم يتغير/يتحدث) والأسئلة المتداولة FAQs (لأنها لا توجد عادة في التقارير المخصصة والبحثية)`,
+              `تاريخ إنشاء التقرير والعنوان`,
+              `التسميات ووسائل الإيضاح`
+            ],
+            ans: 1,
+            exp: `رقم الإصدار يُطلب فقط للتقارير المحدثة أو المتغيرة ذات الإصدارات المتعددة، والأسئلة المتداولة (FAQs) ترتبط بتقارير الخدمة الذاتية أو المتكررة ولا توجد عادة في التقارير المخصصة أو البحثية.`
+          },
+          {
+            unit: `الوحدة 3`,
+            q: `ما الفرق الدقيق بين «الملحق (Appendix)» و«مصادر البيانات المرجعية» في هيكل التقرير؟`,
+            opts: [
+              `كلاهما إلزامي في كل صفحة غلاف`,
+              `مصادر البيانات المرجعية تشير إلى مصادر البيانات المستخدمة في إنشاء التقرير، بينما الملحق يضم معلومات إضافية كالتعريفات واللوائح وهو اختياري غير مطلوب`,
+              `الملحق يوضع في الغلاف والمصادر في النهاية فقط`,
+              `الملحق يخص التقارير الثابتة والمصادر تخص الديناميكية فقط`
+            ],
+            ans: 1,
+            exp: `مصادر البيانات المرجعية توثق مصادر البيانات المستخدمة في بناء التقرير، أما الملحق فيضيف معلومات اختيارية مساندة كالتعريفات أو اللوائح ولا يُعد مطلوباً.`
+          },
+          {
+            unit: `الوحدة 3`,
+            q: `تستضيف شركة لوحة معلومات مالية حساسة عبر خدمة ويب تابعة لطرف ثالث، وتريد تحديثها وإرسالها آلياً كل اثنين الساعة 7:00 صباحاً للمديرين الماليين فقط. أي عنصرين يضمنان التنفيذ الصحيح؟`,
+            opts: [
+              `التقارير المخصصة والملحق`,
+              `الاشتراك (Subscription) للجدولة والإرسال التلقائي، وأذونات الوصول عبر واجهة الويب لحصر الرؤية على الفئة المستهدفة`,
+              `تغيير حجم الخط إلى 14 وإضافة أسئلة متداولة`,
+              `استخدام المستخرج الأخير يدوياً كل أسبوع`
+            ],
+            ans: 1,
+            exp: `الاشتراك يجدول التحديث والإرسال التلقائي عبر البريد الإلكتروني في موعد محدد، وأذونات الوصول عبر واجهة الويب تضمن ألا يرى المعلومات السرية سوى المستفيدين المستهدفين.`
+          },
+          {
+            unit: `الوحدة 3`,
+            q: `راجع مصمم تقريراً فوجد أن حجم الخط 10، والأسطر متلاصقة، والتباين بين لون النص والخلفية مفرط للغاية، والصفحة مكدسة بعناصر كثيرة. ما المبدأ الكلي الأول الذي تم إخلاله في جانب الخطوط؟`,
+            opts: [
+              `القاعدة الأولى للخطوط: قدرة المستفيدين على قراءتها بوضوح (حيث يجب ألا يقل الحجم عن 11 مع تباعد مناسب وتباين متوازن وخط احترافي)`,
+              `قاعدة تعدد الإصدارات في صفحة الغلاف`,
+              `قاعدة اتصال SQL المباشر`,
+              `قاعدة حصر الملحق في اللوائح`
+            ],
+            ans: 0,
+            exp: `القاعدة الأولى للخطوط هي قدرة المستفيدين على قراءتها، وتتأثر بالحجم (ألا يقل عن 11)، وتباعد الأسطر، وتباين الألوان (مناسب دون إفراط)، ونوع الخط الاحترافي؛ كما يجب تجنب تكديس البيانات لتسهيل الاستيعاب.`
+          },
+          {
+            unit: `الوحدة 3`,
+            q: `في رسم بياني داخل التقرير: أين يجد القارئ اسم المخطط، وأين يجد مسميات المحاور، وأين يجد الجدول المفسّر لألوان الفئات؟`,
+            opts: [
+              `اسم المخطط في وسيلة الإيضاح، والمحاور في العنوان، والألوان في الملحق`,
+              `اسم المخطط هو العنوان، ومسميات المحاور هي التسميات، وجدول العناصر الأخرى هو وسيلة الإيضاح`,
+              `جميعها تُدمج داخل صفحة الغلاف فقط`,
+              `التسميات تحدد اسم المخطط، والعنوان يحدد المحاور`
+            ],
+            ans: 1,
+            exp: `عناصر الرسم البياني الثلاثة واضحة: العنوان هو اسم المخطط، والتسميات تحدد أشياء مثل المحاور، ووسيلة الإيضاح هي جدول يحدد عناصر المخطط الأخرى.`
+          }
+        ]
+      }
     };
-  });
-}
 
-function renderQuiz() {
-  prepareShuffledQuiz();
-  const area = document.getElementById("quizArea");
-  area.innerHTML = "";
-  const letters = ["أ", "ب", "ج", "د"];
-  currentQuestions.forEach((item, i) => {
-    const box = document.createElement("div");
-    box.className = "qbox";
-    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
-    const opts = box.querySelector(".options");
-    item.o.forEach((opt, j) => {
-      const btn = document.createElement("button");
-      btn.className = "option";
-      btn.textContent = `${letters[j]}) ${opt}`;
-      btn.onclick = () => {
-        answers[i] = j;
-        [...opts.children].forEach((x, k) => {
-          x.classList.remove("correct", "wrong");
-          x.disabled = true;
-          if (k === item.a) x.classList.add("correct");
-          if (k === j && j !== item.a) x.classList.add("wrong");
+    const arabicLetters = [`أ`, `ب`, `ج`, `د`];
+
+    /* ==================== STATE & PERSISTENCE ==================== */
+    const defaultState = {
+      staticClicks: 12,
+      staticSnapshot: 12,
+      activeScenario: 0,
+      activeStep: 0,
+      scopeLevel: 2,
+      roboticsVars: [],
+      designLab: {
+        fontSize: 12,
+        tightLines: false,
+        ornateFont: false,
+        harshContrast: false,
+        clutter: false,
+        showTitle: true,
+        showLabels: true,
+        showLegend: true
+      },
+      quizzes: {
+        u1: { currentIdx: 0, viewAll: false, answers: {} },
+        u2: { currentIdx: 0, viewAll: false, answers: {} },
+        u3: { currentIdx: 0, viewAll: false, answers: {} },
+        final: { currentIdx: 0, viewAll: false, answers: {} }
+      }
+    };
+
+    let appState = JSON.parse(JSON.stringify(defaultState));
+
+    function safeMergeState(saved) {
+      if (!saved || typeof saved !== 'object') return;
+      if (typeof saved.staticClicks === 'number') appState.staticClicks = saved.staticClicks;
+      if (typeof saved.staticSnapshot === 'number') appState.staticSnapshot = saved.staticSnapshot;
+      if (typeof saved.activeScenario === 'number') appState.activeScenario = saved.activeScenario;
+      if (typeof saved.activeStep === 'number') appState.activeStep = saved.activeStep;
+      if (typeof saved.scopeLevel === 'number') appState.scopeLevel = saved.scopeLevel;
+      if (Array.isArray(saved.roboticsVars)) appState.roboticsVars = saved.roboticsVars;
+      if (saved.designLab && typeof saved.designLab === 'object') {
+        appState.designLab = Object.assign({}, defaultState.designLab, saved.designLab);
+      }
+      if (saved.quizzes && typeof saved.quizzes === 'object') {
+        [`u1`, `u2`, `u3`, `final`].forEach(function (k) {
+          if (saved.quizzes[k]) {
+            appState.quizzes[k] = {
+              currentIdx: typeof saved.quizzes[k].currentIdx === 'number' ? saved.quizzes[k].currentIdx : 0,
+              viewAll: Boolean(saved.quizzes[k].viewAll),
+              answers: saved.quizzes[k].answers && typeof saved.quizzes[k].answers === 'object' ? saved.quizzes[k].answers : {}
+            };
+          }
         });
-        const fb = document.getElementById("fb" + i);
-        fb.hidden = false;
-        fb.className = "feedback " + (j === item.a ? "good" : "bad");
-        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
-        updateScore();
+      }
+    }
+
+    async function persistState() {
+      const statusEl = document.getElementById('persistence-status');
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === 'function') {
+          await window.notebookAppApi.setAppState(appState);
+          if (statusEl) statusEl.textContent = `حالة التقدم: محفوظة تلقائياً`;
+        }
+      } catch (e) {
+        if (statusEl) statusEl.textContent = `حالة التقدم: نشطة في الجلسة`;
+      }
+    }
+
+    /* ==================== INTERACTIVE LABS ==================== */
+    function renderStaticDynamicSim() {
+      const dbEl = document.getElementById('source-db-clicks');
+      const staticValEl = document.getElementById('static-sim-val');
+      const dynamicValEl = document.getElementById('dynamic-sim-val');
+      const tagEl = document.getElementById('static-sync-tag');
+      const statusEl = document.getElementById('static-sim-status');
+      if (!dbEl || !staticValEl || !dynamicValEl || !tagEl || !statusEl) return;
+
+      dbEl.textContent = String(appState.staticClicks);
+      staticValEl.textContent = String(appState.staticSnapshot);
+      dynamicValEl.textContent = String(appState.staticClicks);
+
+      if (appState.staticClicks === appState.staticSnapshot) {
+        tagEl.className = `tag-warm`;
+        tagEl.textContent = `مطابق للحظة السحب`;
+        statusEl.textContent = `مطابق للبيانات عند هذه النقطة الزمنية؛ أي نقرة جديدة لن تظهر تلقائياً.`;
+      } else {
+        const diff = appState.staticClicks - appState.staticSnapshot;
+        tagEl.className = `tag-error`;
+        tagEl.textContent = `غير محدّث (-${diff})`;
+        statusEl.textContent = `بيانات التقرير الثابت قديمة بفارق ${diff} نقرة؛ يجب إعادة إنشائه يدوياً لعكس التغيير.`;
+      }
+    }
+
+    function triggerSourceClick() {
+      appState.staticClicks += 1;
+      renderStaticDynamicSim();
+      persistState();
+    }
+
+    function regenerateStaticReport() {
+      appState.staticSnapshot = appState.staticClicks;
+      renderStaticDynamicSim();
+      persistState();
+    }
+
+    function selectScenario(idx) {
+      if (idx < 0 || idx >= u1Scenarios.length) return;
+      appState.activeScenario = idx;
+      const btns = document.querySelectorAll('#u1-scenario-buttons .choice-chip');
+      btns.forEach(function (b, i) {
+        b.classList.toggle('is-active', i === idx);
+      });
+      const out = document.getElementById('u1-scenario-output');
+      const s = u1Scenarios[idx];
+      if (out && s) {
+        out.innerHTML =
+          `<div><strong>الموقف:</strong> ${s.title}</div>` +
+          `<div><strong>نوع التقرير الموصى به:</strong> <span class="tag-warm">${s.reportType}</span></div>` +
+          `<div><strong>الأداة التحليلية الأنسب:</strong> <span class="tag-positive">${s.tool}</span></div>` +
+          `<div><strong>التعليل المنهجي:</strong> ${s.reason}</div>`;
+      }
+      persistState();
+    }
+
+    function selectCreationStep(idx) {
+      if (idx < 0 || idx >= u2CreationSteps.length) return;
+      appState.activeStep = idx;
+      const btns = document.querySelectorAll('#u2-step-buttons .choice-chip');
+      btns.forEach(function (b, i) {
+        b.classList.toggle('is-active', i === idx);
+      });
+      const out = document.getElementById('u2-step-detail');
+      const st = u2CreationSteps[idx];
+      if (out && st) {
+        out.innerHTML =
+          `<div style="display:flex;align-items:center;gap:var(--space-sm);">` +
+            `<span class="index-num">${st.num}</span>` +
+            `<strong>${st.title}</strong>` +
+          `</div>` +
+          `<p>${st.body}</p>`;
+      }
+      persistState();
+    }
+
+    function syncRoboticsCheckboxesFromState() {
+      const inputs = document.querySelectorAll('#robotics-checkboxes input[type="checkbox"]');
+      inputs.forEach(function (inp) {
+        inp.checked = appState.roboticsVars.indexOf(inp.value) !== -1;
+      });
+    }
+
+    function evaluateRoboticsVars() {
+      const inputs = document.querySelectorAll('#robotics-checkboxes input[type="checkbox"]');
+      const selected = [];
+      inputs.forEach(function (inp) {
+        if (inp.checked) selected.push(inp.value);
+      });
+      appState.roboticsVars = selected;
+
+      const box = document.getElementById('robotics-feedback');
+      if (!box) return;
+
+      const required = [`distance`, `time`, `date`];
+      const extras = selected.filter(function (v) { return required.indexOf(v) === -1; });
+      const missing = required.filter(function (v) { return selected.indexOf(v) === -1; });
+
+      if (selected.length === 0) {
+        box.className = `feedback-box`;
+        box.innerHTML = `<div class="feedback-title">التشخيص التحليلي</div><div>حدد المتغيرات اللازمة أعلاه لاختبار تطبيق قاعدة «محتوى البيانات دون إضافات».</div>`;
+      } else if (extras.length === 0 && missing.length === 0) {
+        box.className = `feedback-box is-correct`;
+        box.innerHTML = `<div class="feedback-title">اختيار مثالي ومطابق للقاعدة</div><div>أحسنت! نحتاج فقط إلى <strong>المسافة</strong> و<strong>الوقت</strong> لحساب السرعة، و<strong>التاريخ</strong> لمقارنة النتائج أسبوعاً بعد أسبوع دون تشويش.</div>`;
+      } else {
+        box.className = `feedback-box is-wrong`;
+        const notes = [];
+        if (missing.length > 0) notes.push(`ينقصك متغير ضروري لحساب السرعة أو للمقارنة الزمنية الأسبوعية (المسافة، الوقت، التاريخ).`);
+        if (extras.length > 0) notes.push(`أضفت متغيرات غير مطلوبة للإجابة على السؤال، مما يزيد تعقيد التقرير ويشوش الجمهور.`);
+        box.innerHTML = `<div class="feedback-title">يحتاج تعديلاً</div><div>${notes.join(' ')}</div>`;
+      }
+      persistState();
+    }
+
+    function updateScopeLab(val) {
+      const level = parseInt(val, 10);
+      if (isNaN(level) || level < 1 || level > 3) return;
+      appState.scopeLevel = level;
+      const slider = document.getElementById('scope-slider');
+      if (slider) slider.value = String(level);
+
+      const info = scopeLevels[level - 1];
+      const lbl = document.getElementById('scope-level-text');
+      const out = document.getElementById('scope-output');
+      if (lbl && info) lbl.textContent = info.label;
+      if (out && info) {
+        out.innerHTML =
+          `<div><strong>حجم نطاق البيانات المطلوب:</strong> <span class="tag-warm">${info.scope}</span></div>` +
+          `<div>${info.example}</div>`;
+      }
+      persistState();
+    }
+
+    function syncDesignLabInputs() {
+      const d = appState.designLab;
+      const fs = document.getElementById('lab-font-size');
+      const tl = document.getElementById('lab-tight-lines');
+      const of = document.getElementById('lab-ornate-font');
+      const hc = document.getElementById('lab-harsh-contrast');
+      const cl = document.getElementById('lab-clutter');
+      const st = document.getElementById('lab-show-title');
+      const sl = document.getElementById('lab-show-labels');
+      const sg = document.getElementById('lab-show-legend');
+
+      if (fs) fs.value = String(d.fontSize);
+      if (tl) tl.checked = d.tightLines;
+      if (of) of.checked = d.ornateFont;
+      if (hc) hc.checked = d.harshContrast;
+      if (cl) cl.checked = d.clutter;
+      if (st) st.checked = d.showTitle;
+      if (sl) sl.checked = d.showLabels;
+      if (sg) sg.checked = d.showLegend;
+    }
+
+    function updateDesignLab() {
+      const fs = document.getElementById('lab-font-size');
+      const tl = document.getElementById('lab-tight-lines');
+      const of = document.getElementById('lab-ornate-font');
+      const hc = document.getElementById('lab-harsh-contrast');
+      const cl = document.getElementById('lab-clutter');
+      const st = document.getElementById('lab-show-title');
+      const sl = document.getElementById('lab-show-labels');
+      const sg = document.getElementById('lab-show-legend');
+      if (!fs || !tl || !of || !hc || !cl || !st || !sl || !sg) return;
+
+      const d = {
+        fontSize: parseInt(fs.value, 10) || 12,
+        tightLines: tl.checked,
+        ornateFont: of.checked,
+        harshContrast: hc.checked,
+        clutter: cl.checked,
+        showTitle: st.checked,
+        showLabels: sl.checked,
+        showLegend: sg.checked
       };
-      opts.appendChild(btn);
-    });
-    area.appendChild(box);
-  });
-  updateScore();
-}
+      appState.designLab = d;
 
-function updateScore() {
-  let correct = 0;
-  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
-  document.getElementById("score").textContent = `النتيجة: ${correct} / ${currentQuestions.length}`;
-  document.getElementById("progressBar").style.width = (Object.keys(answers).length / currentQuestions.length * 100) + "%";
-}
+      const fsVal = document.getElementById('lab-font-size-val');
+      if (fsVal) fsVal.textContent = String(d.fontSize);
 
-document.getElementById("resetQuiz").onclick = () => {
-  answers = {};
-  document.getElementById("finalResult").textContent = "";
-  renderQuiz();
-  window.scrollTo({ top: 0, behavior: "smooth" });
-};
+      const previewCard = document.getElementById('design-preview-card');
+      const sampleText = document.getElementById('preview-sample-text');
+      const chartBox = document.getElementById('preview-chart-box');
+      const svgTitle = document.getElementById('svg-chart-title');
+      const svgLabels = document.getElementById('svg-chart-labels');
+      const svgLegend = document.getElementById('svg-chart-legend');
+      const svgClutter = document.getElementById('svg-clutter-bars');
 
-document.getElementById("finishQuiz").onclick = () => {
-  let correct = 0;
-  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
-  const pct = Math.round(correct / currentQuestions.length * 100);
-  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${currentQuestions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! أنتِ مستعدة تماماً للاختبار في هذا الفصل." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
-};
+      if (previewCard) {
+        previewCard.classList.toggle('is-harsh-contrast', d.harshContrast);
+        previewCard.classList.toggle('is-ornate', d.ornateFont);
+      }
+      if (sampleText) {
+        sampleText.classList.toggle('size-small', d.fontSize < 11);
+        sampleText.classList.toggle('size-valid', d.fontSize >= 11);
+        sampleText.classList.toggle('tight-lead', d.tightLines);
+        sampleText.classList.toggle('good-lead', !d.tightLines);
+      }
+      if (chartBox) chartBox.classList.toggle('is-cluttered', d.clutter);
+      if (svgTitle) svgTitle.style.display = d.showTitle ? 'inline' : 'none';
+      if (svgLabels) svgLabels.style.display = d.showLabels ? 'inline' : 'none';
+      if (svgLegend) svgLegend.style.display = d.showLegend ? 'inline' : 'none';
+      if (svgClutter) svgClutter.style.display = d.clutter ? 'inline' : 'none';
 
-renderQuiz();
-</script>
+      const issues = [];
+      if (d.fontSize < 11) issues.push(`حجم الخط (${d.fontSize}) أقل من الحد الأدنى الموصى به (11).`);
+      if (d.tightLines) issues.push(`تباعد الأسطر ضيق جداً مما يصعّب القراءة.`);
+      if (d.ornateFont) issues.push(`استخدام خطوط مزخرفة أو غير اعتيادية يضعف الاحترافية والوضوح.`);
+      if (d.harshContrast) issues.push(`التباين اللوني مفرط جداً ومرهق للعين.`);
+      if (d.clutter) issues.push(`تكديس البيانات في مساحة صغيرة يصعّب الاستيعاب.`);
+      if (!d.showTitle || !d.showLabels || !d.showLegend) {
+        issues.push(`عناصر الرسم البياني ناقصة (العنوان، التسميات، وسيلة الإيضاح).`);
+      }
+
+      const badge = document.getElementById('design-health-badge');
+      const diag = document.getElementById('design-lab-diagnosis');
+      if (badge && diag) {
+        if (issues.length === 0) {
+          badge.className = `tag-positive`;
+          badge.textContent = `تصميم مطابق للمعايير`;
+          diag.className = `feedback-box is-correct`;
+          diag.innerHTML = `<div class="feedback-title">جميع معايير التصميم متحققة</div><div>الخط واضح (≥ 11)، التباعد والتباين متوازنان، المساحة غير مزدحمة، وعناصر الرسم البياني الثلاثة مكتملة.</div>`;
+        } else {
+          badge.className = `tag-error`;
+          badge.textContent = `${issues.length} مخالفات تصميمية`;
+          diag.className = `feedback-box is-wrong`;
+          diag.innerHTML = `<div class="feedback-title">مخالفات مرصودة في التصميم</div><ul class="clean-list">${issues.map(function (m) { return `<li>${m}</li>`; }).join('')}</ul>`;
+        }
+      }
+      persistState();
+    }
+
+    /* ==================== QUIZ ENGINE ==================== */
+    function renderQuiz(quizKey) {
+      const meta = quizzesMeta[quizKey];
+      const qState = appState.quizzes[quizKey];
+      const container = document.getElementById(meta.containerId);
+      if (!container) return;
+
+      const total = meta.questions.length;
+      let answeredCount = 0;
+      let correctCount = 0;
+      meta.questions.forEach(function (q, idx) {
+        if (typeof qState.answers[idx] === 'number') {
+          answeredCount += 1;
+          if (qState.answers[idx] === q.ans) correctCount += 1;
+        }
+      });
+      const pct = Math.round((answeredCount / total) * 100);
+
+      let pillsHtml = `<div class="q-pills">`;
+      meta.questions.forEach(function (q, idx) {
+        const chosen = qState.answers[idx];
+        let cls = `q-pill`;
+        if (!qState.viewAll && idx === qState.currentIdx) cls += ` is-current`;
+        if (typeof chosen === 'number') {
+          cls += chosen === q.ans ? ` is-correct` : ` is-wrong`;
+        }
+        pillsHtml += `<button type="button" class="${cls}" onclick="jumpToQuestion('${quizKey}', ${idx})" aria-label="السؤال ${idx + 1}">${idx + 1}</button>`;
+      });
+      pillsHtml += `</div>`;
+
+      let cardsHtml = ``;
+      const indicesToShow = qState.viewAll
+        ? meta.questions.map(function (_, i) { return i; })
+        : [qState.currentIdx];
+
+      indicesToShow.forEach(function (idx) {
+        const q = meta.questions[idx];
+        const chosen = qState.answers[idx];
+        const isAnswered = typeof chosen === 'number';
+        const isCorrect = isAnswered && chosen === q.ans;
+
+        let optionsHtml = `<div class="options-list">`;
+        q.opts.forEach(function (optText, oIdx) {
+          let btnCls = `option-btn`;
+          if (isAnswered) {
+            if (oIdx === q.ans) btnCls += ` is-correct-choice`;
+            else if (oIdx === chosen) btnCls += ` is-wrong-choice`;
+          }
+          optionsHtml +=
+            `<button type="button" class="${btnCls}" ${isAnswered ? 'disabled' : ''} onclick="answerQuestion('${quizKey}', ${idx}, ${oIdx})">` +
+              `<span class="option-letter">${arabicLetters[oIdx]}</span>` +
+              `<span>${optText}</span>` +
+            `</button>`;
+        });
+        optionsHtml += `</div>`;
+
+        let feedbackHtml = ``;
+        if (isAnswered) {
+          feedbackHtml =
+            `<div class="feedback-box ${isCorrect ? 'is-correct' : 'is-wrong'}" aria-live="polite">` +
+              `<div class="feedback-title">${isCorrect ? 'إجابة صحيحة' : 'إجابة غير صحيحة — الإجابة الصحيحة هي (' + arabicLetters[q.ans] + ')'}</div>` +
+              `<div><strong>الشرح التفصيلي:</strong> ${q.exp}</div>` +
+            `</div>`;
+        }
+
+        const unitTagHtml = q.unit ? `<span class="tag-warm">${q.unit}</span>` : ``;
+        cardsHtml +=
+          `<div class="question-card">` +
+            `<div class="question-meta-row">` +
+              `<span class="index-num">السؤال ${idx + 1} من ${total}</span>` +
+              unitTagHtml +
+            `</div>` +
+            `<div class="question-prompt">${q.q}</div>` +
+            optionsHtml +
+            feedbackHtml +
+          `</div>`;
+      });
+
+      let navFooterHtml = ``;
+      if (!qState.viewAll) {
+        const prevDisabled = qState.currentIdx === 0 ? `disabled` : ``;
+        const nextDisabled = qState.currentIdx >= total - 1 ? `disabled` : ``;
+        navFooterHtml =
+          `<div class="quiz-nav-footer">` +
+            `<button type="button" class="btn btn-secondary" ${prevDisabled} onclick="stepQuestion('${quizKey}', -1)">السؤال السابق</button>` +
+            `<span class="dossier-meta mono-num">${qState.currentIdx + 1} / ${total}</span>` +
+            `<button type="button" class="btn btn-primary" ${nextDisabled} onclick="stepQuestion('${quizKey}', 1)">السؤال التالي</button>` +
+          `</div>`;
+      }
+
+      let summaryHtml = ``;
+      if (answeredCount === total) {
+        let extraBreakdown = ``;
+        if (quizKey === `final`) {
+          const unitStats = { 'الوحدة 1': [0, 0], 'الوحدة 2': [0, 0], 'الوحدة 3': [0, 0] };
+          meta.questions.forEach(function (q, idx) {
+            if (q.unit && unitStats[q.unit]) {
+              unitStats[q.unit][1] += 1;
+              if (qState.answers[idx] === q.ans) unitStats[q.unit][0] += 1;
+            }
+          });
+          extraBreakdown =
+            `<div class="pill-selector">` +
+              Object.keys(unitStats).map(function (u) {
+                return `<span class="tag-warm">${u}: <span class="mono-num">${unitStats[u][0]} / ${unitStats[u][1]}</span></span>`;
+              }).join('') +
+            `</div>`;
+        }
+        const gradePct = Math.round((correctCount / total) * 100);
+        summaryHtml =
+          `<div class="quiz-summary-banner">` +
+            `<strong>اكتمل الاختبار — النتيجة النهائية: <span class="mono-num">${correctCount} / ${total} (${gradePct}%)</span></strong>` +
+            extraBreakdown +
+          `</div>`;
+      }
+
+      container.innerHTML =
+        `<div class="quiz-top-bar">` +
+          `<div>` +
+            `<h3 id="${meta.titleId}" style="font-size:var(--subhead-size);font-weight:700;">${meta.title}</h3>` +
+            `<div class="dossier-meta">النتيجة الحالية: <strong class="mono-num">${correctCount} / ${total}</strong> • المجاب عنها: <span class="mono-num">${answeredCount} / ${total}</span></div>` +
+          `</div>` +
+          `<div class="quiz-progress-wrap">` +
+            `<div class="quiz-progress-track"><div class="quiz-progress-fill" style="width:${pct}%"></div></div>` +
+            `<div class="quiz-controls-row">` +
+              `<button type="button" class="btn btn-secondary" onclick="toggleQuizView('${quizKey}')">${qState.viewAll ? 'عرض سؤال بسؤال' : 'عرض جميع الأسئلة'}</button>` +
+              `<button type="button" class="btn btn-danger-outline" onclick="handleQuizReset('${quizKey}', this)">إعادة الاختبار</button>` +
+            `</div>` +
+          `</div>` +
+        `</div>` +
+        pillsHtml +
+        summaryHtml +
+        cardsHtml +
+        navFooterHtml;
+
+      updateGlobalScore();
+    }
+
+    function answerQuestion(quizKey, qIdx, optIdx) {
+      const qState = appState.quizzes[quizKey];
+      if (!qState || typeof qState.answers[qIdx] === 'number') return;
+      qState.answers[qIdx] = optIdx;
+      renderQuiz(quizKey);
+      persistState();
+    }
+
+    function jumpToQuestion(quizKey, qIdx) {
+      const qState = appState.quizzes[quizKey];
+      if (!qState) return;
+      qState.currentIdx = qIdx;
+      if (qState.viewAll) qState.viewAll = false;
+      renderQuiz(quizKey);
+      persistState();
+    }
+
+    function stepQuestion(quizKey, delta) {
+      const meta = quizzesMeta[quizKey];
+      const qState = appState.quizzes[quizKey];
+      if (!meta || !qState) return;
+      const next = qState.currentIdx + delta;
+      if (next >= 0 && next < meta.questions.length) {
+        qState.currentIdx = next;
+        renderQuiz(quizKey);
+        persistState();
+      }
+    }
+
+    function toggleQuizView(quizKey) {
+      const qState = appState.quizzes[quizKey];
+      if (!qState) return;
+      qState.viewAll = !qState.viewAll;
+      renderQuiz(quizKey);
+      persistState();
+    }
+
+    function handleQuizReset(quizKey, btn) {
+      if (btn.dataset.armed !== 'true') {
+        btn.dataset.armed = 'true';
+        btn.textContent = `اضغط للتأكيد`;
+        return;
+      }
+      btn.dataset.armed = 'false';
+      appState.quizzes[quizKey] = { currentIdx: 0, viewAll: false, answers: {} };
+      renderQuiz(quizKey);
+      persistState();
+    }
+
+    function handleGlobalReset(btn) {
+      if (btn.dataset.armed !== 'true') {
+        btn.dataset.armed = 'true';
+        btn.textContent = `تأكيد مسح كل التقدم`;
+        return;
+      }
+      btn.dataset.armed = 'false';
+      btn.textContent = `إعادة تعيين التقدم`;
+      appState = JSON.parse(JSON.stringify(defaultState));
+      renderAll();
+      persistState();
+    }
+
+    function updateGlobalScore() {
+      let totalCorrect = 0;
+      let totalQuestions = 0;
+      [`u1`, `u2`, `u3`, `final`].forEach(function (k) {
+        const meta = quizzesMeta[k];
+        const qState = appState.quizzes[k];
+        totalQuestions += meta.questions.length;
+        meta.questions.forEach(function (q, idx) {
+          if (qState.answers[idx] === q.ans) totalCorrect += 1;
+        });
+      });
+      const el = document.getElementById('global-score-display');
+      if (el) el.innerHTML = `<span class="mono-num">${totalCorrect} / ${totalQuestions}</span>`;
+    }
+
+    function renderAll() {
+      renderStaticDynamicSim();
+      selectScenario(appState.activeScenario);
+      selectCreationStep(appState.activeStep);
+      syncRoboticsCheckboxesFromState();
+      evaluateRoboticsVars();
+      updateScopeLab(appState.scopeLevel);
+      syncDesignLabInputs();
+      updateDesignLab();
+      [`u1`, `u2`, `u3`, `final`].forEach(renderQuiz);
+      updateGlobalScore();
+    }
+
+    /* ==================== INITIALIZATION ==================== */
+    (async function initApp() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === 'function') {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved) safeMergeState(saved);
+        }
+      } catch (e) {
+        // Fallback silently to defaultState
+      }
+
+      renderAll();
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === 'function') {
+        window.notebookAppApi.notifyAppReady();
+      }
+    })();
+  </script>
 </body>
 </html>

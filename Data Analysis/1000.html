@@ -1,0 +1,2128 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="dashboard">
+  <meta name="design-style" content="briefing">
+  <title>بنك مراجعة تحليل وتمثيل البيانات — 34 سؤالاً تفاعلياً</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,600;0,8..60,700;1,8..60,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces: warm stone-white paper (Briefing) */
+      --background: #faf9f5;
+      --surface-container-low: #ffffff;
+      --surface-container: #f1efe8;
+      --surface-container-high: #e6e2d6;
+
+      /* Ink */
+      --on-surface: #17181a;
+      --on-surface-variant: #56585c;
+
+      /* Rules */
+      --outline: #17181a;
+      --outline-variant: #dedad0;
+      --border-button: #c8c4b8;
+
+      /* Accents */
+      --primary: #17181a;
+      --on-primary: #faf9f5;
+      --primary-container: #f2b705;
+      --on-primary-container: #17181a;
+      --secondary: #1f4e5f;
+      --secondary-container: #e3eef2;
+      --tertiary: #785008;
+      --tertiary-container: #f5e6c4;
+      --error: #b42318;
+      --on-error: #ffffff;
+      --error-container: #fdecea;
+
+      /* Data series */
+      --data-1: #1f4e5f;
+      --data-2: #d99000;
+      --data-3: #2b6e52;
+      --data-4: #b84a39;
+      --data-context: #c4bfb2;
+
+      /* Semantic */
+      --positive: #2b6e52;
+      --positive-container: #e4f2eb;
+      --warning: #8a5300;
+      --warning-container: #fdf2db;
+      --focus: #1f4e5f;
+
+      /* Code surface */
+      --code-bg: #17181a;
+      --code-fg: #faf9f5;
+
+      /* Fonts (Arabic first per non-Latin RTL rules) */
+      --font-headline: 'IBM Plex Sans Arabic', 'Source Serif 4', serif;
+      --font-body: 'IBM Plex Sans Arabic', 'Plus Jakarta Sans', sans-serif;
+      --font-label: 'Geist Mono', 'IBM Plex Sans Arabic', monospace;
+
+      /* Shape */
+      --rounded: 0.25rem;
+      --rounded-lg: 0.375rem;
+      --rounded-full: 0.25rem;
+
+      /* Style effects */
+      --section-rule: 1.5px solid var(--outline);
+      --card-border: 1px solid var(--outline-variant);
+      --badge-radius: 2px;
+      --heading-tracking: 0;
+      --label-tracking: 0;
+
+      /* Dashboard / Data Explorer Type Scale */
+      --display-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+      --headline-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+      --subhead-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+      --body-size: clamp(0.9375rem, 0.9rem + 0.15vw, 1rem);
+      --label-size: 0.78rem;
+
+      /* Spacing scale */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.65;
+    }
+    header { position: static !important; }
+    button, input, select, textarea {
+      font-family: inherit;
+      font-size: inherit;
+    }
+
+    .page-grid {
+      display: grid;
+      gap: var(--space-lg);
+      padding: var(--space-lg);
+      max-width: 1180px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Briefing Dossier Header */
+    .dossier-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      border-bottom: var(--section-rule);
+      padding-bottom: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+    .dossier-bar-start {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .dossier-pill {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: var(--label-size);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--badge-radius);
+    }
+    .dossier-meta {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      font-weight: 500;
+    }
+    .title {
+      font-family: var(--font-headline);
+      font-size: var(--display-size);
+      font-weight: 700;
+      line-height: 1.2;
+      margin: 0;
+      color: var(--on-surface);
+    }
+    .standfirst {
+      font-family: var(--font-body);
+      font-size: var(--subhead-size);
+      font-weight: 600;
+      color: var(--secondary);
+      margin: var(--space-xs) 0 0 0;
+      max-width: 70ch;
+    }
+
+    /* KPI Strip */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .figure-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+    }
+    .kpi-label {
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--on-surface-variant);
+      margin-bottom: var(--space-xs);
+    }
+    .kpi-value {
+      font-family: var(--font-headline);
+      font-size: var(--headline-size);
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      color: var(--on-surface);
+      line-height: 1.15;
+    }
+    .kpi-value--positive { color: var(--positive); }
+    .kpi-value--secondary { color: var(--secondary); }
+    .kpi-value--warning { color: var(--warning); }
+    .kpi-sub {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      margin-top: var(--space-xs);
+    }
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: var(--surface-container);
+      border-radius: var(--rounded);
+      overflow: hidden;
+      margin-top: var(--space-sm);
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--secondary);
+      transition: width var(--dur-short) var(--ease-out);
+    }
+
+    /* Controls & Filter Toolbar */
+    .controls-panel {
+      display: grid;
+      gap: var(--space-md);
+    }
+    .filter-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: center;
+    }
+    .tab-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      border: 1px solid var(--border-button);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  color var(--dur-micro) var(--ease-out),
+                  box-shadow var(--dur-micro) var(--ease-out);
+    }
+    .tab-btn:hover {
+      background: var(--surface-container);
+    }
+    .tab-btn.is-active {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+    .tab-count {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      background: var(--surface-container);
+      color: var(--on-surface);
+      padding: 0.1rem var(--space-sm);
+      border-radius: var(--badge-radius);
+      font-variant-numeric: tabular-nums;
+    }
+    .tab-btn.is-active .tab-count {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+
+    .controls-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) auto auto;
+      gap: var(--space-md);
+      align-items: end;
+    }
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .field-label {
+      font-size: var(--label-size);
+      font-weight: 700;
+      color: var(--on-surface);
+    }
+    .field-input, .field-select {
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      border: 1px solid var(--border-button);
+      border-radius: var(--rounded);
+      width: 100%;
+    }
+    .field-select {
+      padding-left: var(--space-xl);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      border: 1px solid var(--border-button);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  color var(--dur-micro) var(--ease-out);
+    }
+    .btn:hover { background: var(--surface-container); }
+    .btn--primary {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+    .btn--primary:hover {
+      background: var(--secondary);
+      border-color: var(--secondary);
+    }
+    .btn--danger-armed {
+      background: var(--error);
+      color: var(--on-error);
+      border-color: var(--error);
+    }
+    .btn--danger-armed:hover {
+      background: var(--error);
+      color: var(--on-error);
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* Quick Question Navigator Map */
+    .nav-map-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+      gap: var(--space-md);
+    }
+    .nav-group-title {
+      font-size: var(--label-size);
+      font-weight: 700;
+      color: var(--secondary);
+      margin-bottom: var(--space-sm);
+    }
+    .nav-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+    }
+    .nav-dot {
+      min-width: 44px;
+      min-height: 44px;
+      padding: 0 var(--space-xs);
+      border-radius: var(--rounded);
+      border: 1px solid var(--outline-variant);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  box-shadow var(--dur-micro) var(--ease-out);
+    }
+    .nav-dot:hover {
+      background: var(--surface-container);
+    }
+    .nav-dot.is-correct {
+      background: var(--positive-container);
+      color: var(--positive);
+      border-color: var(--positive);
+    }
+    .nav-dot.is-wrong {
+      background: var(--error-container);
+      color: var(--error);
+      border-color: var(--error);
+    }
+    .nav-dot.is-flagged {
+      box-shadow: inset 0 -3px 0 var(--primary-container);
+    }
+
+    /* Section Dividers */
+    .section-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      border-bottom: var(--section-rule);
+      padding-bottom: var(--space-sm);
+      margin-top: var(--space-sm);
+    }
+    .section-title {
+      font-family: var(--font-headline);
+      font-size: var(--headline-size);
+      font-weight: 700;
+      margin: 0;
+      color: var(--on-surface);
+    }
+    .section-counter-badge {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      background: var(--surface-container);
+      color: var(--secondary);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--badge-radius);
+    }
+
+    /* Question Cards */
+    .questions-list {
+      display: grid;
+      gap: var(--space-lg);
+    }
+    .question-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      display: grid;
+      gap: var(--space-md);
+      scroll-margin-top: var(--space-lg);
+    }
+    .question-card.is-correct-card {
+      box-shadow: inset -4px 0 0 var(--positive);
+    }
+    .question-card.is-wrong-card {
+      box-shadow: inset -4px 0 0 var(--error);
+    }
+
+    .q-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      padding-bottom: var(--space-sm);
+      border-bottom: 1px solid var(--outline-variant);
+    }
+    .q-meta-start {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .index-num {
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: var(--label-size);
+      background: var(--primary);
+      color: var(--on-primary);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--badge-radius);
+      font-variant-numeric: tabular-nums;
+    }
+    .source-tag {
+      font-size: var(--label-size);
+      font-weight: 700;
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--badge-radius);
+    }
+    .source-tag--pdf {
+      background: var(--secondary-container);
+      color: var(--secondary);
+    }
+    .source-tag--shots {
+      background: var(--tertiary-container);
+      color: var(--tertiary);
+    }
+    .topic-tag {
+      font-size: var(--label-size);
+      font-weight: 600;
+      background: var(--surface-container);
+      color: var(--on-surface-variant);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--badge-radius);
+    }
+    .grounding-note-tag {
+      font-size: var(--label-size);
+      font-weight: 600;
+      background: var(--warning-container);
+      color: var(--warning);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--badge-radius);
+    }
+
+    .flag-btn {
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--rounded);
+      border: 1px solid var(--outline-variant);
+      background: var(--surface-container-low);
+      color: var(--on-surface-variant);
+      font-size: var(--label-size);
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .flag-btn:hover {
+      background: var(--surface-container);
+      color: var(--on-surface);
+    }
+    .flag-btn.is-flagged {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      border-color: var(--tertiary);
+    }
+
+    .q-stem {
+      font-size: var(--subhead-size);
+      font-weight: 600;
+      color: var(--on-surface);
+      margin: 0;
+      max-width: 72ch;
+    }
+    .code-snippet {
+      direction: ltr;
+      text-align: left;
+      background: var(--code-bg);
+      color: var(--code-fg);
+      font-family: var(--font-label);
+      font-size: 0.9rem;
+      line-height: 1.55;
+      padding: var(--space-md);
+      border-radius: var(--rounded);
+      overflow-x: auto;
+      margin: 0;
+    }
+    .inline-code {
+      font-family: var(--font-label);
+      font-size: 0.9em;
+      background: var(--surface-container);
+      color: var(--secondary);
+      padding: 0.1rem 0.4rem;
+      border-radius: var(--badge-radius);
+    }
+
+    /* Interactive Options */
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+      gap: var(--space-sm);
+    }
+    .option-btn {
+      min-height: 48px;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      border: 1px solid var(--outline-variant);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      text-align: right;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  box-shadow var(--dur-micro) var(--ease-out);
+    }
+    .option-btn:hover {
+      background: var(--surface-container);
+    }
+    .option-main {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .option-letter {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: var(--badge-radius);
+      background: var(--surface-container);
+      color: var(--on-surface);
+      font-weight: 700;
+      font-size: var(--label-size);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .option-text {
+      font-weight: 500;
+    }
+    .option-status {
+      flex-shrink: 0;
+      font-size: var(--label-size);
+      font-weight: 700;
+    }
+
+    .option-btn.is-correct-choice {
+      background: var(--positive-container);
+      border-color: var(--positive);
+      color: var(--on-surface);
+      box-shadow: inset 0 0 0 1px var(--positive);
+    }
+    .option-btn.is-correct-choice .option-letter {
+      background: var(--positive);
+      color: var(--on-error);
+    }
+    .option-btn.is-correct-choice .option-status {
+      color: var(--positive);
+    }
+
+    .option-btn.is-wrong-choice {
+      background: var(--error-container);
+      border-color: var(--error);
+      color: var(--on-surface);
+      box-shadow: inset 0 0 0 1px var(--error);
+    }
+    .option-btn.is-wrong-choice .option-letter {
+      background: var(--error);
+      color: var(--on-error);
+    }
+    .option-btn.is-wrong-choice .option-status {
+      color: var(--error);
+    }
+
+    .q-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+    .answer-feedback {
+      font-size: var(--label-size);
+      font-weight: 700;
+    }
+    .answer-feedback--ok { color: var(--positive); }
+    .answer-feedback--bad { color: var(--error); }
+    .answer-feedback--idle { color: var(--on-surface-variant); }
+
+    /* Doctor's Step-by-Step Explanation Box (.aside-box treatment) */
+    .aside-box {
+      background: var(--surface-container);
+      border-top: var(--section-rule);
+      border-radius: var(--rounded);
+      padding: var(--space-md) var(--space-lg);
+      display: grid;
+      gap: var(--space-sm);
+    }
+    .aside-box[hidden] {
+      display: none;
+    }
+    .aside-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .doctor-badge {
+      background: var(--secondary);
+      color: var(--on-primary);
+      font-size: var(--label-size);
+      font-weight: 700;
+      padding: 0.15rem var(--space-sm);
+      border-radius: var(--badge-radius);
+    }
+    .aside-title {
+      font-weight: 700;
+      color: var(--on-surface);
+      margin: 0;
+    }
+    .steps-list {
+      margin: 0;
+      padding-right: var(--space-lg);
+      display: grid;
+      gap: var(--space-xs);
+      max-width: 72ch;
+    }
+    .doctor-note {
+      background: var(--surface-container-low);
+      border-right: 4px solid var(--primary-container);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      font-size: 0.92rem;
+    }
+    .visual-wrap {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      padding: var(--space-sm) var(--space-md);
+      overflow-x: auto;
+    }
+    .visual-caption {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      margin-bottom: var(--space-xs);
+      font-weight: 600;
+    }
+
+    /* Empty State & Footer */
+    .empty-state {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-xl);
+      text-align: center;
+      display: grid;
+      gap: var(--space-sm);
+      justify-items: center;
+    }
+    .empty-state[hidden] { display: none; }
+
+    .sources-footer {
+      background: var(--surface-container);
+      border-top: var(--section-rule);
+      padding: var(--space-lg);
+      border-radius: var(--rounded);
+      display: grid;
+      gap: var(--space-sm);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+    }
+    .sources-footer strong {
+      color: var(--on-surface);
+    }
+
+    @media (max-width: 820px) {
+      .controls-row {
+        grid-template-columns: 1fr 1fr;
+      }
+      .nav-map-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-sm);
+        gap: var(--space-md);
+      }
+      .controls-row {
+        grid-template-columns: 1fr;
+      }
+      .question-card {
+        padding: var(--space-md);
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-grid">
+    <header>
+      <div class="dossier-bar">
+        <div class="dossier-bar-start">
+          <span class="dossier-pill">مراجعة شاملة</span>
+          <span class="dossier-meta">تحليل وتمثيل البيانات • المجموع الكلي: 34 سؤالاً</span>
+        </div>
+        <span class="dossier-meta" id="header-source-counter">23 من ملف اللقاء المباشر 3 + 11 من لقطات الشاشة الخمس</span>
+      </div>
+      <h1 class="title">بنك مراجعة أسئلة اللقاء المباشر واللقطات الخمس</h1>
+      <p class="standfirst">اختبار تفاعلي متكامل يضم 34 سؤالاً مع التصحيح الفوري، والتصفية حسب المصدر والحالة، وشرح تفصيلي خطوة بخطوة بأسلوب الدكتور.</p>
+    </header>
+
+    <!-- KPI Summary Strip -->
+    <section class="kpi-grid" aria-label="ملخص التقدم والعداد الإجمالي">
+      <div class="figure-card">
+        <div class="kpi-label">إجمالي الأسئلة في البنك</div>
+        <div class="kpi-value" id="kpi-total">34 سؤالاً</div>
+        <div class="kpi-sub">23 من ملف اللقاء 3 + 11 من اللقطات الخمس</div>
+      </div>
+      <div class="figure-card">
+        <div class="kpi-label">نسبة الإنجاز</div>
+        <div class="kpi-value kpi-value--secondary" id="kpi-answered">0 / 34</div>
+        <div class="progress-track" aria-hidden="true">
+          <div class="progress-fill" id="kpi-progress-bar"></div>
+        </div>
+      </div>
+      <div class="figure-card">
+        <div class="kpi-label">الإجابات الصحيحة</div>
+        <div class="kpi-value kpi-value--positive" id="kpi-correct">0 (0%)</div>
+        <div class="kpi-sub" id="kpi-wrong-sub">إجابات خاطئة: 0</div>
+      </div>
+      <div class="figure-card">
+        <div class="kpi-label">أسئلة مُعلَّمة للمراجعة</div>
+        <div class="kpi-value kpi-value--warning" id="kpi-flagged">0</div>
+        <div class="kpi-sub">اضغط «علّم للمراجعة» داخل أي سؤال</div>
+      </div>
+    </section>
+
+    <!-- Filter & Search Controls -->
+    <section class="figure-card controls-panel" aria-label="أدوات التصفية والتحكم">
+      <div class="filter-tabs" role="tablist" aria-label="تصفية الأسئلة حسب المصدر">
+        <button type="button" class="tab-btn is-active" id="tab-all" onclick="setSourceFilter('all')">
+          <span>جميع الأسئلة</span>
+          <span class="tab-count" id="count-all">34</span>
+        </button>
+        <button type="button" class="tab-btn" id="tab-pdf" onclick="setSourceFilter('pdf')">
+          <span>ملف اللقاء المباشر 3</span>
+          <span class="tab-count" id="count-pdf">23</span>
+        </button>
+        <button type="button" class="tab-btn" id="tab-shots" onclick="setSourceFilter('shots')">
+          <span>لقطات الشاشة الخمس</span>
+          <span class="tab-count" id="count-shots">11</span>
+        </button>
+      </div>
+
+      <div class="controls-row">
+        <div class="field-group">
+          <label class="field-label" for="search-input">بحث في الأسئلة أو الأكواد أو المفاهيم</label>
+          <input type="search" id="search-input" class="field-input" placeholder="مثال: MSE أو PCA أو Bokeh أو Box Plot" oninput="setSearchQuery(this.value)">
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="status-select">تصفية حسب حالة الحل</label>
+          <select id="status-select" class="field-select" onchange="setStatusFilter(this.value)">
+            <option value="all">جميع الحالات (34)</option>
+            <option value="unanswered">لم تُحل بعد</option>
+            <option value="correct">إجابات صحيحة فقط</option>
+            <option value="wrong">إجابات خاطئة فقط</option>
+            <option value="flagged">مُعلَّمة للمراجعة</option>
+          </select>
+        </div>
+        <button type="button" class="btn btn--primary" id="toggle-all-btn" onclick="toggleAllExplanations()">إظهار كل الشروحات</button>
+        <button type="button" class="btn" id="reset-btn" onclick="resetProgress(this)">إعادة ضبط التقدم</button>
+      </div>
+    </section>
+
+    <!-- Quick Navigator Grid -->
+    <section class="figure-card" aria-label="خريطة الوصول السريع للأسئلة">
+      <div class="nav-map-grid">
+        <div>
+          <div class="nav-group-title">ملف اللقاء المباشر 3 (الأسئلة 1 إلى 23)</div>
+          <div class="nav-pills" id="nav-pdf"></div>
+        </div>
+        <div>
+          <div class="nav-group-title">لقطات الشاشة الخمس (الأسئلة 1 إلى 11)</div>
+          <div class="nav-pills" id="nav-shots"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Visible Filter Summary Header -->
+    <div class="section-header">
+      <h2 class="section-title" id="list-heading">قائمة الأسئلة التفاعلية</h2>
+      <span class="section-counter-badge" id="visible-counter">يُعرض الآن 34 من أصل 34 سؤالاً</span>
+    </div>
+
+    <!-- Questions Container -->
+    <main id="questions-container" class="questions-list"></main>
+
+    <!-- Empty State -->
+    <div id="empty-state" class="empty-state" hidden>
+      <p class="q-stem">لا توجد أسئلة مطابقة لمعايير التصفية الحالية.</p>
+      <p class="kpi-sub">غيّر كلمة البحث أو أعد تعيين فلتر المصدر والحالة لعرض جميع الأسئلة الـ 34.</p>
+      <button type="button" class="btn btn--primary" onclick="clearFilters()">عرض جميع الأسئلة (34)</button>
+    </div>
+
+    <!-- Grounding & Sources Footer -->
+    <footer class="sources-footer">
+      <div><strong>المصادر والشفافية العلمية:</strong></div>
+      <div>1) الأسئلة (01 إلى 18) من القسم الأول مأخوذة نصياً كما وردت في مصدر «تحليل البيانات - اللقاء المباشر 3.pdf» (مع ملاحظة توضيحية في السؤال 10 حول الفرق بين الإجابة المؤشر عليها في الملف والناتج الحسابي الدقيق لقانون MSE المذكور أسفل السؤال نفسه).</div>
+      <div>2) السؤال (19) يعتمد على المعادلة والنقطة الواردتين في نهاية مقتطف «تحليل البيانات - اللقاء المباشر 3.pdf» مع استكمال الخيارات، والأسئلة (20 إلى 23) مستكملة من موضوعات الفصول المقابلة في «__ملخص (تحليل وتمثيل البيانات)_.pdf» (التعلم الآلي بإشراف والتصنيف والمسافات) لتغطية عدد الـ 23 سؤالاً كاملاً.</div>
+      <div>3) الأسئلة الـ 11 في قسم «لقطات الشاشة الخمس» تغطي بالترتيب جميع الموضوعات الـ 11 المحددة (النطاق Range، المركز المئوي 90، متوسط الانحراف المطلق MAD، كود plt.hist، القيم المتطرفة في Box Plot، معامل الارتباط 0.9، كود Bokeh وموضع legend، معالجة القيم المفقودة، Ordinal Encoding، أثر PCA على السمات، ومسألة مصفوفة PCA ذات 5 سمات) استناداً إلى القوانين والأمثلة المعتمدة في «__ملخص (تحليل وتمثيل البيانات)_.pdf».</div>
+    </footer>
+  </div>
+
+  <api-shim></api-shim>
+
+  <script>
+    const LETTERS = [`أ`, `ب`, `ج`, `د`, `هـ`];
+
+    const QUESTIONS = [
+      // ================= PART 1: PDF (23 Questions) =================
+      {
+        id: `pdf-1`,
+        source: `pdf`,
+        sourceNum: 1,
+        globalNum: 1,
+        topic: `الانحدار الخطي`,
+        grounding: `نصي من الملف`,
+        stem: `إذا كانت معادلة الانحدار الخطي هي <bdi dir="ltr" class="inline-code">y = 3 + 2x</bdi>، فما هي القيمة المتوقعة لـ <bdi dir="ltr" class="inline-code">y</bdi> عندما تكون <bdi dir="ltr" class="inline-code">x = 7</bdi>؟`,
+        options: [`4`, `5`, `12`, `17`],
+        correctIndex: 3,
+        steps: [
+          `نكتب معادلة الانحدار الخطي المعطاة: <bdi dir="ltr">y = 3 + 2x</bdi> (حيث الحد الثابت <bdi dir="ltr">b = 3</bdi> والميل <bdi dir="ltr">m = 2</bdi>).`,
+          `نعوض عن قيمة المتغير المستقل <bdi dir="ltr">x = 7</bdi> داخل المعادلة.`,
+          `نحسب الضرب أولاً حسب أولوية العمليات: <bdi dir="ltr">2 × 7 = 14</bdi>.`,
+          `نجمع الحد الثابت: <bdi dir="ltr">y = 3 + 14 = 17</bdi>.`
+        ],
+        doctorNote: `تذكر دائماً في اختبارات الانحدار الخطي البسيط أن نبدأ بعملية الضرب (الميل × قيمة x) ثم نجمع الحد الثابت (Intercept)؛ لأن خطأ الأولوية الحسابية هو أكثر ما يوقع الطلاب في الخيارات المشتتة.`
+      },
+      {
+        id: `pdf-2`,
+        source: `pdf`,
+        sourceNum: 2,
+        globalNum: 2,
+        topic: `حساب الخطأ (Residual)`,
+        grounding: `نصي من الملف`,
+        stem: `إذا كانت معادلة الانحدار <bdi dir="ltr" class="inline-code">y = 5 + 3x</bdi>، ورصدنا أن <bdi dir="ltr" class="inline-code">x = 10</bdi> والقيمة الفعلية <bdi dir="ltr" class="inline-code">y = 37</bdi>، فما هو الخطأ في هذا الرصد؟`,
+        options: [`12`, `10`, `2`, `0`],
+        correctIndex: 2,
+        steps: [
+          `أولاً نحسب القيمة المتوقعة من النموذج (<bdi dir="ltr">ŷ</bdi>) عند <bdi dir="ltr">x = 10</bdi>: <bdi dir="ltr">ŷ = 5 + 3(10) = 5 + 30 = 35</bdi>.`,
+          `ثانياً نطبق قانون الخطأ (Residual / Error): الخطأ = القيمة الفعلية − القيمة المتوقعة.`,
+          `بالتعويض: <bdi dir="ltr">Error = 37 − 35 = 2</bdi>.`
+        ],
+        doctorNote: `الخطأ في الرصد الفردي يعني الفرق بين الواقع وتوقع النموذج؛ أي كم أخطأ النموذج عن القيمة الحقيقية المرصودة.`
+      },
+      {
+        id: `pdf-3`,
+        source: `pdf`,
+        sourceNum: 3,
+        globalNum: 3,
+        topic: `دوال التقييم والتدريب`,
+        grounding: `نصي من الملف`,
+        stem: `ما هو اسم الدالة التي تقيس معدل الخطأ في النموذج الخطي؟`,
+        options: [
+          `Hypothesis function`,
+          `Loss function (أو Mean Squared Error)`,
+          `Gradient Descent`,
+          `Normalization`
+        ],
+        correctIndex: 1,
+        steps: [
+          `دالة الفرضية (<bdi dir="ltr">Hypothesis function</bdi>) هي المعادلة التي تحسب التنبؤ نفسه (<bdi dir="ltr">ŷ</bdi>).`,
+          `دالة الخسارة (<bdi dir="ltr">Loss function</bdi>) مثل متوسط مربع الخطأ (<bdi dir="ltr">MSE</bdi>) هي التي تقيس مقدار الخطأ بين القيم المتوقعة والفعلية.`,
+          `خوارزمية <bdi dir="ltr">Gradient Descent</bdi> هي أداة التحسين لتقليل تلك الخسارة، أما <bdi dir="ltr">Normalization</bdi> فهي خطوة تجهيز البيانات.`
+        ],
+        doctorNote: `فرّق جيداً بين ثلاثة مفاهيم مترابطة: الفرضية (تتنبأ)، ودالة الخسارة (تقيس الخطأ)، والانحدار التدريجي (يُصلح المعاملات لتقليل الخطأ).`
+      },
+      {
+        id: `pdf-4`,
+        source: `pdf`,
+        sourceNum: 4,
+        globalNum: 4,
+        topic: `Gradient Descent`,
+        grounding: `نصي من الملف`,
+        stem: `ما الغرض من استخدام <bdi dir="ltr" class="inline-code">Gradient Descent</bdi>؟`,
+        options: [
+          `رسم البيانات`,
+          `تقليل قيمة Loss Function إلى أدنى مستوى عن طريق تعديل المعاملات θ`,
+          `تقسيم البيانات`,
+          `طباعة النموذج`
+        ],
+        correctIndex: 1,
+        steps: [
+          `في بداية تدريب النموذج تكون قيم المعاملات <bdi dir="ltr">θ</bdi> عشوائية ويكون الخطأ كبيراً.`,
+          `تحسب خوارزمية <bdi dir="ltr">Gradient Descent</bdi> اتجاه انحدار دالة الخسارة، ثم تعدّل المعاملات <bdi dir="ltr">θ</bdi> خطوة بخطوة عكس اتجاه الزيادة.`,
+          `تستمر التكرارات حتى تصل قيمة <bdi dir="ltr">Loss Function</bdi> إلى أدنى نقطة ممكنة (Global/Local Minimum).`
+        ],
+        doctorNote: `تخيل أنك تنزل من قمة جبل في الضباب؛ تتحسس الميلان تحت قدميك وتخطو نحو الأسفل حتى تصل لأعمق وادٍ — هذا الوادي هو أقل قيمة لدالة الخسارة.`
+      },
+      {
+        id: `pdf-5`,
+        source: `pdf`,
+        sourceNum: 5,
+        globalNum: 5,
+        topic: `Ridge vs Lasso`,
+        grounding: `نصي من الملف`,
+        stem: `ما الفرق الرئيسي بين <bdi dir="ltr" class="inline-code">Ridge</bdi> و <bdi dir="ltr" class="inline-code">Lasso</bdi>؟`,
+        options: [
+          `Ridge يستخدم مجموع المربعات، بينما Lasso يستخدم مجموع القيم المطلقة`,
+          `Ridge يلغي المتغيرات، بينما Lasso لا يلغي`,
+          `لا فرق`,
+          `Ridge أبطأ`
+        ],
+        correctIndex: 0,
+        steps: [
+          `كلا النموذجين يضيف حد عقوبة (Penalty) إلى دالة الخسارة لمنع فرط التخصيص (<bdi dir="ltr">Overfitting</bdi>).`,
+          `نموذج <bdi dir="ltr">Ridge (L2)</bdi> يضيف مجموع مربعات المعاملات (<bdi dir="ltr">λ ∑θ²</bdi>) فيقلصها دون جعلها صفراً تاماً غالباً.`,
+          `نموذج <bdi dir="ltr">Lasso (L1)</bdi> يضيف مجموع القيم المطلقة للمعاملات (<bdi dir="ltr">λ ∑|θ|</bdi>) مما يتيح تصفير المعاملات غير المؤثرة وإلغاء متغيراتها.`
+        ],
+        doctorNote: `الخيار الثاني معكوس تماماً؛ لأن Lasso هو الذي يصفر المعاملات ويلغي المتغيرات، بينما Ridge يكتفي بتقليص أوزانها.`
+      },
+      {
+        id: `pdf-6`,
+        source: `pdf`,
+        sourceNum: 6,
+        globalNum: 6,
+        topic: `Polynomial Regression`,
+        grounding: `نصي من الملف`,
+        stem: `متى نستخدم <bdi dir="ltr" class="inline-code">Polynomial Regression</bdi>؟`,
+        options: [
+          `عندما تكون العلاقة خطية تماماً`,
+          `عندما تكون العلاقة غير خطية ولا يمكن تمثيلها بخط مستقيم`,
+          `عندما يكون عدد البيانات قليل جداً`,
+          `عند وجود تعددية خطية فقط`
+        ],
+        correctIndex: 1,
+        steps: [
+          `الانحدار الخطي العادي يرسم خطاً مستقيماً لا يناسب البيانات التي تتخذ شكلاً منحنياً.`,
+          `لتمثيل الانحناءات، نضيف حدوداً متعددة الحدود للسمات مثل <bdi dir="ltr">x², x³</bdi>.`,
+          `لذلك نلجأ إلى <bdi dir="ltr">Polynomial Regression</bdi> تحديداً عندما تكون العلاقة بين المتغيرات غير خطية.`
+        ],
+        doctorNote: `لاحظ أن النموذج يبقى «خطياً في المعاملات» من الناحية الرياضية، لكنه ينتج منحنى غير خطي بالنسبة للمتغير x.`
+      },
+      {
+        id: `pdf-7`,
+        source: `pdf`,
+        sourceNum: 7,
+        globalNum: 7,
+        topic: `تقسيم البيانات`,
+        grounding: `نصي من الملف`,
+        stem: `أي مما يلي يُعد طريقة صحيحة لتقسيم البيانات؟`,
+        options: [
+          `Holdout`,
+          `K-fold cross-validation`,
+          `Leave-one-out`,
+          `كل ما سبق`
+        ],
+        correctIndex: 3,
+        steps: [
+          `<bdi dir="ltr">Holdout</bdi>: تقسيم مباشر إلى مجموعة تدريب ومجموعة اختبار (مثل 70% / 30%).`,
+          `<bdi dir="ltr">K-fold cross-validation</bdi>: تقسيم البيانات إلى K أجزاء متساوية وتدوير الاختبار على كل جزء.`,
+          `<bdi dir="ltr">Leave-one-out</bdi>: حالة خاصة من التحقق المتقاطع يكون فيها كل سجل اختباراً مرة واحدة (<bdi dir="ltr">K = N</bdi>).`,
+          `بما أن جميع الطرق الثلاث صحيحة ومعتمدة، فالإجابة الصحيحة هي «كل ما سبق».`
+        ],
+        doctorNote: `عندما ترى «كل ما سبق» بعد ثلاث طرق قياسية لتقسيم البيانات، تحقق من كل واحدة سريعاً وستجدها كلها من أساليب التقييم المعتمدة في المقرر.`
+      },
+      {
+        id: `pdf-8`,
+        source: `pdf`,
+        sourceNum: 8,
+        globalNum: 8,
+        topic: `تفسير معاملات Lasso`,
+        grounding: `نصي من الملف`,
+        stem: `عند استخدام نموذج انحدار <bdi dir="ltr" class="inline-code">Lasso</bdi>، أصبح المعامل المقابل لإحدى السمات صفر. ماذا يعني ذلك؟`,
+        options: [
+          `أن البيانات مفقودة`,
+          `أن Lasso قام باستبعاده تلقائياً لأنه غير مؤثر نسبياً`,
+          `خطأ في الكود`,
+          `لأن قيمته كبيرة جداً`
+        ],
+        correctIndex: 1,
+        steps: [
+          `في المعادلة الخطية <bdi dir="ltr">y = θ₀ + θ₁x₁ + θ₂x₂</bdi>، إذا أصبح <bdi dir="ltr">θ₂ = 0</bdi> فإن ناتج ضرب <bdi dir="ltr">0 × x₂ = 0</bdi> دائماً.`,
+          `هذا يعني أن السمة <bdi dir="ltr">x₂</bdi> لم يعد لها أي أثر في التنبؤ.`,
+          `بفضل عقوبة <bdi dir="ltr">L1</bdi>، يقوم <bdi dir="ltr">Lasso</bdi> بتصفير معاملات السمات الضعيفة تلقائياً مما يحقق اختياراً مدمجاً للسمات (<bdi dir="ltr">Feature Selection</bdi>).`
+        ],
+        doctorNote: `هذه بالضبط الميزة الذهبية في Lasso: يجمع بين الانحدار وتصفية السمات غير المفيدة في خطوة واحدة.`
+      },
+      {
+        id: `pdf-9`,
+        source: `pdf`,
+        sourceNum: 9,
+        globalNum: 9,
+        topic: `التنبؤ بالانحدار الخطي`,
+        grounding: `نصي من الملف`,
+        stem: `لديك النموذج الخطي التالي، فإذا كان وزن شخص <bdi dir="ltr" class="inline-code">70</bdi> كجم، ما هو الطول المتوقع؟`,
+        code: `Height = 128.017 + 0.611 * Weight`,
+        options: [`150.787`, `170.787`, `198.017`, `128.017`],
+        correctIndex: 1,
+        steps: [
+          `نعوض عن الوزن بالقيمة <bdi dir="ltr">Weight = 70</bdi> في المعادلة.`,
+          `نحسب حاصل الضرب أولاً: <bdi dir="ltr">0.611 × 70 = 42.77</bdi>.`,
+          `نضيف الحد الثابت: <bdi dir="ltr">128.017 + 42.77 = 170.787</bdi>.`
+        ],
+        doctorNote: `لاحظ أن الخيار (128.017) هو قيمة التقاطع فقط عند وزن صفر، و(198.017) هو جمع مباشر للوزن دون ضربه في معامل الميل 0.611.`
+      },
+      {
+        id: `pdf-10`,
+        source: `pdf`,
+        sourceNum: 10,
+        globalNum: 10,
+        topic: `حساب MSE`,
+        grounding: `نصي من الملف (مع تنبيه حسابي)`,
+        stem: `إذا كانت <bdi dir="ltr" class="inline-code">Loss Function</bdi> هي <bdi dir="ltr" class="inline-code">MSE</bdi>، وكانت القيم الفعلية <bdi dir="ltr" class="inline-code">[10, 20, 30]</bdi> والمتوقعة <bdi dir="ltr" class="inline-code">[12, 18, 33]</bdi>، احسب قيمة <bdi dir="ltr" class="inline-code">MSE</bdi>.`,
+        options: [
+          `9`,
+          `12 (مؤشر عليها في نسخة الملف بالخطأ)`,
+          `36`,
+          `13`,
+          `5.67 (الناتج الحسابي الدقيق: 17 ÷ 3)`
+        ],
+        correctIndex: 4,
+        steps: [
+          `نحسب الخطأ المربع لكل عينة <bdi dir="ltr">(y - ŷ)²</bdi>:`,
+          `العينة الأولى: <bdi dir="ltr">(10 - 12)² = (-2)² = 4</bdi>.`,
+          `العينة الثانية: <bdi dir="ltr">(20 - 18)² = (2)² = 4</bdi>.`,
+          `العينة الثالثة: <bdi dir="ltr">(30 - 33)² = (-3)² = 9</bdi>.`,
+          `نجمع مربعات الأخطاء: <bdi dir="ltr">4 + 4 + 9 = 17</bdi>، ثم نقسم على عدد العينات (<bdi dir="ltr">n = 3</bdi>): <bdi dir="ltr">MSE = 17 / 3 ≈ 5.67</bdi>.`
+        ],
+        doctorNote: `تنبيه مهم من الدكتور: في ملف اللقاء الأصلي تم تظليل الخيار (ب- 12) بالخطأ في الاختيارات، بينما الحل الرياضي المكتوب في الملف نفسه أسفل السؤال ينص حرفياً على أن مجموع الأخطاء 17 وأن MSE = 17 / 3 ≈ 5.67. اعتمد الحساب الصحيح (5.67) مع معرفة هذه الملاحظة عند المراجعة.`,
+        visualType: `mse`
+      },
+      {
+        id: `pdf-11`,
+        source: `pdf`,
+        sourceNum: 11,
+        globalNum: 11,
+        topic: `تأثير المعامل λ في Lasso`,
+        grounding: `نصي من الملف`,
+        stem: `في <bdi dir="ltr" class="inline-code">Lasso</bdi>، إذا كان <bdi dir="ltr" class="inline-code">λ</bdi> كبيراً جداً، فماذا يحدث للمعاملات؟`,
+        options: [
+          `تصبح كبيرة`,
+          `تصبح كثير منها صفراً`,
+          `لا تتغير`,
+          `تصبح سالبة فقط`
+        ],
+        correctIndex: 1,
+        steps: [
+          `تتضمن دالة الهدف في Lasso الحد العقابي <bdi dir="ltr">+ λ ∑|θᵢ|</bdi>.`,
+          `عندما تكون قيمة <bdi dir="ltr">λ</bdi> كبيرة جداً، تصبح تكلفة إبقاء أي معامل غير صفري باهظة على النموذج.`,
+          `لذلك يجبر النموذج عدداً كبيراً من المعاملات على الهبوط إلى الصفر تماماً لتقليل دالة الهدف الكلية.`
+        ],
+        doctorNote: `احفظ العلاقة الطردية التالية: كلما زادت λ زاد التقليم؛ فتقل قيم المعاملات وتزداد أعداد الأصفار في Lasso (وإن بالغت في λ يقع النموذج في Underfitting).`
+      },
+      {
+        id: `pdf-12`,
+        source: `pdf`,
+        sourceNum: 12,
+        globalNum: 12,
+        topic: `كود PolynomialFeatures`,
+        grounding: `نصي من الملف`,
+        stem: `أي مما يلي يُستخدم لتحويل البيانات قبل تطبيق <bdi dir="ltr" class="inline-code">Polynomial Regression</bdi>؟`,
+        options: [
+          `model.fit()`,
+          `PolynomialFeatures(degree=2).fit_transform(X_train)`,
+          `train_test_split()`,
+          `Lasso()`
+        ],
+        correctIndex: 1,
+        steps: [
+          `تطبيق الانحدار متعدد الحدود في Scikit-learn يتم على مرحلتين: تحويل السمات أولاً، ثم تدريب الانحدار الخطي.`,
+          `دالة <bdi dir="ltr">PolynomialFeatures(degree=2)</bdi> تنشئ أعمدة جديدة للقوى (<bdi dir="ltr">x², x₁x₂</bdi>).`,
+          `استدعاء <bdi dir="ltr">.fit_transform(X_train)</bdi> يطبق هذا التحويل مباشرة على بيانات التدريب قبل تمريرها إلى <bdi dir="ltr">fit()</bdi>.`
+        ],
+        doctorNote: `انتبه لترتيب الدوال في Scikit-learn: دالة train_test_split للتقسيم، ثم PolynomialFeatures للتحويل، ثم model.fit للتدريب.`
+      },
+      {
+        id: `pdf-13`,
+        source: `pdf`,
+        sourceNum: 13,
+        globalNum: 13,
+        topic: `هدف Loss Function`,
+        grounding: `نصي من الملف`,
+        stem: `ما هو الهدف الأساسي من <bdi dir="ltr" class="inline-code">Loss Function</bdi>؟`,
+        options: [
+          `زيادة الدقة`,
+          `تقليل معدل الخطأ بين القيم الفعلية والمتوقعة`,
+          `رسم البيانات`,
+          `تقسيم البيانات`
+        ],
+        correctIndex: 1,
+        steps: [
+          `لا يستطيع النموذج تحسين نفسه دون مقياس رقمي يخبره بمدى سوء أو جودة توقعاته الحالية.`,
+          `تعمل <bdi dir="ltr">Loss Function</bdi> على حساب الفارق بين القيمة الحقيقية والقيمة المتوقعة.`,
+          `وبتوجيه عملية التدريب لتصغير هذه الدالة، ينخفض معدل الخطأ إلى أدنى حد ممكن.`
+        ],
+        doctorNote: `قد تلتبس عبارة «زيادة الدقة» مع «تقليل الخطأ»؛ في الانحدار الخطي الهدف المباشر لدالة الخسارة هو تقليل الفارق (الخطأ) بين الفعلي والمتوقع.`
+      },
+      {
+        id: `pdf-14`,
+        source: `pdf`,
+        sourceNum: 14,
+        globalNum: 14,
+        topic: `مفهوم التصنيف`,
+        grounding: `نصي من الملف`,
+        stem: `ما هو الغرض الرئيسي من عملية التصنيف (<bdi dir="ltr" class="inline-code">Classification</bdi>)؟`,
+        options: [
+          `التنبؤ بقيم مستمرة`,
+          `إعطاء وسم (label) للبيانات غير الموسومة بناءً على سمات مستقلة`,
+          `تجميع البيانات غير المشرفة`,
+          `حساب المسافات بين النقاط`
+        ],
+        correctIndex: 1,
+        steps: [
+          `التصنيف هو مهمة تعلم آلي بإشراف (<bdi dir="ltr">Supervised Learning</bdi>).`,
+          `يتعلم النموذج العلاقة بين السمات المستقلة والفئات من بيانات تدريب موسومة مسبقاً.`,
+          `بعد التدريب، يتنبأ النموذج بالوسم (<bdi dir="ltr">Label</bdi>) الصحيح للبيانات الجديدة غير الموسومة.`
+        ],
+        doctorNote: `الفرق الجوهري: القيم المستمرة (مثل السعر أو الطول) = Regression، أما الفئات والوسوم (مثل مصاب/سليم) = Classification، والتجميع دون وسوم = Clustering.`
+      },
+      {
+        id: `pdf-15`,
+        source: `pdf`,
+        sourceNum: 15,
+        globalNum: 15,
+        topic: `خوارزمية K-NN`,
+        grounding: `نصي من الملف`,
+        stem: `في <bdi dir="ltr" class="inline-code">K-NN</bdi>، كيف يتم تصنيف نقطة جديدة؟`,
+        options: [
+          `بحساب المتوسط الحسابي للنقاط`,
+          `بأغلبية تصويت الجيران الأقرب (K أقرب نقطة)`,
+          `باستخدام Bayes theorem`,
+          `بإنشاء شجرة قرارات`
+        ],
+        correctIndex: 1,
+        steps: [
+          `تحسب الخوارزمية المسافة بين النقطة الجديدة وجميع نقاط التدريب المخزنة.`,
+          `تختار أقرب <bdi dir="ltr">K</bdi> نقطة ذات أقل مسافة.`,
+          `يُجرى تصويت بين فئات هذه النقاط الـ <bdi dir="ltr">K</bdi>، وتُمنح النقطة الجديدة الفئة الأكثر تكراراً (الأغلبية).`
+        ],
+        doctorNote: `تُسمى K-NN أحياناً «التعلم الكسول» لأنها لا تبني معادلة معقدة مسبقاً بل تعتمد مباشرة على جيران النقطة وقت الاستعلام؛ ولهذا يُفضل أن يكون K عدداً فردياً في التصنيف الثنائي لتجنب التعادل.`
+      },
+      {
+        id: `pdf-16`,
+        source: `pdf`,
+        sourceNum: 16,
+        globalNum: 16,
+        topic: `عتبة التصنيف في Logistic Regression`,
+        grounding: `نصي من الملف`,
+        stem: `في <bdi dir="ltr" class="inline-code">Logistic Regression</bdi>، إذا كان الاحتمال المحسوب لانتماء عنصر لفئة معينة هو <bdi dir="ltr" class="inline-code">0.3</bdi>، كيف يتم تصنيف النقطة إذا كانت قيمة الفاصل <bdi dir="ltr" class="inline-code">0.5</bdi>؟`,
+        options: [`فئة 0`, `فئة 1`, `فئة -1`, `غير مصنفة`],
+        correctIndex: 0,
+        steps: [
+          `تُخرج دالة <bdi dir="ltr">Sigmoid</bdi> احتمالاً محصوراً بين <bdi dir="ltr">0</bdi> و <bdi dir="ltr">1</bdi>، وهنا <bdi dir="ltr">P = 0.3</bdi>.`,
+          `نقارن الاحتمال بالعتبة الفاصلة (<bdi dir="ltr">Threshold = 0.5</bdi>).`,
+          `بما أن <bdi dir="ltr">0.3 &lt; 0.5</bdi>، فإن النقطة لا تصل إلى حد الانتماء للفئة الموجبة (1)، فتُصنف ضمن <strong>فئة 0</strong>.`
+        ],
+        doctorNote: `في الانحدار اللوجستي الفئتان القياسيتان هما (0 و 1) وليس (-1)، وكل قيمة تحت العتبة 0.5 تذهب تلقائياً للفئة 0.`
+      },
+      {
+        id: `pdf-17`,
+        source: `pdf`,
+        sourceNum: 17,
+        globalNum: 17,
+        topic: `Logistic vs Linear Regression`,
+        grounding: `نصي من الملف`,
+        stem: `ما هو الفرق الرئيسي بين <bdi dir="ltr" class="inline-code">Logistic Regression</bdi> و <bdi dir="ltr" class="inline-code">Linear Regression</bdi>؟`,
+        options: [
+          `Logistic تستخدم للقيم المستمرة، بينما Linear للتصنيف`,
+          `Logistic تستخدم للتصنيف الثنائي بتطبيق Sigmoid لتحويل النتائج إلى احتمالات`,
+          `لا فرق`,
+          `Logistic أبطأ`
+        ],
+        correctIndex: 1,
+        steps: [
+          `الانحدار الخطي (<bdi dir="ltr">Linear</bdi>) يتنبأ بقيمة عددية مفتوحة المدى (<bdi dir="ltr">-∞ إلى +∞</bdi>).`,
+          `الانحدار اللوجستي (<bdi dir="ltr">Logistic</bdi>) يأخذ التركيبة الخطية ثم يمررها عبر دالة <bdi dir="ltr">Sigmoid: 1 / (1 + e⁻ᶻ)</bdi>.`,
+          `تحوّل دالة Sigmoid الناتج إلى احتمال بين <bdi dir="ltr">0</bdi> و <bdi dir="ltr">1</bdi> يُستخدم في التصنيف الثنائي.`
+        ],
+        doctorNote: `لا تخدعك كلمة Regression في اسم Logistic Regression؛ هي في الحقيقة خوارزمية تصنيف بامتياز وليست للتنبؤ بقيم مستمرة مفتوحة.`,
+        visualType: `sigmoid`
+      },
+      {
+        id: `pdf-18`,
+        source: `pdf`,
+        sourceNum: 18,
+        globalNum: 18,
+        topic: `شجرة القرارات (Gini Impurity)`,
+        grounding: `نصي من الملف`,
+        stem: `ما هو الشرط للتوقف عن تقسيم الـ <bdi dir="ltr" class="inline-code">Node</bdi> في <bdi dir="ltr" class="inline-code">Decision Tree</bdi>؟`,
+        options: [
+          `عندما يصبح عدد العناصر صفراً`,
+          `عندما يصبح Gini Impurity صفراً (كل الفئة في فرع منفصل)`,
+          `عندما يزيد العمق عن 10`,
+          `لا شرط، يستمر دائماً`
+        ],
+        correctIndex: 1,
+        steps: [
+          `يقيس مؤشر <bdi dir="ltr">Gini Impurity</bdi> مدى اختلاط الفئات داخل العقدة (<bdi dir="ltr">Node</bdi>).`,
+          `عندما تحتوي العقدة على عناصر من فئة واحدة فقط (نقاء تام بنسبة 100%)، يصبح <bdi dir="ltr">Gini = 0</bdi>.`,
+          `عند هذه النقطة لا جدوى من أي تقسيم إضافي، فتتوقف الشجرة عند هذا الفرع وتُعلن العقدة كورقة قرار (<bdi dir="ltr">Leaf</bdi>).`
+        ],
+        doctorNote: `فكر فيها ببساطة: لماذا نقسم صندوقاً يحتوي كرات حمراء فقط؟ ما دام الصندوق نقياً (Gini = 0) نتوقف فوراً.`
+      },
+      {
+        id: `pdf-19`,
+        source: `pdf`,
+        sourceNum: 19,
+        globalNum: 19,
+        topic: `الفاصل الخطي (w·x + b = 0)`,
+        grounding: `معادلة نصية + خيارات مستكملة`,
+        stem: `إذا كان الفاصل <bdi dir="ltr" class="inline-code">w·x + b = 0</bdi>، و <bdi dir="ltr" class="inline-code">w = [2, 3]</bdi>، <bdi dir="ltr" class="inline-code">b = -5</bdi>، ونقطة جديدة <bdi dir="ltr" class="inline-code">x = (3, 4)</bdi>، احسب القيمة وحدد الفئة (إيجابية إذا كان الناتج ≥ 0، وسلبية إذا كان &lt; 0):`,
+        options: [
+          `+13 — فئة إيجابية`,
+          `-13 — فئة سلبية`,
+          `+5 — فئة إيجابية`,
+          `0 — تقع على الحد الفاصل`
+        ],
+        correctIndex: 0,
+        steps: [
+          `نكتب معادلة الحد الفاصل الخطي: <bdi dir="ltr">f(x) = w·x + b</bdi>.`,
+          `نحسب الضرب النقطي (<bdi dir="ltr">Dot Product</bdi>) بين متجه الأوزان <bdi dir="ltr">w = [2, 3]</bdi> والنقطة <bdi dir="ltr">x = (3, 4)</bdi>: <bdi dir="ltr">(2 × 3) + (3 × 4) = 6 + 12 = 18</bdi>.`,
+          `نجمع الحد الثابت <bdi dir="ltr">b = -5</bdi>: <bdi dir="ltr">18 + (-5) = +13</bdi>.`,
+          `بما أن <bdi dir="ltr">+13 &gt; 0</bdi>، فإن النقطة تقع في الجهة الموجبة وتُصنف <strong>فئة إيجابية</strong>.`
+        ],
+        doctorNote: `من لطائف هذه المسألة أن الناتج يظل +13 سواء رتبت الإحداثيات (3,4) مع [2,3] أم (4,3) مع [3,2]؛ المهم ألا تنسى طرح b = -5 في الخطوة الأخيرة.`,
+        visualType: `hyperplane`
+      },
+      {
+        id: `pdf-20`,
+        source: `pdf`,
+        sourceNum: 20,
+        globalNum: 20,
+        topic: `Naive Bayes`,
+        grounding: `مستكمل من المنهج (الفصل 12)`,
+        stem: `في خوارزمية <bdi dir="ltr" class="inline-code">Naive Bayes</bdi> لتصنيف الرسائل (<bdi dir="ltr" class="inline-code">Spam</bdi>)، إذا كانت الاحتمالات المعطاة هي <bdi dir="ltr" class="inline-code">P(spam) = 1.0</bdi> و <bdi dir="ltr" class="inline-code">P(free|spam) = 0.6</bdi> و <bdi dir="ltr" class="inline-code">P(win|spam) = 0.67</bdi>، فما قيمة البسط <bdi dir="ltr" class="inline-code">P(spam) × P(free|spam) × P(win|spam)</bdi>؟`,
+        options: [`0.0`, `0.402`, `0.67`, `1.27`],
+        correctIndex: 1,
+        steps: [
+          `بافتراض استقلالية الكلمات (<bdi dir="ltr">free</bdi> و <bdi dir="ltr">win</bdi>) في Naive Bayes، نضرب الاحتمالات ببعضها.`,
+          `نحسب: <bdi dir="ltr">1.0 × 0.6 = 0.6</bdi>.`,
+          `نضرب الناتج في <bdi dir="ltr">0.67</bdi>: <bdi dir="ltr">0.6 × 0.67 = 0.402</bdi>.`
+        ],
+        doctorNote: `هذا المثال مأخوذ مباشرة من مسألة الرسائل المهملة في الملخص؛ لاحظ أننا في Naive Bayes نضرب الاحتمالات الشرطية ولا نجمعها أبداً.`
+      },
+      {
+        id: `pdf-21`,
+        source: `pdf`,
+        sourceNum: 21,
+        globalNum: 21,
+        topic: `التقسيم الطبقي (Stratified Split)`,
+        grounding: `مستكمل من المنهج (الفصل 13)`,
+        stem: `عند تقسيم بيانات غير متوازنة الفئات بنسبة 70% للتدريب و30% للاختبار باستخدام <bdi dir="ltr" class="inline-code">train_test_split</bdi>، ما المعامل الذي يحافظ على نفس نسبة توزيع الفئات في كلا الجزأين؟`,
+        options: [
+          `random_state=42`,
+          `shuffle=False`,
+          `stratify=target`,
+          `test_size=0.7`
+        ],
+        correctIndex: 2,
+        steps: [
+          `عندما تكون إحدى الفئات أقلية (مثل المصابين بالسكري بنسبة أقل من السليمين)، قد يؤدي التقسيم العشوائي الصرف لاختلال النسب.`,
+          `المعامل <bdi dir="ltr">stratify=target</bdi> يخبر دالة <bdi dir="ltr">train_test_split</bdi> بأن تجعل نسبة كل فئة متطابقة في مجموعتي التدريب والتقييم.`,
+          `أما <bdi dir="ltr">random_state</bdi> فيثبت العشوائية فقط ولا يوازن الفئات.`
+        ],
+        doctorNote: `في مشاريع التصنيف الطبية أو المالية (حيث الفئة المهمة نادرة نسبياً)، نسيان stratify=target خطأ شائع يضعف عدالة التقييم.`
+      },
+      {
+        id: `pdf-22`,
+        source: `pdf`,
+        sourceNum: 22,
+        globalNum: 22,
+        topic: `مقاييس التقييم (F1-score)`,
+        grounding: `مستكمل من المنهج (الفصل 2 و13)`,
+        stem: `في مرحلة التقييم (<bdi dir="ltr" class="inline-code">Evaluation</bdi>) لنموذج تصنيف ثنائي مع بيانات غير متوازنة الفئات (مثل فقدان العملاء)، أي مقياس يوازن بين <bdi dir="ltr" class="inline-code">Precision</bdi> و <bdi dir="ltr" class="inline-code">Recall</bdi>؟`,
+        options: [
+          `Mean Squared Error (MSE)`,
+          `F1-score`,
+          `Range`,
+          `Euclidean Distance`
+        ],
+        correctIndex: 1,
+        steps: [
+          `دقة التصنيف الكلية (<bdi dir="ltr">Accuracy</bdi>) قد تخدعنا عندما تكون الفئات غير متوازنة.`,
+          `مقياس <bdi dir="ltr">F1-score</bdi> يحسب المتوسط التوافقي بين الدقة (<bdi dir="ltr">Precision</bdi>) والاستدعاء (<bdi dir="ltr">Recall</bdi>).`,
+          `أما <bdi dir="ltr">MSE</bdi> فهو لمشاكل الانحدار، و<bdi dir="ltr">Euclidean Distance</bdi> لقياس المسافات.`
+        ],
+        doctorNote: `كما مرّ معنا في مرحلة التقييم ضمن نموذج CRISP-DM في الفصل الأول، تُستخدم دالة F1-score لتقييم قدرة النموذج على رصد العملاء المحتمل فقدانهم بدقة وتوازن.`
+      },
+      {
+        id: `pdf-23`,
+        source: `pdf`,
+        sourceNum: 23,
+        globalNum: 23,
+        topic: `مسافة مانهاتن (Manhattan)`,
+        grounding: `مستكمل من المنهج (الفصل 11)`,
+        stem: `إذا كانت سمات (الوزن، الطول) لشخصين هي <bdi dir="ltr" class="inline-code">(70, 175)</bdi> و <bdi dir="ltr" class="inline-code">(80, 170)</bdi>، فما هي المسافة بينهما باستخدام <bdi dir="ltr" class="inline-code">Manhattan / City Block Distance</bdi>؟`,
+        options: [`5`, `10`, `15`, `25`],
+        correctIndex: 2,
+        steps: [
+          `معادلة مسافة مانهاتن (City Block): <bdi dir="ltr">Dc = ∑ |aᵢ - bᵢ|</bdi>.`,
+          `نحسب الفرق المطلق في الوزن: <bdi dir="ltr">|70 - 80| = 10</bdi>.`,
+          `نحسب الفرق المطلق في الطول: <bdi dir="ltr">|175 - 170| = 5</bdi>.`,
+          `نجمع الفروق المطلقة: <bdi dir="ltr">Dc = 10 + 5 = 15</bdi>.`
+        ],
+        doctorNote: `تذكر الفرق بين المسافتين: مسافة مانهاتن تجمع القيم المطلقة للفروق (10 + 5 = 15)، أما المسافة الإقليدية فتربّع الفروق ثم تجمعها وتأخذ الجذر التربيعي.`
+      },
+
+      // ================= PART 2: 5 SCREENSHOTS (11 Questions) =================
+      {
+        id: `shot-1`,
+        source: `shots`,
+        sourceNum: 1,
+        globalNum: 24,
+        topic: `النطاق (Range)`,
+        grounding: `موضوع اللقطة 1 + المنهج`,
+        stem: `لمجموعة البيانات المرتبة <bdi dir="ltr" class="inline-code">[23, 39, 39, 40, 45]</bdi> (درجات مهارة التواصل من الملخص)، ما هي قيمة النطاق (<bdi dir="ltr" class="inline-code">Range</bdi>)؟`,
+        options: [`16`, `22`, `39`, `45`],
+        correctIndex: 1,
+        steps: [
+          `نحدد أصغر قيمة (<bdi dir="ltr">Minimum</bdi>) في المجموعة: <bdi dir="ltr">23</bdi>.`,
+          `نحدد أكبر قيمة (<bdi dir="ltr">Maximum</bdi>) في المجموعة: <bdi dir="ltr">45</bdi>.`,
+          `نطبق قانون النطاق: <bdi dir="ltr">Range = Maximum − Minimum = 45 − 23 = 22</bdi>.`
+        ],
+        doctorNote: `النطاق أسرع مقياس تشتت حساباً، لكنه شديد التأثر بالقيم المتطرفة لأنه يعتمد فقط على أصغر وأكبر قيمة ويهمل ما بينهما.`
+      },
+      {
+        id: `shot-2`,
+        source: `shots`,
+        sourceNum: 2,
+        globalNum: 25,
+        topic: `المركز المئوي 90`,
+        grounding: `موضوع اللقطة 2 + المنهج`,
+        stem: `لدينا 10 قيم مرتبة تصاعدياً: <bdi dir="ltr" class="inline-code">[10, 15, 20, 25, 30, 35, 40, 45, 50, 60]</bdi>. وفق طريقة حساب المئينات في المقرر (<bdi dir="ltr" class="inline-code">l = n × (p / 100)</bdi> مع بدء الفهرسة من 1)، ما قيمة المركز المئوي الـ 90 (<bdi dir="ltr" class="inline-code">p = 90</bdi>)؟`,
+        options: [`45 (عند الفهرس 8)`, `50 (عند الفهرس 9)`, `60 (عند الفهرس 10)`, `55 (متوسط 50 و 60)`],
+        correctIndex: 1,
+        steps: [
+          `نتأكد أولاً أن البيانات مرتبة تصاعدياً (وهي مرتبة بالفعل، وعددها <bdi dir="ltr">n = 10</bdi>).`,
+          `نحسب موضع المركز المئوي الـ 90: <bdi dir="ltr">l = 10 × (90 / 100) = 9</bdi>.`,
+          `ننتقل إلى العنصر التاسع (باعتبار الفهرس يبدأ من 1 كما في الفصل الثالث): العناصر هي 10(1)، 15(2)، 20(3)، 25(4)، 30(5)، 35(6)، 40(7)، 45(8)، <strong>50(9)</strong>.`
+        ],
+        doctorNote: `أول خطوة قبل حساب أي ربع أو مركز مئوي هي «ترتيب البيانات تصاعدياً». إذا نسي الطالب الترتيب خرجت النتيجة خاطئة تماماً.`
+      },
+      {
+        id: `shot-3`,
+        source: `shots`,
+        sourceNum: 3,
+        globalNum: 26,
+        topic: `متوسط الانحراف المطلق (MAD)`,
+        grounding: `موضوع اللقطة 3 + المنهج`,
+        stem: `احسب قيمة متوسط الانحراف المطلق (<bdi dir="ltr" class="inline-code">MAD — Mean Absolute Deviation</bdi>) لمجموعة القيم <bdi dir="ltr" class="inline-code">[2, 4, 6, 8]</bdi>:`,
+        options: [`1.5`, `2.0`, `2.5`, `5.0`],
+        correctIndex: 1,
+        steps: [
+          `الخطوة 1: نحسب المتوسط الحسابي (<bdi dir="ltr">Mean</bdi>): <bdi dir="ltr">(2 + 4 + 6 + 8) / 4 = 20 / 4 = 5</bdi>.`,
+          `الخطوة 2: نحسب الانحراف المطلق لكل قيمة عن المتوسط <bdi dir="ltr">|xᵢ − 5|</bdi>: <bdi dir="ltr">|2−5|=3</bdi>، <bdi dir="ltr">|4−5|=1</bdi>، <bdi dir="ltr">|6−5|=1</bdi>، <bdi dir="ltr">|8−5|=3</bdi>.`,
+          `الخطوة 3: نجمع الانحرافات المطلقة ثم نقسم على عددها: <bdi dir="ltr">MAD = (3 + 1 + 1 + 3) / 4 = 8 / 4 = 2.0</bdi>.`
+        ],
+        doctorNote: `سبب استخدام القيمة المطلقة في MAD هو أن مجموع الانحرافات بدون قيمة مطلقة يساوي صفراً دائماً لأن السالب يلغي الموجب!`
+      },
+      {
+        id: `shot-4`,
+        source: `shots`,
+        sourceNum: 4,
+        globalNum: 27,
+        topic: `كود plt.hist`,
+        grounding: `موضوع اللقطة 4 + المنهج`,
+        stem: `عند تنفيذ الكود التالي في مكتبة <bdi dir="ltr" class="inline-code">Matplotlib</bdi>، ما الغرض من المعامل <bdi dir="ltr" class="inline-code">bins=10</bdi> وما نوع الرسم الناتج؟`,
+        code: `import matplotlib.pyplot as plt\nplt.hist(scores, bins=10, edgecolor='black')\nplt.show()`,
+        options: [
+          `يرسم مخططاً نقطياً ويعرض أول 10 نقاط فقط`,
+          `يرسم مدرجاً تكرارياً (Histogram) ويقسم نطاق القيم إلى 10 فئات لعرض عدد التكرارات في كل فئة`,
+          `يرسم مخططاً دائرياً من 10 شرائح مرتبة`,
+          `يحسب المتوسط الحسابي لكل 10 سجلات`
+        ],
+        correctIndex: 1,
+        steps: [
+          `الدالة <bdi dir="ltr">plt.hist()</bdi> متخصصة في رسم المدرج التكراري (<bdi dir="ltr">Histogram</bdi>) لإظهار توزيع وتكرار البيانات الرقمية.`,
+          `المعامل <bdi dir="ltr">bins=10</bdi> يحدد عدد الفئات (الفترات/الأعمدة) التي سيُقسم إليها مدى القيم من الأصغر للأكبر.`,
+          `ارتفاع كل عمود يمثل عدد القيم التي تقع ضمن حدود تلك الفئة، و<bdi dir="ltr">edgecolor='black'</bdi> يرسم حدوداً سوداء تفصل بين الأعمدة بوضوح.`
+        ],
+        doctorNote: `تذكر أن Histogram للبيانات الرقمية المستمرة وأعمدته متلاصقة تمثل فترات، بينما Bar Chart للمقارنة بين فئات منفصلة.`
+      },
+      {
+        id: `shot-5`,
+        source: `shots`,
+        sourceNum: 5,
+        globalNum: 28,
+        topic: `القيم المتطرفة في Box Plot`,
+        grounding: `موضوع اللقطة 5 + المنهج`,
+        stem: `في مخطط الصندوق (<bdi dir="ltr" class="inline-code">Box Plot</bdi>) في مكتبة Matplotlib، كيف يتم تمثيل القيم المتطرفة (<bdi dir="ltr" class="inline-code">Outliers</bdi>) وما الذي يمثله الخط البرتقالي داخل الصندوق؟`,
+        options: [
+          `القيم المتطرفة هي حدود الصندوق، والخط البرتقالي هو المتوسط الحسابي`,
+          `القيم المتطرفة تظهر كدوائر منفصلة خارج الشوكة (Whiskers)، والخط البرتقالي يمثل الوسيط (Median)`,
+          `القيم المتطرفة هي الخطوط المتقطعة، والخط البرتقالي هو المدى الكامل`,
+          `لا يعرض Box Plot أي قيم متطرفة إطلاقاً`
+        ],
+        correctIndex: 1,
+        steps: [
+          `يعتمد مخطط الصندوق على الربعيات: حافة الصندوق السفلى <bdi dir="ltr">Q1</bdi> والعليا <bdi dir="ltr">Q3</bdi>، والخط البرتقالي في المنتصف هو <strong>الوسيط (Median / Q2)</strong>.`,
+          `تمتد الشوكتان (<bdi dir="ltr">Whiskers</bdi>) حتى حدود النطاق الطبيعي (عادة <bdi dir="ltr">Q1 − 1.5×IQR</bdi> و <bdi dir="ltr">Q3 + 1.5×IQR</bdi>).`,
+          `أي قيمة تتجاوز هذه الحدود تظهر على شكل <strong>دوائر منفردة</strong> خارج الشوكة وتُعد قيماً متطرفة (<bdi dir="ltr">Outliers</bdi>).`
+        ],
+        doctorNote: `في الفصل السابع استخدمنا Box plot لحقل BMI لمرضى السكري، وعندما قصرنا القيم بين 18 و50 اختفت الدوائر الخارجية تماماً عند إعادة الرسم!`,
+        visualType: `boxplot`
+      },
+      {
+        id: `shot-6`,
+        source: `shots`,
+        sourceNum: 6,
+        globalNum: 29,
+        topic: `معامل الارتباط 0.9`,
+        grounding: `موضوع اللقطة 6 + المنهج`,
+        stem: `إذا كانت قيمة معامل ارتباط بيرسون (<bdi dir="ltr" class="inline-code">Pearson Correlation</bdi>) بين متغيرين رقميين هي <bdi dir="ltr" class="inline-code">r = 0.9</bdi>، فما التفسير الإحصائي الصحيح لهذه القيمة؟`,
+        options: [
+          `علاقة خطية عكسية قوية`,
+          `عدم وجود علاقة خطية بين المتغيرين`,
+          `علاقة خطية طردية قوية جداً`,
+          `خطأ حسابي لأن الحد الأقصى للارتباط هو 0.5`
+        ],
+        correctIndex: 2,
+        steps: [
+          `نطاق معامل ارتباط بيرسون محصور دائماً في الفترة <bdi dir="ltr">[-1, +1]</bdi>.`,
+          `الإشارة الموجبة (<bdi dir="ltr">+0.9</bdi>) تدل على أن العلاقة <strong>طردية</strong> (زيادة أحد المتغيرين يصاحبها زيادة الآخر).`,
+          `القرب الشديد من <bdi dir="ltr">+1</bdi> (<bdi dir="ltr">0.9</bdi>) يشير إلى أن العلاقة الخطية <strong>قوية جداً</strong>.`
+        ],
+        doctorNote: `إشارة r تحدد الاتجاه (موجب = طردي، سالب = عكسي، صفر = لا توجد علاقة خطية)، أما القيمة المطلقة |r| فتحدد القوة.`
+      },
+      {
+        id: `shot-7`,
+        source: `shots`,
+        sourceNum: 7,
+        globalNum: 30,
+        topic: `كود Bokeh وموضع legend`,
+        grounding: `موضوع اللقطة 7 + المنهج`,
+        stem: `في مكتبة <bdi dir="ltr" class="inline-code">Bokeh</bdi> للرسوم التفاعلية، ما الصياغة الصحيحة في الكود لنقل موضع وسيلة الإيضاح (<bdi dir="ltr" class="inline-code">legend</bdi>) إلى أعلى يسار منطقة الرسم <bdi dir="ltr" class="inline-code">p</bdi>؟`,
+        code: `from bokeh.plotting import figure\np = figure(title="Sales Analysis")\np.line(x, y, legend_label="Revenue")\n# المطلوب ضبط موضع الـ legend:`,
+        options: [
+          `p.legend.align = 'left_top'`,
+          `p.legend.location = 'top_left'`,
+          `p.legend.position = 'upper_left'`,
+          `p.title.legend = 'top_left'`
+        ],
+        correctIndex: 1,
+        steps: [
+          `في مكتبة Bokeh نصل لخصائص وسيلة الإيضاح عبر <bdi dir="ltr">p.legend</bdi>.`,
+          `الخاصية المعتمدة لتحديد الموضع داخل مساحة الرسم هي <bdi dir="ltr">.location</bdi>.`,
+          `تُكتب القيم بصيغة العمودي أولاً ثم الأفقي: <bdi dir="ltr">'top_left'</bdi> أو <bdi dir="ltr">'top_right'</bdi> أو <bdi dir="ltr">'bottom_left'</bdi> أو <bdi dir="ltr">'bottom_right'</bdi>.`
+        ],
+        doctorNote: `احفظ قاعدة التسمية في Bokeh: (top أو bottom) أولاً ثم شرطة سفلية ثم (left أو right)؛ ولا تخلطها مع Matplotlib التي تستخدم 'upper left'.`
+      },
+      {
+        id: `shot-8`,
+        source: `shots`,
+        sourceNum: 8,
+        globalNum: 31,
+        topic: `معالجة القيم المفقودة`,
+        grounding: `موضوع اللقطة 8 + المنهج`,
+        stem: `عند معالجة القيم المفقودة (<bdi dir="ltr" class="inline-code">Missing Values</bdi>) باستخدام نموذج الانحدار (<bdi dir="ltr" class="inline-code">Regression Imputation</bdi>) في البيانات الخطية، ما الإجراء الأساسي الواجب تنفيذه قبل بناء نموذج التعويض؟`,
+        options: [
+          `استبدال القيم المفقودة بالصفر قبل التدريب`,
+          `التعامل مع القيم المتطرفة أولاً، وبناء النموذج من الصفوف المكتملة الخالية من القيم المفقودة`,
+          `حذف جميع الأعمدة النصية والرقمية معاً`,
+          `تطبيق Log transformation على القيم الفارغة مباشرة`
+        ],
+        correctIndex: 1,
+        steps: [
+          `تؤثر القيم المتطرفة (<bdi dir="ltr">Outliers</bdi>) بشدة على ميل خط الانحدار وتشوّه القيم المُقدّرة، لذا يجب معالجتها أولاً.`,
+          `بعد ذلك نبني نموذج الانحدار من البيانات الفعلية التي لا تحتوي على قيم مفقودة، مستفيدين من عدة أعمدة مترابطة.`,
+          `أخيراً نستخدم النموذج للتنبؤ بالقيم الناقصة وتعويضها بدقة عالية.`
+        ],
+        doctorNote: `كما ذكرنا في الفصل السادس: استبدال القيم المفقودة بنموذج الانحدار أدق من التعويض بالمتوسط للبيانات الخطية، بشرط تنظيف المتطرفات قبل بناء النموذج.`
+      },
+      {
+        id: `shot-9`,
+        source: `shots`,
+        sourceNum: 9,
+        globalNum: 32,
+        topic: `Ordinal Encoding`,
+        grounding: `موضوع اللقطة 9 + المنهج`,
+        stem: `أي من السمات التالية يُعد استخدام الترميز الترتيبي (<bdi dir="ltr" class="inline-code">Ordinal Encoding</bdi>) هو الأنسب لها دون إحداث تفضيل رقمي زائف؟`,
+        options: [
+          `اسم المدينة (الرياض، جدة، الدمام)`,
+          `فصيلة الدم (A, B, AB, O)`,
+          `مستوى التعليم أو الجودة (ضعيف، متوسط، جيد، ممتاز)`,
+          `نوع المركبة (سيدان، دفع رباعي، شاحنة)`
+        ],
+        correctIndex: 2,
+        steps: [
+          `يحوّل <bdi dir="ltr">Ordinal Encoding</bdi> كل فئة إلى رقم صحيح متسلسل مثل (<bdi dir="ltr">0, 1, 2, 3</bdi>).`,
+          `بما أن الأرقام تحمل ترتيباً طبيعياً (<bdi dir="ltr">3 &gt; 2 &gt; 1 &gt; 0</bdi>)، فإنها تصلح فقط للبيانات النوعية الترتيبية (<bdi dir="ltr">Ordinal</bdi>) مثل الجودة أو الدرجة العلمية.`,
+          `أما المدن وفصائل الدم وأنواع المركبات فهي بيانات اسمية (<bdi dir="ltr">Nominal</bdi>) لا ترتيب بينها، فيناسبها <bdi dir="ltr">One-Hot Encoding</bdi>.`
+        ],
+        doctorNote: `اربط هذا بمقاييس البيانات في الفصل الأول: النوعي الترتيبي (Ordinal) يقبل الترتيب الرقمي، بينما النوعي الاسمي (Nominal) لا يقبل الترتيب.`
+      },
+      {
+        id: `shot-10`,
+        source: `shots`,
+        sourceNum: 10,
+        globalNum: 33,
+        topic: `أثر PCA على السمات`,
+        grounding: `موضوع اللقطة 10 + المنهج`,
+        stem: `ما الأثر الأساسي لتطبيق خوارزمية تحليل المكونات الرئيسية (<bdi dir="ltr" class="inline-code">PCA</bdi>) على سمات مجموعة البيانات؟`,
+        options: [
+          `مضاعفة عدد السمات الأصلية لتدريب أبطأ`,
+          `دمج وتحويل السمات الأصلية إلى عدد أقل من المكونات المتعامدة التي تحفظ أكبر قدر من التباين`,
+          `حذف الصفوف المكررة دون لمس الأعمدة`,
+          `ترتيب الأعمدة أبجدياً فقط`
+        ],
+        correctIndex: 1,
+        steps: [
+          `تهدف عملية تقليص السمات (<bdi dir="ltr">Feature Reduction</bdi>) عبر PCA إلى خفض عدد الأبعاد دون حذف عشوائي للمعلومات.`,
+          `تُركّز الخوارزمية البيانات حول المتوسط (<bdi dir="ltr">Mean Centered Data</bdi>) ثم توجد محاور جديدة متعامدة (غير مترابطة).`,
+          `المكوّن الرئيسي الأول يلتقط أعلى تباين، يليه الثاني وهكذا؛ فنختار المكونات الأولى لتكوين سمات جديدة أقل عدداً وأغنى بالمعلومات.`
+        ],
+        doctorNote: `تذكر الفرق الدقيق: اختيار السمات (Feature Selection) ينتقي بعض السمات الأصلية كما هي، بينما تقليص السمات بـ PCA ينتج سمات جديدة مركبة خطياً من الأصلية.`
+      },
+      {
+        id: `shot-11`,
+        source: `shots`,
+        sourceNum: 11,
+        globalNum: 34,
+        topic: `مسألة مصفوفة PCA ذات 5 سمات`,
+        grounding: `موضوع اللقطة 11 + المنهج`,
+        stem: `لدينا مجموعة بيانات تتكون من <strong>5 سمات</strong> ونريد تطبيق <bdi dir="ltr" class="inline-code">PCA</bdi>. ما أبعاد مصفوفة التغاير (<bdi dir="ltr" class="inline-code">Covariance Matrix</bdi>)؟ وإذا كانت القيم الذاتية (<bdi dir="ltr" class="inline-code">Eigenvalues</bdi>) للمكونات الخمسة هي <bdi dir="ltr" class="inline-code">[2.9, 1.5, 0.35, 0.15, 0.10]</bdi> (المجموع = 5.0)، فكم مكوناً رئيسياً يكفي للاحتفاظ بأكثر من <bdi dir="ltr" class="inline-code">85%</bdi> من التباين؟`,
+        options: [
+          `مصفوفة 5 × 5، ويكفي الاحتفاظ بمكونين رئيسيين (88% من التباين)`,
+          `مصفوفة 5 × 1، ويكفي مكون واحد فقط (58% من التباين)`,
+          `مصفوفة 2 × 5، ونحتاج 3 مكونات رئيسية`,
+          `مصفوفة 4 × 4، ونحتاج جميع السمات الخمس`
+        ],
+        correctIndex: 0,
+        steps: [
+          `أبعاد مصفوفة التغاير تساوي دائماً <bdi dir="ltr">d × d</bdi> حيث <bdi dir="ltr">d</bdi> عدد السمات؛ ومع 5 سمات تكون الأبعاد <bdi dir="ltr">5 × 5</bdi>.`,
+          `نسبة التباين للمكوّن الأول: <bdi dir="ltr">2.9 / 5.0 = 58%</bdi> (أقل من 85%).`,
+          `نسبة التباين للمكوّن الثاني: <bdi dir="ltr">1.5 / 5.0 = 30%</bdi>.`,
+          `التباين التراكمي للمكوّنين الأول والثاني معاً: <bdi dir="ltr">58% + 30% = 88%</bdi>، وهو يتجاوز عتبة <bdi dir="ltr">85%</bdi> المطلوبة.`
+        ],
+        doctorNote: `بهذه الخطوة البسيطة اختزلنا مصفوفة السمات من 5 أبعاد إلى بُعدين فقط (2D) مع الحفاظ على 88% من المعلومات وتخسير 12% فقط!`,
+        visualType: `pca`
+      }
+    ];
+
+    // App State
+    let appState = {
+      answers: {},       // { [id]: selectedOptionIndex }
+      flagged: {},       // { [id]: true }
+      revealed: {},      // { [id]: true }
+      sourceFilter: `all`,
+      statusFilter: `all`,
+      searchQuery: ``,
+      expandAll: false
+    };
+
+    function sanitizeState(raw) {
+      if (!raw || typeof raw !== `object`) return;
+      if (raw.answers && typeof raw.answers === `object`) appState.answers = raw.answers;
+      if (raw.flagged && typeof raw.flagged === `object`) appState.flagged = raw.flagged;
+      if (raw.revealed && typeof raw.revealed === `object`) appState.revealed = raw.revealed;
+      if (typeof raw.sourceFilter === `string`) appState.sourceFilter = raw.sourceFilter;
+      if (typeof raw.statusFilter === `string`) appState.statusFilter = raw.statusFilter;
+      if (typeof raw.searchQuery === `string`) appState.searchQuery = raw.searchQuery;
+      if (typeof raw.expandAll === `boolean`) appState.expandAll = raw.expandAll;
+    }
+
+    async function persistState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === `function`) {
+          await window.notebookAppApi.setAppState(appState);
+        }
+      } catch (e) {
+        // Ignore persistence transport errors cleanly
+      }
+    }
+
+    function buildVisualSvg(type) {
+      if (type === `mse`) {
+        return `
+          <div class="visual-wrap">
+            <div class="visual-caption">تمثيل بصري لحساب الأخطاء المربعة (MSE = (4 + 4 + 9) ÷ 3 ≈ 5.67)</div>
+            <svg viewBox="0 0 520 130" width="100%" height="120" role="img" aria-label="رسم توضيحي لمربعات الخطأ في سؤال 10">
+              <line x1="30" y1="100" x2="490" y2="100" stroke="var(--outline)" stroke-width="1.5"/>
+              <rect x="65" y="65" width="70" height="35" fill="var(--data-1)" rx="2"/>
+              <text x="100" y="55" text-anchor="middle" font-size="12" font-weight="700" fill="var(--on-surface)">العينة 1: (10-12)² = 4</text>
+              <text x="100" y="118" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)">فعلي 10 | متوقع 12</text>
+
+              <rect x="215" y="65" width="70" height="35" fill="var(--data-1)" rx="2"/>
+              <text x="250" y="55" text-anchor="middle" font-size="12" font-weight="700" fill="var(--on-surface)">العينة 2: (20-18)² = 4</text>
+              <text x="250" y="118" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)">فعلي 20 | متوقع 18</text>
+
+              <rect x="365" y="25" width="70" height="75" fill="var(--data-4)" rx="2"/>
+              <text x="400" y="16" text-anchor="middle" font-size="12" font-weight="700" fill="var(--error)">العينة 3: (30-33)² = 9</text>
+              <text x="400" y="118" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)">فعلي 30 | متوقع 33</text>
+            </svg>
+          </div>`;
+      }
+      if (type === `sigmoid`) {
+        return `
+          <div class="visual-wrap">
+            <div class="visual-caption">منحنى دالة Sigmoid في Logistic Regression (يحصر القيم بين 0 و 1 عند العتبة 0.5)</div>
+            <svg viewBox="0 0 520 140" width="100%" height="130" role="img" aria-label="منحنى دالة سيجمويد">
+              <line x1="40" y1="115" x2="480" y2="115" stroke="var(--outline-variant)" stroke-width="1"/>
+              <line x1="40" y1="20" x2="480" y2="20" stroke="var(--outline-variant)" stroke-width="1" stroke-dasharray="4 4"/>
+              <line x1="40" y1="67" x2="480" y2="67" stroke="var(--data-2)" stroke-width="1.5" stroke-dasharray="5 4"/>
+              <line x1="260" y1="15" x2="260" y2="122" stroke="var(--outline-variant)" stroke-width="1"/>
+              <path d="M 50 113 C 160 112, 200 105, 260 67 C 320 29, 360 22, 470 21" fill="none" stroke="var(--data-1)" stroke-width="3"/>
+              <circle cx="260" cy="67" r="4.5" fill="var(--data-2)"/>
+              <text x="32" y="24" text-anchor="end" font-size="11" fill="var(--on-surface-variant)">1.0</text>
+              <text x="32" y="71" text-anchor="end" font-size="11" font-weight="700" fill="var(--tertiary)">0.5</text>
+              <text x="32" y="118" text-anchor="end" font-size="11" fill="var(--on-surface-variant)">0.0</text>
+              <text x="370" y="55" font-size="12" font-weight="700" fill="var(--positive)">P ≥ 0.5 → الفئة 1</text>
+              <text x="150" y="96" font-size="12" font-weight="700" fill="var(--error)">P &lt; 0.5 → الفئة 0</text>
+            </svg>
+          </div>`;
+      }
+      if (type === `hyperplane`) {
+        return `
+          <div class="visual-wrap">
+            <div class="visual-caption">موضع النقطة (3, 4) بالنسبة للحد الفاصل 2x₁ + 3x₂ − 5 = 0 (القيمة = +13 &gt; 0)</div>
+            <svg viewBox="0 0 520 135" width="100%" height="125" role="img" aria-label="تمثيل الحد الفاصل الخطي">
+              <line x1="60" y1="115" x2="460" y2="20" stroke="var(--primary)" stroke-width="2.5"/>
+              <circle cx="340" cy="88" r="6" fill="var(--positive)"/>
+              <text x="340" y="110" text-anchor="middle" font-size="12" font-weight="700" fill="var(--positive)">النقطة (3, 4) → الناتج +13 (فئة إيجابية)</text>
+              <text x="175" y="45" font-size="12" font-weight="600" fill="var(--on-surface-variant)">منطقة الفئة السلبية (w·x + b &lt; 0)</text>
+              <text x="270" y="65" font-size="11" font-weight="700" fill="var(--secondary)">الحد الفاصل w·x + b = 0</text>
+            </svg>
+          </div>`;
+      }
+      if (type === `boxplot`) {
+        return `
+          <div class="visual-wrap">
+            <div class="visual-caption">تشريح مخطط الصندوق (Box Plot): الوسيط بالخط البرتقالي والقيم المتطرفة دوائر خارج الشوكتين</div>
+            <svg viewBox="0 0 520 115" width="100%" height="110" role="img" aria-label="تشريح مخطط الصندوق">
+              <line x1="95" y1="55" x2="170" y2="55" stroke="var(--outline)" stroke-width="2"/>
+              <line x1="95" y1="40" x2="95" y2="70" stroke="var(--outline)" stroke-width="2"/>
+              <rect x="170" y="30" width="170" height="50" fill="var(--secondary-container)" stroke="var(--data-1)" stroke-width="2"/>
+              <line x1="265" y1="30" x2="265" y2="80" stroke="var(--data-2)" stroke-width="3.5"/>
+              <line x1="340" y1="55" x2="405" y2="55" stroke="var(--outline)" stroke-width="2"/>
+              <line x1="405" y1="40" x2="405" y2="70" stroke="var(--outline)" stroke-width="2"/>
+              <circle cx="445" cy="55" r="5" fill="none" stroke="var(--error)" stroke-width="2.5"/>
+              <circle cx="475" cy="55" r="5" fill="none" stroke="var(--error)" stroke-width="2.5"/>
+              <text x="170" y="18" text-anchor="middle" font-size="11" font-weight="700" fill="var(--secondary)">Q1</text>
+              <text x="265" y="18" text-anchor="middle" font-size="11" font-weight="700" fill="var(--tertiary)">الوسيط Q2</text>
+              <text x="340" y="18" text-anchor="middle" font-size="11" font-weight="700" fill="var(--secondary)">Q3</text>
+              <text x="460" y="88" text-anchor="middle" font-size="11" font-weight="700" fill="var(--error)">قيم متطرفة (Outliers)</text>
+              <text x="95" y="92" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)">الشوكة الدنيا</text>
+            </svg>
+          </div>`;
+      }
+      if (type === `pca`) {
+        return `
+          <div class="visual-wrap">
+            <div class="visual-caption">توزيع التباين المفسر عبر المكونات الرئيسية الخمسة (PC1 + PC2 = 88% &gt; 85%)</div>
+            <svg viewBox="0 0 520 135" width="100%" height="125" role="img" aria-label="أعمدة التباين المفسر في PCA">
+              <line x1="40" y1="100" x2="480" y2="100" stroke="var(--outline)" stroke-width="1.5"/>
+              <rect x="65" y="25" width="58" height="75" fill="var(--data-1)" rx="2"/>
+              <text x="94" y="18" text-anchor="middle" font-size="11" font-weight="700" fill="var(--data-1)">58%</text>
+              <text x="94" y="118" text-anchor="middle" font-size="11" font-weight="700" fill="var(--on-surface)">PC1 (2.9)</text>
+
+              <rect x="150" y="61" width="58" height="39" fill="var(--data-2)" rx="2"/>
+              <text x="179" y="54" text-anchor="middle" font-size="11" font-weight="700" fill="var(--tertiary)">30%</text>
+              <text x="179" y="118" text-anchor="middle" font-size="11" font-weight="700" fill="var(--on-surface)">PC2 (1.5)</text>
+
+              <rect x="235" y="91" width="58" height="9" fill="var(--data-context)" rx="2"/>
+              <text x="264" y="84" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)">7%</text>
+              <text x="264" y="118" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)">PC3</text>
+
+              <rect x="320" y="96" width="58" height="4" fill="var(--data-context)" rx="2"/>
+              <text x="349" y="88" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)">3%</text>
+              <text x="349" y="118" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)">PC4</text>
+
+              <rect x="405" y="97" width="58" height="3" fill="var(--data-context)" rx="2"/>
+              <text x="434" y="88" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)">2%</text>
+              <text x="434" y="118" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)">PC5</text>
+            </svg>
+          </div>`;
+      }
+      return ``;
+    }
+
+    function stripTags(str) {
+      return String(str || ``).replace(/<[^>]*>/g, ``);
+    }
+
+    function getFilteredQuestions() {
+      const q = appState.searchQuery.trim().toLowerCase();
+      return QUESTIONS.filter(function(item) {
+        if (appState.sourceFilter !== `all` && item.source !== appState.sourceFilter) {
+          return false;
+        }
+        const chosen = appState.answers[item.id];
+        const isAnswered = typeof chosen === `number`;
+        const isCorrect = isAnswered && chosen === item.correctIndex;
+        const isWrong = isAnswered && chosen !== item.correctIndex;
+        const isFlagged = Boolean(appState.flagged[item.id]);
+
+        if (appState.statusFilter === `unanswered` && isAnswered) return false;
+        if (appState.statusFilter === `correct` && !isCorrect) return false;
+        if (appState.statusFilter === `wrong` && !isWrong) return false;
+        if (appState.statusFilter === `flagged` && !isFlagged) return false;
+
+        if (q) {
+          const haystack = [
+            stripTags(item.stem),
+            item.topic,
+            item.code || ``,
+            item.doctorNote || ``,
+            item.options.join(` `),
+            item.steps.map(stripTags).join(` `)
+          ].join(` `).toLowerCase();
+          if (!haystack.includes(q)) return false;
+        }
+        return true;
+      });
+    }
+
+    function updateMetricsAndNav() {
+      const total = QUESTIONS.length;
+      let answeredCount = 0;
+      let correctCount = 0;
+      let wrongCount = 0;
+      let flaggedCount = 0;
+
+      QUESTIONS.forEach(function(item) {
+        const chosen = appState.answers[item.id];
+        if (typeof chosen === `number`) {
+          answeredCount += 1;
+          if (chosen === item.correctIndex) {
+            correctCount += 1;
+          } else {
+            wrongCount += 1;
+          }
+        }
+        if (appState.flagged[item.id]) flaggedCount += 1;
+      });
+
+      const pctDone = total > 0 ? Math.round((answeredCount / total) * 100) : 0;
+      const pctAcc = answeredCount > 0 ? Math.round((correctCount / answeredCount) * 100) : 0;
+
+      const elTotal = document.getElementById(`kpi-total`);
+      const elAns = document.getElementById(`kpi-answered`);
+      const elBar = document.getElementById(`kpi-progress-bar`);
+      const elCorr = document.getElementById(`kpi-correct`);
+      const elWrong = document.getElementById(`kpi-wrong-sub`);
+      const elFlag = document.getElementById(`kpi-flagged`);
+
+      if (elTotal) elTotal.textContent = `${total} سؤالاً`;
+      if (elAns) elAns.textContent = `${answeredCount} / ${total}`;
+      if (elBar) elBar.style.width = `${pctDone}%`;
+      if (elCorr) elCorr.textContent = `${correctCount} (${pctAcc}%)`;
+      if (elWrong) elWrong.textContent = `إجابات خاطئة: ${wrongCount}`;
+      if (elFlag) elFlag.textContent = `${flaggedCount}`;
+
+      // Update Tab active states
+      const tabAll = document.getElementById(`tab-all`);
+      const tabPdf = document.getElementById(`tab-pdf`);
+      const tabShots = document.getElementById(`tab-shots`);
+      if (tabAll) tabAll.classList.toggle(`is-active`, appState.sourceFilter === `all`);
+      if (tabPdf) tabPdf.classList.toggle(`is-active`, appState.sourceFilter === `pdf`);
+      if (tabShots) tabShots.classList.toggle(`is-active`, appState.sourceFilter === `shots`);
+
+      const toggleAllBtn = document.getElementById(`toggle-all-btn`);
+      if (toggleAllBtn) {
+        toggleAllBtn.textContent = appState.expandAll ? `إخفاء كل الشروحات` : `إظهار كل الشروحات`;
+      }
+
+      // Render Mini-Map Navigators
+      const navPdf = document.getElementById(`nav-pdf`);
+      const navShots = document.getElementById(`nav-shots`);
+      if (navPdf && navShots) {
+        let pdfHtml = ``;
+        let shotsHtml = ``;
+        QUESTIONS.forEach(function(item) {
+          const chosen = appState.answers[item.id];
+          let cls = `nav-dot`;
+          if (typeof chosen === `number`) {
+            cls += chosen === item.correctIndex ? ` is-correct` : ` is-wrong`;
+          }
+          if (appState.flagged[item.id]) cls += ` is-flagged`;
+          const label = String(item.sourceNum).padStart(2, `0`);
+          const btnHtml = `<button type="button" class="${cls}" title="الانتقال إلى السؤال ${item.sourceNum}" onclick="jumpToQuestion('${item.id}')">${label}</button>`;
+          if (item.source === `pdf`) pdfHtml += btnHtml;
+          else shotsHtml += btnHtml;
+        });
+        navPdf.innerHTML = pdfHtml;
+        navShots.innerHTML = shotsHtml;
+      }
+    }
+
+    function renderQuestions() {
+      const container = document.getElementById(`questions-container`);
+      const emptyEl = document.getElementById(`empty-state`);
+      const visibleCounter = document.getElementById(`visible-counter`);
+      if (!container || !emptyEl) return;
+
+      const list = getFilteredQuestions();
+      if (visibleCounter) {
+        visibleCounter.textContent = `يُعرض الآن ${list.length} من أصل ${QUESTIONS.length} سؤالاً`;
+      }
+
+      if (list.length === 0) {
+        container.innerHTML = ``;
+        emptyEl.hidden = false;
+        return;
+      }
+      emptyEl.hidden = true;
+
+      const htmlParts = list.map(function(item) {
+        const chosen = appState.answers[item.id];
+        const isAnswered = typeof chosen === `number`;
+        const isCorrect = isAnswered && chosen === item.correctIndex;
+        const isFlagged = Boolean(appState.flagged[item.id]);
+        const showExp = appState.expandAll || Boolean(appState.revealed[item.id]);
+
+        const cardCls = [
+          `question-card`,
+          isAnswered ? (isCorrect ? `is-correct-card` : `is-wrong-card`) : ``
+        ].filter(Boolean).join(` `);
+
+        const sourceBadge = item.source === `pdf`
+          ? `<span class="source-tag source-tag--pdf">ملف اللقاء المباشر 3 • س${item.sourceNum}/23</span>`
+          : `<span class="source-tag source-tag--shots">لقطات الشاشة الخمس • س${item.sourceNum}/11</span>`;
+
+        const groundingBadge = item.grounding !== `نصي من الملف`
+          ? `<span class="grounding-note-tag">${item.grounding}</span>`
+          : ``;
+
+        const numDisplay = String(item.globalNum).padStart(2, `0`);
+        const codeHtml = item.code ? `<pre class="code-snippet" dir="ltr"><code>${item.code}</code></pre>` : ``;
+
+        const optionsHtml = item.options.map(function(opt, idx) {
+          let optCls = `option-btn`;
+          let statusTxt = ``;
+          if (isAnswered) {
+            if (idx === item.correctIndex) {
+              optCls += ` is-correct-choice`;
+              statusTxt = `✓ صحيح`;
+            } else if (idx === chosen) {
+              optCls += ` is-wrong-choice`;
+              statusTxt = `✕ اختيارك`;
+            }
+          }
+          return `
+            <button type="button" class="${optCls}" onclick="selectOption('${item.id}', ${idx})">
+              <span class="option-main">
+                <span class="option-letter">${LETTERS[idx] || (idx + 1)}</span>
+                <span class="option-text">${opt}</span>
+              </span>
+              <span class="option-status">${statusTxt}</span>
+            </button>`;
+        }).join(``);
+
+        let feedbackHtml = `<span class="answer-feedback answer-feedback--idle">اختر إجابة للتحقق الفوري</span>`;
+        if (isAnswered) {
+          feedbackHtml = isCorrect
+            ? `<span class="answer-feedback answer-feedback--ok">إجابة صحيحة — أحسنت!</span>`
+            : `<span class="answer-feedback answer-feedback--bad">إجابة غير دقيقة — الصواب هو الخيار (${LETTERS[item.correctIndex]})</span>`;
+        }
+
+        const stepsHtml = item.steps.map(function(step) {
+          return `<li>${step}</li>`;
+        }).join(``);
+
+        const visualHtml = item.visualType ? buildVisualSvg(item.visualType) : ``;
+
+        return `
+          <article class="${cardCls}" id="card-${item.id}">
+            <div class="q-header">
+              <div class="q-meta-start">
+                <span class="index-num">${numDisplay}</span>
+                ${sourceBadge}
+                <span class="topic-tag">${item.topic}</span>
+                ${groundingBadge}
+              </div>
+              <button type="button" class="flag-btn ${isFlagged ? `is-flagged` : ``}" onclick="toggleFlag('${item.id}')">
+                <span>${isFlagged ? `★ مُعلَّم للمراجعة` : `☆ علّم للمراجعة`}</span>
+              </button>
+            </div>
+
+            <p class="q-stem">${item.stem}</p>
+            ${codeHtml}
+
+            <div class="options-grid" role="group" aria-label="خيارات السؤال ${item.globalNum}">
+              ${optionsHtml}
+            </div>
+
+            <div class="q-actions">
+              ${feedbackHtml}
+              <button type="button" class="btn" onclick="toggleExplanation('${item.id}')">
+                ${showExp ? `إخفاء شرح الدكتور` : `عرض شرح الدكتور خطوة بخطوة`}
+              </button>
+            </div>
+
+            <div class="aside-box" ${showExp ? `` : `hidden`}>
+              <div class="aside-head">
+                <span class="doctor-badge">أسلوب الدكتور</span>
+                <h3 class="aside-title">الشرح التفصيلي وخطوات الحل</h3>
+              </div>
+              <ol class="steps-list">
+                ${stepsHtml}
+              </ol>
+              ${visualHtml}
+              <div class="doctor-note"><strong>ملاحظة الدكتور:</strong> ${item.doctorNote}</div>
+            </div>
+          </article>`;
+      });
+
+      container.innerHTML = htmlParts.join(``);
+    }
+
+    function renderAll() {
+      updateMetricsAndNav();
+      renderQuestions();
+    }
+
+    // Hoisted interactive handlers
+    function selectOption(qId, optIdx) {
+      appState.answers[qId] = optIdx;
+      appState.revealed[qId] = true;
+      renderAll();
+      persistState();
+    }
+
+    function toggleFlag(qId) {
+      if (appState.flagged[qId]) {
+        delete appState.flagged[qId];
+      } else {
+        appState.flagged[qId] = true;
+      }
+      renderAll();
+      persistState();
+    }
+
+    function toggleExplanation(qId) {
+      if (appState.expandAll) {
+        // When global expandAll is active, switching one off turns off global expandAll while keeping others open
+        QUESTIONS.forEach(function(item) {
+          if (item.id !== qId) appState.revealed[item.id] = true;
+        });
+        appState.expandAll = false;
+        appState.revealed[qId] = false;
+      } else {
+        appState.revealed[qId] = !appState.revealed[qId];
+      }
+      renderAll();
+      persistState();
+    }
+
+    function toggleAllExplanations() {
+      appState.expandAll = !appState.expandAll;
+      if (!appState.expandAll) {
+        appState.revealed = {};
+      }
+      renderAll();
+      persistState();
+    }
+
+    function setSourceFilter(src) {
+      appState.sourceFilter = src;
+      renderAll();
+      persistState();
+    }
+
+    function setStatusFilter(val) {
+      appState.statusFilter = val;
+      renderAll();
+      persistState();
+    }
+
+    function setSearchQuery(val) {
+      appState.searchQuery = val;
+      renderAll();
+    }
+
+    function clearFilters() {
+      appState.sourceFilter = `all`;
+      appState.statusFilter = `all`;
+      appState.searchQuery = ``;
+      const searchEl = document.getElementById(`search-input`);
+      const statusEl = document.getElementById(`status-select`);
+      if (searchEl) searchEl.value = ``;
+      if (statusEl) statusEl.value = `all`;
+      renderAll();
+      persistState();
+    }
+
+    function jumpToQuestion(qId) {
+      const targetItem = QUESTIONS.find(function(x) { return x.id === qId; });
+      if (!targetItem) return;
+      // Ensure card is visible if current filters hide it
+      let el = document.getElementById(`card-${qId}`);
+      if (!el) {
+        appState.sourceFilter = `all`;
+        appState.statusFilter = `all`;
+        appState.searchQuery = ``;
+        const searchEl = document.getElementById(`search-input`);
+        const statusEl = document.getElementById(`status-select`);
+        if (searchEl) searchEl.value = ``;
+        if (statusEl) statusEl.value = `all`;
+        renderAll();
+        el = document.getElementById(`card-${qId}`);
+      }
+      if (el) {
+        el.scrollIntoView({ behavior: `smooth`, block: `start` });
+      }
+    }
+
+    function resetProgress(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.classList.add(`btn--danger-armed`);
+        btn.textContent = `اضغط مجدداً لتأكيد المسح`;
+        setTimeout(function() {
+          if (btn.dataset.armed === `true`) {
+            btn.dataset.armed = `false`;
+            btn.classList.remove(`btn--danger-armed`);
+            btn.textContent = `إعادة ضبط التقدم`;
+          }
+        }, 4000);
+        return;
+      }
+      btn.dataset.armed = `false`;
+      btn.classList.remove(`btn--danger-armed`);
+      btn.textContent = `إعادة ضبط التقدم`;
+      appState.answers = {};
+      appState.flagged = {};
+      appState.revealed = {};
+      appState.expandAll = false;
+      renderAll();
+      persistState();
+    }
+
+    async function initApp() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === `function`) {
+          const saved = await window.notebookAppApi.getAppState();
+          sanitizeState(saved);
+        }
+      } catch (e) {
+        // Start fresh if no saved state
+      }
+
+      const searchEl = document.getElementById(`search-input`);
+      const statusEl = document.getElementById(`status-select`);
+      if (searchEl) searchEl.value = appState.searchQuery;
+      if (statusEl) statusEl.value = appState.statusFilter;
+
+      renderAll();
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    document.addEventListener(`DOMContentLoaded`, initApp);
+  </script>
+</body>
+</html>

@@ -1,654 +1,2827 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>الفصل السابع الشامل (100%) | تحليل وتمثيل البيانات</title>
-<style>
-:root{
-  --bg:#f0f5ff;
-  --card:#ffffff;
-  --ink:#0f172a;
-  --muted:#475569;
-  --accent:#1d4ed8;
-  --accent-dark:#1e3a8a;
-  --accent2:#dbeafe;
-  --line:#cbd5e1;
-  --good:#059669;
-  --good-bg:#ecfdf5;
-  --bad:#dc2626;
-  --bad-bg:#fef2f2;
-  --warn:#d97706;
-  --warn-bg:#fffbeb;
-}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
-header{background:linear-gradient(135deg,#0f172a,#1d4ed8);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(15,23,42,0.2)}
-.wrap{max-width:1040px;margin:auto;padding:0 16px}
-.eyebrow{opacity:.92;font-size:.9rem;background:rgba(255,255,255,0.16);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
-h1{margin:5px 0;font-size:clamp(1.5rem,4vw,2.25rem)}
-header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
-nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
-nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:var(--accent2);color:var(--accent-dark);font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
-nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
-nav button.active,.btn.primary{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
-main .btn.primary{background:var(--accent);color:white}
-main{padding:22px 0 48px}
-.panel{display:none}
-.panel.active{display:block;animation:fadeIn .25s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(15,23,42,0.04)}
-h2{font-size:1.35rem;margin:0 0 12px;color:#0f172a}
-h3{font-size:1.08rem;margin:0 0 8px;color:var(--accent-dark)}
-small,.muted{color:var(--muted)}
-ul,ol{padding-right:22px;margin:8px 0}
-li{margin:6px 0}
-details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
-summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f8fafc;color:#0f172a;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
-details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
-.details-body{padding:16px 18px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
-.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
-.badge-new{display:inline-block;background:var(--warn-bg);color:var(--warn);border:1px solid #fcd34d;font-size:.78rem;padding:1px 8px;border-radius:6px;margin-right:6px;font-weight:bold}
-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
-th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
-th{background:#eff6ff;color:#1e3a8a;font-weight:bold}
-tr:last-child td{border-bottom:0}
-.note{border-right:4px solid var(--accent);padding:10px 14px;background:#eff6ff;border-radius:8px;margin:10px 0}
-.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
-.math-box{background:#f8fafc;border:2px solid #93c5fd;border-radius:12px;padding:12px 16px;margin:10px 0;text-align:center;font-size:1.03rem;font-weight:bold;color:#1e3a8a;direction:ltr}
-.step-box{background:#f0fdf4;border:1px solid #86efac;border-right:4px solid var(--good);border-radius:10px;padding:12px 16px;margin:10px 0;font-size:.95rem}
-.code-box{background:#0f172a;color:#e2e8f0;padding:14px 18px;border-radius:12px;font-family:Consolas,Monaco,monospace;direction:ltr;text-align:left;overflow-x:auto;margin:10px 0;border:1px solid #334155;line-height:1.65;font-size:.91rem}
-.code-box .kw{color:#38bdf8;font-weight:bold}
-.code-box .str{color:#4ade80}
-.code-box .num{color:#f472b6}
-.code-box .cmt{color:#94a3b8;font-style:italic}
-.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
-.options{display:grid;gap:8px;margin-top:12px}
-.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
-.option:hover:not(:disabled){border-color:var(--accent);background:#eff6ff}
-.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
-.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
-.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
-.feedback.good{color:var(--good);background:var(--good-bg)}
-.feedback.bad{color:var(--bad);background:var(--bad-bg)}
-.progress{height:10px;background:#cbd5e1;border-radius:9px;overflow:hidden;margin:12px 0}
-.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
-.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#dbeafe);border:2px solid #93c5fd;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
-.flashcard:hover{transform:scale(1.005)}
-.flashcard .term{font-size:1.32rem;font-weight:bold;color:#1e3a8a}
-.flashcard .answer{margin-top:16px;font-size:1.04rem;color:#0f172a;background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04);white-space:pre-line}
-.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
-.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
-footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
-@media(max-width:600px){
-  .card{padding:14px}
-  nav button{flex:1 1 calc(50% - 8px);text-align:center}
-  .flashcard{min-height:200px;padding:18px}
-  th,td{padding:8px 10px;font-size:.88rem}
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="carbon">
+  <title>الفصل السابع: تحسين جودة البيانات — الدليل التفاعلي والاختبار الشامل</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/plotly.js-dist-min@2.32.0/plotly.min.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* 1. Carbon style tokens */
+      --background: #ffffff;
+      --surface-container-low: #f4f4f4;
+      --surface-container: #f4f4f4;
+      --surface-container-high: #e0e0e0;
+
+      --on-surface: #161616;
+      --on-surface-variant: #525252;
+
+      --outline: #8d8d8d;
+      --outline-variant: #e0e0e0;
+
+      --primary: #0f62fe;
+      --primary-hover: #0353e9;
+      --on-primary: #ffffff;
+      --primary-container: #d0e2ff;
+      --on-primary-container: #161616;
+      --secondary: #6f6f6f;
+      --tertiary: #198038;
+      --error: #da1e28;
+      --on-error: #ffffff;
+
+      --data-1: #0f62fe;
+      --data-2: #6929c4;
+      --data-3: #005d5d;
+      --data-4: #9f1853;
+      --data-context: #8d8d8d;
+
+      /* Fonts (Arabic RTL priority) */
+      --font-headline: 'IBM Plex Sans Arabic', 'IBM Plex Sans', sans-serif;
+      --font-body: 'IBM Plex Sans Arabic', 'IBM Plex Sans', sans-serif;
+      --font-label: 'IBM Plex Mono', 'IBM Plex Sans Arabic', monospace;
+
+      /* Shape */
+      --rounded: 0.125rem;
+      --rounded-lg: 0.25rem;
+      --rounded-full: 0.75rem;
+
+      /* Style effects */
+      --shadow-1: 0 2px 6px rgb(0 0 0 / 0.1);
+      --shadow-2: 0 4px 12px rgb(0 0 0 / 0.12);
+      --rule: 1px solid var(--outline-variant);
+      --field-rule: 1px solid var(--outline);
+      --indicator: 2px solid var(--primary);
+
+      /* 3. Shared tokens */
+      --positive: #198038;
+      --positive-container: #defbe6;
+      --error-container: #fff1f1;
+      --warning: #8e6a00;
+      --warning-container: #fcf4d6;
+      --focus: #0f62fe;
+
+      /* Code block surface (Carbon high-contrast terminal) */
+      --code-bg: #161616;
+      --code-fg: #f4f4f4;
+      --code-header: #262626;
+      --code-muted: #a8a8a8;
+      --code-accent: #78a9ff;
+      --code-string: #6fdc8c;
+      --code-number: #d4bbff;
+
+      /* Narrative Type Scale */
+      --display-size: clamp(2rem, 1.35rem + 2.4vw, 3.25rem);
+      --headline-size: clamp(1.5rem, 1.15rem + 1.2vw, 2.125rem);
+      --subhead-size: clamp(1.125rem, 1.02rem + 0.45vw, 1.375rem);
+      --body-size: clamp(1rem, 0.96rem + 0.18vw, 1.125rem);
+      --label-size: clamp(0.75rem, 0.72rem + 0.12vw, 0.8125rem);
+
+      /* Spacing scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.65;
+      scroll-behavior: smooth;
+    }
+    header { position: static !important; }
+    button, input, select, textarea { font-family: inherit; }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-xl);
+      padding: var(--space-lg);
+      max-width: 1200px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Focus rings */
+    :focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* Typography helpers */
+    .headline-display {
+      font-family: var(--font-headline);
+      font-size: var(--display-size);
+      font-weight: 300;
+      line-height: 1.2;
+      letter-spacing: 0;
+      margin: 0;
+    }
+    .headline-display strong { font-weight: 600; }
+
+    .unit-title {
+      font-family: var(--font-headline);
+      font-size: var(--headline-size);
+      font-weight: 300;
+      line-height: 1.25;
+      margin: 0 0 var(--space-sm) 0;
+    }
+    .unit-title strong { font-weight: 600; }
+
+    .section-heading {
+      font-family: var(--font-headline);
+      font-size: var(--subhead-size);
+      font-weight: 600;
+      line-height: 1.35;
+      margin: 0 0 var(--space-md) 0;
+      padding-bottom: var(--space-sm);
+      border-bottom: var(--rule);
+    }
+
+    .sub-heading {
+      font-family: var(--font-headline);
+      font-size: var(--body-size);
+      font-weight: 600;
+      margin: var(--space-md) 0 var(--space-sm) 0;
+    }
+
+    .mono-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      letter-spacing: 0;
+      text-transform: none;
+    }
+    .mono-code-tag {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      direction: ltr;
+      unicode-bidi: isolate;
+      display: inline-block;
+    }
+
+    .prose {
+      max-width: 68ch;
+      margin: 0 0 var(--space-md) 0;
+    }
+
+    /* Inline code */
+    code.inline-code {
+      font-family: var(--font-label);
+      font-size: 0.88em;
+      background-color: var(--surface-container-low);
+      border: var(--rule);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--rounded);
+      direction: ltr;
+      unicode-bidi: isolate;
+      display: inline-block;
+      line-height: 1.2;
+    }
+
+    /* Header & Overview Shell */
+    .doc-header {
+      border-bottom: var(--rule);
+      padding-bottom: var(--space-xl);
+      display: grid;
+      gap: var(--space-lg);
+    }
+    .header-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      padding-bottom: var(--space-sm);
+      border-bottom: var(--rule);
+    }
+    .tag-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 0 var(--space-md);
+      background-color: var(--primary-container);
+      color: var(--on-primary-container);
+      border-radius: var(--rounded-full);
+      font-size: var(--label-size);
+      font-weight: 500;
+    }
+    .tag-pill--positive {
+      background-color: var(--positive-container);
+      color: var(--on-surface);
+    }
+    .tag-pill--error {
+      background-color: var(--error-container);
+      color: var(--on-surface);
+    }
+    .tag-pill--neutral {
+      background-color: var(--surface-container-high);
+      color: var(--on-surface);
+    }
+
+    /* KPI Tile Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .kpi-tile {
+      background-color: var(--surface-container);
+      padding: var(--space-md);
+      border-radius: 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .kpi-tile--active {
+      border-bottom: var(--indicator);
+    }
+    .kpi-value {
+      font-family: var(--font-label);
+      font-weight: 400;
+      font-size: 1.875rem;
+      line-height: 1.15;
+      color: var(--on-surface);
+      direction: ltr;
+      text-align: right;
+    }
+    .kpi-helper {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+    }
+
+    /* Quick Unit Index Bar */
+    .unit-index-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+      gap: var(--space-sm);
+      background-color: var(--surface-container);
+      padding: var(--space-md);
+    }
+    .unit-jump-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      background-color: var(--background);
+      color: var(--on-surface);
+      text-decoration: none;
+      border-bottom: 2px solid var(--outline-variant);
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .unit-jump-link:hover {
+      background-color: var(--surface-container-high);
+      border-bottom-color: var(--primary);
+    }
+    .unit-jump-link.is-complete {
+      border-bottom-color: var(--tertiary);
+    }
+    .unit-jump-score {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      direction: ltr;
+    }
+
+    /* Buttons (Carbon square corners, 44px+ touch targets) */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-lg);
+      border-radius: 0;
+      border: 1px solid transparent;
+      font-size: var(--body-size);
+      font-weight: 400;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+    }
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--on-primary);
+    }
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+    }
+    .btn-secondary {
+      background-color: var(--background);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+    .btn-secondary:hover {
+      background-color: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    .btn-ghost {
+      background-color: transparent;
+      color: var(--primary);
+      border-color: var(--outline-variant);
+    }
+    .btn-ghost:hover {
+      background-color: var(--surface-container-high);
+      color: var(--on-surface);
+    }
+    .btn-danger-arm {
+      background-color: var(--error);
+      color: var(--on-error);
+    }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Independent Unit Section Shell */
+    .unit-shell {
+      border-top: 2px solid var(--on-surface);
+      padding-top: var(--space-xl);
+      display: grid;
+      gap: var(--space-xl);
+    }
+    .unit-banner {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: var(--space-lg);
+      align-items: end;
+      background-color: var(--surface-container);
+      padding: var(--space-lg);
+      border-inline-start: 4px solid var(--primary);
+    }
+    .unit-badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-sm);
+    }
+    .unit-status-tile {
+      background-color: var(--background);
+      padding: var(--space-md);
+      min-width: 170px;
+      border-bottom: var(--indicator);
+    }
+
+    /* Carbon Layers & Card Grids */
+    .layer {
+      background-color: var(--surface-container);
+      padding: var(--space-lg);
+      border-radius: 0;
+    }
+    .layer .layer {
+      background-color: var(--surface-container-high);
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(270px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .concept-card {
+      background-color: var(--surface-container);
+      padding: var(--space-md);
+      border-top: 2px solid var(--outline-variant);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .concept-card--highlight {
+      border-top-color: var(--primary);
+    }
+    .concept-card-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+    .concept-index {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* Notification / Callout Strip (Carbon 3px inline-start bar) */
+    .callout {
+      background-color: var(--surface-container);
+      border-inline-start: 3px solid var(--primary);
+      padding: var(--space-md) var(--space-lg);
+      display: grid;
+      gap: var(--space-xs);
+    }
+    .callout--warning {
+      background-color: var(--warning-container);
+      border-inline-start-color: var(--warning);
+    }
+    .callout--error {
+      background-color: var(--error-container);
+      border-inline-start-color: var(--error);
+    }
+    .callout--positive {
+      background-color: var(--positive-container);
+      border-inline-start-color: var(--tertiary);
+    }
+
+    /* Asymmetric 2-column content layouts */
+    .split-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+    .card-wrapper {
+      container-type: inline-size;
+    }
+    @container (max-width: 480px) {
+      .compact-row { flex-direction: column; align-items: stretch; }
+    }
+
+    /* Data Tables (Carbon style: zebra rows, gray 20 header, no vertical lines) */
+    .table-scroll {
+      overflow-x: auto;
+      width: 100%;
+      border-bottom: var(--rule);
+    }
+    table.carbon-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: right;
+      font-size: 0.9375rem;
+    }
+    table.carbon-table.is-ltr {
+      direction: ltr;
+      text-align: left;
+    }
+    table.carbon-table thead th {
+      background-color: var(--surface-container-high);
+      color: var(--on-surface);
+      font-weight: 600;
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--rule);
+      white-space: nowrap;
+    }
+    table.carbon-table tbody tr:nth-child(even) {
+      background-color: var(--surface-container-low);
+    }
+    table.carbon-table tbody td {
+      padding: var(--space-sm) var(--space-md);
+      border-top: var(--rule);
+      vertical-align: middle;
+    }
+    .cell-num {
+      font-family: var(--font-label);
+      direction: ltr;
+      unicode-bidi: isolate;
+    }
+    .cell-flag-error {
+      background-color: var(--error-container);
+      color: var(--on-surface);
+      font-weight: 600;
+      outline: 1px solid var(--error);
+      outline-offset: -1px;
+    }
+    .cell-flag-imputed {
+      background-color: var(--primary-container);
+      color: var(--on-primary-container);
+      font-weight: 600;
+    }
+    .row-removed {
+      opacity: 0.42;
+      text-decoration: line-through;
+    }
+
+    /* Code Blocks */
+    .code-panel {
+      background-color: var(--code-bg);
+      color: var(--code-fg);
+      border-radius: 0;
+      overflow: hidden;
+      margin: var(--space-sm) 0;
+      direction: ltr;
+      text-align: left;
+    }
+    .code-panel-bar {
+      background-color: var(--code-header);
+      padding: var(--space-xs) var(--space-md);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      border-bottom: 1px solid var(--on-surface-variant);
+    }
+    .code-lang {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--code-muted);
+    }
+    .copy-btn {
+      min-height: 32px;
+      padding: var(--space-xs) var(--space-sm);
+      background-color: transparent;
+      color: var(--code-fg);
+      border: 1px solid var(--on-surface-variant);
+      border-radius: 0;
+      font-family: var(--font-body);
+      font-size: var(--label-size);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .copy-btn:hover {
+      background-color: var(--on-surface-variant);
+    }
+    .code-panel pre {
+      margin: 0;
+      padding: var(--space-md);
+      overflow-x: auto;
+      font-family: var(--font-label);
+      font-size: 0.875rem;
+      line-height: 1.55;
+      color: var(--code-fg);
+    }
+    .tok-kw { color: var(--code-accent); }
+    .tok-str { color: var(--code-string); }
+    .tok-num { color: var(--code-number); }
+    .tok-com { color: var(--code-muted); font-style: italic; }
+
+    /* Interactive Lab Controls */
+    .lab-box {
+      background-color: var(--surface-container);
+      padding: var(--space-lg);
+      border-top: 2px solid var(--primary);
+      display: grid;
+      gap: var(--space-md);
+    }
+    .lab-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    .filter-tab {
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      background-color: var(--background);
+      color: var(--on-surface);
+      border: 1px solid var(--outline-variant);
+      border-bottom: 2px solid var(--outline-variant);
+      cursor: pointer;
+      font-size: 0.9375rem;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .filter-tab:hover {
+      background-color: var(--surface-container-high);
+    }
+    .filter-tab.is-active {
+      background-color: var(--primary-container);
+      color: var(--on-primary-container);
+      border-bottom: var(--indicator);
+      font-weight: 600;
+    }
+
+    /* Form Controls with visible labels above */
+    .control-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-lg);
+      align-items: end;
+    }
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      min-width: 180px;
+      flex: 1 1 200px;
+    }
+    .field-label {
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--on-surface);
+    }
+    .field-input-pair {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    input[type="range"] {
+      flex: 1 1 auto;
+      accent-color: var(--primary);
+      min-height: 44px;
+      cursor: pointer;
+    }
+    input[type="number"] {
+      width: 78px;
+      height: 44px;
+      padding: 0 var(--space-sm);
+      background-color: var(--background);
+      color: var(--on-surface);
+      border: 0;
+      border-bottom: var(--field-rule);
+      font-family: var(--font-label);
+      font-size: 0.9375rem;
+      direction: ltr;
+      text-align: center;
+    }
+
+    /* Formula display */
+    .formula-strip {
+      background-color: var(--background);
+      border: var(--rule);
+      padding: var(--space-md);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+    .formula-math {
+      font-family: var(--font-label);
+      font-size: 1rem;
+      font-weight: 600;
+      direction: ltr;
+      unicode-bidi: isolate;
+      color: var(--primary);
+    }
+
+    /* Chart Container (explicit min-height per defensive JS) */
+    .chart-box {
+      background-color: var(--background);
+      border: var(--rule);
+      padding: var(--space-md);
+    }
+    .plotly-mount {
+      width: 100%;
+      min-height: 360px;
+    }
+
+    /* Method Accordion / List */
+    .method-list {
+      display: grid;
+      gap: var(--space-md);
+    }
+    .method-item {
+      background-color: var(--surface-container);
+      padding: var(--space-lg);
+      border-inline-start: 3px solid var(--outline);
+      display: grid;
+      gap: var(--space-sm);
+    }
+    .method-item--featured {
+      border-inline-start-color: var(--primary);
+    }
+
+    /* Quiz Engine Styles */
+    .quiz-section {
+      background-color: var(--surface-container);
+      padding: var(--space-lg);
+      border-top: 3px solid var(--on-surface);
+      display: grid;
+      gap: var(--space-lg);
+    }
+    .quiz-topbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      padding-bottom: var(--space-md);
+      border-bottom: var(--rule);
+    }
+    .quiz-progress-track {
+      width: 100%;
+      height: 8px;
+      background-color: var(--surface-container-high);
+      overflow: hidden;
+    }
+    .quiz-progress-fill {
+      height: 100%;
+      width: 0%;
+      background-color: var(--primary);
+      transition: width var(--dur-short) var(--ease-out);
+    }
+    .quiz-dot-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+    }
+    .quiz-dot {
+      min-width: 36px;
+      min-height: 36px;
+      padding: 0 var(--space-xs);
+      border: 1px solid var(--outline-variant);
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .quiz-dot.is-correct {
+      background-color: var(--positive-container);
+      border-color: var(--tertiary);
+      color: var(--on-surface);
+      font-weight: 600;
+    }
+    .quiz-dot.is-wrong {
+      background-color: var(--error-container);
+      border-color: var(--error);
+      color: var(--on-surface);
+      font-weight: 600;
+    }
+
+    .question-list {
+      display: grid;
+      gap: var(--space-md);
+    }
+    .question-card {
+      background-color: var(--background);
+      border: var(--rule);
+      padding: var(--space-lg);
+      display: grid;
+      gap: var(--space-md);
+    }
+    .question-card.state-correct {
+      border-inline-start: 4px solid var(--tertiary);
+    }
+    .question-card.state-wrong {
+      border-inline-start: 4px solid var(--error);
+    }
+    .question-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+    .question-title {
+      font-weight: 600;
+      font-size: var(--body-size);
+      margin: 0;
+      line-height: 1.5;
+    }
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+      gap: var(--space-sm);
+    }
+    .option-btn {
+      min-height: 48px;
+      padding: var(--space-sm) var(--space-md);
+      background-color: var(--surface-container-low);
+      color: var(--on-surface);
+      border: 1px solid var(--outline-variant);
+      border-radius: 0;
+      text-align: right;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-size: 0.96rem;
+      line-height: 1.45;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .option-btn:hover:not(:disabled) {
+      background-color: var(--surface-container-high);
+      border-color: var(--primary);
+    }
+    .option-btn:disabled {
+      cursor: default;
+    }
+    .option-btn.opt-correct {
+      background-color: var(--positive-container);
+      border-color: var(--tertiary);
+      box-shadow: inset 0 0 0 1px var(--tertiary);
+      font-weight: 600;
+    }
+    .option-btn.opt-wrong {
+      background-color: var(--error-container);
+      border-color: var(--error);
+      box-shadow: inset 0 0 0 1px var(--error);
+    }
+    .option-letter {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      min-width: 24px;
+      height: 24px;
+      background-color: var(--background);
+      border: var(--rule);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .feedback-panel {
+      padding: var(--space-md);
+      border-inline-start: 3px solid var(--primary);
+      background-color: var(--surface-container-low);
+      display: none;
+      gap: var(--space-xs);
+    }
+    .feedback-panel.is-visible {
+      display: grid;
+    }
+    .feedback-panel.is-correct {
+      background-color: var(--positive-container);
+      border-inline-start-color: var(--tertiary);
+    }
+    .feedback-panel.is-wrong {
+      background-color: var(--error-container);
+      border-inline-start-color: var(--error);
+    }
+    .feedback-verdict {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .feedback-explain {
+      margin: 0;
+      font-size: 0.95rem;
+      color: var(--on-surface);
+    }
+
+    /* Footer Summary */
+    .master-summary {
+      border-top: 2px solid var(--on-surface);
+      padding-top: var(--space-xl);
+      padding-bottom: var(--space-2xl);
+      display: grid;
+      gap: var(--space-lg);
+    }
+    .summary-footer-meta {
+      border-top: var(--rule);
+      padding-top: var(--space-md);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: var(--space-md);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+    }
+
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-md);
+        gap: var(--space-lg);
+      }
+      .split-grid {
+        grid-template-columns: 1fr;
+      }
+      .unit-banner {
+        grid-template-columns: 1fr;
+      }
+      .unit-status-tile {
+        min-width: 0;
+      }
+      .layer, .lab-box, .quiz-section, .question-card {
+        padding: var(--space-md);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
 </head>
 <body>
-<header>
-  <div class="wrap">
-    <div class="eyebrow">نسخة شاملة ومحدثة 100% • مقرر تحليل وتمثيل البيانات</div>
-    <h1>الفصل السابع: تحسين جودة البيانات (Data Quality Improvement)</h1>
-    <p>يغطي الجوانب الستة لجودة البيانات، مشاكل البيانات الست، تصنيفات القيم المفقودة الثلاثة (MCAR, MAR, MNAR)، الطرق الخمس لمعالجة القيم المفقودة برمجياً، والطرق الأربع لاكتشاف ومعالجة القيم المتطرفة (Box plot, Scatter plot, Z-score, IQR)</p>
-    <nav>
-      <button class="active" data-tab="summary">الشرح والقوانين والأكواد (100%)</button>
-      <button data-tab="tables">جداول المقارنات والمعادلات</button>
-      <button data-tab="terms">قاموس المصطلحات والدوال</button>
-      <button data-tab="cards">البطاقات (28)</button>
-      <button data-tab="quiz">الاختبار العشوائي (25)</button>
-    </nav>
+  <div class="page-grid">
+
+    <!-- ==================== HEADER & OVERVIEW ==================== -->
+    <header class="doc-header">
+      <div class="header-meta-row">
+        <div style="display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-sm);">
+          <span class="tag-pill">تحليل وتمثيل البيانات</span>
+          <span class="mono-label">CHAPTER 07 — DATA QUALITY</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:var(--space-sm);">
+          <button type="button" class="btn btn-ghost" id="btn-reset-all" onclick="resetAllProgress(this)">إعادة تعيين كل الإجابات</button>
+        </div>
+      </div>
+
+      <div>
+        <h1 class="headline-display">الفصل السابع: <strong>تحسين جودة البيانات</strong></h1>
+        <p class="prose" style="margin-top: var(--space-sm); color: var(--on-surface-variant);">
+          مرجع تفاعلي متكامل مقسّم إلى وحداته الثلاث بشكل مستقل، يجمع الشرح النظري الدقيق، والأكواد البرمجية بلغة بايثون ومكتبة <bdi dir="ltr">Pandas</bdi>، ومختبرات تطبيقية حيّة، و<bdi dir="ltr">30</bdi> سؤالاً تدريبياً بنظام الاختيار من متعدد مع التصحيح الفوري والتعليل.
+        </p>
+      </div>
+
+      <!-- KPI Overview -->
+      <div class="kpi-grid" aria-label="ملخص التقدم العام">
+        <div class="kpi-tile kpi-tile--active">
+          <span class="mono-label">الدرجة الإجمالية (3 وحدات)</span>
+          <span class="kpi-value" id="global-score-val">0 / 30</span>
+          <span class="kpi-helper" id="global-answered-helper">أجبت عن 0 من أصل 30 سؤالاً</span>
+        </div>
+        <div class="kpi-tile">
+          <span class="mono-label">نسبة الإتقان الكلية</span>
+          <span class="kpi-value" id="global-pct-val">0%</span>
+          <span class="kpi-helper">التقييم الفوري يحدّث تلقائياً</span>
+        </div>
+        <div class="kpi-tile">
+          <span class="mono-label">البيانات التطبيقية</span>
+          <span class="kpi-value" style="font-size:1.35rem; padding-top:0.3rem;">employe.csv · diabetes.xls</span>
+          <span class="kpi-helper">أمثلة المقرر المعتمدة في الوحدات</span>
+        </div>
+        <div class="kpi-tile">
+          <span class="mono-label">حالة الحفظ</span>
+          <span class="kpi-value" style="font-size:1.35rem; padding-top:0.3rem;" id="save-status-val">جاهز</span>
+          <span class="kpi-helper">يحفظ التقدم والإجابات تلقائياً</span>
+        </div>
+      </div>
+
+      <!-- Quick Jump Index -->
+      <nav class="unit-index-bar" aria-label="التنقل السريع بين الوحدات الثلاث">
+        <a class="unit-jump-link" id="jump-unit-1" href="#unit-1">
+          <span><strong>الوحدة (1):</strong> مفهوم الجودة والمشكلات</span>
+          <span class="unit-jump-score" id="jump-score-1">0 / 10</span>
+        </a>
+        <a class="unit-jump-link" id="jump-unit-2" href="#unit-2">
+          <span><strong>الوحدة (2):</strong> معالجة القيم المفقودة</span>
+          <span class="unit-jump-score" id="jump-score-2">0 / 10</span>
+        </a>
+        <a class="unit-jump-link" id="jump-unit-3" href="#unit-3">
+          <span><strong>الوحدة (3):</strong> كشف ومعالجة القيم المتطرفة</span>
+          <span class="unit-jump-score" id="jump-score-3">0 / 10</span>
+        </a>
+      </nav>
+    </header>
+
+    <main style="display: grid; gap: var(--space-2xl);">
+
+      <!-- ==================== UNIT 1 ==================== -->
+      <section class="unit-shell" id="unit-1" aria-labelledby="unit-1-heading">
+        <div class="unit-banner">
+          <div>
+            <div class="unit-badge-row">
+              <span class="tag-pill">الوحدة الأولى — مستقلة</span>
+              <span class="mono-label">UNIT 01 · DATA QUALITY CONCEPTS &amp; DEFECTS</span>
+            </div>
+            <h2 class="unit-title" id="unit-1-heading">مفهوم <strong>جودة البيانات</strong> ومشكلاتها الأساسية</h2>
+            <p class="prose" style="margin-bottom:0;">
+              تأسيس الإطار المفاهيمي لجودة البيانات، أبعادها الستة، قاعدة <bdi dir="ltr">GIGO</bdi>، وتصنيفات البيانات المفقودة والمتكررة وغير المتسقة.
+            </p>
+          </div>
+          <div class="unit-status-tile">
+            <span class="mono-label">نتيجة الوحدة (1)</span>
+            <div class="kpi-value" id="u1-banner-score">0 / 10</div>
+            <span class="kpi-helper" id="u1-banner-status">لم يكتمل الاختبار بعد</span>
+          </div>
+        </div>
+
+        <!-- 1.1 Definition & 6 Dimensions -->
+        <div>
+          <h3 class="section-heading">1.1 مفهوم جودة البيانات وجوانب تحسينها الستة</h3>
+          <p class="prose">
+            تشير <strong>جودة البيانات (Data Quality)</strong> إلى مدى دقة واكتمال البيانات في توفير المعلومات المفيدة والصحيحة للاستخدام المقصود. وفي عالم البيانات الحديث، أصبحت جودة البيانات ركيزة أساسية لأي منظمة تعتمد على البيانات في اتخاذ القرارات وتنفيذ العمليات.
+          </p>
+          <div class="card-grid">
+            <article class="concept-card concept-card--highlight">
+              <div class="concept-card-head">
+                <h4>الدقة (Accuracy)</h4>
+                <span class="concept-index">01</span>
+              </div>
+              <p style="margin:0;">مدى صحة البيانات ومطابقتها للواقع الفعلي، مع التحقق من صحة المدخلات وضمان خلوها من الأخطاء.</p>
+            </article>
+            <article class="concept-card concept-card--highlight">
+              <div class="concept-card-head">
+                <h4>الاكتمال (Completeness)</h4>
+                <span class="concept-index">02</span>
+              </div>
+              <p style="margin:0;">وجود جميع المعلومات الضرورية والمطلوبة لغرض معين، وضرورة ملء الفجوات لضمان توفر كل البيانات اللازمة.</p>
+            </article>
+            <article class="concept-card concept-card--highlight">
+              <div class="concept-card-head">
+                <h4>الاتساق (Consistency)</h4>
+                <span class="concept-index">03</span>
+              </div>
+              <p style="margin:0;">ضمان تناسق البيانات داخل مصادرها المختلفة وفيما بينها، بما يمنع وجود سجلات متعارضة أو متضاربة.</p>
+            </article>
+            <article class="concept-card">
+              <div class="concept-card-head">
+                <h4>الموثوقية (Reliability)</h4>
+                <span class="concept-index">04</span>
+              </div>
+              <p style="margin:0;">أن تكون البيانات مستندة إلى مصادر موثوقة ومعتمدة، مع توثيق تلك المصادر بشكل واضح.</p>
+            </article>
+            <article class="concept-card">
+              <div class="concept-card-head">
+                <h4>المرجعية (Traceability)</h4>
+                <span class="concept-index">05</span>
+              </div>
+              <p style="margin:0;">إمكانية ربط البيانات بمصادر معينة أو معايير معترف بها، مما يسهل فهمها والتحقق منها واستخدامها.</p>
+            </article>
+            <article class="concept-card">
+              <div class="concept-card-head">
+                <h4>الوضوح والتوضيح (Clarity)</h4>
+                <span class="concept-index">06</span>
+              </div>
+              <p style="margin:0;">أن تكون البيانات مفهومة وواضحة للمستخدمين المستهدفين، مع توفير وسائل لتوضيح أي مصطلحات أو مفاهيم غامضة.</p>
+            </article>
+          </div>
+        </div>
+
+        <!-- 1.2 Preprocessing Importance, 6 Problems & GIGO -->
+        <div class="split-grid">
+          <div>
+            <h3 class="section-heading">1.2 أهمية المعالجة المبدئية ومشاكل جودة البيانات الستة</h3>
+            <p class="prose">
+              نادراً ما تكون البيانات المجمعة من المصدر عالية الجودة؛ بل غالباً ما تحتوي على مشكلة أو أكثر من المشكلات الست الشائعة التالية:
+            </p>
+            <div class="table-scroll">
+              <table class="carbon-table">
+                <thead>
+                  <tr>
+                    <th>المشكلة</th>
+                    <th>المصطلح</th>
+                    <th>الوصف والمثال التوضيحي</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>غير مكتملة</strong></td>
+                    <td class="cell-num">Incomplete / Missing</td>
+                    <td>تحتوي على قيم مفقودة (<code class="inline-code">NaN</code>) في بعض الحقول.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>مشوشة</strong></td>
+                    <td class="cell-num">Noisy</td>
+                    <td>تحتوي على بيانات غير دقيقة أو ضوضاء قياس أو قيم شاذة.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>غير متسقة</strong></td>
+                    <td class="cell-num">Inconsistent</td>
+                    <td>سجلات متعارضة: عمر سالب، أو عدم تطابق المدينة مع الرمز البريدي.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>غير صالحة</strong></td>
+                    <td class="cell-num">Invalid</td>
+                    <td>حقول تحتوي على قيم لا يمكن أن توجد فيها مطلقاً حسب نوع الحقل ونطاقه.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>متكررة</strong></td>
+                    <td class="cell-num">Redundant</td>
+                    <td>سجلات مكررة بالكامل أو أعمدة زائدة لا تضيف معلومات جديدة.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>غير صحيحة</strong></td>
+                    <td class="cell-num">Incorrect</td>
+                    <td>بيانات خاطئة إملائياً أو واقعياً مثل كتابة اسم بلد بشكل غير صحيح.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <aside style="display:grid; gap:var(--space-md);">
+            <div class="callout callout--error">
+              <span class="mono-label">قاعدة ذهبية في علم البيانات</span>
+              <h4 style="margin:0; font-size:var(--subhead-size);" dir="ltr">“Garbage in, Garbage out” (GIGO)</h4>
+              <p style="margin:0;">
+                تعني هذه القاعدة أنه إذا تم إدخال بيانات غير جيدة إلى أي نموذج أو خوارزمية تعلم آلي، <strong>فلا تتوقع نتائج جيدة مهما بلغت كفاءة الخوارزمية أو دقة النموذج</strong>. ولذلك فإن الهدف الأسمى لتحسين جودة البيانات هو تجنب الوقوع في هذه القاعدة.
+              </p>
+            </div>
+
+            <div class="layer">
+              <h4 style="margin:0 0 var(--space-sm) 0;">أسباب فقدان البيانات (Missing Values)</h4>
+              <ol style="margin:0; padding-inline-start:1.25rem; display:grid; gap:var(--space-xs);">
+                <li>لم يتم جمع الخاصية وقت الجمع أو كانت غير معروفة حينها.</li>
+                <li>عدم فهم الخصائص أو مدى الاحتياج لها عند تصميم عملية الجمع.</li>
+                <li>عدم إلزامية إدخال الحقل وقت تسجيل البيانات.</li>
+                <li>خطأ تقني أثناء الجمع، مثل <strong>عطل في أحد الحساسات</strong>.</li>
+                <li>صعوبة تصنيف بعض العناصر عند بناء قاعدة البيانات فتبقى الفئة مفقودة.</li>
+              </ol>
+            </div>
+          </aside>
+        </div>
+
+        <!-- Interactive Lab 1: Data Quality Defect Inspector -->
+        <div class="lab-box">
+          <div class="lab-header">
+            <div>
+              <span class="mono-label">مختبر تفاعلي · الوحدة 1</span>
+              <h4 style="margin:var(--space-xs) 0 0 0; font-size:var(--subhead-size);">مختبر فحص عيوب البيانات الستة</h4>
+            </div>
+            <span class="tag-pill" id="u1-lab-badge">عرض جميع العيوب (6 أنواع)</span>
+          </div>
+          <p class="prose" style="margin-bottom:0;">
+            اختر نوع الخلل من الأزرار التالية لتمييزه مباشرة داخل جدول البيانات التطبيقي وفهم سبب اعتباره مشكلة جودة:
+          </p>
+          <div class="filter-row" role="group" aria-label="تصفية عيوب البيانات">
+            <button type="button" class="filter-tab is-active" onclick="selectDefectFilter('all', this)">الكل</button>
+            <button type="button" class="filter-tab" onclick="selectDefectFilter('missing', this)">غير مكتملة (Missing)</button>
+            <button type="button" class="filter-tab" onclick="selectDefectFilter('inconsistent', this)">غير متسقة (Inconsistent)</button>
+            <button type="button" class="filter-tab" onclick="selectDefectFilter('invalid', this)">غير صالحة (Invalid)</button>
+            <button type="button" class="filter-tab" onclick="selectDefectFilter('redundant', this)">متكررة (Redundant)</button>
+            <button type="button" class="filter-tab" onclick="selectDefectFilter('incorrect', this)">غير صحيحة (Incorrect)</button>
+            <button type="button" class="filter-tab" onclick="selectDefectFilter('noisy', this)">مشوشة (Noisy)</button>
+          </div>
+          <div class="table-scroll">
+            <table class="carbon-table is-ltr" id="u1-defect-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Country</th>
+                  <th>City</th>
+                  <th>Age</th>
+                  <th>Temp_C</th>
+                  <th>Sex</th>
+                  <th>Male</th>
+                </tr>
+              </thead>
+              <tbody id="u1-defect-tbody"></tbody>
+            </table>
+          </div>
+          <div class="callout" id="u1-lab-explain">
+            <strong>التشخيص الحالي:</strong> يعرض الجدول أمثلة حية لكل نوع من مشاكل الجودة الستة: قيم مفقودة، أعمار سالبة، درجات حرارة غير منطقية، عدم تطابق الدولة والمدينة، تكرار سجل كامل، وعمود <code class="inline-code">Male</code> الزائد عن <code class="inline-code">Sex</code>، وأخطاء إملائية.
+          </div>
+        </div>
+
+        <!-- 1.3 Missing Value Taxonomy, Redundant, Inconsistent -->
+        <div class="split-grid">
+          <div class="layer">
+            <h3 class="section-heading" style="border-bottom-color:var(--outline-variant);">1.3 تصنيفات البيانات غير المكتملة (المثال التطبيقي)</h3>
+            <ul style="margin:0 0 var(--space-md) 0; padding-inline-start:1.25rem; display:grid; gap:var(--space-sm);">
+              <li>
+                <strong>مفقودة عشوائياً تماماً (<bdi dir="ltr">MCAR</bdi>):</strong> لا يرتبط الفقدان بأي متغير مسجل أو غير مسجل (حدث عارض بحت).
+              </li>
+              <li>
+                <strong>مفقودة عشوائياً (<bdi dir="ltr">MAR</bdi>):</strong> الفقدان مرتبط بمتغير آخر تم تسجيله، مما يعني أنه غير عشوائي تماماً وقد يسبب تحيزاً؛ كما في جدول الموظفين المقابل حيث ترتبط القيم المفقودة في <code class="inline-code">Years With Company</code> بقسم <code class="inline-code">IT</code>.
+              </li>
+              <li>
+                <strong>مفقودة بشكل غير عشوائي (<bdi dir="ltr">MNAR</bdi>):</strong> الفقدان مرتبط بقيمة المتغير المفقود نفسه أو بمتغيرات أخرى غير مسجلة.
+              </li>
+            </ul>
+            <div class="table-scroll">
+              <table class="carbon-table is-ltr" aria-label="مثال تصنيف MAR من المقرر">
+                <thead>
+                  <tr>
+                    <th>Employee ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Department</th>
+                    <th>Years With Company</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td class="cell-num">83784</td><td>Floyd</td><td>Benhill</td><td>Sales</td><td class="cell-num">12</td></tr>
+                  <tr><td class="cell-num">64986</td><td>Jill</td><td>Chane</td><td><strong>IT</strong></td><td class="cell-flag-error">NaN (مفقود)</td></tr>
+                  <tr><td class="cell-num">93671</td><td>Richard</td><td>Hanson</td><td>HR</td><td class="cell-num">15</td></tr>
+                  <tr><td class="cell-num">37816</td><td>Trudy</td><td>Smith</td><td>Sales</td><td class="cell-num">21</td></tr>
+                  <tr><td class="cell-num">73891</td><td>John</td><td>Doe</td><td><strong>IT</strong></td><td class="cell-flag-error">NaN (مفقود)</td></tr>
+                  <tr><td class="cell-num">20179</td><td>Olivia</td><td>Brown</td><td>HR</td><td class="cell-num">18</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div style="display:grid; gap:var(--space-md);">
+            <div class="layer">
+              <h3 class="section-heading" style="border-bottom-color:var(--outline-variant);">أوجه البيانات المتكررة (Redundant Data)</h3>
+              <p style="margin:0 0 var(--space-sm) 0;">هي بيانات لا تضيف معلومات جديدة وحذفها لا يؤثر على نواتج التحليل، وتشمل 4 صور:</p>
+              <ol style="margin:0; padding-inline-start:1.25rem; display:grid; gap:var(--space-xs);">
+                <li>بيانات غير مرتبطة أصلاً بالمشكلة محل الدراسة.</li>
+                <li>عناصر (صفوف) متكررة بالكامل (<code class="inline-code">Duplicate</code>)، مثل تكرار <bdi dir="ltr">(Italian, 43, Very close, Good)</bdi> مرتين.</li>
+                <li>حقول أو خصائص متكررة وزائدة، مثل وجود حقول <code class="inline-code">Male</code> و <code class="inline-code">Female</code> مع وجود حقل <code class="inline-code">Sex</code>.</li>
+                <li>الخصائص التي بينها ارتباط قوي جداً بحيث يكفي الإبقاء على إحداها.</li>
+              </ol>
+            </div>
+
+            <div class="layer">
+              <h3 class="section-heading" style="border-bottom-color:var(--outline-variant);">البيانات غير المتسقة (Inconsistent Data)</h3>
+              <p style="margin:0 0 var(--space-sm) 0;">بيانات لا تتوافق مع بعضها البعض أو مع القواعد المنطقية المحددة، ومن أمثلتها:</p>
+              <ul style="margin:0; padding-inline-start:1.25rem; display:grid; gap:var(--space-xs);">
+                <li>عدم التناسق بين الحقول المعتمدة على بعضها: كالدولة والمدينة، أو المدينة والرمز البريدي.</li>
+                <li>احتواء الحقل على قيم مستحيلة الحدوث: مثل قيمة <strong>سالبة</strong> لحقل العمر.</li>
+                <li>قيم غير منطقية: مثل درجة حرارة عالية جداً تتجاوز الحدود الممكنة.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1.4 Unit 1 Quiz (10 MCQs) -->
+        <div class="quiz-section" id="quiz-unit-1">
+          <div class="quiz-topbar">
+            <div>
+              <span class="mono-label">اختبار الوحدة الأولى · تصحيح فوري مع التعليل</span>
+              <h3 style="margin:var(--space-xs) 0 0 0; font-size:var(--subhead-size);">أسئلة الاختيار من متعدد — الوحدة (1) (10 أسئلة)</h3>
+            </div>
+            <div style="display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-sm);">
+              <span class="tag-pill" id="u1-quiz-pill">النتيجة: 0 / 10</span>
+              <button type="button" class="btn btn-secondary" onclick="resetUnitQuiz(1, this)">إعادة اختبار الوحدة (1)</button>
+            </div>
+          </div>
+          <div class="quiz-progress-track" aria-hidden="true">
+            <div class="quiz-progress-fill" id="u1-progress-fill"></div>
+          </div>
+          <div class="quiz-dot-strip" id="u1-dots" aria-label="حالة أسئلة الوحدة الأولى"></div>
+          <div class="question-list" id="u1-questions"></div>
+        </div>
+      </section>
+
+      <!-- ==================== UNIT 2 ==================== -->
+      <section class="unit-shell" id="unit-2" aria-labelledby="unit-2-heading">
+        <div class="unit-banner">
+          <div>
+            <div class="unit-badge-row">
+              <span class="tag-pill">الوحدة الثانية — مستقلة</span>
+              <span class="mono-label">UNIT 02 · HANDLING MISSING VALUES IN PANDAS</span>
+            </div>
+            <h2 class="unit-title" id="unit-2-heading">التعامل مع <strong>القيم المفقودة</strong> (<bdi dir="ltr">Missing Values</bdi>)</h2>
+            <p class="prose" style="margin-bottom:0;">
+              تطبيق الطرق الخمس للتعامل مع القيم المفقودة على ملف <code class="inline-code">employe.csv</code> باستخدام <bdi dir="ltr">Pandas</bdi> مع فهم ضوابط كل طريقة وتأثيرها على التباين والمتوسط.
+            </p>
+          </div>
+          <div class="unit-status-tile">
+            <span class="mono-label">نتيجة الوحدة (2)</span>
+            <div class="kpi-value" id="u2-banner-score">0 / 10</div>
+            <span class="kpi-helper" id="u2-banner-status">لم يكتمل الاختبار بعد</span>
+          </div>
+        </div>
+
+        <!-- 2.1 Exploring employe.csv -->
+        <div class="split-grid">
+          <div>
+            <h3 class="section-heading">2.1 استكشاف القيم المفقودة في ملف <bdi dir="ltr">employe.csv</bdi></h3>
+            <p class="prose">
+              نبدأ بقراءة ملف الموظفين داخل <code class="inline-code">DataFrame</code> واستدعاء دالة <code class="inline-code">describe()</code>. نلاحظ في هذا المثال أن العدد الكلي للعناصر هو <strong>9 عناصر</strong>، بينما يظهر أن عدد القيم غير الفارغة في عمودي <code class="inline-code">age</code> و <code class="inline-code">income</code> يساوي <strong>7</strong> فقط، مما يكشف وجود قيمتين مفقودتين في كل منهما.
+            </p>
+            <div class="code-panel">
+              <div class="code-panel-bar">
+                <span class="code-lang">Python · Pandas (استكشاف القيم المفقودة)</span>
+                <button type="button" class="copy-btn" onclick="copyCodeBlock(this)">نسخ الكود</button>
+              </div>
+              <pre><code><span class="tok-kw">import</span> pandas <span class="tok-kw">as</span> pd
+
+<span class="tok-com"># قراءة ملف البيانات وعرض الملخص الإحصائي</span>
+df = pd.read_csv(<span class="tok-str">'employe.csv'</span>)
+df.describe()
+
+<span class="tok-com"># حساب عدد القيم المفقودة في كل عمود</span>
+df.isnull().sum()</code></pre>
+            </div>
+          </div>
+
+          <div class="callout">
+            <span class="mono-label">نتيجة الفحص المبدئي</span>
+            <h4 style="margin:0;">كيف تقرأ مخرجات <code class="inline-code">describe()</code> و <code class="inline-code">isnull().sum()</code>؟</h4>
+            <ul style="margin:var(--space-xs) 0 0 0; padding-inline-start:1.25rem; display:grid; gap:var(--space-xs);">
+              <li>تُظهر <code class="inline-code">describe()</code> صف <code class="inline-code">count</code> للأعمدة الرقمية فقط (القيم غير الفارغة).</li>
+              <li>تُعيد <code class="inline-code">df.isnull().sum()</code> العدد الدقيق لقيم <code class="inline-code">NaN</code> في كل حقل (سواء كان رقمياً أو نصياً مثل <code class="inline-code">gender</code>).</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 2.2 The 5 Methods + Code -->
+        <div>
+          <h3 class="section-heading">2.2 الطرق الخمس لمعالجة القيم المفقودة والأكواد البرمجية</h3>
+          <div class="method-list">
+            <!-- Method 1: Deletion -->
+            <article class="method-item method-item--featured">
+              <div class="concept-card-head">
+                <h4 style="margin:0; font-size:var(--subhead-size);">أولاً: الحذف (<bdi dir="ltr">Deletion — dropna</bdi>)</h4>
+                <span class="tag-pill tag-pill--neutral">إزالة صفوف أو أعمدة</span>
+              </div>
+              <p style="margin:0;">
+                حذف السجل (الصف) أو الحقل (العمود) الذي يحتوي على قيم مفقودة. ويُعد <strong>حذف السجل أقل تأثيراً</strong> على البيانات من حذف الحقول، لكن عند وجود عدد كبير من السجلات المفقودة يُفضّل اتباع وسائل أخرى. كما يجب قبل حذف أي حقل النظر في <strong>نسبة القيم المفقودة من كامل قيم الحقل</strong> ومدى تأثيره على حل المشكلة.
+              </p>
+              <div class="code-panel">
+                <div class="code-panel-bar">
+                  <span class="code-lang">Python · dropna()</span>
+                  <button type="button" class="copy-btn" onclick="copyCodeBlock(this)">نسخ الكود</button>
+                </div>
+                <pre><code><span class="tok-com"># 1) حذف السجلات (الصفوف) التي بها أي قيمة مفقودة (حُذفت 4 صفوف في المثال)</span>
+df_rows_clean = df.dropna()
+
+<span class="tok-com"># 2) حذف الحقول (الأعمدة) التي بها أي قيمة مفقودة باستخدام axis=1 (حُذفت 3 أعمدة)</span>
+df_cols_clean = df.dropna(axis=<span class="tok-num">1</span>)
+
+<span class="tok-com"># 3) الحذف فقط إذا كانت جميع القيم في الصف مفقودة</span>
+df_all_clean = df.dropna(how=<span class="tok-str">'all'</span>)</code></pre>
+              </div>
+            </article>
+
+            <!-- Method 2: Constant -->
+            <article class="method-item">
+              <div class="concept-card-head">
+                <h4 style="margin:0; font-size:var(--subhead-size);">ثانياً: الاستبدال بقيمة ثابتة (<bdi dir="ltr">Constant Imputation — fillna</bdi>)</h4>
+                <span class="tag-pill tag-pill--neutral">0 للرقمي · UNKNOWN للنوعي</span>
+              </div>
+              <p style="margin:0;">
+                اختيار قيمة ثابتة تكون غالباً <code class="inline-code">0</code> للحقول الرقمية و <code class="inline-code">'UNKNOWN'</code> للحقول النوعية. <strong>تحذير مهم:</strong> يجب قياس مدى تأثير ذلك على <strong>التنوع (التباين)</strong>؛ فاستبدال أكثر من نصف القيم بصفر سيؤثر بكل تأكيد على قيمة التباين داخل الحقل وعلى النتائج النهائية.
+              </p>
+              <div class="code-panel">
+                <div class="code-panel-bar">
+                  <span class="code-lang">Python · fillna(constant)</span>
+                  <button type="button" class="copy-btn" onclick="copyCodeBlock(this)">نسخ الكود</button>
+                </div>
+                <pre><code><span class="tok-com"># استبدال جميع القيم المفقودة في الجدول بالقيمة الثابتة 0</span>
+df_filled = df.fillna(<span class="tok-num">0</span>)
+
+<span class="tok-com"># التحقق من أن مجموع القيم المفقودة أصبح صفراً</span>
+df_filled.isnull().sum()
+
+<span class="tok-com"># استبدال القيم المفقودة في حقل معين فقط مثل age</span>
+df[<span class="tok-str">'age'</span>] = df[<span class="tok-str">'age'</span>].fillna(<span class="tok-num">0</span>)</code></pre>
+              </div>
+            </article>
+
+            <!-- Method 3: Mode -->
+            <article class="method-item">
+              <div class="concept-card-head">
+                <h4 style="margin:0; font-size:var(--subhead-size);">ثالثاً: الاستبدال بأكثر قيمة تكراراً (<bdi dir="ltr">Mode Imputation</bdi>)</h4>
+                <span class="tag-pill tag-pill--neutral">الأنسب للبيانات النوعية</span>
+              </div>
+              <p style="margin:0;">
+                حساب القيمة الأكثر تكراراً (<code class="inline-code">mode</code>) في الحقل واستبدال القيم المفقودة بها. تصلح مع الحقول لأنها من نوع واحد، وتكون <strong>مناسبة للبيانات النوعية بشكل أكبر من الكمية</strong>، مع ضرورة مراعاة نسبة النقاط المفقودة لتأثيرها على التباين.
+              </p>
+              <div class="code-panel">
+                <div class="code-panel-bar">
+                  <span class="code-lang">Python · mode()</span>
+                  <button type="button" class="copy-btn" onclick="copyCodeBlock(this)">نسخ الكود</button>
+                </div>
+                <pre><code><span class="tok-com"># استبدال القيم المفقودة في حقل gender بالقيمة الأكثر تكراراً</span>
+mode_gender = df[<span class="tok-str">'gender'</span>].mode()[<span class="tok-num">0</span>]
+df[<span class="tok-str">'gender_filled'</span>] = df[<span class="tok-str">'gender'</span>].fillna(mode_gender)</code></pre>
+              </div>
+            </article>
+
+            <!-- Method 4: Mean -->
+            <article class="method-item method-item--featured">
+              <div class="concept-card-head">
+                <h4 style="margin:0; font-size:var(--subhead-size);">رابعاً: الاستبدال بالمتوسط (<bdi dir="ltr">Mean Imputation</bdi>)</h4>
+                <span class="tag-pill tag-pill--neutral">للحقول الكمية</span>
+              </div>
+              <p style="margin:0;">
+                تصلح هذه الطريقة مع القيم المفقودة في <strong>الحقول الكمية</strong>؛ حيث يُحسب المتوسط من <strong>القيم غير المفقودة فقط</strong>. ورغم أنها أفضل من الطرق السابقة لاعتمادها على البيانات الفعلية، يجب الحذر من <strong>القيم المتطرفة (Outliers)</strong> التي تؤثر على المتوسط بشكل كبير.
+              </p>
+              <div class="code-panel">
+                <div class="code-panel-bar">
+                  <span class="code-lang">Python · mean()</span>
+                  <button type="button" class="copy-btn" onclick="copyCodeBlock(this)">نسخ الكود</button>
+                </div>
+                <pre><code><span class="tok-com"># استبدال القيم المفقودة في الحقل الكمي age بمتوسط القيم غير المفقودة</span>
+mean_age = df[<span class="tok-str">'age'</span>].mean()
+df[<span class="tok-str">'age'</span>] = df[<span class="tok-str">'age'</span>].fillna(mean_age)</code></pre>
+              </div>
+            </article>
+
+            <!-- Method 5: Regression -->
+            <article class="method-item">
+              <div class="concept-card-head">
+                <h4 style="margin:0; font-size:var(--subhead-size);">خامساً: الاستبدال بقيم من نموذج الانحدار (<bdi dir="ltr">Regression Imputation</bdi>)</h4>
+                <span class="tag-pill tag-pill--positive">الأدق للبيانات الخطية</span>
+              </div>
+              <p style="margin:0;">
+                تُعد من <strong>أدق الطرق</strong> وخاصة مع <strong>البيانات الخطية</strong>؛ حيث تُستنتج القيم المفقودة من نموذج بُني على البيانات الفعلية. ويجب مراعاة أمرين: (1) <strong>التعامل مع القيم المتطرفة قبل بناء النموذج</strong> لأنها تؤثر على نواتجه، (2) يُبنى النموذج من <strong>البيانات الخالية من القيم المفقودة</strong> ويعتمد على عدد من الأعمدة.
+              </p>
+            </article>
+          </div>
+        </div>
+
+        <!-- Interactive Lab 2: Missing Value Imputation Simulator -->
+        <div class="lab-box">
+          <div class="lab-header">
+            <div>
+              <span class="mono-label">مختبر تفاعلي · الوحدة 2</span>
+              <h4 style="margin:var(--space-xs) 0 0 0; font-size:var(--subhead-size);">محاكي معالجة القيم المفقودة على بيانات <bdi dir="ltr">employe.csv</bdi></h4>
+            </div>
+            <span class="tag-pill" id="u2-lab-code-badge" dir="ltr">df (Raw Data)</span>
+          </div>
+          <p class="prose" style="margin-bottom:0;">
+            جرّب تطبيق كل دالة من دوال <bdi dir="ltr">Pandas</bdi> على بيانات الموظفين التسعة ولاحظ مباشرة كيف يتغير عدد الصفوف والأعمدة وقيم المتوسط والتباين:
+          </p>
+          <div class="filter-row" role="group" aria-label="طرق معالجة القيم المفقودة">
+            <button type="button" class="filter-tab is-active" onclick="runImputationLab('raw', this)">البيانات الأصلية</button>
+            <button type="button" class="filter-tab" onclick="runImputationLab('dropna_rows', this)"><bdi dir="ltr">df.dropna()</bdi></button>
+            <button type="button" class="filter-tab" onclick="runImputationLab('dropna_cols', this)"><bdi dir="ltr">df.dropna(axis=1)</bdi></button>
+            <button type="button" class="filter-tab" onclick="runImputationLab('fillna_zero', this)"><bdi dir="ltr">df.fillna(0)</bdi></button>
+            <button type="button" class="filter-tab" onclick="runImputationLab('mode_mean', this)"><bdi dir="ltr">mode() + mean()</bdi></button>
+          </div>
+
+          <div class="kpi-grid">
+            <div class="kpi-tile">
+              <span class="mono-label">الصفوف المتبقية</span>
+              <span class="kpi-value" id="u2-sim-rows">9 / 9</span>
+            </div>
+            <div class="kpi-tile">
+              <span class="mono-label">الأعمدة المتبقية</span>
+              <span class="kpi-value" id="u2-sim-cols">4 / 4</span>
+            </div>
+            <div class="kpi-tile">
+              <span class="mono-label">متوسط العمر (age)</span>
+              <span class="kpi-value" id="u2-sim-mean">34.0</span>
+            </div>
+            <div class="kpi-tile">
+              <span class="mono-label">تباين العمر (Variance)</span>
+              <span class="kpi-value" id="u2-sim-var">52.3</span>
+            </div>
+          </div>
+
+          <div class="table-scroll">
+            <table class="carbon-table is-ltr">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>gender</th>
+                  <th>age</th>
+                  <th>income</th>
+                </tr>
+              </thead>
+              <tbody id="u2-sim-tbody"></tbody>
+            </table>
+          </div>
+          <div class="callout" id="u2-sim-note">
+            <strong>ملاحظة التحليل:</strong> البيانات الأصلية تضم 9 صفوف و 4 أعمدة، لكن عمودي <code class="inline-code">age</code> و <code class="inline-code">income</code> يضمان 7 قيم غير مفقودة فقط، كما يضم عمود <code class="inline-code">gender</code> قيمة مفقودة.
+          </div>
+        </div>
+
+        <!-- 2.4 Unit 2 Quiz (10 MCQs) -->
+        <div class="quiz-section" id="quiz-unit-2">
+          <div class="quiz-topbar">
+            <div>
+              <span class="mono-label">اختبار الوحدة الثانية · تصحيح فوري مع التعليل</span>
+              <h3 style="margin:var(--space-xs) 0 0 0; font-size:var(--subhead-size);">أسئلة الاختيار من متعدد — الوحدة (2) (10 أسئلة)</h3>
+            </div>
+            <div style="display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-sm);">
+              <span class="tag-pill" id="u2-quiz-pill">النتيجة: 0 / 10</span>
+              <button type="button" class="btn btn-secondary" onclick="resetUnitQuiz(2, this)">إعادة اختبار الوحدة (2)</button>
+            </div>
+          </div>
+          <div class="quiz-progress-track" aria-hidden="true">
+            <div class="quiz-progress-fill" id="u2-progress-fill"></div>
+          </div>
+          <div class="quiz-dot-strip" id="u2-dots" aria-label="حالة أسئلة الوحدة الثانية"></div>
+          <div class="question-list" id="u2-questions"></div>
+        </div>
+      </section>
+
+      <!-- ==================== UNIT 3 ==================== -->
+      <section class="unit-shell" id="unit-3" aria-labelledby="unit-3-heading">
+        <div class="unit-banner">
+          <div>
+            <div class="unit-badge-row">
+              <span class="tag-pill">الوحدة الثالثة — مستقلة</span>
+              <span class="mono-label">UNIT 03 · OUTLIER DETECTION &amp; TREATMENT</span>
+            </div>
+            <h2 class="unit-title" id="unit-3-heading">التعرف على <strong>القيم المتطرفة</strong> (<bdi dir="ltr">Outliers</bdi>) ومعالجتها</h2>
+            <p class="prose" style="margin-bottom:0;">
+              تطبيق الطرق الأربع لاكتشاف القيم المتطرفة (<bdi dir="ltr">Box plot, Scatter plot, Z-score, IQR</bdi>) على بيانات مرضى السكري في <code class="inline-code">diabetes.xls</code> وتنقيتها برمجياً.
+            </p>
+          </div>
+          <div class="unit-status-tile">
+            <span class="mono-label">نتيجة الوحدة (3)</span>
+            <div class="kpi-value" id="u3-banner-score">0 / 10</div>
+            <span class="kpi-helper" id="u3-banner-status">لم يكتمل الاختبار بعد</span>
+          </div>
+        </div>
+
+        <!-- 3.1 Dataset Info & 4 Methods -->
+        <div class="split-grid">
+          <div>
+            <h3 class="section-heading">3.1 بيانات <bdi dir="ltr">diabetes.xls</bdi> والطرق الأربع للكشف</h3>
+            <p class="prose">
+              نبدأ بتحميل بيانات مرضى السكري المخزنة في ملف <code class="inline-code">diabetes.xls</code> وفحصها بدالة <code class="inline-code">df.info()</code>، حيث يتضح أنها تحتوي على <strong>9 حقول (أعمدة)</strong> و <strong>768 عنصراً (صفاً)</strong>، و<strong>لا توجد بها أي قيم مفقودة</strong>.
+            </p>
+            <div class="card-grid">
+              <div class="concept-card concept-card--highlight">
+                <div class="concept-card-head">
+                  <h4>مخطط الصندوق (<bdi dir="ltr">Box plot</bdi>)</h4>
+                  <span class="concept-index">01</span>
+                </div>
+                <p style="margin:0;">تمثيل رسومي يُظهر القيم المتطرفة بوضوح كنقاط منفردة خارج الأطراف (الشوارب).</p>
+              </div>
+              <div class="concept-card">
+                <div class="concept-card-head">
+                  <h4>مخطط التشتت (<bdi dir="ltr">Scatter plot</bdi>)</h4>
+                  <span class="concept-index">02</span>
+                </div>
+                <p style="margin:0;">تمثيل رسومي ثنائي الأبعاد يكشف النقاط البعيدة والمعزولة عن التجمع العام للبيانات.</p>
+              </div>
+              <div class="concept-card">
+                <div class="concept-card-head">
+                  <h4>درجة Z (<bdi dir="ltr">Z-score</bdi>)</h4>
+                  <span class="concept-index">03</span>
+                </div>
+                <p style="margin:0;">مقياس إحصائي يحسب بُعد القيمة عن المتوسط بوحدات الانحراف المعياري (<bdi dir="ltr">|Z| &gt; 3</bdi>).</p>
+              </div>
+              <div class="concept-card concept-card--highlight">
+                <div class="concept-card-head">
+                  <h4>المدى الربيعي (<bdi dir="ltr">IQR</bdi>)</h4>
+                  <span class="concept-index">04</span>
+                </div>
+                <p style="margin:0;">الفرق بين الربع الثالث والربع الأول لتحديد الحدود الآمنة واستبعاد ما يتجاوز <bdi dir="ltr">1.5 × IQR</bdi>.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-panel" style="margin-top:0;">
+            <div class="code-panel-bar">
+              <span class="code-lang">Python · استعراض وتنقية Box plot</span>
+              <button type="button" class="copy-btn" onclick="copyCodeBlock(this)">نسخ الكود</button>
+            </div>
+            <pre><code><span class="tok-kw">import</span> pandas <span class="tok-kw">as</span> pd
+
+<span class="tok-com"># تحميل بيانات مرضى السكري (9 حقول × 768 عنصر)</span>
+df = pd.read_excel(<span class="tok-str">'diabetes.xls'</span>)
+df.info()
+
+<span class="tok-com"># تمثيل حقل bmi بمخطط الصندوق لرصد القيم المتطرفة</span>
+df.boxplot(column=[<span class="tok-str">'bmi'</span>])
+
+<span class="tok-com"># تنقية البيانات والاحتفاظ بقيم BMI بين 18 و 50</span>
+new_data = df[(df[<span class="tok-str">'bmi'</span>] &gt;= <span class="tok-num">18</span>) &amp; (df[<span class="tok-str">'bmi'</span>] &lt;= <span class="tok-num">50</span>)]
+
+<span class="tok-com"># إعادة الرسم للتحقق من اختفاء النقاط المتطرفة</span>
+new_data.boxplot(column=[<span class="tok-str">'bmi'</span>])</code></pre>
+          </div>
+        </div>
+
+        <!-- 3.2 IQR Deep Dive -->
+        <div>
+          <h3 class="section-heading">3.2 اكتشاف القيم المتطرفة ومعالجتها باستخدام <bdi dir="ltr">IQR</bdi></h3>
+          <div class="split-grid">
+            <div style="display:grid; gap:var(--space-md);">
+              <p class="prose" style="margin-bottom:0;">
+                يمثل <strong>المدى الربيعي (<bdi dir="ltr">IQR — Interquartile Range</bdi>)</strong> قيمة الربع الثالث (<bdi dir="ltr">Q3</bdi>) مطروحاً منها قيمة الربع الأول (<bdi dir="ltr">Q1</bdi>). وتُستخدم هذه القيمة مع <bdi dir="ltr">Q1</bdi> و <bdi dir="ltr">Q3</bdi> للتخلص من القيم المتطرفة التي تقع خارج الحدود التالية:
+              </p>
+              <div class="formula-strip">
+                <span class="mono-label">معادلة المدى الربيعي</span>
+                <span class="formula-math">IQR = Q3 − Q1</span>
+              </div>
+              <div class="formula-strip">
+                <span class="mono-label">الحد الأدنى المقبول</span>
+                <span class="formula-math">Lower = Q1 − (1.5 × IQR)</span>
+              </div>
+              <div class="formula-strip">
+                <span class="mono-label">الحد الأعلى المقبول</span>
+                <span class="formula-math">Upper = Q3 + (1.5 × IQR)</span>
+              </div>
+              <div class="callout callout--positive">
+                <strong>القاعدة الذهبية:</strong> يتم التخلص من أي قيمة أقل من <bdi dir="ltr">Q1 − 1.5 × IQR</bdi> أو أعلى من <bdi dir="ltr">Q3 + 1.5 × IQR</bdi>.
+              </div>
+            </div>
+
+            <div class="code-panel" style="margin-top:0;">
+              <div class="code-panel-bar">
+                <span class="code-lang">Python · IQR Outlier Filtering &amp; Z-score</span>
+                <button type="button" class="copy-btn" onclick="copyCodeBlock(this)">نسخ الكود</button>
+              </div>
+              <pre><code><span class="tok-com"># حساب الربع الأول والثالث والمدى الربيعي</span>
+Q1 = df[<span class="tok-str">'bmi'</span>].quantile(<span class="tok-num">0.25</span>)
+Q3 = df[<span class="tok-str">'bmi'</span>].quantile(<span class="tok-num">0.75</span>)
+IQR = Q3 - Q1
+
+<span class="tok-com"># تحديد الحدود واستبعاد القيم المتطرفة</span>
+lower = Q1 - <span class="tok-num">1.5</span> * IQR
+upper = Q3 + <span class="tok-num">1.5</span> * IQR
+clean_iqr = df[(df[<span class="tok-str">'bmi'</span>] &gt;= lower) &amp; (df[<span class="tok-str">'bmi'</span>] &lt;= upper)]
+
+<span class="tok-com"># بديل Z-score للرصد الإحصائي</span>
+z = (df[<span class="tok-str">'bmi'</span>] - df[<span class="tok-str">'bmi'</span>].mean()) / df[<span class="tok-str">'bmi'</span>].std()
+clean_z = df[z.abs() &lt;= <span class="tok-num">3</span>]</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Lab 3: Plotly Box Plot & IQR Explorer -->
+        <div class="lab-box">
+          <div class="lab-header">
+            <div>
+              <span class="mono-label">مختبر تفاعلي · الوحدة 3</span>
+              <h4 style="margin:var(--space-xs) 0 0 0; font-size:var(--subhead-size);">مختبر مخطط الصندوق (<bdi dir="ltr">Box plot</bdi>) وتنقية <bdi dir="ltr">IQR</bdi> على حقل <bdi dir="ltr">bmi</bdi></h4>
+            </div>
+            <span class="tag-pill" id="u3-lab-mode-badge">البيانات الخام (مع القيم المتطرفة)</span>
+          </div>
+          <p class="prose" style="margin-bottom:0;">
+            بدّل بين أوضاع التنقية (أو اضبط النطاق يدوياً) لمشاهدة اختفاء النقاط المتطرفة خارج أطراف مخطط الصندوق، تماماً كما يحدث عند إنشاء <code class="inline-code">new_data</code> في المقرر:
+          </p>
+
+          <div class="filter-row" role="group" aria-label="أوضاع تنقية القيم المتطرفة">
+            <button type="button" class="filter-tab is-active" onclick="setOutlierMode('raw', this)">1. البيانات الخام (<bdi dir="ltr">df</bdi>)</button>
+            <button type="button" class="filter-tab" onclick="setOutlierMode('range1850', this)">2. تنقية النطاق (<bdi dir="ltr">18 ≤ bmi ≤ 50</bdi>)</button>
+            <button type="button" class="filter-tab" onclick="setOutlierMode('iqr', this)">3. تنقية <bdi dir="ltr">IQR (1.5×)</bdi> التلقائية</button>
+            <button type="button" class="filter-tab" onclick="setOutlierMode('custom', this)">4. نطاق مخصص</button>
+          </div>
+
+          <div class="control-row" id="u3-custom-controls" style="display:none;">
+            <div class="field-group">
+              <label class="field-label" for="slider-bmi-min">الحد الأدنى لمؤشر كتلة الجسم (BMI Min)</label>
+              <div class="field-input-pair">
+                <input type="range" id="slider-bmi-min" min="0" max="35" step="1" value="18" oninput="syncMinFromSlider(this.value)">
+                <input type="number" id="num-bmi-min" min="0" max="35" step="1" value="18" oninput="syncMinFromNumber(this.value)">
+              </div>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="slider-bmi-max">الحد الأعلى لمؤشر كتلة الجسم (BMI Max)</label>
+              <div class="field-input-pair">
+                <input type="range" id="slider-bmi-max" min="36" max="70" step="1" value="50" oninput="syncMaxFromSlider(this.value)">
+                <input type="number" id="num-bmi-max" min="36" max="70" step="1" value="50" oninput="syncMaxFromNumber(this.value)">
+              </div>
+            </div>
+          </div>
+
+          <div class="kpi-grid">
+            <div class="kpi-tile">
+              <span class="mono-label">Q1 / Q3</span>
+              <span class="kpi-value" id="u3-kpi-quartiles">27.3 / 36.6</span>
+            </div>
+            <div class="kpi-tile">
+              <span class="mono-label">المدى الربيعي (IQR)</span>
+              <span class="kpi-value" id="u3-kpi-iqr">9.3</span>
+            </div>
+            <div class="kpi-tile">
+              <span class="mono-label">حدود IQR المقبولة</span>
+              <span class="kpi-value" id="u3-kpi-bounds" style="font-size:1.35rem; padding-top:0.3rem;">13.4 – 50.6</span>
+            </div>
+            <div class="kpi-tile kpi-tile--active">
+              <span class="mono-label">السجلات المتبقية / المستبعدة</span>
+              <span class="kpi-value" id="u3-kpi-counts" style="font-size:1.45rem; padding-top:0.25rem;">768 / 0</span>
+            </div>
+          </div>
+
+          <div class="chart-box">
+            <div id="unit3-boxplot" class="plotly-mount" aria-label="مخطط الصندوق التفاعلي لمؤشر كتلة الجسم BMI"></div>
+          </div>
+        </div>
+
+        <!-- 3.5 Unit 3 Quiz (10 MCQs) -->
+        <div class="quiz-section" id="quiz-unit-3">
+          <div class="quiz-topbar">
+            <div>
+              <span class="mono-label">اختبار الوحدة الثالثة · تصحيح فوري مع التعليل</span>
+              <h3 style="margin:var(--space-xs) 0 0 0; font-size:var(--subhead-size);">أسئلة الاختيار من متعدد — الوحدة (3) (10 أسئلة)</h3>
+            </div>
+            <div style="display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-sm);">
+              <span class="tag-pill" id="u3-quiz-pill">النتيجة: 0 / 10</span>
+              <button type="button" class="btn btn-secondary" onclick="resetUnitQuiz(3, this)">إعادة اختبار الوحدة (3)</button>
+            </div>
+          </div>
+          <div class="quiz-progress-track" aria-hidden="true">
+            <div class="quiz-progress-fill" id="u3-progress-fill"></div>
+          </div>
+          <div class="quiz-dot-strip" id="u3-dots" aria-label="حالة أسئلة الوحدة الثالثة"></div>
+          <div class="question-list" id="u3-questions"></div>
+        </div>
+      </section>
+
+      <!-- ==================== MASTER SUMMARY ==================== -->
+      <section class="master-summary" aria-labelledby="summary-heading">
+        <div>
+          <span class="mono-label">CHAPTER 07 · PERFORMANCE SUMMARY</span>
+          <h2 class="unit-title" id="summary-heading" style="margin-top:var(--space-xs);">ملخص الأداء النهائي في <strong>الفصل السابع</strong></h2>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-tile">
+            <span class="mono-label">الوحدة (1): المفاهيم والمشكلات</span>
+            <span class="kpi-value" id="sum-u1">0 / 10</span>
+            <span class="kpi-helper"><a href="#quiz-unit-1" style="color:var(--primary);">الانتقال لاختبار الوحدة 1</a></span>
+          </div>
+          <div class="kpi-tile">
+            <span class="mono-label">الوحدة (2): القيم المفقودة</span>
+            <span class="kpi-value" id="sum-u2">0 / 10</span>
+            <span class="kpi-helper"><a href="#quiz-unit-2" style="color:var(--primary);">الانتقال لاختبار الوحدة 2</a></span>
+          </div>
+          <div class="kpi-tile">
+            <span class="mono-label">الوحدة (3): القيم المتطرفة</span>
+            <span class="kpi-value" id="sum-u3">0 / 10</span>
+            <span class="kpi-helper"><a href="#quiz-unit-3" style="color:var(--primary);">الانتقال لاختبار الوحدة 3</a></span>
+          </div>
+          <div class="kpi-tile kpi-tile--active">
+            <span class="mono-label">النتيجة النهائية الشاملة</span>
+            <span class="kpi-value" id="sum-total">0 / 30</span>
+            <span class="kpi-helper" id="sum-verdict">أجب عن الأسئلة لتقييم جاهزيتك للاختبار</span>
+          </div>
+        </div>
+
+        <footer class="summary-footer-meta">
+          <span>المصدر: الفصل السابع (تحسين جودة البيانات — الوحدات 1، 2، 3) من مقرر تحليل وتمثيل البيانات</span>
+          <span>تم بناء الجداول والمحاكيات التفاعلية استناداً إلى أمثلة المقرر (<bdi dir="ltr">employe.csv</bdi> و <bdi dir="ltr">diabetes.xls</bdi>)</span>
+        </footer>
+      </section>
+    </main>
   </div>
-</header>
 
-<main class="wrap">
-  <section id="summary" class="panel active">
-    <div class="card">
-      <h2>خريطة الفصل السابع (الوحدات الثلاث الكاملة)</h2>
-      <div class="grid">
-        <div>
-          <span class="tag">الوحدة الأولى</span>
-          <h3>مفهوم ومشاكل جودة البيانات والـ Missing</h3>
-          <p>الجوانب الستة لجودة البيانات، مشاكل الجودة الست وقاعدة (<span dir="ltr">GIGO</span>)، التصنيفات الثلاثة للقيم المفقودة (<span dir="ltr">MCAR, MAR, MNAR</span>)، والبيانات المتكررة وغير المتسقة والمتطرفة.</p>
-        </div>
-        <div>
-          <span class="tag">الوحدة الثانية</span>
-          <h3>معالجة القيم المفقودة برمجياً</h3>
-          <p>اكتشاف المفقود بـ <span dir="ltr">isnull().sum()</span>، والطرق الخمس للمعالجة: الحذف (<span dir="ltr">dropna</span>)، الاستبدال بقيمة ثابتة (<span dir="ltr">fillna</span>)، بالمنوال (<span dir="ltr">Mode</span>)، بالمتوسط (<span dir="ltr">Mean</span>)، وبنموذج الانحدار (<span dir="ltr">Regression</span>).</p>
-        </div>
-        <div>
-          <span class="tag">الوحدة الثالثة</span>
-          <h3>اكتشاف ومعالجة القيم المتطرفة (Outliers)</h3>
-          <p>الطرق الأربع لاكتشاف وتنقية القيم المتطرفة على بيانات السكري: <span dir="ltr">Box plot</span>، <span dir="ltr">Scatter plot</span>، درجة <span dir="ltr">Z-score</span> (مع عتبة <span dir="ltr">3</span>)، والمدى الربعي <span dir="ltr">IQR</span> (مع معامل <span dir="ltr">1.5</span>).</p>
-        </div>
-      </div>
-    </div>
+  <api-shim></api-shim>
+  <script>
+    /* =========================================================================
+       DATA & QUIZ BANK (30 MCQs: 10 per Unit, grounded strictly in Chapter 7)
+       ========================================================================= */
 
-    <!-- ==================== الوحدة الأولى ==================== -->
-    <details open>
-      <summary>الوحدة الأولى: جوانب ومشاكل جودة البيانات، وأنواع القيم المفقودة (MCAR, MAR, MNAR)</summary>
-      <div class="details-body">
-        <h3>1) مفهوم جودة البيانات والجوانب الستة الأساسية لها</h3>
-        <ul>
-          <li>تُعد جودة البيانات حجر الأساس في نجاح أي مشروع لتحليل البيانات أو تعلم الآلة، وتلخصها القاعدة الشهيرة: <b><span dir="ltr">"Garbage In, Garbage Out (GIGO)"</span></b> (أي: إذا أدخلتَ بيانات رديئة ومعيبة إلى النموذج، فستحصل حتماً على نتائج وقرارات خاطئة ورديئة!).</li>
-          <li><b>الجوانب (الأبعاد) الستة لجودة البيانات:</b>
-            <ol>
-              <li><b>1. الدقة (<span dir="ltr">Accuracy</span>):</b> مدى صحة البيانات وتمثيلها للواقع الفعلي دون أخطاء.</li>
-              <li><b>2. الاكتمال (<span dir="ltr">Completeness</span>):</b> مدى توفر كافة البيانات المطلوبة وخلوها من القيم المفقودة.</li>
-              <li><b>3. الاتساق (<span dir="ltr">Consistency</span>):</b> توافق تنسيق ومعنى البيانات عبر الجداول والأنظمة المختلفة دون تعارض.</li>
-              <li><b>4. الموثوقية (<span dir="ltr">Reliability</span>):</b> مصداقية مصدر البيانات وثباتها عند تكرار القياس.</li>
-              <li><b>5. المرجعية / الحداثة (<span dir="ltr">Timeliness / Relevance</span>):</b> كون البيانات محدثة وملائمة للإطار الزمني للمشكلة.</li>
-              <li><b>6. الوضوح والتوضيح (<span dir="ltr">Clarity / Interpretability</span>):</b> سهولة فهم الحقول والرموز ووحدات القياس المستخدمة.</li>
-            </ol>
-          </li>
-        </ul>
+    const DEFECT_ROWS = [
+      { id: 101, country: `Saudi Arabia`, city: `Riyadh`, age: 29, temp: 24, sex: `M`, male: `True`, defects: [] },
+      { id: 102, country: `Egypt`, city: `Cairo`, age: null, temp: 26, sex: `F`, male: `False`, defects: [`missing`] },
+      { id: 103, country: `Jordan`, city: `Riyadh`, age: -5, temp: 22, sex: `M`, male: `True`, defects: [`inconsistent`, `invalid`] },
+      { id: 104, country: `Kuwait`, city: `Kuwait City`, age: 41, temp: 280, sex: `F`, male: `False`, defects: [`inconsistent`, `noisy`] },
+      { id: 105, country: `Saudii Arabya`, city: `Jeddah`, age: 34, temp: 31, sex: `M`, male: `True`, defects: [`incorrect`, `redundant`] },
+      { id: 106, country: `Saudi Arabia`, city: `Riyadh`, age: 29, temp: 24, sex: `M`, male: `True`, defects: [`redundant`] }
+    ];
 
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
-
-        <h3>2) مشاكل جودة البيانات الست (<span dir="ltr">Data Quality Problems</span>)</h3>
-        <ol>
-          <li><b>بيانات غير مكتملة / مفقودة (<span dir="ltr">Incomplete / Missing Data</span>):</b> غياب قيم بعض السمات في بعض السجلات (تظهر كـ <code dir="ltr">NaN</code> أو <code dir="ltr">Null</code>).</li>
-          <li><b>بيانات مشوشة / صاخبة (<span dir="ltr">Noisy Data</span>):</b> بيانات تحتوي على أخطاء عشوائية أو تباينات كبيرة أو <b>قيم متطرفة (<span dir="ltr">Outliers</span>)</b> شاذة عن النمط المعتاد.</li>
-          <li><b>بيانات غير متسقة (<span dir="ltr">Inconsistent Data</span>):</b> تناقض في طريقة كتابة أو ترميز نفس المعلومة (مثلاً كتابة الجنس مرة <code dir="ltr">Male/Female</code> ومرة <code dir="ltr">M/F</code> ومرة <code dir="ltr">1/0</code>، أو اختلاف صيغ التواريخ، أو وجود عمر سالب أو تاريخ انتهاء قبل تاريخ البداية).</li>
-          <li><b>بيانات غير صالحة (<span dir="ltr">Invalid Data</span>):</b> قيم تخرج عن النطاق أو النوع المسموح به للحقل.</li>
-          <li><b>بيانات متكررة / زائدة عن الحاجة (<span dir="ltr">Redundant / Duplicate Data</span>):</b> تكرار نفس العينة (الصف) أكثر من مرة، أو وجود عمودين يحملان نفس المعلومة بالضبط، مما يسبب تحيزاً في التحليل وإهداراً للموارد.</li>
-          <li><b>بيانات غير صحيحة (<span dir="ltr">Incorrect Data</span>):</b> أخطاء ناتجة عن الإدخال اليدوي الخاطئ أو تعطل أجهزة القياس.</li>
-        </ol>
-
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
-
-        <h3>3) التصنيفات الثلاثة للقيم المفقودة (<span dir="ltr">MCAR vs MAR vs MNAR</span>)</h3>
-        <div class="exam-alert">
-          <b>🔥🔥 سؤال امتحاني مؤكد 100%: قارني بدقة بين الأنواع الثلاثة للقيم المفقودة من حيث السبب والخطورة والتحيز:</b><br><br>
-          <b>1) مفقودة بشكل عشوائي تماماً (<span dir="ltr">MCAR - Missing Completely at Random</span>):</b><br>
-          • <b>المفهوم:</b> سبب فقدان القيمة <b>عشوائي تماماً ولا يعتمد على أي متغير آخر في البيانات ولا على قيمة المتغير نفسه</b> (مثل ضياع عينة دم في المختبر بالخطأ، أو تعطل حساس لحظياً بشكل عشوائي).<br>
-          • <b>الخطورة والتحيز:</b> هي <b>الأقل ضرراً ولا تسبب تحيزاً (<span dir="ltr">Unbiased</span>)</b> عند حذفها أو تعويضها.<br><br>
-          <b>2) مفقودة بشكل عشوائي (<span dir="ltr">MAR - Missing at Random</span>):</b><br>
-          • <b>المفهوم:</b> سبب فقدان القيمة ليس عشوائياً بالكامل، بل <b>يرتبط بمتغير آخر معروف ومسجل في مجموعة البيانات</b> (وليس بقيمة المتغير المفقود نفسه).<br>
-          • <b>مثال:</b> امتناع الإناث عن الإجابة عن سؤال "العمر" أكثر من الذكور (هنا فقدان "العمر" مرتبط بمتغير "الجنس" المسجل لدينا). وقد تسبب <b>بعض التحيز</b> إذا لم تُعالج بشكل صحيح.<br><br>
-          <b>3) مفقودة بشكل غير عشوائي (<span dir="ltr">MNAR - Missing Not at Random</span>):</b><br>
-          • <b>المفهوم:</b> سبب فقدان القيمة <b>يرتبط بقيمة المتغير المفقود نفسه أو بعامل غير معروف</b>.<br>
-          • <b>مثال:</b> امتناع أصحاب الدخل المرتفع جداً (أو المنخفض جداً) عن كتابة قيمة "الراتب" بسبب قيمة الراتب نفسها، أو امتناع المرضى ذوي الكآبة الشديدة عن ملء استبيان الاكتئاب.<br>
-          • <b>الخطورة والتحيز:</b> هي <b>الأكثر إشكالية وخطورة وتسبب تحيزاً كبيراً (<span dir="ltr">Highly Biased</span>)</b> في النتائج!
-        </div>
-      </div>
-    </details>
-
-    <!-- ==================== الوحدة الثانية ==================== -->
-    <details>
-      <summary>الوحدة الثانية: الطرق الخمس لمعالجة القيم المفقودة برمجياً على بيانات الموظفين (employee.csv)</summary>
-      <div class="details-body">
-        <h3>1) اكتشاف القيم المفقودة وحساب عددها في كل عمود</h3>
-        <ul>
-          <li>نكتشف وجود القيم المفقودة وعددها في كل عمود باستخدام الدالة <b><code dir="ltr">data.info()</code></b> أو بجمع القيم المنطقية للدالة <b><code dir="ltr">data.isnull().sum()</code></b>:</li>
-        </ul>
-        <div class="code-box">
-data = pd.read_csv(<span class="str">'employee.csv'</span>)<br>
-data.info()            <span class="cmt"># يعرض عدد القيم Non-Null في كل عمود</span><br>
-data.isnull().sum()    <span class="cmt"># يحسب عدد القيم المفقودة (NaN) في كل عمود بالضبط</span>
-        </div>
-
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
-
-        <h3>2) الطرق الخمس لمعالجة القيم المفقودة (<span dir="ltr">Handling Missing Values</span>)</h3>
-        <div class="exam-alert">
-          <b>🌟 احفظي الطرق الخمس ومتى نستخدم كل طريقة والكود البرمجي الخاص بها:</b>
-        </div>
-        <ul>
-          <li><b>الطريقة (1): الحذف (<span dir="ltr">Deletion: dropna</span>):</b>
-            <ul>
-              <li>تُستخدم عندما تكون نسبة القيم المفقودة صغيرة جداً (أو عندما يكون العمود بأكمله مفقوداً)، ولكن عيبها أنها قد تؤدي لفقدان معلومات هامة إذا كانت البيانات المفقودة كثيرة:</li>
-            </ul>
-            <div class="code-box">
-data.dropna()                 <span class="cmt"># حذف أي صف يحتوي على قيمة مفقودة واحدة على الأقل (axis=0 افتراضياً)</span><br>
-data.dropna(axis=<span class="num">1</span>)           <span class="cmt"># حذف أي عمود يحتوي على قيمة مفقودة</span><br>
-data.dropna(how=<span class="str">"all"</span>)        <span class="cmt"># حذف الصف فقط إذا كانت (جميع) قيمه بالكامل مفقودة!</span>
-            </div>
-          </li>
-          <li><b>الطريقة (2): الاستبدال بقيمة ثابتة (<span dir="ltr">Constant Value Imputation: fillna</span>):</b>
-            <ul>
-              <li>تُعوض القيم المفقودة برقم ثابت مثل <code dir="ltr">0</code> للأعمدة الرقمية، أو نص ثابت مثل <code dir="ltr">"UNKNOWN"</code> للأعمدة النصية:</li>
-            </ul>
-            <div class="code-box">
-data[<span class="str">'salary'</span>].fillna(<span class="num">0</span>, inplace=<span class="kw">True</span>)<br>
-data[<span class="str">'department'</span>].fillna(<span class="str">"UNKNOWN"</span>, inplace=<span class="kw">True</span>)
-            </div>
-          </li>
-          <li><b>الطريقة (3): الاستبدال بأكثر القيم تكراراً — المنوال (<span dir="ltr">Mode Imputation</span>):</b>
-            <ul>
-              <li>تُعد الطريقة الأنسب لتعويض القيم المفقودة في <b>الحقول النوعية (الفئوية/النصية)</b> مثل عمود الجنس (<code dir="ltr">gender</code>):</li>
-            </ul>
-            <div class="code-box">
-mode_gender = data[<span class="str">'gender'</span>].mode()[<span class="num">0</span>]<br>
-data[<span class="str">'gender'</span>].fillna(mode_gender, inplace=<span class="kw">True</span>)
-            </div>
-          </li>
-          <li><b>الطريقة (4): الاستبدال بالمتوسط الحسابي (<span dir="ltr">Mean Imputation</span>):</b>
-            <ul>
-              <li>تُستخدم لتعويض القيم المفقودة في <b>الحقول الكمية (الرقمية)</b> مثل العمر (<code dir="ltr">age</code>)، ولكن <b>يُعاب عليها تأثرها بالقيم المتطرفة (<span dir="ltr">Outliers</span>)</b> (وفي حال وجود قيم متطرفة يُفضل استخدام الوسيط <code dir="ltr">median</code>):</li>
-            </ul>
-            <div class="code-box">
-data[<span class="str">'age'</span>].fillna(data[<span class="str">'age'</span>].mean(), inplace=<span class="kw">True</span>)
-            </div>
-          </li>
-          <li><b>الطريقة (5): الاستبدال بقيم مستنتجة من نموذج الانحدار (<span dir="ltr">Regression Imputation</span>):</b>
-            <ul>
-              <li>تُعد <b>أدق الطرق العلمية</b> عندما توجد علاقة خطية قوية بين العمود الذي يحتوي على قيم مفقودة وأعمدة أخرى مكتملة في الجدول؛ حيث نبني نموذج انحدار (<span dir="ltr">Regression Model</span>) يتنبأ بالقيمة المفقودة بناءً على بقية سمات الموظف.</li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-    </details>
-
-    <!-- ==================== الوحدة الثالثة ==================== -->
-    <details>
-      <summary>الوحدة الثالثة: الطرق الأربع لاكتشاف ومعالجة القيم المتطرفة (Outliers) على بيانات السكري</summary>
-      <div class="details-body">
-        <h3>1) الطرق المرئية لاكتشاف القيم المتطرفة: (1) Box Plot و (2) Scatter Plot</h3>
-        <ul>
-          <li><b>الطريقة الأولى: باستخدام مخطط الصندوق (<span dir="ltr">Box Plot</span> — لمتغير واحد):</b>
-            <ul>
-              <li>نرسم مخطط الصندوق للعمود (مثل <code dir="ltr">BMI</code>) باستخدام <code dir="ltr">sns.boxplot(x=df['BMI'])</code>، فتظهر القيم المتطرفة كنقاط منفردة خارج الشوكة، ثم نقوم بإزالتها أو استبدالها بشرط منطقي:</li>
-            </ul>
-            <div class="code-box">
-sns.boxplot(x=df[<span class="str">'BMI'</span>])<br>
-<span class="cmt"># تنقية البيانات بالاحتفاظ بالقيم الواقعة ضمن النطاق الطبيعي فقط</span><br>
-df_clean = df[(df[<span class="str">'BMI'</span>] &gt; <span class="num">15</span>) &amp; (df[<span class="str">'BMI'</span>] &lt; <span class="num">50</span>)]
-            </div>
-          </li>
-          <li><b>الطريقة الثانية: باستخدام المخطط النقطي (<span dir="ltr">Scatter Plot</span> — لمتغيرين معاً):</b>
-            <ul>
-              <li>نرسم العلاقة بين حقلين كميين مثل (<code dir="ltr">BMI</code> و <code dir="ltr">BloodPressure</code>) باستخدام <code dir="ltr">plt.scatter(df['BMI'], df['BloodPressure'])</code>، فنلاحظ النقاط الشاذة التي تبتعد تماماً عن تجمع باقي النقاط في البعدين.</li>
-            </ul>
-          </li>
-        </ul>
-
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
-
-        <h3>2) الطرق الإحصائية الرياضية: (3) درجة Z-score و (4) المدى الربعي IQR</h3>
-        <div class="exam-alert">
-          <b>🔥🔥 قوانين ومسائل حسابية مؤكدة في الاختبار لاكتشاف القيم المتطرفة:</b>
-        </div>
-
-        <p><b>الطريقة الثالثة: استخدام الدرجة المعيارية (<span dir="ltr">Z-score</span>)</b></p>
-        <ul>
-          <li><b>المفهوم والقانون الرياضي:</b> تقيس درجة <span dir="ltr">Z-score</span> كم انحرافاً معيارياً تبتعد القيمة ($x$) عن المتوسط الحسابي ($\mu$):</li>
-        </ul>
-        <div class="math-box">
-          Z-score = ( data_point &minus; mean ) / std. deviation = ( x &minus; &mu; ) / &sigma;
-        </div>
-        <ul>
-          <li><b>قاعدة العتبة (<span dir="ltr">Threshold</span>):</b> عادةً نحدد عتبة <b><code dir="ltr">threshold_z = 3</code></b>؛ بحيث إن أي نقطة بيانات تزيد القيمة المطلقة لدرجتها المعيارية عن 3 (أي <b>$|Z| > 3$</b>، بمعنى $Z > +3$ أو $Z < -3$) تُصنف كـ <b>قيمة متطرفة (<span dir="ltr">Outlier</span>)</b> ويتم حذفها!</li>
-        </ul>
-        <div class="step-box">
-          <b>مثال حسابي يدوي على Z-score:</b> إذا كان متوسط عمود هو $\mu = 50$ والانحراف المعياري $\sigma = 10$، فهل القيمة $x = 85$ متطرفة عند عتبة $3$؟<br>
-          • نحسب: $Z = (85 - 50) \div 10 = 35 \div 10 = \mathbf{3.5}$.<br>
-          • بما أن $3.5 > 3$، إذن القيمة $85$ هي <b>قيمة متطرفة (<span dir="ltr">Outlier</span>)</b>!
-        </div>
-        <div class="code-box">
-<span class="kw">from</span> scipy <span class="kw">import</span> stats<br>
-<span class="kw">import</span> numpy <span class="kw">as</span> np<br><br>
-z = np.abs(stats.zscore(df[<span class="str">'Age'</span>]))   <span class="cmt"># حساب القيمة المطلقة لدرجة Z-score لكل عنصر</span><br>
-threshold_z = <span class="num">3</span><br>
-outlier_indices = np.where(z &gt; threshold_z)[<span class="num">0</span>] <span class="cmt"># استخراج مواقع القيم المتطرفة</span><br>
-no_outliers_df = df.drop(outlier_indices)       <span class="cmt"># حذف الصفوف المتطرفة</span>
-        </div>
-
-        <p><b>الطريقة الرابعة: استخدام المدى الربعي (<span dir="ltr">Interquartile Range - IQR</span>)</b></p>
-        <ul>
-          <li><b>الخطوات والقوانين الرياضية لحساب حدود القيم المتطرفة بـ <span dir="ltr">IQR</span>:</b>
-            <ol>
-              <li>نحسب الربع الأول ($Q_1 = 25\%$) والربع الثالث ($Q_3 = 75\%$).</li>
-              <li>نحسب المدى الربعي: $\text{IQR} = Q_3 - Q_1$.</li>
-              <li>نحسب <b>الحد الأدنى المسموح به (<span dir="ltr">Lower Bound</span>)</b> و<b>الحد الأعلى المسموح به (<span dir="ltr">Upper Bound</span>)</b> بضرب $\text{IQR}$ في المعامل الثابت <b>$1.5$</b>:</li>
-            </ol>
-          </li>
-        </ul>
-        <div class="math-box">
-          Lower Bound = Q<sub>1</sub> &minus; (1.5 &times; IQR) &nbsp;&nbsp;|&nbsp;&nbsp; Upper Bound = Q<sub>3</sub> + (1.5 &times; IQR)
-        </div>
-        <div class="step-box">
-          <b>مثال حسابي يدوي كامل على طريقة IQR (مهم جداً للاختبار!):</b><br>
-          إذا كان الربع الأول لعمود البيانات $Q_1 = 20$، والربع الثالث $Q_3 = 40$:<br>
-          1) <b>المدى الربعي:</b> $\text{IQR} = 40 - 20 = \mathbf{20}$.<br>
-          2) <b>مقدار الهامش:</b> $1.5 \times \text{IQR} = 1.5 \times 20 = \mathbf{30}$.<br>
-          3) <b>الحد الأدنى (<span dir="ltr">Lower</span>):</b> $Q_1 - 30 = 20 - 30 = \mathbf{-10}$.<br>
-          4) <b>الحد الأعلى (<span dir="ltr">Upper</span>):</b> $Q_3 + 30 = 40 + 30 = \mathbf{70}$.<br>
-          • <b>الاستنتاج:</b> أي قيمة في البيانات <b>أقل من $-10$ أو أكبر من $70$</b> تُعتبر <b>قيمة متطرفة (<span dir="ltr">Outlier</span>)</b>!
-        </div>
-        <div class="code-box">
-Q1 = df[<span class="str">'BMI'</span>].quantile(<span class="num">0.25</span>)<br>
-Q3 = df[<span class="str">'BMI'</span>].quantile(<span class="num">0.75</span>)<br>
-IQR = Q3 - Q1<br><br>
-lower = Q1 - <span class="num">1.5</span> * IQR<br>
-upper = Q3 + <span class="num">1.5</span> * IQR<br><br>
-<span class="cmt"># الاحتفاظ فقط بالصفوف الطبيعية الواقعة بين الحد الأدنى والحد الأعلى</span><br>
-df_filtered = df[(df[<span class="str">'BMI'</span>] &gt;= lower) &amp; (df[<span class="str">'BMI'</span>] &lt;= upper)]
-        </div>
-      </div>
-    </details>
-  </section>
-
-  <!-- التبويب الثاني: جداول المقارنات والمعادلات -->
-  <section id="tables" class="panel">
-    <div class="card">
-      <h2>1. مقارنة الأنواع الثلاثة للقيم المفقودة (MCAR vs MAR vs MNAR)</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>نوع الفقدان</th>
-            <th>الاختصار الكامل</th>
-            <th>سبب الفقدان وعلاقته بالمتغيرات</th>
-            <th>درجة الخطورة والتحيز</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><b>1. عشوائي تماماً</b></td>
-            <td dir="ltr"><b>MCAR</b><br><small>Missing Completely at Random</small></td>
-            <td>عشوائي بالكامل؛ <b>لا يعتمد</b> على أي متغير آخر في البيانات ولا على قيمة المتغير المفقود نفسه.</td>
-            <td><b>الأقل ضرراً؛</b> لا يسبب تحيزاً عند الحذف أو التعويض.</td>
-          </tr>
-          <tr>
-            <td><b>2. عشوائي</b></td>
-            <td dir="ltr"><b>MAR</b><br><small>Missing at Random</small></td>
-            <td><b>يرتبط بمتغير آخر مسجل ومعروف</b> في البيانات (وليس بقيمة المتغير المفقود نفسه).</td>
-            <td>متوسط الخطورة؛ قد يسبب <b>بعض التحيز</b>.</td>
-          </tr>
-          <tr>
-            <td><b>3. غير عشوائي</b></td>
-            <td dir="ltr"><b>MNAR</b><br><small>Missing Not at Random</small></td>
-            <td><b>يرتبط بقيمة المتغير المفقود نفسه</b> أو بعامل خارجي غير معروف.</td>
-            <td><b>الأكثر إشكالية وخطورة؛</b> يسبب تحيزاً كبيراً في التحليل.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="card">
-      <h2>2. ملخص طرق معالجة القيم المفقودة وطرق اكتشاف القيم المتطرفة</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>العملية / الطريقة</th>
-            <th>الدالة أو المعادلة الرياضية</th>
-            <th>متى نستخدمها وأهم ملاحظاتها</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><b>حذف القيم المفقودة</b></td>
-            <td dir="ltr"><code>df.dropna(axis=0/1, how="all")</code></td>
-            <td>حذف الصفوف أو الأعمدة المفقودة (<code dir="ltr">how="all"</code> يحذف فقط إذا كانت كل القيم مفقودة).</td>
-          </tr>
-          <tr>
-            <td><b>التعويض بالمنوال (<span dir="ltr">Mode</span>)</b></td>
-            <td dir="ltr"><code>df['c'].fillna(df['c'].mode()[0])</code></td>
-            <td>الطريقة المثلى لتعويض القيم المفقودة في <b>الأعمدة النوعية (الفئوية/النصية)</b>.</td>
-          </tr>
-          <tr>
-            <td><b>التعويض بالمتوسط (<span dir="ltr">Mean</span>)</b></td>
-            <td dir="ltr"><code>df['c'].fillna(df['c'].mean())</code></td>
-            <td>لتعويض <b>الأعمدة الكمية (الرقمية)</b> الخالية من القيم المتطرفة.</td>
-          </tr>
-          <tr>
-            <td><b>كشف المتطرف بـ <span dir="ltr">Z-score</span></b></td>
-            <td dir="ltr">$Z = \frac{x - \mu}{\sigma}$ &nbsp; (<code dir="ltr">stats.zscore</code>)</td>
-            <td>تُعتبر القيمة متطرفة إذا كانت $|Z| > 3$ (<code dir="ltr">threshold_z = 3</code>).</td>
-          </tr>
-          <tr>
-            <td><b>كشف المتطرف بـ <span dir="ltr">IQR</span></b></td>
-            <td dir="ltr">$\text{Lower} = Q_1 - 1.5\text{IQR}$<br>$\text{Upper} = Q_3 + 1.5\text{IQR}$</td>
-            <td>تُعتبر القيمة متطرفة إذا كانت أصغر من <code dir="ltr">Lower</code> أو أكبر من <code dir="ltr">Upper</code>.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- التبويب الثالث: قاموس المصطلحات والدوال -->
-  <section id="terms" class="panel">
-    <div class="card">
-      <h2>قاموس المصطلحات والدوال الشامل للفصل السابع</h2>
-      <p class="muted">جميع المفاهيم والدوال البرمجية الخاصة بتحسين جودة البيانات ومعالجة المفقود والمتطرف:</p>
-      <div id="termsGrid" class="grid"></div>
-    </div>
-  </section>
-
-  <!-- التبويب الرابع: البطاقات التعليمية -->
-  <section id="cards" class="panel">
-    <div class="card">
-      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
-      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
-      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
-        <div class="term" id="flashTerm"></div>
-        <div class="answer" id="flashAnswer" hidden></div>
-        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
-      </div>
-      <div class="row" style="margin-top:14px">
-        <button class="btn" id="prevCard">السابق</button>
-        <span id="cardCount" class="muted"></span>
-        <button class="btn primary" id="nextCard">التالي</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- التبويب الخامس: الاختبار الذاتي العشوائي -->
-  <section id="quiz" class="panel">
-    <div class="card">
-      <div class="row">
-        <div>
-          <h2>الاختبار الشامل المتغير للفصل السابع (25 سؤالاً) <span class="badge-new">ترتيب عشوائي ذكي 🎲</span></h2>
-          <p class="muted">يختبر فهمك لـ (MCAR, MAR, MNAR)، دوال dropna و fillna، وحسابات Z-score و IQR مع تصحيح وتعليل فوري!</p>
-        </div>
-        <div class="score" id="score">النتيجة: 0 / 25</div>
-      </div>
-      <div class="progress"><div id="progressBar"></div></div>
-      <div id="quizArea"></div>
-      <div class="row">
-        <button class="btn" id="resetQuiz">إعادة الاختبار بترتيب عشوائي جديد 🔀</button>
-        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
-      </div>
-      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
-    </div>
-  </section>
-</main>
-
-<footer>مبني بالكامل (100%) على محتوى الفصل السابع (تحسين جودة البيانات) من مقرر تحليل وتمثيل البيانات</footer>
-
-<script>
-const terms = [
-  ["Garbage In, Garbage Out (GIGO)", "قاعدة أساسية في جودة البيانات تعني أن إدخال بيانات رديئة وغير نظيفة إلى نظام التحليل سيؤدي حتماً إلى مخرجات وقرارات خاطئة."],
-  ["MCAR (Missing Completely at Random)", "قيم مفقودة بشكل عشوائي تماماً: لا يعتمد فقدانها على أي متغير آخر ولا على قيمة المتغير نفسه، وهي الأقل ضرراً ولا تسبب تحيزاً."],
-  ["MAR (Missing at Random)", "قيم مفقودة بشكل عشوائي: يرتبط سبب فقدانها بمتغير آخر مسجل في البيانات (وليس بالمتغير المفقود نفسه)، وقد تسبب بعض التحيز."],
-  ["MNAR (Missing Not at Random)", "قيم مفقودة بشكل غير عشوائي: يرتبط سبب فقدانها بقيمة المتغير المفقود نفسه أو بعامل غير معروف، وهي الأكثر إشكالية وتحيزاً."],
-  ["Redundant / Duplicate Data", "البيانات المتكررة أو الزائدة عن الحاجة: تكرار نفس العينة (الصف) أو وجود أعمدة مكررة المعنى، وتسبب تحيزاً في النماذج."],
-  ["Inconsistent Data", "البيانات غير المتسقة: تعارض أو اختلاف في طريقة ترميز أو كتابة نفس المعلومة (مثل اختلاف صيغ التواريخ أو ترميز الجنس)."],
-  ["Outliers (القيم المتطرفة / الشاذة)", "نقاط بيانات تبتعد بشكل كبير وشاذ عن بقية القيم الطبيعية في العينة، وتندرج تحت البيانات المشوشة (Noisy Data)."],
-  ["data.isnull().sum()", "كود في Pandas يحسب مجموع القيم المفقودة (NaN) في كل عمود من أعمدة الـ DataFrame."],
-  ["data.dropna(how='all')", "دالة حذف القيم المفقودة؛ وعند تمرير المعامل how='all' لا تحذف الصف إلا إذا كانت جميع قيمه بالكامل مفقودة."],
-  ["data.fillna(value, inplace=True)", "دالة استبدال وتعويض القيم المفقودة بقيمة محددة (سواء قيمة ثابتة، أو المتوسط الحسابي، أو المنوال)."],
-  ["Regression Imputation", "تعويض القيم المفقودة باستخدام نموذج انحدار يتنبأ بالقيمة المفقودة بناءً على علاقتها الخطية ببقية المتغيرات."],
-  ["Z-score for Outliers", "معادلة إحصائية لكشف القيم المتطرفة: Z = (x - mean) / std، وتُحسب بـ stats.zscore() مع عتبة قياسية threshold_z = 3."],
-  ["IQR Method for Outliers", "طريقة المدى الربعي لكشف القيم المتطرفة: تحسب الحد الأدنى (Q1 - 1.5*IQR) والحد الأعلى (Q3 + 1.5*IQR)."]
-];
-
-const cards = [
-  ["ما هي الجوانب (الأبعاد) الستة الرئيسية لجودة البيانات؟", "1) الدقة (Accuracy).\n2) الاكتمال (Completeness).\n3) الاتساق (Consistency).\n4) الموثوقية (Reliability).\n5) المرجعية / الحداثة (Timeliness).\n6) الوضوح والتوضيح (Clarity)."],
-  ["ما هي مشاكل جودة البيانات الست التي تواجه محلل البيانات؟", "1) بيانات غير مكتملة/مفقودة (Incomplete/Missing).\n2) بيانات مشوشة (Noisy).\n3) بيانات غير متسقة (Inconsistent).\n4) بيانات غير صالحة (Invalid).\n5) بيانات متكررة (Redundant).\n6) بيانات غير صحيحة (Incorrect)."],
-  ["ماذا تعني مقولة (Garbage In, Garbage Out - GIGO) في علم البيانات؟", "تعني أنه إذا قمت بتغذية نموذج التحليل أو تعلم الآلة ببيانات معيبة ومنخفضة الجودة، فستحصل حتماً على نتائج وتنبؤات خاطئة مهما كانت قوة الخوارزمية."],
-  ["ما هي الأنواع (التصنيفات) الثلاثة للقيم المفقودة؟", "1) مفقودة بشكل عشوائي تماماً (MCAR).\n2) مفقودة بشكل عشوائي (MAR).\n3) مفقودة بشكل غير عشوائي (MNAR)."],
-  ["ما الفرق الدقيق بين (MCAR) و (MAR) و (MNAR) من حيث سبب الفقدان والخطورة؟", "• MCAR: لا يعتمد الفقدان على أي متغير (الأقل ضرراً ولا تسبب تحيزاً).\n• MAR: يرتبط الفقدان بمتغير آخر معروف ومسجل في البيانات (قد تسبب بعض التحيز).\n• MNAR: يرتبط الفقدان بقيمة المتغير المفقود نفسه أو بعامل مجهول (الأكثر خطورة وإشكالية وتحيزاً)."],
-  ["ما المقصود بالبيانات غير المتسقة (Inconsistent Data)؟ مع ذكر مثال.", "هي وجود تناقض أو اختلاف في طريقة كتابة أو ترميز نفس المعلومة داخل البيانات (مثل كتابة اسم الدولة مرة KSA ومرة Saudi Arabia، أو وجود تاريخ تخرج قبل تاريخ الميلاد)."],
-  ["كيف نكتشف عدد القيم المفقودة في كل عمود من أعمدة الـ DataFrame برمجياً؟", "باستخدام الكود:\ndata.isnull().sum()\n(أو من خلال فحص عدد القيم Non-Null في دالة data.info())."],
-  ["ما هي الطرق الخمس لمعالجة القيم المفقودة؟", "1) الحذف (dropna).\n2) الاستبدال بقيمة ثابتة (fillna).\n3) الاستبدال بالمنوال - الأكثر تكراراً (Mode).\n4) الاستبدال بالمتوسط الحسابي (Mean).\n5) الاستبدال بقيم مستنتجة من نموذج الانحدار (Regression)."],
-  ["ما الفرق بين: data.dropna() ، و data.dropna(axis=1) ، و data.dropna(how='all')؟", "• data.dropna(): يحذف أي صف يحتوي على قيمة مفقودة واحدة على الأقل.\n• data.dropna(axis=1): يحذف أي عمود يحتوي على قيمة مفقودة.\n• data.dropna(how='all'): يحذف الصف فقط إذا كانت (جميع) خلاياه مفقودة بالكامل."],
-  ["متى نستخدم التعويض بالمنوال (Mode) ومتى نستخدم التعويض بالمتوسط الحسابي (Mean) لمعالجة القيم المفقودة؟", "• بالمنوال (Mode): مع البيانات النوعية (الفئوية/النصية) مثل الجنس data['gender'].fillna(data['gender'].mode()[0]).\n• بالمتوسط (Mean): مع البيانات الكمية (الرقمية) الخالية من القيم المتطرفة مثل العمر data['age'].fillna(data['age'].mean())."],
-  ["ما هو العيب الرئيسي لتعويض القيم المفقودة بالمتوسط الحسابي (Mean)؟ وما هي الطريقة الأدق للبيانات ذات الارتباط الخطي؟", "• عيب المتوسط: يتأثر بشدة بالقيم المتطرفة (Outliers).\n• الطريقة الأدق للبيانات الخطية: الاستبدال باستخدام نموذج الانحدار (Regression Imputation)."],
-  ["ما هي الطرق الأربع لاكتشاف القيم المتطرفة (Outliers) في البيانات؟", "طريقتان مرئيتان وطريقتان إحصائيتان:\n1) مخطط الصندوق (Box Plot).\n2) المخطط النقطي (Scatter Plot).\n3) الدرجة المعيارية (Z-score).\n4) المدى الربعي (IQR)."],
-  ["كيف نكتشف القيم المتطرفة باستخدام (Box Plot) و (Scatter Plot)؟", "• Box Plot: يكشف القيم المتطرفة في متغير واحد كنقاط خارجة عن الشوكة (Whiskers).\n• Scatter Plot: يكشف القيم المتطرفة ثنائية البعد (بين متغيرين معاً) كنقاط شاذة بعيدة عن تجمع البيانات."],
-  ["ما هي معادلة الدرجة المعيارية (Z-score)؟ وما هي قيمة العتبة (Threshold) الشائعة لاعتبار القيمة متطرفة؟", "• المعادلة: Z = (data_point - mean) / std. deviation\n• العتبة الشائعة: threshold_z = 3 (أي إذا كانت |Z| > 3 تعتبر القيمة متطرفة)."],
-  ["[مسألة حسابية] إذا كان المتوسط الحسابي لعمود هو 100 والانحراف المعياري هو 15، فكم تبلغ درجة Z-score للقيمة 160؟ وهل هي متطرفة؟", "Z = (160 - 100) / 15 = 60 / 15 = 4.\nبما أن 4 > 3، إذن القيمة 160 هي قيمة متطرفة (Outlier)."],
-  ["ما هي الدالة البرمجية المستخدمة لحساب Z-score في البايثون؟ ومن أي مكتبة نستوردها؟", "الدالة هي: stats.zscore(df['col'])\nونستوردها من مكتبة: from scipy import stats"],
-  ["ما هما المعادلتان لحساب الحد الأدنى (Lower) والحد الأعلى (Upper) لكشف القيم المتطرفة بطريقة المدى الربعي (IQR)؟", "• أولاً نحسب: IQR = Q3 - Q1\n• الحد الأدنى: Lower = Q1 - (1.5 * IQR)\n• الحد الأعلى: Upper = Q3 + (1.5 * IQR)\n(وأي قيمة أصغر من Lower أو أكبر من Upper هي قيمة متطرفة)."],
-  ["[مسألة حسابية] إذا كان Q1 = 10 و Q3 = 30، فاحسبي الحد الأدنى والحد الأعلى للقيم الطبيعية بطريقة IQR.", "1) IQR = 30 - 10 = 20.\n2) 1.5 * IQR = 1.5 * 20 = 30.\n3) الحد الأدنى (Lower) = 10 - 30 = -20.\n4) الحد الأعلى (Upper) = 30 + 30 = 60.\n(أي قيمة خارج الفترة [-20, 60] هي متطرفة)."],
-  ["كيف نكتب شرطاً برمجياً في Pandas للاحتفاظ فقط بالصفوف الطبيعية الواقعة بين الحد الأدنى (lower) والحد الأعلى (upper) لعمود BMI؟", "df_clean = df[(df['BMI'] >= lower) & (df['BMI'] <= upper)]"],
-  ["ماذا يفعل الكود التالي: np.where(z > 3)[0] عند اكتشاف القيم المتطرفة بطريقة Z-score؟", "يرجع مصفوفة تحتوي على أرقام فهارس (مواقع) الصفوف التي تتجاوز درجتها المعيارية العتبة 3 ليتم حذفها بـ df.drop()."],
-  ["تحت أي مشكلة من مشاكل جودة البيانات الست تندرج مشكلة (القيم المتطرفة - Outliers)؟", "تندرج تحت مشكلة البيانات المشوشة أو الصاخبة (Noisy Data)."],
-  ["ما خطورة بقاء البيانات المتكررة (Redundant / Duplicate Data) دون حذف قبل تدريب نماذج تعلم الآلة؟", "تؤدي إلى إهدار مساحة التخزين والوقت الحسابي، وتسبب تحيزاً في النموذج تجاه العينات المكررة."],
-  ["في الكود: data['salary'].fillna(0, inplace=True)، ماذا سيحدث لعمود الراتب؟", "سيتم استبدال جميع القيم المفقودة (NaN) في عمود الراتب بالرقم الثابت (0) وتثبيت التعديل في نفس الجدول."],
-  ["لماذا لا يصلح استخدام المتوسط الحسابي (Mean) لتعويض القيم المفقودة في عمود مثل 'gender' (الجنس: Male/Female)؟", "لأن عمود الجنس متغير نوعي (نصي/فئوي) لا يمكن جمع قيمه وحساب متوسطها، بل يجب تعويضه بالمنوال (Mode)."],
-  ["إذا امتنع المرضى ذوو الأوزان العالية جداً عن تسجيل أوزانهم في استبيان صحي بسبب حرجهم من وزنهم نفسه، فما نوع هذه القيم المفقودة؟", "تُصنف كـ MNAR (Missing Not at Random - مفقودة بشكل غير عشوائي) لأن سبب الفقدان يرتبط بقيمة المتغير المفقود نفسه."],
-  ["إذا سقطت ورقة استبيان واحدة من الباحث بسبب الرياح وضاعت بياناتها، فما نوع هذه القيم المفقودة؟", "تُصنف كـ MCAR (Missing Completely at Random - مفقودة بشكل عشوائي تماماً)."],
-  ["هل يجب دائماً حذف القيم المتطرفة (Outliers) فوراً دون فحصها؟", "لا؛ يجب أولاً التحقق مما إذا كانت ناتجة عن خطأ في القياس/الإدخال (فتُحذف أو تُصحح) أم أنها تمثل ظاهرة حقيقية نادرة ومهمة (مثل عملية احتيال مالي)."],
-  ["كيف نعوض القيم المفقودة في عمود 'age' بمتوسط الأعمار في سطر برمجي واحد؟", "data['age'].fillna(data['age'].mean(), inplace=True)"]
-];
-
-const masterQuestions = [
-  {q:"تشير القاعدة الشهيرة (Garbage In, Garbage Out - GIGO) في مجال تحليل البيانات وتعلم الآلة إلى أن:",o:["إدخال بيانات معيبة ومنخفضة الجودة سيؤدي حتماً إلى الحصول على نتائج وقرارات خاطئة","حذف جميع البيانات من القرص الصلب يسرع المعالج","البيانات المفقودة تزيد من دقة النماذج التنبؤية دائماً","الرسوم البيانية تغني عن تنظيف البيانات"],a:0,e:"تعني قاعدة GIGO أن جودة المخرجات تعتمد كلياً على جودة المدخلات؛ فالبيانات الرديئة تنتج قرارات رديئة."},
-  {q:"جميع ما يلي يُعد من الجوانب (الأبعاد) الستة لجودة البيانات كما وردت في الفصل السابع ما عدا:",o:["التكرار والضجيج (Redundancy and Noise)","الدقة (Accuracy) والاكتمال (Completeness)","الاتساق (Consistency) والموثوقية (Reliability)","المرجعية (Timeliness) والوضوح والتوضيح (Clarity)"],a:0,e:"الجوانب الستة لجودة البيانات هي: الدقة، الاكتمال، الاتساق، الموثوقية، المرجعية، والوضوح. أما التكرار والضجيج فهما من مشاكل البيانات."},
-  {q:"أي نوع من أنواع القيم المفقودة يُعد (الأقل ضرراً ولا يسبب تحيزاً في التحليل)، حيث يكون سبب الفقدان عشوائياً تماماً ولا يعتمد على أي متغير آخر؟",o:["MCAR (Missing Completely at Random - مفقودة بشكل عشوائي تماماً)","MAR (Missing at Random - مفقودة بشكل عشوائي)","MNAR (Missing Not at Random - مفقودة بشكل غير عشوائي)","Outliers (القيم المتطرفة)"],a:0,e:"النوع MCAR يحدث بشكل عشوائي تماماً دون ارتباط بأي متغير، ولذلك لا يسبب تحيزاً وهو الأقل ضرراً."},
-  {q:"أي نوع من أنواع القيم المفقودة يُعد (الأكثر إشكالية وخطورة ويسبب تحيزاً كبيراً)، حيث يرتبط سبب الفقدان بقيمة المتغير المفقود نفسه أو بعامل غير معروف؟",o:["MNAR (Missing Not at Random - مفقودة بشكل غير عشوائي)","MCAR (Missing Completely at Random)","MAR (Missing at Random)","Consistent Data"],a:0,e:"النوع MNAR يرتبط فيه الفقدان بقيمة المتغير المفقود نفسه (كإخفاء الدخل المرتفع جداً)، وهو الأكثر إشكالية وتحيزاً."},
-  {q:"عندما يرتبط سبب فقدان قيمة متغير معين بمتغير آخر (مسجل ومعروف في مجموعة البيانات) وليس بقيمة المتغير المفقود نفسه، فإن هذا يُصنف كـ:",o:["MAR (Missing at Random - مفقودة بشكل عشوائي)","MCAR (Missing Completely at Random)","MNAR (Missing Not at Random)","Duplicate Data"],a:0,e:"في MAR يعتمد احتمال الفقدان على متغيرات أخرى مرصودة ومسجلة لدينا في الجدول، وقد يسبب بعض التحيز."},
-  {q:"وجود اختلاف أو تناقض في طريقة كتابة أو ترميز نفس المعلومة في قاعدة البيانات (مثل كتابة الجنس مرة M/F ومرة Male/Female، أو وجود تاريخ انتهاء قبل تاريخ البداية) يُسمى:",o:["بيانات غير متسقة (Inconsistent Data)","بيانات مكتملة (Complete Data)","بيانات موثوقة (Reliable Data)","قيم عشوائية تماماً (MCAR)"],a:0,e:"عدم توحيد الترميز أو وجود تعارض منطقي بين الحقول هو تعريف البيانات غير المتسقة (Inconsistent Data)."},
-  {q:"ما هو الكود البرمجي الصحيح في مكتبة Pandas لحساب إجمالي عدد القيم المفقودة (NaN) في كل عمود من أعمدة الجدول data؟",o:["data.isnull().sum()","data.dropna().max()","data.fillna(0)","data.mode()[0]"],a:0,e:"الدالة data.isnull() تعطي True للقيم المفقودة، وتقوم .sum() بجمعها لحساب عدد القيم المفقودة في كل عمود."},
-  {q:"ما الفرق بين تنفيذ الكود data.dropna() وتنفيذ الكود data.dropna(how='all')؟",o:["dropna() يحذف الصف إذا كان فيه قيمة مفقودة واحدة على الأقل، بينما dropna(how='all') لا يحذف الصف إلا إذا كانت (جميع) قيمه مفقودة بالكامل","كلاهما يحذفان الأعمدة فقط ولا يحذفان الصفوف","how='all' يحذف الجدول بالكامل حتى لو لم توجد قيم مفقودة","لا يوجد معامل اسمه how في دالة dropna"],a:0,e:"الوضع الافتراضي هو how='any' (حذف الصف لوجود أي قيمة مفقودة)، بينما how='all' يشترط أن تكون كل خلايا الصف مفقودة لحذفه."},
-  {q:"لتعويض القيم المفقودة في عمود نوعي (فئوي/نصي) مثل عمود الجنس ('gender') بأكثر القيم تكراراً (المنوال)، ما هو الكود الصحيح؟",o:["data['gender'].fillna(data['gender'].mode()[0], inplace=True)","data['gender'].fillna(data['gender'].mean(), inplace=True)","data['gender'].dropna(axis=1)","data['gender'].zscore()"],a:0,e:"الحقول النوعية تُعوض بالقيمة الأكثر تكراراً (المنوال) عبر استخراجها بـ .mode()[0] وتمريرها لدالة .fillna()."},
-  {q:"لتعويض القيم المفقودة في عمود رقمي مثل العمر ('age') بالمتوسط الحسابي للأعمار، نستخدم الكود:",o:["data['age'].fillna(data['age'].mean(), inplace=True)","data['age'].fillna(0, inplace=True)","data['age'].dropna(how='all')","data['age'].isnull().sum()"],a:0,e:"تُستخدم الدالة .mean() لحساب المتوسط الحسابي للعمود الرقمي وتمريرها داخل .fillna() لتعويض القيم المفقودة."},
-  {q:"ما هو العيب الرئيسي لطريقة استبدال القيم المفقودة بالمتوسط الحسابي (Mean Imputation)؟ وما هي الطريقة الأدق عندما توجد علاقة خطية بين المتغيرات؟",o:["يتأثر المتوسط الحسابي بشدة بالقيم المتطرفة (Outliers)؛ والطريقة الأدق للبيانات الخطية هي الاستبدال باستخدام نموذج الانحدار (Regression Imputation)","المتوسط الحسابي يعمل مع النصوص فقط؛ والطريقة الأدق هي حذف الجدول","لا يوجد أي عيب للمتوسط الحسابي ولا يتأثر بالقيم المتطرفة","الطريقة الأدق هي وضع أصفار في جميع الأعمدة دائماً"],a:0,e:"يتأثر المتوسط الحسابي بالقيم المتطرفة، وتُعد طريقة الانحدار (Regression) الأدق عند وجود ارتباط خطي بين المتغيرات."},
-  {q:"ما هي الطرق الأربع المذكورة في الفصل السابع لاكتشاف القيم المتطرفة (Outliers) في البيانات؟",o:["1) مخطط الصندوق (Box Plot)، 2) المخطط النقطي (Scatter Plot)، 3) الدرجة المعيارية (Z-score)، 4) المدى الربعي (IQR)","1) المخطط الدائري، 2) جدول التقاطع، 3) الحذف، 4) الدمج","1) MCAR، 2) MAR، 3) MNAR، 4) GIGO","1) العنوان، 2) المحاور، 3) المفتاح، 4) الشبكة"],a:0,e:"طرق اكتشاف القيم المتطرفة أربع: طريقتان بصريتان (Box plot و Scatter plot) وطريقتان رياضيتان (Z-score و IQR)."},
-  {q:"ما هي المعادلة الرياضية لحساب الدرجة المعيارية (Z-score) لنقطة بيانات x بهدف اكتشاف القيم المتطرفة؟",o:["Z = (x - mean) / std. deviation","Z = Q3 - Q1","Z = max - min","Z = (x + mean) * variance"],a:0,e:"تقيس درجة Z-score بعد النقطة عن المتوسط الحسابي بوحدات الانحراف المعياري: (القيمة ناقص المتوسط) مقسوماً على الانحراف المعياري."},
-  {q:"[مسألة حسابية] إذا كان المتوسط الحسابي لعمود بيانات هو (60) والانحراف المعياري هو (10)، وكانت عتبة القيم المتطرفة هي (threshold_z = 3)، فأي قيمة مما يلي تُصنف كقيمة متطرفة (Outlier)؟",o:["القيمة 95 (لأن Z = (95 - 60) / 10 = 3.5 وهي أكبر من العتبة 3)","القيمة 60 (لأن Z = 0)","القيمة 70 (لأن Z = 1)","القيمة 80 (لأن Z = 2)"],a:0,e:"نحسب Z للقيمة 95: (95 - 60) / 10 = 35 / 10 = 3.5. وبما أن 3.5 > 3 فإنها قيمة متطرفة."},
-  {q:"من أي مكتبة في البايثون نستورد الدالة stats.zscore() لحساب الدرجة المعيارية؟",o:["من مكتبة scipy (from scipy import stats)","من مكتبة bokeh.models","من مكتبة matplotlib.pyplot","من مكتبة seaborn"],a:0,e:"توجد وحدة stats التي تضم الدالة zscore() داخل مكتبة الحسابات العلمية scipy."},
-  {q:"عند اكتشاف القيم المتطرفة بطريقة المدى الربعي (IQR)، كيف يتم حساب كلٍ من الحد الأدنى (Lower Bound) والحد الأعلى (Upper Bound)؟",o:["Lower = Q1 - (1.5 × IQR) ، و Upper = Q3 + (1.5 × IQR)","Lower = Q1 + IQR ، و Upper = Q3 - IQR","Lower = Mean - 3 ، و Upper = Mean + 3","Lower = Min ، و Upper = Max"],a:0,e:"في قاعدة IQR، نضرب المدى الربعي (IQR = Q3 - Q1) في المعامل 1.5، ونطرحه من Q1 للحد الأدنى ونجمعه مع Q3 للحد الأعلى."},
-  {q:"[مسألة حسابية] إذا كان الربع الأول لعمود البيانات Q1 = 30، والربع الثالث Q3 = 50، فما هما الحدان الأدنى (Lower) والأعلى (Upper) للقيم الطبيعية وفق طريقة IQR؟",o:["الحد الأدنى = 0 ، والحد الأعلى = 80 (لأن IQR = 20، و 1.5 × 20 = 30، فيكون 30-30=0 و 50+30=80)","الحد الأدنى = 20 ، والحد الأعلى = 60","الحد الأدنى = 30 ، والحد الأعلى = 50","الحد الأدنى = -50 ، والحد الأعلى = 100"],a:0,e:"نحسب أولاً: IQR = 50 - 30 = 20. ثم نضرب: 1.5 × 20 = 30. الحد الأدنى = 30 - 30 = 0، والحد الأعلى = 50 + 30 = 80."},
-  {q:"[مسألة حسابية] بناءً على السؤال السابق (حيث الحد الأدنى = 0 والحد الأعلى = 80 بطريقة IQR)، أي القيم التالية تُعتبر قيمة متطرفة (Outlier) يجب استبعادها؟",o:["القيمة 92 (لأنها أكبر من الحد الأعلى 80)","القيمة 40","القيمة 15","القيمة 75"],a:0,e:"أي قيمة تقع خارج الفترة [0, 80] (أصغر من 0 أو أكبر من 80) تُعد متطرفة، وبالتالي 92 قيمة متطرفة."},
-  {q:"كيف نستخدم دالة dropna() في مكتبة Pandas لحذف (الأعمدة) التي تحتوي على قيم مفقودة بدلاً من حذف الصفوف؟",o:["نمرر المعامل axis=1 (أي data.dropna(axis=1))","نمرر المعامل axis=0","نمرر المعامل inplace=False","نستخدم دالة fillna()"],a:0,e:"المحور الافتراضي هو الصفوف (axis=0)، ولحذف الأعمدة التي بها قيم مفقودة نمرر المعامل axis=1."},
-  {q:"لاستبدال جميع القيم المفقودة في عمود القسم 'department' بالنص الثابت 'UNKNOWN' مع حفظ التغيير في نفس الجدول، نكتب:",o:["data['department'].fillna('UNKNOWN', inplace=True)","data['department'].dropna('UNKNOWN')","data['department'].isnull('UNKNOWN')","pd.merge(data, 'UNKNOWN')"],a:0,e:"تُستخدم دالة fillna('UNKNOWN', inplace=True) لتعويض القيم المفقودة بقيمة نصية ثابتة في نفس الكائن."},
-  {q:"تندرج مشكلة وجود (القيم المتطرفة - Outliers) والأخطاء العشوائية في القياس تحت أي فئة من مشاكل جودة البيانات؟",o:["البيانات المشوشة / الصاخبة (Noisy Data)","البيانات المكتملة (Complete Data)","البيانات المرجعية (Timely Data)","البيانات الموثوقة (Reliable Data)"],a:0,e:"البيانات المشوشة (Noisy Data) هي البيانات التي تتضمن تباينات عشوائية كبيرة أو قيماً متطرفة شاذة (Outliers)."},
-  {q:"إذا وجدنا في جدول بيانات الموظفين أن نفس سجل الموظف (بنفس الرقم والاسم والراتب) مكرر 3 مرات، فما اسم هذه المشكلة في جودة البيانات؟",o:["بيانات متكررة / زائدة عن الحاجة (Redundant / Duplicate Data)","قيم مفقودة عشوائياً (MCAR)","درجة معيارية (Z-score)","مدى ربعي (IQR)"],a:0,e:"تكرار نفس العينات أو السجلات في قاعدة البيانات يُعرف بالبيانات المتكررة أو الزائدة عن الحاجة (Redundant / Duplicate Data)."},
-  {q:"أي رسم بياني يُستخدم في الفصل السابع لاكتشاف القيم المتطرفة بصرياً بين حقلين كميين معاً (مثل BMI و BloodPressure في بيانات السكري)؟",o:["المخطط النقطي (Scatter Plot)","المخطط الدائري (Pie Plot)","جدول التقاطع (Crosstab)","المدرج التكراري لعمود واحد"],a:0,e:"يكشف المخطط النقطي (plt.scatter) القيم المتطرفة ثنائية البعد التي تشذ عن العلاقة المشتركة بين متغيرين كميين."},
-  {q:"ماذا يُرجع الكود البرمجي التالي: np.where(z > 3) عندما تكون z هي مصفوفة القيم المطلقة للدرجات المعيارية Z-score؟",o:["يُرجع مواقع (فهارس / Indices) الصفوف التي تتجاوز درجتها المعيارية العتبة 3 (أي مواقع القيم المتطرفة)","يُرجع المتوسط الحسابي للجدول","يُرجع عدد الأعمدة النصية","يقوم برسم مخطط الصندوق"],a:0,e:"الدالة np.where(condition) في NumPy تُرجع فهارس (Indices) العناصر التي تحقق الشرط المحدد."},
-  {q:"بعد تحديد الحدود الطبيعية لعمود BMI باستخدام طريقة IQR (lower و upper)، ما هو الكود الصحيح لتنقية الجدول df والاحتفاظ بالبيانات الطبيعية فقط؟",o:["df_clean = df[(df['BMI'] >= lower) & (df['BMI'] <= upper)]","df_clean = df.fillna(lower + upper)","df_clean = df.dropna(axis=1)","df_clean = df[df['BMI'] > upper]"],a:0,e:"نستخدم التصفية المنطقية للاحتفاظ بالصفوف التي تكون قيمة BMI فيها أكبر من أو تساوي الحد الأدنى وأصغر من أو تساوي الحد الأعلى."}
-];
-
-const termsGrid = document.getElementById("termsGrid");
-terms.forEach(([en, ar]) => {
-  const d = document.createElement("div");
-  d.className = "card";
-  d.style.margin = "0";
-  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
-  termsGrid.appendChild(d);
-});
-
-let ci = 0, showAnswer = false;
-function renderCard() {
-  document.getElementById("flashTerm").textContent = cards[ci][0];
-  document.getElementById("flashAnswer").textContent = cards[ci][1];
-  document.getElementById("flashAnswer").hidden = !showAnswer;
-  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
-  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
-}
-document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
-document.getElementById("flashcard").addEventListener("keydown", e => {
-  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
-});
-document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
-document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
-renderCard();
-
-document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
-  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
-  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
-  window.scrollTo({ top: 0, behavior: "smooth" });
-});
-
-function shuffleArray(arr) {
-  const copy = [...arr];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-}
-
-let currentQuestions = [];
-let answers = {};
-
-function prepareShuffledQuiz() {
-  currentQuestions = shuffleArray(masterQuestions).map(item => {
-    const optsWithFlag = item.o.map((text, idx) => ({ text, isCorrect: idx === item.a }));
-    const shuffledOpts = shuffleArray(optsWithFlag);
-    return {
-      q: item.q,
-      o: shuffledOpts.map(x => x.text),
-      a: shuffledOpts.findIndex(x => x.isCorrect),
-      e: item.e
+    const DEFECT_NOTES = {
+      all: `يعرض الجدول جميع المشكلات الست: قيم مفقودة (NaN)، أعمار سالبة (-5) غير صالحة وغير متسقة، عدم توافق الدولة والمدينة، حرارة شاذة (280)، خطأ إملائي في اسم الدولة، تكرار الصف 106 بالكامل مع الصف 101، ووجود عمود Male كتكرار لعمود Sex.`,
+      missing: `البيانات غير المكتملة (Missing Values): الصف 102 يفتقد قيمة العمر (NaN). قد يكون السبب عطل حساس أو عدم إلزامية إدخال الحقل.`,
+      inconsistent: `البيانات غير المتسقة (Inconsistent): الصف 103 يجمع بين دولة Jordan ومدينة Riyadh مع عمر سالب (-5)، والصف 104 يسجل درجة حرارة (280°C) تتجاوز الحدود المنطقية.`,
+      invalid: `البيانات غير الصالحة (Invalid): حقل العمر في الصف 103 يحمل القيمة (-5)، وهي قيمة مستحيلة ولا يمكن أن توجد في حقل العمر.`,
+      redundant: `البيانات المتكررة (Redundant): الصف 106 نسخة مكررة بالكامل (Duplicate) من الصف 101، كما أن عمود Male لا يضيف أي معلومة جديدة مع وجود عمود Sex.`,
+      incorrect: `البيانات غير الصحيحة (Incorrect): الصف 105 يحتوي على خطأ إملائي في كتابة اسم البلد (Saudii Arabya) مما يؤدي لفصله عن بقية سجلات الدولة نفسها.`,
+      noisy: `البيانات المشوشة (Noisy): القيمة 280°C في الصف 104 تمثل ضوضاء قياس أو تشويشاً غير دقيق في قراءة المستشعر.`
     };
-  });
-}
 
-function renderQuiz() {
-  prepareShuffledQuiz();
-  const area = document.getElementById("quizArea");
-  area.innerHTML = "";
-  const letters = ["أ", "ب", "ج", "د"];
-  currentQuestions.forEach((item, i) => {
-    const box = document.createElement("div");
-    box.className = "qbox";
-    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
-    const opts = box.querySelector(".options");
-    item.o.forEach((opt, j) => {
-      const btn = document.createElement("button");
-      btn.className = "option";
-      btn.textContent = `${letters[j]}) ${opt}`;
-      btn.onclick = () => {
-        answers[i] = j;
-        [...opts.children].forEach((x, k) => {
-          x.classList.remove("correct", "wrong");
-          x.disabled = true;
-          if (k === item.a) x.classList.add("correct");
-          if (k === j && j !== item.a) x.classList.add("wrong");
+    const EMPLOYE_RAW = [
+      { id: 1, gender: `M`, age: 28, income: 4200 },
+      { id: 2, gender: `F`, age: null, income: 4800 },
+      { id: 3, gender: `M`, age: 35, income: null },
+      { id: 4, gender: `M`, age: 42, income: 6100 },
+      { id: 5, gender: null, age: 31, income: 4500 },
+      { id: 6, gender: `F`, age: 26, income: 3900 },
+      { id: 7, gender: `M`, age: 45, income: null },
+      { id: 8, gender: `F`, age: null, income: 5200 },
+      { id: 9, gender: `M`, age: 31, income: 4700 }
+    ];
+
+    /* Simulated 768-point BMI dataset preserving authentic diabetes.xls properties:
+       768 total records, 0 missing, ~11 zero-BMI outliers + high BMI outliers (>50),
+       Q1 ≈ 27.3, Median ≈ 32.0, Q3 ≈ 36.6 */
+    const BMI_SAMPLE_768 = (function buildBmi768() {
+      const vals = [];
+      /* 11 zero entries (classic Pima Indians Diabetes missing-encoded-as-0 outliers) */
+      for (let i = 0; i < 11; i++) vals.push(0);
+      /* 6 low entries between 18.2 and 21.0 */
+      const lows = [18.2, 18.4, 19.1, 19.3, 19.5, 19.6];
+      for (let i = 0; i < lows.length; i++) vals.push(lows[i]);
+      /* 743 core entries smoothly distributed between 20.0 and 49.7 around Q1=27.3, Med=32.0, Q3=36.6 */
+      for (let i = 0; i < 743; i++) {
+        const u = (i + 0.5) / 743;
+        let v;
+        if (u < 0.24) {
+          v = 20.0 + (u / 0.24) * 7.3;
+        } else if (u < 0.50) {
+          v = 27.3 + ((u - 0.24) / 0.26) * 4.7;
+        } else if (u < 0.75) {
+          v = 32.0 + ((u - 0.50) / 0.25) * 4.6;
+        } else {
+          v = 36.6 + ((u - 0.75) / 0.25) * 13.1;
+        }
+        vals.push(Math.round(v * 10) / 10);
+      }
+      /* 8 high outliers > 50 */
+      const highs = [52.3, 52.9, 53.2, 55.0, 57.3, 59.4, 67.1, 51.8];
+      for (let i = 0; i < highs.length; i++) vals.push(highs[i]);
+      return vals;
+    })();
+
+    const QUIZ_BANK = {
+      1: [
+        {
+          q: `ما المفهوم الدقيق لجودة البيانات (Data Quality) كما ورد في الوحدة الأولى؟`,
+          opts: [
+            `حجم البيانات المخزنة في قواعد البيانات السحابية`,
+            `مدى دقة واكتمال البيانات في توفير المعلومات المفيدة والصحيحة للاستخدام المقصود`,
+            `سرعة معالجة الخوارزميات للبيانات الضخمة بغض النظر عن مصدرها`,
+            `تحويل كافة البيانات النصية إلى أرقام ثنائية فقط`
+          ],
+          ans: 1,
+          exp: `تشير جودة البيانات إلى مدى دقة واكتمال البيانات في توفير المعلومات المفيدة والصحيحة للاستخدام المقصود لدعم القرار والعمليات.`
+        },
+        {
+          q: `أي جانب من جوانب جودة البيانات الستة يشير إلى "وجود كل المعلومات الضرورية والمطلوبة لغرض معين وملء الفجوات"؟`,
+          opts: [`الدقة (Accuracy)`, `الاتساق (Consistency)`, `الاكتمال (Completeness)`, `المرجعية (Traceability)`],
+          ans: 2,
+          exp: `الاكتمال يعني وجود جميع المعلومات الضرورية المطلوبة للغرض المحدد وضرورة ملء أي فجوات أو قيم ناقصة.`
+        },
+        {
+          q: `إمكانية ربط البيانات بمصادر معينة أو معايير معترف بها مما يسهل فهمها واستخدامها يُعرف بجانب:`,
+          opts: [`المرجعية`, `الموثوقية`, `الوضوح والتوضيح`, `الدقة`],
+          ans: 0,
+          exp: `المرجعية تتعلق بإمكانية ربط البيانات بمصادر معينة أو معايير معترف بها؛ أما الموثوقية فتعني استنادها لمصادر موثوقة وتوثيقها.`
+        },
+        {
+          q: `ما الهدف الرئيسي من تطبيق قاعدة "Garbage in, Garbage out" (GIGO) في علم البيانات؟`,
+          opts: [
+            `تسريع تدريب الشبكات العصبية على البيانات الخام`,
+            `التأكيد على أنه إذا أُدخلت بيانات غير جيدة للنموذج فلا تتوقع نتائج جيدة مهما كانت جودة الخوارزمية`,
+            `حذف نصف الأعمدة في كل جدول قبل بدء التحليل`,
+            `تحويل الجداول العلائقية إلى ملفات نصية غير منظمة`
+          ],
+          ans: 1,
+          exp: `تؤكد قاعدة GIGO أن جودة المخرجات والنماذج مرهونة بجودة المدخلات؛ فالبيانات الرديئة تنتج قرارات ونتائج رديئة مهما كان النموذج متقدماً.`
+        },
+        {
+          q: `عند كتابة اسم دولة بشكل إملائي خاطئ في بعض السجلات (مثل كتابة اسم البلد بطريقة غير صحيحة)، تُصنّف هذه المشكلة ضمن البيانات:`,
+          opts: [`المتكررة (Redundant)`, `غير المكتملة (Incomplete)`, `غير الصحيحة (Incorrect)`, `المشوشة عشوائياً`],
+          ans: 2,
+          exp: `وفق تصنيف مشاكل جودة البيانات في الوحدة الأولى، فإن كتابة اسم بلد بشكل غير صحيح مثال مباشر على البيانات غير الصحيحة (Incorrect).`
+        },
+        {
+          q: `أيٌّ من الحالات التالية تُعد مثالاً تقنياً مباشراً على أسباب وجود القيم المفقودة (Missing Values)؟`,
+          opts: [
+            `عطل في إحدى الحساسات التي تقيس بيانات معينة أثناء الجمع`,
+            `وجود عمودين لهما نفس القيم المنطقية`,
+            `ترتيب الصفوف تصاعدياً حسب العمر`,
+            `ربط جدولين عبر المفتاح الأساسي`
+          ],
+          ans: 0,
+          exp: `من الأسباب الخمسة لفقدان البيانات: خطأ في جمع البيانات مثل عطل في إحدى الحساسات، إضافة لعدم إلزامية الحقل أو صعوبة التصنيف أو عدم الحاجة المسبقة.`
+        },
+        {
+          q: `في جدول الموظفين الذي يضم عمود Department وعمود Years With Company، لوحظ أن القيم المفقودة في سنوات الخبرة تظهر فقط لموظفي قسم IT. ما تصنيف هذا الفقدان؟`,
+          opts: [
+            `MCAR — مفقودة بشكل عشوائي تماماً`,
+            `MAR — مفقودة بشكل عشوائي (مرتبطة بمتغير مسجل)`,
+            `بيانات متكررة (Duplicate)`,
+            `بيانات غير صالحة (Invalid)`
+          ],
+          ans: 1,
+          exp: `في هذا المثال المذكور نصاً في الوحدة الأولى، يرتبط الفقدان في عمود Years With Company بمتغير مسجل آخر هو Department (قسم IT)، لذا يُصنف MAR وقد يسبب تحيزاً.`
+        },
+        {
+          q: `ما المقصود بالبيانات المفقودة بشكل غير عشوائي (MNAR — Missing Not at Random)؟`,
+          opts: [
+            `بيانات مفقودة بسبب عطل عشوائي نادر لا علاقة له بأي متغير`,
+            `بيانات مفقودة لها علاقة بمتغيرات غير مسجلة أو بقيمة المتغير المفقود نفسه`,
+            `بيانات متكررة في أكثر من صف`,
+            `بيانات تم استبدالها بالصفر`
+          ],
+          ans: 1,
+          exp: `يرتبط نوع MNAR بمتغيرات أخرى غير مسجلة أو بقيمة الحقل المفقود ذاته، فلا يكون الفقدان عشوائياً لا كلياً ولا مشروطاً بمتغير مسجل.`
+        },
+        {
+          q: `جدول يحتوي على عمود Sex بالقيم (M/F) بالإضافة إلى عمودي Male و Female بالقيم (True/False). ما نوع مشكلة الجودة هنا؟`,
+          opts: [
+            `بيانات غير متسقة (Inconsistent)`,
+            `بيانات مشوشة (Noisy)`,
+            `بيانات متكررة أو زائدة (Redundant data)`,
+            `بيانات غير صالحة (Invalid)`
+          ],
+          ans: 2,
+          exp: `تُعد حقول Male و Female تكراراً وزوائد عن حقل Sex لأنها لا تضيف أي معلومات جديدة وحذفها لا يؤثر على نتائج التحليل.`
+        },
+        {
+          q: `أيُّ مثال مما يلي يعبر عن "البيانات غير المتسقة" (Inconsistent Data)؟`,
+          opts: [
+            `وجود صفين متطابقين في كل الحقول`,
+            `احتواء حقل العمر على قيمة سالبة أو تعارض المدينة مع الرمز البريدي`,
+            `عدم إدخال رقم الهاتف لأنه اختياري`,
+            `استبدال القيمة المفقودة بالكلمة UNKNOWN`
+          ],
+          ans: 1,
+          exp: `عدم التناسق يشمل تعارض الحقول المعتمدة على بعضها (الدولة والمدينة، أو المدينة والرمز البريدي)، والقيم المستحيلة (عمر سالب)، والقيم غير المنطقية (حرارة عالية جداً).`
+        }
+      ],
+      2: [
+        {
+          q: `بعد قراءة ملف employe.csv المكوّن من 9 صفوف، أظهر ناتج df.describe() أن count لعمودي age و income هو 7. ما الاستنتاج الصحيح؟`,
+          opts: [
+            `الملف يحتوي على 7 صفوف فقط`,
+            `يوجد قيمتان مفقودتان في كل من عمودي age و income`,
+            `جميع القيم في عمود age تساوي 7`,
+            `البيانات خالية تماماً من القيم المفقودة`
+          ],
+          ans: 1,
+          exp: `تحسب دالة describe() عدد القيم غير الفارغة في count؛ وبما أن إجمالي الصفوف 9 وعدد غير الفارغ 7، فهناك 9 - 7 = 2 قيمة مفقودة في كل عمود.`
+        },
+        {
+          q: `ما الأمر الصحيح في مكتبة Pandas لمعرفة عدد القيم المفقودة في كل عمود على حدة؟`,
+          opts: [
+            `df.describe().count()`,
+            `df.isnull().sum()`,
+            `df.dropna().info()`,
+            `df.fillna().sum()`
+          ],
+          ans: 1,
+          exp: `تقوم df.isnull() بتحديد القيم المفقودة (True/False) وتجمع sum() عدد القيم المفقودة لكل حقل.`
+        },
+        {
+          q: `عند مقارنة حذف السجلات (الصفوف) بحذف الحقول (الأعمدة) في معالجة القيم المفقودة، أي العبارات أدق؟`,
+          opts: [
+            `حذف الحقول دائماً أفضل من حذف السجلات`,
+            `حذف السجل أقل تأثيراً على البيانات من حذف الحقول، لكن مع كثرة السجلات الناقصة يُفضّل وسائل أخرى`,
+            `يجب حذف كل عمود يحتوي ولو على قيمة واحدة مفقودة`,
+            `لا فرق مطلقاً بين حذف الصف أو العمود`
+          ],
+          ans: 1,
+          exp: `حذف السجل أقل ضرراً من حذف خاصية كاملة، لكن إذا كان عدد السجلات المفقودة كبيراً جداً فالحذف يضيّع معظم البيانات ويجب استخدام التعويض.`
+        },
+        {
+          q: `ما تأثير تنفيذ الأمر df.dropna(axis=1) على DataFrame؟`,
+          opts: [
+            `حذف الصفوف التي تحتوي على قيم مفقودة`,
+            `حذف الأعمدة (الحقول) التي تحتوي على أي قيمة مفقودة`,
+            `استبدال القيم المفقودة بالرقم 1`,
+            `حذف الصفوف التي كل قيمها مفقودة فقط`
+          ],
+          ans: 1,
+          exp: `المعامل axis=1 يوجّه دالة dropna() للعمل على مستوى الأعمدة؛ وفي مثال employe.csv أدى ذلك لحذف 3 أعمدة.`
+        },
+        {
+          q: `ما الغرض من تمرير المعامل how='all' إلى دالة df.dropna(how='all')؟`,
+          opts: [
+            `حذف الصف إذا احتوى على قيمة واحدة مفقودة على الأقل`,
+            `حذف الصف فقط إذا كانت جميع قيمه مفقودة بالكامل`,
+            `حذف جميع الأعمدة الرقمية والنصية`,
+            `تعويض جميع القيم المفقودة بالمتوسط`
+          ],
+          ans: 1,
+          exp: `الوضع الافتراضي لـ dropna() يحذف الصف بوجود أي قيمة مفقودة، أما how='all' فيقصر الحذف على الصفوف الفارغة تماماً.`
+        },
+        {
+          q: `ما القيمة الثابتة الشائعة لتعويض القيم المفقودة في الحقول النوعية، وما الخطر عند استبدال أكثر من نصف قيم حقل رقمي بصفر؟`,
+          opts: [
+            `'UNKNOWN' للنوعية، والخطر هو التأثير سلباً على قيمة التباين (Variance) داخل الحقل`,
+            `'ZERO' للنوعية، ولا يوجد أي أثر على التباين`,
+            `'MEAN' للنوعية، والخطر هو زيادة عدد الأعمدة`,
+            `0 للنوعية، والخطر هو حذف الصفوف تلقائياً`
+          ],
+          ans: 0,
+          exp: `نستخدم غالباً 'UNKNOWN' للحقول النوعية و 0 للرقمية؛ لكن استبدال أكثر من نصف القيم بصفر يضغط التوزيع ويؤثر بقوة على التباين والنتائج.`
+        },
+        {
+          q: `ما الكود الصحيح في Pandas لاستبدال القيم المفقودة في عمود age فقط بالقيمة الثابتة 0؟`,
+          opts: [
+            `df.fillna(0)`,
+            `df['age'].fillna(0)`,
+            `df['age'].dropna(0)`,
+            `df.replace('age', 0)`
+          ],
+          ans: 1,
+          exp: `تطبيق fillna(0) على السلسلة df['age'] يستهدف عمود العمر فقط دون التأثير على بقية الأعمدة في DataFrame.`
+        },
+        {
+          q: `تصلح طريقة الاستبدال بأكثر قيمة تكراراً (Mode) بشكل أكبر مع:`,
+          opts: [
+            `البيانات النوعية/الفئوية مثل gender`,
+            `البيانات المتصلة التي تحتوي على أرقام عشرية دقيقة فقط`,
+            `إزالة الأعمدة المتكررة`,
+            `حساب الانحراف المعياري فقط`
+          ],
+          ans: 0,
+          exp: `تستخدم mode() مع الحقول، وتكون أكثر ملاءمة للبيانات النوعية (مثل gender) مقارنة بالبيانات الكمية، مع مراعاة نسبة الفقدان.`
+        },
+        {
+          q: `عند استخدام المتوسط الحسابي (mean) لتعويض القيم المفقودة في عمود كمي مثل age، ما العيب الذي يجب الانتباه له؟`,
+          opts: [
+            `أنه يحسب المتوسط من القيم المفقودة أيضاً`,
+            `أنه يتأثر بشكل كبير بوجود القيم المتطرفة (Outliers)`,
+            `أنه لا يعمل مع البيانات الرقمية`,
+            `أنه يحذف العمود الأصلي بعد الحساب`
+          ],
+          ans: 1,
+          exp: `رغم أن المتوسط يُحسب من القيم غير المفقودة فقط ويعتمد على البيانات الفعلية، إلا أن القيم المتطرفة تسحبه بقوة وتشوه القيمة المعوضة.`
+        },
+        {
+          q: `لماذا تُعد طريقة نموذج الانحدار (Regression) من أدق طرق تعويض القيم المفقودة، وما الشرط اللازم قبل بناء النموذج؟`,
+          opts: [
+            `تصلح للبيانات الخطية وتعتمد على عدة أعمدة، ويجب معالجة القيم المتطرفة قبل بناء النموذج`,
+            `تصلح للنصوص فقط وتُبنى من الصفوف المفقودة`,
+            `لا تتأثر بالقيم المتطرفة مطلقاً`,
+            `تستبدل كل القيم المفقودة بالصفر أولاً ثم تبني النموذج`
+          ],
+          ans: 0,
+          exp: `تعويض الانحدار دقيق جداً خاصة مع البيانات الخطية؛ ويجب معالجة القيم المتطرفة قبل بناء النموذج لأنه يتدرب على البيانات الكاملة الخالية من الفقدان.`
+        }
+      ],
+      3: [
+        {
+          q: `وفق ناتج دالة info() على ملف بيانات مرضى السكري diabetes.xls في الوحدة الثالثة، ما مواصفات البيانات؟`,
+          opts: [
+            `9 حقول و 768 عنصراً ولا توجد قيم مفقودة`,
+            `7 حقول و 900 عنصر مع 20 قيمة مفقودة`,
+            `4 حقول و 9 عناصر مع قيم مفقودة في age`,
+            `12 حقلاً و 500 عنصر نصفها مفقود`
+          ],
+          ans: 0,
+          exp: `يوضح ناتج info() في الوحدة الثالثة أن بيانات diabetes.xls تحتوي على 9 حقول و 768 عنصراً وجميعها غير مفقودة (768 non-null).`
+        },
+        {
+          q: `أيٌّ من الأدوات التالية لا يُعد من الطرق الأربع المذكورة في الوحدة الثالثة للتعرف على القيم المتطرفة؟`,
+          opts: [`Box plot`, `Scatter plot`, `Z-score`, `Mode imputation`],
+          ans: 3,
+          exp: `الطرق الأربع لكشف القيم المتطرفة هي: Box plot و Scatter plot و Z-score و IQR. أما Mode imputation فهي طريقة لتعويض القيم المفقودة.`
+        },
+        {
+          q: `كيف تظهر القيم المتطرفة عند تمثيل حقل bmi باستخدام مخطط الصندوق (Box plot)؟`,
+          opts: [
+            `كخط متصل في منتصف الصندوق`,
+            `كنقاط منفردة خارج الأطراف الخاصة بمخطط الصندوق`,
+            `كأعمدة ملونة أسفل المحور الأفقي`,
+            `تختفي تلقائياً ولا تظهر في الرسم`
+          ],
+          ans: 1,
+          exp: `يُظهر مخطط الصندوق (Box plot) القيم المتطرفة بوضوح كنقاط تقع خارج أطراف (شوارب) المخطط.`
+        },
+        {
+          q: `ما الكود الصحيح في Pandas لتنقية بيانات diabetes والاحتفاظ فقط بالسجلات التي تكون قيمة bmi فيها بين 18 و 50؟`,
+          opts: [
+            `new_data = df[(df['bmi'] >= 18) & (df['bmi'] <= 50)]`,
+            `new_data = df[(df['bmi'] > 50) | (df['bmi'] < 18)]`,
+            `new_data = df.dropna(bmi=[18, 50])`,
+            `new_data = df['bmi'].fillna(18, 50)`
+          ],
+          ans: 0,
+          exp: `نستخدم التصفية المنطقية بالمعامل & للجمع بين شرط أكبر من أو يساوي 18 وشرط أصغر من أو يساوي 50.`
+        },
+        {
+          q: `كيف تم التحقق في الوحدة الثالثة من نجاح عملية تنقية حقل bmi في المتغير new_data؟`,
+          opts: [
+            `باستدعاء دالة dropna(how='all')`,
+            `بإعادة رسم Box plot لبيانات new_data وملاحظة اختفاء النقاط المتطرفة`,
+            `بتحويل الملف إلى صيغة CSV`,
+            `بحساب المنوال لعمود gender`
+          ],
+          ans: 1,
+          exp: `بعد تخزين السجلات المنقّاة في new_data، أعيد رسم مخطط الصندوق فظهر خالياً من النقاط الخارجية المتطرفة.`
+        },
+        {
+          q: `ما التعريف الصحيح لمقياس IQR في الوحدة الثالثة؟`,
+          opts: [
+            `مجموع الربع الأول والربع الثالث مقسوماً على 2`,
+            `قيمة الربع الثالث (Q3) مطروحاً منها قيمة الربع الأول (Q1)`,
+            `المتوسط الحسابي مطروحاً منه الوسيط`,
+            `الحد الأقصى مطروحاً منه الحد الأدنى بالكامل`
+          ],
+          ans: 1,
+          exp: `المدى الربيعي IQR يساوي الفرق بين الربع الثالث والربع الأول: IQR = Q3 - Q1.`
+        },
+        {
+          q: `أي دالة في Pandas تُستخدم لحساب قيمة الربع الأول Q1 (25%) والربع الثالث Q3 (75%)؟`,
+          opts: [
+            `df['bmi'].quantile(0.25) و df['bmi'].quantile(0.75)`,
+            `df['bmi'].mean(0.25) و df['bmi'].mean(0.75)`,
+            `df['bmi'].mode(0.25) و df['bmi'].mode(0.75)`,
+            `df['bmi'].describe(0.25)`
+          ],
+          ans: 0,
+          exp: `تُستخدم دالة quantile(0.25) لاستخراج الربع الأول Q1، و quantile(0.75) لاستخراج الربع الثالث Q3.`
+        },
+        {
+          q: `عند استخدام قاعدة IQR لتنقية البيانات، ما القيم التي يتم التخلص منها باعتبارها قيماً متطرفة؟`,
+          opts: [
+            `القيم الواقعة بين Q1 و Q3`,
+            `القيم الأقل من Q1 - 1.5*IQR أو الأعلى من Q3 + 1.5*IQR`,
+            `القيم الأقل من المتوسط بمقدار 0.5`,
+            `القيم المساوية للوسيط تماماً`
+          ],
+          ans: 1,
+          exp: `تستبعد طريقة IQR أي قيمة تقل عن Q1 بمقدار 1.5×IQR أو تزيد عن Q3 بمقدار 1.5×IQR.`
+        },
+        {
+          q: `مسألة تطبيقية: إذا كانت قيمة الربع الأول Q1 = 27 وقيمة الربع الثالث Q3 = 37 لمجموعة قيم، فما الحد الأعلى المقبول وفق قاعدة IQR؟`,
+          opts: [`42`, `47`, `52`, `57`],
+          ans: 2,
+          exp: `أولاً نحسب IQR = 37 - 27 = 10. ثم الحد الأعلى = Q3 + 1.5 × IQR = 37 + 15 = 52. أي قيمة أكبر من 52 تُعد متطرفة.`
+        },
+        {
+          q: `أي من طرق كشف القيم المتطرفة تعتمد على التمثيل الرسومي لعلاقة متغيرين معاً لرؤية النقاط الشاذة المعزولة؟`,
+          opts: [`Scatter plot`, `Z-score`, `IQR`, `fillna()`],
+          ans: 0,
+          exp: `مخطط التشتت (Scatter plot) يرسم العلاقة بين متغيرين كنقاط في المستوى، مما يسهل رؤية القيم المتطرفة البعيدة عن بقية النقاط.`
+        }
+      ]
+    };
+
+    /* =========================================================================
+       APPLICATION STATE & PERSISTENCE (notebookAppApi)
+       ========================================================================= */
+
+    const appState = {
+      u1DefectFilter: `all`,
+      u2SimMode: `raw`,
+      u3OutlierMode: `raw`,
+      u3MinBmi: 18,
+      u3MaxBmi: 50,
+      answers: {
+        1: {},
+        2: {},
+        3: {}
+      }
+    };
+
+    function setSaveStatus(text) {
+      const el = document.getElementById(`save-status-val`);
+      if (el) el.textContent = text;
+    }
+
+    async function persistAppState() {
+      if (!window.notebookAppApi) return;
+      try {
+        setSaveStatus(`جارٍ الحفظ…`);
+        await window.notebookAppApi.setAppState({
+          u1DefectFilter: appState.u1DefectFilter,
+          u2SimMode: appState.u2SimMode,
+          u3OutlierMode: appState.u3OutlierMode,
+          u3MinBmi: appState.u3MinBmi,
+          u3MaxBmi: appState.u3MaxBmi,
+          answers: appState.answers
         });
-        const fb = document.getElementById("fb" + i);
-        fb.hidden = false;
-        fb.className = "feedback " + (j === item.a ? "good" : "bad");
-        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
-        updateScore();
+        setSaveStatus(`محفوظ`);
+      } catch (err) {
+        setSaveStatus(`محلي فقط`);
+      }
+    }
+
+    /* =========================================================================
+       UNIT 1 INTERACTIVE LAB: DEFECT INSPECTOR
+       ========================================================================= */
+
+    function renderDefectTable() {
+      const tbody = document.getElementById(`u1-defect-tbody`);
+      const explainEl = document.getElementById(`u1-lab-explain`);
+      const badgeEl = document.getElementById(`u1-lab-badge`);
+      if (!tbody) return;
+
+      const f = appState.u1DefectFilter;
+      let html = ``;
+
+      for (let i = 0; i < DEFECT_ROWS.length; i++) {
+        const r = DEFECT_ROWS[i];
+        const isRowDup = r.id === 106 && (f === `all` || f === `redundant`);
+        const trClass = isRowDup ? `class="cell-flag-error"` : ``;
+
+        const flagCountry = (r.id === 105 && (f === `all` || f === `incorrect`)) || (r.id === 103 && (f === `all` || f === `inconsistent`));
+        const flagCity = r.id === 103 && (f === `all` || f === `inconsistent`);
+        const flagAge = (r.age === null && (f === `all` || f === `missing`)) || (r.age < 0 && (f === `all` || f === `invalid` || f === `inconsistent`));
+        const flagTemp = r.temp > 60 && (f === `all` || f === `noisy` || f === `inconsistent`);
+        const flagMale = (f === `all` || f === `redundant`);
+
+        html += `<tr ${trClass}>`;
+        html += `<td class="cell-num">${r.id}</td>`;
+        html += `<td class="${flagCountry ? `cell-flag-error` : ``}">${r.country}</td>`;
+        html += `<td class="${flagCity ? `cell-flag-error` : ``}">${r.city}</td>`;
+        html += `<td class="cell-num ${flagAge ? `cell-flag-error` : ``}">${r.age === null ? `NaN` : r.age}</td>`;
+        html += `<td class="cell-num ${flagTemp ? `cell-flag-error` : ``}">${r.temp}</td>`;
+        html += `<td>${r.sex}</td>`;
+        html += `<td class="${flagMale ? `cell-flag-error` : ``}">${r.male}</td>`;
+        html += `</tr>`;
+      }
+      tbody.innerHTML = html;
+
+      if (explainEl) {
+        explainEl.innerHTML = `<strong>التشخيص الحالي:</strong> ${DEFECT_NOTES[f] || DEFECT_NOTES.all}`;
+      }
+      if (badgeEl) {
+        const labels = {
+          all: `عرض جميع العيوب (6 أنواع)`,
+          missing: `التركيز: غير مكتملة (Missing)`,
+          inconsistent: `التركيز: غير متسقة (Inconsistent)`,
+          invalid: `التركيز: غير صالحة (Invalid)`,
+          redundant: `التركيز: متكررة (Redundant)`,
+          incorrect: `التركيز: غير صحيحة (Incorrect)`,
+          noisy: `التركيز: مشوشة (Noisy)`
+        };
+        badgeEl.textContent = labels[f] || labels.all;
+      }
+    }
+
+    function selectDefectFilter(filterKey, btnEl) {
+      appState.u1DefectFilter = filterKey;
+      if (btnEl && btnEl.parentElement) {
+        const btns = btnEl.parentElement.querySelectorAll(`.filter-tab`);
+        for (let i = 0; i < btns.length; i++) btns[i].classList.remove(`is-active`);
+        btnEl.classList.add(`is-active`);
+      }
+      renderDefectTable();
+      persistAppState();
+    }
+
+    /* =========================================================================
+       UNIT 2 INTERACTIVE LAB: MISSING VALUE IMPUTATION SIMULATOR
+       ========================================================================= */
+
+    function calcMeanVar(nums) {
+      if (!nums.length) return { mean: 0, variance: 0 };
+      let sum = 0;
+      for (let i = 0; i < nums.length; i++) sum += nums[i];
+      const mean = sum / nums.length;
+      let sq = 0;
+      for (let i = 0; i < nums.length; i++) {
+        const d = nums[i] - mean;
+        sq += d * d;
+      }
+      const variance = nums.length > 1 ? sq / (nums.length - 1) : 0;
+      return { mean: mean, variance: variance };
+    }
+
+    function renderImputationLab() {
+      const tbody = document.getElementById(`u2-sim-tbody`);
+      const rowsEl = document.getElementById(`u2-sim-rows`);
+      const colsEl = document.getElementById(`u2-sim-cols`);
+      const meanEl = document.getElementById(`u2-sim-mean`);
+      const varEl = document.getElementById(`u2-sim-var`);
+      const noteEl = document.getElementById(`u2-sim-note`);
+      const badgeEl = document.getElementById(`u2-lab-code-badge`);
+      if (!tbody) return;
+
+      const mode = appState.u2SimMode;
+      const validAges = EMPLOYE_RAW.filter(function (r) { return r.age !== null; }).map(function (r) { return r.age; });
+      const rawStats = calcMeanVar(validAges);
+      const meanAge = Math.round(rawStats.mean * 10) / 10;
+      const modeGender = `M`;
+
+      let html = ``;
+      let activeAges = [];
+      let remainingRows = 0;
+      let remainingCols = 4;
+
+      if (mode === `dropna_cols`) {
+        remainingCols = 1; /* only ID has no nulls across gender, age, income */
+        remainingRows = 9;
+      }
+
+      for (let i = 0; i < EMPLOYE_RAW.length; i++) {
+        const r = EMPLOYE_RAW[i];
+        const hasAnyNull = r.gender === null || r.age === null || r.income === null;
+        let rowRemoved = false;
+
+        let dispGender = r.gender === null ? `NaN` : r.gender;
+        let dispAge = r.age === null ? `NaN` : r.age;
+        let dispIncome = r.income === null ? `NaN` : r.income;
+
+        let clsGender = r.gender === null ? `cell-flag-error` : ``;
+        let clsAge = r.age === null ? `cell-flag-error` : ``;
+        let clsIncome = r.income === null ? `cell-flag-error` : ``;
+
+        if (mode === `raw`) {
+          remainingRows++;
+          if (r.age !== null) activeAges.push(r.age);
+        } else if (mode === `dropna_rows`) {
+          if (hasAnyNull) {
+            rowRemoved = true;
+          } else {
+            remainingRows++;
+            activeAges.push(r.age);
+          }
+        } else if (mode === `dropna_cols`) {
+          clsGender = `row-removed`;
+          clsAge = `row-removed`;
+          clsIncome = `row-removed`;
+          dispGender = `(حُذف)`;
+          dispAge = `(حُذف)`;
+          dispIncome = `(حُذف)`;
+        } else if (mode === `fillna_zero`) {
+          remainingRows++;
+          if (r.gender === null) { dispGender = `0`; clsGender = `cell-flag-imputed`; }
+          if (r.age === null) { dispAge = 0; clsAge = `cell-flag-imputed`; activeAges.push(0); } else { activeAges.push(r.age); }
+          if (r.income === null) { dispIncome = 0; clsIncome = `cell-flag-imputed`; }
+        } else if (mode === `mode_mean`) {
+          remainingRows++;
+          if (r.gender === null) { dispGender = `${modeGender} (mode)`; clsGender = `cell-flag-imputed`; }
+          if (r.age === null) { dispAge = meanAge; clsAge = `cell-flag-imputed`; activeAges.push(meanAge); } else { activeAges.push(r.age); }
+          if (r.income === null) { dispIncome = 4771; clsIncome = `cell-flag-imputed`; }
+        }
+
+        html += `<tr class="${rowRemoved ? `row-removed` : ``}">`;
+        html += `<td class="cell-num">${r.id}</td>`;
+        html += `<td class="${clsGender}">${dispGender}</td>`;
+        html += `<td class="cell-num ${clsAge}">${dispAge}</td>`;
+        html += `<td class="cell-num ${clsIncome}">${dispIncome}</td>`;
+        html += `</tr>`;
+      }
+
+      tbody.innerHTML = html;
+
+      if (mode === `dropna_cols`) {
+        if (rowsEl) rowsEl.textContent = `9 / 9`;
+        if (colsEl) colsEl.textContent = `1 / 4`;
+        if (meanEl) meanEl.textContent = `—`;
+        if (varEl) varEl.textContent = `—`;
+      } else {
+        const stats = calcMeanVar(activeAges);
+        if (rowsEl) rowsEl.textContent = `${remainingRows} / 9`;
+        if (colsEl) colsEl.textContent = `${remainingCols} / 4`;
+        if (meanEl) meanEl.textContent = stats.mean.toFixed(1);
+        if (varEl) varEl.textContent = stats.variance.toFixed(1);
+      }
+
+      const modeBadges = {
+        raw: `df (Raw Data)`,
+        dropna_rows: `df.dropna()`,
+        dropna_cols: `df.dropna(axis=1)`,
+        fillna_zero: `df.fillna(0)`,
+        mode_mean: `mode() + mean()`
       };
-      opts.appendChild(btn);
-    });
-    area.appendChild(box);
-  });
-  updateScore();
-}
+      const modeNotes = {
+        raw: `البيانات الأصلية تضم 9 صفوف و 4 أعمدة، مع وجود قيم مفقودة (<code class="inline-code">NaN</code>) في ثلاثة أعمدة: <code class="inline-code">gender</code> و <code class="inline-code">age</code> و <code class="inline-code">income</code>.`,
+        dropna_rows: `تسببت <code class="inline-code">df.dropna()</code> في حذف <strong>4 صفوف</strong> من أصل 9 (بقي 5 صفوف فقط)، مما يؤدي لفقدان نسبة كبيرة من العينة عندما تكون السجلات قليلة.`,
+        dropna_cols: `تسببت <code class="inline-code">df.dropna(axis=1)</code> في حذف <strong>3 أعمدة</strong> كاملة لأنها تحتوي على قيم مفقودة، ولم يبقَ سوى عمود <code class="inline-code">ID</code>! لذلك يجب توخي الحذر قبل حذف الأعمدة.`,
+        fillna_zero: `استبدلت <code class="inline-code">df.fillna(0)</code> جميع القيم المفقودة بصفر: لاحظ أن متوسط العمر هبط من <bdi dir="ltr">34.0</bdi> إلى <bdi dir="ltr">26.4</bdi>، وتضاعف التباين قفزاً من <bdi dir="ltr">52.3</bdi> إلى <bdi dir="ltr">256.8</bdi> مما يشوه التحليل!`,
+        mode_mean: `عُوّض الحقل النوعي <code class="inline-code">gender</code> بالقيمة الأكثر تكراراً (<code class="inline-code">M</code>)، وعُوّضت الحقول الكمية <code class="inline-code">age</code> و <code class="inline-code">income</code> بمتوسط القيم غير المفقودة، فحافظ المتوسط على استقراره (<bdi dir="ltr">34.0</bdi>) دون حذف أي صف.`
+      };
+      if (badgeEl) badgeEl.textContent = modeBadges[mode] || modeBadges.raw;
+      if (noteEl) noteEl.innerHTML = `<strong>تحليل النتيجة:</strong> ${modeNotes[mode] || modeNotes.raw}`;
+    }
 
-function updateScore() {
-  let correct = 0;
-  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
-  document.getElementById("score").textContent = `النتيجة: ${correct} / ${currentQuestions.length}`;
-  document.getElementById("progressBar").style.width = (Object.keys(answers).length / currentQuestions.length * 100) + "%";
-}
+    function runImputationLab(modeKey, btnEl) {
+      appState.u2SimMode = modeKey;
+      if (btnEl && btnEl.parentElement) {
+        const btns = btnEl.parentElement.querySelectorAll(`.filter-tab`);
+        for (let i = 0; i < btns.length; i++) btns[i].classList.remove(`is-active`);
+        btnEl.classList.add(`is-active`);
+      }
+      renderImputationLab();
+      persistAppState();
+    }
 
-document.getElementById("resetQuiz").onclick = () => {
-  answers = {};
-  document.getElementById("finalResult").textContent = "";
-  renderQuiz();
-  window.scrollTo({ top: 0, behavior: "smooth" });
-};
+    /* =========================================================================
+       UNIT 3 INTERACTIVE LAB: PLOTLY BOX PLOT & IQR FILTER
+       ========================================================================= */
 
-document.getElementById("finishQuiz").onclick = () => {
-  let correct = 0;
-  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
-  const pct = Math.round(correct / currentQuestions.length * 100);
-  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${currentQuestions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! أنتِ مستعدة تماماً للاختبار في هذا الفصل." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
-};
+    function getQuantile(sortedArr, q) {
+      const pos = (sortedArr.length - 1) * q;
+      const base = Math.floor(pos);
+      const rest = pos - base;
+      if (sortedArr[base + 1] !== undefined) {
+        return sortedArr[base] + rest * (sortedArr[base + 1] - sortedArr[base]);
+      }
+      return sortedArr[base];
+    }
 
-renderQuiz();
-</script>
+    function updateUnit3Plot() {
+      const mount = document.getElementById(`unit3-boxplot`);
+      const qEl = document.getElementById(`u3-kpi-quartiles`);
+      const iqrEl = document.getElementById(`u3-kpi-iqr`);
+      const boundsEl = document.getElementById(`u3-kpi-bounds`);
+      const countsEl = document.getElementById(`u3-kpi-counts`);
+      const badgeEl = document.getElementById(`u3-lab-mode-badge`);
+      const customBox = document.getElementById(`u3-custom-controls`);
+      if (!mount) return;
+
+      const sortedRaw = BMI_SAMPLE_768.slice().sort(function (a, b) { return a - b; });
+      const rawQ1 = getQuantile(sortedRaw, 0.25);
+      const rawQ3 = getQuantile(sortedRaw, 0.75);
+      const rawIQR = rawQ3 - rawQ1;
+      const rawLower = rawQ1 - 1.5 * rawIQR;
+      const rawUpper = rawQ3 + 1.5 * rawIQR;
+
+      let filtered = BMI_SAMPLE_768;
+      let modeTitle = `البيانات الخام (df['bmi'])`;
+
+      if (appState.u3OutlierMode === `range1850`) {
+        filtered = BMI_SAMPLE_768.filter(function (v) { return v >= 18 && v <= 50; });
+        modeTitle = `بعد التنقية: 18 <= bmi <= 50 (new_data)`;
+      } else if (appState.u3OutlierMode === `iqr`) {
+        filtered = BMI_SAMPLE_768.filter(function (v) { return v >= rawLower && v <= rawUpper; });
+        modeTitle = `بعد التنقية بقاعدة IQR (1.5×)`;
+      } else if (appState.u3OutlierMode === `custom`) {
+        const lo = Number(appState.u3MinBmi);
+        const hi = Number(appState.u3MaxBmi);
+        filtered = BMI_SAMPLE_768.filter(function (v) { return v >= lo && v <= hi; });
+        modeTitle = `تنقية مخصصة: ${lo} <= bmi <= ${hi}`;
+      }
+
+      if (customBox) {
+        customBox.style.display = appState.u3OutlierMode === `custom` ? `flex` : `none`;
+      }
+
+      const sortedF = filtered.slice().sort(function (a, b) { return a - b; });
+      const fQ1 = sortedF.length ? getQuantile(sortedF, 0.25) : 0;
+      const fQ3 = sortedF.length ? getQuantile(sortedF, 0.75) : 0;
+      const fIQR = fQ3 - fQ1;
+      const removedCount = BMI_SAMPLE_768.length - filtered.length;
+
+      if (qEl) qEl.textContent = `${fQ1.toFixed(1)} / ${fQ3.toFixed(1)}`;
+      if (iqrEl) iqrEl.textContent = fIQR.toFixed(1);
+      if (boundsEl) boundsEl.textContent = `${rawLower.toFixed(1)} – ${rawUpper.toFixed(1)}`;
+      if (countsEl) countsEl.textContent = `${filtered.length} / ${removedCount}`;
+      if (badgeEl) badgeEl.textContent = modeTitle;
+
+      if (typeof Plotly === `undefined`) {
+        mount.innerHTML = `<p style="padding:var(--space-md);">مخطط الصندوق جاهز بعد تحميل مكتبة الرسم؛ المتبقي ${filtered.length} عنصراً والمستبعد ${removedCount}.</p>`;
+        return;
+      }
+
+      const styles = getComputedStyle(document.documentElement);
+      const colorPrimary = styles.getPropertyValue(`--data-1`).trim() || `#0f62fe`;
+      const colorError = styles.getPropertyValue(`--error`).trim() || `#da1e28`;
+      const colorInk = styles.getPropertyValue(`--on-surface`).trim() || `#161616`;
+      const colorGrid = styles.getPropertyValue(`--outline-variant`).trim() || `#e0e0e0`;
+      const colorBg = styles.getPropertyValue(`--background`).trim() || `#ffffff`;
+      const fontLabel = styles.getPropertyValue(`--font-label`).trim() || `monospace`;
+
+      const trace = {
+        x: filtered,
+        type: `box`,
+        name: `bmi`,
+        boxpoints: `outliers`,
+        jitter: 0.25,
+        marker: {
+          color: appState.u3OutlierMode === `raw` ? colorError : colorPrimary,
+          size: 7,
+          line: { width: 1, color: colorInk }
+        },
+        line: { color: colorPrimary, width: 2 },
+        fillcolor: `rgba(15, 98, 254, 0.14)`
+      };
+
+      const layout = {
+        title: {
+          text: modeTitle,
+          font: { family: fontLabel, size: 14, color: colorInk },
+          x: 0.02,
+          xanchor: `left`
+        },
+        paper_bgcolor: colorBg,
+        plot_bgcolor: colorBg,
+        margin: { t: 48, r: 24, b: 48, l: 56 },
+        xaxis: {
+          title: { text: `BMI (Body Mass Index)`, font: { family: fontLabel, size: 12, color: colorInk } },
+          range: [-3, 72],
+          gridcolor: colorGrid,
+          zerolinecolor: colorGrid,
+          tickfont: { family: fontLabel, size: 11, color: colorInk }
+        },
+        yaxis: {
+          tickfont: { family: fontLabel, size: 12, color: colorInk }
+        },
+        showlegend: false
+      };
+
+      Plotly.react(mount, [trace], layout, { responsive: true, displayModeBar: false });
+    }
+
+    function setOutlierMode(modeKey, btnEl) {
+      appState.u3OutlierMode = modeKey;
+      if (btnEl && btnEl.parentElement) {
+        const btns = btnEl.parentElement.querySelectorAll(`.filter-tab`);
+        for (let i = 0; i < btns.length; i++) btns[i].classList.remove(`is-active`);
+        btnEl.classList.add(`is-active`);
+      }
+      updateUnit3Plot();
+      persistAppState();
+    }
+
+    function syncMinFromSlider(val) {
+      const numEl = document.getElementById(`num-bmi-min`);
+      if (numEl) numEl.value = val;
+      appState.u3MinBmi = Number(val);
+      updateUnit3Plot();
+      persistAppState();
+    }
+    function syncMinFromNumber(val) {
+      const clamped = Math.max(0, Math.min(35, Number(val) || 0));
+      const sliderEl = document.getElementById(`slider-bmi-min`);
+      if (sliderEl) sliderEl.value = clamped;
+      appState.u3MinBmi = clamped;
+      updateUnit3Plot();
+      persistAppState();
+    }
+    function syncMaxFromSlider(val) {
+      const numEl = document.getElementById(`num-bmi-max`);
+      if (numEl) numEl.value = val;
+      appState.u3MaxBmi = Number(val);
+      updateUnit3Plot();
+      persistAppState();
+    }
+    function syncMaxFromNumber(val) {
+      const clamped = Math.max(36, Math.min(70, Number(val) || 36));
+      const sliderEl = document.getElementById(`slider-bmi-max`);
+      if (sliderEl) sliderEl.value = clamped;
+      appState.u3MaxBmi = clamped;
+      updateUnit3Plot();
+      persistAppState();
+    }
+
+    /* =========================================================================
+       COPY CODE HELPER
+       ========================================================================= */
+
+    function copyCodeBlock(btn) {
+      const panel = btn ? btn.closest(`.code-panel`) : null;
+      const codeEl = panel ? panel.querySelector(`pre code`) : null;
+      if (!codeEl) return;
+      const text = codeEl.textContent;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () {
+          btn.textContent = `تم النسخ`;
+          setTimeout(function () { btn.textContent = `نسخ الكود`; }, 1500);
+        });
+      }
+    }
+
+    /* =========================================================================
+       INDEPENDENT QUIZ ENGINE (10 MCQs PER UNIT = 30 TOTAL)
+       ========================================================================= */
+
+    const LETTERS = [`أ`, `ب`, `ج`, `د`];
+
+    function buildUnitQuiz(unitNum) {
+      const listEl = document.getElementById(`u${unitNum}-questions`);
+      const dotsEl = document.getElementById(`u${unitNum}-dots`);
+      if (!listEl || !dotsEl) return;
+
+      const questions = QUIZ_BANK[unitNum];
+      let dotsHtml = ``;
+      let qHtml = ``;
+
+      for (let idx = 0; idx < questions.length; idx++) {
+        const item = questions[idx];
+        const qId = `u${unitNum}-q${idx}`;
+        dotsHtml += `<button type="button" class="quiz-dot" id="dot-${qId}" onclick="scrollToQuestion('${qId}')">${idx + 1}</button>`;
+
+        qHtml += `<article class="question-card" id="${qId}">`;
+        qHtml += `<div class="question-head">`;
+        qHtml += `<h4 class="question-title"><span class="concept-index" style="margin-inline-end:var(--space-sm);">س${idx + 1}.</span>${item.q}</h4>`;
+        qHtml += `<span class="tag-pill tag-pill--neutral" id="status-${qId}">لم يُجب</span>`;
+        qHtml += `</div>`;
+        qHtml += `<div class="options-grid">`;
+
+        for (let o = 0; o < item.opts.length; o++) {
+          qHtml += `<button type="button" class="option-btn" id="${qId}-opt-${o}" onclick="answerQuestion(${unitNum}, ${idx}, ${o})">`;
+          qHtml += `<span class="option-letter">${LETTERS[o]}</span>`;
+          qHtml += `<span>${item.opts[o]}</span>`;
+          qHtml += `</button>`;
+        }
+
+        qHtml += `</div>`;
+        qHtml += `<div class="feedback-panel" id="fb-${qId}" aria-live="polite">`;
+        qHtml += `<div class="feedback-verdict" id="fbv-${qId}"></div>`;
+        qHtml += `<p class="feedback-explain" id="fbe-${qId}"></p>`;
+        qHtml += `</div>`;
+        qHtml += `</article>`;
+      }
+
+      dotsEl.innerHTML = dotsHtml;
+      listEl.innerHTML = qHtml;
+    }
+
+    function scrollToQuestion(qId) {
+      const el = document.getElementById(qId);
+      if (el) el.scrollIntoView({ behavior: `smooth`, block: `center` });
+    }
+
+    function applyQuestionVisualState(unitNum, qIdx) {
+      const item = QUIZ_BANK[unitNum][qIdx];
+      const chosen = appState.answers[unitNum][qIdx];
+      const qId = `u${unitNum}-q${qIdx}`;
+
+      const card = document.getElementById(qId);
+      const dot = document.getElementById(`dot-${qId}`);
+      const statusPill = document.getElementById(`status-${qId}`);
+      const fb = document.getElementById(`fb-${qId}`);
+      const fbv = document.getElementById(`fbv-${qId}`);
+      const fbe = document.getElementById(`fbe-${qId}`);
+      if (!card || !dot || !statusPill || !fb || !fbv || !fbe) return;
+
+      card.classList.remove(`state-correct`, `state-wrong`);
+      dot.classList.remove(`is-correct`, `is-wrong`);
+      fb.classList.remove(`is-visible`, `is-correct`, `is-wrong`);
+
+      for (let o = 0; o < item.opts.length; o++) {
+        const optBtn = document.getElementById(`${qId}-opt-${o}`);
+        if (!optBtn) continue;
+        optBtn.classList.remove(`opt-correct`, `opt-wrong`);
+        optBtn.disabled = chosen !== undefined;
+      }
+
+      if (chosen === undefined) {
+        statusPill.textContent = `لم يُجب`;
+        statusPill.className = `tag-pill tag-pill--neutral`;
+        return;
+      }
+
+      const isRight = chosen === item.ans;
+      const chosenBtn = document.getElementById(`${qId}-opt-${chosen}`);
+      const correctBtn = document.getElementById(`${qId}-opt-${item.ans}`);
+
+      if (correctBtn) correctBtn.classList.add(`opt-correct`);
+      if (!isRight && chosenBtn) chosenBtn.classList.add(`opt-wrong`);
+
+      card.classList.add(isRight ? `state-correct` : `state-wrong`);
+      dot.classList.add(isRight ? `is-correct` : `is-wrong`);
+      statusPill.textContent = isRight ? `إجابة صحيحة` : `إجابة خاطئة`;
+      statusPill.className = `tag-pill ${isRight ? `tag-pill--positive` : `tag-pill--error`}`;
+
+      fb.classList.add(`is-visible`, isRight ? `is-correct` : `is-wrong`);
+      fbv.textContent = isRight ? `صحيح — أحسنت:` : `غير صحيح — الإجابة الصحيحة (${LETTERS[item.ans]}):`;
+      fbe.textContent = item.exp;
+    }
+
+    function updateAllScores() {
+      let totalCorrect = 0;
+      let totalAnswered = 0;
+
+      for (let u = 1; u <= 3; u++) {
+        const qs = QUIZ_BANK[u];
+        let uCorrect = 0;
+        let uAnswered = 0;
+        for (let i = 0; i < qs.length; i++) {
+          const a = appState.answers[u][i];
+          if (a !== undefined) {
+            uAnswered++;
+            if (a === qs[i].ans) uCorrect++;
+          }
+        }
+        totalCorrect += uCorrect;
+        totalAnswered += uAnswered;
+
+        const bannerScore = document.getElementById(`u${u}-banner-score`);
+        const bannerStatus = document.getElementById(`u${u}-banner-status`);
+        const quizPill = document.getElementById(`u${u}-quiz-pill`);
+        const fill = document.getElementById(`u${u}-progress-fill`);
+        const jumpScore = document.getElementById(`jump-score-${u}`);
+        const jumpLink = document.getElementById(`jump-unit-${u}`);
+        const sumEl = document.getElementById(`sum-u${u}`);
+
+        if (bannerScore) bannerScore.textContent = `${uCorrect} / 10`;
+        if (bannerStatus) {
+          bannerStatus.textContent = uAnswered === 10
+            ? (uCorrect >= 8 ? `ممتاز — اكتمل الاختبار` : `اكتمل — راجع الأخطاء`)
+            : `أجبت عن ${uAnswered} من 10`;
+        }
+        if (quizPill) quizPill.textContent = `النتيجة: ${uCorrect} / 10`;
+        if (fill) fill.style.width = `${(uAnswered / 10) * 100}%`;
+        if (jumpScore) jumpScore.textContent = `${uCorrect} / 10`;
+        if (jumpLink) {
+          if (uAnswered === 10) jumpLink.classList.add(`is-complete`);
+          else jumpLink.classList.remove(`is-complete`);
+        }
+        if (sumEl) sumEl.textContent = `${uCorrect} / 10`;
+      }
+
+      const globalScore = document.getElementById(`global-score-val`);
+      const globalHelper = document.getElementById(`global-answered-helper`);
+      const globalPct = document.getElementById(`global-pct-val`);
+      const sumTotal = document.getElementById(`sum-total`);
+      const sumVerdict = document.getElementById(`sum-verdict`);
+
+      const pct = Math.round((totalCorrect / 30) * 100);
+      if (globalScore) globalScore.textContent = `${totalCorrect} / 30`;
+      if (globalHelper) globalHelper.textContent = `أجبت عن ${totalAnswered} من أصل 30 سؤالاً`;
+      if (globalPct) globalPct.textContent = `${pct}%`;
+      if (sumTotal) sumTotal.textContent = `${totalCorrect} / 30`;
+      if (sumVerdict) {
+        if (totalAnswered === 0) sumVerdict.textContent = `أجب عن الأسئلة لتقييم جاهزيتك للاختبار`;
+        else if (totalAnswered < 30) sumVerdict.textContent = `تبقّى ${30 - totalAnswered} سؤالاً لاستكمال الفصل السابع`;
+        else if (totalCorrect >= 26) sumVerdict.textContent = `إتقان ممتاز لجميع تفاصيل الفصل السابع (${pct}%)`;
+        else if (totalCorrect >= 20) sumVerdict.textContent = `مستوى جيد (${pct}%) — راجع الأسئلة المعلّمة بالأحمر`;
+        else sumVerdict.textContent = `يُنصح بمراجعة الشرح والأكواد ثم إعادة المحاولة (${pct}%)`;
+      }
+    }
+
+    function answerQuestion(unitNum, qIdx, optIdx) {
+      if (appState.answers[unitNum][qIdx] !== undefined) return;
+      appState.answers[unitNum][qIdx] = optIdx;
+      applyQuestionVisualState(unitNum, qIdx);
+      updateAllScores();
+      persistAppState();
+    }
+
+    function resetUnitQuiz(unitNum, btn) {
+      if (btn && btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.classList.add(`btn-danger-arm`);
+        btn.textContent = `اضغط مرة أخرى لتأكيد إعادة الوحدة (${unitNum})`;
+        setTimeout(function () {
+          if (btn.dataset.armed === `true`) {
+            btn.dataset.armed = `false`;
+            btn.classList.remove(`btn-danger-arm`);
+            btn.textContent = `إعادة اختبار الوحدة (${unitNum})`;
+          }
+        }, 3500);
+        return;
+      }
+      if (btn) {
+        btn.dataset.armed = `false`;
+        btn.classList.remove(`btn-danger-arm`);
+        btn.textContent = `إعادة اختبار الوحدة (${unitNum})`;
+      }
+      appState.answers[unitNum] = {};
+      for (let i = 0; i < QUIZ_BANK[unitNum].length; i++) {
+        applyQuestionVisualState(unitNum, i);
+      }
+      updateAllScores();
+      persistAppState();
+    }
+
+    function resetAllProgress(btn) {
+      if (btn && btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.classList.add(`btn-danger-arm`);
+        btn.textContent = `اضغط للتأكيد: مسح جميع الإجابات (30)`;
+        setTimeout(function () {
+          if (btn.dataset.armed === `true`) {
+            btn.dataset.armed = `false`;
+            btn.classList.remove(`btn-danger-arm`);
+            btn.textContent = `إعادة تعيين كل الإجابات`;
+          }
+        }, 3500);
+        return;
+      }
+      if (btn) {
+        btn.dataset.armed = `false`;
+        btn.classList.remove(`btn-danger-arm`);
+        btn.textContent = `إعادة تعيين كل الإجابات`;
+      }
+      appState.answers = { 1: {}, 2: {}, 3: {} };
+      for (let u = 1; u <= 3; u++) {
+        for (let i = 0; i < QUIZ_BANK[u].length; i++) {
+          applyQuestionVisualState(u, i);
+        }
+      }
+      updateAllScores();
+      persistAppState();
+    }
+
+    /* =========================================================================
+       RESTORE SAVED STATE & INITIALIZE
+       ========================================================================= */
+
+    function syncTabGroupState(containerSelector, activeKey, attrPrefix) {
+      const container = document.querySelector(containerSelector);
+      if (!container) return;
+      const btns = container.querySelectorAll(`.filter-tab`);
+      for (let i = 0; i < btns.length; i++) {
+        const onclickAttr = btns[i].getAttribute(`onclick`) || ``;
+        if (onclickAttr.indexOf(`'${activeKey}'`) !== -1) btns[i].classList.add(`is-active`);
+        else btns[i].classList.remove(`is-active`);
+      }
+    }
+
+    async function initApp() {
+      buildUnitQuiz(1);
+      buildUnitQuiz(2);
+      buildUnitQuiz(3);
+
+      const saved = window.notebookAppApi ? await window.notebookAppApi.getAppState() : null;
+      if (saved && typeof saved === `object`) {
+        if (saved.u1DefectFilter) appState.u1DefectFilter = saved.u1DefectFilter;
+        if (saved.u2SimMode) appState.u2SimMode = saved.u2SimMode;
+        if (saved.u3OutlierMode) appState.u3OutlierMode = saved.u3OutlierMode;
+        if (typeof saved.u3MinBmi === `number`) appState.u3MinBmi = saved.u3MinBmi;
+        if (typeof saved.u3MaxBmi === `number`) appState.u3MaxBmi = saved.u3MaxBmi;
+        if (saved.answers) {
+          for (let u = 1; u <= 3; u++) {
+            if (saved.answers[u]) appState.answers[u] = saved.answers[u];
+          }
+        }
+        setSaveStatus(`تم الاسترجاع`);
+      }
+
+      const minSlider = document.getElementById(`slider-bmi-min`);
+      const minNum = document.getElementById(`num-bmi-min`);
+      const maxSlider = document.getElementById(`slider-bmi-max`);
+      const maxNum = document.getElementById(`num-bmi-max`);
+      if (minSlider) minSlider.value = appState.u3MinBmi;
+      if (minNum) minNum.value = appState.u3MinBmi;
+      if (maxSlider) maxSlider.value = appState.u3MaxBmi;
+      if (maxNum) maxNum.value = appState.u3MaxBmi;
+
+      syncTabGroupState(`#unit-1 .filter-row`, appState.u1DefectFilter);
+      syncTabGroupState(`#unit-2 .filter-row`, appState.u2SimMode);
+      syncTabGroupState(`#unit-3 .filter-row`, appState.u3OutlierMode);
+
+      renderDefectTable();
+      renderImputationLab();
+      updateUnit3Plot();
+
+      for (let u = 1; u <= 3; u++) {
+        for (let i = 0; i < QUIZ_BANK[u].length; i++) {
+          applyQuestionVisualState(u, i);
+        }
+      }
+      updateAllScores();
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    document.addEventListener(`DOMContentLoaded`, initApp);
+  </script>
 </body>
 </html>

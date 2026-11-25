@@ -1,608 +1,3221 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>الفصل الثاني عشر الشامل (100%) | تحليل وتمثيل البيانات</title>
-<style>
-:root{
-  --bg:#f0f5ff;
-  --card:#ffffff;
-  --ink:#0f172a;
-  --muted:#475569;
-  --accent:#1d4ed8;
-  --accent-dark:#1e3a8a;
-  --accent2:#dbeafe;
-  --line:#cbd5e1;
-  --good:#059669;
-  --good-bg:#ecfdf5;
-  --bad:#dc2626;
-  --bad-bg:#fef2f2;
-  --warn:#d97706;
-  --warn-bg:#fffbeb;
-}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.85}
-header{background:linear-gradient(135deg,#0f172a,#1d4ed8);color:white;padding:28px 18px 32px;box-shadow:0 4px 20px rgba(15,23,42,0.2)}
-.wrap{max-width:1040px;margin:auto;padding:0 16px}
-.eyebrow{opacity:.92;font-size:.9rem;background:rgba(255,255,255,0.16);display:inline-block;padding:3px 12px;border-radius:99px;margin-bottom:6px}
-h1{margin:5px 0;font-size:clamp(1.5rem,4vw,2.25rem)}
-header p{margin:6px 0 0;opacity:.92;font-size:.98rem}
-nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px auto 0}
-nav button,.btn{border:0;border-radius:12px;padding:10px 16px;background:var(--accent2);color:var(--accent-dark);font-weight:bold;cursor:pointer;font-family:inherit;transition:all .2s ease;font-size:.95rem}
-nav button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(0.97)}
-nav button.active,.btn.primary{background:#ffffff;color:var(--accent-dark);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
-main .btn.primary{background:var(--accent);color:white}
-main{padding:22px 0 48px}
-.panel{display:none}
-.panel.active{display:block;animation:fadeIn .25s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px rgba(15,23,42,0.04)}
-h2{font-size:1.35rem;margin:0 0 12px;color:#0f172a}
-h3{font-size:1.08rem;margin:0 0 8px;color:var(--accent-dark)}
-small,.muted{color:var(--muted)}
-ul,ol{padding-right:22px;margin:8px 0}
-li{margin:6px 0}
-details{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
-summary{padding:14px 18px;cursor:pointer;font-weight:bold;background:#f8fafc;color:#0f172a;font-size:1.05rem;border-bottom:1px solid transparent;transition:background .2s}
-details[open] summary{border-bottom-color:var(--line);background:var(--accent2);color:var(--accent-dark)}
-.details-body{padding:16px 18px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
-.tag{display:inline-block;border-radius:8px;background:var(--accent2);color:var(--accent-dark);padding:3px 10px;margin:2px;font-size:.83rem;font-weight:bold}
-.badge-new{display:inline-block;background:var(--warn-bg);color:var(--warn);border:1px solid #fcd34d;font-size:.78rem;padding:1px 8px;border-radius:6px;margin-right:6px;font-weight:bold}
-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
-th,td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
-th{background:#eff6ff;color:#1e3a8a;font-weight:bold}
-tr:last-child td{border-bottom:0}
-.note{border-right:4px solid var(--accent);padding:10px 14px;background:#eff6ff;border-radius:8px;margin:10px 0}
-.exam-alert{border-right:4px solid var(--warn);padding:10px 14px;background:var(--warn-bg);border-radius:8px;margin:10px 0}
-.math-box{background:#f8fafc;border:2px solid #93c5fd;border-radius:12px;padding:12px 16px;margin:10px 0;text-align:center;font-size:1.03rem;font-weight:bold;color:#1e3a8a;direction:ltr}
-.step-box{background:#f0fdf4;border:1px solid #86efac;border-right:4px solid var(--good);border-radius:10px;padding:12px 16px;margin:10px 0;font-size:.95rem}
-.qbox{padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0;background:#fff}
-.options{display:grid;gap:8px;margin-top:12px}
-.option{text-align:right;border:1px solid var(--line);border-radius:10px;padding:11px 14px;background:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;transition:all .15s}
-.option:hover:not(:disabled){border-color:var(--accent);background:#eff6ff}
-.option.correct{background:var(--good-bg);border-color:#6ee7b7;color:#065f46;font-weight:bold}
-.option.wrong{background:var(--bad-bg);border-color:#fca5a5;color:#991b1b}
-.feedback{font-size:.94rem;margin-top:10px;font-weight:bold;padding:8px 12px;border-radius:8px}
-.feedback.good{color:var(--good);background:var(--good-bg)}
-.feedback.bad{color:var(--bad);background:var(--bad-bg)}
-.progress{height:10px;background:#cbd5e1;border-radius:9px;overflow:hidden;margin:12px 0}
-.progress div{height:100%;width:0;background:var(--accent);transition:width .25s}
-.flashcard{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;cursor:pointer;background:linear-gradient(145deg,#ffffff,#dbeafe);border:2px solid #93c5fd;border-radius:18px;padding:28px;user-select:none;transition:transform .2s}
-.flashcard:hover{transform:scale(1.005)}
-.flashcard .term{font-size:1.32rem;font-weight:bold;color:#1e3a8a}
-.flashcard .answer{margin-top:16px;font-size:1.04rem;color:#0f172a;background:#fff;padding:12px 18px;border-radius:12px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,0.04);white-space:pre-line}
-.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
-.score{font-size:1.15rem;font-weight:bold;color:var(--accent-dark)}
-footer{text-align:center;color:var(--muted);padding:24px;font-size:.86rem;border-top:1px solid var(--line);background:#fff}
-@media(max-width:600px){
-  .card{padding:14px}
-  nav button{flex:1 1 calc(50% - 8px);text-align:center}
-  .flashcard{min-height:200px;padding:18px}
-  th,td{padding:8px 10px;font-size:.88rem}
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="briefing">
+  <title>الفصل الثاني عشر: التعلم الآلي بإشراف (الجزء الثاني) — خوارزميات التصنيف</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/katex.min.css">
+
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces: warm stone-white paper */
+      --background: #faf9f5;
+      --surface-container-low: #ffffff;
+      --surface-container: #f1efe8;
+      --surface-container-high: #e6e2d6;
+
+      /* Ink */
+      --on-surface: #17181a;
+      --on-surface-variant: #56585c;
+
+      /* Rules */
+      --outline: #17181a;
+      --outline-variant: #dedad0;
+
+      /* Accents */
+      --primary: #17181a;
+      --on-primary: #faf9f5;
+      --primary-container: #f2b705;
+      --on-primary-container: #17181a;
+      --secondary: #1f4e5f;
+      --tertiary: #785008;
+      --error: #b42318;
+      --on-error: #ffffff;
+
+      /* Data series, in order of use */
+      --data-1: #1f4e5f;
+      --data-2: #d99000;
+      --data-3: #2b6e52;
+      --data-4: #b84a39;
+      --data-context: #c4bfb2;
+
+      /* Fonts (RTL Arabic first) */
+      --font-headline: 'Noto Sans Arabic', 'Source Serif 4', serif;
+      --font-body: 'Noto Sans Arabic', 'Plus Jakarta Sans', sans-serif;
+      --font-label: 'Geist Mono', 'Noto Sans Arabic', monospace;
+
+      /* Shape */
+      --rounded: 0.25rem;
+      --rounded-lg: 0.375rem;
+      --rounded-full: 0.25rem;
+
+      /* Style effects */
+      --section-rule: 1.5px solid var(--outline);
+      --card-border: 1px solid var(--outline-variant);
+      --badge-radius: 2px;
+      --heading-tracking: 0;
+      --label-tracking: 0;
+
+      /* Semantic tokens */
+      --positive: #2b6e52;
+      --positive-bg: #e7f3ed;
+      --warning: #785008;
+      --warning-bg: #f5e6c4;
+      --error-bg: #fdeceb;
+      --secondary-soft: #e6eff2;
+      --focus: #1f4e5f;
+
+      /* Type scale (Narrative) */
+      --display-size: clamp(2rem, 1.4rem + 2.5vw, 3.25rem);
+      --headline-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.125rem);
+      --subhead-size: clamp(1.1875rem, 1.05rem + 0.5vw, 1.4375rem);
+      --body-size: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+      --label-size: clamp(0.75rem, 0.72rem + 0.12vw, 0.8125rem);
+
+      /* Spacing scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 5.5rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { overflow-x: clip; margin: 0; padding: 0; scroll-behavior: smooth; }
+    header { position: static !important; }
+
+    body {
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.68;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
+    }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-xl);
+      padding: var(--space-lg);
+      max-width: 1120px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Focus rings */
+    :focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* Typography */
+    h1, h2, h3, h4 {
+      font-family: var(--font-headline);
+      color: var(--on-surface);
+      margin: 0;
+      letter-spacing: 0;
+    }
+    p {
+      margin: 0 0 var(--space-md) 0;
+      max-width: 72ch;
+    }
+    p:last-child { margin-bottom: 0; }
+
+    .title {
+      font-size: var(--display-size);
+      font-weight: 800;
+      line-height: 1.22;
+      margin-bottom: var(--space-sm);
+    }
+
+    .standfirst {
+      font-family: var(--font-body);
+      font-size: var(--subhead-size);
+      font-weight: 600;
+      color: var(--secondary);
+      line-height: 1.55;
+      max-width: 68ch;
+      margin-bottom: var(--space-lg);
+    }
+
+    .section-heading {
+      font-size: var(--headline-size);
+      font-weight: 800;
+      line-height: 1.3;
+      margin-bottom: var(--space-sm);
+    }
+
+    .sub-heading {
+      font-size: var(--subhead-size);
+      font-weight: 700;
+      color: var(--secondary);
+      line-height: 1.4;
+      margin-top: var(--space-xl);
+      margin-bottom: var(--space-md);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .minor-heading {
+      font-size: 1.0625rem;
+      font-weight: 700;
+      color: var(--on-surface);
+      margin: var(--space-md) 0 var(--space-sm) 0;
+    }
+
+    .muted-note {
+      color: var(--on-surface-variant);
+      font-size: 0.9375rem;
+    }
+
+    /* KaTeX LTR protection inside RTL */
+    .katex, .katex-display {
+      direction: ltr;
+      unicode-bidi: isolate;
+    }
+    .katex-display {
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: var(--space-sm) 0;
+      margin: var(--space-sm) 0;
+    }
+    .math-box {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-inline-start: 4px solid var(--secondary);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      margin: var(--space-md) 0;
+    }
+    .math-box-label {
+      font-size: var(--label-size);
+      font-weight: 700;
+      color: var(--secondary);
+      margin-bottom: var(--space-xs);
+    }
+
+    /* Briefing Dossier Treatments */
+    .dossier-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      border-bottom: var(--section-rule);
+      padding-bottom: var(--space-sm);
+      margin-bottom: var(--space-lg);
+    }
+    .dossier-left {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .dossier-pill {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-family: var(--font-body);
+      font-weight: 800;
+      font-size: 0.8125rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: var(--badge-radius);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .dossier-meta {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      direction: ltr;
+      unicode-bidi: isolate;
+    }
+
+    .index-num {
+      font-family: var(--font-label);
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: var(--secondary);
+      background: var(--surface-container);
+      border: var(--card-border);
+      padding: 0.125rem 0.5rem;
+      border-radius: var(--badge-radius);
+      direction: ltr;
+      unicode-bidi: isolate;
+      flex-shrink: 0;
+    }
+
+    .figure-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+    }
+
+    .figure-card .kpi-value {
+      font-family: 'Source Serif 4', 'Noto Sans Arabic', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--on-surface);
+      font-variant-numeric: lining-nums tabular-nums;
+      line-height: 1.15;
+    }
+    .figure-card .kpi-label {
+      font-size: 0.875rem;
+      color: var(--on-surface-variant);
+      margin-top: var(--space-xs);
+    }
+
+    .aside-box {
+      background: var(--surface-container);
+      border-top: var(--section-rule);
+      border-radius: 0 0 var(--rounded-lg) var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      margin: var(--space-md) 0;
+    }
+
+    .tag-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      background: var(--warning-bg);
+      color: var(--tertiary);
+      font-size: 0.8125rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: var(--rounded);
+    }
+    .tag-chip--teal {
+      background: var(--secondary-soft);
+      color: var(--secondary);
+    }
+    .tag-chip--green {
+      background: var(--positive-bg);
+      color: var(--positive);
+    }
+
+    /* Grids */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+      gap: var(--space-lg);
+      align-items: start;
+    }
+    .asymmetric-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+
+    /* Navigation / TOC Index Bar */
+    .toc-panel {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+    }
+    .toc-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+    .toc-links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+      gap: var(--space-sm);
+    }
+    .toc-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      padding: var(--space-sm) var(--space-md);
+      min-height: 44px;
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      color: var(--on-surface);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9375rem;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .toc-link:hover {
+      background: var(--surface-container);
+      border-color: var(--secondary);
+    }
+    .toc-score {
+      font-family: var(--font-label);
+      font-size: 0.78rem;
+      color: var(--secondary);
+      background: var(--secondary-soft);
+      padding: 0.125rem 0.45rem;
+      border-radius: var(--badge-radius);
+      direction: ltr;
+      unicode-bidi: isolate;
+      white-space: nowrap;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      min-height: 44px;
+      padding: 0.5rem 1rem;
+      border-radius: var(--rounded);
+      font-weight: 600;
+      font-size: 0.9375rem;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+    .btn-primary:hover {
+      background: var(--secondary);
+      border-color: var(--secondary);
+    }
+    .btn-secondary {
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      border-color: var(--outline-variant);
+    }
+    .btn-secondary:hover {
+      background: var(--surface-container);
+      border-color: var(--outline);
+    }
+    .btn-secondary.is-active {
+      background: var(--secondary);
+      color: var(--on-primary);
+      border-color: var(--secondary);
+    }
+    .btn-danger-arm {
+      background: var(--error);
+      color: var(--on-error);
+      border-color: var(--error);
+    }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Tables */
+    .table-wrap {
+      overflow-x: auto;
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      background: var(--surface-container-low);
+      margin: var(--space-md) 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9375rem;
+    }
+    thead th {
+      background: var(--surface-container);
+      color: var(--on-surface);
+      font-weight: 700;
+      text-align: right;
+      padding: 0.75rem 1rem;
+      border-bottom: var(--section-rule);
+      white-space: nowrap;
+    }
+    tbody td {
+      padding: 0.7rem 1rem;
+      border-bottom: 1px solid var(--outline-variant);
+      vertical-align: top;
+    }
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .num-cell {
+      font-family: var(--font-label);
+      font-variant-numeric: tabular-nums;
+      direction: ltr;
+      unicode-bidi: isolate;
+      text-align: center;
+    }
+
+    /* Pros & Cons list */
+    .pros-cons-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+      gap: var(--space-md);
+      margin: var(--space-md) 0;
+    }
+    .pros-box {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-top: 3px solid var(--positive);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+    }
+    .cons-box {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-top: 3px solid var(--error);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+    }
+    .pros-box ul, .cons-box ul, .clean-list {
+      margin: var(--space-sm) 0 0 0;
+      padding-inline-start: 1.25rem;
+    }
+    .pros-box li, .cons-box li, .clean-list li {
+      margin-bottom: var(--space-xs);
+    }
+
+    /* Interactive Lab Panels */
+    .lab-card {
+      background: var(--surface-container-low);
+      border: 1.5px solid var(--secondary);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      margin: var(--space-lg) 0;
+    }
+    .lab-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      border-bottom: 1px solid var(--outline-variant);
+      padding-bottom: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+    .lab-title {
+      font-weight: 800;
+      font-size: 1.0625rem;
+      color: var(--secondary);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      align-items: end;
+      margin-bottom: var(--space-md);
+    }
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      min-width: 140px;
+      flex: 1 1 150px;
+    }
+    .field-label {
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--on-surface);
+    }
+    .field-input, .field-select {
+      min-height: 44px;
+      padding: 0.5rem 0.75rem;
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline);
+      border-radius: var(--rounded);
+      color: var(--on-surface);
+      font-size: 0.9375rem;
+    }
+    .field-select {
+      padding-inline-end: 2rem;
+    }
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--secondary);
+      min-height: 44px;
+      cursor: pointer;
+    }
+    .svg-stage {
+      width: 100%;
+      min-height: 300px;
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      overflow: hidden;
+      display: block;
+    }
+    .svg-stage svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .lab-readout {
+      background: var(--surface-container);
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .readout-metric {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--outline-variant);
+      padding-bottom: var(--space-xs);
+      font-size: 0.9375rem;
+    }
+    .readout-metric:last-child { border-bottom: none; padding-bottom: 0; }
+    .readout-val {
+      font-family: var(--font-label);
+      font-weight: 700;
+      color: var(--secondary);
+      direction: ltr;
+      unicode-bidi: isolate;
+    }
+
+    /* Random Forest Voting Grid */
+    .trees-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(130px, 100%), 1fr));
+      gap: var(--space-sm);
+      margin: var(--space-md) 0;
+    }
+    .tree-vote-card {
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      padding: var(--space-sm);
+      text-align: center;
+    }
+    .tree-vote-card.vote-a {
+      border-top: 3px solid var(--data-1);
+    }
+    .tree-vote-card.vote-b {
+      border-top: 3px solid var(--data-2);
+    }
+
+    /* Worked Example Stepper / Box */
+    .worked-example {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      margin: var(--space-md) 0;
+    }
+    .step-row {
+      display: flex;
+      gap: var(--space-md);
+      align-items: flex-start;
+      padding: var(--space-sm) 0;
+      border-bottom: 1px dashed var(--outline-variant);
+    }
+    .step-row:last-child { border-bottom: none; }
+
+    /* Purity Progress Bar */
+    .purity-bar {
+      height: 16px;
+      background: var(--data-2);
+      border-radius: var(--rounded);
+      overflow: hidden;
+      display: flex;
+      border: 1px solid var(--outline-variant);
+    }
+    .purity-fill {
+      background: var(--data-1);
+      height: 100%;
+      transition: width var(--dur-short) var(--ease-out);
+    }
+
+    /* Quiz Styling */
+    .quiz-section {
+      background: var(--surface-container-low);
+      border: 1.5px solid var(--outline);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      margin-top: var(--space-xl);
+    }
+    .quiz-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      border-bottom: var(--section-rule);
+      padding-bottom: var(--space-md);
+      margin-bottom: var(--space-lg);
+    }
+    .quiz-score-box {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .score-badge {
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: 0.9375rem;
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      padding: 0.35rem 0.75rem;
+      border-radius: var(--badge-radius);
+      direction: ltr;
+      unicode-bidi: isolate;
+    }
+    .question-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+    .question-card {
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+    }
+    .question-card.is-correct {
+      border-color: var(--positive);
+      border-inline-start: 4px solid var(--positive);
+    }
+    .question-card.is-wrong {
+      border-color: var(--error);
+      border-inline-start: 4px solid var(--error);
+    }
+    .question-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-sm);
+    }
+    .question-text {
+      font-weight: 700;
+      font-size: 1.03125rem;
+      margin-bottom: var(--space-md);
+      color: var(--on-surface);
+    }
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+      gap: var(--space-sm);
+    }
+    .option-btn {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      width: 100%;
+      min-height: 46px;
+      padding: 0.6rem 0.9rem;
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded);
+      color: var(--on-surface);
+      text-align: right;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .option-btn:hover:not(:disabled) {
+      background: var(--surface-container);
+      border-color: var(--secondary);
+    }
+    .option-btn:disabled {
+      cursor: default;
+    }
+    .option-btn.opt-correct {
+      background: var(--positive-bg);
+      border-color: var(--positive);
+      color: var(--on-surface);
+      font-weight: 700;
+    }
+    .option-btn.opt-wrong {
+      background: var(--error-bg);
+      border-color: var(--error);
+      color: var(--error);
+      font-weight: 700;
+    }
+    .option-letter {
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: 0.8125rem;
+      width: 26px;
+      height: 26px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--badge-radius);
+      background: var(--surface-container);
+      color: var(--on-surface);
+      flex-shrink: 0;
+    }
+    .opt-correct .option-letter {
+      background: var(--positive);
+      color: var(--on-primary);
+    }
+    .opt-wrong .option-letter {
+      background: var(--error);
+      color: var(--on-error);
+    }
+    .explanation-box {
+      margin-top: var(--space-md);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      font-size: 0.9375rem;
+      line-height: 1.6;
+    }
+    .explanation-box.exp-correct {
+      background: var(--positive-bg);
+      border-inline-start: 3px solid var(--positive);
+    }
+    .explanation-box.exp-wrong {
+      background: var(--error-bg);
+      border-inline-start: 3px solid var(--error);
+    }
+
+    /* Exam breakdown */
+    .exam-breakdown {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+      gap: var(--space-md);
+      margin-bottom: var(--space-lg);
+    }
+
+    /* Unit divider spacing */
+    .unit-section {
+      padding-top: var(--space-md);
+    }
+
+    /* Collapsible details */
+    details.secondary-detail {
+      background: var(--surface-container);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      padding: var(--space-sm) var(--space-md);
+      margin: var(--space-md) 0;
+    }
+    details.secondary-detail summary {
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--secondary);
+      min-height: 36px;
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    details.secondary-detail[open] summary {
+      margin-bottom: var(--space-sm);
+      border-bottom: 1px solid var(--outline-variant);
+      padding-bottom: var(--space-xs);
+    }
+
+    footer {
+      border-top: var(--section-rule);
+      padding: var(--space-lg) 0 var(--space-xl) 0;
+      color: var(--on-surface-variant);
+      font-size: 0.875rem;
+    }
+
+    @media (max-width: 760px) {
+      .asymmetric-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-md);
+        gap: var(--space-lg);
+      }
+      .quiz-section, .lab-card, .worked-example {
+        padding: var(--space-md);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
 </head>
 <body>
-<header>
-  <div class="wrap">
-    <div class="eyebrow">نسخة شاملة ومحدثة 100% • مقرر تحليل وتمثيل البيانات</div>
-    <h1>الفصل الثاني عشر: التعلم الآلي بإشراف - الجزء الثاني (خوارزميات التصنيف Classification)</h1>
-    <p>يغطي مفهوم التصنيف وأقسامه الأربعة، خوارزمية أقرب الجيران (K-NN)، خوارزمية بايز الساذج (Naive Bayes) ومسألة تصنيف البريد Spam، الانحدار اللوجستي (Logistic Regression) ودالة السيجمويد، آلات المتجهات الداعمة (SVM) وخدعة النواة، وأشجار القرار (Decision Trees - Gini) والغابات العشوائية (Random Forests)</p>
-    <nav>
-      <button class="active" data-tab="summary">الشرح والقوانين والمسائل (100%)</button>
-      <button data-tab="tables">ملخص الخوارزميات والمعادلات</button>
-      <button data-tab="terms">قاموس المصطلحات والقوانين</button>
-      <button data-tab="cards">البطاقات (28)</button>
-      <button data-tab="quiz">الاختبار العشوائي (25)</button>
+  <div class="page-grid">
+
+    <!-- HEADER & OVERVIEW -->
+    <header>
+      <div class="dossier-bar">
+        <div class="dossier-left">
+          <span class="dossier-pill">الفصل الثاني عشر</span>
+          <span class="dossier-meta">SUPERVISED ML — PART II · CLASSIFICATION ALGORITHMS</span>
+        </div>
+        <span class="dossier-meta">UNITS 01–03 + 50 MCQS</span>
+      </div>
+
+      <h1 class="title">التعلم الآلي بإشراف (الجزء الثاني): خوارزميات التصنيف</h1>
+      <p class="standfirst">
+        مرجع دراسي تفاعلي شامل يغطي الوحدات الثلاث للفصل الثاني عشر: من مفهوم التصنيف وخوارزميات المسافة والاحتمالات، مروراً بالانحدار اللوجستي وآلات المتجهات الداعمة، وصولاً إلى أشجار القرار والغابات العشوائية — مع المعادلات والأمثلة الحسابية المحلولة، ومختبرات المحاكاة، و50 سؤالاً تقييمياً بتصحيح فوري وشرح.
+      </p>
+
+      <div class="card-grid" aria-label="ملخص محتوى الفصل">
+        <div class="figure-card">
+          <div class="kpi-value">03</div>
+          <div class="kpi-label">وحدات دراسية مفصلة ومستقلة</div>
+        </div>
+        <div class="figure-card">
+          <div class="kpi-value">06</div>
+          <div class="kpi-label">خوارزميات تصنيف مع المزايا والعيوب</div>
+        </div>
+        <div class="figure-card">
+          <div class="kpi-value">04</div>
+          <div class="kpi-label">مختبرات وحاسبات رياضية تفاعلية</div>
+        </div>
+        <div class="figure-card">
+          <div class="kpi-value">50</div>
+          <div class="kpi-label">سؤالاً (30 للوحدات + 20 للاختبار الشامل)</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- QUICK JUMP INDEX & PROGRESS TRACKER -->
+    <nav class="toc-panel" aria-label="فهرس الفصل ومتابعة التقدم">
+      <div class="toc-top">
+        <div>
+          <strong>خريطة المذاكرة والاختبارات</strong>
+          <div class="muted-note">انتقل مباشرة إلى أي وحدة أو اختبار؛ تُحفظ إجاباتك ودرجاتك تلقائياً.</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:var(--space-sm); flex-wrap:wrap;">
+          <span class="score-badge" id="global-progress-badge">الإنجاز الكلي: 0 / 50</span>
+          <button type="button" class="btn btn-secondary" id="reset-all-btn" onclick="handleResetAll(this)">
+            <i data-lucide="rotate-ccw" style="width:16px;height:16px;"></i>
+            إعادة ضبط التقدم
+          </button>
+        </div>
+      </div>
+      <div class="toc-links">
+        <a class="toc-link" href="#unit-1">
+          <span>الوحدة 1: K-NN و Naïve Bayes</span>
+          <span class="toc-score" id="toc-score-u1">0 / 10</span>
+        </a>
+        <a class="toc-link" href="#unit-2">
+          <span>الوحدة 2: Logistic Regression و SVM</span>
+          <span class="toc-score" id="toc-score-u2">0 / 10</span>
+        </a>
+        <a class="toc-link" href="#unit-3">
+          <span>الوحدة 3: Decision Trees و Random Forests</span>
+          <span class="toc-score" id="toc-score-u3">0 / 10</span>
+        </a>
+        <a class="toc-link" href="#comprehensive-exam">
+          <span>الاختبار الشامل للفصل</span>
+          <span class="toc-score" id="toc-score-comp">0 / 20</span>
+        </a>
+      </div>
     </nav>
-  </div>
-</header>
 
-<main class="wrap">
-  <section id="summary" class="panel active">
-    <div class="card">
-      <h2>خريطة الفصل الثاني عشر (الوحدات الثلاث الكاملة)</h2>
-      <div class="grid">
-        <div>
-          <span class="tag">الوحدة الأولى</span>
-          <h3>مفهوم التصنيف، K-NN، و Naive Bayes</h3>
-          <p>مفهوم التصنيف والحد الفاصل (<span dir="ltr">Decision boundary</span>)، تقسيم الخوارزميات الأربعة، خوارزمية (<span dir="ltr">K-NN</span>) وأثر $K$، وخوارزمية (<span dir="ltr">Naive Bayes</span>) ومسألة تصنيف البريد الإلكتروني (<span dir="ltr">Spam</span>).</p>
-        </div>
-        <div>
-          <span class="tag">الوحدة الثانية</span>
-          <h3>الانحدار اللوجستي وآلات المتجهات الداعمة (SVM)</h3>
-          <p>الانحدار اللوجستي (<span dir="ltr">Logistic Regression</span>) ودالة السيجمويد ومسألة احتمالية نجاح الطالب، وآلات المتجهات الداعمة (<span dir="ltr">SVM</span>) والهامش وخدعة النواة (<span dir="ltr">Kernel Trick</span>) ومسألة تصنيف النقطة.</p>
-        </div>
-        <div>
-          <span class="tag">الوحدة الثالثة</span>
-          <h3>أشجار القرار والغابات العشوائية</h3>
-          <p>بنية أشجار القرار (<span dir="ltr">Decision Trees</span>)، حساب معامل جيني للنقاء (<span dir="ltr">Gini Impurity &amp; Gain</span>) بالمسألة الكاملة، والغابات العشوائية (<span dir="ltr">Random Forests</span>) والتصويت بالأغلبية.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- ==================== الوحدة الأولى ==================== -->
-    <details open>
-      <summary>الوحدة الأولى: مفهوم التصنيف، خوارزمية أقرب الجيران (K-NN)، وخوارزمية بايز الساذج (Naive Bayes)</summary>
-      <div class="details-body">
-        <h3>1) مفهوم التصنيف (<span dir="ltr">Classification</span>) وتقسيم خوارزمياته الأربعة</h3>
-        <ul>
-          <li><b>مفهوم التصنيف:</b> هو أحد فروع التعلم الآلي بإشراف (<span dir="ltr">Supervised Learning</span>)، ويُستخدم عندما تكون <b>سمة الهدف ($Y$) فئوية محددة (<span dir="ltr">Categorical / Discrete Class Labels</span>)</b>؛ سواء كانت ثنائية الفئة (مثل: مريض/سليم، بريد مزعج <span dir="ltr">Spam</span>/سليم) أو متعددة الفئات.</li>
-          <li>تقوم خوارزمية التصنيف بتعلم رسم <b>الحد الفاصل للقرار (<span dir="ltr">Decision Boundary</span>)</b> الذي يفصل بين الفئات المختلفة في فضاء السمات.</li>
-        </ul>
-
-        <div class="exam-alert">
-          <b>🔥 التقسيمات الأربعة لخوارزميات التصنيف في الملزمة:</b><br>
-          1) <b>خوارزميات معتمدة على المسافة (<span dir="ltr">Distance-based</span>):</b> مثل خوارزمية أقرب الجيران (<b><span dir="ltr">K-NN</span></b>).<br>
-          2) <b>خوارزميات معتمدة على الاحتمالات (<span dir="ltr">Probability-based</span>):</b> مثل خوارزمية بايز الساذج (<b><span dir="ltr">Naive Bayes</span></b>).<br>
-          3) <b>خوارزميات معتمدة على البحث والأشجار (<span dir="ltr">Search / Tree-based</span>):</b> مثل أشجار القرار (<b><span dir="ltr">Decision Trees</span></b>) والغابات العشوائية (<b><span dir="ltr">Random Forests</span></b>).<br>
-          4) <b>خوارزميات معتمدة على التحسين (<span dir="ltr">Optimization-based</span>):</b> مثل الانحدار اللوجستي (<b><span dir="ltr">Logistic Regression</span></b>) وآلات المتجهات الداعمة (<b><span dir="ltr">SVM</span></b>).
+    <main>
+      <!-- =========================================================
+           UNIT 1: CLASSIFICATION CONCEPTS, K-NN & NAIVE BAYES
+           ========================================================= -->
+      <section id="unit-1" class="unit-section" aria-labelledby="u1-heading">
+        <div class="dossier-bar">
+          <div class="dossier-left">
+            <span class="dossier-pill">الوحدة الأولى</span>
+            <span class="dossier-meta">UNIT 01 · DISTANCE &amp; PROBABILITY CLASSIFIERS</span>
+          </div>
+          <button type="button" class="btn btn-secondary" id="mark-u1-btn" onclick="toggleUnitRead('u1')">
+            <i data-lucide="check-circle" style="width:16px;height:16px;"></i>
+            <span>تحديد كمُنجَز</span>
+          </button>
         </div>
 
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+        <h2 id="u1-heading" class="section-heading">مفهوم التصنيف، خوارزمية <bdi dir="ltr">K-NN</bdi>، ومصنف <bdi dir="ltr">Naïve Bayes</bdi></h2>
 
-        <h3>2) خوارزمية أقرب الجيران (<span dir="ltr">K-Nearest Neighbors - K-NN</span>)</h3>
-        <ul>
-          <li><b>الفرضية الأساسية لـ <span dir="ltr">K-NN</span>:</b> العينات المتشابهة في السمات تكون قريبة من بعضها في المسافة وتنتمي لنفس الفئة ("قل لي مَن جيرانك أقل لك مَن أنت").</li>
-          <li><b>خطوات عمل خوارزمية <span dir="ltr">K-NN</span> الأربع لتصنيف نقطة جديدة:</b>
-            <ol>
-              <li>تحديد عدد الجيران المطلوب ($K$).</li>
-              <li>حساب المسافة (الإقليدية أو مانهاتن) بين النقطة الجديدة المجهولة وجميع نقاط بيانات التدريب.</li>
-              <li>ترتيب المسافات تصاعدياً واختيار <b>أقرب $K$ نقاط (جيران)</b> للنقطة الجديدة.</li>
-              <li>إعطاء النقطة الجديدة الفئة الأكثر تكراراً بين هؤلاء الجيران الـ $K$ عن طريق <b>التصويت بالأغلبية (<span dir="ltr">Majority Voting</span>)</b> (ويُفضل اختيار $K$ <b>عدداً فردياً</b> في التصنيف الثنائي لمنع التعادل!).</li>
-            </ol>
-          </li>
-          <li><b>أثر تغيير قيمة $K$ في خوارزمية <span dir="ltr">K-NN</span>:</b>
-            <ul>
-              <li><b>قيمة $K$ صغيرة جداً (مثل $K=1$):</b> يصبح الحد الفاصل متعرجاً جداً وحساساً للضجيج، مما يسبب <b>الإفراط في التخصيص (<span dir="ltr">Overfitting</span>)</b>.</li>
-              <li><b>قيمة $K$ كبيرة جداً:</b> يصبح الحد الفاصل أكثر نعومة واستقراراً، ولكن المبالغة فيه قد تسبب <b>نقص التخصيص (<span dir="ltr">Underfitting</span>)</b>.</li>
+        <h3 class="sub-heading"><span class="index-num">1.1</span> مفهوم تصنيف البيانات وتصنيف الخوارزميات</h3>
+        <p>
+          تُعد عملية <strong>التصنيف (<bdi dir="ltr">Classification</bdi>)</strong> واحدة من أشهر عمليات التعلم الآلي بإشراف في تحليلات البيانات. وتُعنى بإعطاء وسم (<bdi dir="ltr">Label</bdi>) أو فئة محددة للبيانات غير الموسومة اعتماداً على مجموعة من السمات المستقلة (<bdi dir="ltr">Independent Features</bdi>). وبمعنى آخر، فإن السمة الهدف تكون في صورة مجموعة من <strong>الفئات المنفصلة</strong> (مثل: سليم/مريض، بريد مزعج/عادي، أرقام <bdi dir="ltr">0–9</bdi>) على عكس الانحدار الذي يتنبأ بقيم عددية مستمرة.
+        </p>
+
+        <div class="card-grid" style="margin: var(--space-md) 0;">
+          <div class="figure-card">
+            <span class="tag-chip tag-chip--teal">تعتمد على المسافة</span>
+            <h4 class="minor-heading">Distance-based</h4>
+            <p class="muted-note">تقيس القرب الهندسي بين العينات؛ أشهرها <strong><bdi dir="ltr">K-Nearest Neighbors (K-NN)</bdi></strong>.</p>
+          </div>
+          <div class="figure-card">
+            <span class="tag-chip tag-chip--teal">تعتمد على الاحتمالات</span>
+            <h4 class="minor-heading">Probability-based</h4>
+            <p class="muted-note">تحسب احتمالية انتماء العينة لكل فئة؛ مثل <strong><bdi dir="ltr">Naïve Bayes</bdi></strong> و <strong><bdi dir="ltr">Logistic Regression</bdi></strong>.</p>
+          </div>
+          <div class="figure-card">
+            <span class="tag-chip tag-chip--teal">تعتمد على البحث والقواعد</span>
+            <h4 class="minor-heading">Search &amp; Tree-based</h4>
+            <p class="muted-note">تقسم البيانات هرمياً وفق شروط متتالية؛ مثل <strong><bdi dir="ltr">Decision Trees</bdi></strong> و <strong><bdi dir="ltr">Random Forests</bdi></strong>.</p>
+          </div>
+          <div class="figure-card">
+            <span class="tag-chip tag-chip--teal">تعتمد على التحسين</span>
+            <h4 class="minor-heading">Optimization-based</h4>
+            <p class="muted-note">تعظّم دالة هدف أو هامش فصل؛ مثل <strong><bdi dir="ltr">SVM</bdi></strong> و <strong><bdi dir="ltr">Artificial Neural Networks</bdi></strong>.</p>
+          </div>
+        </div>
+
+        <!-- 1.2 K-NN -->
+        <h3 class="sub-heading"><span class="index-num">1.2</span> خوارزمية الجيران الأقرب (<bdi dir="ltr">K-Nearest Neighbors — K-NN</bdi>)</h3>
+        <p>
+          تقوم الخوارزمية على فرضية بسيطة وبديهية: <strong>«العنصر الجديد يأخذ نفس الوسم الخاص بالعناصر المشابهة القريبة منه»</strong>. تُصنَّف الخوارزمية كمتعلم كسول (<bdi dir="ltr">Lazy Learner</bdi>) لأنها لا تبني نموذجاً رياضياً خارجياً مستقلاً أثناء التدريب، بل تخزن بيانات التدريب وتُجري الحسابات عند وصول نقطة اختبار جديدة.
+        </p>
+
+        <div class="asymmetric-grid" style="margin: var(--space-md) 0;">
+          <div class="math-box" style="margin:0;">
+            <div class="math-box-label">المعادلات الرياضية لمقاييس المسافة</div>
+            <p><strong>1. المسافة الإقليدية (<bdi dir="ltr">Euclidean Distance</bdi>)</strong> — الأشهر استخداماً:</p>
+            $$d_{\text{Euclidean}}(x, y) = \sqrt{\sum_{i=1}^{n} (x_i - y_i)^2}$$
+            <p><strong>2. مسافة مانهاتن (<bdi dir="ltr">Manhattan Distance</bdi>):</strong></p>
+            $$d_{\text{Manhattan}}(x, y) = \sum_{i=1}^{n} |x_i - y_i|$$
+          </div>
+          <div class="aside-box" style="margin:0;">
+            <strong>دور المعامل الفائق <bdi dir="ltr">K</bdi> (Hyper-parameter):</strong>
+            <ul class="clean-list">
+              <li>تحديد قيمة <bdi dir="ltr">K</bdi> خطوة حساسة ويجب ضبطها بدقة.</li>
+              <li>قيمة <bdi dir="ltr">K</bdi> صغيرة جداً (مثل <bdi dir="ltr">K = 1</bdi>) تجعل المصنف حساساً للضجيج والقيم المتطرفة (<bdi dir="ltr">Overfitting</bdi>).</li>
+              <li>قيمة <bdi dir="ltr">K</bdi> كبيرة جداً تطمس الحدود المحلية بين الفئات (<bdi dir="ltr">Underfitting</bdi>).</li>
+              <li>في التصنيف الثنائي يُفضَّل اختيار <bdi dir="ltr">K</bdi> عدداً فردياً لتجنب التعادل في التصويت (<bdi dir="ltr">Majority Voting</bdi>).</li>
             </ul>
-          </li>
-          <li><b>مزايا وعيوب <span dir="ltr">K-NN</span>:</b>
-            <ul>
-              <li><b>المزايا:</b> بسيطة جداً، لا تفترض شكلاً مسبقاً للبيانات، ولا تحتاج لمرحلة تدريب (<span dir="ltr">Lazy Learner</span> - متعلم كسول).</li>
-              <li><b>العيوب:</b> بطيئة ومكلفة حسابياً وقت الاختبار (لأنها تحسب المسافة مع كل بيانات التدريب)، وتحتاج لـ <b>تحجيم السمات (<span dir="ltr">Feature Scaling</span>)</b>، وحساسة للقيم المتطرفة والسمات غير المهمة.</li>
-            </ul>
-          </li>
-        </ul>
-
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
-
-        <h3>3) خوارزمية بايز الساذج (<span dir="ltr">Naive Bayes Classifier</span>) — القانون والمسألة الكاملة</h3>
-        <ul>
-          <li><b>لماذا سُميت بـ "الساذج" (<span dir="ltr">Naive</span>)؟</b> لأنها تفترض أن جميع السمات ($X_1, X_2, \dots, X_n$) <b>مستقلة تماماً عن بعضها البعض إحصائياً</b> بشرط معرفة الفئة (وهو افتراض مبسط يسهل الحسابات بشكل هائل).</li>
-          <li><b>قانون بايز للاحتمال الشرطي (<span dir="ltr">Bayes' Theorem</span>):</b></li>
-        </ul>
-        <div class="math-box">
-          P(A | B) = [ P(B | A) &middot; P(A) ] / P(B)
-        </div>
-        <ul>
-          <li>حيث عند وجود عدة سمات مستقلة ($x_1, x_2$)، يكون البسط المتناسب مع احتمال الفئة $C_k$ هو:
-            <div class="math-box">P(C<sub>k</sub> | x<sub>1</sub>, x<sub>2</sub>) &prop; P(C<sub>k</sub>) &times; P(x<sub>1</sub> | C<sub>k</sub>) &times; P(x<sub>2</sub> | C<sub>k</sub>)</div>
-          </li>
-        </ul>
-
-        <div class="step-box">
-          <b>مسألة الكتاب الكاملة لتصنيف البريد الإلكتروني (Spam vs Not Spam) باستخدام Naive Bayes:</b><br>
-          لنفترض أن لدينا احتمالات مسبقة (<span dir="ltr">Priors</span>): احتمال أن الرسالة مزعجة $P(\text{Spam}) = 0.4$، واحتمال أنها سليمة $P(\text{Not Spam}) = 0.6$.<br>
-          وظهرت في رسالة جديدة الكلمتان: <code dir="ltr">"free"</code> و <code dir="ltr">"win"</code>، وكانت الاحتمالات الشرطية من بيانات التدريب كالتالي:<br>
-          • في رسائل الـ <b>Spam</b>: $P(\text{"free"} | \text{Spam}) = 0.5$ ، و $P(\text{"win"} | \text{Spam}) = 0.4$.<br>
-          • في رسائل الـ <b>Not Spam</b>: $P(\text{"free"} | \text{Not Spam}) = 0.1$ ، و $P(\text{"win"} | \text{Not Spam}) = 0.05$.<br><br>
-          <b>خطوات الحل لتصنيف الرسالة الجديدة:</b><br>
-          1) <b>حساب درجة احتمال كونها <span dir="ltr">Spam</span>:</b><br>
-          $S(\text{Spam}) = P(\text{Spam}) \times P(\text{"free"}|\text{Spam}) \times P(\text{"win"}|\text{Spam}) = 0.4 \times 0.5 \times 0.4 = \mathbf{0.08}$.<br>
-          2) <b>حساب درجة احتمال كونها <span dir="ltr">Not Spam</span>:</b><br>
-          $S(\text{Not Spam}) = P(\text{Not Spam}) \times P(\text{"free"}|\text{Not Spam}) \times P(\text{"win"}|\text{Not Spam}) = 0.6 \times 0.1 \times 0.05 = \mathbf{0.003}$.<br>
-          3) <b>القرار النهائي:</b> بما أن $0.08 > 0.003$، يتم تصنيف الرسالة على أنها <b>بريد مزعج (<span dir="ltr">Spam</span>)</b>!
-        </div>
-      </div>
-    </details>
-
-    <!-- ==================== الوحدة الثانية ==================== -->
-    <details>
-      <summary>الوحدة الثانية: الانحدار اللوجستي (Logistic Regression) وآلات المتجهات الداعمة (SVM)</summary>
-      <div class="details-body">
-        <h3>1) الانحدار اللوجستي (<span dir="ltr">Logistic Regression</span>) ودالة السيجمويد والمسألة الحسابية</h3>
-        <div class="exam-alert">
-          <b>🔥🔥 تنبيه امتحاني هام جداً:</b> على الرغم من وجود كلمة "انحدار" في اسمه، فإن <b>الانحدار اللوجستي (<span dir="ltr">Logistic Regression</span>) هو خوارزمية تصنيف (<span dir="ltr">Classification</span>)</b> (وتحديداً للتصنيف الثنائي <span dir="ltr">Binary Classification</span>: $0$ أو $1$) وليس خوارزمية انحدار!
-        </div>
-        <ul>
-          <li><b>كيف يعمل الانحدار اللوجستي؟</b>
-            <ol>
-              <li>يحسب أولاً المعادلة الخطية: $z = w_1 x + w_0$ (أو $\theta^T x$).</li>
-              <li>يمرر القيمة $z$ داخل <b>دالة السيجمويد اللوجستية (<span dir="ltr">Sigmoid / Logistic Function - $\sigma(z)$</span>)</b> التي تحول أي رقم حقيقي إلى <b>احتمال يقع دائماً بين $[0, 1]$</b>:</li>
-            </ol>
-          </li>
-        </ul>
-        <div class="math-box">
-          &sigma;(z) = 1 / ( 1 + e<sup>&minus;z</sup> ) &nbsp;&nbsp; where &nbsp;&nbsp; z = w<sub>1</sub>x + w<sub>0</sub>
-        </div>
-        <ul>
-          <li><b>قاعدة اتخاذ قرار التصنيف عند العتبة الافتراضية ($0.5$):</b>
-            <ul>
-              <li>إذا كان الاحتمال <b>$\sigma(z) \ge 0.5$</b> (أي عندما تكون $z \ge 0$) &larr; تُصنف العينة في <b>الفئة الموجبة ($y = 1$)</b>.</li>
-              <li>إذا كان الاحتمال <b>$\sigma(z) < 0.5$</b> (أي عندما تكون $z < 0$) &larr; تُصنف العينة في <b>الفئة السالبة ($y = 0$)</b>.</li>
-            </ul>
-          </li>
-          <li><b>دالة الخسارة المستخدمة في الانحدار اللوجستي:</b> لا يستخدم مربع الخطأ، بل يستخدم دالة <b><span dir="ltr">Binary Cross-Entropy Loss (Log Loss)</span></b>.</li>
-        </ul>
-
-        <div class="step-box">
-          <b>مسألة الكتاب الكاملة (حساب احتمالية نجاح طالب درس $x = 6$ ساعات):</b><br>
-          لنفترض أن نموذج الانحدار اللوجستي لتوقع نجاح الطالب ($1$ ناجح، $0$ راسب) بناءً على ساعات الدراسة ($x$) يمتلك المعاملات: $w_1 = 1.5$ و $w_0 = -7.0$:<br>
-          • <b>المطلوب:</b> ما احتمالية نجاح طالب درس $x = 6$ ساعات؟ وما قرار تصنيفه؟<br>
-          1) <b>نحسب قيمة $z$ الخطية:</b> $z = (1.5 \times 6) - 7.0 = 9.0 - 7.0 = \mathbf{+2.0}$.<br>
-          2) <b>نطبق دالة السيجمويد $\sigma(z)$:</b><br>
-          $\sigma(2) = \frac{1}{1 + e^{-2}} = \frac{1}{1 + 0.1353} = \frac{1}{1.1353} \approx \mathbf{0.8808}$ (أي احتمالية نجاحه $88.1\%$).<br>
-          3) <b>قرار التصنيف:</b> بما أن $0.8808 \ge 0.5$ (أو لأن $z = +2 \ge 0$)، يُصنف الطالب بأنه <b>ناجح ($1$)</b>!
+          </div>
         </div>
 
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
-
-        <h3>2) آلات المتجهات الداعمة (<span dir="ltr">Support Vector Machines - SVM</span>) وخدعة النواة</h3>
-        <ul>
-          <li><b>الفكرة الأساسية لـ <span dir="ltr">SVM</span>:</b> تبحث عن <b>أفضل مستوى أو خط فاصل (<span dir="ltr">Optimal Hyperplane</span>)</b> يفصل بين الفئتين بحيث يحقق <b>أكبر هامش أمان ممكن (<span dir="ltr">Maximum Margin</span>)</b> بين الخط الفاصل وأقرب النقاط إليه من الفئتين.</li>
-          <li><b>ما هي المتجهات الداعمة (<span dir="ltr">Support Vectors</span>)؟</b> هي <b>النقاط الحدية الأقرب للخط الفاصل</b> من كلا الفئتين والتي تقع على حافة الهامش وتحدد اتجاه وموقع الخط الفاصل.</li>
-          <li><b>كيف تتعامل <span dir="ltr">SVM</span> مع البيانات غير القابلة للفصل خطياً؟ — خدعة النواة (<span dir="ltr">Kernel Trick</span>):</b>
-            <ul>
-              <li>تقوم <b>دالة النواة (<span dir="ltr">Kernel Function</span>)</b> بتحويل البيانات غير الخطية من فضائها الأصلي منخفض الأبعاد إلى <b>فضاء أعلى أبعاداً (<span dir="ltr">Higher-dimensional space</span>)</b> بحيث تصبح قابلة للفصل خطياً!</li>
-              <li><b>أشهر 3 أنواع لدوال النواة (<span dir="ltr">Kernels</span>) في <span dir="ltr">SVM</span>:</b>
-                <ol>
-                  <li><b>النواة الخطية (<span dir="ltr">Linear Kernel</span>):</b> للبيانات القابلة للفصل خطياً.</li>
-                  <li><b>النواة كثيرة الحدود (<span dir="ltr">Polynomial Kernel - <code>'poly'</code></span>):</b> للحدود المنحنية متعددة الحدود.</li>
-                  <li><b>نواة دالة الأساس الشعاعي / جاوس (<span dir="ltr">RBF / Gaussian Kernel - <code>'rbf'</code></span>):</b> الأكثر قوة ومرونة للبيانات المعقدة غير الخطية.</li>
-                </ol>
-              </li>
-            </ul>
-          </li>
-        </ul>
-
-        <div class="step-box">
-          <b>مسألة الكتاب لتصنيف نقطة جديدة باستخدام معادلة الخط الفاصل في SVM:</b><br>
-          إذا كانت معادلة الخط الفاصل في نموذج <span dir="ltr">SVM</span> هي: $f(x_1, x_2) = 2x_1 + 3x_2 - 12 = 0$:<br>
-          • <b>المطلوب:</b> صنّفي النقطة الجديدة $P = (4, 3)$ (حيث الفئة الموجبة $+1$ إذا كان الناتج $>0$، والفئة السالبة $-1$ إذا كان الناتج $<0$):<br>
-          1) نعوض بإحداثيات النقطة $(x_1 = 4, x_2 = 3)$ في المعادلة:<br>
-          $f(4, 3) = (2 \times 4) + (3 \times 3) - 12 = 8 + 9 - 12 = 17 - 12 = \mathbf{+5}$.<br>
-          2) بما أن الناتج $+5 > 0$ (موجب)، إذن تقع النقطة فوق الخط الفاصل وتنتمي إلى <b>الفئة الموجبة ($+1$)</b>!
-        </div>
-      </div>
-    </details>
-
-    <!-- ==================== الوحدة الثالثة ==================== -->
-    <details>
-      <summary>الوحدة الثالثة: أشجار القرار (Decision Trees - Gini Gain) والغابات العشوائية (Random Forests)</summary>
-      <div class="details-body">
-        <h3>1) أشجار القرار (<span dir="ltr">Decision Trees</span>) وحساب معامل جيني (<span dir="ltr">Gini Impurity &amp; Gain</span>)</h3>
-        <ul>
-          <li><b>بنية شجرة القرار:</b> تتكون من:
-            <ol>
-              <li><b>عقدة الجذر (<span dir="ltr">Root Node</span>):</b> أعلى عقدة في الشجرة وتمثل السمة الأهم التي تبدأ بتقسيم كافة البيانات.</li>
-              <li><b>العقد الداخلية / الفروع (<span dir="ltr">Internal / Branch Nodes</span>):</b> تمثل اختبارات وشروطاً على السمات.</li>
-              <li><b>العقد الورقية / النهائية (<span dir="ltr">Leaf / Terminal Nodes</span>):</b> تقع في أسفل الشجرة وتمثل <b>قرار التصنيف النهائي (الفئة المتوقعة)</b>.</li>
-            </ol>
-          </li>
-          <li><b>كيف تختار شجرة القرار أفضل سمة لتقسيم العقدة؟ — معامل جيني لعدم النقاء (<span dir="ltr">Gini Impurity</span>):</b>
-            <ul>
-              <li>يقيس معامل جيني ($G$) مدى اختلاط الفئات داخل العقدة؛ فإذا كانت كل عينات العقدة من فئة واحدة فقط (نقية تماماً <span dir="ltr">Pure</span>) يكون <b>$G = 0$ (وهو الأفضل!)</b>، وإذا كانت مقسمة بالتساوي $50\% / 50\%$ يكون $G = 0.5$ (أقصى عدم نقاء).</li>
-              <li><b>معادلة معامل جيني لعقدة تضم $C$ من الفئات:</b></li>
-            </ul>
-          </li>
-        </ul>
-        <div class="math-box">
-          Gini (G) = &sum;<sub>i=1</sub><sup>C</sup> P<sub>i</sub> ( 1 &minus; P<sub>i</sub> ) = 1 &minus; &sum;<sub>i=1</sub><sup>C</sup> (P<sub>i</sub>)<sup>2</sup>
-        </div>
-        <ul>
-          <li><b>معادلة كسب جيني (<span dir="ltr">Gini Gain</span>) لاختيار أفضل تقسيم:</b>
-            <div class="math-box">
-              Gini Gain = G<sub>parent</sub> &minus; [ (N<sub>left</sub> / N) &middot; G<sub>left</sub> + (N<sub>right</sub> / N) &middot; G<sub>right</sub> ]
+        <div class="worked-example">
+          <div class="dossier-left" style="margin-bottom: var(--space-sm);">
+            <span class="tag-chip">مثال حسابي محلول</span>
+            <strong>تصنيف نقطة اختبار جديدة باستخدام <bdi dir="ltr">K-NN</bdi></strong>
+          </div>
+          <p>
+            لدينا 5 عينات تدريبية في فضاء ثنائي الأبعاد <bdi dir="ltr">(X₁, X₂)</bdi>:
+            <bdi dir="ltr">P₁(2, 2)→A</bdi>، <bdi dir="ltr">P₂(3, 4)→A</bdi>، <bdi dir="ltr">P₃(6, 7)→B</bdi>، <bdi dir="ltr">P₄(7, 5)→B</bdi>، <bdi dir="ltr">P₅(5, 3)→A</bdi>.
+            نريد تصنيف النقطة الجديدة <bdi dir="ltr">Q(5, 5)</bdi> عندما <bdi dir="ltr">K = 3</bdi>.
+          </p>
+          <div class="step-row">
+            <span class="index-num">01</span>
+            <div>
+              <strong>حساب المسافة الإقليدية بين <bdi dir="ltr">Q(5, 5)</bdi> وكل نقطة تدريب:</strong>
+              <ul class="clean-list">
+                <li><bdi dir="ltr">d(Q, P₁) = √((5−2)² + (5−2)²) = √(9 + 9) = √18 ≈ 4.24</bdi> (الفئة A)</li>
+                <li><bdi dir="ltr">d(Q, P₂) = √((5−3)² + (5−4)²) = √(4 + 1) = √5 ≈ 2.24</bdi> (الفئة A)</li>
+                <li><bdi dir="ltr">d(Q, P₃) = √((5−6)² + (5−7)²) = √(1 + 4) = √5 ≈ 2.24</bdi> (الفئة B)</li>
+                <li><bdi dir="ltr">d(Q, P₄) = √((5−7)² + (5−5)²) = √(4 + 0) = 2.00</bdi> (الفئة B)</li>
+                <li><bdi dir="ltr">d(Q, P₅) = √((5−5)² + (5−3)²) = √(0 + 4) = 2.00</bdi> (الفئة A)</li>
+              </ul>
             </div>
-            ونختار السمة التي تحقق <b>أكبر قيمة لكسب جيني (<span dir="ltr">Maximum Gini Gain</span>)</b>!
-          </li>
-        </ul>
-
-        <div class="step-box">
-          <b>مسألة الكتاب الكاملة لحساب ($G$, $G_{\text{left}}$, $G_{\text{right}}$, و $\text{Gini Gain}$):</b><br>
-          لنفترض أن العقدة الأب (<span dir="ltr">Parent</span>) تحتوي على $N = 10$ عينات: منها $6$ من الفئة الموجبة و $4$ من الفئة السالبة:<br>
-          1) <b>حساب جيني للعقدة الأب ($G_{\text{parent}}$):</b><br>
-          $P_+ = \frac{6}{10} = 0.6$ ، و $P_- = \frac{4}{10} = 0.4$.<br>
-          $G_{\text{parent}} = 0.6(1 - 0.6) + 0.4(1 - 0.4) = (0.6 \times 0.4) + (0.4 \times 0.6) = 0.24 + 0.24 = \mathbf{0.48}$.<br><br>
-          2) عند تقسيم العقدة بشرط معين، نتجت عقدتان فرعيتان:<br>
-          • <b>الفرع الأيسر ($N_{\text{left}} = 5$ عينات):</b> يضم $5$ موجبة و $0$ سالبة (نقية تماماً!) &larr; $G_{\text{left}} = 1(1-1) + 0 = \mathbf{0.0}$.<br>
-          • <b>الفرع الأيمن ($N_{\text{right}} = 5$ عينات):</b> يضم $1$ موجبة ($P_+=0.2$) و $4$ سالبة ($P_-=0.8$) &larr; $G_{\text{right}} = 0.2(0.8) + 0.8(0.2) = 0.16 + 0.16 = \mathbf{0.32}$.<br><br>
-          3) <b>حساب كسب جيني (<span dir="ltr">Gini Gain</span>):</b><br>
-          $\text{Gini Gain} = 0.48 - \left[ \frac{5}{10}(0.0) + \frac{5}{10}(0.32) \right] = 0.48 - [0 + 0.16] = \mathbf{0.32}$.
+          </div>
+          <div class="step-row">
+            <span class="index-num">02</span>
+            <div>
+              <strong>ترتيب المسافات تصاعدياً واختيار أقرب 3 جيران (<bdi dir="ltr">K = 3</bdi>):</strong>
+              الأقرب هم: <bdi dir="ltr">P₄ (2.00, B)</bdi>، <bdi dir="ltr">P₅ (2.00, A)</bdi>، ثم أحد <bdi dir="ltr">P₂ (2.24, A)</bdi> أو <bdi dir="ltr">P₃ (2.24, B)</bdi>. في حال اختيار <bdi dir="ltr">P₂, P₄, P₅</bdi> يكون التصويت: صوتان للفئة <strong>A</strong> مقابل صوت واحد للفئة <strong>B</strong>، فتُصنَّف النقطة ضمن الفئة <strong>A</strong>.
+            </div>
+          </div>
         </div>
 
-        <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+        <!-- K-NN Interactive Lab -->
+        <div class="lab-card" id="knn-lab">
+          <div class="lab-header">
+            <span class="lab-title">
+              <i data-lucide="crosshair" style="width:18px;height:18px;"></i>
+              مختبر تفاعلي: محاكي الجيران الأقرب (<bdi dir="ltr">K-NN</bdi>)
+            </span>
+            <span class="tag-chip tag-chip--teal">انقر على الرسم لتغيير موضع النقطة Q</span>
+          </div>
 
-        <h3>2) الغابات العشوائية (<span dir="ltr">Random Forests</span>)</h3>
-        <div class="exam-alert">
-          <b>🌟 لماذا نستخدم الغابات العشوائية (<span dir="ltr">Random Forests</span>) بدلاً من شجرة قرار واحدة؟</b><br>
-          • شجرة القرار الواحدة سهلة الفهم والتفسير، ولكن عيبها الأكبر أنها <b>عرضة بشدة للإفراط في التخصيص (<span dir="ltr">Overfitting</span>)</b>!<br>
-          • تعالج خوارزمية <b>الغابات العشوائية (<span dir="ltr">Random Forests</span>)</b> هذه المشكلة عبر بناء <b>عدد كبير من أشجار القرار المستقلة</b>؛ حيث تُدرَّب كل شجرة على <b>عينة عشوائية مع الإرجاع (<span dir="ltr">Bootstrap sample</span>)</b> ومجموعة فرعية عشوائية من السمات، وعند تصنيف عينة جديدة تصوت كل شجرة، ويتم اختيار الفئة النهائية عن طريق <b>التصويت بالأغلبية (<span dir="ltr">Majority Voting</span>)</b> مما يرفع الدقة ويقلل الـ <span dir="ltr">Overfitting</span> بشكل كبير!
+          <div class="controls-row">
+            <div class="field-group">
+              <label class="field-label" for="knn-k">عدد الجيران (K)</label>
+              <select class="field-select" id="knn-k" onchange="updateKnnLab()">
+                <option value="1">K = 1</option>
+                <option value="3" selected>K = 3</option>
+                <option value="5">K = 5</option>
+                <option value="7">K = 7</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="knn-metric">مقياس المسافة</label>
+              <select class="field-select" id="knn-metric" onchange="updateKnnLab()">
+                <option value="euclidean" selected>الإقليدية (Euclidean)</option>
+                <option value="manhattan">مانهاتن (Manhattan)</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="knn-qx">إحداثي X₁ للنقطة Q: <span id="knn-qx-lbl">5.0</span></label>
+              <input type="range" id="knn-qx" min="0.5" max="9.5" step="0.5" value="5" oninput="updateKnnLab()">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="knn-qy">إحداثي X₂ للنقطة Q: <span id="knn-qy-lbl">5.0</span></label>
+              <input type="range" id="knn-qy" min="0.5" max="9.5" step="0.5" value="5" oninput="updateKnnLab()">
+            </div>
+          </div>
+
+          <div class="asymmetric-grid">
+            <div class="svg-stage" style="min-height:320px;">
+              <svg id="knn-svg" viewBox="0 0 460 320" role="img" aria-label="رسم تفاعلي لخوارزمية K-NN" onclick="handleKnnSvgClick(event)"></svg>
+            </div>
+            <div class="lab-readout">
+              <div class="readout-metric">
+                <span>موضع النقطة الجديدة Q</span>
+                <span class="readout-val" id="knn-pos-out">(5.0, 5.0)</span>
+              </div>
+              <div class="readout-metric">
+                <span>أصوات الفئة A (أزرق)</span>
+                <span class="readout-val" id="knn-vote-a">2</span>
+              </div>
+              <div class="readout-metric">
+                <span>أصوات الفئة B (ذهبي)</span>
+                <span class="readout-val" id="knn-vote-b">1</span>
+              </div>
+              <div class="readout-metric">
+                <span>القرار النهائي للتصنيف</span>
+                <span class="readout-val" id="knn-result">الفئة A</span>
+              </div>
+              <div style="margin-top:var(--space-xs);">
+                <strong style="font-size:0.875rem;">أقرب الجيران المحسوبين:</strong>
+                <div id="knn-neighbors-list" class="muted-note" style="font-family:var(--font-label); font-size:0.8125rem; margin-top:4px; direction:ltr; unicode-bidi:isolate;"></div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </details>
-  </section>
 
-  <!-- التبويب الثاني: ملخص الخوارزميات والمعادلات -->
-  <section id="tables" class="panel">
-    <div class="card">
-      <h2>1. مقارنة شاملة لخوارزميات التصنيف الست في الفصل الثاني عشر</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>الخوارزمية</th>
-            <th>عائلة التصنيف</th>
-            <th>المبدأ الرياضي وأهم خصائصها</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><b>1. أقرب الجيران (<span dir="ltr">K-NN</span>)</b></td>
-            <td>معتمدة على المسافة</td>
-            <td>تصنف النقطة حسب أغلبية أقرب $K$ جيران لها؛ متعلم كسول لا يحتاج لتدريب لكنه بطيء بالاختبار ويحتاج لتحجيم السمات.</td>
-          </tr>
-          <tr>
-            <td><b>2. بايز الساذج (<span dir="ltr">Naive Bayes</span>)</b></td>
-            <td>معتمدة على الاحتمالات</td>
-            <td>تطبق قانون بايز $P(A|B) = \frac{P(B|A)P(A)}{P(B)}$ بافتراض استقلال السمات؛ سريعة جداً وممتازة لتصنيف النصوص والـ <span dir="ltr">Spam</span>.</td>
-          </tr>
-          <tr>
-            <td><b>3. الانحدار اللوجستي (<span dir="ltr">Logistic Regression</span>)</b></td>
-            <td>معتمدة على التحسين</td>
-            <td>للتصنيف الثنائي عبر دالة السيجمويد $\sigma(z) = \frac{1}{1+e^{-z}}$ بين $[0, 1]$ مع عتبة $0.5$ ودالة خسارة <span dir="ltr">Binary Cross-Entropy</span>.</td>
-          </tr>
-          <tr>
-            <td><b>4. آلات المتجهات الداعمة (<span dir="ltr">SVM</span>)</b></td>
-            <td>معتمدة على التحسين</td>
-            <td>تعظم الهامش (<span dir="ltr">Margin</span>) بين المتجهات الداعمة، وتفصل البيانات غير الخطية عبر <b>خدعة النواة (<span dir="ltr">Kernel Trick: Linear, Poly, RBF</span>)</b>.</td>
-          </tr>
-          <tr>
-            <td><b>5. أشجار القرار (<span dir="ltr">Decision Trees</span>)</b></td>
-            <td>معتمدة على البحث</td>
-            <td>تقسم البيانات في هيكل شجري باختيار السمة التي تحقق أعلى كسب في النقاء (<span dir="ltr">Gini Gain</span>)؛ سهلة التفسير لكنها عرضة للـ <span dir="ltr">Overfitting</span>.</td>
-          </tr>
-          <tr>
-            <td><b>6. الغابات العشوائية (<span dir="ltr">Random Forests</span>)</b></td>
-            <td>تجميعية (<span dir="ltr">Ensemble</span>)</td>
-            <td>تجمع عدة أشجار قرار مدربة بعينات <span dir="ltr">Bootstrap</span> وتصوت بالأغلبية (<span dir="ltr">Majority Voting</span>) للقضاء على الـ <span dir="ltr">Overfitting</span>.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- التبويب الثالث: قاموس المصطلحات والقوانين -->
-  <section id="terms" class="panel">
-    <div class="card">
-      <h2>قاموس المصطلحات والقوانين الشامل للفصل الثاني عشر</h2>
-      <p class="muted">جميع المفاهيم والخوارزميات والمعادلات الخاصة بالتصنيف:</p>
-      <div id="termsGrid" class="grid"></div>
-    </div>
-  </section>
-
-  <!-- التبويب الرابع: البطاقات التعليمية -->
-  <section id="cards" class="panel">
-    <div class="card">
-      <h2>البطاقات التعليمية التفاعلية (28 بطاقة شاملة)</h2>
-      <p class="muted">اضغطي على البطاقة أو زر المسافة (Space) لإظهار الإجابة أو إخفائها.</p>
-      <div id="flashcard" class="flashcard" role="button" tabindex="0" aria-label="بطاقة تعليمية">
-        <div class="term" id="flashTerm"></div>
-        <div class="answer" id="flashAnswer" hidden></div>
-        <small style="margin-top:18px">اضغطي للكشف عن الإجابة</small>
-      </div>
-      <div class="row" style="margin-top:14px">
-        <button class="btn" id="prevCard">السابق</button>
-        <span id="cardCount" class="muted"></span>
-        <button class="btn primary" id="nextCard">التالي</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- التبويب الخامس: الاختبار الذاتي العشوائي -->
-  <section id="quiz" class="panel">
-    <div class="card">
-      <div class="row">
-        <div>
-          <h2>الاختبار الشامل المتغير للفصل الثاني عشر (25 سؤالاً) <span class="badge-new">ترتيب عشوائي ذكي 🎲</span></h2>
-          <p class="muted">يختبر فهمك لخوارزميات التصنيف ومسائل Naive Bayes، و Sigmoid، و SVM، وحسابات Gini في أشجار القرار مع تعليل فوري!</p>
+        <div class="pros-cons-grid">
+          <div class="pros-box">
+            <strong>مزايا <bdi dir="ltr">K-NN</bdi></strong>
+            <ul>
+              <li>بسيطة وسهلة الفهم والتنفيذ ولا تحتاج افتراضات مسبقة عن توزيع البيانات.</li>
+              <li>لا تتطلب مرحلة تدريب حسابية مكلفة (تخزن البيانات فقط).</li>
+              <li>تستطيع تشكيل حدود قرار غير خطية ومرنة حسب توزيع الجيران.</li>
+            </ul>
+          </div>
+          <div class="cons-box">
+            <strong>عيوب <bdi dir="ltr">K-NN</bdi></strong>
+            <ul>
+              <li>بطيئة عند التنبؤ للبيانات الضخمة لأنها تحسب المسافة مع كل عينات التدريب.</li>
+              <li>حساسة جداً لاختلاف مقاييس السمات (تتطلب تطبيع/تحجيم البيانات <bdi dir="ltr">Scaling</bdi>).</li>
+              <li>حساسة للقيم المتطرفة والسمات غير المهمة واختيار قيمة <bdi dir="ltr">K</bdi>.</li>
+            </ul>
+          </div>
         </div>
-        <div class="score" id="score">النتيجة: 0 / 25</div>
-      </div>
-      <div class="progress"><div id="progressBar"></div></div>
-      <div id="quizArea"></div>
-      <div class="row">
-        <button class="btn" id="resetQuiz">إعادة الاختبار بترتيب عشوائي جديد 🔀</button>
-        <button class="btn primary" id="finishQuiz">اعتماد وعرض النتيجة النهائية</button>
-      </div>
-      <p id="finalResult" class="score" aria-live="polite" style="margin-top:14px"></p>
-    </div>
-  </section>
-</main>
 
-<footer>مبني بالكامل (100%) على محتوى الفصل الثاني عشر (التعلم الآلي بإشراف - التصنيف) من مقرر تحليل وتمثيل البيانات</footer>
+        <!-- 1.3 Naive Bayes -->
+        <h3 class="sub-heading"><span class="index-num">1.3</span> خوارزمية بايز الساذجة (<bdi dir="ltr">Naïve Bayes</bdi>)</h3>
+        <p>
+          تعتمد هذه الخوارزمية على <strong>مبرهنة بايز (<bdi dir="ltr">Bayes' Theorem</bdi>)</strong> لحساب احتمالية انتماء عينة إلى فئة معينة بناءً على سماتها. وتُوصف بـ «الساذجة» (<bdi dir="ltr">Naïve</bdi>) لأنها تفترض أن جميع السمات <strong>مستقلة شرطياً</strong> عن بعضها البعض عند معرفة الفئة.
+        </p>
 
-<script>
-const terms = [
-  ["Classification (التصنيف)", "أحد أساليب التعلم الآلي بإشراف يُستخدم عندما تكون سمة الهدف (Y) فئوية منفصلة (مثل مريض/سليم أو Spam/Not Spam)."],
-  ["Decision Boundary (الحد الفاصل للقرار)", "الخط أو السطح الذي يتعلمه المصنف للفصل بين الفئات المختلفة في فضاء السمات."],
-  ["K-Nearest Neighbors (K-NN)", "خوارزمية أقرب الجيران: خوارزمية تصنيف معتمدة على المسافة تصنف العينة الجديدة حسب أغلبية أقرب K جيران لها."],
-  ["Naive Bayes Classifier", "خوارزمية بايز الساذج: خوارزمية تصنيف احتمالية تعتمد على قانون بايز وتفترض الاستقلال الشرطي بين السمات."],
-  ["Logistic Regression (الانحدار اللوجستي)", "خوارزمية تصنيف (وليست انحداراً!) تعتمد على التحسين وتستخدم دالة السيجمويد لحساب احتمالية الانتماء للفئة بين [0, 1]."],
-  ["Sigmoid Function σ(z)", "دالة السيجمويد: σ(z) = 1 / (1 + e^-z) تحول القيمة الخطية z إلى احتمال بين 0 و 1 مع عتبة قرار 0.5."],
-  ["Binary Cross-Entropy Loss", "دالة الخسارة اللوغاريتمية المستخدمة لتدريب نموذج الانحدار اللوجستي."],
-  ["Support Vector Machines (SVM)", "آلات المتجهات الداعمة: خوارزمية تصنيف تبحث عن أفضل مستوى فاصل يحقق أقصى هامش (Margin) بين المتجهات الداعمة."],
-  ["Kernel Trick (خدعة النواة)", "تقنية في SVM تحول البيانات غير القابلة للفصل خطياً إلى فضاء أعلى أبعاداً لتصبح قابلة للفصل خطياً (ومن أنواعها: Linear, Poly, RBF)."],
-  ["Decision Trees (أشجار القرار)", "خوارزمية تصنيف شجرية تتكون من جذر وفروع وأوراق، وتختار أفضل سمة للتقسيم بناءً على نقاء العقدة (Gini Gain)."],
-  ["Gini Impurity (معامل جيني)", "مقياس لعدم نقاء العقدة في شجرة القرار: G = Σ P_i (1 - P_i)، ويساوي 0 عندما تكون العقدة نقية تماماً."],
-  ["Random Forests (الغابات العشوائية)", "خوارزمية تجميعية تدرب عدة أشجار قرار على عينات Bootstrap وسمات عشوائية وتستخدم التصويت بالأغلبية لتقليل الـ Overfitting."]
-];
+        <div class="math-box">
+          <div class="math-box-label">صيغة مبرهنة بايز للتصنيف</div>
+          $$P(A|B) = \frac{P(B|A) \cdot P(A)}{P(B)}$$
+          <p class="muted-note" style="margin-top:var(--space-sm);">
+            • <bdi dir="ltr">P(A|B)</bdi>: الاحتمال الشرطي للفئة <bdi dir="ltr">A</bdi> عندما تكون السمة <bdi dir="ltr">B</bdi> معروفة (الاحتمال البعدي <bdi dir="ltr">Posterior</bdi>).<br>
+            • <bdi dir="ltr">P(B|A)</bdi>: الاحتمال الشرطي للسمة <bdi dir="ltr">B</bdi> عندما تكون الفئة <bdi dir="ltr">A</bdi> معروفة (<bdi dir="ltr">Likelihood</bdi>).<br>
+            • <bdi dir="ltr">P(A)</bdi>: الاحتمال الأولي للفئة <bdi dir="ltr">A</bdi> (<bdi dir="ltr">Prior</bdi>)؛ و <bdi dir="ltr">P(B)</bdi>: الاحتمال الأولي للسمة <bdi dir="ltr">B</bdi>.
+          </p>
+        </div>
 
-const cards = [
-  ["ما الفرق بين الانحدار (Regression) والتصنيف (Classification) في التعلم الآلي بإشراف؟", "• الانحدار: سمة الهدف (Y) كمية رقمية متصلة (مثل السعر أو الحرارة).\n• التصنيف: سمة الهدف (Y) فئوية محددة (مثل مريض/سليم أو Spam/Not Spam)."],
-  ["ما هي الأقسام الأربعة لخوارزميات التصنيف مع ذكر مثال لكل قسم؟", "1) المعتمدة على المسافة: مثل K-NN.\n2) المعتمدة على الاحتمالات: مثل Naive Bayes.\n3) المعتمدة على البحث والأشجار: مثل Decision Trees و Random Forests.\n4) المعتمدة على التحسين (Optimization): مثل Logistic Regression و SVM."],
-  ["ما هي الخطوات الأربع لعمل خوارزمية أقرب الجيران (K-NN)؟", "1) تحديد عدد الجيران K.\n2) حساب المسافة بين النقطة الجديدة وجميع نقاط التدريب.\n3) اختيار أقرب K جيران للنقطة.\n4) إسناد النقطة للفئة الأكثر تكراراً بين الجيران الـ K (بالتصويت بالأغلبية)."],
-  ["ما أثر اختيار قيمة K صغيرة جداً (مثل K=1) مقارنة بقيمة K كبيرة جداً في خوارزمية K-NN؟", "• قيمة K صغيرة جداً: تجعل الحد الفاصل متعرجاً وحساساً للضجيج وتسبب (Overfitting).\n• قيمة K كبيرة جداً: تجعل الحد الفاصل ناعماً، ولكن المبالغة فيها قد تسبب (Underfitting)."],
-  ["لماذا سُميت خوارزمية بايز الساذج (Naive Bayes) بهذا الاسم؟ وما هو قانون بايز؟", "لأنها تفترض (بسذاجة/تبسيط) أن جميع السمات مستقلة تماماً عن بعضها البعض بشرط الفئة.\nوقانون بايز هو: P(A|B) = [ P(B|A) * P(A) ] / P(B)"],
-  ["[مسألة حسابية - Naive Bayes] إذا كان P(Spam)=0.5 و P(free|Spam)=0.6 و P(win|Spam)=0.5، فكم تبلغ درجة احتمال كون رسالة تحتوي على الكلمتين معاً هي Spam؟", "نضرب الاحتمالات معاً:\nScore(Spam) = 0.5 × 0.6 × 0.5 = 0.15."],
-  ["هل الانحدار اللوجستي (Logistic Regression) خوارزمية انحدار أم خوارزمية تصنيف؟ وما الدالة التي يستخدمها؟", "هو خوارزمية (تصنيف - Classification) رغم اسمه!\nويستخدم دالة السيجمويد (Sigmoid Function) لحساب احتمالية الانتماء للفئة بين [0 و 1]."],
-  ["ما هي معادلة دالة السيجمويد (Sigmoid Function) في الانحدار اللوجستي؟ وما هي عتبة التصنيف؟", "σ(z) = 1 / (1 + e^-z) حيث z = w1*x + w0\nوعتبة التصنيف الافتراضية هي (0.5): فإذا كان الناتج >= 0.5 تصنف الفئة (1)، وإذا كان < 0.5 تصنف الفئة (0)."],
-  ["[مسألة حسابية - Logistic Regression] إذا كانت معادلة الطالب هي z = 2x - 8، ودرس الطالب x = 4 ساعات، فكم تبلغ قيمة z وكم تبلغ احتمالية نجاحه σ(z)؟", "1) z = (2 × 4) - 8 = 8 - 8 = 0.\n2) σ(0) = 1 / (1 + e^0) = 1 / (1 + 1) = 1 / 2 = 0.5 (أي 50%)."],
-  ["ما هي الفكرة الأساسية لخوارزمية آلات المتجهات الداعمة (SVM)؟ وما هي المتجهات الداعمة؟", "تبحث SVM عن أفضل خط/مستوى فاصل يحقق أكبر هامش (Maximum Margin) بين الفئتين.\nوالمتجهات الداعمة (Support Vectors) هي النقاط الحدية الأقرب للخط الفاصل التي تحدد موقعه."],
-  ["ما هي خدعة النواة (Kernel Trick) في خوارزمية SVM؟ وما أشهر 3 أنواع لدوال النواة؟", "هي تحويل البيانات غير القابلة للفصل خطياً إلى فضاء أعلى أبعاداً لتصبح قابلة للفصل خطياً.\nوأشهر 3 أنواع هي:\n1) Linear kernel.\n2) Polynomial kernel ('poly').\n3) RBF / Gaussian kernel ('rbf')."],
-  ["[مسألة حسابية - SVM] إذا كانت معادلة الفاصل في SVM هي: 3x1 - 2x2 - 4 = 0، فما تصنيف النقطة (2, 2)؟", "نعوض بالنقطة (x1=2, x2=2):\n3(2) - 2(2) - 4 = 6 - 4 - 4 = -2.\nبما أن الناتج سالب (-2 < 0)، فالنقطة تنتمي للفئة السالبة (-1)."],
-  ["ما هي المكونات الثلاثة لبنية شجرة القرار (Decision Tree)؟", "1) عقدة الجذر (Root Node): أعلى عقدة في الشجرة.\n2) العقد الداخلية / الفروع (Internal / Branch Nodes): شروط التقسيم.\n3) العقد الورقية (Leaf Nodes): قرار التصنيف النهائي."],
-  ["ما هي معادلة معامل جيني لعدم النقاء (Gini Impurity)؟ ومتى يساوي صفراً؟", "G = Σ P_i (1 - P_i) = 1 - Σ (P_i)²\nويساوي صفراً (G = 0) عندما تكون العقدة نقية تماماً (جميع عيناتها تنتمي لفئة واحدة فقط)."],
-  ["[مسألة حسابية - Gini] إذا كانت عقدة في شجرة القرار تحتوي على 10 عينات: 5 موجبة و 5 سالبة، فكم تبلغ قيمة معامل جيني (G) لها؟", "P+ = 5/10 = 0.5 ، و P- = 5/10 = 0.5.\nG = 0.5(1 - 0.5) + 0.5(1 - 0.5) = 0.25 + 0.25 = 0.50 (أقصى عدم نقاء)."],
-  ["[مسألة حسابية - Gini] إذا كانت عقدة تحتوي على 8 عينات جميعها من الفئة الموجبة (8 موجبة و 0 سالبة)، فكم تبلغ قيمة معامل جيني (G) لها؟", "P+ = 8/8 = 1.0 ، و P- = 0.\nG = 1(1 - 1) + 0 = 0.0 (عقدة نقية تماماً!)."],
-  ["كيف تختار شجرة القرار السمة الأفضل لتقسيم العقدة؟", "تحسب كسب جيني (Gini Gain = G_parent - Weighted_G_children) لكل سمة، وتختار السمة التي تحقق أعلى كسب جيني (Maximum Gini Gain)."],
-  ["ما العيب الرئيسي لشجرة القرار الواحدة؟ وكيف تعالجه خوارزمية الغابات العشوائية (Random Forests)؟", "• عيب شجرة القرار: عرضة بشدة للإفراط في التخصيص (Overfitting).\n• تعالجه الغابات العشوائية بتدريب عدة أشجار قرار على عينات Bootstrap وسمات عشوائية، ثم أخذ التصويت بالأغلبية (Majority Voting)."]
-];
+        <div class="worked-example">
+          <div class="dossier-left" style="margin-bottom: var(--space-sm);">
+            <span class="tag-chip">خطوات الخوارزمية + مثال حسابي</span>
+            <strong>تصنيف البريد الإلكتروني (<bdi dir="ltr">Spam / Not Spam</bdi>) بالكلمتين <bdi dir="ltr">"free"</bdi> و <bdi dir="ltr">"win"</bdi></strong>
+          </div>
+          <div class="step-row">
+            <span class="index-num">01</span>
+            <div><strong>حساب الاحتمالات الأولية (<bdi dir="ltr">Prior</bdi>):</strong> نسبة العينات لكل فئة: لنفترض <bdi dir="ltr">P(Spam) = 0.4</bdi> و <bdi dir="ltr">P(Non-Spam) = 0.6</bdi>.</div>
+          </div>
+          <div class="step-row">
+            <span class="index-num">02</span>
+            <div>
+              <strong>حساب الاحتمالات الشرطية للسمات:</strong><br>
+              في البريد المزعج: <bdi dir="ltr">P(free|Spam) = 0.8</bdi>، <bdi dir="ltr">P(win|Spam) = 0.6</bdi>.<br>
+              في البريد العادي: <bdi dir="ltr">P(free|Non-Spam) = 0.1</bdi>، <bdi dir="ltr">P(win|Non-Spam) = 0.2</bdi>.
+            </div>
+          </div>
+          <div class="step-row">
+            <span class="index-num">03</span>
+            <div>
+              <strong>تطبيق مبرهنة بايز للرسالة التي تحتوي على الكلمتين معاً:</strong>
+              $$P(\text{Spam}|\text{free, win}) \propto P(\text{Spam}) \times P(\text{free}|\text{Spam}) \times P(\text{win}|\text{Spam}) = 0.4 \times 0.8 \times 0.6 = 0.192$$
+              $$P(\text{Non-Spam}|\text{free, win}) \propto P(\text{Non-Spam}) \times P(\text{free}|\text{Non-Spam}) \times P(\text{win}|\text{Non-Spam}) = 0.6 \times 0.1 \times 0.2 = 0.012$$
+            </div>
+          </div>
+          <div class="step-row">
+            <span class="index-num">04</span>
+            <div>
+              <strong>تحديد الفئة:</strong> بما أن <bdi dir="ltr">0.192 &gt; 0.012</bdi> (وبعد المعايرة يصبح احتمال <bdi dir="ltr">Spam ≈ 94.1%</bdi>)، تُصنَّف الرسالة كـ <strong>بريد مزعج (<bdi dir="ltr">Spam</bdi>)</strong>.
+              <div class="muted-note" style="margin-top:4px;">ملاحظة: إذا كانت إحدى الكلمات غير موجودة إطلاقاً في إحدى الفئات يصبح ناتج الضرب <bdi dir="ltr">0.0</bdi> (مثل <bdi dir="ltr">0.0 × 0.0 × 0.4 = 0.0</bdi>)، ويُعالَج ذلك بتقنية تنعيم لابلاس (<bdi dir="ltr">Laplace Smoothing</bdi>).</div>
+            </div>
+          </div>
+        </div>
 
-const masterQuestions = [
-  {q:"أي نوع من خوارزميات التعلم الآلي بإشراف يُستخدم عندما تكون سمة الهدف (Y) عبارة عن (فئات محددة ومنفصلة مثل: مريض/سليم أو Spam/Not Spam)؟",o:["خوارزميات التصنيف (Classification)","خوارزميات الانحدار الخطي (Linear Regression)","خوارزميات التجميع بدون إشراف (Clustering)","التحويل اللوغاريتمي"],a:0,e:"التصنيف (Classification) يتنبأ بسمة هدف فئوية منفصلة، بينما الانحدار يتنبأ بقيمة رقمية متصلة."},
-  {q:"وفقاً لتقسيم خوارزميات التصنيف الأربعة في الملزمة، إلى أي فئة تنتمي كل من (K-NN) و (Naive Bayes) على التوالي؟",o:["K-NN معتمدة على المسافة (Distance-based)، و Naive Bayes معتمدة على الاحتمالات (Probability-based)","K-NN معتمدة على الأشجار، و Naive Bayes معتمدة على المسافة","كلتاهما معتمدتان على التحسين (Optimization)","كلتاهما خوارزميات تجميع بدون إشراف"],a:0,e:"K-NN تصنف بحساب المسافات، بينما Naive Bayes تصنف بحساب الاحتمالات الشرطية."},
-  {q:"في خوارزمية أقرب الجيران (K-NN)، ماذا يحدث إذا اخترنا قيمة (K) صغيرة جداً مثل (K = 1)؟",o:["يصبح الحد الفاصل متعرجاً جداً وحساساً للضجيج والقيم الشاذة، مما يسبب الإفراط في التخصيص (Overfitting)","يصبح النموذج أسرع بمئة مرة ولا يتأثر بالضجيج","يتحول النموذج إلى شجرة قرار","تُحذف جميع نقاط التدريب"],a:0,e:"عند K=1 تتأثر النقطة بأقرب جار واحد فقط حتى لو كان نقطة ضجيج، مما يسبب Overfitting."},
-  {q:"ما هي الفرضية الأساسية التي تقوم عليها خوارزمية بايز الساذج (Naive Bayes)؟",o:["تفترض أن جميع السمات (Features) مستقلة تماماً عن بعضها البعض إحصائياً بشرط معرفة الفئة","تفترض أن جميع السمات متطابقة ومكررة 100%","تفترض عدم وجود سمة هدف في البيانات","تفترض أن البيانات مقسمة بحدود دائرية فقط"],a:0,e:"سُميت Naive (ساذجة/مبسطة) لافتراضها الاستقلال الشرطي التام بين السمات لتبسيط حساب قانون بايز."},
-  {q:"[مسألة حسابية - Naive Bayes] لتصنيف رسالة بريد إلكتروني تحتوي على كلمتي ('free' و 'win')، إذا كان P(Spam) = 0.5 ، و P('free'|Spam) = 0.4 ، و P('win'|Spam) = 0.5 ، فكم تبلغ قيمة البسط (درجة احتمال Spam)؟",o:["0.10 (لأن 0.5 × 0.4 × 0.5 = 0.10)","1.40","0.50","0.01"],a:0,e:"بضرب الاحتمال المسبق في الاحتمالات الشرطية للكلمات: 0.5 × 0.4 × 0.5 = 0.10."},
-  {q:"[مسألة حسابية - Naive Bayes] إذا كانت درجة احتمال كون الرسالة مزعجة S(Spam) = 0.08 ، ودرجة احتمال كونها سليمة S(Not Spam) = 0.003 ، فما هو قرار خوارزمية Naive Bayes؟",o:["تُصنف الرسالة على أنها بريد مزعج (Spam) لأن 0.08 أكبر من 0.003","تُصنف الرسالة على أنها سليمة (Not Spam)","ترفض الخوارزمية تصنيف الرسالة","تُصنف الرسالة كقيمة مفقودة NaN"],a:0,e:"تختار خوارزمية Naive Bayes الفئة صاحبة الاحتمال الأعلى (MAP)، وبما أن 0.08 > 0.003 فالرسالة Spam."},
-  {q:"على الرغم من اسمه، فإن (الانحدار اللوجستي - Logistic Regression) يُستخدم في التعلم الآلي كخوارزمية:",o:["تصنيف (Classification - وخاصة التصنيف الثنائي 0 أو 1)","انحدار للتنبؤ بدرجات الحرارة المتصلة فقط","تجميع بدون إشراف (Clustering)","تقليص أبعاد بدون هدف"],a:0,e:"الانحدار اللوجستي هو خوارزمية تصنيف معتمدة على التحسين (Optimization-based classification)."},
-  {q:"ما هي الدالة الرياضية التي يستخدمها الانحدار اللوجستي لتحويل المجموع الخطي (z) إلى قيمة احتمالية تقع دائماً بين [0 و 1]؟",o:["دالة السيجمويد (Sigmoid Function): σ(z) = 1 / (1 + e^-z)","دالة الجذر التربيعي","دالة القيمة المطلقة","معادلة مسافة مانهاتن"],a:0,e:"دالة السيجمويد تحصر أي رقم حقيقي z من (-∞, +∞) ليقع داخل نطاق الاحتمال [0, 1]."},
-  {q:"[مسألة حسابية - Logistic Regression] في نموذج انحدار لوجستي لتوقع نجاح الطالب، إذا كانت المعادلة الخطية هي z = 1.5x - 6 ، ودرس الطالب x = 6 ساعات، فما هي قيمة z وما قرار تصنيف الطالب؟",o:["z = +3.0 ، وبما أن σ(3) أكبر من 0.5 يُصنف الطالب بأنه ناجح (الفئة 1)","z = -3.0 ، ويُصنف الطالب بأنه راسب (الفئة 0)","z = 0.0 ، ولا يمكن تصنيفه","z = 100"],a:0,e:"نعوض بـ x=6: z = (1.5 × 6) - 6 = 9 - 6 = +3.0. وعندما تكون z موجبة (> 0) تكون σ(z) > 0.5 فيُصنف في الفئة الموجبة (1)."},
-  {q:"ما هي دالة الخسارة (Loss Function) القياسية المستخدمة في تدريب نموذج الانحدار اللوجستي؟",o:["Binary Cross-Entropy Loss (Log Loss)","مجموع الأخطاء المطلقة (SAE)","معامل الظل (Silhouette)","مسافة مانهاتن"],a:0,e:"يستخدم الانحدار اللوجستي دالة الخسارة اللوغاريتمية Binary Cross-Entropy بدلاً من MSE."},
-  {q:"تهدف خوارزمية آلات المتجهات الداعمة (SVM) عند الفصل بين فئتين إلى إيجاد المستوى الفاصل الذي يحقق:",o:["أكبر هامش أمان ممكن (Maximum Margin) بين الخط الفاصل وأقرب النقاط من الفئتين (المتجهات الداعمة)","أصغر مسافة ممكنة بحيث يلامس جميع النقاط","تصفير جميع المعاملات كما في Lasso","بناء شجرة من الجذر إلى الأوراق"],a:0,e:"جوهر خوارزمية SVM هو تعظيم الهامش (Margin) بين الفئتين لزيادة قدرة النموذج على التعميم."},
-  {q:"كيف تتعامل خوارزمية (SVM) مع البيانات غير القابلة للفصل خطياً في فضائها الأصلي؟",o:["باستخدام خدعة النواة (Kernel Trick) مثل نواة (Polynomial أو RBF) لرفع البيانات إلى فضاء أعلى أبعاداً تصبح فيه قابلة للفصل خطياً","عن طريق حذف جميع البيانات غير الخطية","عن طريق تحويلها إلى نص","لا تستطيع SVM التعامل مع البيانات غير الخطية إطلاقاً"],a:0,e:"تُستخدم دوال النواة (Kernels مثل poly و rbf) لتمكين SVM من فصل البيانات غير الخطية بكفاءة عالية."},
-  {q:"[مسألة حسابية - SVM] إذا كانت معادلة المستوى الفاصل في نموذج SVM هي: 2x1 + x2 - 7 = 0 ، فما هو تصنيف النقطة الجديدة P = (5, 1)؟",o:["تنتمي للفئة الموجبة (+1) لأن التعويض يعطي: 2(5) + 1 - 7 = +4 (أكبر من الصفر)","تنتمي للفئة السالبة (-1) لأن الناتج سالب","تقع النقطة على الخط الفاصل تماماً لأن الناتج صفر","تُصنف كنقطة ضجيج (-1)"],a:0,e:"نعوض بإحداثيات النقطة (x1=5, x2=1): 2(5) + (1) - 7 = 10 + 1 - 7 = +4. وبما أن +4 > 0 فهي في الفئة الموجبة (+1)."},
-  {q:"في بنية شجرة القرار (Decision Tree)، ماذا تمثل كل من: (عقدة الجذر - Root Node) و (العقد الورقية - Leaf Nodes)؟",o:["عقدة الجذر هي أعلى عقدة وتضم كامل البيانات، والعقد الورقية تقع في أسفل الشجرة وتمثل قرار التصنيف النهائي (الفئة المتوقعة)","عقدة الجذر تقع في أسفل الشجرة، والعقد الورقية تقع في قمتها","كلاهما يمثلان القيم المفقودة","لا تحتوي شجرة القرار على عقد ورقية"],a:0,e:"تبدأ الشجرة من الجذر (Root) في الأعلى، وتتفرع عبر العقد الداخلية، وتنتهي بالعقد الورقية (Leaf nodes) التي تحمل قرار التصنيف."},
-  {q:"ما هي معادلة حساب معامل جيني لعدم النقاء (Gini Impurity) لعقدة في شجرة القرار؟ ومتى تكون العقدة نقية تماماً (Pure)؟",o:["G = Σ P_i (1 - P_i) ، وتكون العقدة نقية تماماً عندما يساوي معامل جيني صفراً (G = 0)","G = Q3 - Q1 ، وتكون نقية عندما G = 100","G = (x - μ) / σ ، وتكون نقية عندما G = -1","G = b(x) - a(x)"],a:0,e:"معامل جيني G = Σ P_i(1 - P_i) يقيس عدم النقاء؛ فإذا كانت كل عينات العقدة من فئة واحدة يكون P=1 وبالتالي G = 1(1-1) = 0."},
-  {q:"[مسألة حسابية - Gini] إذا كانت عقدة في شجرة القرار تحتوي على 10 عينات: 6 منها من الفئة (A) و 4 منها من الفئة (B)، فكم تبلغ قيمة معامل جيني (G) لهذه العقدة؟",o:["0.48 (لأن P(A)=0.6 و P(B)=0.4، فيكون G = 0.6×0.4 + 0.4×0.6 = 0.24 + 0.24 = 0.48)","0.00","1.00","0.24"],a:0,e:"نحسب الاحتمالات: P(A) = 6/10 = 0.6، و P(B) = 4/10 = 0.4. ثم نعوض: G = 0.6(0.4) + 0.4(0.6) = 0.24 + 0.24 = 0.48."},
-  {q:"[مسألة حسابية - Gini Gain] إذا كان معامل جيني للعقدة الأب G_parent = 0.48 (تضم 10 عينات)، وقسمناها إلى فرعين متساويين (5 عينات لكل فرع) فكان G_left = 0.0 و G_right = 0.40، فكم يبلغ كسب جيني (Gini Gain)؟",o:["0.28 (لأن المتوسط الموزون للفرعين = (5/10)×0 + (5/10)×0.40 = 0.20، فيكون الكسب = 0.48 - 0.20 = 0.28)","0.48","0.20","0.88"],a:0,e:"نحسب جيني الموزون للأبناء: (0.5 × 0) + (0.5 × 0.40) = 0.20. ثم نطرحه من جيني الأب: Gini Gain = 0.48 - 0.20 = 0.28."},
-  {q:"على أي أساس تختار شجرة القرار السمة الأفضل لتقسيم العقدة الحالية؟",o:["تختار السمة التي تحقق أكبر قيمة لكسب جيني (Maximum Gini Gain - أي أكبر تقليل لعدم النقاء)","تختار السمة التي تحقق أقل كسب جيني","تختار السمة التي تحتوي على أكبر عدد من القيم المفقودة","تختار أول عمود في الجدول دائماً دون حساب"],a:0,e:"السمة الأفضل للتقسيم هي التي تزيد من نقاء العقد الناتجة بأكبر قدر ممكن، أي صاحبة أعلى Gini Gain."},
-  {q:"ما هي الميزة الرئيسية لاستخدام خوارزمية (الغابات العشوائية - Random Forests) مقارنة باستخدام شجرة قرار واحدة؟",o:["تقلل بشكل كبير من مشكلة الإفراط في التخصيص (Overfitting) وترفع دقة التعميم عن طريق تجميع عدة أشجار والتصويت بالأغلبية","تعتمد على شجرة واحدة فقط وتلغي بقية الأشجار","تحول مشكلة التصنيف إلى تجميع بدون إشراف","لا تحتاج إلى أي بيانات للتدريب"],a:0,e:"شجرة القرار الواحدة تعاني من الـ Overfitting، بينما تعالج الغابات العشوائية ذلك بتدريب غابة من الأشجار على عينات Bootstrap وأخذ التصويت بالأغلبية."},
-  {q:"كيف تتخذ خوارزمية الغابات العشوائية (Random Forests) قرار التصنيف النهائي لعينة اختبار جديدة بعد أن تتنبأ بها جميع الأشجار في الغابة؟",o:["عن طريق التصويت بالأغلبية (Majority Voting) بين جميع الأشجار","عن طريق أخذ رأي الشجرة الأولى فقط وتجاهل الباقي","عن طريق جمع أرقام الفئات وضربها في 100","عن طريق حذف العينة الجديدة"],a:0,e:"في التصنيف، تصوت كل شجرة في الغابة العشوائية لصالح فئة، والفئة التي تحصل على أغلبية الأصوات (Majority Voting) تكون هي التوقع النهائي."},
-  {q:"لماذا يُنصح باختيار قيمة (K) عدداً فردياً (مثل K=3 أو K=5) في خوارزمية أقرب الجيران (K-NN) عند التصنيف بين فئتين؟",o:["لتجنب حدوث تعادل في الأصوات بين الفئتين عند إجراء التصويت بالأغلبية","لأن الأعداد الزوجية غير مقبولة برمجياً في لغة البايثون","لأن الأعداد الفردية تحذف القيم المتطرفة تلقائياً","لجعل المسافة الإقليدية تساوي صفراً"],a:0,e:"اختيار K عدداً فردياً في التصنيف الثنائي يمنع تساوي عدد الجيران من الفئة الأولى مع عدد الجيران من الفئة الثانية."},
-  {q:"أي خوارزمية من خوارزميات التصنيف التالية توصف بأنها (متعلم كسول - Lazy Learner) لأنها لا تبني نموذجاً رياضياً أثناء التدريب بل تؤجل كل الحسابات إلى وقت الاختبار؟",o:["خوارزمية أقرب الجيران (K-NN)","الانحدار اللوجستي (Logistic Regression)","آلات المتجهات الداعمة (SVM)","شجرة القرار (Decision Tree)"],a:0,e:"خوارزمية K-NN تحفظ بيانات التدريب فقط، وعند وصول نقطة اختبار جديدة تبدأ بحساب المسافات مع كافة النقاط."},
-  {q:"في خوارزمية (SVM)، ماذا نسمي النقاط الحدية القريبة جداً من المستوى الفاصل والتي تقع على حافة الهامش وتتحكم في تحديد موقع واتجاه المستوى الفاصل؟",o:["المتجهات الداعمة (Support Vectors)","العقد الورقية (Leaf Nodes)","المراكز العشوائية (Centroids)","القيم المفقودة (Missing Values)"],a:0,e:"سُميت الخوارزمية بآلات المتجهات الداعمة لأن هذه النقاط الحدية القريبة (Support Vectors) هي التي تدعم وتحدد موقع الفاصل."},
-  {q:"في دالة السيجمويد σ(z) بالانحدار اللوجستي، كم تبلغ قيمة الاحتمال σ(z) عندما تكون القيمة الخطية (z = 0)؟",o:["0.5 (لأن 1 / (1 + e^0) = 1 / (1 + 1) = 0.5)","0.0","1.0","-1.0"],a:0,e:"بما أن e^0 = 1، فإن σ(0) = 1 / (1 + 1) = 1/2 = 0.5 (وهي نقطة العتبة الفاصلة بين الفئتين)."},
-  {q:"أي زوج من الخوارزميات التالية ينتمي كلاهما إلى فئة خوارزميات التصنيف المعتمدة على التحسين (Optimization-based classification algorithms)؟",o:["الانحدار اللوجستي (Logistic Regression) وآلات المتجهات الداعمة (SVM)","أقرب الجيران (K-NN) وبايز الساذج (Naive Bayes)","K-means و DBSCAN","PCA و Chi-squared"],a:0,e:"يُصنف كل من Logistic Regression و SVM ضمن خوارزميات التصنيف المعتمدة على التحسين الرياضي (Optimization)."}
-];
+        <!-- Naive Bayes Calculator -->
+        <div class="lab-card" id="nb-lab">
+          <div class="lab-header">
+            <span class="lab-title">
+              <i data-lucide="calculator" style="width:18px;height:18px;"></i>
+              حاسبة تفاعلية: مصنف <bdi dir="ltr">Naïve Bayes</bdi> للرسائل
+            </span>
+            <button type="button" class="btn btn-secondary" onclick="resetNbPreset()">استعادة قيم المثال</button>
+          </div>
 
-const termsGrid = document.getElementById("termsGrid");
-terms.forEach(([en, ar]) => {
-  const d = document.createElement("div");
-  d.className = "card";
-  d.style.margin = "0";
-  d.innerHTML = `<h3 dir="ltr" style="text-align:right">${en}</h3><p style="margin:0;font-size:.94rem">${ar}</p>`;
-  termsGrid.appendChild(d);
-});
+          <div class="controls-row">
+            <div class="field-group">
+              <label class="field-label" for="nb-pspam">P(Spam)</label>
+              <input class="field-input" type="number" id="nb-pspam" min="0.01" max="0.99" step="0.05" value="0.4" oninput="updateNbLab()">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="nb-pf-s">P(free | Spam)</label>
+              <input class="field-input" type="number" id="nb-pf-s" min="0" max="1" step="0.05" value="0.8" oninput="updateNbLab()">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="nb-pw-s">P(win | Spam)</label>
+              <input class="field-input" type="number" id="nb-pw-s" min="0" max="1" step="0.05" value="0.6" oninput="updateNbLab()">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="nb-pf-n">P(free | Non-Spam)</label>
+              <input class="field-input" type="number" id="nb-pf-n" min="0" max="1" step="0.05" value="0.1" oninput="updateNbLab()">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="nb-pw-n">P(win | Non-Spam)</label>
+              <input class="field-input" type="number" id="nb-pw-n" min="0" max="1" step="0.05" value="0.2" oninput="updateNbLab()">
+            </div>
+          </div>
 
-let ci = 0, showAnswer = false;
-function renderCard() {
-  document.getElementById("flashTerm").textContent = cards[ci][0];
-  document.getElementById("flashAnswer").textContent = cards[ci][1];
-  document.getElementById("flashAnswer").hidden = !showAnswer;
-  document.querySelector("#flashcard small").textContent = showAnswer ? "اضغطي لإخفاء الإجابة" : "اضغطي للكشف عن الإجابة";
-  document.getElementById("cardCount").textContent = `بطاقة ${ci + 1} من ${cards.length}`;
-}
-document.getElementById("flashcard").addEventListener("click", () => { showAnswer = !showAnswer; renderCard(); });
-document.getElementById("flashcard").addEventListener("keydown", e => {
-  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showAnswer = !showAnswer; renderCard(); }
-});
-document.getElementById("prevCard").onclick = () => { ci = (ci - 1 + cards.length) % cards.length; showAnswer = false; renderCard(); };
-document.getElementById("nextCard").onclick = () => { ci = (ci + 1) % cards.length; showAnswer = false; renderCard(); };
-renderCard();
+          <div class="lab-readout">
+            <div class="readout-metric">
+              <span>بسط Spam: <bdi dir="ltr">P(Spam) × P(free|Spam) × P(win|Spam)</bdi></span>
+              <span class="readout-val" id="nb-score-spam">0.1920</span>
+            </div>
+            <div class="readout-metric">
+              <span>بسط Non-Spam: <bdi dir="ltr">P(Non-Spam) × P(free|Non-Spam) × P(win|Non-Spam)</bdi></span>
+              <span class="readout-val" id="nb-score-non">0.0120</span>
+            </div>
+            <div class="readout-metric">
+              <span>الاحتمال المعاير لـ Spam / التصنيف النهائي</span>
+              <span class="readout-val" id="nb-decision">94.1% → Spam</span>
+            </div>
+          </div>
+        </div>
 
-document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
-  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
-  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
-  window.scrollTo({ top: 0, behavior: "smooth" });
-});
+        <div class="pros-cons-grid">
+          <div class="pros-box">
+            <strong>مزايا <bdi dir="ltr">Naïve Bayes</bdi></strong>
+            <ul>
+              <li>كفاءة عالية في التصنيف عندما تكون السمات مستقلة.</li>
+              <li>تقاوم وجود الضجيج والسمات غير المناسبة.</li>
+              <li>سريعة جداً في التدريب والتطبيق وسهلة التفسير.</li>
+            </ul>
+          </div>
+          <div class="cons-box">
+            <strong>عيوب <bdi dir="ltr">Naïve Bayes</bdi></strong>
+            <ul>
+              <li>تتجاهل العلاقة والارتباط بين المتغيرات في حالة وجودها.</li>
+              <li>من الصعب التعامل مباشرة مع السمات ذات القيم المستمرة (تحتاج افتراض توزيع أو تقطيع لفئات).</li>
+            </ul>
+          </div>
+        </div>
 
-function shuffleArray(arr) {
-  const copy = [...arr];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-}
+        <!-- UNIT 1 QUIZ -->
+        <div class="quiz-section" id="quiz-unit-1" aria-labelledby="q1-title">
+          <div class="quiz-header">
+            <div>
+              <span class="dossier-pill">اختبار الوحدة الأولى</span>
+              <h3 id="q1-title" class="minor-heading" style="margin-bottom:0;">10 أسئلة اختيار من متعدد — تصحيح فوري وشرح</h3>
+            </div>
+            <div class="quiz-score-box">
+              <span class="score-badge" id="score-badge-u1">النتيجة: 0 / 10</span>
+              <button type="button" class="btn btn-secondary" onclick="resetQuiz('u1')">إعادة اختبار الوحدة 1</button>
+            </div>
+          </div>
+          <div class="question-list" id="quiz-container-u1"></div>
+        </div>
+      </section>
 
-let currentQuestions = [];
-let answers = {};
+      <!-- =========================================================
+           UNIT 2: LOGISTIC REGRESSION & SVM
+           ========================================================= -->
+      <section id="unit-2" class="unit-section" aria-labelledby="u2-heading">
+        <div class="dossier-bar">
+          <div class="dossier-left">
+            <span class="dossier-pill">الوحدة الثانية</span>
+            <span class="dossier-meta">UNIT 02 · DECISION BOUNDARIES &amp; SUPPORT VECTOR MACHINES</span>
+          </div>
+          <button type="button" class="btn btn-secondary" id="mark-u2-btn" onclick="toggleUnitRead('u2')">
+            <i data-lucide="check-circle" style="width:16px;height:16px;"></i>
+            <span>تحديد كمُنجَز</span>
+          </button>
+        </div>
 
-function prepareShuffledQuiz() {
-  currentQuestions = shuffleArray(masterQuestions).map(item => {
-    const optsWithFlag = item.o.map((text, idx) => ({ text, isCorrect: idx === item.a }));
-    const shuffledOpts = shuffleArray(optsWithFlag);
-    return {
-      q: item.q,
-      o: shuffledOpts.map(x => x.text),
-      a: shuffledOpts.findIndex(x => x.isCorrect),
-      e: item.e
+        <h2 id="u2-heading" class="section-heading">الانحدار اللوجستي (<bdi dir="ltr">Logistic Regression</bdi>) وآلات المتجهات الداعمة (<bdi dir="ltr">SVM</bdi>)</h2>
+
+        <!-- 2.1 Logistic Regression -->
+        <h3 class="sub-heading"><span class="index-num">2.1</span> الانحدار اللوجستي (<bdi dir="ltr">Logistic Regression</bdi>)</h3>
+        <p>
+          على الرغم من تسميته «انحدار»، يُستخدم الانحدار اللوجستي لتصنيف البيانات إلى فئات (وخاصة التصنيف الثنائي <bdi dir="ltr">0</bdi> أو <bdi dir="ltr">1</bdi>). يقوم النموذج بحساب تركيبة خطية للسمات <bdi dir="ltr">z</bdi> ثم تمريرها عبر <strong>دالة السيجمويد (<bdi dir="ltr">Sigmoid Function</bdi>)</strong> لتحويل المخرج إلى قيمة احتمالية محصورة بين <bdi dir="ltr">0</bdi> و <bdi dir="ltr">1</bdi>.
+        </p>
+
+        <div class="two-col-grid">
+          <div class="math-box" style="margin:0;">
+            <div class="math-box-label">دالة السيجمويد وحد القرار</div>
+            $$z = \beta_0 + \beta_1 X_1 + \dots + \beta_n X_n$$
+            $$\sigma(z) = \frac{1}{1 + e^{-z}}$$
+            <p class="muted-note">عند استخدام عتبة <bdi dir="ltr">0.5</bdi> للفصل بين الفئات (<bdi dir="ltr">Decision Boundary</bdi>): إذا كان <bdi dir="ltr">σ(z) ≥ 0.5</bdi> (أي <bdi dir="ltr">z ≥ 0</bdi>) تُصنف العينة للفئة <strong>1</strong>، وإلا للفئة <strong>0</strong>.</p>
+          </div>
+          <div class="math-box" style="margin:0;">
+            <div class="math-box-label">دالة الخسارة (<bdi dir="ltr">Binary Cross-Entropy Loss</bdi>)</div>
+            $$L(y, \hat{y}) = -\Big[ y \log(\hat{y}) + (1 - y)\log(1 - \hat{y}) \Big]$$
+            <p class="muted-note">تزيد قيمة هذه الدالة كلما أخطأ النموذج في التصنيف، وتقل كلما اقترب التوقع <bdi dir="ltr">ŷ = σ(z)</bdi> من التصنيف الفعلي <bdi dir="ltr">y</bdi>، وتُستخدم لتدريب معاملات النموذج <bdi dir="ltr">β</bdi>.</p>
+          </div>
+        </div>
+
+        <div class="worked-example">
+          <div class="dossier-left" style="margin-bottom: var(--space-sm);">
+            <span class="tag-chip">مثال حسابي محلول</span>
+            <strong>التنبؤ بنجاح الطالب بناءً على الساعات الدراسية</strong>
+          </div>
+          <div class="asymmetric-grid">
+            <div>
+              <div class="table-wrap" style="margin:0;">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>الساعات الدراسية <bdi dir="ltr">X</bdi></th>
+                      <th>النجاح <bdi dir="ltr">Y</bdi></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td class="num-cell">2</td><td class="num-cell">0</td></tr>
+                    <tr><td class="num-cell">3</td><td class="num-cell">0</td></tr>
+                    <tr><td class="num-cell">5</td><td class="num-cell">1</td></tr>
+                    <tr><td class="num-cell">7</td><td class="num-cell">1</td></tr>
+                    <tr><td class="num-cell">8</td><td class="num-cell">1</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div>
+              <p>بعد تدريب النموذج حصلنا على المعاملين: <bdi dir="ltr">β₀ = −4</bdi> و <bdi dir="ltr">β₁ = 0.9</bdi>. احسب احتمالية نجاح طالب درس <strong>6 ساعات</strong>:</p>
+              <div class="math-box" style="margin: var(--space-sm) 0;">
+                $$z = -4 + 0.9 \times 6 = -4 + 5.4 = 1.4$$
+                $$\sigma(1.4) = \frac{1}{1 + e^{-1.4}} \approx \frac{1}{1 + 0.2466} = 0.802$$
+              </div>
+              <p>وبما أن <bdi dir="ltr">0.802 &gt; 0.5</bdi>، نتنبأ بأن الطالب <strong>سينجح (<bdi dir="ltr">Y = 1</bdi>)</strong>.</p>
+              <p class="muted-note">مثال إضافي: إذا كان <bdi dir="ltr">z = 1.2</bdi> فإن <bdi dir="ltr">σ(1.2) = 1 / (1 + e⁻¹·²) ≈ 1 / (1 + 0.301) ≈ 0.768</bdi>.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Logistic Regression Interactive Lab -->
+        <div class="lab-card" id="logreg-lab">
+          <div class="lab-header">
+            <span class="lab-title">
+              <i data-lucide="activity" style="width:18px;height:18px;"></i>
+              مختبر تفاعلي: منحنى <bdi dir="ltr">Sigmoid</bdi> وحد القرار اللوجستي
+            </span>
+            <button type="button" class="btn btn-secondary" onclick="resetLogRegPreset()">استعادة معاملات المثال</button>
+          </div>
+
+          <div class="controls-row">
+            <div class="field-group">
+              <label class="field-label" for="lr-b0">التقاطع β₀: <span id="lr-b0-lbl">-4.0</span></label>
+              <input type="range" id="lr-b0" min="-8" max="2" step="0.2" value="-4" oninput="updateLogRegLab()">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="lr-b1">الميل β₁: <span id="lr-b1-lbl">0.9</span></label>
+              <input type="range" id="lr-b1" min="0.2" max="2.5" step="0.1" value="0.9" oninput="updateLogRegLab()">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="lr-x">ساعات الدراسة X: <span id="lr-x-lbl">6.0</span></label>
+              <input type="range" id="lr-x" min="0" max="10" step="0.2" value="6" oninput="updateLogRegLab()">
+            </div>
+          </div>
+
+          <div class="asymmetric-grid">
+            <div class="svg-stage" style="min-height:280px;">
+              <svg id="lr-svg" viewBox="0 0 460 280" role="img" aria-label="منحنى دالة السيجمويد"></svg>
+            </div>
+            <div class="lab-readout">
+              <div class="readout-metric">
+                <span>قيمة التركيبة الخطية z</span>
+                <span class="readout-val" id="lr-z-out">1.40</span>
+              </div>
+              <div class="readout-metric">
+                <span>الاحتمال المتوقع σ(z)</span>
+                <span class="readout-val" id="lr-sig-out">0.802</span>
+              </div>
+              <div class="readout-metric">
+                <span>نقطة حد القرار (عند σ = 0.5)</span>
+                <span class="readout-val" id="lr-boundary-out">X = 4.44</span>
+              </div>
+              <div class="readout-metric">
+                <span>التنبؤ النهائي</span>
+                <span class="readout-val" id="lr-decision">ناجح (Y = 1)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pros-cons-grid">
+          <div class="pros-box">
+            <strong>مزايا <bdi dir="ltr">Logistic Regression</bdi></strong>
+            <ul>
+              <li>بسيطة وسهلة الفهم والتفسير الاحتمالي.</li>
+              <li>لا تحتاج إلى تحديد معاملات فائقة (<bdi dir="ltr">Hyper-parameters</bdi>) في صورتها الأساسية.</li>
+            </ul>
+          </div>
+          <div class="cons-box">
+            <strong>عيوب <bdi dir="ltr">Logistic Regression</bdi></strong>
+            <ul>
+              <li>تفترض أن البيانات يمكن فصلها بشكل خطي.</li>
+              <li>حساسة للمتغيرات المستقلة المرتبطة ببعضها البعض وحساسة للقيم المتطرفة.</li>
+              <li>تحتاج إلى عدد عناصر كبير نسبياً حتى تعمل بشكل جيد.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 2.2 SVM -->
+        <h3 class="sub-heading"><span class="index-num">2.2</span> آلات المتجهات الداعمة (<bdi dir="ltr">Support Vector Machines — SVM</bdi>)</h3>
+        <p>
+          الهدف الأساسي لخوارزمية <bdi dir="ltr">SVM</bdi> هو إيجاد الحد الفاصل (<bdi dir="ltr">Hyperplane</bdi>) الذي <strong>يعظّم الهامش (<bdi dir="ltr">Margin</bdi>)</strong> بين الفئات. الهامش هو المسافة بين الحد الفاصل وأقرب النقاط من أي فئة؛ وتُعرف هذه النقاط الأقرب باسم <strong>«المتجهات الداعمة» (<bdi dir="ltr">Support Vectors</bdi>)</strong>.
+        </p>
+
+        <div class="math-box">
+          <div class="math-box-label">معادلة الحد الفاصل والـ Kernel Trick</div>
+          $$w \cdot x + b = 0 \implies \hat{y} = \text{sign}(w_1 x_1 + w_2 x_2 + \dots + b)$$
+          <p class="muted-note">عندما تكون البيانات <strong>غير قابلة للفصل خطياً</strong>، تستخدم <bdi dir="ltr">SVM</bdi> تقنية <strong><bdi dir="ltr">Kernel Trick</bdi></strong> (مثل <bdi dir="ltr">Polynomial Kernel</bdi> أو <bdi dir="ltr">RBF</bdi>) لنقل البيانات إلى فضاء أعلى أبعاداً لتصبح قابلة للفصل بمستوى فاصل.</p>
+        </div>
+
+        <div class="worked-example">
+          <div class="dossier-left" style="margin-bottom: var(--space-sm);">
+            <span class="tag-chip">مثال حسابي محلول</span>
+            <strong>تصنيف عينة جديدة باستخدام معادلة <bdi dir="ltr">SVM</bdi></strong>
+          </div>
+          <div class="asymmetric-grid">
+            <div>
+              <div class="table-wrap" style="margin:0;">
+                <table>
+                  <thead>
+                    <tr>
+                      <th><bdi dir="ltr">X₁</bdi></th>
+                      <th><bdi dir="ltr">X₂</bdi></th>
+                      <th>الفئة <bdi dir="ltr">Y</bdi></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td class="num-cell">2</td><td class="num-cell">3</td><td class="num-cell">1</td></tr>
+                    <tr><td class="num-cell">3</td><td class="num-cell">3</td><td class="num-cell">1</td></tr>
+                    <tr><td class="num-cell">4</td><td class="num-cell">4</td><td class="num-cell">1</td></tr>
+                    <tr><td class="num-cell">1</td><td class="num-cell">1</td><td class="num-cell">-1</td></tr>
+                    <tr><td class="num-cell">2</td><td class="num-cell">1</td><td class="num-cell">-1</td></tr>
+                    <tr><td class="num-cell">3</td><td class="num-cell">2</td><td class="num-cell">-1</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div>
+              <p>بافتراض أن خوارزميات التحسين (<bdi dir="ltr">Optimization</bdi>) أوجدت المعاملات المثلى للفاصل <bdi dir="ltr">w·x + b = 0</bdi> وهي: <bdi dir="ltr">w = [1, 1]</bdi> و <bdi dir="ltr">b = −3</bdi>.</p>
+              <p>لتصنيف عنصر جديد إحداثياته <bdi dir="ltr">(3, 4)</bdi>:</p>
+              <div class="math-box" style="margin: var(--space-sm) 0;">
+                $$y = (1 \times 3) + (1 \times 4) - 3 = 3 + 4 - 3 = +4$$
+              </div>
+              <p>ولأن النتيجة موجبة (<bdi dir="ltr">+4 &gt; 0</bdi>)، يُصنَّف العنصر على أنه من الفئة <strong><bdi dir="ltr">+1</bdi></strong>.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- SVM Interactive Lab -->
+        <div class="lab-card" id="svm-lab">
+          <div class="lab-header">
+            <span class="lab-title">
+              <i data-lucide="git-commit" style="width:18px;height:18px;"></i>
+              مختبر تفاعلي: الفاصل الأعظم والهامش في <bdi dir="ltr">SVM</bdi>
+            </span>
+            <span class="tag-chip tag-chip--teal">اختبر أي نقطة <bdi dir="ltr">(X₁, X₂)</bdi> مقابل <bdi dir="ltr">x₁ + x₂ − 3 = 0</bdi></span>
+          </div>
+
+          <div class="controls-row">
+            <div class="field-group">
+              <label class="field-label" for="svm-x1">إحداثي X₁ للنقطة الجديدة: <span id="svm-x1-lbl">3.0</span></label>
+              <input type="range" id="svm-x1" min="0" max="5" step="0.25" value="3" oninput="updateSvmLab()">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="svm-x2">إحداثي X₂ للنقطة الجديدة: <span id="svm-x2-lbl">4.0</span></label>
+              <input type="range" id="svm-x2" min="0" max="5" step="0.25" value="4" oninput="updateSvmLab()">
+            </div>
+            <div class="field-group" style="flex:0 0 auto;">
+              <button type="button" class="btn btn-secondary" onclick="resetSvmPreset()">نقطة المثال (3, 4)</button>
+            </div>
+          </div>
+
+          <div class="asymmetric-grid">
+            <div class="svg-stage" style="min-height:300px;">
+              <svg id="svm-svg" viewBox="0 0 460 300" role="img" aria-label="رسم تفاعلي للفاصل والهامش في SVM"></svg>
+            </div>
+            <div class="lab-readout">
+              <div class="readout-metric">
+                <span>النقطة الاختبارية (X₁, X₂)</span>
+                <span class="readout-val" id="svm-pt-out">(3.00, 4.00)</span>
+              </div>
+              <div class="readout-metric">
+                <span>ناتج المعادلة w·x + b</span>
+                <span class="readout-val" id="svm-val-out">+4.00</span>
+              </div>
+              <div class="readout-metric">
+                <span>المسافة العمودية للفاصل</span>
+                <span class="readout-val" id="svm-dist-out">2.83</span>
+              </div>
+              <div class="readout-metric">
+                <span>الفئة المتوقعة</span>
+                <span class="readout-val" id="svm-class-out">الفئة +1</span>
+              </div>
+              <p class="muted-note" style="margin-top:var(--space-xs); font-size:0.85rem;">
+                تمثل النقاط المحاطة بحلقة مزدوجة في الرسم النقاط الأقرب للفاصل حول حدي الهامش <bdi dir="ltr">x₁ + x₂ − 3 = ±1</bdi> التي تحدد موقع الفاصل الأمثل.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pros-cons-grid">
+          <div class="pros-box">
+            <strong>مزايا <bdi dir="ltr">SVM</bdi></strong>
+            <ul>
+              <li>لها أساس علمي ورياضي قوي في تعظيم الهامش.</li>
+              <li>كفاءة عالية في معظم الحالات حتى مع الأبعاد العالية.</li>
+              <li>تستطيع التعامل مع البيانات غير الخطية عبر <bdi dir="ltr">Kernel Trick</bdi>.</li>
+            </ul>
+          </div>
+          <div class="cons-box">
+            <strong>عيوب <bdi dir="ltr">SVM</bdi></strong>
+            <ul>
+              <li>حساسة لاختيار المعاملات الفائقة (<bdi dir="ltr">Hyper-parameters</bdi>).</li>
+              <li>يزداد التعقيد الحسابي كلما زاد عدد المتجهات الداعمة (<bdi dir="ltr">Support Vectors</bdi>).</li>
+              <li>حساسة للقيم المتطرفة وتحتاج لعدد عناصر كبير نسبياً لتعمل بكفاءة.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- UNIT 2 QUIZ -->
+        <div class="quiz-section" id="quiz-unit-2" aria-labelledby="q2-title">
+          <div class="quiz-header">
+            <div>
+              <span class="dossier-pill">اختبار الوحدة الثانية</span>
+              <h3 id="q2-title" class="minor-heading" style="margin-bottom:0;">10 أسئلة اختيار من متعدد — تصحيح فوري وشرح</h3>
+            </div>
+            <div class="quiz-score-box">
+              <span class="score-badge" id="score-badge-u2">النتيجة: 0 / 10</span>
+              <button type="button" class="btn btn-secondary" onclick="resetQuiz('u2')">إعادة اختبار الوحدة 2</button>
+            </div>
+          </div>
+          <div class="question-list" id="quiz-container-u2"></div>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           UNIT 3: DECISION TREES & RANDOM FORESTS
+           ========================================================= -->
+      <section id="unit-3" class="unit-section" aria-labelledby="u3-heading">
+        <div class="dossier-bar">
+          <div class="dossier-left">
+            <span class="dossier-pill">الوحدة الثالثة</span>
+            <span class="dossier-meta">UNIT 03 · DECISION TREES &amp; RANDOM FOREST ENSEMBLES</span>
+          </div>
+          <button type="button" class="btn btn-secondary" id="mark-u3-btn" onclick="toggleUnitRead('u3')">
+            <i data-lucide="check-circle" style="width:16px;height:16px;"></i>
+            <span>تحديد كمُنجَز</span>
+          </button>
+        </div>
+
+        <h2 id="u3-heading" class="section-heading">أشجار القرار (<bdi dir="ltr">Decision Trees</bdi>) والغابات العشوائية (<bdi dir="ltr">Random Forests</bdi>)</h2>
+
+        <!-- 3.1 Decision Trees -->
+        <h3 class="sub-heading"><span class="index-num">3.1</span> أشجار القرار (<bdi dir="ltr">Decision Trees</bdi>)</h3>
+        <p>
+          ليس من الضروري دائماً إيجاد مستوى فاصل مائل (<bdi dir="ltr">Hyperplane</bdi>) لتصنيف البيانات. فأحياناً يمكن لقواعد شرطية بسيطة — مثل: <strong>«إذا كانت قيمة <bdi dir="ltr">X &gt; 3</bdi> تنتمي للفئة الصفراء، وإن كانت أقل تنتمي للفئة الزرقاء»</strong> — أن تفصل الفئات بوضوح. تُمثَّل هذه القواعد على هيئة شجرة تبدأ بـ <strong>الجذر (<bdi dir="ltr">Root</bdi>)</strong> الذي يحوي كل البيانات، ثم تتفرع يميناً ويساراً عبر حدود فاصلة إلى <strong>أبناء (<bdi dir="ltr">Children</bdi>)</strong> حتى تصل إلى <strong>العقد الورقية (<bdi dir="ltr">Leaf Nodes</bdi>)</strong> الحاملة للقرار النهائي.
+        </p>
+
+        <div class="two-col-grid">
+          <div class="math-box" style="margin:0;">
+            <div class="math-box-label">مؤشر جيني للشوائب (<bdi dir="ltr">Gini Impurity</bdi>)</div>
+            $$\text{Gini}(D) = 1 - \sum_{i=1}^{C} p_i^2$$
+            <p class="muted-note">يقيس مدى اختلاط الفئات داخل العقدة. القيمة <bdi dir="ltr">0</bdi> تعني عقدة نقية تماماً (كل العينات من فئة واحدة)، وتصل في التصنيف الثنائي إلى <bdi dir="ltr">0.5</bdi> عند التساوي التام.</p>
+          </div>
+          <div class="math-box" style="margin:0;">
+            <div class="math-box-label">الإنتروبي وكسب المعلومات (<bdi dir="ltr">Entropy &amp; Information Gain</bdi>)</div>
+            $$H(D) = -\sum_{i=1}^{C} p_i \log_2(p_i)$$
+            $$IG(D, A) = H(D) - \sum_{v} \frac{|D_v|}{|D|} H(D_v)$$
+            <p class="muted-note">تختار الشجرة عند كل عقدة السمة والحد الفاصل اللذين يحققان أكبر انخفاض في الشوائب (أعلى <bdi dir="ltr">Information Gain</bdi> أو أقل <bdi dir="ltr">Gini</bdi> موزون).</p>
+          </div>
+        </div>
+
+        <div class="worked-example">
+          <div class="dossier-left" style="margin-bottom: var(--space-sm);">
+            <span class="tag-chip">مثال حسابي محلول</span>
+            <strong>حساب نقاء العقدة بمؤشر <bdi dir="ltr">Gini</bdi> قبل التقسيم وبعده</strong>
+          </div>
+          <p>لنفترض عقدة جذر تحتوي على <strong>10 عينات</strong>: 6 من الفئة الزرقاء و 4 من الفئة الصفراء. نختبر التقسيم بالقاعدة <bdi dir="ltr">X &gt; 3</bdi> فينتج فرعان: الأيسر (<bdi dir="ltr">X ≤ 3</bdi>) فيه 5 عينات كلها زرقاء، والأيمن (<bdi dir="ltr">X &gt; 3</bdi>) فيه 5 عينات (1 زرقاء و 4 صفراء).</p>
+          <div class="step-row">
+            <span class="index-num">01</span>
+            <div>
+              <strong>شوائب العقدة الجذرية قبل التقسيم:</strong>
+              $$\text{Gini}(\text{Root}) = 1 - \left[\left(\frac{6}{10}\right)^2 + \left(\frac{4}{10}\right)^2\right] = 1 - (0.36 + 0.16) = 0.48$$
+            </div>
+          </div>
+          <div class="step-row">
+            <span class="index-num">02</span>
+            <div>
+              <strong>شوائب الفرعين بعد التقسيم:</strong><br>
+              الفرع الأيسر (5 زرقاء، 0 صفراء): <bdi dir="ltr">Gini(Left) = 1 − (1² + 0²) = 0.00</bdi> (نقية تماماً!).<br>
+              الفرع الأيمن (1 زرقاء، 4 صفراء): <bdi dir="ltr">Gini(Right) = 1 − (0.2² + 0.8²) = 1 − (0.04 + 0.64) = 0.32</bdi>.
+            </div>
+          </div>
+          <div class="step-row">
+            <span class="index-num">03</span>
+            <div>
+              <strong>مؤشر Gini الموزون بعد التقسيم ومقدار التحسن:</strong>
+              $$\text{Gini}_{\text{split}} = \frac{5}{10}(0.00) + \frac{5}{10}(0.32) = 0.16 \implies \Delta \text{Gini} = 0.48 - 0.16 = 0.32$$
+            </div>
+          </div>
+        </div>
+
+        <!-- Gini / Entropy Interactive Calculator -->
+        <div class="lab-card" id="gini-lab">
+          <div class="lab-header">
+            <span class="lab-title">
+              <i data-lucide="git-branch" style="width:18px;height:18px;"></i>
+              حاسبة تفاعلية: نقاء العقدة (<bdi dir="ltr">Gini</bdi> و <bdi dir="ltr">Entropy</bdi>)
+            </span>
+            <button type="button" class="btn btn-secondary" onclick="resetGiniPreset()">استعادة قيم المثال</button>
+          </div>
+
+          <div class="controls-row">
+            <div class="field-group">
+              <label class="field-label" for="gini-c1">عدد عينات الفئة A (أزرق): <span id="gini-c1-lbl">6</span></label>
+              <input type="range" id="gini-c1" min="0" max="20" step="1" value="6" oninput="updateGiniLab()">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="gini-c2">عدد عينات الفئة B (ذهبي): <span id="gini-c2-lbl">4</span></label>
+              <input type="range" id="gini-c2" min="0" max="20" step="1" value="4" oninput="updateGiniLab()">
+            </div>
+          </div>
+
+          <div style="margin-bottom: var(--space-md);">
+            <div class="purity-bar" aria-label="نسبة الفئتين في العقدة">
+              <div class="purity-fill" id="gini-bar-fill" style="width:60%;"></div>
+            </div>
+            <div class="muted-note" style="display:flex; justify-content:space-between; font-size:0.8125rem; margin-top:4px;">
+              <span id="gini-pct-a">الفئة A: 60%</span>
+              <span id="gini-pct-b">الفئة B: 40%</span>
+            </div>
+          </div>
+
+          <div class="lab-readout">
+            <div class="readout-metric">
+              <span>مؤشر جيني للشوائب (<bdi dir="ltr">Gini Impurity</bdi>)</span>
+              <span class="readout-val" id="gini-val-out">0.480</span>
+            </div>
+            <div class="readout-metric">
+              <span>مقياس الإنتروبي (<bdi dir="ltr">Entropy H(D)</bdi>)</span>
+              <span class="readout-val" id="entropy-val-out">0.971 bits</span>
+            </div>
+            <div class="readout-metric">
+              <span>تفسير نقاء العقدة</span>
+              <span class="readout-val" id="gini-status-out">عقدة مختلطة (تحتاج تقسيماً)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pros-cons-grid">
+          <div class="pros-box">
+            <strong>مزايا أشجار القرار</strong>
+            <ul>
+              <li>سهلة الفهم والتمثيل البصري وتتبع قواعد القرار (<bdi dir="ltr">If-Else</bdi>).</li>
+              <li>لا تتطلب تحجيم السمات (<bdi dir="ltr">Feature Scaling</bdi>) وتعمل مع البيانات الرقمية والفئوية.</li>
+            </ul>
+          </div>
+          <div class="cons-box">
+            <strong>عيوب أشجار القرار</strong>
+            <ul>
+              <li>شديدة العرضة لفرط التخصيص (<bdi dir="ltr">Overfitting</bdi>) عند زيادة عمق الشجرة.</li>
+              <li>عدم الاستقرار: تغيّر بسيط في البيانات قد ينتج شجرة مختلفة تماماً.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 3.2 Random Forests -->
+        <h3 class="sub-heading"><span class="index-num">3.2</span> الغابات العشوائية (<bdi dir="ltr">Random Forests</bdi>) وتصويت الأغلبية</h3>
+        <p>
+          تندرج الغابات العشوائية تحت مفهوم <strong>التعلم الجماعي (<bdi dir="ltr">Ensemble Learning</bdi>)</strong>؛ حيث تُبنى عدة أشجار قرار مستقلة (<bdi dir="ltr">Base Classifiers</bdi>)، بحيث تتدرب كل شجرة على عينة عشوائية من البيانات ومجموعة فرعية عشوائية من السمات. وعند تصنيف عينة جديدة، تُصدر كل شجرة قرارها الخاص ثم يُحدَّد التصنيف النهائي عبر <strong>تصويت الأغلبية (<bdi dir="ltr">Majority Voting</bdi>)</strong>.
+        </p>
+
+        <!-- Random Forest Majority Voting Interactive Lab -->
+        <div class="lab-card" id="rf-lab">
+          <div class="lab-header">
+            <span class="lab-title">
+              <i data-lucide="trees" style="width:18px;height:18px;"></i>
+              مختبر تفاعلي: محاكي تصويت الأغلبية في الغابة العشوائية
+            </span>
+            <button type="button" class="btn btn-primary" onclick="runRfSimulation()">توليد عينة اختبار وتصويت جديد</button>
+          </div>
+
+          <div class="controls-row">
+            <div class="field-group">
+              <label class="field-label" for="rf-trees-count">عدد الأشجار في الغابة</label>
+              <select class="field-select" id="rf-trees-count" onchange="runRfSimulation()">
+                <option value="3">3 أشجار</option>
+                <option value="5" selected>5 أشجار</option>
+                <option value="7">7 أشجار</option>
+                <option value="9">9 أشجار</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="rf-noise">مستوى الضجيج/التباين بين الأشجار: <span id="rf-noise-lbl">25%</span></label>
+              <input type="range" id="rf-noise" min="5" max="45" step="5" value="25" oninput="runRfSimulation()">
+            </div>
+          </div>
+
+          <div class="trees-grid" id="rf-trees-grid"></div>
+
+          <div class="lab-readout">
+            <div class="readout-metric">
+              <span>الفئة الحقيقية المفترضة للعينة</span>
+              <span class="readout-val" id="rf-true-class">الفئة A</span>
+            </div>
+            <div class="readout-metric">
+              <span>توزيع الأصوات (أغلبية)</span>
+              <span class="readout-val" id="rf-vote-tally">4 صوت لـ A مقابل 1 لـ B</span>
+            </div>
+            <div class="readout-metric">
+              <span>قرار الغابة العشوائية النهائي</span>
+              <span class="readout-val" id="rf-final-decision">الفئة A (تطابق مع الحقيقة رغم خطأ شجرة)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pros-cons-grid">
+          <div class="pros-box">
+            <strong>مزايا <bdi dir="ltr">Random Forests</bdi></strong>
+            <ul>
+              <li><strong>تقليل <bdi dir="ltr">Overfitting</bdi>:</strong> تجميع نتائج عدة أشجار قرار يقلل احتمال فرط التخصيص الذي قد يحدث في الشجرة المفردة.</li>
+              <li><strong>ثبات الأداء:</strong> تؤدي أداءً جيداً حتى في وجود عدد كبير من الميزات.</li>
+              <li><strong>مقاومة للتنوع العشوائي:</strong> إضافة أو تغيير جزء صغير من البيانات لا يؤثر بشكل كبير على النتائج النهائية.</li>
+            </ul>
+          </div>
+          <div class="cons-box">
+            <strong>عيوب <bdi dir="ltr">Random Forests</bdi></strong>
+            <ul>
+              <li><strong>تعقيد النموذج:</strong> نظراً لوجود عدد كبير من الـ <bdi dir="ltr">base classifiers</bdi> يصعب تحديد كيف تم تصنيف عنصر بشكل معين.</li>
+              <li><strong>استهلاك الوقت والموارد:</strong> تحتاج ذاكرة ووقت تدريب وتنبؤ أكبر مقارنة بشجرة قرار واحدة.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 3.3 Master Comparison Table -->
+        <h3 class="sub-heading"><span class="index-num">3.3</span> جدول المقارنة الشاملة بين خوارزميات التصنيف الست</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>الخوارزمية</th>
+                <th>آلية العمل الأساسية</th>
+                <th>أبرز المعاملات الفائقة</th>
+                <th>الحساسية للقيم المتطرفة</th>
+                <th>أبرز ميزة</th>
+                <th>أبرز قيد / عيب</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong><bdi dir="ltr">K-NN</bdi></strong></td>
+                <td>المسافة وتصويت أقرب <bdi dir="ltr">K</bdi> جيران</td>
+                <td><bdi dir="ltr">K</bdi>، مقياس المسافة</td>
+                <td>عالية (وخاصة عند <bdi dir="ltr">K</bdi> صغيرة)</td>
+                <td>لا تبني نموذجاً مسبقاً؛ مرنة</td>
+                <td>بطيئة مع البيانات الضخمة وتحتاج <bdi dir="ltr">Scaling</bdi></td>
+              </tr>
+              <tr>
+                <td><strong><bdi dir="ltr">Naïve Bayes</bdi></strong></td>
+                <td>مبرهنة بايز واستقلالية السمات</td>
+                <td>معامل التنعيم <bdi dir="ltr">α</bdi></td>
+                <td>منخفضة (تقاوم الضجيج)</td>
+                <td>سريعة جداً للتدريب والتطبيق</td>
+                <td>تتجاهل الارتباط بين السمات</td>
+              </tr>
+              <tr>
+                <td><strong><bdi dir="ltr">Logistic Regression</bdi></strong></td>
+                <td>دالة السيجمويد وحد خطي <bdi dir="ltr">0.5</bdi></td>
+                <td>لا تحتاج في صورتها الأساسية</td>
+                <td>حساسة للقيم المتطرفة</td>
+                <td>بسيطة ومخرجاتها احتمالات واضحة</td>
+                <td>تفترض القابلية للفصل الخطي</td>
+              </tr>
+              <tr>
+                <td><strong><bdi dir="ltr">SVM</bdi></strong></td>
+                <td>تعظيم الهامش عبر المتجهات الداعمة</td>
+                <td><bdi dir="ltr">C</bdi>، نوع الـ <bdi dir="ltr">Kernel</bdi></td>
+                <td>حساسة للقيم المتطرفة</td>
+                <td>أساس علمي قوي؛ تدعم غير الخطية</td>
+                <td>يزداد تعقيدها مع زيادة المتجهات الداعمة</td>
+              </tr>
+              <tr>
+                <td><strong><bdi dir="ltr">Decision Tree</bdi></strong></td>
+                <td>قواعد تقسيم هرمية (<bdi dir="ltr">Gini / Entropy</bdi>)</td>
+                <td><bdi dir="ltr">max_depth</bdi>، معيار التقسيم</td>
+                <td>متوسطة (عالية في فرط التخصيص)</td>
+                <td>سهلة القراءة والتمثيل البصري</td>
+                <td>عرضة جداً للـ <bdi dir="ltr">Overfitting</bdi></td>
+              </tr>
+              <tr>
+                <td><strong><bdi dir="ltr">Random Forest</bdi></strong></td>
+                <td>غابة أشجار + تصويت الأغلبية</td>
+                <td>عدد الأشجار، <bdi dir="ltr">max_features</bdi></td>
+                <td>منخفضة (مقاومة للتنوع)</td>
+                <td>تقلل <bdi dir="ltr">Overfitting</bdi> وثابتة الأداء</td>
+                <td>صعوبة التفسير واستهلاك الموارد</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- UNIT 3 QUIZ -->
+        <div class="quiz-section" id="quiz-unit-3" aria-labelledby="q3-title">
+          <div class="quiz-header">
+            <div>
+              <span class="dossier-pill">اختبار الوحدة الثالثة</span>
+              <h3 id="q3-title" class="minor-heading" style="margin-bottom:0;">10 أسئلة اختيار من متعدد — تصحيح فوري وشرح</h3>
+            </div>
+            <div class="quiz-score-box">
+              <span class="score-badge" id="score-badge-u3">النتيجة: 0 / 10</span>
+              <button type="button" class="btn btn-secondary" onclick="resetQuiz('u3')">إعادة اختبار الوحدة 3</button>
+            </div>
+          </div>
+          <div class="question-list" id="quiz-container-u3"></div>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           COMPREHENSIVE CHAPTER EXAM (20 QUESTIONS)
+           ========================================================= -->
+      <section id="comprehensive-exam" class="unit-section" aria-labelledby="comp-heading">
+        <div class="dossier-bar">
+          <div class="dossier-left">
+            <span class="dossier-pill">الاختبار الشامل للفصل</span>
+            <span class="dossier-meta">CHAPTER 12 COMPREHENSIVE EXAM · 20 QUESTIONS</span>
+          </div>
+          <button type="button" class="btn btn-secondary" onclick="resetQuiz('comp')">
+            <i data-lucide="refresh-cw" style="width:16px;height:16px;"></i>
+            <span>إعادة الاختبار الشامل</span>
+          </button>
+        </div>
+
+        <h2 id="comp-heading" class="section-heading">الاختبار الشامل للفصل الثاني عشر كاملاً (20 سؤالاً)</h2>
+        <p class="muted-note" style="margin-bottom: var(--space-lg);">
+          يغطي هذا الاختبار جميع الوحدات الثلاث بمزيج من الأسئلة المفاهيمية والمعادلات والمسائل الحسابية ومقارنات الخوارزميات، مع تحليل فوري لدرجتك في كل وحدة لتحديد مواضع المراجعة.
+        </p>
+
+        <div class="exam-breakdown" aria-label="تحليل درجة الاختبار الشامل حسب الوحدة">
+          <div class="figure-card">
+            <div class="kpi-value" id="comp-total-val">0 / 20</div>
+            <div class="kpi-label">الدرجة الإجمالية (<span id="comp-pct-val">0%</span>)</div>
+          </div>
+          <div class="figure-card">
+            <div class="kpi-value" id="comp-u1-val">0 / 7</div>
+            <div class="kpi-label">أداء أسئلة الوحدة 1</div>
+          </div>
+          <div class="figure-card">
+            <div class="kpi-value" id="comp-u2-val">0 / 7</div>
+            <div class="kpi-label">أداء أسئلة الوحدة 2</div>
+          </div>
+          <div class="figure-card">
+            <div class="kpi-value" id="comp-u3-val">0 / 6</div>
+            <div class="kpi-label">أداء أسئلة الوحدة 3</div>
+          </div>
+        </div>
+
+        <div class="quiz-section" style="margin-top:0;">
+          <div class="quiz-header">
+            <div>
+              <span class="dossier-pill">ورقة الأسئلة الشاملة</span>
+              <h3 class="minor-heading" style="margin-bottom:0;">أجب عن الأسئلة التالية للحصول على التصحيح الفوري والشرح</h3>
+            </div>
+            <span class="score-badge" id="score-badge-comp">تمت الإجابة: 0 / 20</span>
+          </div>
+          <div class="question-list" id="quiz-container-comp"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        المصدر العلمي: ملخص مقرر تحليل وتمثيل البيانات — الفصل الثاني عشر (التعلم الآلي بإشراف - الجزء الثاني: الوحدات 1 و 2 و 3)، وأسئلة اللقاء المباشر الثالث للمقرر.
+      </p>
+    </footer>
+  </div>
+
+  <!-- Scripts -->
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/contrib/auto-render.min.js"></script>
+  <script defer src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+
+  <api-shim></api-shim>
+
+  <script>
+    /* ============================================================
+       DATA: 30 UNIT MCQS + 20 COMPREHENSIVE EXAM MCQS
+       (All strings in template literals to avoid escaping errors)
+       ============================================================ */
+    const QUIZZES = {
+      u1: [
+        {
+          q: `ما الغرض الرئيسي من عملية التصنيف (<bdi dir="ltr">Classification</bdi>) في التعلم الآلي بإشراف؟`,
+          opts: [
+            `التنبؤ بقيم عددية مستمرة مثل درجات الحرارة.`,
+            `إعطاء وسم (<bdi dir="ltr">Label</bdi>) أو فئة للبيانات غير الموسومة بناءً على سمات مستقلة.`,
+            `تجميع البيانات غير الموسومة دون وجود سمة هدف.`,
+            `تقليص عدد الأعمدة فقط دون تدريب نموذج.`
+          ],
+          ans: 1,
+          exp: `التصنيف هو عملية تعلم بإشراف تهدف لإعطاء وسم فئوي منفصل للبيانات الجديدة بناءً على السمات المستقلة، بخلاف الانحدار الذي يتنبأ بقيم مستمرة، والتجميع (<bdi dir="ltr">Clustering</bdi>) الذي يعمل بدون سمة هدف.`
+        },
+        {
+          q: `إلى أي فئة من خوارزميات التصنيف تنتمي خوارزمية <bdi dir="ltr">K-Nearest Neighbors (K-NN)</bdi>؟`,
+          opts: [
+            `خوارزميات تعتمد على الاحتمالات (<bdi dir="ltr">Probability-based</bdi>).`,
+            `خوارزميات تعتمد على البحث (<bdi dir="ltr">Search-based</bdi>).`,
+            `خوارزميات تعتمد على المسافة (<bdi dir="ltr">Distance-based</bdi>).`,
+            `خوارزميات تعتمد على التحسين (<bdi dir="ltr">Optimization-based</bdi>).`
+          ],
+          ans: 2,
+          exp: `تعتمد خوارزمية <bdi dir="ltr">K-NN</bdi> على قياس المسافة بين العينة الجديدة وعينات التدريب (وأشهرها المسافة الإقليدية) لاختيار أقرب <bdi dir="ltr">K</bdi> جيران.`
+        },
+        {
+          q: `أي العبارات التالية تصف آلية عمل خوارزمية <bdi dir="ltr">K-NN</bdi> بشكل صحيح؟`,
+          opts: [
+            `تبني معادلة خطية معقدة أثناء التدريب ثم تتجاهل بيانات التدريب.`,
+            `لا تبني نموذجاً خارجياً مستقلاً، وتُصنّف العنصر وفق الفئة الغالبة بين أقرب <bdi dir="ltr">K</bdi> جيران.`,
+            `تفترض استقلالية جميع السمات شرطياً باستخدام مبرهنة بايز.`,
+            `تعظّم الهامش الفاصل بين الفئات باستخدام المتجهات الداعمة.`
+          ],
+          ans: 1,
+          exp: `خوارزمية <bdi dir="ltr">K-NN</bdi> لا تقوم ببناء نموذج خارجي مستقل (<bdi dir="ltr">Lazy Learner</bdi>)، وتعتمد على فرضية أن العنصر يأخذ الوسم الغالب لأقرب <bdi dir="ltr">K</bdi> عناصر مشابهة له.`
+        },
+        {
+          q: `ماذا يحدث غالباً عند اختيار قيمة صغيرة جداً للمعامل <bdi dir="ltr">K</bdi> (مثل <bdi dir="ltr">K = 1</bdi>) في خوارزمية <bdi dir="ltr">K-NN</bdi>؟`,
+          opts: [
+            `يصبح النموذج مقاوماً تماماً للقيم المتطرفة والضجيج.`,
+            `يصبح النموذج شديد الحساسية للضجيج والقيم الشاذة (<bdi dir="ltr">Overfitting</bdi>).`,
+            `يصبح حد القرار خطياً دائماً.`,
+            `تتوقف الخوارزمية عن استخدام المسافة الإقليدية.`
+          ],
+          ans: 1,
+          exp: `عند <bdi dir="ltr">K = 1</bdi> يعتمد القرار على أقرب نقطة واحدة فقط؛ فإذا كانت تلك النقطة ضجيجاً أو قيمة متطرفة ينتج تصنيف خاطئ.`
+        },
+        {
+          q: `احسب المسافة الإقليدية بين النقطتين <bdi dir="ltr">A(1, 2)</bdi> و <bdi dir="ltr">B(4, 6)</bdi>.`,
+          opts: [
+            `<bdi dir="ltr">3</bdi>`,
+            `<bdi dir="ltr">5</bdi>`,
+            `<bdi dir="ltr">7</bdi>`,
+            `<bdi dir="ltr">25</bdi>`
+          ],
+          ans: 1,
+          exp: `المسافة الإقليدية تساوي <bdi dir="ltr">√((4 − 1)² + (6 − 2)²) = √(3² + 4²) = √(9 + 16) = √25 = 5</bdi>.`
+        },
+        {
+          q: `لماذا تُسمى خوارزمية <bdi dir="ltr">Naïve Bayes</bdi> بـ «الساذجة»؟`,
+          opts: [
+            `لأنها لا تستخدم أي معادلات رياضية أو احتمالات.`,
+            `لأنها تفترض أن جميع السمات مستقلة تماماً عن بعضها البعض عند معرفة الفئة.`,
+            `لأنها تعمل فقط مع البيانات الرقمية المستمرة.`,
+            `لأنها أبطأ خوارزمية في التدريب.`
+          ],
+          ans: 1,
+          exp: `تُسمى ساذجة (<bdi dir="ltr">Naïve</bdi>) لأنها تفترض عدم وجود ارتباط بين السمات المستقلة داخل الفئة الواحدة، وهو افتراض نادراً ما يتحقق حرفياً في الواقع لكنه يعطي نتائج قوية وسريعة.`
+        },
+        {
+          q: `في مبرهنة بايز <bdi dir="ltr">P(A|B) = [P(B|A) · P(A)] / P(B)</bdi>، ماذا يمثل الرمز <bdi dir="ltr">P(A)</bdi>؟`,
+          opts: [
+            `الاحتمال الشرطي للسمة <bdi dir="ltr">B</bdi> بمعرفة الفئة <bdi dir="ltr">A</bdi>.`,
+            `الاحتمال الأولي (<bdi dir="ltr">Prior Probability</bdi>) للفئة <bdi dir="ltr">A</bdi> في مجموعة البيانات.`,
+            `معدل الخطأ في التصنيف.`,
+            `المتوسط التوافقي للدقة.`
+          ],
+          ans: 1,
+          exp: `<bdi dir="ltr">P(A)</bdi> هو الاحتمال الأولي للفئة <bdi dir="ltr">A</bdi> (نسبة العينات التي تنتمي إلى الفئة <bdi dir="ltr">A</bdi> من إجمالي البيانات).`
+        },
+        {
+          q: `عند استخدام <bdi dir="ltr">Naïve Bayes</bdi> لتصنيف بريد إلكتروني يحتوي الكلمتين <bdi dir="ltr">"free"</bdi> و <bdi dir="ltr">"win"</bdi>، إذا كان <bdi dir="ltr">P(Spam)=0.4</bdi> و <bdi dir="ltr">P(free|Spam)=0.8</bdi> و <bdi dir="ltr">P(win|Spam)=0.6</bdi>، فما قيمة البسط <bdi dir="ltr">P(Spam)·P(free|Spam)·P(win|Spam)</bdi>؟`,
+          opts: [
+            `<bdi dir="ltr">0.402</bdi>`,
+            `<bdi dir="ltr">0.192</bdi>`,
+            `<bdi dir="ltr">0.012</bdi>`,
+            `<bdi dir="ltr">0.800</bdi>`
+          ],
+          ans: 1,
+          exp: `بضرب الاحتمال الأولي في الاحتمالين الشرطيين: <bdi dir="ltr">0.4 × 0.8 × 0.6 = 0.192</bdi>، وهو أعلى من قيمة <bdi dir="ltr">Non-Spam</bdi> فتُصنف الرسالة كـ <bdi dir="ltr">Spam</bdi>.`
+        },
+        {
+          q: `أي مما يلي يُعد من أبرز <strong>مزايا</strong> خوارزمية <bdi dir="ltr">Naïve Bayes</bdi>؟`,
+          opts: [
+            `تعالج الارتباطات المعقدة بين السمات بدقة متناهية.`,
+            `السرعة العالية في التدريب والتطبيق ومقاومة الضجيج والسمات غير المناسبة.`,
+            `لا تعتمد على نظرية الاحتمالات إطلاقاً.`,
+            `تتفوق دائماً على كل الخوارزميات في البيانات المستمرة دون أي معالجة.`
+          ],
+          ans: 1,
+          exp: `تتميز <bdi dir="ltr">Naïve Bayes</bdi> بالسرعة في التدريب والتطبيق، وسهولة التفسير، ومقاومة وجود الضجيج والسمات غير المناسبة، والكفاءة العالية عندما تكون السمات مستقلة.`
+        },
+        {
+          q: `ما العيب المشترك الذي يظهر في <bdi dir="ltr">Naïve Bayes</bdi> عند التعامل مع سمات ذات قيم مستمرة؟`,
+          opts: [
+            `أنها تتطلب حساب المسافة الإقليدية لكل نقطة تدريب.`,
+            `صعوبة التعامل المباشر مع السمات ذات القيم المستمرة دون افتراض توزيع أو تحويلها لفئات.`,
+            `أنها تعجز عن التصنيف متعدد الفئات.`,
+            `أنها تحتاج إلى تحديد قيمة <bdi dir="ltr">K</bdi>.`
+          ],
+          ans: 1,
+          exp: `من عيوب <bdi dir="ltr">Naïve Bayes</bdi> المذكورة في المقرر: صعوبة التعامل مع السمات ذات القيم المستمرة وتجاهلها للعلاقة بين المتغيرات في حال وجودها.`
+        }
+      ],
+      u2: [
+        {
+          q: `ما الوظيفة الأساسية لدالة <bdi dir="ltr">Sigmoid</bdi> في الانحدار اللوجستي (<bdi dir="ltr">Logistic Regression</bdi>)؟`,
+          opts: [
+            `حساب المسافة الإقليدية بين المتجهات الداعمة.`,
+            `تحويل المخرج الخطي <bdi dir="ltr">z</bdi> إلى قيمة احتمالية محصورة بين <bdi dir="ltr">0</bdi> و <bdi dir="ltr">1</bdi>.`,
+            `تقسيم البيانات إلى أشجار قرار ثنائية.`,
+            `إزالة القيم المفقودة من الجدول.`
+          ],
+          ans: 1,
+          exp: `تُحوّل دالة السيجمويد <bdi dir="ltr">σ(z) = 1 / (1 + e⁻ᶻ)</bdi> أي قيمة حقيقية <bdi dir="ltr">z ∈ (-∞, +∞)</bdi> إلى احتمال في الفترة <bdi dir="ltr">(0, 1)</bdi>.`
+        },
+        {
+          q: `في الانحدار اللوجستي، إذا كان <bdi dir="ltr">z = 1.2</bdi>، فما قيمة <bdi dir="ltr">Sigmoid(1.2)</bdi> تقريباً؟`,
+          opts: [
+            `<bdi dir="ltr">0.119</bdi>`,
+            `<bdi dir="ltr">0.500</bdi>`,
+            `<bdi dir="ltr">0.768</bdi>`,
+            `<bdi dir="ltr">1.200</bdi>`
+          ],
+          ans: 2,
+          exp: `بتطبيق الصيغة: <bdi dir="ltr">σ(1.2) = 1 / (1 + e⁻¹·²) ≈ 1 / (1 + 0.301) ≈ 0.768</bdi>. وبما أنها أكبر من <bdi dir="ltr">0.5</bdi> تُصنَّف العينة ضمن الفئة الإيجابية.`
+        },
+        {
+          q: `في مثال الساعات الدراسية (<bdi dir="ltr">β₀ = −4</bdi> و <bdi dir="ltr">β₁ = 0.9</bdi>)، إذا درس طالب <strong>6 ساعات</strong>، فما قيمة <bdi dir="ltr">z</bdi> وما القرار المتوقع عند عتبة <bdi dir="ltr">0.5</bdi>؟`,
+          opts: [
+            `<bdi dir="ltr">z = −1.4</bdi>، لا ينجح.`,
+            `<bdi dir="ltr">z = 1.4</bdi> و <bdi dir="ltr">σ(1.4) = 0.802</bdi>، ينجح.`,
+            `<bdi dir="ltr">z = 5.4</bdi>، لا ينجح.`,
+            `<bdi dir="ltr">z = 0.0</bdi>، قرار متعادل.`
+          ],
+          ans: 1,
+          exp: `<bdi dir="ltr">z = −4 + 0.9 × 6 = 1.4</bdi>، وعند التعويض في دالة السيجمويد نحصل على <bdi dir="ltr">0.802 &gt; 0.5</bdi>، لذلك يتنبأ النموذج بالنجاح.`
+        },
+        {
+          q: `ما اسم دالة الخسارة المستخدمة لتدريب نموذج الانحدار اللوجستي والتي تزيد قيمتها كلما أخطأ النموذج في التصنيف؟`,
+          opts: [
+            `<bdi dir="ltr">Gini Impurity</bdi>`,
+            `<bdi dir="ltr">Euclidean Loss</bdi>`,
+            `<bdi dir="ltr">Binary Cross-Entropy Loss</bdi>`,
+            `<bdi dir="ltr">Within-Cluster Sum of Squares</bdi>`
+          ],
+          ans: 2,
+          exp: `يُدرَّب الانحدار اللوجستي بتقليل دالة <bdi dir="ltr">Binary Cross-Entropy (Log Loss)</bdi> التي تعاقب التنبؤات الخاطئة الواثقة بقوة.`
+        },
+        {
+          q: `أي العبارات التالية تُعد من <strong>عيوب</strong> الانحدار اللوجستي؟`,
+          opts: [
+            `يحتاج إلى تحديد عدد الجيران <bdi dir="ltr">K</bdi> يدوياً.`,
+            `يفترض أن البيانات يمكن فصلها خطياً، وحساس للقيم المتطرفة والمتغيرات المرتبطة.`,
+            `لا يعطي أي احتمالات للفئات.`,
+            `يتطلب استخدام <bdi dir="ltr">Majority Voting</bdi>.`
+          ],
+          ans: 1,
+          exp: `رغم بساطة الانحدار اللوجستي وعدم حاجته لـ <bdi dir="ltr">hyper-parameters</bdi>، فإنه يفترض القابلية للفصل الخطي ويتأثر بالارتباط بين السمات المستقلة والقيم المتطرفة.`
+        },
+        {
+          q: `ما الهدف الرئيسي لخوارزمية <bdi dir="ltr">Support Vector Machines (SVM)</bdi>؟`,
+          opts: [
+            `تصغير الهامش بين الفئات إلى الصفر.`,
+            `إيجاد الحد الفاصل (<bdi dir="ltr">Hyperplane</bdi>) الذي يعظّم الهامش بين الفئات.`,
+            `حساب متوسط المسافة بين كل نقطتين في البيانات.`,
+            `تقليل عدد الأعمدة باستخدام <bdi dir="ltr">PCA</bdi>.`
+          ],
+          ans: 1,
+          exp: `تسعى <bdi dir="ltr">SVM</bdi> إلى إيجاد الفاصل الأمثل الذي يعظّم المسافة (الهامش) بين الفاصل وأقرب النقاط من كل فئة لضمان أفضل تعميم ممكن.`
+        },
+        {
+          q: `ما المقصود بـ «المتجهات الداعمة» (<bdi dir="ltr">Support Vectors</bdi>) في <bdi dir="ltr">SVM</bdi>؟`,
+          opts: [
+            `النقاط البعيدة جداً عن الحد الفاصل.`,
+            `أقرب النقاط إلى الحد الفاصل من أي فئة، والتي تحدد موقعه والهامش.`,
+            `النقاط التي تم حذفها كقيم متطرفة.`,
+            `المعاملات <bdi dir="ltr">β₀, β₁</bdi> في الانحدار اللوجستي.`
+          ],
+          ans: 1,
+          exp: `المتجهات الداعمة هي أقرب نقاط التدريب للحد الفاصل من كلا الفئتين، وإذا تحركت يتغير موقع الحد الفاصل والهامش.`
+        },
+        {
+          q: `كيف تتعامل خوارزمية <bdi dir="ltr">SVM</bdi> مع البيانات غير القابلة للفصل خطياً؟`,
+          opts: [
+            `تتحول تلقائياً إلى خوارزمية <bdi dir="ltr">K-NN</bdi>.`,
+            `تستخدم تقنية <bdi dir="ltr">Kernel Trick</bdi> لنقل البيانات إلى فضاء أبعاد أعلى.`,
+            `تحذف نصف العينات عشوائياً.`,
+            `تستخدم دالة السيجمويد بدلاً من الفاصل.`
+          ],
+          ans: 1,
+          exp: `تسمح تقنية <bdi dir="ltr">Kernel Trick</bdi> (مثل <bdi dir="ltr">Polynomial</bdi> و <bdi dir="ltr">RBF</bdi>) بالتعامل مع الحدود غير الخطية عبر تحويلها لفضاء أعلى أبعاداً.`
+        },
+        {
+          q: `في نموذج <bdi dir="ltr">SVM</bdi> معادلته <bdi dir="ltr">w·x + b = 0</bdi> حيث <bdi dir="ltr">w = [1, 1]</bdi> و <bdi dir="ltr">b = −3</bdi>، كيف تُصنَّف النقطة الجديدة <bdi dir="ltr">(3, 4)</bdi>؟`,
+          opts: [
+            `الناتج <bdi dir="ltr">−4</bdi> فتُصنف ضمن الفئة <bdi dir="ltr">−1</bdi>.`,
+            `الناتج <bdi dir="ltr">+4</bdi> فتُصنف ضمن الفئة <bdi dir="ltr">+1</bdi>.`,
+            `الناتج <bdi dir="ltr">0</bdi> فتقع على الحد الفاصل تماماً.`,
+            `الناتج <bdi dir="ltr">+1</bdi> فتُصنف ضمن الفئة <bdi dir="ltr">−1</bdi>.`
+          ],
+          ans: 1,
+          exp: `بالتعويض: <bdi dir="ltr">y = 1(3) + 1(4) − 3 = 4</bdi>. وبما أن النتيجة موجبة تُصنَّف النقطة في الفئة <bdi dir="ltr">+1</bdi>.`
+        },
+        {
+          q: `ماذا يحدث للتعقيد الحسابي في <bdi dir="ltr">SVM</bdi> كلما زاد عدد المتجهات الداعمة (<bdi dir="ltr">Support Vectors</bdi>)؟`,
+          opts: [
+            `يقل التعقيد الحسابي ويصبح النموذج فورياً.`,
+            `يزداد التعقيد الحسابي للنموذج.`,
+            `لا يتأثر التعقيد الحسابي إطلاقاً.`,
+            `يتحول النموذج إلى انحدار خطي بسيط.`
+          ],
+          ans: 1,
+          exp: `من عيوب <bdi dir="ltr">SVM</bdi> زيادة التعقيد كلما ارتفع عدد المتجهات الداعمة، إضافةً إلى حساسيتها لاختيار <bdi dir="ltr">hyper-parameters</bdi> والقيم المتطرفة.`
+        }
+      ],
+      u3: [
+        {
+          q: `كيف تفصل شجرة القرار (<bdi dir="ltr">Decision Tree</bdi>) بين الفئات في فضاء السمات؟`,
+          opts: [
+            `بإيجاد مستوى فاصل مائل يعظّم الهامش دائماً.`,
+            `باستخدام قواعد شرطية متتالية تحدد حدوداً فاصلة عمودية/أفقية على السمات.`,
+            `بضرب الاحتمالات الشرطية للسمات.`,
+            `بتخزين البيانات دون أي تقسيم.`
+          ],
+          ans: 1,
+          exp: `تستخدم شجرة القرار حدوداً فاصلة بسيطة على قيم السمات (مثل <bdi dir="ltr">X &gt; 3</bdi>) تُرتَّب هرمياً من الجذر إلى الأوراق دون الحاجة لـ <bdi dir="ltr">Hyperplane</bdi> مائل معقد.`
+        },
+        {
+          q: `أين توجد جميع بيانات التدريب في بداية بناء شجرة القرار؟`,
+          opts: [
+            `في العقد الورقية (<bdi dir="ltr">Leaf Nodes</bdi>).`,
+            `في العقدة الجذرية (<bdi dir="ltr">Root Node</bdi>).`,
+            `خارج الشجرة تماماً.`,
+            `في الفروع فقط.`
+          ],
+          ans: 1,
+          exp: `يحتوي الجذر (<bdi dir="ltr">Root</bdi>) الخاص بالشجرة على كل البيانات، ثم يتم تحديد قيمة/سمة لتقسيم البيانات على الأبناء (<bdi dir="ltr">Children</bdi>) يميناً ويساراً.`
+        },
+        {
+          q: `ما قيمة مؤشر جيني (<bdi dir="ltr">Gini Impurity</bdi>) لعقدة «نقية تماماً» تحتوي على 8 عينات من الفئة الأولى و 0 عينات من الفئة الثانية؟`,
+          opts: [
+            `<bdi dir="ltr">1.0</bdi>`,
+            `<bdi dir="ltr">0.5</bdi>`,
+            `<bdi dir="ltr">0.0</bdi>`,
+            `<bdi dir="ltr">0.25</bdi>`
+          ],
+          ans: 2,
+          exp: `<bdi dir="ltr">Gini = 1 − (1² + 0²) = 0.0</bdi>. الصفر يعني نقاءً تاماً وعدم وجود اختلاط بين الفئات.`
+        },
+        {
+          q: `احسب مؤشر <bdi dir="ltr">Gini</bdi> لعقدة تحتوي على 6 عينات من الفئة <bdi dir="ltr">A</bdi> و 4 عينات من الفئة <bdi dir="ltr">B</bdi>.`,
+          opts: [
+            `<bdi dir="ltr">0.50</bdi>`,
+            `<bdi dir="ltr">0.48</bdi>`,
+            `<bdi dir="ltr">0.32</bdi>`,
+            `<bdi dir="ltr">0.16</bdi>`
+          ],
+          ans: 1,
+          exp: `النسب هي <bdi dir="ltr">0.6</bdi> و <bdi dir="ltr">0.4</bdi>؛ إذن <bdi dir="ltr">Gini = 1 − (0.6² + 0.4²) = 1 − (0.36 + 0.16) = 0.48</bdi>.`
+        },
+        {
+          q: `ما المشكلة الرئيسية التي تعاني منها شجرة القرار المفردة عند زيادة عمقها وتشعبها بشكل مفرط؟`,
+          opts: [
+            `فرط التخصيص (<bdi dir="ltr">Overfitting</bdi>) وحفظ ضجيج بيانات التدريب.`,
+            `استحالة تصنيف بيانات التدريب نفسها.`,
+            `الحاجة إلى تحويل البيانات بـ <bdi dir="ltr">Sigmoid</bdi>.`,
+            `انعدام القدرة على تفسير قواعدها.`
+          ],
+          ans: 0,
+          exp: `شجرة القرار المفردة العميقة تميل إلى التكيف الزائد مع تفاصيل وضجيج بيانات التدريب (<bdi dir="ltr">Overfitting</bdi>) فتضعف دقتها على البيانات الجديدة.`
+        },
+        {
+          q: `كيف تدمج خوارزمية الغابة العشوائية (<bdi dir="ltr">Random Forest</bdi>) تنبؤات أشجار القرار الفردية لتحديد الفئة النهائية؟`,
+          opts: [
+            `بأخذ نتيجة الشجرة الأولى فقط.`,
+            `عبر تصويت الأغلبية (<bdi dir="ltr">Majority Voting</bdi>) بين جميع الأشجار.`,
+            `بضرب مخرجات الأشجار في معامل <bdi dir="ltr">λ</bdi>.`,
+            `بحساب المسافة الإقليدية بين الأشجار.`
+          ],
+          ans: 1,
+          exp: `تعتمد الغابات العشوائية على تجميع نتائج عدد من الأشجار المستقلة (<bdi dir="ltr">Base Classifiers</bdi>) واختيار الفئة التي تحصل على أغلبية الأصوات (<bdi dir="ltr">Majority Voting</bdi>).`
+        },
+        {
+          q: `إذا صوّتت 7 أشجار في غابة عشوائية لعينة ما بالنتائج: (A, B, A, A, B, A, B)، فما التصنيف النهائي؟`,
+          opts: [
+            `الفئة <bdi dir="ltr">B</bdi> بـ 4 أصوات.`,
+            `الفئة <bdi dir="ltr">A</bdi> بـ 4 أصوات مقابل 3 لـ <bdi dir="ltr">B</bdi>.`,
+            `لا يمكن تصنيف العينة.`,
+            `يؤخذ متوسط القيمتين.`
+          ],
+          ans: 1,
+          exp: `بتطبيق تصويت الأغلبية: حصلت الفئة <bdi dir="ltr">A</bdi> على 4 أصوات مقابل 3 أصوات للفئة <bdi dir="ltr">B</bdi>، فيكون التصنيف النهائي <bdi dir="ltr">A</bdi>.`
+        },
+        {
+          q: `أي مما يلي يُعد من <strong>مزايا</strong> الغابات العشوائية مقارنة بشجرة القرار المفردة؟`,
+          opts: [
+            `سهلة التتبع والتفسير البصري لكل قرار فردي كشجرة واحدة.`,
+            `تقليل الـ <bdi dir="ltr">Overfitting</bdi>، ثبات الأداء مع الميزات الكثيرة، ومقاومة التنوع العشوائي.`,
+            `استهلاك أقل بكثير للوقت والذاكرة.`,
+            `لا تستخدم أي أشجار قرار داخلها.`
+          ],
+          ans: 1,
+          exp: `تقلل الغابات العشوائية من <bdi dir="ltr">Overfitting</bdi>، وتُظهر ثباتاً في الأداء مع عدد كبير من الميزات، ولا تتأثر كثيراً بتغيير أو إضافة جزء صغير من البيانات.`
+        },
+        {
+          q: `ما أبرز <strong>عيوب</strong> الغابات العشوائية (<bdi dir="ltr">Random Forests</bdi>) المذكورة في الفصل؟`,
+          opts: [
+            `تفترض أن البيانات خطية فقط.`,
+            `تعقيد النموذج (صعوبة تحديد سبب تصنيف عنصر معين) واستهلاك الوقت والموارد.`,
+            `تحتاج دائماً لتحديد قيمة <bdi dir="ltr">K</bdi>.`,
+            `حساسة جداً لتغيير عينة واحدة في البيانات.`
+          ],
+          ans: 1,
+          exp: `بسبب وجود عدد كبير من الـ <bdi dir="ltr">base classifiers</bdi> يصعب تتبع وتفسير كيف تم تصنيف عينة محددة، كما تستهلك وقتاً وموارداً أكبر مقارنة بشجرة مفردة.`
+        },
+        {
+          q: `لماذا لا تتأثر الغابات العشوائية كثيراً عند تعديل أو إضافة جزء صغير من بيانات التدريب؟`,
+          opts: [
+            `لأنها تتجاهل بيانات التدريب تماماً.`,
+            `لأن كل شجرة تُبنى على عينة فرعية عشوائية، وتجميع تصويت العديد من الأشجار يمنحها مقاومة للتنوع العشوائي.`,
+            `لأنها تستخدم دالة اللوغاريتم لتحويل البيانات.`,
+            `لأن جميع الأشجار متطابقة تماماً.`
+          ],
+          ans: 1,
+          exp: `تنوع العينات والسمات بين الأشجار وتجميع النتائج عبر التصويت يجعل تأثير التغييرات الصغيرة المحدودة في البيانات ضئيلاً على النتيجة النهائية.`
+        }
+      ],
+      comp: [
+        {
+          unit: 1,
+          q: `[الوحدة 1] ما الفرق الجوهري بين عملية التصنيف (<bdi dir="ltr">Classification</bdi>) والانحدار (<bdi dir="ltr">Regression</bdi>) في التعلم الآلي بإشراف؟`,
+          opts: [
+            `التصنيف تعلم بدون إشراف والانحدار بإشراف.`,
+            `التصنيف يتنبأ بسمة هدف في صورة فئات منفصلة، بينما الانحدار يتنبأ بقيم عددية مستمرة.`,
+            `التصنيف لا يستخدم سمات مستقلة.`,
+            `لا يوجد فرق بينهما.`
+          ],
+          ans: 1,
+          exp: `كلاهما من التعلم الآلي بإشراف؛ لكن مخرج التصنيف هو وسم فئوي (<bdi dir="ltr">Class Label</bdi>) بينما مخرج الانحدار قيمة مستمرة.`
+        },
+        {
+          unit: 1,
+          q: `[الوحدة 1] ما الترتيب الصحيح لخطوات تصنيف عينة جديدة في خوارزمية <bdi dir="ltr">K-NN</bdi>؟`,
+          opts: [
+            `تصويت الأغلبية ← حساب المسافات ← اختيار <bdi dir="ltr">K</bdi>.`,
+            `حساب المسافة بين العينة الجديدة وكل نقاط التدريب ← اختيار أقرب <bdi dir="ltr">K</bdi> نقاط ← تصنيف العينة بالفئة الغالبة.`,
+            `بناء شجرة قرار ← حساب الاحتمال الأولي ← تطبيق <bdi dir="ltr">Kernel</bdi>.`,
+            `حساب معامل <bdi dir="ltr">β</bdi> ← تطبيق <bdi dir="ltr">Sigmoid</bdi>.`
+          ],
+          ans: 1,
+          exp: `تبدأ <bdi dir="ltr">K-NN</bdi> بقياس المسافات، ثم تحديد أقرب <bdi dir="ltr">K</bdi> جيران، وأخيراً تطبيق تصويت الأغلبية لتعيين الوسم.`
+        },
+        {
+          unit: 1,
+          q: `[الوحدة 1] أي من الحالات التالية تجعل من الضروري تطبيق تحجيم السمات (<bdi dir="ltr">Feature Scaling</bdi>) قبل التدريب؟`,
+          opts: [
+            `عند استخدام خوارزمية <bdi dir="ltr">Decision Tree</bdi>.`,
+            `عند استخدام خوارزمية <bdi dir="ltr">K-NN</bdi> مع سمتين بمقاييس مختلفة مثل العمر (20–60) والراتب (5000–50000).`,
+            `عند استخدام <bdi dir="ltr">Random Forest</bdi> فقط.`,
+            `عند حساب تصويت الأغلبية بين الأشجار.`
+          ],
+          ans: 1,
+          exp: `لأن <bdi dir="ltr">K-NN</bdi> تعتمد على المسافة، فإن السمة ذات النطاق الأكبر (الراتب) ستطغى على حساب المسافة ما لم يتم توحيد المقياس.`
+        },
+        {
+          unit: 1,
+          q: `[الوحدة 1] في مسألة تصنيف تحتوي على 100 رسالة (30 <bdi dir="ltr">Spam</bdi> و 70 <bdi dir="ltr">Not Spam</bdi>)، ما قيمة الاحتمال الأولي <bdi dir="ltr">P(Spam)</bdi>؟`,
+          opts: [
+            `<bdi dir="ltr">0.70</bdi>`,
+            `<bdi dir="ltr">0.30</bdi>`,
+            `<bdi dir="ltr">0.50</bdi>`,
+            `<bdi dir="ltr">0.43</bdi>`
+          ],
+          ans: 1,
+          exp: `الاحتمال الأولي <bdi dir="ltr">Prior</bdi> للفئة يساوي نسبة عدد عيناتها إلى العدد الكلي: <bdi dir="ltr">30 / 100 = 0.30</bdi>.`
+        },
+        {
+          unit: 1,
+          q: `[الوحدة 1] في مصنف <bdi dir="ltr">Naïve Bayes</bdi>، إذا كان الاحتمال الشرطي لإحدى الكلمات داخل فئة <bdi dir="ltr">Not Spam</bdi> يساوي <bdi dir="ltr">0.0</bdi>، ماذا يحدث لناتج ضرب الاحتمالات لتلك الفئة دون تنعيم؟`,
+          opts: [
+            `يصبح ناتج الضرب <bdi dir="ltr">0.0</bdi> بغض النظر عن قوة بقية السمات.`,
+            `يصبح ناتج الضرب <bdi dir="ltr">1.0</bdi>.`,
+            `تُحذف الكلمة تلقائياً وتُستبدل بـ <bdi dir="ltr">0.5</bdi>.`,
+            `لا يتأثر ناتج الضرب.`
+          ],
+          ans: 0,
+          exp: `كما ظهر في مثال الملخص (<bdi dir="ltr">0.0 × 0.0 × 0.4 = 0.0</bdi>)، يؤدي الصفر في الضرب إلى تصفير الاحتمال الكلي للفئة ما لم يُستخدم تنعيم مثل لابلاس.`
+        },
+        {
+          unit: 1,
+          q: `[الوحدة 1] ما المسافة المانهاتنية (<bdi dir="ltr">Manhattan Distance</bdi>) بين النقطتين <bdi dir="ltr">(2, 5)</bdi> و <bdi dir="ltr">(6, 2)</bdi>؟`,
+          opts: [
+            `<bdi dir="ltr">5</bdi>`,
+            `<bdi dir="ltr">7</bdi>`,
+            `<bdi dir="ltr">12</bdi>`,
+            `<bdi dir="ltr">1</bdi>`
+          ],
+          ans: 1,
+          exp: `مسافة مانهاتن هي مجموع الفروق المطلقة: <bdi dir="ltr">|2 − 6| + |5 − 2| = 4 + 3 = 7</bdi>.`
+        },
+        {
+          unit: 1,
+          q: `[الوحدة 1] أي الخوارزميات التالية تعتمد على مبدأ «المتعلم الكسول» ولا تبني نموذجاً مستقلاً أثناء مرحلة التدريب؟`,
+          opts: [
+            `<bdi dir="ltr">Logistic Regression</bdi>`,
+            `<bdi dir="ltr">SVM</bdi>`,
+            `<bdi dir="ltr">K-NN</bdi>`,
+            `<bdi dir="ltr">Random Forest</bdi>`
+          ],
+          ans: 2,
+          exp: `تؤجل <bdi dir="ltr">K-NN</bdi> العمل الحسابي إلى وقت الاختبار لأنها لا تبني دالة أو شجرة أو مستوى فاصل خلال التدريب.`
+        },
+        {
+          unit: 2,
+          q: `[الوحدة 2] في الانحدار اللوجستي عند استخدام عتبة <bdi dir="ltr">0.5</bdi> للفصل بين الفئات، ما قيمة <bdi dir="ltr">z</bdi> المناظرة تماماً لحد القرار؟`,
+          opts: [
+            `<bdi dir="ltr">z = 1</bdi>`,
+            `<bdi dir="ltr">z = 0</bdi>`,
+            `<bdi dir="ltr">z = 0.5</bdi>`,
+            `<bdi dir="ltr">z = −1</bdi>`
+          ],
+          ans: 1,
+          exp: `عند <bdi dir="ltr">z = 0</bdi> تكون <bdi dir="ltr">σ(0) = 1 / (1 + e⁰) = 1 / 2 = 0.5</bdi>، وهو تماماً حد القرار الفاصل.`
+        },
+        {
+          unit: 2,
+          q: `[الوحدة 2] في نموذج انحدار لوجستي بمعاملات <bdi dir="ltr">β₀ = −4</bdi> و <bdi dir="ltr">β₁ = 0.9</bdi>، كيف يُصنَّف طالب درس <strong>3 ساعات</strong> فقط؟`,
+          opts: [
+            `<bdi dir="ltr">z = −1.3</bdi> و <bdi dir="ltr">σ(z) &lt; 0.5</bdi>، إذن الفئة <bdi dir="ltr">0</bdi> (لا ينجح).`,
+            `<bdi dir="ltr">z = 1.3</bdi>، إذن الفئة <bdi dir="ltr">1</bdi>.`,
+            `<bdi dir="ltr">z = −4.0</bdi>، إذن الفئة <bdi dir="ltr">1</bdi>.`,
+            `<bdi dir="ltr">z = 0.0</bdi>، قرار متعادل.`
+          ],
+          ans: 0,
+          exp: `<bdi dir="ltr">z = −4 + 0.9 × 3 = −4 + 2.7 = −1.3</bdi>. وبما أن <bdi dir="ltr">z &lt; 0</bdi> فإن <bdi dir="ltr">σ(−1.3) ≈ 0.214 &lt; 0.5</bdi>، فيُصنَّف ضمن الفئة <bdi dir="ltr">0</bdi>.`
+        },
+        {
+          unit: 2,
+          q: `[الوحدة 2] أي من المزايا التالية ينطبق على الانحدار اللوجستي دون الحاجة لضبط معاملات معقدة؟`,
+          opts: [
+            `لا يحتاج إلى تحديد <bdi dir="ltr">hyper-parameters</bdi> وبسيط الفهم.`,
+            `يعالج البيانات غير الخطية تلقائياً دون أي تحويل.`,
+            `لا يتأثر إطلاقاً بالقيم المتطرفة.`,
+            `يعمل بدقة ممتازة مع 3 عينات تدريب فقط.`
+          ],
+          ans: 0,
+          exp: `من مزايا الانحدار اللوجستي الأساسية أنه بسيط وسهل الفهم ولا يحتاج تحديد <bdi dir="ltr">hyper-parameters</bdi> في صورته القياسية.`
+        },
+        {
+          unit: 2,
+          q: `[الوحدة 2] في خوارزمية <bdi dir="ltr">SVM</bdi>، ما تأثير حذف نقطة تدريب بعيدة جداً عن الهامش وليست من المتجهات الداعمة؟`,
+          opts: [
+            `يتغير الحد الفاصل والهامش جذرياً.`,
+            `لا يتغير الحد الفاصل الأمثل لأن النقطة ليست من المتجهات الداعمة.`,
+            `ينهار النموذج ويتوقف عن التصنيف.`,
+            `يتحول <bdi dir="ltr">b</bdi> إلى صفر.`
+          ],
+          ans: 1,
+          exp: `موقع الحد الفاصل في <bdi dir="ltr">SVM</bdi> يعتمد حصرياً على المتجهات الداعمة (<bdi dir="ltr">Support Vectors</bdi>) الواقعة على حافة الهامش.`
+        },
+        {
+          unit: 2,
+          q: `[الوحدة 2] ليكن الفاصل الخطي لـ <bdi dir="ltr">SVM</bdi> هو <bdi dir="ltr">w = [1, 1]</bdi> و <bdi dir="ltr">b = −3</bdi>. ما تصنيف النقطة <bdi dir="ltr">(1, 1)</bdi>؟`,
+          opts: [
+            `الناتج <bdi dir="ltr">+1</bdi> ← الفئة <bdi dir="ltr">+1</bdi>.`,
+            `الناتج <bdi dir="ltr">−1</bdi> ← الفئة <bdi dir="ltr">−1</bdi>.`,
+            `الناتج <bdi dir="ltr">−3</bdi> ← الفئة <bdi dir="ltr">+1</bdi>.`,
+            `الناتج <bdi dir="ltr">0</bdi> ← على الفاصل.`
+          ],
+          ans: 1,
+          exp: `<bdi dir="ltr">y = 1(1) + 1(1) − 3 = −1 &lt; 0</bdi>، وبما أن الإشارة سالبة تُصنف العينة ضمن الفئة <bdi dir="ltr">−1</bdi>.`
+        },
+        {
+          unit: 2,
+          q: `[الوحدة 2] في تطبيق عملي على بيانات مرضى، أعطت <bdi dir="ltr">SVM</bdi> مع <bdi dir="ltr">Linear Kernel</bdi> نتائج أفضل من <bdi dir="ltr">Polynomial Kernel</bdi>؛ ماذا نستنتج عن طبيعة البيانات؟`,
+          opts: [
+            `البيانات غير خطية ومعقدة جداً.`,
+            `البيانات خطية بشكل كبير ويمكن فصلها بحد خطي.`,
+            `النموذج يعاني من عدم وجود سمات مستقلة.`,
+            `يجب استبدال <bdi dir="ltr">SVM</bdi> بـ <bdi dir="ltr">Clustering</bdi>.`
+          ],
+          ans: 1,
+          exp: `تفوق <bdi dir="ltr">Linear Kernel</bdi> على <bdi dir="ltr">Polynomial Kernel</bdi> يدل على أن العلاقة والانفصال بين الفئات في هذه البيانات خطي إلى حد كبير.`
+        },
+        {
+          unit: 2,
+          q: `[الوحدة 2] أي الخوارزميات التالية تنتمي إلى فئة الخوارزميات المعتمدة على التحسين (<bdi dir="ltr">Optimization</bdi>) ويدخل في أساسها تعظيم الهامش؟`,
+          opts: [
+            `<bdi dir="ltr">Naïve Bayes</bdi>`,
+            `<bdi dir="ltr">Support Vector Machines (SVM)</bdi>`,
+            `<bdi dir="ltr">K-Nearest Neighbors</bdi>`,
+            `<bdi dir="ltr">Decision Trees</bdi>`
+          ],
+          ans: 1,
+          exp: `تعتمد <bdi dir="ltr">SVM</bdi> على خوارزميات التحسين (<bdi dir="ltr">Optimization</bdi>) لإيجاد أوزان الفاصل <bdi dir="ltr">w, b</bdi> التي تعظّم الهامش.`
+        },
+        {
+          unit: 3,
+          q: `[الوحدة 3] ما أقصى قيمة ممكنة لمؤشر <bdi dir="ltr">Gini Impurity</bdi> في مسألة تصنيف ثنائية (فئتان فقط)؟`,
+          opts: [
+            `<bdi dir="ltr">1.0</bdi>`,
+            `<bdi dir="ltr">0.5</bdi>`,
+            `<bdi dir="ltr">0.25</bdi>`,
+            `<bdi dir="ltr">0.0</bdi>`
+          ],
+          ans: 1,
+          exp: `عند تساوي الفئتين (<bdi dir="ltr">p₁ = 0.5, p₂ = 0.5</bdi>) تكون <bdi dir="ltr">Gini = 1 − (0.5² + 0.5²) = 1 − 0.5 = 0.5</bdi> وهي أقصى شوائب للتصنيف الثنائي.`
+        },
+        {
+          unit: 3,
+          q: `[الوحدة 3] إذا كان في عقدة ما 5 عينات من الفئة الموجبة و 5 عينات من الفئة السالبة، فما قيمة الإنتروبي <bdi dir="ltr">Entropy H(D)</bdi>؟`,
+          opts: [
+            `<bdi dir="ltr">0.0 bits</bdi>`,
+            `<bdi dir="ltr">0.5 bits</bdi>`,
+            `<bdi dir="ltr">1.0 bit</bdi>`,
+            `<bdi dir="ltr">2.0 bits</bdi>`
+          ],
+          ans: 2,
+          exp: `<bdi dir="ltr">H(D) = −[0.5 log₂(0.5) + 0.5 log₂(0.5)] = −[−0.5 − 0.5] = 1.0 bit</bdi> (أقصى عدم يقين في التصنيف الثنائي).`
+        },
+        {
+          unit: 3,
+          q: `[الوحدة 3] أي الخوارزميات التالية يُنصح بها عندما نحتاج نموذجاً يشرح قواعد قراره بوضوح بصري دون الحاجة لتحجيم السمات؟`,
+          opts: [
+            `<bdi dir="ltr">K-NN</bdi>`,
+            `<bdi dir="ltr">SVM (RBF)</bdi>`,
+            `<bdi dir="ltr">Decision Tree</bdi>`,
+            `<bdi dir="ltr">Random Forest</bdi>`
+          ],
+          ans: 2,
+          exp: `شجرة القرار المفردة سهلة التفسير والتمثيل كسلسلة قواعد واضحة، بخلاف الغابة العشوائية التي يصعب تفسيرها بسبب كثرة الأشجار، و <bdi dir="ltr">K-NN</bdi> التي تحتاج تحجيم السمات.`
+        },
+        {
+          unit: 3,
+          q: `[الوحدة 3] كيف تعالج الغابات العشوائية (<bdi dir="ltr">Random Forests</bdi>) مشكلة فرط التخصيص (<bdi dir="ltr">Overfitting</bdi>) الموجودة في شجرة القرار المفردة؟`,
+          opts: [
+            `بحذف نصف السمات نهائياً قبل البدء.`,
+            `بتجميع نتائج عدة أشجار قرار مستقلة مبنية على عينات وميزات عشوائية عبر تصويت الأغلبية.`,
+            `باستبدال جميع الأشجار بانحدار لوجستي.`,
+            `بتعيين <bdi dir="ltr">K = 1</bdi>.`
+          ],
+          ans: 1,
+          exp: `تجميع مخرجات عدد كبير من الأشجار المتنوعة يخفف التباين العالي للشجرة الواحدة ويقلل احتمال الـ <bdi dir="ltr">Overfitting</bdi>.`
+        },
+        {
+          unit: 3,
+          q: `[الوحدة 3] ما المقصود بـ <bdi dir="ltr">Base Classifiers</bdi> في سياق الغابات العشوائية؟`,
+          opts: [
+            `نقاط التدريب المتطرفة.`,
+            `أشجار القرار الفردية العديدة التي تتكون منها الغابة.`,
+            `السمات المستبعدة من النموذج.`,
+            `دوال المسافة المستخدمة في <bdi dir="ltr">K-NN</bdi>.`
+          ],
+          ans: 1,
+          exp: `تتكون الغابة العشوائية من عدد كبير من المصنفات الأساسية (<bdi dir="ltr">Base Classifiers</bdi>) وهي أشجار القرار الفردية، ووجود عدد كبير منها يجعل تفسير القرار صعباً.`
+        },
+        {
+          unit: 3,
+          q: `[الوحدة 3] أي العبارات التالية تجمع بشكل صحيح بين إحدى مزايا وأحد عيوب الغابات العشوائية؟`,
+          opts: [
+            `الميزة: سريعة جداً ومفسَّرة بالكامل؛ العيب: تعاني من <bdi dir="ltr">Overfitting</bdi> شديد.`,
+            `الميزة: ثبات الأداء حتى مع عدد كبير من الميزات؛ العيب: استهلاك الوقت والموارد وتعقيد التفسير.`,
+            `الميزة: لا تستخدم أكثر من شجرة؛ العيب: تحتاج تحجيم سمات.`,
+            `الميزة: تعتمد على <bdi dir="ltr">Sigmoid</bdi>؛ العيب: تتجاهل الاستقلالية.`
+          ],
+          ans: 1,
+          exp: `تتفوق الغابات العشوائية في ثبات الأداء مع كثرة الميزات وتقليل فرط التخصيص، لكن ثمن ذلك هو تعقيد النموذج واستهلاك الوقت والموارد.`
+        }
+      ]
     };
-  });
-}
 
-function renderQuiz() {
-  prepareShuffledQuiz();
-  const area = document.getElementById("quizArea");
-  area.innerHTML = "";
-  const letters = ["أ", "ب", "ج", "د"];
-  currentQuestions.forEach((item, i) => {
-    const box = document.createElement("div");
-    box.className = "qbox";
-    box.innerHTML = `<b>${i + 1}. ${item.q}</b><div class="options"></div><div class="feedback" id="fb${i}" aria-live="polite" hidden></div>`;
-    const opts = box.querySelector(".options");
-    item.o.forEach((opt, j) => {
-      const btn = document.createElement("button");
-      btn.className = "option";
-      btn.textContent = `${letters[j]}) ${opt}`;
-      btn.onclick = () => {
-        answers[i] = j;
-        [...opts.children].forEach((x, k) => {
-          x.classList.remove("correct", "wrong");
-          x.disabled = true;
-          if (k === item.a) x.classList.add("correct");
-          if (k === j && j !== item.a) x.classList.add("wrong");
+    /* ============================================================
+       APPLICATION STATE (persisted via window.notebookAppApi)
+       ============================================================ */
+    let appState = {
+      answers: { u1: {}, u2: {}, u3: {}, comp: {} },
+      readUnits: { u1: false, u2: false, u3: false }
+    };
+
+    /* ============================================================
+       QUIZ ENGINE
+       ============================================================ */
+    const LETTERS = ['أ', 'ب', 'ج', 'د'];
+
+    function renderQuiz(quizKey) {
+      const container = document.getElementById(`quiz-container-${quizKey}`);
+      if (!container) return;
+      const questions = QUIZZES[quizKey];
+      const saved = appState.answers[quizKey] || {};
+
+      let html = '';
+      questions.forEach((item, idx) => {
+        const chosen = saved[idx];
+        const isAnswered = typeof chosen === 'number';
+        const isRight = isAnswered && chosen === item.ans;
+
+        let cardCls = 'question-card';
+        if (isAnswered) cardCls += isRight ? ' is-correct' : ' is-wrong';
+
+        html += `<article class="${cardCls}" id="qcard-${quizKey}-${idx}">`;
+        html += `<div class="question-meta">`;
+        html += `<span class="index-num">Q${String(idx + 1).padStart(2, '0')}</span>`;
+        if (isAnswered) {
+          html += isRight
+            ? `<span class="tag-chip tag-chip--green">إجابة صحيحة</span>`
+            : `<span class="tag-chip" style="background:var(--error-bg);color:var(--error);">إجابة خاطئة</span>`;
+        }
+        html += `</div>`;
+        html += `<div class="question-text">${item.q}</div>`;
+        html += `<div class="options-grid">`;
+
+        item.opts.forEach((optText, oIdx) => {
+          let btnCls = 'option-btn';
+          if (isAnswered) {
+            if (oIdx === item.ans) btnCls += ' opt-correct';
+            else if (oIdx === chosen) btnCls += ' opt-wrong';
+          }
+          html += `<button type="button" class="${btnCls}" ${isAnswered ? 'disabled' : ''} onclick="selectAnswer('${quizKey}', ${idx}, ${oIdx})">`;
+          html += `<span class="option-letter">${LETTERS[oIdx]}</span>`;
+          html += `<span>${optText}</span>`;
+          html += `</button>`;
         });
-        const fb = document.getElementById("fb" + i);
-        fb.hidden = false;
-        fb.className = "feedback " + (j === item.a ? "good" : "bad");
-        fb.textContent = (j === item.a ? "✓ إجابة صحيحة: " : "✗ إجابة غير صحيحة: ") + item.e;
-        updateScore();
+
+        html += `</div>`;
+        if (isAnswered) {
+          const expCls = isRight ? 'explanation-box exp-correct' : 'explanation-box exp-wrong';
+          html += `<div class="${expCls}"><strong>الشرح:</strong> ${item.exp}</div>`;
+        }
+        html += `</article>`;
+      });
+
+      container.innerHTML = html;
+      updateQuizScores();
+    }
+
+    function selectAnswer(quizKey, qIdx, optIdx) {
+      if (!appState.answers[quizKey]) appState.answers[quizKey] = {};
+      if (typeof appState.answers[quizKey][qIdx] === 'number') return;
+      appState.answers[quizKey][qIdx] = optIdx;
+      renderQuiz(quizKey);
+      saveAppState();
+    }
+
+    function resetQuiz(quizKey) {
+      appState.answers[quizKey] = {};
+      renderQuiz(quizKey);
+      saveAppState();
+    }
+
+    function computeScore(quizKey) {
+      const qs = QUIZZES[quizKey];
+      const ans = appState.answers[quizKey] || {};
+      let correct = 0;
+      let answered = 0;
+      qs.forEach((q, i) => {
+        if (typeof ans[i] === 'number') {
+          answered += 1;
+          if (ans[i] === q.ans) correct += 1;
+        }
+      });
+      return { correct, answered, total: qs.length };
+    }
+
+    function updateQuizScores() {
+      const s1 = computeScore('u1');
+      const s2 = computeScore('u2');
+      const s3 = computeScore('u3');
+      const sc = computeScore('comp');
+
+      const b1 = document.getElementById('score-badge-u1');
+      if (b1) b1.textContent = `النتيجة: ${s1.correct} / ${s1.total}`;
+      const b2 = document.getElementById('score-badge-u2');
+      if (b2) b2.textContent = `النتيجة: ${s2.correct} / ${s2.total}`;
+      const b3 = document.getElementById('score-badge-u3');
+      if (b3) b3.textContent = `النتيجة: ${s3.correct} / ${s3.total}`;
+      const bc = document.getElementById('score-badge-comp');
+      if (bc) bc.textContent = `تمت الإجابة: ${sc.answered} / ${sc.total}`;
+
+      const t1 = document.getElementById('toc-score-u1');
+      if (t1) t1.textContent = `${s1.correct} / ${s1.total}`;
+      const t2 = document.getElementById('toc-score-u2');
+      if (t2) t2.textContent = `${s2.correct} / ${s2.total}`;
+      const t3 = document.getElementById('toc-score-u3');
+      if (t3) t3.textContent = `${s3.correct} / ${s3.total}`;
+      const tc = document.getElementById('toc-score-comp');
+      if (tc) tc.textContent = `${sc.correct} / ${sc.total}`;
+
+      const totalAnswered = s1.answered + s2.answered + s3.answered + sc.answered;
+      const gp = document.getElementById('global-progress-badge');
+      if (gp) gp.textContent = `الإنجاز الكلي: ${totalAnswered} / 50`;
+
+      // Comprehensive exam unit breakdown
+      let u1c = 0, u1t = 0, u2c = 0, u2t = 0, u3c = 0, u3t = 0;
+      const compAns = appState.answers.comp || {};
+      QUIZZES.comp.forEach((q, idx) => {
+        if (q.unit === 1) { u1t++; if (compAns[idx] === q.ans) u1c++; }
+        if (q.unit === 2) { u2t++; if (compAns[idx] === q.ans) u2c++; }
+        if (q.unit === 3) { u3t++; if (compAns[idx] === q.ans) u3c++; }
+      });
+
+      const pct = Math.round((sc.correct / sc.total) * 100);
+      const cTot = document.getElementById('comp-total-val');
+      if (cTot) cTot.textContent = `${sc.correct} / ${sc.total}`;
+      const cPct = document.getElementById('comp-pct-val');
+      if (cPct) cPct.textContent = `${pct}%`;
+      const cu1 = document.getElementById('comp-u1-val');
+      if (cu1) cu1.textContent = `${u1c} / ${u1t}`;
+      const cu2 = document.getElementById('comp-u2-val');
+      if (cu2) cu2.textContent = `${u2c} / ${u2t}`;
+      const cu3 = document.getElementById('comp-u3-val');
+      if (cu3) cu3.textContent = `${u3c} / ${u3t}`;
+    }
+
+    function toggleUnitRead(unitKey) {
+      appState.readUnits[unitKey] = !appState.readUnits[unitKey];
+      updateReadButtons();
+      saveAppState();
+    }
+
+    function updateReadButtons() {
+      ['u1', 'u2', 'u3'].forEach((k) => {
+        const btn = document.getElementById(`mark-${k}-btn`);
+        if (!btn) return;
+        const done = Boolean(appState.readUnits[k]);
+        btn.classList.toggle('is-active', done);
+        const span = btn.querySelector('span');
+        if (span) span.textContent = done ? `مُنجَز ✓` : `تحديد كمُنجَز`;
+      });
+    }
+
+    function handleResetAll(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== 'true') {
+        btn.dataset.armed = 'true';
+        btn.classList.remove('btn-secondary');
+        btn.classList.add('btn-danger-arm');
+        btn.textContent = `اضغط مرة أخرى لتأكيد المسح`;
+        setTimeout(() => {
+          if (btn.dataset.armed === 'true') {
+            btn.dataset.armed = 'false';
+            btn.classList.remove('btn-danger-arm');
+            btn.classList.add('btn-secondary');
+            btn.textContent = `إعادة ضبط التقدم`;
+          }
+        }, 4000);
+        return;
+      }
+      btn.dataset.armed = 'false';
+      btn.classList.remove('btn-danger-arm');
+      btn.classList.add('btn-secondary');
+      btn.textContent = `إعادة ضبط التقدم`;
+
+      appState = {
+        answers: { u1: {}, u2: {}, u3: {}, comp: {} },
+        readUnits: { u1: false, u2: false, u3: false }
       };
-      opts.appendChild(btn);
-    });
-    area.appendChild(box);
-  });
-  updateScore();
-}
+      renderAllQuizzes();
+      updateReadButtons();
+      saveAppState();
+    }
 
-function updateScore() {
-  let correct = 0;
-  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
-  document.getElementById("score").textContent = `النتيجة: ${correct} / ${currentQuestions.length}`;
-  document.getElementById("progressBar").style.width = (Object.keys(answers).length / currentQuestions.length * 100) + "%";
-}
+    /* ============================================================
+       INTERACTIVE LAB 1: K-NN VISUALIZER
+       ============================================================ */
+    const KNN_POINTS = [
+      { id: 'P1', x: 2.0, y: 2.0, cls: 'A' },
+      { id: 'P2', x: 3.0, y: 4.0, cls: 'A' },
+      { id: 'P3', x: 5.0, y: 3.0, cls: 'A' },
+      { id: 'P4', x: 1.5, y: 6.0, cls: 'A' },
+      { id: 'P5', x: 3.5, y: 7.5, cls: 'A' },
+      { id: 'P6', x: 6.0, y: 7.0, cls: 'B' },
+      { id: 'P7', x: 7.0, y: 5.0, cls: 'B' },
+      { id: 'P8', x: 8.0, y: 7.5, cls: 'B' },
+      { id: 'P9', x: 7.5, y: 2.5, cls: 'B' }
+    ];
 
-document.getElementById("resetQuiz").onclick = () => {
-  answers = {};
-  document.getElementById("finalResult").textContent = "";
-  renderQuiz();
-  window.scrollTo({ top: 0, behavior: "smooth" });
-};
+    function updateKnnLab() {
+      const kEl = document.getElementById('knn-k');
+      const mEl = document.getElementById('knn-metric');
+      const qxEl = document.getElementById('knn-qx');
+      const qyEl = document.getElementById('knn-qy');
+      const svg = document.getElementById('knn-svg');
+      if (!kEl || !mEl || !qxEl || !qyEl || !svg) return;
 
-document.getElementById("finishQuiz").onclick = () => {
-  let correct = 0;
-  Object.keys(answers).forEach(i => { if (answers[i] === currentQuestions[Number(i)].a) correct++; });
-  const pct = Math.round(correct / currentQuestions.length * 100);
-  document.getElementById("finalResult").textContent = `نتيجتك النهائية: ${correct} من ${currentQuestions.length} (${pct}٪) — ${pct >= 90 ? "ممتاز! أنتِ مستعدة تماماً للاختبار في هذا الفصل." : pct >= 70 ? "جيد جداً، راجعي الأسئلة التي أخطأتِ فيها." : "راجعي الشرح والجداول والبطاقات ثم أعيدي المحاولة."}`;
-};
+      const K = parseInt(kEl.value, 10) || 3;
+      const metric = mEl.value;
+      const qx = parseFloat(qxEl.value);
+      const qy = parseFloat(qyEl.value);
 
-renderQuiz();
-</script>
+      const qxLbl = document.getElementById('knn-qx-lbl');
+      const qyLbl = document.getElementById('knn-qy-lbl');
+      if (qxLbl) qxLbl.textContent = qx.toFixed(1);
+      if (qyLbl) qyLbl.textContent = qy.toFixed(1);
+
+      const withDist = KNN_POINTS.map((p) => {
+        const d = metric === 'euclidean'
+          ? Math.hypot(p.x - qx, p.y - qy)
+          : Math.abs(p.x - qx) + Math.abs(p.y - qy);
+        return { ...p, d };
+      }).sort((a, b) => a.d - b.d);
+
+      const neighbors = withDist.slice(0, K);
+      const votesA = neighbors.filter((n) => n.cls === 'A').length;
+      const votesB = neighbors.filter((n) => n.cls === 'B').length;
+      const winner = votesA >= votesB ? 'الفئة A (أزرق)' : 'الفئة B (ذهبي)';
+
+      const posOut = document.getElementById('knn-pos-out');
+      const vaOut = document.getElementById('knn-vote-a');
+      const vbOut = document.getElementById('knn-vote-b');
+      const resOut = document.getElementById('knn-result');
+      const listOut = document.getElementById('knn-neighbors-list');
+      if (posOut) posOut.textContent = `(${qx.toFixed(1)}, ${qy.toFixed(1)})`;
+      if (vaOut) vaOut.textContent = String(votesA);
+      if (vbOut) vbOut.textContent = String(votesB);
+      if (resOut) resOut.textContent = winner;
+      if (listOut) {
+        listOut.innerHTML = neighbors.map((n) => `${n.id}(${n.cls}): d=${n.d.toFixed(2)}`).join(' · ');
+      }
+
+      // Render SVG coordinate system [0..10] -> x: [45..430], y: [285..25]
+      const mapX = (v) => 45 + (v / 10) * 385;
+      const mapY = (v) => 285 - (v / 10) * 260;
+
+      let s = '';
+      // Grid lines
+      for (let g = 0; g <= 10; g += 2) {
+        const gx = mapX(g);
+        const gy = mapY(g);
+        s += `<line x1="${gx}" y1="25" x2="${gx}" y2="285" stroke="var(--outline-variant)" stroke-width="1" />`;
+        s += `<line x1="45" y1="${gy}" x2="430" y2="${gy}" stroke="var(--outline-variant)" stroke-width="1" />`;
+        s += `<text x="${gx}" y="302" font-size="11" fill="var(--on-surface-variant)" text-anchor="middle">${g}</text>`;
+        s += `<text x="32" y="${gy + 4}" font-size="11" fill="var(--on-surface-variant)" text-anchor="end">${g}</text>`;
+      }
+      // Axes
+      s += `<line x1="45" y1="285" x2="430" y2="285" stroke="var(--outline)" stroke-width="1.5" />`;
+      s += `<line x1="45" y1="25" x2="45" y2="285" stroke="var(--outline)" stroke-width="1.5" />`;
+
+      // Radius indicator for Euclidean K-th neighbor
+      const qpx = mapX(qx);
+      const qpy = mapY(qy);
+      const kth = neighbors[neighbors.length - 1];
+      if (metric === 'euclidean' && kth) {
+        const rx = (kth.d / 10) * 385;
+        const ry = (kth.d / 10) * 260;
+        s += `<ellipse cx="${qpx}" cy="${qpy}" rx="${rx}" ry="${ry}" fill="var(--secondary-soft)" fill-opacity="0.35" stroke="var(--secondary)" stroke-dasharray="5 4" stroke-width="1.5" />`;
+      }
+
+      // Lines to K neighbors
+      neighbors.forEach((n) => {
+        const npx = mapX(n.x);
+        const npy = mapY(n.y);
+        s += `<line x1="${qpx}" y1="${qpy}" x2="${npx}" y2="${npy}" stroke="var(--on-surface-variant)" stroke-width="1.5" stroke-dasharray="3 3" />`;
+      });
+
+      // Training points
+      const neighborIds = new Set(neighbors.map((n) => n.id));
+      KNN_POINTS.forEach((p) => {
+        const px = mapX(p.x);
+        const py = mapY(p.y);
+        const fill = p.cls === 'A' ? 'var(--data-1)' : 'var(--data-2)';
+        const isNbr = neighborIds.has(p.id);
+        if (isNbr) {
+          s += `<circle cx="${px}" cy="${py}" r="11" fill="none" stroke="var(--on-surface)" stroke-width="1.5" />`;
+        }
+        s += `<circle cx="${px}" cy="${py}" r="6.5" fill="${fill}" stroke="var(--surface-container-low)" stroke-width="1.5" />`;
+        s += `<text x="${px}" y="${py - 12}" font-size="10.5" font-weight="700" fill="var(--on-surface)" text-anchor="middle">${p.id}(${p.cls})</text>`;
+      });
+
+      // Query point Q
+      const qFill = votesA >= votesB ? 'var(--data-1)' : 'var(--data-2)';
+      s += `<polygon points="${qpx},${qpy - 9} ${qpx + 9},${qpy} ${qpx},${qpy + 9} ${qpx - 9},${qpy}" fill="${qFill}" stroke="var(--on-surface)" stroke-width="2" />`;
+      s += `<text x="${qpx}" y="${qpy + 21}" font-size="11.5" font-weight="800" fill="var(--on-surface)" text-anchor="middle">Q</text>`;
+
+      svg.innerHTML = s;
+    }
+
+    function handleKnnSvgClick(evt) {
+      const svg = document.getElementById('knn-svg');
+      const qxEl = document.getElementById('knn-qx');
+      const qyEl = document.getElementById('knn-qy');
+      if (!svg || !qxEl || !qyEl) return;
+      const rect = svg.getBoundingClientRect();
+      const svgX = ((evt.clientX - rect.left) / rect.width) * 460;
+      const svgY = ((evt.clientY - rect.top) / rect.height) * 320;
+      const valX = Math.min(9.5, Math.max(0.5, Math.round(((svgX - 45) / 385) * 10 * 2) / 2));
+      const valY = Math.min(9.5, Math.max(0.5, Math.round(((285 - svgY) / 260) * 10 * 2) / 2));
+      qxEl.value = valX;
+      qyEl.value = valY;
+      updateKnnLab();
+    }
+
+    /* ============================================================
+       INTERACTIVE LAB 2: NAIVE BAYES CALCULATOR
+       ============================================================ */
+    function updateNbLab() {
+      const pSpam = parseFloat(document.getElementById('nb-pspam')?.value || 0.4);
+      const pfS = parseFloat(document.getElementById('nb-pf-s')?.value || 0);
+      const pwS = parseFloat(document.getElementById('nb-pw-s')?.value || 0);
+      const pfN = parseFloat(document.getElementById('nb-pf-n')?.value || 0);
+      const pwN = parseFloat(document.getElementById('nb-pw-n')?.value || 0);
+
+      const clampedSpam = Math.min(0.99, Math.max(0.01, isNaN(pSpam) ? 0.4 : pSpam));
+      const pNon = 1 - clampedSpam;
+
+      const scoreSpam = clampedSpam * pfS * pwS;
+      const scoreNon = pNon * pfN * pwN;
+      const denom = scoreSpam + scoreNon;
+      const probSpam = denom > 0 ? (scoreSpam / denom) * 100 : 50;
+
+      const sOut = document.getElementById('nb-score-spam');
+      const nOut = document.getElementById('nb-score-non');
+      const dOut = document.getElementById('nb-decision');
+      if (sOut) sOut.textContent = scoreSpam.toFixed(4);
+      if (nOut) nOut.textContent = scoreNon.toFixed(4);
+      if (dOut) {
+        const label = scoreSpam >= scoreNon ? 'Spam (بريد مزعج)' : 'Non-Spam (عادي)';
+        dOut.textContent = `${probSpam.toFixed(1)}% → ${label}`;
+      }
+    }
+
+    function resetNbPreset() {
+      const ids = {
+        'nb-pspam': '0.4',
+        'nb-pf-s': '0.8',
+        'nb-pw-s': '0.6',
+        'nb-pf-n': '0.1',
+        'nb-pw-n': '0.2'
+      };
+      Object.entries(ids).forEach(([id, v]) => {
+        const el = document.getElementById(id);
+        if (el) el.value = v;
+      });
+      updateNbLab();
+    }
+
+    /* ============================================================
+       INTERACTIVE LAB 3: LOGISTIC REGRESSION (SIGMOID)
+       ============================================================ */
+    const STUDY_DATA = [
+      { x: 2, y: 0 },
+      { x: 3, y: 0 },
+      { x: 5, y: 1 },
+      { x: 7, y: 1 },
+      { x: 8, y: 1 }
+    ];
+
+    function updateLogRegLab() {
+      const b0El = document.getElementById('lr-b0');
+      const b1El = document.getElementById('lr-b1');
+      const xEl = document.getElementById('lr-x');
+      const svg = document.getElementById('lr-svg');
+      if (!b0El || !b1El || !xEl || !svg) return;
+
+      const b0 = parseFloat(b0El.value);
+      const b1 = parseFloat(b1El.value);
+      const x = parseFloat(xEl.value);
+
+      const b0Lbl = document.getElementById('lr-b0-lbl');
+      const b1Lbl = document.getElementById('lr-b1-lbl');
+      const xLbl = document.getElementById('lr-x-lbl');
+      if (b0Lbl) b0Lbl.textContent = b0.toFixed(1);
+      if (b1Lbl) b1Lbl.textContent = b1.toFixed(1);
+      if (xLbl) xLbl.textContent = x.toFixed(1);
+
+      const z = b0 + b1 * x;
+      const sig = 1 / (1 + Math.exp(-z));
+      const boundaryX = -b0 / b1;
+
+      const zOut = document.getElementById('lr-z-out');
+      const sOut = document.getElementById('lr-sig-out');
+      const bdOut = document.getElementById('lr-boundary-out');
+      const decOut = document.getElementById('lr-decision');
+      if (zOut) zOut.textContent = z.toFixed(2);
+      if (sOut) sOut.textContent = sig.toFixed(3);
+      if (bdOut) bdOut.textContent = `X = ${boundaryX.toFixed(2)}`;
+      if (decOut) decOut.textContent = sig >= 0.5 ? `ناجح (Y = 1)` : `غير ناجح (Y = 0)`;
+
+      const mapX = (vx) => 45 + (vx / 10) * 390;
+      const mapY = (vy) => 240 - vy * 200;
+
+      let s = '';
+      // Grid
+      [0, 0.25, 0.5, 0.75, 1].forEach((gyVal) => {
+        const gy = mapY(gyVal);
+        const isHalf = gyVal === 0.5;
+        s += `<line x1="45" y1="${gy}" x2="435" y2="${gy}" stroke="${isHalf ? 'var(--data-4)' : 'var(--outline-variant)'}" stroke-width="${isHalf ? '1.5' : '1'}" ${isHalf ? 'stroke-dasharray="5 4"' : ''} />`;
+        s += `<text x="36" y="${gy + 4}" font-size="11" fill="var(--on-surface-variant)" text-anchor="end">${gyVal.toFixed(2)}</text>`;
+      });
+      for (let gxVal = 0; gxVal <= 10; gxVal += 2) {
+        const gx = mapX(gxVal);
+        s += `<line x1="${gx}" y1="40" x2="${gx}" y2="240" stroke="var(--outline-variant)" stroke-width="1" />`;
+        s += `<text x="${gx}" y="258" font-size="11" fill="var(--on-surface-variant)" text-anchor="middle">${gxVal}</text>`;
+      }
+      // Axes
+      s += `<line x1="45" y1="240" x2="435" y2="240" stroke="var(--outline)" stroke-width="1.5" />`;
+      s += `<line x1="45" y1="40" x2="45" y2="240" stroke="var(--outline)" stroke-width="1.5" />`;
+
+      // Decision boundary vertical marker
+      if (boundaryX >= 0 && boundaryX <= 10) {
+        const bx = mapX(boundaryX);
+        s += `<line x1="${bx}" y1="40" x2="${bx}" y2="240" stroke="var(--data-4)" stroke-width="1.25" stroke-dasharray="3 3" />`;
+        s += `<text x="${bx}" y="30" font-size="11" font-weight="700" fill="var(--data-4)" text-anchor="middle">حد القرار X=${boundaryX.toFixed(2)}</text>`;
+      }
+
+      // Sigmoid curve path
+      let pts = [];
+      for (let xv = 0; xv <= 10; xv += 0.2) {
+        const yv = 1 / (1 + Math.exp(-(b0 + b1 * xv)));
+        pts.push(`${mapX(xv).toFixed(1)},${mapY(yv).toFixed(1)}`);
+      }
+      s += `<polyline fill="none" stroke="var(--data-1)" stroke-width="3" points="${pts.join(' ')}" />`;
+
+      // Training sample points
+      STUDY_DATA.forEach((pt) => {
+        const px = mapX(pt.x);
+        const py = mapY(pt.y);
+        s += `<circle cx="${px}" cy="${py}" r="5.5" fill="${pt.y === 1 ? 'var(--data-3)' : 'var(--data-4)'}" stroke="var(--surface-container-low)" stroke-width="1.5" />`;
+      });
+
+      // Selected student point
+      const cx = mapX(x);
+      const cy = mapY(sig);
+      s += `<circle cx="${cx}" cy="${cy}" r="8" fill="var(--primary-container)" stroke="var(--on-surface)" stroke-width="2" />`;
+      s += `<text x="${cx}" y="${cy - 13}" font-size="11" font-weight="800" fill="var(--on-surface)" text-anchor="middle">σ=${sig.toFixed(2)}</text>`;
+
+      svg.innerHTML = s;
+    }
+
+    function resetLogRegPreset() {
+      const b0 = document.getElementById('lr-b0');
+      const b1 = document.getElementById('lr-b1');
+      const x = document.getElementById('lr-x');
+      if (b0) b0.value = '-4';
+      if (b1) b1.value = '0.9';
+      if (x) x.value = '6';
+      updateLogRegLab();
+    }
+
+    /* ============================================================
+       INTERACTIVE LAB 4: SVM HYPERPLANE & MARGIN
+       ============================================================ */
+    const SVM_POINTS = [
+      { x1: 2, x2: 3, y: 1, sv: false },
+      { x1: 3, x2: 3, y: 1, sv: false },
+      { x1: 4, x2: 4, y: 1, sv: false },
+      { x1: 1, x2: 1, y: -1, sv: true },
+      { x1: 2, x2: 1, y: -1, sv: true },
+      { x1: 3, x2: 2, y: -1, sv: false }
+    ];
+
+    function updateSvmLab() {
+      const x1El = document.getElementById('svm-x1');
+      const x2El = document.getElementById('svm-x2');
+      const svg = document.getElementById('svm-svg');
+      if (!x1El || !x2El || !svg) return;
+
+      const x1 = parseFloat(x1El.value);
+      const x2 = parseFloat(x2El.value);
+      const l1 = document.getElementById('svm-x1-lbl');
+      const l2 = document.getElementById('svm-x2-lbl');
+      if (l1) l1.textContent = x1.toFixed(2);
+      if (l2) l2.textContent = x2.toFixed(2);
+
+      // w = [1, 1], b = -3
+      const val = x1 + x2 - 3;
+      const dist = Math.abs(val) / Math.SQRT2;
+      const clsLabel = val > 0 ? `الفئة +1` : (val < 0 ? `الفئة -1` : `على الحد الفاصل تماماً`);
+
+      const ptOut = document.getElementById('svm-pt-out');
+      const valOut = document.getElementById('svm-val-out');
+      const distOut = document.getElementById('svm-dist-out');
+      const clsOut = document.getElementById('svm-class-out');
+      if (ptOut) ptOut.textContent = `(${x1.toFixed(2)}, ${x2.toFixed(2)})`;
+      if (valOut) valOut.textContent = `${val >= 0 ? '+' : ''}${val.toFixed(2)}`;
+      if (distOut) distOut.textContent = dist.toFixed(2);
+      if (clsOut) clsOut.textContent = clsLabel;
+
+      const mapX = (v) => 55 + (v / 5) * 370;
+      const mapY = (v) => 265 - (v / 5) * 235;
+
+      let s = '';
+      for (let g = 0; g <= 5; g += 1) {
+        const gx = mapX(g);
+        const gy = mapY(g);
+        s += `<line x1="${gx}" y1="30" x2="${gx}" y2="265" stroke="var(--outline-variant)" stroke-width="1" />`;
+        s += `<line x1="55" y1="${gy}" x2="425" y2="${gy}" stroke="var(--outline-variant)" stroke-width="1" />`;
+        s += `<text x="${gx}" y="283" font-size="11" fill="var(--on-surface-variant)" text-anchor="middle">${g}</text>`;
+        s += `<text x="42" y="${gy + 4}" font-size="11" fill="var(--on-surface-variant)" text-anchor="end">${g}</text>`;
+      }
+      s += `<line x1="55" y1="265" x2="425" y2="265" stroke="var(--outline)" stroke-width="1.5" />`;
+      s += `<line x1="55" y1="30" x2="55" y2="265" stroke="var(--outline)" stroke-width="1.5" />`;
+
+      // Hyperplane: x1 + x2 - 3 = 0 => (0, 3) to (3, 0)
+      s += `<line x1="${mapX(0)}" y1="${mapY(3)}" x2="${mapX(3)}" y2="${mapY(0)}" stroke="var(--on-surface)" stroke-width="2.5" />`;
+      s += `<text x="${mapX(0.4)}" y="${mapY(2.8)}" font-size="11" font-weight="700" fill="var(--on-surface)">w·x + b = 0</text>`;
+
+      // Margin lines: x1 + x2 = 4 (pass through (0,4)-(4,0)) & x1 + x2 = 2 (pass through (0,2)-(2,0))
+      s += `<line x1="${mapX(0)}" y1="${mapY(4)}" x2="${mapX(4)}" y2="${mapY(0)}" stroke="var(--data-1)" stroke-width="1.5" stroke-dasharray="5 4" />`;
+      s += `<line x1="${mapX(0)}" y1="${mapY(2)}" x2="${mapX(2)}" y2="${mapY(0)}" stroke="var(--data-2)" stroke-width="1.5" stroke-dasharray="5 4" />`;
+
+      // Training points
+      SVM_POINTS.forEach((p) => {
+        const px = mapX(p.x1);
+        const py = mapY(p.x2);
+        const fill = p.y === 1 ? 'var(--data-1)' : 'var(--data-2)';
+        const isSV = Math.abs(p.x1 + p.x2 - 3) <= 2 && ((p.x1 === 2 && p.x2 === 3) || (p.x1 === 3 && p.x2 === 2) || (p.x1 === 2 && p.x2 === 1));
+        if (isSV) {
+          s += `<circle cx="${px}" cy="${py}" r="10.5" fill="none" stroke="var(--on-surface)" stroke-width="1.5" />`;
+        }
+        s += `<circle cx="${px}" cy="${py}" r="6.5" fill="${fill}" stroke="var(--surface-container-low)" stroke-width="1.5" />`;
+      });
+
+      // Test point
+      const tx = mapX(x1);
+      const ty = mapY(x2);
+      const tFill = val >= 0 ? 'var(--data-1)' : 'var(--data-2)';
+      s += `<polygon points="${tx},${ty - 9} ${tx + 9},${ty} ${tx},${ty + 9} ${tx - 9},${ty}" fill="${tFill}" stroke="var(--primary-container)" stroke-width="2.5" />`;
+      s += `<text x="${tx}" y="${ty - 13}" font-size="11" font-weight="800" fill="var(--on-surface)" text-anchor="middle">(${x1},${x2})</text>`;
+
+      svg.innerHTML = s;
+    }
+
+    function resetSvmPreset() {
+      const e1 = document.getElementById('svm-x1');
+      const e2 = document.getElementById('svm-x2');
+      if (e1) e1.value = '3';
+      if (e2) e2.value = '4';
+      updateSvmLab();
+    }
+
+    /* ============================================================
+       INTERACTIVE LAB 5: GINI & ENTROPY + RANDOM FOREST VOTING
+       ============================================================ */
+    function updateGiniLab() {
+      const c1El = document.getElementById('gini-c1');
+      const c2El = document.getElementById('gini-c2');
+      if (!c1El || !c2El) return;
+
+      const c1 = parseInt(c1El.value, 10);
+      const c2 = parseInt(c2El.value, 10);
+      const l1 = document.getElementById('gini-c1-lbl');
+      const l2 = document.getElementById('gini-c2-lbl');
+      if (l1) l1.textContent = String(c1);
+      if (l2) l2.textContent = String(c2);
+
+      const tot = c1 + c2;
+      let gini = 0;
+      let entropy = 0;
+      let p1 = 0;
+      let p2 = 0;
+
+      if (tot > 0) {
+        p1 = c1 / tot;
+        p2 = c2 / tot;
+        gini = 1 - (p1 * p1 + p2 * p2);
+        const h1 = p1 > 0 ? -p1 * Math.log2(p1) : 0;
+        const h2 = p2 > 0 ? -p2 * Math.log2(p2) : 0;
+        entropy = h1 + h2;
+      }
+
+      const bar = document.getElementById('gini-bar-fill');
+      const pctA = document.getElementById('gini-pct-a');
+      const pctB = document.getElementById('gini-pct-b');
+      const gOut = document.getElementById('gini-val-out');
+      const eOut = document.getElementById('entropy-val-out');
+      const sOut = document.getElementById('gini-status-out');
+
+      if (bar) bar.style.width = `${tot > 0 ? (p1 * 100).toFixed(1) : 50}%`;
+      if (pctA) pctA.textContent = `الفئة A: ${tot > 0 ? Math.round(p1 * 100) : 0}%`;
+      if (pctB) pctB.textContent = `الفئة B: ${tot > 0 ? Math.round(p2 * 100) : 0}%`;
+      if (gOut) gOut.textContent = gini.toFixed(3);
+      if (eOut) eOut.textContent = `${entropy.toFixed(3)} bits`;
+      if (sOut) {
+        if (tot === 0) sOut.textContent = `العقدة فارغة`;
+        else if (gini === 0) sOut.textContent = `عقدة نقية تماماً (ورقة قرار)`;
+        else if (gini >= 0.45) sOut.textContent = `اختلاط مرتفع (يستفيد من التقسيم)`;
+        else sOut.textContent = `اختلاط متوسط`;
+      }
+    }
+
+    function resetGiniPreset() {
+      const c1 = document.getElementById('gini-c1');
+      const c2 = document.getElementById('gini-c2');
+      if (c1) c1.value = '6';
+      if (c2) c2.value = '4';
+      updateGiniLab();
+    }
+
+    function runRfSimulation() {
+      const countEl = document.getElementById('rf-trees-count');
+      const noiseEl = document.getElementById('rf-noise');
+      const grid = document.getElementById('rf-trees-grid');
+      if (!countEl || !noiseEl || !grid) return;
+
+      const nTrees = parseInt(countEl.value, 10) || 5;
+      const errProb = (parseInt(noiseEl.value, 10) || 25) / 100;
+      const nLbl = document.getElementById('rf-noise-lbl');
+      if (nLbl) nLbl.textContent = `${Math.round(errProb * 100)}%`;
+
+      const trueClass = Math.random() >= 0.5 ? 'A' : 'B';
+      let votesA = 0;
+      let votesB = 0;
+      let cardsHtml = '';
+
+      for (let i = 1; i <= nTrees; i++) {
+        const isCorrect = Math.random() >= errProb;
+        const vote = isCorrect ? trueClass : (trueClass === 'A' ? 'B' : 'A');
+        if (vote === 'A') votesA++;
+        else votesB++;
+
+        cardsHtml += `<div class="tree-vote-card ${vote === 'A' ? 'vote-a' : 'vote-b'}">`;
+        cardsHtml += `<div class="muted-note" style="font-size:0.78rem;">شجرة #${i}</div>`;
+        cardsHtml += `<div style="font-weight:800; font-size:1.125rem; color:${vote === 'A' ? 'var(--data-1)' : 'var(--data-2)'};">الفئة ${vote}</div>`;
+        cardsHtml += `<div style="font-size:0.75rem; color:${isCorrect ? 'var(--positive)' : 'var(--error)'};">${isCorrect ? 'صائبة' : 'مخطئة'}</div>`;
+        cardsHtml += `</div>`;
+      }
+
+      grid.innerHTML = cardsHtml;
+
+      const winner = votesA >= votesB ? 'A' : 'B';
+      const trueEl = document.getElementById('rf-true-class');
+      const tallyEl = document.getElementById('rf-vote-tally');
+      const decEl = document.getElementById('rf-final-decision');
+      if (trueEl) trueEl.textContent = `الفئة ${trueClass}`;
+      if (tallyEl) tallyEl.textContent = `${votesA} صوت لـ A مقابل ${votesB} صوت لـ B`;
+      if (decEl) {
+        decEl.textContent = winner === trueClass
+          ? `الفئة ${winner} (تصحيح ناجح بتصويت الأغلبية)`
+          : `الفئة ${winner} (تأثر بالضجيج المرتفع)`;
+      }
+    }
+
+    /* ============================================================
+       STATE PERSISTENCE & BOOTSTRAP
+       ============================================================ */
+    function renderAllQuizzes() {
+      renderQuiz('u1');
+      renderQuiz('u2');
+      renderQuiz('u3');
+      renderQuiz('comp');
+    }
+
+    async function saveAppState() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === 'function') {
+        try {
+          await window.notebookAppApi.setAppState(appState);
+        } catch (err) {
+          // Safe fallback if host rejects transient write
+        }
+      }
+    }
+
+    async function initApp() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === 'function') {
+        try {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === 'object') {
+            if (saved.answers) {
+              appState.answers = {
+                u1: saved.answers.u1 || {},
+                u2: saved.answers.u2 || {},
+                u3: saved.answers.u3 || {},
+                comp: saved.answers.comp || {}
+              };
+            }
+            if (saved.readUnits) {
+              appState.readUnits = {
+                u1: Boolean(saved.readUnits.u1),
+                u2: Boolean(saved.readUnits.u2),
+                u3: Boolean(saved.readUnits.u3)
+              };
+            }
+          }
+        } catch (err) {
+          // Start clean on error
+        }
+      }
+
+      renderAllQuizzes();
+      updateReadButtons();
+      updateKnnLab();
+      updateNbLab();
+      updateLogRegLab();
+      updateSvmLab();
+      updateGiniLab();
+      runRfSimulation();
+
+      if (typeof renderMathInElement === 'function') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false }
+          ],
+          throwOnError: false
+        });
+      }
+
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+      }
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === 'function') {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', initApp);
+  </script>
 </body>
 </html>
