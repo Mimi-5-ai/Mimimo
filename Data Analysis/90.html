@@ -1,0 +1,2945 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="tool">
+  <meta name="design-style" content="carbon">
+  <title>الاختبار الشامل في تمثيل البيانات — Matplotlib و Pandas و Seaborn و Bokeh</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* 1. Carbon tokens */
+      --background: #ffffff;
+      --surface-container-low: #f4f4f4;
+      --surface-container: #f4f4f4;
+      --surface-container-high: #e0e0e0;
+
+      /* Ink */
+      --on-surface: #161616;
+      --on-surface-variant: #525252;
+
+      /* Rules */
+      --outline: #8d8d8d;
+      --outline-variant: #e0e0e0;
+
+      /* Accents */
+      --primary: #0f62fe;
+      --on-primary: #ffffff;
+      --primary-container: #d0e2ff;
+      --on-primary-container: #161616;
+      --secondary: #6f6f6f;
+      --tertiary: #198038;
+      --error: #da1e28;
+      --on-error: #ffffff;
+
+      /* Data series */
+      --data-1: #0f62fe;
+      --data-2: #6929c4;
+      --data-3: #005d5d;
+      --data-4: #9f1853;
+      --data-context: #8d8d8d;
+
+      /* Fonts (Arabic first for RTL + IBM Plex Sans + IBM Plex Mono) */
+      --font-headline: 'IBM Plex Sans Arabic', 'IBM Plex Sans', sans-serif;
+      --font-body: 'IBM Plex Sans Arabic', 'IBM Plex Sans', sans-serif;
+      --font-label: 'IBM Plex Mono', 'IBM Plex Sans Arabic', monospace;
+
+      /* Shape */
+      --rounded: 0.125rem;
+      --rounded-lg: 0.25rem;
+      --rounded-full: 0.75rem;
+
+      /* Style effects */
+      --shadow-1: 0 2px 6px rgb(0 0 0 / 0.1);
+      --shadow-2: 0 4px 12px rgb(0 0 0 / 0.12);
+      --rule: 1px solid var(--outline-variant);
+      --field-rule: 1px solid var(--outline);
+      --indicator: 2px solid var(--primary);
+      --indicator-success: 3px solid var(--tertiary);
+      --indicator-error: 3px solid var(--error);
+      --indicator-warning: 3px solid var(--warning);
+
+      /* 3. Shared semantic & scale tokens */
+      --positive: #198038;
+      --positive-container: #defbe6;
+      --on-positive-container: #0e6027;
+      --error-container: #fff1f1;
+      --on-error-container: #a2191f;
+      --warning: #735500;
+      --warning-container: #fcf4d6;
+      --focus: var(--primary);
+
+      /* Type scale (Focused Tool) */
+      --display-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+      --headline-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+      --subhead-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+      --body-size: clamp(0.9375rem, 0.9rem + 0.15vw, 1rem);
+      --label-size: 0.75rem;
+
+      /* Spacing scale */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.6;
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
+      font-size: inherit;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .page-grid {
+      display: grid;
+      gap: var(--space-lg);
+      padding: var(--space-lg);
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Top Masthead */
+    .exam-header {
+      position: static !important;
+      border-bottom: var(--rule);
+      padding-bottom: var(--space-lg);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: var(--space-lg);
+      align-items: end;
+    }
+
+    .kicker {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      margin: 0 0 var(--space-xs) 0;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    .page-title {
+      font-family: var(--font-headline);
+      font-size: var(--display-size);
+      font-weight: 300;
+      line-height: 1.2;
+      margin: 0 0 var(--space-sm) 0;
+      letter-spacing: 0;
+    }
+    .page-title strong { font-weight: 600; }
+
+    .page-subtitle {
+      margin: 0;
+      color: var(--on-surface-variant);
+      max-width: 65ch;
+      font-size: var(--body-size);
+    }
+
+    /* Mode Switcher */
+    .mode-switch-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .field-label {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      font-weight: 500;
+      display: block;
+      margin-bottom: var(--space-xs);
+      letter-spacing: 0;
+      text-transform: none;
+    }
+    .segmented-control {
+      display: flex;
+      background: var(--surface-container);
+      border: var(--rule);
+    }
+    .seg-btn {
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      border: 0;
+      background: transparent;
+      color: var(--on-surface-variant);
+      cursor: pointer;
+      font-weight: 500;
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+      white-space: nowrap;
+    }
+    .seg-btn:hover {
+      background: var(--surface-container-high);
+      color: var(--on-surface);
+    }
+    .seg-btn.is-active {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+
+    /* KPI Strip */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+
+    .kpi-tile {
+      background: var(--surface-container);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-xs);
+    }
+    .kpi-tile.is-primary {
+      border-bottom: var(--indicator);
+    }
+
+    .kpi-label {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      font-weight: 500;
+    }
+    .kpi-value {
+      font-family: var(--font-label);
+      font-size: 1.75rem;
+      font-weight: 400;
+      line-height: 1.15;
+      color: var(--on-surface);
+    }
+    .kpi-meta {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 4px;
+      background: var(--surface-container-high);
+      margin-top: var(--space-xs);
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--primary);
+      transition: width var(--dur-short) var(--ease-out);
+    }
+
+    .stat-pos { color: var(--positive); font-weight: 600; }
+    .stat-err { color: var(--error); font-weight: 600; }
+
+    /* Status Notice Banner */
+    .notice-banner {
+      display: none;
+      background: var(--surface-container);
+      border-inline-start: var(--indicator);
+      padding: var(--space-sm) var(--space-md);
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      flex-wrap: wrap;
+    }
+    .notice-banner.is-visible { display: flex; }
+    .notice-banner.is-success { border-inline-start: var(--indicator-success); }
+    .notice-banner.is-warning { border-inline-start: var(--indicator-warning); }
+    .notice-banner.is-error { border-inline-start: var(--indicator-error); }
+    .notice-text { font-size: var(--body-size); margin: 0; }
+
+    /* Main Asymmetric Workspace */
+    .workspace {
+      display: grid;
+      grid-template-columns: 330px minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+
+    /* Sidebar Navigation */
+    .sidebar {
+      background: var(--surface-container);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .sidebar-section-title {
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--on-surface-variant);
+      margin: 0 0 var(--space-sm) 0;
+      padding-bottom: var(--space-xs);
+      border-bottom: var(--rule);
+    }
+
+    .chapter-tree {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+
+    .nav-btn {
+      width: 100%;
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--background);
+      border: 0;
+      border-inline-start: 2px solid transparent;
+      color: var(--on-surface);
+      text-align: right;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .nav-btn:hover {
+      background: var(--surface-container-high);
+    }
+    .nav-btn.is-active {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      border-inline-start: var(--indicator);
+      font-weight: 600;
+    }
+
+    .chapter-group-header {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--on-surface);
+      padding: var(--space-sm) var(--space-xs) var(--space-xs);
+      margin-top: var(--space-xs);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      background: transparent;
+      border: 0;
+      border-bottom: var(--rule);
+      width: 100%;
+      text-align: right;
+      min-height: 44px;
+    }
+    .chapter-group-header:hover {
+      background: var(--surface-container-high);
+    }
+    .chapter-group-header.is-active {
+      border-bottom: var(--indicator);
+      color: var(--primary);
+    }
+
+    .unit-btn {
+      width: 100%;
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      background: transparent;
+      border: 0;
+      border-inline-start: 2px solid var(--outline-variant);
+      color: var(--on-surface-variant);
+      text-align: right;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      font-size: 0.875rem;
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .unit-btn:hover {
+      background: var(--surface-container-high);
+      color: var(--on-surface);
+    }
+    .unit-btn.is-active {
+      background: var(--background);
+      color: var(--on-surface);
+      border-inline-start: var(--indicator);
+      font-weight: 600;
+    }
+
+    .mono-badge {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* Filter Select */
+    .carbon-select {
+      width: 100%;
+      height: 44px;
+      background: var(--background);
+      border: 0;
+      border-bottom: var(--field-rule);
+      padding: 0 var(--space-md) 0 var(--space-xl);
+      color: var(--on-surface);
+      cursor: pointer;
+    }
+
+    /* Question Map Grid */
+    .q-map-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: var(--space-xs);
+    }
+    .q-map-cell {
+      min-height: 44px;
+      border: 1px solid var(--outline-variant);
+      background: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .q-map-cell:hover {
+      background: var(--surface-container-high);
+    }
+    .q-map-cell.is-current {
+      outline: 2px solid var(--primary);
+      outline-offset: -2px;
+      font-weight: 600;
+    }
+    .q-map-cell.is-correct {
+      background: var(--positive-container);
+      color: var(--on-positive-container);
+      border-color: var(--positive);
+    }
+    .q-map-cell.is-wrong {
+      background: var(--error-container);
+      color: var(--on-error-container);
+      border-color: var(--error);
+    }
+    .q-map-cell.is-answered-pending {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      border-color: var(--primary);
+    }
+    .q-map-cell.is-flagged::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 6px;
+      height: 6px;
+      background: var(--warning);
+    }
+
+    .sidebar-actions {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      padding-top: var(--space-sm);
+      border-top: var(--rule);
+    }
+
+    /* Carbon Buttons */
+    .btn {
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-lg);
+      border: 0;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      font-weight: 500;
+      text-align: right;
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+    .btn-primary:hover:not(:disabled) {
+      background: color-mix(in srgb, var(--primary), var(--on-surface) 22%);
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+    .btn-secondary:hover:not(:disabled) {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    .btn-ghost {
+      background: var(--background);
+      color: var(--on-surface);
+      border: 1px solid var(--outline-variant);
+    }
+    .btn-ghost:hover:not(:disabled) {
+      background: var(--surface-container-high);
+    }
+    .btn-danger {
+      background: transparent;
+      color: var(--error);
+      border: 1px solid var(--error);
+    }
+    .btn-danger:hover:not(:disabled) {
+      background: var(--error-container);
+      color: var(--on-error-container);
+    }
+    .btn-danger.is-armed {
+      background: var(--error);
+      color: var(--on-error);
+    }
+
+    /* Main Panel & Tabs */
+    .main-panel {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .view-tabs {
+      display: flex;
+      border-bottom: var(--rule);
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .tabs-list {
+      display: flex;
+      gap: var(--space-xs);
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      background: transparent;
+      border: 0;
+      border-bottom: 2px solid transparent;
+      color: var(--on-surface-variant);
+      cursor: pointer;
+      font-weight: 400;
+      transition: color var(--dur-micro) var(--ease-out);
+    }
+    .tab-btn:hover {
+      color: var(--on-surface);
+      background: var(--surface-container);
+    }
+    .tab-btn.is-active {
+      color: var(--on-surface);
+      font-weight: 600;
+      border-bottom: var(--indicator);
+    }
+
+    .exam-submit-bar {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      padding-bottom: var(--space-xs);
+    }
+
+    /* Question Card */
+    .question-card {
+      background: var(--surface-container);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .q-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+      padding-bottom: var(--space-sm);
+      border-bottom: var(--rule);
+    }
+
+    .q-tags {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+    }
+
+    .tag-pill {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      border-radius: var(--rounded-full);
+      padding: 0 var(--space-md);
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      font-size: var(--label-size);
+      font-weight: 500;
+    }
+    .tag-neutral {
+      background: var(--surface-container-high);
+      color: var(--on-surface);
+    }
+
+    .flag-btn {
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      background: var(--background);
+      border: 1px solid var(--outline-variant);
+      color: var(--on-surface-variant);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      font-size: 0.875rem;
+    }
+    .flag-btn:hover { background: var(--surface-container-high); color: var(--on-surface); }
+    .flag-btn.is-flagged {
+      background: var(--warning-container);
+      color: var(--warning);
+      border-color: var(--warning);
+      font-weight: 600;
+    }
+
+    .q-number-line {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+    }
+
+    .q-text {
+      font-size: var(--subhead-size);
+      font-weight: 600;
+      line-height: 1.55;
+      margin: 0;
+      color: var(--on-surface);
+    }
+
+    .code-block {
+      background: var(--background);
+      border: var(--rule);
+      border-inline-start: 3px solid var(--primary);
+      padding: var(--space-md);
+      margin: 0;
+      font-family: var(--font-label);
+      font-size: 0.875rem;
+      line-height: 1.55;
+      overflow-x: auto;
+      direction: ltr;
+      text-align: left;
+      color: var(--on-surface);
+    }
+
+    code {
+      font-family: var(--font-label);
+      font-size: 0.9em;
+      background: var(--background);
+      padding: 0.1em 0.35em;
+      border: 1px solid var(--outline-variant);
+      direction: ltr;
+      unicode-bidi: isolate;
+    }
+
+    /* Options List */
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .option-btn {
+      width: 100%;
+      min-height: 52px;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--background);
+      border: 1px solid var(--outline-variant);
+      color: var(--on-surface);
+      text-align: right;
+      cursor: pointer;
+      display: grid;
+      grid-template-columns: 32px minmax(0, 1fr) auto;
+      gap: var(--space-md);
+      align-items: center;
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .option-btn:hover:not(:disabled) {
+      background: var(--surface-container-high);
+    }
+    .option-btn:disabled {
+      cursor: default;
+    }
+
+    .option-letter {
+      width: 28px;
+      height: 28px;
+      background: var(--surface-container);
+      color: var(--on-surface);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .option-btn.is-selected {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      outline: 2px solid var(--primary);
+      outline-offset: -2px;
+    }
+    .option-btn.is-selected .option-letter {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+
+    .option-btn.is-correct {
+      background: var(--positive-container);
+      color: var(--on-positive-container);
+      outline: 2px solid var(--positive);
+      outline-offset: -2px;
+    }
+    .option-btn.is-correct .option-letter {
+      background: var(--positive);
+      color: var(--on-primary);
+    }
+
+    .option-btn.is-wrong {
+      background: var(--error-container);
+      color: var(--on-error-container);
+      outline: 2px solid var(--error);
+      outline-offset: -2px;
+    }
+    .option-btn.is-wrong .option-letter {
+      background: var(--error);
+      color: var(--on-error);
+    }
+
+    .option-status {
+      font-size: var(--label-size);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    /* Explanation Strip */
+    .explanation-box {
+      background: var(--background);
+      padding: var(--space-md);
+      border-inline-start: var(--indicator);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .explanation-box.is-correct { border-inline-start: var(--indicator-success); }
+    .explanation-box.is-wrong { border-inline-start: var(--indicator-error); }
+
+    .explanation-title {
+      font-size: var(--label-size);
+      font-weight: 700;
+      color: var(--on-surface);
+    }
+    .explanation-body {
+      margin: 0;
+      color: var(--on-surface);
+      font-size: 0.9375rem;
+    }
+
+    /* Card Footer Navigation */
+    .q-nav-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      padding-top: var(--space-sm);
+      border-top: var(--rule);
+      flex-wrap: wrap;
+    }
+
+    .q-nav-pair {
+      display: flex;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+    }
+
+    /* List View */
+    .list-stack {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    /* Report View */
+    .report-panel {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+    .report-summary-card {
+      background: var(--surface-container);
+      padding: var(--space-lg);
+      border-bottom: var(--indicator);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: var(--space-lg);
+      align-items: center;
+    }
+    .report-headline {
+      font-size: var(--headline-size);
+      font-weight: 600;
+      margin: 0 0 var(--space-xs) 0;
+    }
+    .report-score-big {
+      font-family: var(--font-label);
+      font-size: 2.5rem;
+      font-weight: 300;
+      line-height: 1;
+    }
+
+    .chart-box {
+      background: var(--surface-container);
+      padding: var(--space-lg);
+    }
+    .chart-title {
+      font-size: var(--subhead-size);
+      font-weight: 600;
+      margin: 0 0 var(--space-xs) 0;
+    }
+    .chart-subtitle {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      margin: 0 0 var(--space-md) 0;
+    }
+
+    /* Carbon Table */
+    .table-wrap {
+      overflow-x: auto;
+      background: var(--background);
+      border: var(--rule);
+    }
+    .carbon-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    .carbon-table th {
+      background: var(--surface-container-high);
+      color: var(--on-surface);
+      font-size: var(--label-size);
+      font-weight: 600;
+      text-align: right;
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--rule);
+    }
+    .carbon-table td {
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--rule);
+      vertical-align: middle;
+    }
+    .carbon-table tr:nth-child(even) td {
+      background: var(--surface-container);
+    }
+    .td-mono {
+      font-family: var(--font-label);
+      direction: ltr;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    /* Empty State */
+    .empty-state {
+      background: var(--surface-container);
+      padding: var(--space-xl);
+      border-inline-start: var(--indicator);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+      align-items: flex-start;
+    }
+
+    .source-footer {
+      border-top: var(--rule);
+      padding-top: var(--space-md);
+      color: var(--on-surface-variant);
+      font-size: var(--label-size);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+
+    @media (max-width: 960px) {
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+      .kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .exam-header {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-md);
+        gap: var(--space-md);
+      }
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+      .report-summary-card {
+        grid-template-columns: 1fr;
+      }
+      .option-btn {
+        grid-template-columns: 28px minmax(0, 1fr);
+      }
+      .option-status {
+        grid-column: 2;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-grid">
+    <!-- Header -->
+    <header class="exam-header">
+      <div>
+        <p class="kicker">بنك الأسئلة التأهيلي · الفصول 4 · 5 · 6 (90 سؤالاً)</p>
+        <h1 class="page-title">الاختبار الشامل في <strong>تمثيل البيانات</strong></h1>
+        <p class="page-subtitle">
+          تدريب تفاعلي شامل يغطي 9 وحدات دراسية بالتفصيل: أساسيات <bdi dir="ltr">Matplotlib</bdi> (الفصل الرابع)، و <bdi dir="ltr">Seaborn</bdi> والرسوم المدمجة في <bdi dir="ltr">Pandas</bdi> (الفصل الخامس)، ومكتبة <bdi dir="ltr">Bokeh</bdi> التفاعلية (الفصل السادس).
+        </p>
+      </div>
+      <div class="mode-switch-group">
+        <span class="field-label">نظام التصحيح</span>
+        <div class="segmented-control" role="group" aria-label="نظام التصحيح">
+          <button type="button" id="mode-practice-btn" class="seg-btn is-active" onclick="setExamMode('practice')">التدريب الفوري</button>
+          <button type="button" id="mode-exam-btn" class="seg-btn" onclick="setExamMode('exam')">الاختبار التجريبي</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- KPI Strip -->
+    <section class="kpi-grid" aria-label="ملخص الأداء">
+      <div class="kpi-tile is-primary">
+        <span class="kpi-label">النتيجة المعتمدة</span>
+        <div class="kpi-value" id="kpi-score" dir="ltr">0%</div>
+        <div class="kpi-meta" id="kpi-grade">ابدأ بالإجابة لحساب التقدير</div>
+      </div>
+
+      <div class="kpi-tile">
+        <span class="kpi-label">تقدم الإنجاز</span>
+        <div class="kpi-value" id="kpi-answered" dir="ltr">0 / 90</div>
+        <div class="progress-track" aria-hidden="true">
+          <div class="progress-fill" id="kpi-progress-bar" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <div class="kpi-tile">
+        <span class="kpi-label">تفصيل التصحيح</span>
+        <div class="kpi-value" id="kpi-breakdown-num" dir="ltr">0 / 0</div>
+        <div class="kpi-meta">
+          <span class="stat-pos" id="kpi-correct-label">صحيح: 0</span>
+          <span class="stat-err" id="kpi-wrong-label">خطأ: 0</span>
+        </div>
+      </div>
+
+      <div class="kpi-tile">
+        <span class="kpi-label">إتقان الفصول الثلاثة</span>
+        <div class="kpi-value" id="kpi-chapters-summary" dir="ltr">0% · 0% · 0%</div>
+        <div class="kpi-meta">ف4 (<bdi dir="ltr">Matplotlib</bdi>) · ف5 (<bdi dir="ltr">Pandas/Seaborn</bdi>) · ف6 (<bdi dir="ltr">Bokeh</bdi>)</div>
+      </div>
+    </section>
+
+    <!-- Inline Notice Banner -->
+    <div id="notice-banner" class="notice-banner" role="status" aria-live="polite">
+      <p id="notice-text" class="notice-text"></p>
+      <button type="button" class="btn btn-ghost" onclick="hideNotice()">إغلاق</button>
+    </div>
+
+    <!-- Main Workspace -->
+    <div class="workspace">
+      <!-- Sidebar -->
+      <aside class="sidebar" aria-label="التنقل والتصفية">
+        <div>
+          <h2 class="sidebar-section-title">الفصول والوحدات التسع</h2>
+          <div id="chapter-tree" class="chapter-tree"></div>
+        </div>
+
+        <div>
+          <label for="status-filter" class="field-label">تصفية الأسئلة حسب الحالة</label>
+          <select id="status-filter" class="carbon-select" onchange="setStatusFilter(this.value)">
+            <option value="all">جميع الأسئلة في النطاق</option>
+            <option value="unanswered">لم يُجب عنها بعد</option>
+            <option value="correct">الإجابات الصحيحة</option>
+            <option value="wrong">الإجابات الخاطئة</option>
+            <option value="flagged">المعلّمة للمراجعة</option>
+          </select>
+        </div>
+
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: var(--rule); padding-bottom: var(--space-xs); margin-bottom: var(--space-sm);">
+            <h2 style="font-size: var(--label-size); font-weight: 600; color: var(--on-surface-variant); margin: 0;">خريطة الأسئلة</h2>
+            <span id="q-map-count" class="mono-badge" dir="ltr">90</span>
+          </div>
+          <div id="q-map-grid" class="q-map-grid"></div>
+        </div>
+
+        <div class="sidebar-actions">
+          <button type="button" class="btn btn-secondary" onclick="exportResultsCsv()">
+            <span>تصدير التقرير (CSV)</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </button>
+          <button type="button" id="reset-btn" class="btn btn-danger" onclick="handleResetClick(this)">
+            <span>إعادة تعيين جميع الإجابات</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Panel -->
+      <main class="main-panel">
+        <div class="view-tabs">
+          <div class="tabs-list" role="tablist" aria-label="طريقة العرض">
+            <button type="button" role="tab" id="tab-single" class="tab-btn is-active" onclick="setViewMode('single')">سؤال بسؤال (تركيز)</button>
+            <button type="button" role="tab" id="tab-list" class="tab-btn" onclick="setViewMode('list')">عرض جميع أسئلة النطاق</button>
+            <button type="button" role="tab" id="tab-report" class="tab-btn" onclick="setViewMode('report')">تقرير النتيجة والتأهيل</button>
+          </div>
+          <div class="exam-submit-bar" id="exam-submit-bar" style="display: none;">
+            <button type="button" id="submit-exam-btn" class="btn btn-primary" onclick="submitExamMode()">إنهاء وتصحيح الاختبار</button>
+          </div>
+        </div>
+
+        <div id="main-content"></div>
+      </main>
+    </div>
+
+    <footer class="source-footer">
+      <span>المصدر: ملخص تحليل وتمثيل البيانات — الفصول الرابع والخامس والسادس (9 وحدات تعليمية).</span>
+      <span>يتم حفظ تقدمك تلقائياً أثناء الإجابة.</span>
+    </footer>
+  </div>
+
+  <api-shim></api-shim>
+  <script>
+    const CHAPTERS = [
+      {
+        id: 4,
+        title: `الفصل الرابع: أساسيات Matplotlib`,
+        units: [
+          { id: `4-1`, num: 1, title: `الوحدة (1): مدخل التمثيل وأساسيات Matplotlib` },
+          { id: `4-2`, num: 2, title: `الوحدة (2): مخطط الأعمدة والمخطط الخطي` },
+          { id: `4-3`, num: 3, title: `الوحدة (3): مخططات التوزيع و Box plot` }
+        ]
+      },
+      {
+        id: 5,
+        title: `الفصل الخامس: Seaborn والرسم في Pandas`,
+        units: [
+          { id: `5-1`, num: 1, title: `الوحدة (1): المخطط النقطي Scatter Plot` },
+          { id: `5-2`, num: 2, title: `الوحدة (2): الجداول المتقاطعة Crosstab` },
+          { id: `5-3`, num: 3, title: `الوحدة (3): التمثيل الرسومي عبر Pandas` }
+        ]
+      },
+      {
+        id: 6,
+        title: `الفصل السادس: مكتبة Bokeh التفاعلية`,
+        units: [
+          { id: `6-1`, num: 1, title: `الوحدة (1): أساسيات Bokeh و Glyphs` },
+          { id: `6-2`, num: 2, title: `الوحدة (2): تخطيط الرسوم Layouts` },
+          { id: `6-3`, num: 3, title: `الوحدة (3): Toolbar و Tooltips والمفتاح التفاعلي` }
+        ]
+      }
+    ];
+
+    const QUESTIONS = [
+      // ===================== الفصل الرابع — الوحدة (1) [1-10] =====================
+      {
+        id: 1, chapter: 4, unitKey: `4-1`,
+        q: `ما المقصود بتمثيل البيانات (Data Visualization) وفقاً للملخص؟`,
+        options: [
+          `تحويل البيانات من شكلها الخام إلى رسوم ومخططات يسهل فهمها لرؤية الاتجاهات والأنماط والقيم المتطرفة`,
+          `تخزين البيانات في جداول علائقية دون إجراء أي معالجة بصرية`,
+          `حذف السجلات المكررة والقيم المفقودة فقط قبل مرحلة النمذجة`,
+          `كتابة خوارزميات تعلم الآلة للتنبؤ بالمبيعات المستقبلية دون رسوم`
+        ],
+        answer: 0,
+        explanation: `تمثيل البيانات هو تحويل البيانات من شكلها الخام إلى تنسيق مرئي كالمخططات والرسوم البيانية التفاعلية ليسهل على البشر رؤية الاتجاهات والقيم المتطرفة والأنماط.`
+      },
+      {
+        id: 2, chapter: 4, unitKey: `4-1`,
+        q: `كيف تُصنَّف الرسوم البيانية التي تُستخدم لتمثيل متغيرين معاً في نفس الرسم؟`,
+        options: [
+          `Univariate`,
+          `Bivariate`,
+          `Multivariate`,
+          `Categorical`
+        ],
+        answer: 1,
+        explanation: `تُصنّف الرسوم البيانية إلى Univariate (متغير واحد)، و Bivariate (متغيرين معاً)، و Multivariate (عدة متغيرات).`
+      },
+      {
+        id: 3, chapter: 4, unitKey: `4-1`,
+        q: `أي مكتبة تُعد المكتبة الرئيسية لتمثيل البيانات في البايثون وتشكّل الأساس لباقي المكتبات؟`,
+        options: [
+          `Bokeh`,
+          `SciPy`,
+          `Matplotlib`,
+          `Scikit-learn`
+        ],
+        answer: 2,
+        explanation: `تُعد مكتبة Matplotlib المكتبة الرئيسية لتمثيل البيانات في بايثون وتُستخدم لإنشاء الرسوم البيانية والرسوم المتحركة وهي الأساس لباقي المكتبات مثل Seaborn.`
+      },
+      {
+        id: 4, chapter: 4, unitKey: `4-1`,
+        q: `ما العلاقة بين مكتبة Seaborn ومكتبة Matplotlib؟`,
+        options: [
+          `Seaborn مبنية على Matplotlib وتُستخدم لإنشاء رسوم بيانية عالية الجودة ومنظمة`,
+          `Matplotlib مبنية على Seaborn وتُستخدم فقط داخل المتصفح`,
+          `Seaborn مخصصة لقواعد البيانات العلائقية ولا تدعم الرسوم البيانية`,
+          `المكتبتان متعارضتان ولا يمكن استخدامهما في نفس المشروع`
+        ],
+        answer: 0,
+        explanation: `تُعد Seaborn مكتبة مبنية على Matplotlib لتقديم رسوم بيانية إحصائية عالية الجودة ومنظمة بأسلوب أبسط.`
+      },
+      {
+        id: 5, chapter: 4, unitKey: `4-1`,
+        q: `إذا لم تكن تستخدم حزمة Anaconda وأردت تثبيت مكتبة Matplotlib يدوياً عبر سطر الأوامر، فما الأمر الصحيح؟`,
+        code: `# تثبيت مكتبة Matplotlib في سطر الأوامر`,
+        options: [
+          `import matplotlib.pyplot as plt`,
+          `pip install matplotlib`,
+          `python run matplotlib`,
+          `conda remove matplotlib`
+        ],
+        answer: 1,
+        explanation: `في نسخ البايثون المستقلة خارج Anaconda يتم تثبيت المكتبة عبر الأمر pip install matplotlib، بينما استدعاؤها في الكود يكون بـ import matplotlib.pyplot as plt.`
+      },
+      {
+        id: 6, chapter: 4, unitKey: `4-1`,
+        q: `ما الصيغة القياسية المتعارف عليها لاستدعاء وحدة الرسم من Matplotlib داخل Jupyter Notebook أو PyCharm؟`,
+        options: [
+          `from matplotlib import show as plt`,
+          `import plt as matplotlib`,
+          `import matplotlib.pyplot as plt`,
+          `include matplotlib.pyplot`
+        ],
+        answer: 2,
+        explanation: `يتم استدعاء وحدة pyplot باسم مختصر قياسي هو plt عبر: import matplotlib.pyplot as plt.`
+      },
+      {
+        id: 7, chapter: 4, unitKey: `4-1`,
+        q: `في المثال الأساسي للرسم بالـ Matplotlib، ما وظيفة دالة linspace من مكتبة NumPy؟`,
+        code: `x = np.linspace(0, 10, 100)\nplt.plot(x, y)`,
+        options: [
+          `حذف القيم المتطرفة من المصفوفة`,
+          `إنشاء مجموعة من النقاط الموزعة بانتظام على خط مستقيم للتمثيل البياني`,
+          `رسم المخطط الدائري مباشرة دون الحاجة إلى plt.show()`,
+          `إظهار مفتاح الرسم البياني (Legend) تلقائياً`
+        ],
+        answer: 1,
+        explanation: `تقوم دالة np.linspace من NumPy بإنشاء مجموعة نقاط متساوية المسافة على خط مستقيم لتكوين بيانات المحور.`
+      },
+      {
+        id: 8, chapter: 4, unitKey: `4-1`,
+        q: `عند استدعاء الدالة plt.plot(a, b)، ماذا يمثل كل من المعامل الأول (a) والمعامل الثاني (b)؟`,
+        options: [
+          `الأول للمحور الرأسي (y) والثاني للمحور الأفقي (x)`,
+          `الأول للون الخط والثاني لسمك الخط`,
+          `الأول لبيانات المحور الأفقي (x) والثاني لبيانات المحور الرأسي (y)`,
+          `الأول لعنوان الرسم والثاني لحجم الشكل`
+        ],
+        answer: 2,
+        explanation: `تستقبل دالة plot متغيرين أساسيين: الأول يمثل بيانات المحور الأفقي (x)، والثاني يمثل بيانات المحور الرأسي (y).`
+      },
+      {
+        id: 9, chapter: 4, unitKey: `4-1`,
+        q: `ما اسم الحاوية الرئيسية في Matplotlib التي تحتوي على الملحقات التالية: Plots و Subplots و Axes و Titles و Legend؟`,
+        options: [
+          `Figure`,
+          `DataFrame`,
+          `Glyph`,
+          `Crosstab`
+        ],
+        answer: 0,
+        explanation: `الـ Figure هو الحاوية الرئيسية التي يُعرض بداخلها الرسم البياني وتضم كافة الملحقات مثل Axes و Titles و Legend و Subplots.`
+      },
+      {
+        id: 10, chapter: 4, unitKey: `4-1`,
+        q: `لإضافة أكثر من منحنى في نفس الرسم البياني مع عرض اسم كل منحنى، ماذا نضيف بعد تكرار استدعاء plt.plot(..., label=...)؟`,
+        code: `plt.plot(x, y1, color='blue', label='A')\nplt.plot(x, y2, color='red', label='B')\n# السطر الناقص هنا\nplt.show()`,
+        options: [
+          `plt.grid()`,
+          `plt.legend()`,
+          `plt.figure()`,
+          `plt.bar()`
+        ],
+        answer: 1,
+        explanation: `في حال تمثيل عدة مجموعات بيانات مع تمرير معامل label لكل منها، تُستخدم دالة plt.legend() لإظهار مفتاح الرسم البياني الذي يعرض عنوان كل مجموعة.`
+      },
+
+      // ===================== الفصل الرابع — الوحدة (2) [11-20] =====================
+      {
+        id: 11, chapter: 4, unitKey: `4-2`,
+        q: `ما الاستخدام الرئيسي لمخطط الأعمدة (Bar plot) في تمثيل البيانات؟`,
+        options: [
+          `مقارنة قيم المجموعات المختلفة مع البيانات النوعية أو الكمية ذات القيم القليلة المختلفة`,
+          `تمثيل التوزيع المستمر لآلاف القيم العشرية المتصلة فقط`,
+          `رسم الخرائط الجغرافية والمضلعات التفاعلية`,
+          `إظهار الترابط الخطي بين متغيرين مستمرين عبر النقاط الفردية`
+        ],
+        answer: 0,
+        explanation: `يُستخدم Bar plot لمقارنة قيم المجموعات المختلفة، ويناسب البيانات النوعية (مثل Bad و Good) أو الكمية عندما يكون عدد القيم المختلفة قليلاً.`
+      },
+      {
+        id: 12, chapter: 4, unitKey: `4-2`,
+        q: `في المثال التالي من الملخص، ماذا يمثل المعاملان movie_ratings و rating_counts في دالة bar؟`,
+        code: `plt.bar(movie_ratings, rating_counts, color='blue')`,
+        options: [
+          `movie_ratings على المحور الرأسي و rating_counts على المحور الأفقي`,
+          `movie_ratings هي الفئات على المحور الأفقي (x)، و rating_counts هي القيم المقابلة على المحور الرأسي (y)`,
+          `كلاهما يمثلان ألوان الأعمدة المتدرجة`,
+          `movie_ratings تحدد عرض العمود و rating_counts تحدد الشفافية`
+        ],
+        answer: 1,
+        explanation: `تستقبل دالة plt.bar الفئات المختلفة لتُمثّل على المحور الأفقي (x)، ثم القيم المقابلة لكل فئة لتُعرض على المحور الرأسي (y)، ثم معاملات التنسيق مثل color.`
+      },
+      {
+        id: 13, chapter: 4, unitKey: `4-2`,
+        q: `كيف يمكن عرض مخطط الأعمدة بشكل أفقي بدلاً من الشكل الرأسي في مكتبة Matplotlib؟`,
+        options: [
+          `استخدام الدالة plt.bar(vert=False)`,
+          `استخدام الدالة plt.barh()`,
+          `استخدام الدالة plt.hbar_stack()`,
+          `استخدام الدالة plt.plot(kind='bar')`
+        ],
+        answer: 1,
+        explanation: `ترسم plt.bar أعمدة رأسية، بينما ترسم plt.barh أعمدة أفقية في Matplotlib (بينما vert=False تخص boxplot و hbar تخص Bokeh).`
+      },
+      {
+        id: 14, chapter: 4, unitKey: `4-2`,
+        q: `أي من الخيارات التالية يصف المخطط الخطي (Line plot) بشكل دقيق؟`,
+        options: [
+          `خط متصل يربط نقاط البيانات بترتيب زمني أو حسب المتغير المستقل`,
+          `مصفوفة خلايا ملونة تمثل تكرار متغيرين نوعيين`,
+          `دوائر مبعثرة لا ترتبط ببعضها بأي خطوط`,
+          `صندوق يوضح الربيع الأول والوسيط والقيم المتطرفة`
+        ],
+        answer: 0,
+        explanation: `يتكون المخطط الخطي من خط متصل يربط نقاط البيانات بترتيب زمني أو حسب المتغير المستقل، وتمثل النقاط القيم على المحورين.`
+      },
+      {
+        id: 15, chapter: 4, unitKey: `4-2`,
+        q: `أي مثال من واقع الأعمال استُخدم في الملخص لتوضيح فائدة المخطط الخطي (Line plot)؟`,
+        options: [
+          `مقارنة أعداد التقييمات الجيدة والسيئة للأفلام (Bad و Good)`,
+          `تتبع تطور سعر سهم معين خلال أيام الأسبوع`,
+          `توزيع مبيعات قطع الحاسب كنسب مئوية`,
+          `عرض العلاقة بين جنس الشخص وحجم المشتريات`
+        ],
+        answer: 1,
+        explanation: `تطور سعر سهم معين خلال أيام الأسبوع هو المثال الأساسي للـ Line plot لأن أيام الأسبوع تمثل متغيراً مستقلاً مرتباً زمنياً.`
+      },
+      {
+        id: 16, chapter: 4, unitKey: `4-2`,
+        q: `في دالة plt.plot()، أي معامل يُستخدم لتغيير نمط الخط (مثل جعله متقطعاً '--' أو منقطاً ':')؟`,
+        options: [
+          `marker`,
+          `linestyle`,
+          `linewidth`,
+          `vert`
+        ],
+        answer: 1,
+        explanation: `يتحكم معامل linestyle في شكل الخط (متصل، متقطع، منقط)، بينما يتحكم marker في شكل علامات النقاط.`
+      },
+      {
+        id: 17, chapter: 4, unitKey: `4-2`,
+        q: `في الكود التالي، ما الأثر البصري لإضافة marker='o'؟`,
+        code: `plt.plot(days, stock_price, linestyle='--', marker='o', color='green')`,
+        options: [
+          `رسم دوائر بارزة عند كل نقطة بيانات على طول الخط المتقطع`,
+          `إخفاء الخط المتقطع وتحويل الرسم إلى مخطط دائري`,
+          `تكبير عرض الشكل ليملأ الشاشة`,
+          `تدوير تسميات أيام الأسبوع بزاوية 90 درجة`
+        ],
+        answer: 0,
+        explanation: `تحدد الخاصية marker='o' شكل علامة كل نقطة بيانات على الخط بدائرة، إلى جانب رسم الخط المتقطع عبر linestyle='--'.`
+      },
+      {
+        id: 18, chapter: 4, unitKey: `4-2`,
+        q: `في دالة plt.plot(x, y)، أي من المتغيرين يمثل "المتغير المستقل" عادةً؟`,
+        options: [
+          `المتغير الممرر للمحور الأفقي (x)`,
+          `المتغير الممرر للمحور الرأسي (y)`,
+          `قيمة اللون الممررة لمعامل color`,
+          `المتغير الممرر لمعامل label`
+        ],
+        answer: 0,
+        explanation: `تستقبل دالة plot أولاً المتغير الذي يمثل المحور الأفقي وهو المتغير المستقل (مثل الزمن أو الأيام)، ثم المتغير الرأسي الذي يمثل القيم المقابلة.`
+      },
+      {
+        id: 19, chapter: 4, unitKey: `4-2`,
+        q: `عند مقارنة عدة مجموعات قيم للفئات نفسها باستخدام Bar plot، ما الهدف من تلوين كل سلسلة بلون مختلف مع Legend؟`,
+        options: [
+          `تمييز القيم المقابلة لكل فئة فرعية داخل نفس الفئة الرئيسية بوضوح`,
+          `تقليل دقة المحور الرأسي إلى الصفر`,
+          `تحويل البيانات النوعية إلى خريطة سداسية`,
+          `إزالة الحاجة إلى تحديد المحور الأفقي`
+        ],
+        answer: 0,
+        explanation: `يتيح المخطط العمودي المقارن عرض أكثر من مجموعة قيم لكل فئة، ويساعد اللون المختلف مع الـ legend على التمييز المباشر بين المجموعات.`
+      },
+      {
+        id: 20, chapter: 4, unitKey: `4-2`,
+        q: `ما النتيجة المتوقعة عند استدعاء plt.plot() مرتين متتاليتين قبل استدعاء plt.show()؟`,
+        code: `plt.plot(days, company_a, label='Company A')\nplt.plot(days, company_b, label='Company B')\nplt.legend()\nplt.show()`,
+        options: [
+          `يمسح الرسم الثاني الرسم الأول ولا يظهر إلا Company B`,
+          `يظهر المتغيران معاً كخطين في نفس الرسم البياني مع مفتاح يوضح اسم كل خط`,
+          `ينتج خطأ برمجي لأن plot لا تقبل سوى متغير واحد لكل نافذة`,
+          `يُفتح نافذتان منفصلتان تلقائياً`
+        ],
+        answer: 1,
+        explanation: `يسمح تكرار استدعاء plt.plot() قبل plt.show() بعرض أكثر من متغير سوياً في نفس المخطط الخطي، ويُظهر plt.legend() عنوان كل خط.`
+      },
+
+      // ===================== الفصل الرابع — الوحدة (3) [21-30] =====================
+      {
+        id: 21, chapter: 4, unitKey: `4-3`,
+        q: `في مخرجات دالة plt.boxplot() الموضحة في الملخص، ماذا يمثل الخط البرتقالي داخل الصندوق؟`,
+        options: [
+          `المتوسط الحسابي (Mean)`,
+          `الوسيط (Median)`,
+          `الانحراف المعياري (Standard Deviation)`,
+          `أكبر قيمة في البيانات`
+        ],
+        answer: 1,
+        explanation: `في المخطط الصندوقي (Box plot) الافتراضي في Matplotlib يمثل الخط البرتقالي داخل الصندوق قيمة الوسيط (Median).`
+      },
+      {
+        id: 22, chapter: 4, unitKey: `4-3`,
+        q: `ماذا تمثل الدوائر المنفردة التي تظهر خارج حدود الصندوق وخطوطه (الشوكتين) في Box plot؟`,
+        options: [
+          `القيم المتطرفة (Outliers)`,
+          `القيم المفقودة (NaN)`,
+          `الوسيط الحسابي للفئات`,
+          `مجموع التكرارات الكلي`
+        ],
+        answer: 0,
+        explanation: `تمثل الدوائر الظاهرة خارج طرفي المخطط الصندوقي القيم المتطرفة (Outliers) التي تبتعد عن النطاق الربيعي المعتاد.`
+      },
+      {
+        id: 23, chapter: 4, unitKey: `4-3`,
+        q: `ماذا يحدث عند تمرير المعامل vert=False إلى دالة plt.boxplot()؟`,
+        code: `plt.boxplot(data, vert=False)`,
+        options: [
+          `يُخفي الخط البرتقالي للوسيط`,
+          `يُرسم المخطط الصندوقي بشكل أفقي بدلاً من الرأسي`,
+          `يحذف القيم المتطرفة من الرسم`,
+          `يُحوّل المخطط إلى مدرج تكراري`
+        ],
+        answer: 1,
+        explanation: `المعامل vert في دالة boxplot يحدد اتجاه الصندوق: القيمة True (الافتراضية) ترسمه رأسياً، والقيمة False ترسمه بشكل أفقي.`
+      },
+      {
+        id: 24, chapter: 4, unitKey: `4-3`,
+        q: `أي معامل في دالة plt.boxplot() يتحكم في عرض الصندوق كنسبة من مساحة الشكل (Figure)؟`,
+        options: [
+          `figsize`,
+          `width`,
+          `bins`,
+          `alpha`
+        ],
+        answer: 1,
+        explanation: `يتحكم المعامل width (أو widths) في دالة boxplot بعرض الصندوق كنسبة من مساحة الـ figure.`
+      },
+      {
+        id: 25, chapter: 4, unitKey: `4-3`,
+        q: `ما وظيفة المعامل meanline في دالة plt.boxplot() وفقاً للملخص؟`,
+        options: [
+          `تحديد عرض خط المتوسط/الوسيط كخط ممتد من عدمه`,
+          `تلوين خلفية الشكل باللون الرمادي`,
+          `تدوير المحور الأفقي بزاوية 45 درجة`,
+          `إضافة جدول بيانات أسفل الصندوق`
+        ],
+        answer: 0,
+        explanation: `يُستخدم المعامل meanline للتحكم في إظهار الخط الخاص بالمتوسط/الوسيط كخط ممتد عبر عرض الصندوق بدلاً من نقطة.`
+      },
+      {
+        id: 26, chapter: 4, unitKey: `4-3`,
+        q: `أي رسم بياني يُستخدم لتمثيل التوزيع التكراري لقيم متغير كمي مستمر بتقسيمه إلى فئات (bins)؟`,
+        options: [
+          `Pie chart`,
+          `Histogram`,
+          `Line plot`,
+          `Scatter plot`
+        ],
+        answer: 1,
+        explanation: `يمثل المدرج التكراري (Histogram) عدد مرات التكرار لكل فئة أو نطاق عددي، وتُنشأ في Matplotlib عبر plt.hist().`
+      },
+      {
+        id: 27, chapter: 4, unitKey: `4-3`,
+        q: `لتمثيل نسب مبيعات قطع الحاسب في متجر معين مقارنةً بالإجمالي (مثل المثال الوارد في مقدمة الملخص)، أي مخطط استُخدم؟`,
+        options: [
+          `المخطط الدائري (Pie Chart)`,
+          `المخطط الصندوقي (Box plot)`,
+          `الخريطة السداسية (Hexbin)`,
+          `الجدول المتقاطع (Crosstab)`
+        ],
+        answer: 0,
+        explanation: `استُخدم المخطط الدائري (Pie Chart) في الملخص كمثال لتمثيل حصص ونسب مبيعات قطع الحاسب في متجر معين.`
+      },
+      {
+        id: 28, chapter: 4, unitKey: `4-3`,
+        q: `عند رسم Box plot لسمة مثل الناتج المحلي (GDP) تشهد نمواً أو تبايناً هائلاً وتظهر فيها نقاط كثيرة خارج الشوكة، ما التحويل الأنسب قبل الرسم؟`,
+        options: [
+          `تطبيق التحويل اللوغاريتمي (Log transformation)`,
+          `تحويل البيانات إلى نصوص اسمية (Nominal)`,
+          `تغيير vert إلى False فقط`,
+          `استبدال القيم الكبيرة بالرقم صفر`
+        ],
+        answer: 0,
+        explanation: `كما ورد في الملخص، عندما تشهد السمة نمواً أو انخفاضاً هائلاً طبيعياً وتظهر نقاط كثيرة خارج شوكة الـ box plot، يحل Log transformation هذه المشكلة ويوضح التوزيع.`
+      },
+      {
+        id: 29, chapter: 4, unitKey: `4-3`,
+        q: `ما الفرق الجوهري بين Bar plot و Histogram في عرض البيانات؟`,
+        options: [
+          `Bar plot يقارن فئات منفصلة (نوعية غالباً)، بينما Histogram يعرض توزيع وتكرار نطاقات عددية متصلة`,
+          `Histogram يُستخدم مع النصوص فقط بينما Bar plot للأرقام السالبة فقط`,
+          `Bar plot يحتاج مكتبة Bokeh بينما Histogram يحتاج Pandas فقط`,
+          `لا يوجد أي فرق بينهما في المعنى أو الشكل`
+        ],
+        answer: 0,
+        explanation: `يُستخدم Bar plot لمقارنة المجموعات والفئات المنفصلة، أما Histogram فيقسم البيانات الكمية المتصلة إلى فئات (bins) لعرض كثافة التكرار.`
+      },
+      {
+        id: 30, chapter: 4, unitKey: `4-3`,
+        q: `أي من الدوال التالية في Matplotlib تُستخدم لتعيين عنوان الرسم البياني وتسميات المحورين الأفقي والرأسي؟`,
+        options: [
+          `plt.title() و plt.xlabel() و plt.ylabel()`,
+          `plt.head() و plt.tail() و plt.info()`,
+          `plt.crosstab() و plt.assign() و plt.cut()`,
+          `plt.vbar() و plt.row() و plt.show()`
+        ],
+        answer: 0,
+        explanation: `تُعيّن ملحقات الرسم القياسية في Matplotlib عبر plt.title() للعنوان الرئيسي، و plt.xlabel() / plt.ylabel() لتسمية المحورين.`
+      },
+
+      // ===================== الفصل الخامس — الوحدة (1) [31-40] =====================
+      {
+        id: 31, chapter: 5, unitKey: `5-1`,
+        q: `ما الغرض الأساسي من استخدام المخطط النقطي (Scatter plot)؟`,
+        options: [
+          `تمثيل العلاقة بين متغيرين أو أكثر عبر نقاط فردية على مستوى الإحداثيات x و y`,
+          `حساب المتوسط الحسابي لمصفوفة أحادية البعد`,
+          `ترتيب الجداول العلائقية وربط المفاتيح الأساسية`,
+          `تنظيم عدة رسوم بيانية في صفوف وأعمدة`
+        ],
+        answer: 0,
+        explanation: `المخطط النقطي (Scatter plot) هو مخطط إحصائي شائع لتمثيل العلاقة بين متغيرين أو أكثر، حيث يعبر موضع كل نقطة عن قيمة كل متغير.`
+      },
+      {
+        id: 32, chapter: 5, unitKey: `5-1`,
+        q: `على ماذا يعبر موضع كل نقطة فردية في الـ Scatter plot؟`,
+        options: [
+          `يعبر عن قيمة محددة للمتغير الأول على المحور x وقيمة محددة للمتغير الثاني على المحور y`,
+          `يعبر عن مجموع النسب المئوية للفئات في الدائرة`,
+          `يعبر عن عدد الصفوف المكررة في الجدول`,
+          `يعبر عن ترتيب الفهرس الزمني فقط دون محور y`
+        ],
+        answer: 0,
+        explanation: `يتم تمثيل كل عنصر بنقطة فردية على مستوى الإحداثيات (x, y) بحيث يحدد موضعها قيمتا المتغيرين معاً.`
+      },
+      {
+        id: 33, chapter: 5, unitKey: `5-1`,
+        q: `في المثال الأول للوحدة الأولى من الفصل الخامس، كيف تم التحكم بأشكال النقاط (marker) في Matplotlib بناءً على عمود "sex"؟`,
+        options: [
+          `بإعطاء كل قيمة في عمود "sex" شكلاً مختلفاً للـ marker عند الرسم (مثل فصل الفئات برسم مستقل أو حلقة)`,
+          `بتمرير اسم العمود 'sex' مباشرة إلى دالة plt.bar()`,
+          `باستخدام دالة CategoricalColorMapper من مكتبة NumPy`,
+          `بإخفاء المحور الرأسي واستخدام الخطوط المتصلة`
+        ],
+        answer: 0,
+        explanation: `لتمييز فئات متغير مثل "sex" بأشكال نقاط مختلفة في Matplotlib، يلزم تعديل الكود لتحديد قيمة لمعامل marker حسب قيمة كل فئة (وهو ما يتطلب فصلاً أو تكراراً في Matplotlib).`
+      },
+      {
+        id: 34, chapter: 5, unitKey: `5-1`,
+        q: `لماذا يُنصح في الملخص باستخدام مكتبة Seaborn للحصول على نفس الـ Scatter plot المخصص حسب الجنس؟`,
+        options: [
+          `لأن Seaborn تحقق نفس النتيجة بشكل أبسط وأسرع وبكود أقل وأكثر تنظيماً`,
+          `لأن Matplotlib لا تدعم رسم النقاط إطلاقاً`,
+          `لأن Seaborn تحذف البيانات المفقودة تلقائياً من قاعدة البيانات`,
+          `لأن Seaborn تُشغّل خادماً محلياً في المتصفح مثل Bokeh`
+        ],
+        answer: 0,
+        explanation: `أوضح الملخص أنه يمكن استخدام مكتبة Seaborn للحصول على نفس نتائج التمييز بالألوان والأشكال في Scatter plot بشكل أبسط بكثير.`
+      },
+      {
+        id: 35, chapter: 5, unitKey: `5-1`,
+        q: `في دالة sns.scatterplot()، أي معامل يُستخدم لتلوين النقاط تلقائياً بناءً على قيم عمود فئوي؟`,
+        code: `sns.scatterplot(data=df, x='age', y='fare', ???='sex')`,
+        options: [
+          `hue`,
+          `vert`,
+          `rot`,
+          `kind`
+        ],
+        answer: 0,
+        explanation: `في Seaborn، يُستخدم المعامل hue لتلوين النقاط تلقائياً وفق فئات عمود محدد وإضافة مفتاح (legend) تلقائي.`
+      },
+      {
+        id: 36, chapter: 5, unitKey: `5-1`,
+        q: `في دالة sns.scatterplot()، أي معامل يُستخدم لتغيير شكل النقاط (marker) تلقائياً حسب متغير فئوي مثل "sex"؟`,
+        options: [
+          `style`,
+          `linestyle`,
+          `layout`,
+          `grid`
+        ],
+        answer: 0,
+        explanation: `يتحكم المعامل style في sns.scatterplot() بتخصيص شكل النقاط (دائرة، مثلث، مربع...) تلقائياً لكل فئة من فئات العمود المحدد.`
+      },
+      {
+        id: 37, chapter: 5, unitKey: `5-1`,
+        q: `إذا أردنا في sns.scatterplot() تمثيل متغير ثالث كمّي عبر حجم النقاط (Multivariate)، أي معامل نستخدم؟`,
+        options: [
+          `size`,
+          `width`,
+          `figsize`,
+          `bins`
+        ],
+        answer: 0,
+        explanation: `يسمح المعامل size في sns.scatterplot() بتغيير حجم النقاط ليعكس قيماً عددية إضافية إلى جانب x و y و hue.`
+      },
+      {
+        id: 38, chapter: 5, unitKey: `5-1`,
+        q: `ما الطريقة الصحيحة لاستدعاء مكتبة Seaborn في بايثون وتمرير DataFrame إليها في دالة scatterplot؟`,
+        options: [
+          `import seaborn as sns ثم sns.scatterplot(data=df, x='col1', y='col2')`,
+          `import sns as seaborn ثم sns.plot(df, kind='scatter')`,
+          `from seaborn import figure ثم figure.scatter(df)`,
+          `import matplotlib.seaborn as sns`
+        ],
+        answer: 0,
+        explanation: `الاختصار القياسي لمكتبة Seaborn هو sns، وتستقبل دوالها الـ DataFrame عبر معامل data وأسماء الأعمدة في x و y.`
+      },
+      {
+        id: 39, chapter: 5, unitKey: `5-1`,
+        q: `عند فحص Scatter plot بين متغيرين، لاحظت تكدساً شديداً للنقاط فوق بعضها في منطقة معينة. ما المعامل الذي يساعد على كشف كثافة التداخل في نقاط الـ Scatter؟`,
+        options: [
+          `alpha (لتحديد درجة شفافية النقاط)`,
+          `rot (لتدوير الأرقام)`,
+          `meanline (لإظهار خط الوسيط)`,
+          `toolbar_location`
+        ],
+        answer: 0,
+        explanation: `يساعد معامل alpha (بين 0 و 1) على جعل النقاط شبه شفافة فتظهر المناطق الأكثر كثافة وتداخلاً بلون أغمق.`
+      },
+      {
+        id: 40, chapter: 5, unitKey: `5-1`,
+        q: `ما الذي لا يُنصح بالاعتماد على Scatter plot وحده لإثباته؟`,
+        options: [
+          `إثبات علاقة سببية حتمية مباشرة، إذ يُظهر الرسم الارتباط والأنماط فقط`,
+          `رؤية وجود ارتباط طردي أو عكسي بين متغيرين`,
+          `اكتشاف النقاط الشاذة البعيدة عن التجمع الرئيسي`,
+          `ملاحظة تجمّع البيانات في مجموعات (Clusters)`
+        ],
+        answer: 0,
+        explanation: `يكشف المخطط النقطي الارتباط والتجمعات والقيم المتطرفة بين المتغيرات، لكنه لا يثبت السببية بمفرده.`
+      },
+
+      // ===================== الفصل الخامس — الوحدة (2) [41-50] =====================
+      {
+        id: 41, chapter: 5, unitKey: `5-2`,
+        q: `ما نوع المتغيرات التي يعرض جدول Crosstab / Two-way table العلاقة بينها؟`,
+        options: [
+          `المتغيرات النوعية (Categorical variables) على شكل مصفوفة`,
+          `المتغيرات الزمنية المستمرة فقط`,
+          `المتجهات ثلاثية الأبعاد`,
+          `أسماء الملفات ومسارات النظام`
+        ],
+        answer: 0,
+        explanation: `يعرض Crosstab table العلاقة بين المتغيرات النوعية على شكل مصفوفة ثنائية البعد لسهولة كشف الأنماط بين الفئات.`
+      },
+      {
+        id: 42, chapter: 5, unitKey: `5-2`,
+        q: `في مصفوفة جدول Crosstab، ماذا تمثل الصفوف وماذا تمثل الأعمدة؟`,
+        options: [
+          `الصفوف هي فئات المتغير النوعي الأول، والأعمدة هي فئات المتغير النوعي الثاني`,
+          `الصفوف هي أرقام التكرار، والأعمدة هي درجات الحرارة`,
+          `الصفوف هي القيم المتطرفة، والأعمدة هي الوسيط الحسابي`,
+          `كلاهما يمثلان نفس المتغير مكرراً`
+        ],
+        answer: 0,
+        explanation: `عادةً ما تكون صفوف جدول Crosstab هي الفئات الموجودة ضمن المتغير النوعي الأول، بينما الأعمدة هي فئات المتغير النوعي الثاني.`
+      },
+      {
+        id: 43, chapter: 5, unitKey: `5-2`,
+        q: `ماذا تمثل القيم الموجودة داخل خلايا جدول Crosstab؟`,
+        options: [
+          `إما تكرار الحدوث (Frequency) أو النسبة المئوية لحدوث الفئتين معاً`,
+          `مشتقة الدالة عند كل نقطة`,
+          `طول السلسلة النصية لاسم العمود`,
+          `رقم الفهرس العشوائي في الذاكرة`
+        ],
+        answer: 0,
+        explanation: `تحتوي خلايا الجدول المتقاطع إما على عدد مرات تكرار اقتران الفئتين معاً، أو على النسبة المئوية لحدوثهما معاً.`
+      },
+      {
+        id: 44, chapter: 5, unitKey: `5-2`,
+        q: `ما الفائدة الرئيسية لاستخدام Crosstab table في تحليل البيانات؟`,
+        options: [
+          `الكشف السريع عن الاتجاهات والأنماط والعلاقات بين فئات محددة في مجموعة البيانات`,
+          `تحويل الجداول العلائقية إلى نصوص غير منظمة`,
+          `رسم المخططات الخطية التفاعلية لأسعار الأسهم`,
+          `ضغط حجم الصور داخل ملفات HTML`
+        ],
+        answer: 0,
+        explanation: `باستخدام Crosstab table يمكننا بسهولة الكشف عن الاتجاهات والأنماط، خاصة فيما يتعلق بفئات محددة ضمن مجموعة البيانات.`
+      },
+      {
+        id: 45, chapter: 5, unitKey: `5-2`,
+        q: `أي دالة في مكتبة Pandas تُستخدم لإنشاء الجدول المتقاطع (Crosstab)؟`,
+        code: `# إنشاء جدول متقاطع بين العمود A والعمود B`,
+        options: [
+          `pd.crosstab(df['A'], df['B'])`,
+          `pd.boxplot(df['A'], df['B'])`,
+          `pd.linspace(df['A'], df['B'])`,
+          `pd.vbar(df['A'], df['B'])`
+        ],
+        answer: 0,
+        explanation: `توفر Pandas الدالة pd.crosstab() لحساب التوزيع التقاطعي (تكرارات أو نسب) بين متغيرين نوعيين أو أكثر.`
+      },
+      {
+        id: 46, chapter: 5, unitKey: `5-2`,
+        q: `كيف يمكننا عرض النسب المئوية (بدلاً من التكرارات المطلقة) داخل خلايا دالة pd.crosstab()؟`,
+        options: [
+          `بتمرير معامل normalize (مثل normalize='all' أو 'index')`,
+          `بتمرير معامل vert=False`,
+          `بتمرير معامل click_policy='hide'`,
+          `بتمرير معامل marker='o'`
+        ],
+        answer: 0,
+        explanation: `يحوّل المعامل normalize في pd.crosstab() القيم من تكرارات مطلقة إلى نسب مئوية (على مستوى الكل أو الصفوف أو الأعمدة).`
+      },
+      {
+        id: 47, chapter: 5, unitKey: `5-2`,
+        q: `عند تمثيل جدول Crosstab بصرياً كمصفوفة ملونة في مكتبة Seaborn، أي دالة تُستخدم؟`,
+        options: [
+          `sns.heatmap()`,
+          `sns.lineplot()`,
+          `sns.pie()`,
+          `sns.gridplot()`
+        ],
+        answer: 0,
+        explanation: `تُستخدم دالة sns.heatmap() لرسم المصفوفات والجداول المتقاطعة بألوان متدرجة تعكس قيم الخلايا.`
+      },
+      {
+        id: 48, chapter: 5, unitKey: `5-2`,
+        q: `كما ورد في الملخص عند تمثيل مصفوفة Crosstab بالألوان، كيف يتعرف المحلل على دلالة الألوان؟`,
+        options: [
+          `من مفتاح الرسم البياني (شريط الألوان) الظاهر يمين المصفوفة`,
+          `من خلال دالة plt.boxplot()`,
+          `من خلال تغيير لغة نظام التشغيل`,
+          `من خلال النقر على المحور الأفقي مرتين`
+        ],
+        answer: 0,
+        explanation: `يظهر على يمين مصفوفة الخريطة الحرارية شريط تدرج الألوان (colorbar) كمفتاح يوضح القيمة الرقمية المقابلة لكل درجة لونية.`
+      },
+      {
+        id: 49, chapter: 5, unitKey: `5-2`,
+        q: `ما وظيفة المعامل annot=True عند استخدامه في دالة sns.heatmap()؟`,
+        code: `sns.heatmap(ct, annot=True, cmap='Blues')`,
+        options: [
+          `كتابة القيم الرقمية الفعلية داخل كل خلية في المصفوفة`,
+          `إزالة مفتاح الألوان من يمين المصفوفة`,
+          `تدوير المصفوفة بزاوية 180 درجة`,
+          `تطبيق التحويل اللوغاريتمي على الألوان`
+        ],
+        answer: 0,
+        explanation: `المعامل annot=True يعرض القيمة الرقمية داخل كل خلية من خلايا الـ heatmap لتسهيل القراءة الدقيقة مع التدرج اللوني.`
+      },
+      {
+        id: 50, chapter: 5, unitKey: `5-2`,
+        q: `ماذا يحدد المعامل cmap في دالة sns.heatmap()؟`,
+        options: [
+          `لوحة التدرج اللوني (Colormap) المستخدمة في تلوين خلايا المصفوفة`,
+          `عدد الصفوف المراد حذفها من الجدول`,
+          `موضع شريط الأدوات في المتصفح`,
+          `عرض الصندوق في المخطط الصندوقي`
+        ],
+        answer: 0,
+        explanation: `يحدد معامل cmap خريطة الألوان (مثل 'Blues' أو 'viridis' أو 'coolwarm') التي تعكس ارتفاع وانخفاض القيم في المصفوفة.`
+      },
+
+      // ===================== الفصل الخامس — الوحدة (3) [51-60] =====================
+      {
+        id: 51, chapter: 5, unitKey: `5-3`,
+        q: `على أي كائنات في مكتبة Pandas تتوفر دالة .plot() المدمجة لإنشاء الرسوم البيانية مباشرة؟`,
+        options: [
+          `DataFrame و Series`,
+          `المصفوفات النصية في بايثون فقط`,
+          `ملفات التكوين .py فقط`,
+          `كائنات Bokeh figure فقط`
+        ],
+        answer: 0,
+        explanation: `تحتوي هياكل البيانات في Pandas (الـ DataFrames والـ Series) على دالة .plot() المدمجة والتي تشبه Matplotlib وتُبنى عليها.`
+      },
+      {
+        id: 52, chapter: 5, unitKey: `5-3`,
+        q: `في مثال أسهم Facebook، تم استدعاء df.iloc[:7].plot(...) دون تمرير معامل kind. لماذا؟`,
+        code: `fb.iloc[:7].plot(y=['Open', 'High', 'Low', 'Close'], style=['b-o', 'g--'])`,
+        options: [
+          `لأن النوع الافتراضي للمعامل kind في دالة plot بالـ Pandas هو 'line'`,
+          `لأن دالة plot لا تدعم معامل kind أصلاً`,
+          `لأن الـ iloc تمنع استخدام الرسوم الخطية`,
+          `لأن الرسم الافتراضي في Pandas هو المخطط الدائري`
+        ],
+        answer: 0,
+        explanation: `يمكن التغاضي عن كتابة kind='line' لأن 'line' هو النوع الافتراضي في دالة plot() في Pandas.`
+      },
+      {
+        id: 53, chapter: 5, unitKey: `5-3`,
+        q: `في الكود الخاص بمثال Facebook، ما الغرض من استخدام .iloc[:7] قبل .plot()؟`,
+        options: [
+          `تحديد أول سبعة صفوف (أيام) فقط من البيانات لتضمينها في الرسم البياني`,
+          `تقسيم الرسم إلى 7 رسومات فرعية`,
+          `تعيين حجم الخط إلى 7 نقاط`,
+          `حذف أول 7 أعمدة من جدول البيانات`
+        ],
+        answer: 0,
+        explanation: `تُستخدم iloc في Pandas لتحديد نطاق الصفوف بالفهرس الموضعي؛ وهنا تم تحديد أول 7 أيام متوفرة في البيانات.`
+      },
+      {
+        id: 54, chapter: 5, unitKey: `5-3`,
+        q: `في دالة df.plot()، ماذا يفعل تفعيل subplots=True مع layout=(2, 2) لعرض 4 أعمدة (Open, High, Low, Close)؟`,
+        code: `fb.plot(subplots=True, layout=(2, 2), figsize=(10, 6))`,
+        options: [
+          `يعرض كل عمود في رسم فرعي مستقل ومرتب في شبكة من صفين وعمودين`,
+          `يدمج الأعمدة الأربعة في خط واحد سميك`,
+          `يكرر نفس الرسم 4 مرات في نوافذ منفصلة`,
+          `يحوّل الأعمدة إلى جدول متقاطع من خليتين`
+        ],
+        answer: 0,
+        explanation: `تُفصل الأعمدة في رسوم فرعية عند ضبط subplots=True، ويحدد layout=(2, 2) ترتيبها في جدول من صفين وعمودين.`
+      },
+      {
+        id: 55, chapter: 5, unitKey: `5-3`,
+        q: `في معاملات df.plot()، أي معامل يتحكم في زاوية تدوير قيم وتسميات المحاور (xticks / yticks)؟`,
+        options: [
+          `rot`,
+          `grid`,
+          `figsize`,
+          `legend`
+        ],
+        answer: 0,
+        explanation: `المعامل rot يأخذ رقماً صحيحاً يمثل زاوية عرض/تدوير التسميات على المحورين لمنع تداخل النصوص الطويلة.`
+      },
+      {
+        id: 56, chapter: 5, unitKey: `5-3`,
+        q: `ما الفرق بين معاملَي xticks و xlim في دالة df.plot()؟`,
+        options: [
+          `xticks تحدد قائمة العلامات الظاهرة على المحور x، بينما xlim تحدد الحد الأدنى والأعلى لنطاق المحور x`,
+          `xlim تحدد حجم الخط، و xticks تحدد لون الخلفية`,
+          `xticks للمحور الرأسي و xlim لخطوط الشبكة`,
+          `كلاهما يؤديان نفس الوظيفة تماماً`
+        ],
+        answer: 0,
+        explanation: `تستقبل xticks قائمة بقيم التدريجات المعروضة على المحور، بينما تحدد xlim الحدود الدنيا والعليا لنطاق المحور.`
+      },
+      {
+        id: 57, chapter: 5, unitKey: `5-3`,
+        q: `في مثال Scatter plot بـ Pandas لبيانات الأسهم، لماذا استُخدمت دالة .assign() قبل .plot(kind='scatter')؟`,
+        code: `fb.assign(change=fb.High - fb.Low).plot(kind='scatter', x='Volume', y='change', alpha=0.5)`,
+        options: [
+          `لإضافة عمود مؤقت (التغير في السعر) أثناء تكوين الرسم البياني دون تعديل الـ DataFrame الأصلي`,
+          `لحفظ الرسم البياني كملف HTML تفاعلي`,
+          `لترتيب الصفوف تصاعدياً قبل حساب الوسيط`,
+          `لتغيير نوع المخطط من Scatter إلى Box plot`
+        ],
+        answer: 0,
+        explanation: `تُستخدم دالة assign() مع DataFrame لإضافة عمود محسوب بشكل مؤقت أثناء تكوين الرسم البياني دون تغيير الجدول الأصلي.`
+      },
+      {
+        id: 58, chapter: 5, unitKey: `5-3`,
+        q: `متى يُفضّل استخدام Hexbins plot (kind='hexbin') بدلاً من Scatter plot العادي في Pandas؟`,
+        options: [
+          `عند وجود تداخل كبير جداً بين النقاط بحيث يصعب تمييزها، إذ يمثل كل شكل سداسي كثافة النقاط في موضعه`,
+          `عندما تكون البيانات نصية اسمية لا تحتوي على أي أرقام`,
+          `عندما نريد تتبع سلسلة زمنية واحدة من 5 نقاط فقط`,
+          `عندما نريد عرض نسب مئوية لأجزاء دائرية`
+        ],
+        answer: 0,
+        explanation: `يعتمد Hexbins plot على تقسيم الرسم إلى أشكال سداسية يمثل لون كل منها كثافة النقاط، وهو مثالي عند التداخل الكثيف الذي يعيق الرؤية في Scatter plot.`
+      },
+      {
+        id: 59, chapter: 5, unitKey: `5-3`,
+        q: `ما تأثير المعامل alpha=0.3 في كود df.plot(kind='scatter', alpha=0.3)؟`,
+        options: [
+          `جعل النقاط شبه شفافة لإبراز مناطق تداخل النقاط بوضوح`,
+          `تكبير حجم النقاط بمقدار 3 أضعاف`,
+          `إخفاء مفتاح الرسم البياني`,
+          `عرض خطوط الشبكة على الخلفية`
+        ],
+        answer: 0,
+        explanation: `يحدد المعامل alpha درجة شفافية النقاط، وهو مهم جداً عند وجود تداخل بين النقاط في Scatter plot.`
+      },
+      {
+        id: 60, chapter: 5, unitKey: `5-3`,
+        q: `أي قيمتين للمعامل kind في df.plot() تنشئان على الترتيب: مدرجاً تكرارياً (Histogram) ومخططاً صندوقياً (Box plot)؟`,
+        options: [
+          `'hist' و 'box'`,
+          `'bar' و 'line'`,
+          `'hexbin' و 'pie'`,
+          `'scatter' و 'area'`
+        ],
+        answer: 0,
+        explanation: `في Pandas يُستخدم kind='hist' لإنشاء Histogram يعرض تكرار الفئات، و kind='box' لإنشاء Box plot لعمود أو أكثر.`
+      },
+
+      // ===================== الفصل السادس — الوحدة (1) [61-70] =====================
+      {
+        id: 61, chapter: 6, unitKey: `6-1`,
+        q: `بماذا تتميز مكتبة Bokeh عن مكتبة Matplotlib التقليدية وفقاً للملخص؟`,
+        options: [
+          `إنشاء رسوم بيانية تفاعلية عالية الجودة للبيانات الضخمة والمتدفقة وعرضها في متصفحات الويب الحديثة`,
+          `إجراء العمليات الحسابية على المصفوفات الرياضية فقط دون رسوم`,
+          `تنظيف القيم المفقودة في ملفات CSV دون أي عرض مرئي`,
+          `إنشاء صور ثابتة غير قابلة للتفاعل فقط`
+        ],
+        answer: 0,
+        explanation: `Bokeh مكتبة تركز على التمثيل التفاعلي عالي الجودة والبيانات الضخمة والمتدفقة، وتُنتج مخططات ولوحات معلومات تفاعلية لمتصفحات الويب.`
+      },
+      {
+        id: 62, chapter: 6, unitKey: `6-1`,
+        q: `أي من الوجهات التالية يمكن تعيينها كمخرجات لمخططات مكتبة Bokeh؟`,
+        options: [
+          `داخل Jupyter Notebook أو كملف HTML أو على خادم (Bokeh Server)`,
+          `كملف صوتي فقط`,
+          `داخل محرر النصوص Notepad فقط دون متصفح`,
+          `كجدول بيانات علائقي في SQL فقط`
+        ],
+        answer: 0,
+        explanation: `يمكن توجيه مخرجات Bokeh للعرض داخل الـ notebook (عبر output_notebook) أو كملف HTML مستقل أو على الخادم.`
+      },
+      {
+        id: 63, chapter: 6, unitKey: `6-1`,
+        q: `في شريط الأدوات الافتراضي على يمين رسم Bokeh، أي أداة تتيح تحريك الرسم البياني في جميع الاتجاهات؟`,
+        options: [
+          `أداة التحريك (Pan)`,
+          `أداة إعادة الضبط (Reset)`,
+          `أداة التكبير بمربع (Box Zoom)`,
+          `أداة الحفظ (Save)`
+        ],
+        answer: 0,
+        explanation: `تُستخدم أداة التحريك Pan (الموضحة باللون الأحمر في الملخص) لتحريك مساحة الرسم البياني في جميع الاتجاهات.`
+      },
+      {
+        id: 64, chapter: 6, unitKey: `6-1`,
+        q: `ما الفرق بين أداة Box Zoom (الأخضر) وأداة Reset (الأصفر) في شريط أدوات Bokeh الموضح بالملخص؟`,
+        options: [
+          `Box Zoom تكبّر جزءاً محدداً برسم مربع حوله، بينما Reset تعيد الرسم البياني إلى وضعه الأصلي`,
+          `Box Zoom تحفظ الرسم كصورة، بينما Reset تغلق المتصفح`,
+          `Box Zoom تحرك الرسم أفقياً، بينما Reset تغير لون الخلفية`,
+          `كلاهما يؤديان نفس عملية التكبير بعجلة الفأرة`
+        ],
+        answer: 0,
+        explanation: `تتيح Box Zoom تكبير منطقة برسم مربع حولها، و Wheel Zoom التكبير بعجلة الفأرة مع CTRL، بينما تعيد Reset الرسم إلى وضعه الأصلي.`
+      },
+      {
+        id: 65, chapter: 6, unitKey: `6-1`,
+        q: `ما المقصود بمصطلح Glyphs في مكتبة Bokeh؟`,
+        options: [
+          `العناصر البصرية الأساسية المستخدمة لبناء الرسوم البيانية مثل الخطوط والدوائر والمستطيلات والمضلعات`,
+          `دالة لحساب الانحدار اللوجستي في Scikit-learn`,
+          `أمر تثبيت المكتبة في موجه أوامر Anaconda`,
+          `جدول البيانات النصية قبل التنظيف`
+        ],
+        answer: 0,
+        explanation: `تُعد Glyphs اللبنات البصرية الأساسية في Bokeh لتمثيل البيانات كالخطوط والدوائر والمربعات والمثلثات والمضلعات.`
+      },
+      {
+        id: 66, chapter: 6, unitKey: `6-1`,
+        q: `أي من الخيارات التالية يضم أسماء Glyphs صحيحة متوفرة في Bokeh كما ورد في الملخص؟`,
+        options: [
+          `Line و Circle و Square و Triangle و Asterisk و Cross و X و Diamond`,
+          `Series و DataFrame و Crosstab و Quantile`,
+          `Hist و Box و Hexbin و Assign`,
+          `Inner و Outer و Left_on و Right_on`
+        ],
+        answer: 0,
+        explanation: `تضم أشهر Glyphs في Bokeh: Line و Circle و Square و Triangle و Asterisk و Cross و X و Diamond.`
+      },
+      {
+        id: 67, chapter: 6, unitKey: `6-1`,
+        q: `ما وظيفة الدوال الثلاث المستدعاة من bokeh.plotting: figure و show و output_notebook؟`,
+        options: [
+          `figure لإنشاء عنصر العرض الرئيسي، و show لعرض الرسم، و output_notebook لتهيئة العرض داخل Jupyter Notebook`,
+          `figure لحساب الوسيط، و show لتثبيت المكتبة، و output_notebook لحذف البيانات`,
+          `جميعها تُستخدم فقط لرسم الجداول المتقاطعة`,
+          `output_notebook تجبر الرسم على الفتح خارج المتصفح`
+        ],
+        answer: 0,
+        explanation: `figure هو الحاوية الرئيسية للرسم، و show تنفذ العرض، و output_notebook تهيئ Bokeh للعرض مباشرة داخل خلايا Jupyter Notebook.`
+      },
+      {
+        id: 68, chapter: 6, unitKey: `6-1`,
+        q: `لرسم عدة خطوط معاً في خطوة واحدة داخل Bokeh، أي دالة تُستخدم كما ورد في الملخص؟`,
+        options: [
+          `multi_line() (أو multiline)`,
+          `vbar()`,
+          `boxplot()`,
+          `crosstab()`
+        ],
+        answer: 0,
+        explanation: `لإنشاء خط واحد نستخدم line()، ولرسم عدة خطوط في خطوة واحدة توفّر Bokeh دالة multi_line().`
+      },
+      {
+        id: 69, chapter: 6, unitKey: `6-1`,
+        q: `كيف تُستخدم أداة CategoricalColorMapper لتلوين العناصر حسب فئات عمود معين في Bokeh؟`,
+        code: `color={'field': 'species', 'transform': color_mapper}`,
+        options: [
+          `تُعطي كل قيمة فئوية لوناً مقابلاً ثم تُمرّر في معامل color كـ transform مع تحديد field بالعمود الفئوي`,
+          `تحول القيم الفئوية إلى أرقام عشوائية وتحذفها من الرسم`,
+          `تُستخدم فقط لتغيير لون خلفية شريط الأدوات`,
+          `تُلزم الرسم باستخدام لون واحد فقط لجميع الفئات`
+        ],
+        answer: 0,
+        explanation: `تُعيّن CategoricalColorMapper لوناً محدداً لكل فئة، وتُربط بمعامل color عبر transform مع تحديد اسم عمود الفئات في field.`
+      },
+      {
+        id: 70, chapter: 6, unitKey: `6-1`,
+        q: `في مثال توزيع الفواكه عبر سنوات مختلفة باستخدام أعمدة Bokeh، ما الفرق بين vbar() و hbar_stack()؟`,
+        options: [
+          `vbar() ترسم مخطط أعمدة رأسي، بينما hbar_stack() تمثّل عدة مجموعات بيانات متكدسة أفقياً`,
+          `vbar() مخصصة للدوائر، و hbar_stack() مخصصة للخطوط المنحنية`,
+          `vbar() تعمل فقط مع Matplotlib`,
+          `لا يوجد فرق بين الرأسي والأفقي في Bokeh`
+        ],
+        answer: 0,
+        explanation: `تُستخدم vbar() لرسم الأعمدة الرأسية، و vbar_stack() / hbar_stack() لتمثيل عدة مجموعات بيانات متكدسة مع تحديد لوحة الألوان عبر palette مثل HighContrast3.`
+      },
+
+      // ===================== الفصل السادس — الوحدة (2) [71-80] =====================
+      {
+        id: 71, chapter: 6, unitKey: `6-2`,
+        q: `ما الغرض الأساسي من استخدام Layouts في مكتبة Bokeh؟`,
+        options: [
+          `تنظيم عرض أكثر من رسم بياني معاً في شكل واحد متناسق`,
+          `تغيير نوع البيانات من رقمية إلى نصية`,
+          `حساب الارتباط الإحصائي بين متغيرين`,
+          `تثبيت حزمة Anaconda على نظام ويندوز`
+        ],
+        answer: 0,
+        explanation: `تُستخدم التخطيطات (Layouts) في Bokeh لتنظيم وترتيب عدة رسوم بيانية في صفحة أو شكل واحد.`
+      },
+      {
+        id: 72, chapter: 6, unitKey: `6-2`,
+        q: `ما هي أنواع التخطيط (Layouts) الثلاثة الأساسية التي تناولتها الوحدة الثانية من الفصل السادس؟`,
+        options: [
+          `Row layout و Column layout و Grid layout`,
+          `Line layout و Bar layout و Pie layout`,
+          `Inner layout و Outer layout و Left layout`,
+          `Series layout و Matrix layout و Hex layout`
+        ],
+        answer: 0,
+        explanation: `تشمل التخطيطات الأساسية في Bokeh: Row layout (صف أفقي)، و Column layout (عمود رأسي)، و Grid layout (مصفوفة ثنائية البعد).`
+      },
+      {
+        id: 73, chapter: 6, unitKey: `6-2`,
+        q: `عند تنفيذ الكود show(row(p1, p2, p3)) في Bokeh، كيف ستظهر الرسوم البيانية؟`,
+        code: `from bokeh.layouts import row\nshow(row(p1, p2, p3))`,
+        options: [
+          `تظهر الرسوم الثلاثة مرتبة في صف واحد بشكل أفقي جنباً إلى جنب`,
+          `تظهر الرسوم الثلاثة فوق بعضها في عمود واحد`,
+          `يظهر الرسم الأول فقط وتُخفى البقية`,
+          `تُدمج الرسوم الثلاثة فوق نفس المحاور`
+        ],
+        answer: 0,
+        explanation: `تنظم دالة row() الرسوم الفرعية في صف واحد بشكل أفقي.`
+      },
+      {
+        id: 74, chapter: 6, unitKey: `6-2`,
+        q: `أي دالة من bokeh.layouts تُستخدم لترتيب عدة رسوم بيانية في عمود واحد بشكل رأسي (فوق بعضها)؟`,
+        options: [
+          `column()`,
+          `row()`,
+          `vbar()`,
+          `add_tools()`
+        ],
+        answer: 0,
+        explanation: `تُمثّل دالة column() كل الرسوم البيانية في عمود واحد بشكل رأسي.`
+      },
+      {
+        id: 75, chapter: 6, unitKey: `6-2`,
+        q: `كيف تصف بنية Grid layout (دالة gridplot) في Bokeh؟`,
+        options: [
+          `مصفوفة ثنائية البعد (صفوف وأعمدة) لعرض الرسوم البيانية`,
+          `قائمة أحادية البعد تعرض رسماً واحداً فقط`,
+          `أداة لتلوين النقاط في المخطط النقطي`,
+          `مفتاح خريطة تفاعلي لإخفاء الخطوط`
+        ],
+        answer: 0,
+        explanation: `عبارة عن مصفوفة ثنائية البعد من القوائم لعرض الرسوم البيانية في شبكة منظمة من صفوف وأعمدة.`
+      },
+      {
+        id: 76, chapter: 6, unitKey: `6-2`,
+        q: `في الكود التالي لـ gridplot، ماذا ينتج عن وضع القيمة None في الصف الثاني؟`,
+        code: `grid = gridplot([[p1, p2], [None, p3]])\nshow(grid)`,
+        options: [
+          `تُترك الخلية الأولى في الصف الثاني فارغة ويظهر p3 في العمود الثاني من الصف الثاني`,
+          `يتوقف البرنامج عن العمل برسالة خطأ`,
+          `تُحذف جميع الرسوم في الصف الأول`,
+          `يُكرر الرسم p1 تلقائياً مكان None`
+        ],
+        answer: 0,
+        explanation: `تمرير None داخل مصفوفة gridplot يترك ذلك الموضع فارغاً في الشبكة دون رسم، مما يمنح مرونة في توزيع المخططات.`
+      },
+      {
+        id: 77, chapter: 6, unitKey: `6-2`,
+        q: `إذا أردت وضع الرسمين p1 و p2 جنباً إلى جنب في الأعلى، وتحتهما الرسم p3 بعرضهما معاً، أي تعبير يحقق ذلك؟`,
+        options: [
+          `column(row(p1, p2), p3)`,
+          `row(p1, p2, p3)`,
+          `column(p1, p2, p3)`,
+          `vbar(p1, p2, p3)`
+        ],
+        answer: 0,
+        explanation: `دمج row(p1, p2) داخل column(..., p3) يضع الأولين في صف علوي أفقي ثم يضع p3 أسفلهما رأسياً.`
+      },
+      {
+        id: 78, chapter: 6, unitKey: `6-2`,
+        q: `عند تمرير x_range=p1.x_range عند إنشاء الرسم p2 ووضعهما في row(p1, p2)، ما الميزة التفاعلية التي نحصل عليها؟`,
+        code: `p2 = figure(x_range=p1.x_range)\nshow(row(p1, p2))`,
+        options: [
+          `ربط المحور الأفقي (Linked Panning) بحيث يتحرك ويكبر الرسم الثاني تلقائياً عند تحريك أو تكبير الأول`,
+          `تغيير ألوان الرسم الثاني لتطابق الأول تلقائياً`,
+          `دمج الرسمين في ملف صورة واحد غير تفاعلي`,
+          `تعطيل شريط الأدوات في كلا الرسمين`
+        ],
+        answer: 0,
+        explanation: `مشاركة x_range أو y_range بين الرسوم داخل التخطيطات يربط تفاعلات التحريك والتكبير بينها بشكل متزامن.`
+      },
+      {
+        id: 79, chapter: 6, unitKey: `6-2`,
+        q: `ما الميزة التي تقدمها gridplot() عند تحديد toolbar_location='above' لها مقارنةً باستخدام row() فقط؟`,
+        options: [
+          `دمج أدوات التحكم في شريط أدوات واحد موحد للشبكة بأكملها بدلاً من تكرار شريط لكل رسم`,
+          `تحويل المخططات الخطية إلى خرائط حرارية`,
+          `إخفاء جميع المحاور والأرقام`,
+          `حفظ البيانات تلقائياً في Pandas`
+        ],
+        answer: 0,
+        explanation: `تجمع gridplot أشرطة الأدوات الخاصة بالرسوم الفرعية في شريط أدوات واحد موحد يسهل التحكم في كامل الشبكة.`
+      },
+      {
+        id: 80, chapter: 6, unitKey: `6-2`,
+        q: `لجعل تخطيط Bokeh يتمدد تلقائياً ليتناسب مع عرض الشاشة أو النافذة، أي معامل يُستخدم؟`,
+        options: [
+          `sizing_mode (مثل 'stretch_width')`,
+          `meanline`,
+          `click_policy`,
+          `annot`
+        ],
+        answer: 0,
+        explanation: `يتحكم معامل sizing_mode في استجابة أبعاد الرسوم والتخطيطات (Layouts) داخل المتصفح مع تغير حجم الشاشة.`
+      },
+
+      // ===================== الفصل السادس — الوحدة (3) [81-90] =====================
+      {
+        id: 81, chapter: 6, unitKey: `6-3`,
+        q: `ما القيم المتاحة لمعامل toolbar_location للتحكم في موضع شريط الأدوات حول الرسم البياني في Bokeh؟`,
+        options: [
+          `"above" و "below" و "left" و "right" (أو None لإخفائه)`,
+          `"top" و "bottom" فقط`,
+          `"inner" و "outer" فقط`,
+          `"hide" و "mute" فقط`
+        ],
+        answer: 0,
+        explanation: `يُحدّد موضع شريط الأدوات عبر toolbar_location بإحدى القيم: "above" (أعلى)، "below" (أسفل)، "left" (يسار)، "right" (يمين).`
+      },
+      {
+        id: 82, chapter: 6, unitKey: `6-3`,
+        q: `في أمثلة الوحدة الثالثة من الفصل السادس بالملخص، لماذا لم يتم استدعاء output_notebook()؟`,
+        options: [
+          `لكي يُعرض الرسم البياني ويتم التفاعل معه مباشرة من خلال المتصفح`,
+          `لأن output_notebook() تم حذفها من مكتبة Bokeh`,
+          `لأن المتصفح لا يدعم الرسوم التفاعلية`,
+          `لتحويل الرسم إلى رسم ثابت في Matplotlib`
+        ],
+        answer: 0,
+        explanation: `كما نُبّه في الملخص، عدم استدعاء output_notebook() يجعل show() تفتح الرسم البياني في المتصفح للتفاعل الكامل معه.`
+      },
+      {
+        id: 83, chapter: 6, unitKey: `6-3`,
+        q: `كيف نضيف أداة تفاعلية مثل FullscreenTool (من bokeh.models) إلى رسم بياني p بعد إنشائه؟`,
+        code: `from bokeh.models import FullscreenTool\n# السطر الناقص لإضافة الأداة للشكل p`,
+        options: [
+          `p.add_tools(FullscreenTool())`,
+          `p.legend.add(FullscreenTool())`,
+          `p.toolbar_location = FullscreenTool()`,
+          `p.plot(kind='fullscreen')`
+        ],
+        answer: 0,
+        explanation: `تُنشأ الأداة ككائن من فئتها في bokeh.models ثم تُضاف إلى الشكل باستخدام الدالة p.add_tools(...).`
+      },
+      {
+        id: 84, chapter: 6, unitKey: `6-3`,
+        q: `إذا أردنا إظهار أدوات محددة فقط في شريط الأدوات (مثل التكبير وإعادة الضبط) عند إنشاء الشكل، كيف نفعل ذلك؟`,
+        code: `p = figure(tools=[BoxZoomTool(), ResetTool()])`,
+        options: [
+          `بتمرير قائمة كائنات الأدوات المطلوبة إلى معامل tools عند استدعاء figure()`,
+          `بتمرير أسماء الأعمدة إلى معامل layout`,
+          `بتغيير click_policy إلى 'hide'`,
+          `باستخدام دالة plt.legend()`
+        ],
+        answer: 0,
+        explanation: `يمكن تحديد الأدوات التي تظهر في الشريط مباشرة بتمرير قائمة كائنات الأدوات في معامل tools عند إنشاء figure.`
+      },
+      {
+        id: 85, chapter: 6, unitKey: `6-3`,
+        q: `كيف يتم تعريف قائمة الـ Tooltips التي تظهر عند تمرير مؤشر الفأرة فوق عناصر الرسم في Bokeh؟`,
+        options: [
+          `كقائمة من الأزواج المرتبة (tuples) بحيث يمثل العنصر الأول العنوان المعروض والثاني القيمة المقابلة`,
+          `كملف نصي منفصل بامتداد .csv فقط`,
+          `كقائمة ألوان سادس عشرية فقط دون عناوين`,
+          `عبر دالة pd.crosstab()`
+        ],
+        answer: 0,
+        explanation: `تُبنى الـ tooltips من قائمة أزواج مرتبة (label, value)، الأول للعنوان الظاهر والثاني لقيمة البيانات أو خصائص الرسم.`
+      },
+      {
+        id: 86, chapter: 6, unitKey: `6-3`,
+        q: `ما الفرق بين الرمز ($) والرمز (@) عند كتابتهما داخل قيم الـ Tooltips في Bokeh؟`,
+        options: [
+          `($) للمعلومات الخاصة بالرسم البياني نفسه (كالفهرس واللون والإحداثيات)، بينما (@) للمعلومات من مصدر البيانات (أعمدة الـ DataFrame)`,
+          `($) للمتغيرات النصية و (@) للأرقام السالبة فقط`,
+          `(@) لتكبير الرسم و ($) لإخفاء مفتاح الخريطة`,
+          `لا يوجد فرق بينهما ويمكن تبديلهما دائماً`
+        ],
+        answer: 0,
+        explanation: `يُستخدم الرمز $ لقراءة خصائص الرسم البياني نفسه ($x, $index, $color)، بينما يُستخدم @ لقراءة قيم الأعمدة من مصدر البيانات.`
+      },
+      {
+        id: 87, chapter: 6, unitKey: `6-3`,
+        q: `إذا كان اسم العمود في مصدر البيانات يحتوي على مسافة (مثل "Unit Price")، كيف يُكتب في Tooltips مع الرمز @؟`,
+        options: [
+          `@{Unit Price}`,
+          `$Unit Price`,
+          `@Unit_Price$`,
+          `@(Unit Price)`
+        ],
+        answer: 0,
+        explanation: `إذا احتوى اسم العمود على مسافة في مصدر البيانات، يجب وضعه بين أقواس مجموعة بعد @ هكذا: @{Unit Price}.`
+      },
+      {
+        id: 88, chapter: 6, unitKey: `6-3`,
+        q: `في قائمة الحقول الخاصة بـ Tooltips في Bokeh، ما الفرق بين $x و $sx؟`,
+        options: [
+          `$x هي قيمة المحور x من مصدر البيانات، بينما $sx هي إحداثي النقطة على الرسم البياني نفسه`,
+          `$x للعمود الأول و $sx للعمود الأخير`,
+          `$x للون السادس عشري و $sx للمربع الملون`,
+          `$sx تُخفي التلميح عند تمرير الفأرة`
+        ],
+        answer: 0,
+        explanation: `$x و $y تمثلان قيم النقطة من مصدر البيانات، بينما $sx و $sy تمثلان إحداثيات موضع النقطة على الرسم البياني نفسه.`
+      },
+      {
+        id: 89, chapter: 6, unitKey: `6-3`,
+        q: `في الصيغة $color[swatch]:fill_color داخل Tooltips، ماذا يفعل الخيار [swatch] مقارنةً بالخيار [hex]؟`,
+        options: [
+          `[swatch] يعرض اللون كمربع ملون، بينما [hex] يعرض رمز اللون بالتمثيل السادس عشري`,
+          `[swatch] يغير لون الخلفية إلى الأسود، بينما [hex] يحذف اللون`,
+          `[swatch] يعمل مع الخطوط فقط و [hex] مع الجداول المتقاطعة`,
+          `كلاهما يعرضان اسم اللون باللغة العربية`
+        ],
+        answer: 0,
+        explanation: `مع $color[option]:field_name، يعرض option='swatch' مربعاً باللون، ويعرض option='hex' التمثيل السادس عشري للون.`
+      },
+      {
+        id: 90, chapter: 6, unitKey: `6-3`,
+        q: `عند وجود عدة رسوم خطية (مثل IBM و GOOG) في شكل واحد، ما الفرق بين p.legend.click_policy = "hide" و "mute"؟`,
+        code: `p.legend.click_policy = "mute"`,
+        options: [
+          `"hide" يخفي الخط كلياً عند النقر على اسمه في المفتاح، بينما "mute" يخفّته (يجعله باهتاً) مع إبقائه ظاهراً`,
+          `"hide" يحذف البيانات من القرص الصلب، و "mute" يوقف الصوت فقط`,
+          `"hide" يظهر رسالة خطأ، و "mute" يغير الرسم إلى أعمدة`,
+          `كلاهما يقومان بحذف مفتاح الخريطة نهائياً`
+        ],
+        answer: 0,
+        explanation: `تتيح click_policy تفاعل مفتاح الخريطة: "hide" تخفي/تُظهر السلسلة تماماً، بينما "mute" تخفّت السلسلة لتسليط الضوء على السلاسل الأخرى دون إخفائها كلياً.`
+      }
+    ];
+
+    // App State
+    let appState = {
+      mode: `practice`,         // 'practice' | 'exam'
+      viewMode: `single`,       // 'single' | 'list' | 'report'
+      selectedChapter: `all`,   // 'all' | 4 | 5 | 6
+      selectedUnit: `all`,      // 'all' | '4-1' .. '6-3'
+      statusFilter: `all`,      // 'all' | 'unanswered' | 'correct' | 'wrong' | 'flagged'
+      currentQId: 1,
+      answers: {},              // { "1": 0, ... }
+      flagged: [],              // [1, 14, ...]
+      examSubmitted: false
+    };
+
+    const OPTION_LETTERS = [`A`, `B`, `C`, `D`];
+
+    function getUnitInfo(unitKey) {
+      for (let i = 0; i < CHAPTERS.length; i++) {
+        const ch = CHAPTERS[i];
+        for (let j = 0; j < ch.units.length; j++) {
+          if (ch.units[j].id === unitKey) {
+            return { chapter: ch, unit: ch.units[j] };
+          }
+        }
+      }
+      return null;
+    }
+
+    function isCorrectionVisible(qId) {
+      if (appState.mode === `practice`) {
+        return typeof appState.answers[String(qId)] === `number`;
+      }
+      return appState.examSubmitted;
+    }
+
+    function getFilteredQuestions() {
+      return QUESTIONS.filter(function(q) {
+        if (appState.selectedChapter !== `all` && q.chapter !== Number(appState.selectedChapter)) {
+          return false;
+        }
+        if (appState.selectedUnit !== `all` && q.unitKey !== appState.selectedUnit) {
+          return false;
+        }
+        const chosen = appState.answers[String(q.id)];
+        const hasAns = typeof chosen === `number`;
+        const canReveal = isCorrectionVisible(q.id);
+        const isFlagged = appState.flagged.indexOf(q.id) !== -1;
+
+        if (appState.statusFilter === `unanswered`) return !hasAns;
+        if (appState.statusFilter === `flagged`) return isFlagged;
+        if (appState.statusFilter === `correct`) return canReveal && hasAns && chosen === q.answer;
+        if (appState.statusFilter === `wrong`) return canReveal && hasAns && chosen !== q.answer;
+        return true;
+      });
+    }
+
+    function computeStats() {
+      let answered = 0;
+      let correct = 0;
+      let wrong = 0;
+      let gradedCount = 0;
+
+      const byChapter = {
+        4: { total: 30, answered: 0, correct: 0, graded: 0 },
+        5: { total: 30, answered: 0, correct: 0, graded: 0 },
+        6: { total: 30, answered: 0, correct: 0, graded: 0 }
+      };
+
+      const byUnit = {};
+      CHAPTERS.forEach(function(ch) {
+        ch.units.forEach(function(u) {
+          byUnit[u.id] = { total: 10, answered: 0, correct: 0, wrong: 0, graded: 0 };
+        });
+      });
+
+      QUESTIONS.forEach(function(q) {
+        const chosen = appState.answers[String(q.id)];
+        const hasAns = typeof chosen === `number`;
+        const canReveal = isCorrectionVisible(q.id);
+
+        if (hasAns) {
+          answered += 1;
+          byChapter[q.chapter].answered += 1;
+          byUnit[q.unitKey].answered += 1;
+        }
+        if (canReveal) {
+          if (appState.mode === `exam` && appState.examSubmitted) {
+            gradedCount += 1;
+            byChapter[q.chapter].graded += 1;
+            byUnit[q.unitKey].graded += 1;
+            if (hasAns && chosen === q.answer) {
+              correct += 1;
+              byChapter[q.chapter].correct += 1;
+              byUnit[q.unitKey].correct += 1;
+            } else {
+              wrong += 1;
+              byUnit[q.unitKey].wrong += 1;
+            }
+          } else if (hasAns) {
+            gradedCount += 1;
+            byChapter[q.chapter].graded += 1;
+            byUnit[q.unitKey].graded += 1;
+            if (chosen === q.answer) {
+              correct += 1;
+              byChapter[q.chapter].correct += 1;
+              byUnit[q.unitKey].correct += 1;
+            } else {
+              wrong += 1;
+              byUnit[q.unitKey].wrong += 1;
+            }
+          }
+        }
+      });
+
+      const denom = (appState.mode === `exam` && appState.examSubmitted) ? 90 : (gradedCount > 0 ? gradedCount : 90);
+      const pct = gradedCount > 0 ? Math.round((correct / denom) * 100) : 0;
+
+      return {
+        answered: answered,
+        correct: correct,
+        wrong: wrong,
+        gradedCount: gradedCount,
+        pct: pct,
+        byChapter: byChapter,
+        byUnit: byUnit
+      };
+    }
+
+    function getGradeLabel(pct, gradedCount) {
+      if (gradedCount === 0) return `ابدأ بالإجابة لحساب التقدير`;
+      if (pct >= 90) return `ممتاز — جاهز للاختبار النهائي`;
+      if (pct >= 80) return `جيد جداً — مستوى متقدم`;
+      if (pct >= 70) return `جيد — راجع نقاط الضعف`;
+      return `يحتاج مراجعة إضافية للوحدات`;
+    }
+
+    async function saveState() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === `function`) {
+        try {
+          await window.notebookAppApi.setAppState(appState);
+        } catch (e) {
+          // Ignore transient host storage error silently
+        }
+      }
+    }
+
+    function showNotice(msg, type) {
+      const banner = document.getElementById(`notice-banner`);
+      const text = document.getElementById(`notice-text`);
+      if (!banner || !text) return;
+      banner.className = `notice-banner is-visible` + (type ? ` is-` + type : ``);
+      text.textContent = msg;
+    }
+
+    function hideNotice() {
+      const banner = document.getElementById(`notice-banner`);
+      if (banner) banner.className = `notice-banner`;
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, `&amp;`)
+        .replace(/</g, `&lt;`)
+        .replace(/>/g, `&gt;`)
+        .replace(/"/g, `&quot;`);
+    }
+
+    function renderAll() {
+      renderHeaderControls();
+      renderKPIs();
+      renderSidebar();
+      renderMainPanel();
+    }
+
+    function renderHeaderControls() {
+      const pBtn = document.getElementById(`mode-practice-btn`);
+      const eBtn = document.getElementById(`mode-exam-btn`);
+      const submitBar = document.getElementById(`exam-submit-bar`);
+      const submitBtn = document.getElementById(`submit-exam-btn`);
+
+      if (pBtn && eBtn) {
+        pBtn.className = `seg-btn` + (appState.mode === `practice` ? ` is-active` : ``);
+        eBtn.className = `seg-btn` + (appState.mode === `exam` ? ` is-active` : ``);
+      }
+
+      if (submitBar && submitBtn) {
+        if (appState.mode === `exam`) {
+          submitBar.style.display = `flex`;
+          submitBtn.textContent = appState.examSubmitted ? `تم التصحيح — عرض التقرير` : `إنهاء وتصحيح الاختبار`;
+        } else {
+          submitBar.style.display = `none`;
+        }
+      }
+
+      const tabs = [`single`, `list`, `report`];
+      tabs.forEach(function(t) {
+        const el = document.getElementById(`tab-` + t);
+        if (el) {
+          el.className = `tab-btn` + (appState.viewMode === t ? ` is-active` : ``);
+        }
+      });
+
+      const filterEl = document.getElementById(`status-filter`);
+      if (filterEl) filterEl.value = appState.statusFilter;
+    }
+
+    function renderKPIs() {
+      const stats = computeStats();
+      const scoreEl = document.getElementById(`kpi-score`);
+      const gradeEl = document.getElementById(`kpi-grade`);
+      const ansEl = document.getElementById(`kpi-answered`);
+      const progEl = document.getElementById(`kpi-progress-bar`);
+      const bdEl = document.getElementById(`kpi-breakdown-num`);
+      const corrEl = document.getElementById(`kpi-correct-label`);
+      const wrongEl = document.getElementById(`kpi-wrong-label`);
+      const chEl = document.getElementById(`kpi-chapters-summary`);
+
+      if (scoreEl) scoreEl.textContent = stats.pct + `%`;
+      if (gradeEl) {
+        if (appState.mode === `exam` && !appState.examSubmitted) {
+          gradeEl.textContent = `وضع الاختبار التجريبي (تُكشف النتيجة بعد التسليم)`;
+        } else {
+          gradeEl.textContent = getGradeLabel(stats.pct, stats.gradedCount);
+        }
+      }
+      if (ansEl) ansEl.textContent = stats.answered + ` / 90`;
+      if (progEl) progEl.style.width = Math.round((stats.answered / 90) * 100) + `%`;
+      if (bdEl) bdEl.textContent = stats.correct + ` / ` + stats.gradedCount;
+      if (corrEl) corrEl.textContent = `صحيح: ` + stats.correct;
+      if (wrongEl) wrongEl.textContent = `خطأ: ` + stats.wrong;
+
+      if (chEl) {
+        const p4 = stats.byChapter[4].graded > 0 ? Math.round((stats.byChapter[4].correct / (appState.mode === `exam` && appState.examSubmitted ? 30 : stats.byChapter[4].graded)) * 100) : 0;
+        const p5 = stats.byChapter[5].graded > 0 ? Math.round((stats.byChapter[5].correct / (appState.mode === `exam` && appState.examSubmitted ? 30 : stats.byChapter[5].graded)) * 100) : 0;
+        const p6 = stats.byChapter[6].graded > 0 ? Math.round((stats.byChapter[6].correct / (appState.mode === `exam` && appState.examSubmitted ? 30 : stats.byChapter[6].graded)) * 100) : 0;
+        chEl.textContent = p4 + `% · ` + p5 + `% · ` + p6 + `%`;
+      }
+    }
+
+    function renderSidebar() {
+      const tree = document.getElementById(`chapter-tree`);
+      const stats = computeStats();
+      if (tree) {
+        let html = ``;
+        const allActive = appState.selectedChapter === `all` && appState.selectedUnit === `all`;
+        html += `<button type="button" class="nav-btn` + (allActive ? ` is-active` : ``) + `" onclick="selectScope('all', 'all')">` +
+          `<span>جميع الفصول (الاختبار الشامل)</span>` +
+          `<span class="mono-badge" dir="ltr">` + stats.answered + `/90</span>` +
+          `</button>`;
+
+        CHAPTERS.forEach(function(ch) {
+          const chActive = Number(appState.selectedChapter) === ch.id && appState.selectedUnit === `all`;
+          const chStat = stats.byChapter[ch.id];
+          html += `<button type="button" class="chapter-group-header` + (chActive ? ` is-active` : ``) + `" onclick="selectScope(` + ch.id + `, 'all')">` +
+            `<span>` + escapeHtml(ch.title) + `</span>` +
+            `<span class="mono-badge" dir="ltr">` + chStat.answered + `/30</span>` +
+            `</button>`;
+
+          ch.units.forEach(function(u) {
+            const uActive = appState.selectedUnit === u.id;
+            const uStat = stats.byUnit[u.id];
+            const scoreTag = uStat.graded > 0 ? (uStat.correct + `/` + uStat.total) : (uStat.answered + `/10`);
+            html += `<button type="button" class="unit-btn` + (uActive ? ` is-active` : ``) + `" onclick="selectScope(` + ch.id + `, '` + u.id + `')">` +
+              `<span>` + escapeHtml(u.title) + `</span>` +
+              `<span class="mono-badge" dir="ltr">` + scoreTag + `</span>` +
+              `</button>`;
+          });
+        });
+
+        tree.innerHTML = html;
+      }
+
+      // Render Question Map
+      const mapEl = document.getElementById(`q-map-grid`);
+      const countEl = document.getElementById(`q-map-count`);
+      const filtered = getFilteredQuestions();
+      if (countEl) countEl.textContent = String(filtered.length);
+
+      if (mapEl) {
+        if (filtered.length === 0) {
+          mapEl.innerHTML = `<div style="grid-column: 1 / -1; color: var(--on-surface-variant); font-size: var(--label-size); padding: var(--space-sm) 0;">لا توجد أسئلة مطابقة للتصفية الحالية.</div>`;
+        } else {
+          let mHtml = ``;
+          filtered.forEach(function(q) {
+            const chosen = appState.answers[String(q.id)];
+            const hasAns = typeof chosen === `number`;
+            const canReveal = isCorrectionVisible(q.id);
+            const isFlagged = appState.flagged.indexOf(q.id) !== -1;
+            let cls = `q-map-cell`;
+            if (q.id === appState.currentQId && appState.viewMode === `single`) cls += ` is-current`;
+            if (canReveal && hasAns) {
+              cls += (chosen === q.answer) ? ` is-correct` : ` is-wrong`;
+            } else if (canReveal && !hasAns && appState.mode === `exam` && appState.examSubmitted) {
+              cls += ` is-wrong`;
+            } else if (hasAns) {
+              cls += ` is-answered-pending`;
+            }
+            if (isFlagged) cls += ` is-flagged`;
+
+            mHtml += `<button type="button" class="` + cls + `" aria-label="السؤال ` + q.id + `" onclick="jumpToQuestion(` + q.id + `)">` + q.id + `</button>`;
+          });
+          mapEl.innerHTML = mHtml;
+        }
+      }
+    }
+
+    function buildQuestionCardHtml(q, indexInList, totalInList, isSingle) {
+      const info = getUnitInfo(q.unitKey);
+      const chosen = appState.answers[String(q.id)];
+      const hasAns = typeof chosen === `number`;
+      const canReveal = isCorrectionVisible(q.id);
+      const isFlagged = appState.flagged.indexOf(q.id) !== -1;
+
+      let html = `<article class="question-card" id="q-card-` + q.id + `">`;
+      html += `<div class="q-meta-row">`;
+      html += `<div class="q-tags">`;
+      html += `<span class="tag-pill">الفصل ` + q.chapter + `</span>`;
+      if (info) {
+        html += `<span class="tag-pill tag-neutral">` + escapeHtml(info.unit.title) + `</span>`;
+      }
+      html += `<span class="q-number-line" dir="ltr">Q` + q.id + ` / 90` + (totalInList > 1 ? ` · (` + (indexInList + 1) + `/` + totalInList + `)` : ``) + `</span>`;
+      html += `</div>`;
+
+      html += `<button type="button" class="flag-btn` + (isFlagged ? ` is-flagged` : ``) + `" onclick="toggleFlag(` + q.id + `)">` +
+        `<svg width="14" height="14" viewBox="0 0 24 24" fill="` + (isFlagged ? `currentColor` : `none`) + `" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>` +
+        `<span>` + (isFlagged ? `معلّم للمراجعة` : `علّم للمراجعة`) + `</span>` +
+        `</button>`;
+      html += `</div>`;
+
+      html += `<h3 class="q-text">` + escapeHtml(q.q) + `</h3>`;
+
+      if (q.code) {
+        html += `<pre class="code-block"><code>` + escapeHtml(q.code) + `</code></pre>`;
+      }
+
+      html += `<div class="options-list">`;
+      const locked = (appState.mode === `practice` && hasAns) || (appState.mode === `exam` && appState.examSubmitted);
+      q.options.forEach(function(opt, idx) {
+        let optCls = `option-btn`;
+        let statusText = ``;
+        if (canReveal) {
+          if (idx === q.answer) {
+            optCls += ` is-correct`;
+            statusText = `الإجابة الصحيحة`;
+          } else if (hasAns && idx === chosen) {
+            optCls += ` is-wrong`;
+            statusText = `اختيارك`;
+          }
+        } else if (hasAns && idx === chosen) {
+          optCls += ` is-selected`;
+          statusText = `تم الاختيار`;
+        }
+
+        html += `<button type="button" class="` + optCls + `" ` + (locked ? `disabled` : ``) + ` onclick="selectOption(` + q.id + `, ` + idx + `)">` +
+          `<span class="option-letter" dir="ltr">` + OPTION_LETTERS[idx] + `</span>` +
+          `<span>` + escapeHtml(opt) + `</span>` +
+          (statusText ? `<span class="option-status">` + statusText + `</span>` : `<span></span>`) +
+          `</button>`;
+      });
+      html += `</div>`;
+
+      if (canReveal) {
+        const isCorrect = hasAns && chosen === q.answer;
+        const boxCls = `explanation-box ` + (isCorrect ? `is-correct` : `is-wrong`);
+        const verdict = isCorrect
+          ? `إجابة صحيحة`
+          : (hasAns ? `إجابة غير صحيحة — الإجابة الصحيحة هي (${OPTION_LETTERS[q.answer]})` : `لم يُجب عن السؤال — الإجابة الصحيحة هي (${OPTION_LETTERS[q.answer]})`);
+
+        html += `<div class="` + boxCls + `">` +
+          `<span class="explanation-title">` + escapeHtml(verdict) + `</span>` +
+          `<p class="explanation-body">` + escapeHtml(q.explanation) + `</p>` +
+          `</div>`;
+      }
+
+      if (isSingle) {
+        const hasPrev = indexInList > 0;
+        const hasNext = indexInList < totalInList - 1;
+        html += `<div class="q-nav-footer">` +
+          `<div class="q-nav-pair">` +
+          `<button type="button" class="btn btn-ghost" ` + (hasPrev ? `` : `disabled`) + ` onclick="navigateQuestion(-1)">السؤال السابق</button>` +
+          `<button type="button" class="btn btn-primary" ` + (hasNext ? `` : `disabled`) + ` onclick="navigateQuestion(1)">السؤال التالي</button>` +
+          `</div>` +
+          `<button type="button" class="btn btn-secondary" onclick="setViewMode('report')">عرض تقرير الأداء</button>` +
+          `</div>`;
+      }
+
+      html += `</article>`;
+      return html;
+    }
+
+    function renderReportView() {
+      const stats = computeStats();
+      const rows = [];
+      CHAPTERS.forEach(function(ch) {
+        ch.units.forEach(function(u) {
+          const uStat = stats.byUnit[u.id];
+          const denom = (appState.mode === `exam` && appState.examSubmitted) ? 10 : (uStat.graded > 0 ? uStat.graded : 10);
+          const pct = uStat.graded > 0 ? Math.round((uStat.correct / denom) * 100) : 0;
+          rows.push({
+            chapterId: ch.id,
+            unitId: u.id,
+            title: u.title,
+            answered: uStat.answered,
+            correct: uStat.correct,
+            wrong: uStat.wrong,
+            graded: uStat.graded,
+            pct: pct
+          });
+        });
+      });
+
+      let html = `<div class="report-panel">`;
+
+      html += `<section class="report-summary-card">` +
+        `<div>` +
+        `<h2 class="report-headline">ملخص التأهيل للاختبار</h2>` +
+        `<p style="margin:0; color: var(--on-surface-variant);">` +
+        escapeHtml(appState.mode === `exam` && !appState.examSubmitted
+          ? `أنت في وضع الاختبار التجريبي. اضغط على «إنهاء وتصحيح الاختبار» أعلاه لاعتماد النتيجة النهائية وكشف الإجابات الصحيحة.`
+          : getGradeLabel(stats.pct, stats.gradedCount) + ` — أجبت عن ` + stats.answered + ` من أصل 90 سؤالاً.`) +
+        `</p>` +
+        `</div>` +
+        `<div class="report-score-big" dir="ltr">` + stats.pct + `%</div>` +
+        `</section>`;
+
+      // Carbon-styled RTL-safe Horizontal Bar Chart for the 9 Units
+      let chartRowsHtml = `<div style="display:flex; flex-direction:column; gap: var(--space-sm);">`;
+      rows.forEach(function(r) {
+        const fillToken = r.graded === 0 ? `var(--data-context)` : (r.pct >= 70 ? `var(--data-1)` : `var(--error)`);
+        const shortLabel = `ف` + r.chapterId + ` · ` + r.title;
+        chartRowsHtml += `<div style="display:grid; grid-template-columns: minmax(160px, 280px) minmax(0, 1fr) 48px; gap: var(--space-md); align-items:center;">` +
+          `<span style="font-size: 0.875rem; color: var(--on-surface);">` + escapeHtml(shortLabel) + `</span>` +
+          `<svg viewBox="0 0 100 14" preserveAspectRatio="none" style="width:100%; height:14px; display:block;" role="img" aria-label="` + escapeHtml(shortLabel + ` ` + r.pct + `%`) + `">` +
+          `<rect x="0" y="0" width="100" height="14" fill="var(--surface-container-high)"/>` +
+          (r.pct > 0 ? `<rect x="` + (100 - r.pct) + `" y="0" width="` + r.pct + `" height="14" fill="` + fillToken + `"/>` : ``) +
+          `</svg>` +
+          `<span class="td-mono" style="font-size: var(--label-size);">` + r.pct + `%</span>` +
+          `</div>`;
+      });
+      chartRowsHtml += `</div>`;
+
+      html += `<section class="chart-box">` +
+        `<h3 class="chart-title">مؤشر الإتقان حسب الوحدات التسع</h3>` +
+        `<p class="chart-subtitle" dir="ltr">UNIT MASTERY (%) · CHAPTERS 4–6</p>` +
+        chartRowsHtml +
+        `</section>`;
+
+      // Detailed Carbon Table
+      html += `<div class="table-wrap"><table class="carbon-table"><thead><tr>` +
+        `<th>الفصل والوحدة</th>` +
+        `<th>المُجاب</th>` +
+        `<th>الصحيحة</th>` +
+        `<th>الخاطئة</th>` +
+        `<th>النسبة</th>` +
+        `<th>إجراء</th>` +
+        `</tr></thead><tbody>`;
+
+      rows.forEach(function(r) {
+        html += `<tr>` +
+          `<td><strong>ف` + r.chapterId + `:</strong> ` + escapeHtml(r.title) + `</td>` +
+          `<td class="td-mono">` + r.answered + ` / 10</td>` +
+          `<td class="td-mono">` + r.correct + `</td>` +
+          `<td class="td-mono">` + r.wrong + `</td>` +
+          `<td class="td-mono">` + r.pct + `%</td>` +
+          `<td><button type="button" class="btn btn-ghost" style="padding: var(--space-xs) var(--space-md);" onclick="practiceUnit(` + r.chapterId + `, '` + r.unitId + `')">مراجعة الوحدة</button></td>` +
+          `</tr>`;
+      });
+
+      html += `</tbody></table></div>`;
+      html += `</div>`;
+      return html;
+    }
+
+    function renderMainPanel() {
+      const container = document.getElementById(`main-content`);
+      if (!container) return;
+
+      if (appState.viewMode === `report`) {
+        container.innerHTML = renderReportView();
+        return;
+      }
+
+      const filtered = getFilteredQuestions();
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="empty-state">` +
+          `<p style="margin:0; font-weight:600;">لا توجد أسئلة مطابقة لمعايير التصفية الحالية</p>` +
+          `<p style="margin:0; color: var(--on-surface-variant);">جرّب إعادة التصفية إلى «جميع الأسئلة في النطاق» لعرض الأسئلة المتاحة.</p>` +
+          `<button type="button" class="btn btn-primary" onclick="resetFilters()">عرض جميع الأسئلة</button>` +
+          `</div>`;
+        return;
+      }
+
+      if (appState.viewMode === `single`) {
+        let idx = filtered.findIndex(function(q) { return q.id === appState.currentQId; });
+        if (idx === -1) {
+          idx = 0;
+          appState.currentQId = filtered[0].id;
+        }
+        container.innerHTML = buildQuestionCardHtml(filtered[idx], idx, filtered.length, true);
+      } else {
+        let listHtml = `<div class="list-stack">`;
+        filtered.forEach(function(q, i) {
+          listHtml += buildQuestionCardHtml(q, i, filtered.length, false);
+        });
+        listHtml += `</div>`;
+        container.innerHTML = listHtml;
+      }
+    }
+
+    // Hoisted interactive handlers
+    function setExamMode(newMode) {
+      if (appState.mode === newMode) return;
+      appState.mode = newMode;
+      hideNotice();
+      if (newMode === `exam`) {
+        showNotice(`تم التبديل إلى وضع الاختبار التجريبي: لن تظهر الإجابات الصحيحة إلا بعد الضغط على «إنهاء وتصحيح الاختبار».`, ``);
+      } else {
+        showNotice(`تم التبديل إلى وضع التدريب الفوري: يظهر التصحيح والشرح مباشرة عند اختيار الإجابة.`, ``);
+      }
+      renderAll();
+      saveState();
+    }
+
+    function setViewMode(mode) {
+      appState.viewMode = mode;
+      renderAll();
+      saveState();
+    }
+
+    function selectScope(chapterId, unitId) {
+      appState.selectedChapter = chapterId;
+      appState.selectedUnit = unitId;
+      if (appState.viewMode === `report`) {
+        appState.viewMode = `single`;
+      }
+      const filtered = getFilteredQuestions();
+      if (filtered.length > 0) {
+        appState.currentQId = filtered[0].id;
+      }
+      renderAll();
+      saveState();
+    }
+
+    function practiceUnit(chapterId, unitId) {
+      appState.selectedChapter = chapterId;
+      appState.selectedUnit = unitId;
+      appState.statusFilter = `all`;
+      appState.viewMode = `single`;
+      const filtered = getFilteredQuestions();
+      if (filtered.length > 0) {
+        appState.currentQId = filtered[0].id;
+      }
+      renderAll();
+      saveState();
+    }
+
+    function setStatusFilter(val) {
+      appState.statusFilter = val;
+      const filtered = getFilteredQuestions();
+      if (filtered.length > 0) {
+        const exists = filtered.some(function(q) { return q.id === appState.currentQId; });
+        if (!exists) appState.currentQId = filtered[0].id;
+      }
+      renderAll();
+      saveState();
+    }
+
+    function resetFilters() {
+      appState.selectedChapter = `all`;
+      appState.selectedUnit = `all`;
+      appState.statusFilter = `all`;
+      const filtered = getFilteredQuestions();
+      if (filtered.length > 0) appState.currentQId = filtered[0].id;
+      renderAll();
+      saveState();
+    }
+
+    function jumpToQuestion(qId) {
+      appState.currentQId = qId;
+      if (appState.viewMode === `report`) {
+        appState.viewMode = `single`;
+      }
+      renderAll();
+      saveState();
+      if (appState.viewMode === `list`) {
+        const el = document.getElementById(`q-card-` + qId);
+        if (el) el.scrollIntoView({ behavior: `smooth`, block: `start` });
+      }
+    }
+
+    function navigateQuestion(delta) {
+      const filtered = getFilteredQuestions();
+      if (filtered.length === 0) return;
+      const idx = filtered.findIndex(function(q) { return q.id === appState.currentQId; });
+      const nextIdx = Math.max(0, Math.min(filtered.length - 1, idx + delta));
+      appState.currentQId = filtered[nextIdx].id;
+      renderAll();
+      saveState();
+    }
+
+    function selectOption(qId, optIdx) {
+      const key = String(qId);
+      if (appState.mode === `practice` && typeof appState.answers[key] === `number`) return;
+      if (appState.mode === `exam` && appState.examSubmitted) return;
+      appState.answers[key] = optIdx;
+      renderAll();
+      saveState();
+    }
+
+    function toggleFlag(qId) {
+      const idx = appState.flagged.indexOf(qId);
+      if (idx === -1) {
+        appState.flagged.push(qId);
+      } else {
+        appState.flagged.splice(idx, 1);
+      }
+      renderAll();
+      saveState();
+    }
+
+    function submitExamMode() {
+      if (appState.examSubmitted) {
+        setViewMode(`report`);
+        return;
+      }
+      appState.examSubmitted = true;
+      appState.viewMode = `report`;
+      const stats = computeStats();
+      showNotice(`تم تصحيح الاختبار الشامل: حصلت على ` + stats.correct + ` من 90 (` + stats.pct + `%).`, stats.pct >= 70 ? `success` : `warning`);
+      renderAll();
+      saveState();
+    }
+
+    function handleResetClick(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.classList.add(`is-armed`);
+        const span = btn.querySelector(`span`);
+        if (span) span.textContent = `اضغط مرة أخرى لتأكيد التصفير`;
+        setTimeout(function() {
+          if (btn.dataset.armed === `true`) {
+            btn.dataset.armed = `false`;
+            btn.classList.remove(`is-armed`);
+            if (span) span.textContent = `إعادة تعيين جميع الإجابات`;
+          }
+        }, 4000);
+        return;
+      }
+
+      btn.dataset.armed = `false`;
+      btn.classList.remove(`is-armed`);
+      const span = btn.querySelector(`span`);
+      if (span) span.textContent = `إعادة تعيين جميع الإجابات`;
+
+      appState.answers = {};
+      appState.flagged = [];
+      appState.examSubmitted = false;
+      appState.statusFilter = `all`;
+      appState.selectedChapter = `all`;
+      appState.selectedUnit = `all`;
+      appState.currentQId = 1;
+      appState.viewMode = `single`;
+      showNotice(`تم مسح جميع الإجابات بنجاح وبدء محاولة جديدة.`, ``);
+      renderAll();
+      saveState();
+    }
+
+    function exportResultsCsv() {
+      const lines = [`Question_ID,Chapter,Unit,Chosen_Option,Correct_Option,Status`];
+      QUESTIONS.forEach(function(q) {
+        const chosen = appState.answers[String(q.id)];
+        const hasAns = typeof chosen === `number`;
+        const chosenStr = hasAns ? OPTION_LETTERS[chosen] : `UNANSWERED`;
+        const corrStr = OPTION_LETTERS[q.answer];
+        let status = `UNANSWERED`;
+        if (hasAns) {
+          status = (chosen === q.answer) ? `CORRECT` : `WRONG`;
+        }
+        lines.push([q.id, q.chapter, q.unitKey, chosenStr, corrStr, status].join(`,`));
+      });
+      const csvContent = lines.join(`\n`);
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.triggerFileDownload === `function`) {
+        window.notebookAppApi.triggerFileDownload({
+          content: csvContent,
+          contentType: `text/csv`,
+          encoding: `UTF-8`,
+          filename: `data_visualization_exam_results.csv`
+        });
+        showNotice(`تم تصدير تقرير الإجابات بصيغة CSV.`, `success`);
+      } else {
+        showNotice(`التصدير المباشر متاح داخل بيئة العرض التفاعلية.`, `warning`);
+      }
+    }
+
+    async function initApp() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === `function`) {
+        try {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === `object`) {
+            if (saved.mode === `practice` || saved.mode === `exam`) appState.mode = saved.mode;
+            if (saved.viewMode === `single` || saved.viewMode === `list` || saved.viewMode === `report`) appState.viewMode = saved.viewMode;
+            if (saved.selectedChapter !== undefined) appState.selectedChapter = saved.selectedChapter;
+            if (saved.selectedUnit !== undefined) appState.selectedUnit = saved.selectedUnit;
+            if (saved.statusFilter !== undefined) appState.statusFilter = saved.statusFilter;
+            if (typeof saved.currentQId === `number`) appState.currentQId = saved.currentQId;
+            if (saved.answers && typeof saved.answers === `object`) appState.answers = saved.answers;
+            if (Array.isArray(saved.flagged)) appState.flagged = saved.flagged;
+            if (typeof saved.examSubmitted === `boolean`) appState.examSubmitted = saved.examSubmitted;
+          }
+        } catch (e) {
+          // Proceed with default state
+        }
+      }
+
+      renderAll();
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    document.addEventListener(`DOMContentLoaded`, initApp);
+  </script>
+</body>
+</html>
