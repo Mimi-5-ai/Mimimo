@@ -1,0 +1,2302 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="tool">
+  <meta name="design-style" content="briefing">
+  <title>الاختبار التفاعلي الشامل في تحليل وتمثيل البيانات | الفصول 1–14</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Noto+Sans+Arabic:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/katex.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/contrib/auto-render.min.js" defer></script>
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js" defer></script>
+
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces: Briefing warm stone-white paper */
+      --background: #faf9f5;
+      --surface-container-low: #ffffff;
+      --surface-container: #f1efe8;
+      --surface-container-high: #e6e2d6;
+
+      /* Ink */
+      --on-surface: #17181a;
+      --on-surface-variant: #56585c;
+
+      /* Rules */
+      --outline: #17181a;
+      --outline-variant: #dedad0;
+      --button-border-secondary: #c8c4b8;
+
+      /* Accents */
+      --primary: #17181a;
+      --on-primary: #faf9f5;
+      --primary-container: #f2b705;
+      --on-primary-container: #17181a;
+      --secondary: #1f4e5f;
+      --tertiary: #785008;
+      --error: #b42318;
+      --on-error: #ffffff;
+
+      /* Semantic & feedback surfaces */
+      --positive: #2b6e52;
+      --positive-bg: #eaf4ef;
+      --positive-border: #8ec5ab;
+      --error-bg: #fdf0ef;
+      --error-border: #e5a8a3;
+      --warning: #d99000;
+      --warning-bg: #fef7e0;
+      --info-bg: #edf4f7;
+      --tag-warm-bg: #f5e6c4;
+
+      /* Code block surfaces */
+      --code-bg: #171b20;
+      --code-ink: #f3f1ea;
+      --code-muted: #9aa3ad;
+      --code-border: #2c333c;
+
+      /* Data series */
+      --data-1: #1f4e5f;
+      --data-2: #d99000;
+      --data-3: #2b6e52;
+      --data-4: #b84a39;
+      --data-context: #c4bfb2;
+
+      /* Focus */
+      --focus: #1f4e5f;
+
+      /* Fonts (Arabic first per RTL guidelines) */
+      --font-headline: 'Noto Sans Arabic', 'Source Serif 4', serif;
+      --font-body: 'Noto Sans Arabic', 'Plus Jakarta Sans', sans-serif;
+      --font-label: 'Noto Sans Arabic', 'Geist Mono', monospace;
+      --font-code: 'Geist Mono', monospace;
+
+      /* Type scale for Focused Tool */
+      --display-size: clamp(1.65rem, 1.3rem + 1.2vw, 2.25rem);
+      --headline-size: clamp(1.2rem, 1.08rem + 0.45vw, 1.45rem);
+      --subhead-size: clamp(1.05rem, 1rem + 0.25vw, 1.15rem);
+      --body-size: clamp(0.95rem, 0.92rem + 0.15vw, 1.02rem);
+      --label-size: 0.78rem;
+
+      /* Shape */
+      --rounded: 0.25rem;
+      --rounded-lg: 0.375rem;
+      --rounded-full: 0.25rem;
+      --badge-radius: 2px;
+
+      /* Effects */
+      --section-rule: 1.5px solid var(--outline);
+      --card-border: 1px solid var(--outline-variant);
+      --selected-ring: 0 0 0 2px var(--secondary);
+      --correct-ring: 0 0 0 2px var(--positive);
+      --error-ring: 0 0 0 2px var(--error);
+
+      /* Spacing scale */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.65;
+      letter-spacing: 0;
+    }
+    header { position: static !important; }
+
+    button, input, select, textarea {
+      font-family: inherit;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    button:focus-visible,
+    select:focus-visible,
+    input:focus-visible,
+    a:focus-visible {
+      outline: 2.5px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-lg);
+      padding: var(--space-lg);
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Briefing Dossier Header */
+    .dossier-header {
+      padding-bottom: var(--space-md);
+      border-bottom: var(--section-rule);
+    }
+    .dossier-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      border-bottom: var(--section-rule);
+      padding-bottom: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+    .dossier-bar-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .dossier-pill {
+      background-color: var(--primary-container);
+      color: var(--on-primary-container);
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 0.78rem;
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--badge-radius);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .dossier-meta {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      font-weight: 500;
+    }
+    .title {
+      font-family: var(--font-headline);
+      font-weight: 800;
+      font-size: var(--display-size);
+      line-height: 1.25;
+      color: var(--on-surface);
+      margin: 0;
+    }
+    .standfirst {
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: var(--subhead-size);
+      color: var(--secondary);
+      margin: var(--space-xs) 0 0;
+      max-width: 68ch;
+    }
+
+    /* Telemetry / Scoreboard Strip */
+    .scoreboard-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+    .figure-card {
+      background-color: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+    }
+    .figure-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--on-surface-variant);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-xs);
+      margin-bottom: var(--space-xs);
+    }
+    .figure-value {
+      font-family: var(--font-headline);
+      font-weight: 800;
+      font-size: 1.65rem;
+      line-height: 1.2;
+      color: var(--on-surface);
+      font-variant-numeric: tabular-nums;
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-sm);
+    }
+    .figure-sub {
+      font-size: 0.84rem;
+      color: var(--on-surface-variant);
+      margin-top: var(--space-xs);
+    }
+    .score-pill {
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.125rem var(--space-sm);
+      border-radius: var(--rounded);
+      background-color: var(--info-bg);
+      color: var(--secondary);
+    }
+    .score-pill.good {
+      background-color: var(--positive-bg);
+      color: var(--positive);
+    }
+    .score-pill.warn {
+      background-color: var(--warning-bg);
+      color: var(--tertiary);
+    }
+    .type-mini-bars {
+      display: grid;
+      gap: 0.375rem;
+      margin-top: var(--space-xs);
+    }
+    .type-mini-row {
+      display: grid;
+      grid-template-columns: 5.5rem minmax(0, 1fr) 2.75rem;
+      align-items: center;
+      gap: var(--space-xs);
+      font-size: 0.76rem;
+    }
+    .mini-track {
+      height: 6px;
+      background-color: var(--surface-container);
+      border-radius: var(--badge-radius);
+      overflow: hidden;
+    }
+    .mini-fill {
+      height: 100%;
+      border-radius: var(--badge-radius);
+      transition: width var(--dur-short) var(--ease-out);
+    }
+    .mini-fill.math { background-color: var(--data-1); }
+    .mini-fill.code { background-color: var(--data-2); }
+    .mini-fill.theory { background-color: var(--data-3); }
+
+    /* Control Toolbar */
+    .control-panel {
+      background-color: var(--surface-container);
+      border-top: var(--section-rule);
+      border-bottom: var(--card-border);
+      padding: var(--space-md) var(--space-lg);
+      display: grid;
+      gap: var(--space-md);
+    }
+    .control-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: end;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+    .control-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: end;
+      gap: var(--space-md);
+    }
+    .field-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .field-label {
+      font-size: var(--label-size);
+      font-weight: 700;
+      color: var(--on-surface);
+    }
+    .select-input {
+      min-height: 44px;
+      padding: 0 var(--space-md);
+      background-color: var(--surface-container-low);
+      color: var(--on-surface);
+      border: 1px solid var(--button-border-secondary);
+      border-radius: var(--rounded);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    .btn {
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      border: 1px solid var(--button-border-secondary);
+      background-color: var(--surface-container-low);
+      color: var(--on-surface);
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  color var(--dur-micro) var(--ease-out),
+                  box-shadow var(--dur-micro) var(--ease-out);
+    }
+    .btn:hover:not(:disabled) {
+      background-color: var(--surface-container-high);
+    }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+    .btn-primary:hover:not(:disabled) {
+      background-color: var(--secondary);
+      border-color: var(--secondary);
+    }
+    .btn-accent {
+      background-color: var(--primary-container);
+      color: var(--on-primary-container);
+      border-color: var(--primary-container);
+      font-weight: 700;
+    }
+    .btn-accent:hover:not(:disabled) {
+      background-color: var(--tag-warm-bg);
+    }
+    .btn-active {
+      background-color: var(--secondary);
+      color: var(--on-primary);
+      border-color: var(--secondary);
+    }
+    .btn-active:hover:not(:disabled) {
+      background-color: var(--primary);
+    }
+    .btn-danger-outline {
+      color: var(--error);
+      border-color: var(--error-border);
+      background-color: var(--surface-container-low);
+    }
+    .btn-danger-outline.armed {
+      background-color: var(--error);
+      color: var(--on-error);
+      border-color: var(--error);
+    }
+
+    /* Formula Drawer */
+    .formula-drawer {
+      background-color: var(--surface-container-low);
+      border: var(--card-border);
+      border-top: 2px solid var(--secondary);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+    }
+    .formula-drawer[hidden] { display: none; }
+    .formula-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+      gap: var(--space-md);
+      margin-top: var(--space-md);
+    }
+    .formula-item {
+      background-color: var(--surface-container);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      border: var(--card-border);
+    }
+    .formula-title {
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--secondary);
+      margin-bottom: var(--space-xs);
+    }
+
+    /* Simulation Submit Banner */
+    .sim-banner {
+      background-color: var(--warning-bg);
+      border: 1px solid var(--warning);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+    .sim-banner[hidden] { display: none; }
+
+    /* Workspace Layout: Main Questions + Side Navigator */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 300px;
+      gap: var(--space-lg);
+      align-items: start;
+    }
+    .questions-column {
+      display: grid;
+      gap: var(--space-lg);
+    }
+    .side-rail {
+      display: grid;
+      gap: var(--space-md);
+      position: sticky;
+      top: var(--space-md);
+    }
+    .aside-box {
+      background-color: var(--surface-container);
+      border-top: var(--section-rule);
+      padding: var(--space-md);
+      border-radius: var(--rounded);
+    }
+    .aside-title {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: 1rem;
+      margin: 0 0 var(--space-sm);
+      color: var(--on-surface);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Question Navigator Map */
+    .nav-map-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 0.375rem;
+    }
+    .nav-cell {
+      min-height: 36px;
+      border-radius: var(--badge-radius);
+      border: 1px solid var(--outline-variant);
+      background-color: var(--surface-container-low);
+      color: var(--on-surface);
+      font-family: var(--font-code);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .nav-cell:hover { background-color: var(--surface-container-high); }
+    .nav-cell.answered-pending {
+      background-color: var(--info-bg);
+      border-color: var(--secondary);
+      color: var(--secondary);
+    }
+    .nav-cell.correct {
+      background-color: var(--positive);
+      border-color: var(--positive);
+      color: var(--on-primary);
+    }
+    .nav-cell.wrong {
+      background-color: var(--error);
+      border-color: var(--error);
+      color: var(--on-error);
+    }
+    .nav-cell.flagged {
+      box-shadow: inset 0 -3px 0 var(--primary-container);
+    }
+    .nav-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-top: var(--space-sm);
+      font-size: 0.75rem;
+      color: var(--on-surface-variant);
+    }
+    .legend-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      margin-inline-end: 4px;
+    }
+    .legend-dot.correct { background-color: var(--positive); }
+    .legend-dot.wrong { background-color: var(--error); }
+    .legend-dot.pending { background-color: var(--secondary); }
+    .legend-dot.flag { background-color: var(--primary-container); }
+
+    /* Module Breakdown Table in Sidebar */
+    .unit-progress-list {
+      display: grid;
+      gap: var(--space-sm);
+    }
+    .unit-progress-btn {
+      width: 100%;
+      text-align: right;
+      background-color: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      padding: var(--space-sm);
+      cursor: pointer;
+      display: grid;
+      gap: 0.25rem;
+      color: var(--on-surface);
+    }
+    .unit-progress-btn:hover { background-color: var(--surface-container-high); }
+    .unit-progress-btn.current { box-shadow: var(--selected-ring); }
+    .unit-progress-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    .unit-progress-bar {
+      height: 5px;
+      background-color: var(--surface-container-high);
+      border-radius: var(--badge-radius);
+      overflow: hidden;
+    }
+    .unit-progress-fill {
+      height: 100%;
+      background-color: var(--secondary);
+    }
+
+    /* Module Divider Header */
+    .module-divider {
+      border-bottom: var(--section-rule);
+      padding-bottom: var(--space-sm);
+      margin-top: var(--space-md);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+    .module-divider-title {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: var(--headline-size);
+      margin: 0;
+      color: var(--on-surface);
+    }
+    .module-divider-meta {
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--secondary);
+    }
+
+    /* Question Card */
+    .question-card {
+      background-color: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      display: grid;
+      gap: var(--space-md);
+      scroll-margin-top: var(--space-lg);
+    }
+    .question-card.state-correct {
+      border-right: 4px solid var(--positive);
+    }
+    .question-card.state-wrong {
+      border-right: 4px solid var(--error);
+    }
+    .question-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      padding-bottom: var(--space-sm);
+      border-bottom: var(--card-border);
+    }
+    .question-badges {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .index-num {
+      font-family: var(--font-code);
+      font-weight: 600;
+      font-size: 0.85rem;
+      background-color: var(--primary);
+      color: var(--on-primary);
+      padding: 0.15rem 0.5rem;
+      border-radius: var(--badge-radius);
+    }
+    .unit-tag {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--on-surface-variant);
+      background-color: var(--surface-container);
+      padding: 0.18rem 0.5rem;
+      border-radius: var(--rounded);
+    }
+    .cat-tag {
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.18rem 0.5rem;
+      border-radius: var(--rounded);
+    }
+    .cat-tag.math {
+      background-color: var(--info-bg);
+      color: var(--secondary);
+    }
+    .cat-tag.code {
+      background-color: var(--tag-warm-bg);
+      color: var(--tertiary);
+    }
+    .cat-tag.theory {
+      background-color: var(--positive-bg);
+      color: var(--positive);
+    }
+    .flag-btn {
+      min-height: 36px;
+      padding: 0.25rem 0.6rem;
+      border: var(--card-border);
+      background-color: var(--surface-container-low);
+      color: var(--on-surface-variant);
+      border-radius: var(--rounded);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .flag-btn.flagged {
+      background-color: var(--primary-container);
+      color: var(--on-primary-container);
+      border-color: var(--primary-container);
+    }
+
+    .question-stem {
+      font-size: 1.04rem;
+      font-weight: 600;
+      line-height: 1.75;
+      color: var(--on-surface);
+      margin: 0;
+    }
+
+    /* Python Code Block (strictly LTR) */
+    .code-block {
+      background-color: var(--code-bg);
+      color: var(--code-ink);
+      border: 1px solid var(--code-border);
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+      font-family: var(--font-code);
+      font-size: 0.85rem;
+      line-height: 1.6;
+      overflow-x: auto;
+      direction: ltr;
+      text-align: left;
+      margin: 0;
+    }
+    .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-code);
+      font-size: 0.72rem;
+      color: var(--code-muted);
+      margin-bottom: var(--space-xs);
+      border-bottom: 1px solid var(--code-border);
+      padding-bottom: var(--space-xs);
+    }
+
+    /* Math LTR isolation */
+    .math-ltr {
+      direction: ltr;
+      unicode-bidi: isolate;
+      display: inline-block;
+      font-family: var(--font-code);
+    }
+    .math-block {
+      direction: ltr;
+      text-align: center;
+      background-color: var(--surface-container);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      overflow-x: auto;
+    }
+
+    /* Options Grid */
+    .options-list {
+      display: grid;
+      gap: var(--space-sm);
+    }
+    .option-btn {
+      width: 100%;
+      min-height: 48px;
+      text-align: right;
+      background-color: var(--surface-container-low);
+      border: 1px solid var(--button-border-secondary);
+      border-radius: var(--rounded);
+      padding: var(--space-sm) var(--space-md);
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-md);
+      color: var(--on-surface);
+      font-size: 0.96rem;
+      line-height: 1.55;
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  box-shadow var(--dur-micro) var(--ease-out);
+    }
+    .option-btn:hover:not(:disabled) {
+      background-color: var(--surface-container);
+    }
+    .option-btn:disabled {
+      cursor: default;
+    }
+    .option-letter {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: var(--badge-radius);
+      background-color: var(--surface-container);
+      border: 1px solid var(--outline-variant);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--on-surface);
+      margin-top: 1px;
+    }
+    .option-text {
+      flex: 1;
+    }
+    .option-text code,
+    .question-stem code,
+    .explanation-body code {
+      font-family: var(--font-code);
+      font-size: 0.86em;
+      background-color: var(--surface-container);
+      padding: 0.1rem 0.35rem;
+      border-radius: var(--badge-radius);
+      direction: ltr;
+      unicode-bidi: isolate;
+      display: inline-block;
+    }
+
+    /* Option States */
+    .option-btn.selected-pending {
+      background-color: var(--info-bg);
+      box-shadow: var(--selected-ring);
+    }
+    .option-btn.selected-pending .option-letter {
+      background-color: var(--secondary);
+      color: var(--on-primary);
+      border-color: var(--secondary);
+    }
+    .option-btn.is-correct {
+      background-color: var(--positive-bg);
+      box-shadow: var(--correct-ring);
+    }
+    .option-btn.is-correct .option-letter {
+      background-color: var(--positive);
+      color: var(--on-primary);
+      border-color: var(--positive);
+    }
+    .option-btn.is-wrong {
+      background-color: var(--error-bg);
+      box-shadow: var(--error-ring);
+    }
+    .option-btn.is-wrong .option-letter {
+      background-color: var(--error);
+      color: var(--on-error);
+      border-color: var(--error);
+    }
+
+    /* Instant Explanation Box */
+    .explanation-box {
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+      border: 1px solid var(--outline-variant);
+      background-color: var(--surface-container);
+      display: grid;
+      gap: var(--space-xs);
+    }
+    .explanation-box.correct {
+      background-color: var(--positive-bg);
+      border-color: var(--positive-border);
+    }
+    .explanation-box.wrong {
+      background-color: var(--error-bg);
+      border-color: var(--error-border);
+    }
+    .explanation-verdict {
+      font-weight: 800;
+      font-size: 0.94rem;
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .explanation-box.correct .explanation-verdict { color: var(--positive); }
+    .explanation-box.wrong .explanation-verdict { color: var(--error); }
+    .explanation-body {
+      font-size: 0.92rem;
+      line-height: 1.75;
+      color: var(--on-surface);
+      margin: 0;
+    }
+
+    /* Empty State */
+    .empty-state {
+      background-color: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-2xl) var(--space-lg);
+      text-align: center;
+      display: grid;
+      justify-items: center;
+      gap: var(--space-sm);
+    }
+
+    /* Footer */
+    .page-footer {
+      border-top: var(--section-rule);
+      padding-top: var(--space-md);
+      color: var(--on-surface-variant);
+      font-size: 0.85rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+
+    /* Responsive Breakpoints */
+    @media (max-width: 980px) {
+      .scoreboard-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .workspace-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .side-rail {
+        position: static;
+        order: -1;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-sm);
+        gap: var(--space-md);
+      }
+      .scoreboard-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .question-card {
+        padding: var(--space-md);
+      }
+      .control-panel {
+        padding: var(--space-md);
+      }
+      .nav-map-grid {
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-grid">
+
+    <!-- Briefing Masthead -->
+    <header class="dossier-header">
+      <div class="dossier-bar">
+        <div class="dossier-bar-group">
+          <span class="dossier-pill">بنك الاختبار الشامل • الفصول 1–14</span>
+          <span class="dossier-meta">تحليل وتمثيل البيانات • أسلوب د. أحمد عفيفي</span>
+        </div>
+        <span class="dossier-meta"><bdi dir="ltr">42 MCQs • Math / Python / Theory</bdi></span>
+      </div>
+      <h1 class="title">الاختبار التفاعلي الشامل في تحليل وتمثيل البيانات</h1>
+      <p class="standfirst">
+        منصة تدريبية متكاملة تغطي وحدات المنهج الـ 14 كاملةً بتوازن دقيق بين المسائل الحسابية، ومخرجات أكواد بايثون، والمفاهيم النظرية — مع تصحيح فوري وشرح تفصيلي لكل خطوة.
+      </p>
+    </header>
+
+    <!-- Scoreboard Telemetry -->
+    <section class="scoreboard-grid" aria-label="ملخص الدرجات والأداء">
+      <div class="figure-card">
+        <div class="figure-label">
+          <span>الدرجة المحققة</span>
+          <span id="score-badge" class="score-pill">0%</span>
+        </div>
+        <div class="figure-value">
+          <span id="score-display">0 / 42</span>
+        </div>
+        <div id="score-sub" class="figure-sub">ابدأ بالإجابة عن أي سؤال لاحتساب الدرجة</div>
+      </div>
+
+      <div class="figure-card">
+        <div class="figure-label">
+          <span>نسبة الدقة (من الأسئلة المُجابة)</span>
+          <span id="answered-badge" class="score-pill">0 مُجاب</span>
+        </div>
+        <div class="figure-value">
+          <span id="accuracy-display">—</span>
+        </div>
+        <div id="mistakes-sub" class="figure-sub">الأخطاء المسجلة للمراجعة: 0</div>
+      </div>
+
+      <div class="figure-card">
+        <div class="figure-label">
+          <span>توازن الأداء حسب النوع</span>
+        </div>
+        <div class="type-mini-bars">
+          <div class="type-mini-row">
+            <span>مسائل حسابية</span>
+            <div class="mini-track"><div id="bar-math" class="mini-fill math" style="width: 0%;"></div></div>
+            <span id="stat-math" dir="ltr">0/14</span>
+          </div>
+          <div class="type-mini-row">
+            <span>أكواد بايثون</span>
+            <div class="mini-track"><div id="bar-code" class="mini-fill code" style="width: 0%;"></div></div>
+            <span id="stat-code" dir="ltr">0/14</span>
+          </div>
+          <div class="type-mini-row">
+            <span>مفاهيم نظرية</span>
+            <div class="mini-track"><div id="bar-theory" class="mini-fill theory" style="width: 0%;"></div></div>
+            <span id="stat-theory" dir="ltr">0/14</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="figure-card">
+        <div class="figure-label">
+          <span>وضع الاختبار الحالي</span>
+          <span id="mode-pill" class="score-pill good">تصحيح فوري</span>
+        </div>
+        <div class="figure-value">
+          <span id="remaining-display">42 سؤالاً متبقياً</span>
+        </div>
+        <div class="figure-sub" id="flagged-sub">المحددة للمراجعة (Flag): 0</div>
+      </div>
+    </section>
+
+    <!-- Controls & Filters -->
+    <section class="control-panel" aria-label="أدوات التصفية والتحكم">
+      <div class="control-row">
+        <div class="control-group">
+          <div class="field-wrap">
+            <label class="field-label" for="unit-filter">الوحدة الدراسية (الفصول 1–14)</label>
+            <select id="unit-filter" class="select-input" onchange="setUnitFilter(this.value)">
+              <option value="all">جميع الوحدات — الاختبار الكامل (42 سؤالاً)</option>
+              <option value="u1">الوحدة 1: الأساسيات و CRISP-DM و JupyterLab (ف1)</option>
+              <option value="u2">الوحدة 2: مكتبة Pandas ومعالجة الجداول (ف2)</option>
+              <option value="u3">الوحدة 3: الإحصاء الوصفي وتمثيل البيانات (ف3–6)</option>
+              <option value="u4">الوحدة 4: جودة البيانات، الترميز، والتحجيم (ف7–8)</option>
+              <option value="u5">الوحدة 5: اختيار السمات، PCA، والتجميع (ف9–10)</option>
+              <option value="u6">الوحدة 6: الانحدار والتنظيم Ridge/Lasso (ف11)</option>
+              <option value="u7">الوحدة 7: التصنيف، التقييم، وإعداد التقارير (ف12–14)</option>
+            </select>
+          </div>
+
+          <div class="field-wrap">
+            <span class="field-label">تصنيف السؤال</span>
+            <div class="chip-row" role="group" aria-label="تصفية حسب نوع السؤال">
+              <button type="button" class="btn btn-active" id="cat-btn-all" onclick="setCategoryFilter('all')">الكل (42)</button>
+              <button type="button" class="btn" id="cat-btn-math" onclick="setCategoryFilter('math')">مسائل حسابية (14)</button>
+              <button type="button" class="btn" id="cat-btn-code" onclick="setCategoryFilter('code')">مخرجات أكواد (14)</button>
+              <button type="button" class="btn" id="cat-btn-theory" onclick="setCategoryFilter('theory')">مفاهيم نظرية (14)</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="chip-row">
+          <button type="button" class="btn" id="btn-mistakes" onclick="toggleMistakesOnly()">
+            <i data-lucide="alert-circle" aria-hidden="true" width="16" height="16"></i>
+            <span id="mistakes-btn-text">مراجعة الأخطاء (0)</span>
+          </button>
+          <button type="button" class="btn" id="btn-flagged" onclick="toggleFlaggedOnly()">
+            <i data-lucide="bookmark" aria-hidden="true" width="16" height="16"></i>
+            <span id="flagged-btn-text">المحددة (0)</span>
+          </button>
+          <button type="button" class="btn" id="btn-formulas" onclick="toggleFormulas()">
+            <i data-lucide="sigma" aria-hidden="true" width="16" height="16"></i>
+            <span>مرجع القوانين</span>
+          </button>
+          <button type="button" class="btn" id="btn-mode" onclick="toggleExamMode()">
+            <i data-lucide="clock" aria-hidden="true" width="16" height="16"></i>
+            <span id="mode-btn-text">التبديل لوضع المحاكاة</span>
+          </button>
+          <button type="button" class="btn" onclick="exportResultsCsv()">
+            <i data-lucide="download" aria-hidden="true" width="16" height="16"></i>
+            <span>تصدير التقرير</span>
+          </button>
+          <button type="button" class="btn btn-danger-outline" id="btn-reset" onclick="handleResetClick(this)">
+            <i data-lucide="rotate-ccw" aria-hidden="true" width="16" height="16"></i>
+            <span>إعادة تعيين</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Formula Reference Drawer -->
+    <section id="formula-drawer" class="formula-drawer" hidden aria-label="مرجع القوانين الرياضية السريع">
+      <div class="aside-title">
+        <span>مرجع القوانين والمعادلات الأساسية في المنهج</span>
+        <button type="button" class="btn" onclick="toggleFormulas()">إغلاق</button>
+      </div>
+      <div class="formula-grid">
+        <div class="formula-item">
+          <div class="formula-title">متوسط الانحراف المطلق (MAD) والتباين</div>
+          <div class="math-block" dir="ltr">\( \text{MAD} = \frac{1}{n}\sum_{i=1}^{n}|x_i - \mu| \quad , \quad \sigma^2 = \frac{1}{n}\sum_{i=1}^{n}(x_i - \mu)^2 \)</div>
+        </div>
+        <div class="formula-item">
+          <div class="formula-title">المدى الربعي والمركز المئوي</div>
+          <div class="math-block" dir="ltr">\( \text{IQR} = Q_3 - Q_1 \quad , \quad \text{Upper Fence} = Q_3 + 1.5\times\text{IQR} \)</div>
+        </div>
+        <div class="formula-item">
+          <div class="formula-title">التحجيم (Min-Max / Z-score / Robust)</div>
+          <div class="math-block" dir="ltr">\( x' = \frac{x - x_{\min}}{x_{\max}-x_{\min}} \quad , \quad z = \frac{x-\mu}{\sigma} \quad , \quad r = \frac{x-\text{Med}}{\text{IQR}} \)</div>
+        </div>
+        <div class="formula-item">
+          <div class="formula-title">إسقاط PCA ومتوسط مربعات الأخطاء MSE</div>
+          <div class="math-block" dir="ltr">\( X' = X \cdot e \quad , \quad \text{MSE} = \frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2 \)</div>
+        </div>
+        <div class="formula-item">
+          <div class="formula-title">دالة Sigmoid ونقاء Gini</div>
+          <div class="math-block" dir="ltr">\( \sigma(z) = \frac{1}{1 + e^{-z}} \quad , \quad \text{Gini} = 1 - \sum_{i=1}^{k} p_i^2 \)</div>
+        </div>
+        <div class="formula-item">
+          <div class="formula-title">مقاييس التصنيف (Precision, Recall, F1)</div>
+          <div class="math-block" dir="ltr">\( P = \frac{TP}{TP+FP} \quad , \quad R = \frac{TP}{TP+FN} \quad , \quad F_1 = \frac{2PR}{P+R} \)</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Simulation Mode Submit Banner -->
+    <div id="sim-banner" class="sim-banner" hidden>
+      <div>
+        <strong>وضع محاكاة الاختبار النهائي مفعّل:</strong>
+        <span>الإجابات محفوظة دون كشف الحل. عند الانتهاء اضغط زر التسليم لاحتساب الدرجة وعرض الشرح لجميع الأسئلة.</span>
+      </div>
+      <button type="button" class="btn btn-accent" onclick="submitSimulationExam()">
+        <i data-lucide="check-circle-2" aria-hidden="true" width="16" height="16"></i>
+        <span>تسليم الاختبار وعرض التصحيح الشامل</span>
+      </button>
+    </div>
+
+    <!-- Main Workspace -->
+    <div class="workspace-grid">
+      <main id="questions-container" class="questions-column" aria-live="polite"></main>
+
+      <aside class="side-rail" aria-label="خريطة التنقل ومؤشر الوحدات">
+        <div class="aside-box">
+          <h2 class="aside-title">
+            <span>خريطة الأسئلة (01–42)</span>
+            <span id="nav-summary" class="dossier-meta">0 / 42</span>
+          </h2>
+          <div id="nav-map-grid" class="nav-map-grid"></div>
+          <div class="nav-legend">
+            <span><span class="legend-dot correct"></span>صحيح</span>
+            <span><span class="legend-dot wrong"></span>خطأ</span>
+            <span><span class="legend-dot pending"></span>مُجاب</span>
+            <span><span class="legend-dot flag"></span>محدد</span>
+          </div>
+        </div>
+
+        <div class="aside-box">
+          <h2 class="aside-title"><span>تقدم الوحدات السبع</span></h2>
+          <div id="unit-progress-list" class="unit-progress-list"></div>
+        </div>
+      </aside>
+    </div>
+
+    <footer class="page-footer">
+      <span>المحتوى مستند إلى ملخصات مقرر تحليل وتمثيل البيانات (الفصول 1–14) وأسئلة اللقاءات المباشرة.</span>
+      <span id="status-message" role="status">جاهز للعمل — يتم حفظ تقدمك تلقائياً.</span>
+    </footer>
+  </div>
+
+  <api-shim></api-shim>
+
+  <script>
+    const UNITS = [
+      { id: 'u1', title: `الوحدة الأولى (الفصل 1): المقدمة وأساسيات التحليل و CRISP-DM و JupyterLab`, short: `و1: الأساسيات و CRISP-DM` },
+      { id: 'u2', title: `الوحدة الثانية (الفصل 2): مكتبة Pandas وهياكل البيانات ومعالجتها`, short: `و2: مكتبة Pandas` },
+      { id: 'u3', title: `الوحدة الثالثة (الفصول 3–6): الإحصاء الوصفي وتمثيل البيانات`, short: `و3: الإحصاء والتمثيل` },
+      { id: 'u4', title: `الوحدة الرابعة (الفصول 7–8): جودة البيانات، الترميز، التحجيم والتقطيع`, short: `و4: الجودة والتهيئة` },
+      { id: 'u5', title: `الوحدة الخامسة (الفصول 9–10): اختيار وتقليص السمات (PCA) والتجميع`, short: `و5: PCA والتجميع` },
+      { id: 'u6', title: `الوحدة السادسة (الفصل 11): الانحدار الخطي والمتعدد والتنظيم Ridge/Lasso`, short: `و6: الانحدار والتنظيم` },
+      { id: 'u7', title: `الوحدة السابعة (الفصول 12–14): التصنيف، مقاييس التقييم، وإعداد التقارير`, short: `و7: التصنيف والتقارير` }
+    ];
+
+    const LETTERS = ['أ', 'ب', 'ج', 'د'];
+
+    const QUESTIONS = [
+      // ================= UNIT 1 (Ch 1) =================
+      {
+        id: 1, unit: 'u1', chapter: `الفصل 1`, category: 'theory',
+        stem: `أي نوع من أنواع تحليل البيانات يمثل المستوى الأكثر تقدماً، حيث لا يكتفي بالتنبؤ بالنتائج المستقبلية بل يقترح إجراءات وقرارات عملية للاستفادة منها باستخدام التعلم الآلي والذكاء الاصطناعي؟`,
+        code: ``,
+        options: [
+          `التحليل الوصفي (Descriptive Analysis)`,
+          `التحليل التشخيصي (Diagnostic Analysis)`,
+          `التحليل التنبؤي (Predictive Analysis)`,
+          `التحليل التوجيهي (Prescriptive Analysis)`
+        ],
+        correct: 3,
+        explanation: `تنقسم أنواع تحليل البيانات إلى أربعة مستويات: الوصفي (ماذا حدث؟)، والتشخيصي (لماذا حدث؟)، والتنبؤي (ماذا سيحدث؟)، وأخيراً <strong>التحليل التوجيهي (Prescriptive)</strong> الذي يجيب عن (كيف يمكن تحقيق ذلك؟) ويوصي بأفضل الإجراءات والقرارات.`
+      },
+      {
+        id: 2, unit: 'u1', chapter: `الفصل 1`, category: 'theory',
+        stem: `في نموذج <bdi dir="ltr">CRISP-DM</bdi> القياسي لعملية تحليل البيانات، ما المرحلة التي يتم فيها تنظيف البيانات ومعالجة القيم المفقودة وإزالة السجلات المكررة والقيم غير المنطقية قبل بناء النماذج؟`,
+        code: ``,
+        options: [
+          `فهم البيانات (Data Understanding)`,
+          `إعداد البيانات (Data Preparation)`,
+          `النمذجة (Modeling)`,
+          `التقييم (Evaluation)`
+        ],
+        correct: 1,
+        explanation: `تمر عملية <bdi dir="ltr">CRISP-DM</bdi> بست مراحل: (1) فهم المشكلة، (2) فهم البيانات، <strong>(3) إعداد البيانات (Data Preparation)</strong> وفيها تُنظَّف البيانات وتُعالج القيم المفقودة والمكررة، (4) النمذجة، (5) التقييم، (6) التطبيق.`
+      },
+      {
+        id: 3, unit: 'u1', chapter: `الفصل 1`, category: 'theory',
+        stem: `إذا كانت لدينا سمة «درجة الحرارة المئوية» (حيث الصفر لا يعني انعدام الحرارة) وسمة «تقييم جودة المنتج: جيد / غير جيد»، فما التصنيف الصحيح لمقياسي هاتين السمتين على الترتيب؟`,
+        code: ``,
+        options: [
+          `كمي نسبي (Relative)، ونوعي ترتيبي (Ordinal)`,
+          `كمي مطلق (Absolute)، ونوعي اسمي (Nominal)`,
+          `كمي نسبي (Relative)، ونوعي اسمي (Nominal)`,
+          `كمي مطلق (Absolute)، ونوعي ترتيبي (Ordinal)`
+        ],
+        correct: 0,
+        explanation: `درجة الحرارة مقياس <strong>كمي نسبي</strong> لأن الصفر نقطة اختيارية وتمتد القيم في الجهتين، أما الجودة فهي <strong>نوعي ترتيبي</strong> لأنها فئات وصفية يمكن ترتيبها (بخلاف الاسم أو الجنس المصنف كاسمي Nominal، والطول ككمي مطلق Absolute).`
+      },
+      {
+        id: 4, unit: 'u1', chapter: `الفصل 1`, category: 'theory',
+        stem: `أي مكتبة من مكتبات بايثون التالية تُعد الأقوى في التعامل مع المصفوفات متعددة الأبعاد وإجراء العمليات الرياضية، بينما تُستخدم مكتبة أخرى للتعلم الآلي؟`,
+        code: ``,
+        options: [
+          `<code>Pandas</code> للمصفوفات، و<code>Matplotlib</code> للتعلم الآلي`,
+          `<code>NumPy</code> للمصفوفات والعمليات الرياضية، و<code>Scikit-learn</code> لخوارزميات التعلم الآلي`,
+          `<code>Seaborn</code> للمصفوفات، و<code>SciPy</code> لقواعد البيانات العلائقية`,
+          `<code>Bokeh</code> للمصفوفات، و<code>Pandas</code> لبناء الشبكات العصبية`
+        ],
+        correct: 1,
+        explanation: `مكتبة <code>NumPy</code> هي الأساس للمصفوفات متعددة الأبعاد والعمليات الرياضية، وتعتمد عليها <code>Pandas</code> (للهياكل الجدولية) و<code>SciPy</code> (للحسابات العلمية والإحصائية)، بينما <code>Scikit-learn</code> هي مكتبة خوارزميات التعلم الآلي.`
+      },
+      {
+        id: 5, unit: 'u1', chapter: `الفصل 1`, category: 'code',
+        stem: `لتغيير مجلد العمل الافتراضي في <bdi dir="ltr">JupyterLab</bdi> إلى مجلد مخصص (مثل <bdi dir="ltr">C:\DataAnalysis Work</bdi>)، ما الأمر الصحيح الذي يُنفَّذ في <bdi dir="ltr">Anaconda Prompt</bdi> لإنشاء ملف الإعدادات قبل تعديل السطر <code>c.NotebookApp.notebook_dir</code>؟`,
+        code: `# في موجه أوامر Anaconda Prompt:\n# الخطوة 1: توليد ملف الإعدادات jupyter_notebook_config.py`,
+        options: [
+          `<code>conda install -c conda-forge jupyterlab</code>`,
+          `<code>jupyter notebook --generate-config</code>`,
+          `<code>pip install jupyterlab --config</code>`,
+          `<code>ipython --create-workspace</code>`
+        ],
+        correct: 1,
+        explanation: `لتوليد ملف التهيئة نكتب <code>jupyter notebook --generate-config</code> ثم نفتح الملف الناتج في محرر نصوص ونزيل علامة التعليق <code>#</code> عن <code>c.NotebookApp.notebook_dir</code> ونضع مسار المجلد الجديد.`
+      },
+      {
+        id: 6, unit: 'u1', chapter: `الفصل 1`, category: 'theory',
+        stem: `في البيانات الجدولية (<bdi dir="ltr">Tabular Data</bdi>) وقواعد البيانات العلائقية (<bdi dir="ltr">Relational Data</bdi>)، ماذا تمثل الصفوف والأعمدة، وكيف ترتبط الجداول ببعضها؟`,
+        code: ``,
+        options: [
+          `الصفوف تمثل السمات والأعمدة تمثل العينات، ولا يمكن ربط الجداول`,
+          `الصفوف تمثل العينات (Samples) والأعمدة تمثل السمات أو الحقول (Features)، وترتبط الجداول عبر حقول مشتركة بينها`,
+          `كلا الصفوف والأعمدة يمثلان متغيرات هدف فقط`,
+          `الأعمدة تمثل الملفات والصفوف تمثل المكتبات البرمجية`
+        ],
+        correct: 1,
+        explanation: `في الجدول تمثل الصفوف العينات (مثل بيانات موظف معين) وتمثل الأعمدة السمات (مثل العمر والاسم)، وفي البيانات العلائقية تتوزع البيانات على أكثر من جدول تُربط معاً عبر حقل ربط مشترك (مثل ربط <code>Name</code> بـ <code>Friend</code>).`
+      },
+
+      // ================= UNIT 2 (Ch 2) =================
+      {
+        id: 7, unit: 'u2', chapter: `الفصل 2`, category: 'code',
+        stem: `ما المخرج الناتج عند تنفيذ الكود التالي لحذف عناصر من كائن <code>Series</code> في مكتبة <bdi dir="ltr">Pandas</bdi>؟`,
+        code: `import pandas as pd\ns = pd.Series([10, 20, 30, 40], index=['a', 'b', 'c', 'd'])\nres = s.drop(['c', 'd'])\nprint(list(res.index), res.sum())`,
+        options: [
+          `<code>['a', 'b'] 30</code>`,
+          `<code>['c', 'd'] 70</code>`,
+          `<code>['a', 'b', 'c', 'd'] 100</code>`,
+          `<code>['a', 'b'] 70</code>`
+        ],
+        correct: 0,
+        explanation: `الدالة <code>s.drop(['c', 'd'])</code> تحذف العنصرين ذوي الفهرس <code>'c'</code> و<code>'d'</code>، فتتبقى القيمتان عند <code>'a'</code> (10) و<code>'b'</code> (20)، ويكون مجموعهما <bdi dir="ltr">10 + 20 = 30</bdi>.`
+      },
+      {
+        id: 8, unit: 'u2', chapter: `الفصل 2`, category: 'code',
+        stem: `عند تنفيذ الكود التالي لتعديل مسميات الأعمدة باستخدام <code>reindex</code>، ماذا يطبع الكود؟`,
+        code: `import pandas as pd\ndf = pd.DataFrame({'A': [1, 2], 'B': [3, 4]})\ndf2 = df.reindex(columns=['B', 'C'])\nprint(df2['C'].isna().sum())`,
+        options: [
+          `<code>0</code>`,
+          `<code>1</code>`,
+          `<code>2</code>`,
+          `يظهر خطأ برمجي <code>KeyError: 'C'</code>`
+        ],
+        correct: 2,
+        explanation: `عند استخدام <code>reindex(columns=...)</code> باسم عمود غير موجود مثل <code>'C'</code>، لا يحدث خطأ، بل يُنشأ العمود وتُوضع جميع قيمه كـ <code>NaN</code>؛ وبما أن الجدول يحتوي على صفّين، فإن عدد القيم المفقودة هو <code>2</code>.`
+      },
+      {
+        id: 9, unit: 'u2', chapter: `الفصل 2`, category: 'code',
+        stem: `لدينا إطاران للبيانات <code>df1</code> و<code>df2</code>. ما عدد الصفوف الناتجة عند الدمج بكلٍ من <code>how='inner'</code> و<code>how='outer'</code> على الترتيب؟`,
+        code: `df1 = pd.DataFrame({'ID': [1, 2, 3], 'Name': ['Ali', 'Sara', 'Omar']})\ndf2 = pd.DataFrame({'ID': [2, 3, 4], 'Mark': [90, 85, 88]})\nm_in = pd.merge(df1, df2, on='ID', how='inner')\nm_out = pd.merge(df1, df2, on='ID', how='outer')\nprint(len(m_in), len(m_out))`,
+        options: [
+          `<code>2 4</code>`,
+          `<code>3 3</code>`,
+          `<code>2 6</code>`,
+          `<code>4 2</code>`
+        ],
+        correct: 0,
+        explanation: `المعامل <code>how='inner'</code> يحتفظ بالبيانات المشتركة فقط بين الجدولين (المعرفان <code>2</code> و<code>3</code> ← صفان)، بينما <code>how='outer'</code> يضم كل المعرفات من الجدولين (<code>1, 2, 3, 4</code> ← 4 صفوف) مع وضع <code>NaN</code> للقيم غير المكتملة.`
+      },
+      {
+        id: 10, unit: 'u2', chapter: `الفصل 2`, category: 'code',
+        stem: `ما القيمة التي يسترجعها التعبير <code>df.loc['r2', 'Age']</code> في الكود التالي؟`,
+        code: `df = pd.DataFrame(\n    {'Name': ['Ali', 'Sara', 'Omar'], 'Age': [20, 25, 30]},\n    index=['r1', 'r2', 'r3']\n)\nprint(df.loc['r2', 'Age'])`,
+        options: [
+          `<code>20</code>`,
+          `<code>25</code>`,
+          `<code>30</code>`,
+          `<code>'Sara'</code>`
+        ],
+        correct: 1,
+        explanation: `تُستخدم <code>.loc[الصف, العمود]</code> للوصول إلى صف كامل أو عنصر محدد باستخدام التسميات؛ وهنا الصف <code>'r2'</code> يقابل العنصر الثاني والعمود <code>'Age'</code> قيمته <code>25</code>.`
+      },
+      {
+        id: 11, unit: 'u2', chapter: `الفصل 2`, category: 'theory',
+        stem: `ما الغرض من إضافة المعامل <code>inplace=True</code> عند تعديل <bdi dir="ltr">DataFrame</bdi>، وما وظيفة الدالتين <code>data.dropna(axis=1)</code> و<code>df.describe()</code> على الترتيب؟`,
+        code: ``,
+        options: [
+          `<code>inplace=True</code> ينشئ نسخة مؤقتة، و<code>dropna(axis=1)</code> يحذف الصفوف الفارغة، و<code>describe()</code> يظهر نوع البيانات فقط`,
+          `<code>inplace=True</code> يطبق التعديل مباشرة على الـ DataFrame الأصلي، و<code>dropna(axis=1)</code> يحذف جميع الأعمدة التي تحتوي على أي قيمة مفقودة، و<code>describe()</code> تعطي ملخصاً إحصائياً شاملاً`,
+          `<code>inplace=True</code> يحفظ الملف كـ CSV، و<code>dropna(axis=1)</code> يحول الأعمدة إلى مصفوفة، و<code>describe()</code> يحذف التكرار`,
+          `<code>inplace=True</code> يتجاهل الفهرس، و<code>dropna(axis=1)</code> يملأ الفراغات بالمتوسط، و<code>describe()</code> يدمج جدولين`
+        ],
+        correct: 1,
+        explanation: `المعامل <code>inplace=True</code> يثبت التعديل في الإطار الأصلي مباشرة، و<code>axis=1</code> يشير للأعمدة لذا تحذف <code>dropna(axis=1)</code> الأعمدة الحاوية على قيم مفقودة، بينما تعطي <code>describe()</code> الملخص الإحصائي (بخلاف <code>info()</code> التي تعرض الأنواع والقيم غير الفارغة).`
+      },
+      {
+        id: 12, unit: 'u2', chapter: `الفصل 2`, category: 'code',
+        stem: `ما ناتج تنفيذ الكود التالي لتغيير عنوان العمود والحصول على مصفوفة القيم؟`,
+        code: `df = pd.DataFrame({'old_col': [5, 10]})\ndf.rename(columns={'old_col': 'new_col'}, inplace=True)\nprint(list(df.columns), df.values.shape)`,
+        options: [
+          `<code>['old_col'] (2, 1)</code>`,
+          `<code>['new_col'] (2, 1)</code>`,
+          `<code>['new_col'] (1, 2)</code>`,
+          `<code>['old_col'] (2,)</code>`
+        ],
+        correct: 1,
+        explanation: `تستبدل دالة <code>rename</code> اسم العمود مباشرة بسبب <code>inplace=True</code> إلى <code>'new_col'</code>، والخاصية <code>.values</code> تحول الـ DataFrame إلى مصفوفة NumPy ثنائية الأبعاد شكلها <code>(2, 1)</code> (صفان وعمود واحد). وللحفظ كملف دون فهرس نستخدم <code>to_csv('name.csv', index=False)</code>.`
+      },
+
+      // ================= UNIT 3 (Ch 3–6) =================
+      {
+        id: 13, unit: 'u3', chapter: `الفصل 3`, category: 'math',
+        stem: `إذا كانت قيم سمة رقمية لخمسة طلاب هي: <bdi dir="ltr">[12, 16, 20, 22, 30]</bdi>، فما قيمة متوسط الانحراف المطلق (<bdi dir="ltr">MAD</bdi>)؟`,
+        code: ``,
+        options: [
+          `<code>4.0</code>`,
+          `<code>4.8</code>`,
+          `<code>6.4</code>`,
+          `<code>20.0</code>`
+        ],
+        correct: 1,
+        explanation: `1) نحسب المتوسط: <bdi dir="ltr">(12 + 16 + 20 + 22 + 30) / 5 = 100 / 5 = 20</bdi>.<br>2) نحسب الانحرافات المطلقة عن 20: <bdi dir="ltr">|12−20|=8, |16−20|=4, |20−20|=0, |22−20|=2, |30−20|=10</bdi>.<br>3) مجموعها = <bdi dir="ltr">8 + 4 + 0 + 2 + 10 = 24</bdi>.<br>4) <bdi dir="ltr">MAD = 24 / 5 = 4.8</bdi>.`
+      },
+      {
+        id: 14, unit: 'u3', chapter: `الفصل 3`, category: 'math',
+        stem: `للقيم <bdi dir="ltr">[40, 45, 23, 39, 39]</bdi> (من مثال المنهج لحقل <code>communication_skill_score</code>)، كان المتوسط <bdi dir="ltr">μ = 37.2</bdi> ومجموع مربعات الانحرافات <bdi dir="ltr">∑(xᵢ − μ)² = 276.8</bdi>. ما قيمة التباين (<bdi dir="ltr">Variance</bdi>) والانحراف المعياري تقريباً؟`,
+        code: ``,
+        options: [
+          `التباين = <code>55.36</code> ، والانحراف المعياري ≈ <code>7.44</code>`,
+          `التباين = <code>69.20</code> ، والانحراف المعياري ≈ <code>8.32</code>`,
+          `التباين = <code>276.8</code> ، والانحراف المعياري ≈ <code>16.64</code>`,
+          `التباين = <code>7.44</code> ، والانحراف المعياري ≈ <code>55.36</code>`
+        ],
+        correct: 0,
+        explanation: `التباين حسب معادلة المنهج هو: <bdi dir="ltr">Variance = (1/n) ∑(xᵢ − μ)² = 276.8 / 5 = 55.36</bdi>. وبما أن التباين هو مربع الانحراف المعياري، فإن الانحراف المعياري = <bdi dir="ltr">√55.36 ≈ 7.44</bdi>.`
+      },
+      {
+        id: 15, unit: 'u3', chapter: `الفصل 3`, category: 'math',
+        stem: `في مجموعة البيانات المرتبة: <bdi dir="ltr">[10, 20, 20, 30, 40, 40, 50]</bdi>، ما قيم كل من المدى (<bdi dir="ltr">Range</bdi>)، والمدى الربعي (<bdi dir="ltr">IQR</bdi>)، وحد الكشف الأعلى للقيم المتطرفة (<bdi dir="ltr">Q3 + 1.5 × IQR</bdi>) على الترتيب؟`,
+        code: ``,
+        options: [
+          `<code>40 , 20 , 70</code>`,
+          `<code>40 , 30 , 75</code>`,
+          `<code>50 , 20 , 70</code>`,
+          `<code>40 , 10 , 55</code>`
+        ],
+        correct: 0,
+        explanation: `• المدى = <bdi dir="ltr">50 − 10 = 40</bdi>.<br>• الربيع الأول <bdi dir="ltr">Q1 = 20</bdi> والوسيط = 30 والربيع الثالث <bdi dir="ltr">Q3 = 40</bdi>.<br>• المدى الربعي <bdi dir="ltr">IQR = Q3 − Q1 = 40 − 20 = 20</bdi>.<br>• الحد الأعلى للقيم المتطرفة = <bdi dir="ltr">40 + (1.5 × 20) = 40 + 30 = 70</bdi>.`
+      },
+      {
+        id: 16, unit: 'u3', chapter: `الفصل 3`, category: 'math',
+        stem: `باستخدام صيغة المركز المئوي <bdi dir="ltr">(عدد القيم الأقل من القيمة ÷ العدد الكلي) × 100</bdi>، في مجموعة القيم المرتبة <bdi dir="ltr">[10, 14, 18, 22, 26, 30, 34, 38, 42, 50]</bdi>، ما المركز المئوي (<bdi dir="ltr">Percentile</bdi>) للقيمة <code>34</code>؟`,
+        code: ``,
+        options: [
+          `<code>50%</code>`,
+          `<code>60%</code>`,
+          `<code>70%</code>`,
+          `<code>34%</code>`
+        ],
+        correct: 1,
+        explanation: `عدد القيم الكلي = 10 قيم. القيم الأقل تماماً من 34 هي: <bdi dir="ltr">[10, 14, 18, 22, 26, 30]</bdi> وعددها 6 قيم. إذن المركز المئوي = <bdi dir="ltr">(6 ÷ 10) × 100 = 60%</bdi>.`
+      },
+      {
+        id: 17, unit: 'u3', chapter: `الفصل 6`, category: 'code',
+        stem: `ما وظيفة الدالة <code>output_notebook()</code> وماذا ترسم الدالة <code>p.multi_line(...)</code> في كود مكتبة <bdi dir="ltr">Bokeh</bdi> التالي؟`,
+        code: `from bokeh.plotting import figure, output_notebook, show\noutput_notebook()\np = figure(width=400, height=300)\np.multi_line([[1, 2], [1, 2]], [[3, 4], [5, 2]], color=['navy', 'red'])\nshow(p)`,
+        options: [
+          `تهيئ المكتبة لعرض المخطط التفاعلي داخل Jupyter Notebook، وترسم عدة خطوط مستقيمة معاً في خطوة واحدة`,
+          `تصدّر الرسم كصورة ثابتة، وترسم مخططاً دائرياً`,
+          `تحفظ البيانات في ملف CSV، وترسم مخطط الصندوق (Boxplot)`,
+          `ترسم خطوطاً ثلاثية الأبعاد وتغلق المتصفح`
+        ],
+        correct: 0,
+        explanation: `في مكتبة <code>Bokeh</code> (التي تركز على الرسوم التفاعلية والبيانات الضخمة والمتدفقة)، تُعد <code>output_notebook()</code> ضرورية لتهيئة العرض داخل الدفتر، وتسمح <code>multi_line()</code> برسم عدة خطوط دفعة واحدة.`
+      },
+      {
+        id: 18, unit: 'u3', chapter: `الفصل 4–5`, category: 'theory',
+        stem: `أي زوج من الرسوم البيانية التالية يُصنَّف كرسم لمتغير واحد (<bdi dir="ltr">Univariate</bdi>) مقابل رسم لمتغيرين معاً (<bdi dir="ltr">Bivariate</bdi>) على الترتيب؟`,
+        code: ``,
+        options: [
+          `<code>Histogram</code> (متغير واحد) ، و<code>Hexbins plot</code> (متغيران معاً)`,
+          `<code>Hexbins plot</code> (متغير واحد) ، و<code>Histogram</code> (متغيران معاً)`,
+          `<code>Scatter plot</code> (متغير واحد) ، و<code>Box plot</code> (متعدد المتغيرات)`,
+          `<code>Pie Chart</code> (متغيران معاً) ، و<code>Line plot</code> (لا يمثل متغيرات)`
+        ],
+        correct: 0,
+        explanation: `تُصنف الرسوم إلى <strong>Univariate</strong> لمتغير واحد (مثل <code>Histogram</code> و<code>Box plot</code> و<code>Pie Chart</code>)، و<strong>Bivariate</strong> لمتغيرين (مثل <code>Hexbins</code> و<code>Scatter</code>)، و<strong>Multivariate</strong> لعدة متغيرات.`
+      },
+
+      // ================= UNIT 4 (Ch 7–8) =================
+      {
+        id: 19, unit: 'u4', chapter: `الفصل 7`, category: 'theory',
+        stem: `في جدول موظفين، لوحظ أن القيم المفقودة في عمود «سنوات الخبرة بالشركة» تظهر للموظفين في قسم «تقنية المعلومات IT» فقط، ولا توجد في الأقسام الأخرى. ما تصنيف هذه البيانات غير المكتملة؟`,
+        code: ``,
+        options: [
+          `مفقودة عشوائياً تماماً (<bdi dir="ltr">MCAR</bdi>)`,
+          `مفقودة عشوائياً (<bdi dir="ltr">MAR</bdi>) لارتباط الفقدان بمتغير آخر مسجل (القسم)`,
+          `بيانات متكررة (<bdi dir="ltr">Redundant Data</bdi>)`,
+          `أخطاء قياس مطلقة`
+        ],
+        correct: 1,
+        explanation: `عندما لا يكون الفقدان عشوائياً تماماً بل يرتبط بمتغير آخر مسجَّل في البيانات (هنا عمود <code>Department = IT</code>)، يُصنف كـ <strong>MAR (Missing at Random)</strong>، بخلاف <strong>MCAR</strong> الذي لا يرتبط بأي متغير.`
+      },
+      {
+        id: 20, unit: 'u4', chapter: `الفصل 7`, category: 'theory',
+        stem: `ما المقصود بالقاعدة الشهيرة <bdi dir="ltr">«Garbage in, Garbage out»</bdi> في علم البيانات، وما تعريف البيانات المتكررة (<bdi dir="ltr">Redundant Data</bdi>)؟`,
+        code: ``,
+        options: [
+          `إدخال بيانات غير جيدة يؤدي حتماً إلى نتائج رديئة مهما كانت جودة الخوارزمية؛ والبيانات المتكررة هي التي لا تضيف معلومات جديدة وحذفها لا يؤثر على التحليل`,
+          `الخوارزميات القوية تعالج البيانات الفاسدة دون تنظيف؛ والبيانات المتكررة ترفع دقة النماذج`,
+          `يجب حذف جميع القيم الصفرية؛ والبيانات المتكررة هي القيم السالبة فقط`,
+          `تُطبَّق هذه القاعدة على الصور فقط دون البيانات الجدولية`
+        ],
+        correct: 0,
+        explanation: `تعني القاعدة أن جودة مخرجات أي نموذج لا يمكن أن تتجاوز جودة البيانات المدخلة إليه؛ وتشمل البيانات المتكررة الصفوف المتطابقة (<code>Duplicates</code>) أو السمات غير المرتبطة بالمشكلة.`
+      },
+      {
+        id: 21, unit: 'u4', chapter: `الفصل 8`, category: 'code',
+        stem: `ما مخرج تنفيذ الكود التالي (علماً أن <code>LabelEncoder</code> يرتب الفئات أبجدياً قبل الترميز)، ومتى نفضل <code>One-Hot Encoding</code> عليه؟`,
+        code: `from sklearn.preprocessing import LabelEncoder\nle = LabelEncoder()\nres = le.fit_transform(['Red', 'Green', 'Blue', 'Red'])\nprint(list(res))`,
+        options: [
+          `<code>[2, 1, 0, 2]</code> — ونفضل One-Hot للسمات الاسمية (Nominal) لمنع افتراض ترتيب عددي زائف`,
+          `<code>[0, 1, 2, 0]</code> — ونفضل One-Hot للسمات الترتيبية فقط`,
+          `<code>[1, 2, 3, 1]</code> — ولا فرق بين الترميزين`,
+          `<code>[2, 0, 1, 2]</code> — ونستخدم LabelEncoder دائماً مع المسافات الإقليدية`
+        ],
+        correct: 0,
+        explanation: `الترتيب الأبجدي للفئات هو: <code>Blue → 0</code>، <code>Green → 1</code>، <code>Red → 2</code>. لذا يكون الناتج <code>[2, 1, 0, 2]</code>. ولأن الألوان بيانات اسمية لا ترتيب بينها، يفضَّل <code>One-Hot Encoding</code> حتى لا يفسّر النموذج أن <code>2 > 0</code>.`
+      },
+      {
+        id: 22, unit: 'u4', chapter: `الفصل 8`, category: 'math',
+        stem: `لدينا حقل عددي قيمه <bdi dir="ltr">[10, 20, 30, 50]</bdi>. ما قيمة العنصر <code>30</code> بعد التحجيم بـ <bdi dir="ltr">Min-Max Scaling</bdi> إلى <bdi dir="ltr">[0, 1]</bdi>؟ وما قيمة العنصر <code>65</code> بعد تطبيق <bdi dir="ltr">Z-score</bdi> إذا كان <bdi dir="ltr">μ = 50</bdi> و<bdi dir="ltr">σ = 10</bdi>؟`,
+        code: ``,
+        options: [
+          `<code>Min-Max = 0.50</code> ، و<code>Z-score = 1.50</code>`,
+          `<code>Min-Max = 0.60</code> ، و<code>Z-score = 1.50</code>`,
+          `<code>Min-Max = 0.50</code> ، و<code>Z-score = 0.15</code>`,
+          `<code>Min-Max = 0.25</code> ، و<code>Z-score = 2.00</code>`
+        ],
+        correct: 0,
+        explanation: `• <bdi dir="ltr">Min-Max = (30 − 10) / (50 − 10) = 20 / 40 = 0.50</bdi>.<br>• <bdi dir="ltr">Z-score = (65 − 50) / 10 = 15 / 10 = 1.50</bdi>.`
+      },
+      {
+        id: 23, unit: 'u4', chapter: `الفصل 8`, category: 'math',
+        stem: `لسمة تحتوي على قيمة متطرفة <bdi dir="ltr">[10, 20, 20, 30, 40, 40, 100]</bdi> (الوسيط = 30، <bdi dir="ltr">Q1 = 20</bdi>، <bdi dir="ltr">Q3 = 40</bdi>)، ما ناتج تحجيم القيمة <code>40</code> باستخدام <bdi dir="ltr">Robust Scaling</bdi> ولماذا يُعد مقاوماً للقيم المتطرفة؟`,
+        code: ``,
+        options: [
+          `الناتج <code>0.50</code> — لأنه يعتمد على الوسيط و<code>IQR</code> بدلاً من المتوسط و<code>Min/Max</code>`,
+          `الناتج <code>1.00</code> — لأنه يحذف القيمة 100 تلقائياً`,
+          `الناتج <code>0.33</code> — لأنه يقسم على المدى الكلي 90`,
+          `الناتج <code>2.00</code> — لأنه يعتمد على الانحراف المعياري`
+        ],
+        correct: 0,
+        explanation: `معادلة <code>RobustScaler</code> هي <bdi dir="ltr">(x − Median) / IQR</bdi>. هنا <bdi dir="ltr">IQR = 40 − 20 = 20</bdi>، فتصبح القيمة المحجّمة: <bdi dir="ltr">(40 − 30) / 20 = 10 / 20 = 0.50</bdi>. وهو مقاوم للقيم المتطرفة لأن الوسيط والربيعات لا تتأثر بالـ 100.`
+      },
+      {
+        id: 24, unit: 'u4', chapter: `الفصل 8`, category: 'code',
+        stem: `ما ناتج عملية تقطيع البيانات (<bdi dir="ltr">Binning / Discretization</bdi>) وتجميعها في فئات باستخدام دالة <code>pd.cut</code> في الكود التالي؟`,
+        code: `import pandas as pd\nages = [12, 25, 45, 70]\nbins = pd.cut(ages, bins=[0, 18, 60, 100], labels=['Young', 'Adult', 'Senior'])\nprint(list(bins))`,
+        options: [
+          `<code>['Young', 'Adult', 'Adult', 'Senior']</code>`,
+          `<code>['Young', 'Young', 'Adult', 'Senior']</code>`,
+          `<code>[0, 1, 1, 2]</code>`,
+          `<code>['Adult', 'Adult', 'Senior', 'Senior']</code>`
+        ],
+        correct: 0,
+        explanation: `تقسّم <code>pd.cut</code> القيم إلى الفترات <bdi dir="ltr">(0, 18]</bdi> لـ <code>'Young'</code> (12)، و<bdi dir="ltr">(18, 60]</bdi> لـ <code>'Adult'</code> (25 و 45)، و<bdi dir="ltr">(60, 100]</bdi> لـ <code>'Senior'</code> (70).`
+      },
+
+      // ================= UNIT 5 (Ch 9–10) =================
+      {
+        id: 25, unit: 'u5', chapter: `الفصل 9`, category: 'math',
+        stem: `في خوارزمية تحليل المكونات الرئيسية (<bdi dir="ltr">PCA</bdi>)، بعد توسيط البيانات حول المتوسط كانت العينة <bdi dir="ltr">X = [3, 4]</bdi> والمتجه الذاتي للمكون الرئيسي الأول هو <bdi dir="ltr">e₁ = [0.6, 0.8]ᵀ</bdi>. ما قيمة السمة الجديدة المختزلة <bdi dir="ltr">X' = X · e₁</bdi>؟`,
+        code: ``,
+        options: [
+          `<code>3.4</code>`,
+          `<code>5.0</code>`,
+          `<code>7.0</code>`,
+          `<code>2.4</code>`
+        ],
+        correct: 1,
+        explanation: `نحسب حاصل الضرب المصفوفي (الجداء النقطي):<br><bdi dir="ltr">X' = (3 × 0.6) + (4 × 0.8) = 1.8 + 3.2 = 5.0</bdi>.`
+      },
+      {
+        id: 26, unit: 'u5', chapter: `الفصل 9`, category: 'theory',
+        stem: `ما الترتيب الصحيح لخطوات حساب <bdi dir="ltr">PCA</bdi>، وما الفرق الجوهري بين اختيار السمات (<bdi dir="ltr">Feature Selection</bdi>) وتقليصها باستخراج المكونات (<bdi dir="ltr">PCA</bdi>)؟`,
+        code: ``,
+        options: [
+          `توسيط البيانات ← حساب مصفوفة التباين المشترك <code>Σ</code> ← استخدام <code>SVD</code> لاستخراج القيم والمتجهات الذاتية ← اختيار أعلاها وإسقاط البيانات <code>X' = Xe</code>؛ وPCA ينشئ سمات مركبة جديدة بينما اختيار السمات ينتقي من السمات الأصلية`,
+          `حساب <code>SVD</code> ← ثم طرح المتوسط ← ثم التخلص من مصفوفة التباين؛ وكلاهما يحذف السمات دون أي تحويل رياضي`,
+          `تقسيم البيانات إلى مجموعات ← تطبيق K-Means ← حفظ المتجهات في CSV`,
+          `تشفير النصوص ← حساب Gini Impurity ← حذف الصفوف المكررة`
+        ],
+        correct: 0,
+        explanation: `تبدأ خوارزمية <code>PCA</code> بطرح المتوسط (Mean-centering)، ثم بناء مصفوفة التباين المشترك، فحساب الـ eigenvalues و eigenvectors عبر <code>SVD</code>، وأخيراً الإسقاط <code>X' = Xe</code> لتكوين سمات جديدة مركبة، بعكس طرق اختيار السمات التي تحتفظ بمجموعة فرعية من الأعمدة الأصلية.`
+      },
+      {
+        id: 27, unit: 'u5', chapter: `الفصل 9`, category: 'code',
+        stem: `ما شكل المصفوفة الناتجة <code>X_new.shape</code> عند تنفيذ كود تقليص الأبعاد التالي؟`,
+        code: `from sklearn.decomposition import PCA\nimport numpy as np\nX = np.array([[1, 2, 3, 4], [2, 4, 6, 8], [3, 6, 9, 12], [4, 8, 12, 16]])\npca = PCA(n_components=2)\nX_new = pca.fit_transform(X)\nprint(X_new.shape)`,
+        options: [
+          `<code>(4, 4)</code>`,
+          `<code>(2, 4)</code>`,
+          `<code>(4, 2)</code>`,
+          `<code>(2, 2)</code>`
+        ],
+        correct: 2,
+        explanation: `المصفوفة الأصلية <code>X</code> تحتوي على <code>4</code> عينات (صفوف) و<code>4</code> سمات (أعمدة). بتحديد <code>n_components=2</code> تتقلص السمات إلى عمودين فقط مع بقاء عدد العينات كما هو، فينتج الشكل <code>(4, 2)</code>.`
+      },
+      {
+        id: 28, unit: 'u5', chapter: `الفصل 10`, category: 'math',
+        stem: `في خوارزمية التجميع <bdi dir="ltr">K-Means</bdi>، لدينا مركزان: <bdi dir="ltr">C₁ = (2, 2)</bdi> و<bdi dir="ltr">C₂ = (8, 6)</bdi>. لأي عنقود تُسند النقطة الجديدة <bdi dir="ltr">P = (5, 5)</bdi>؟ وإذا كانت <bdi dir="ltr">C₂</bdi> تحتوي سابقاً على نقطة واحدة هي <bdi dir="ltr">(9, 7)</bdi>، فما إحداثيات المركز الجديد لـ <bdi dir="ltr">C₂</bdi>؟`,
+        code: ``,
+        options: [
+          `تُسند إلى <code>C₁</code> ، ومركز <code>C₂</code> هو <code>(7, 6)</code>`,
+          `تُسند إلى <code>C₂</code> ، ومركز <code>C₂</code> الجديد هو <code>(7, 6)</code>`,
+          `تُسند إلى <code>C₂</code> ، ومركز <code>C₂</code> الجديد هو <code>(6.5, 5.5)</code>`,
+          `تُسند إلى <code>C₁</code> ، ولا تتغير المراكز`
+        ],
+        correct: 1,
+        explanation: `• مربع المسافة إلى <bdi dir="ltr">C₁</bdi>: <bdi dir="ltr">(5−2)² + (5−2)² = 9 + 9 = 18</bdi>.<br>• مربع المسافة إلى <bdi dir="ltr">C₂</bdi>: <bdi dir="ltr">(5−8)² + (5−6)² = 9 + 1 = 10</bdi>.<br>بما أن <bdi dir="ltr">10 &lt; 18</bdi> تُسند النقطة إلى <bdi dir="ltr">C₂</bdi>. ثم نحدث المركز بمتوسط النقطتين: <bdi dir="ltr">((9+5)/2 , (7+5)/2) = (7, 6)</bdi>.`
+      },
+      {
+        id: 29, unit: 'u5', chapter: `الفصل 10`, category: 'theory',
+        stem: `أي خوارزمية تعلم غير مُشرف (<bdi dir="ltr">Unsupervised Clustering</bdi>) لا تتطلب تحديد عدد العناقيد <bdi dir="ltr">k</bdi> مسبقاً، وتعتمد على الكثافة لاكتشاف عناقيد بأشكال غير منتظمة وعزل النقاط المتطرفة كضوضاء (<bdi dir="ltr">Noise</bdi>)؟`,
+        code: ``,
+        options: [
+          `<code>K-Means</code>`,
+          `<code>DBSCAN</code>`,
+          `<code>Logistic Regression</code>`,
+          `<code>Linear Regression</code>`
+        ],
+        correct: 1,
+        explanation: `تعتمد <code>DBSCAN</code> على معاملَي نصف القطر (<code>eps</code>) وأدنى عدد نقاط (<code>min_samples</code>)، ولا تطلب عدد العناقيد مسبقاً وتميّز الضوضاء بالوسم <code>-1</code>؛ بينما تتطلب <code>K-Means</code> تحديد <code>k</code> (غالباً عبر طريقة الكوع Elbow Method) ويبني التجميع الهرمي مخطط الشجرة (<code>Dendrogram</code>).`
+      },
+      {
+        id: 30, unit: 'u5', chapter: `الفصل 10`, category: 'code',
+        stem: `ما ناتج تنفيذ كود التجميع <bdi dir="ltr">KMeans</bdi> التالي؟`,
+        code: `from sklearn.cluster import KMeans\nimport numpy as np\nX = np.array([[1, 1], [1, 2], [10, 10], [10, 11]])\nkm = KMeans(n_clusters=2, n_init=10, random_state=42).fit(X)\nprint(len(set(km.labels_)), km.labels_[0] == km.labels_[1])`,
+        options: [
+          `<code>2 True</code>`,
+          `<code>2 False</code>`,
+          `<code>4 True</code>`,
+          `<code>1 False</code>`
+        ],
+        correct: 0,
+        explanation: `عدد العناقيد المميز في <code>km.labels_</code> هو <code>2</code>، والنقطتان المتقاربتان <code>[1, 1]</code> و<code>[1, 2]</code> تنتميان للعنقود نفسه لذا تتحقق المساواة <code>True</code>.`
+      },
+
+      // ================= UNIT 6 (Ch 11) =================
+      {
+        id: 31, unit: 'u6', chapter: `الفصل 11`, category: 'math',
+        stem: `إذا كانت القيم الفعلية لهدفٍ ما هي <bdi dir="ltr">[10, 18, 33]</bdi> والقيم المتوقعة من نموذج الانحدار هي <bdi dir="ltr">[12, 20, 30]</bdi>، فما قيمة متوسط مربعات الأخطاء (<bdi dir="ltr">MSE</bdi>)؟`,
+        code: ``,
+        options: [
+          `<code>17.0</code>`,
+          `<code>5.67</code>`,
+          `<code>2.33</code>`,
+          `<code>9.0</code>`
+        ],
+        correct: 1,
+        explanation: `نحسب مربع الخطأ لكل عينة:<br>• <bdi dir="ltr">(10 − 12)² = 4</bdi><br>• <bdi dir="ltr">(18 − 20)² = 4</bdi><br>• <bdi dir="ltr">(33 − 30)² = 9</bdi><br>مجموع المربعات = <bdi dir="ltr">4 + 4 + 9 = 17</bdi>. إذن <bdi dir="ltr">MSE = 17 / 3 ≈ 5.67</bdi>.`
+      },
+      {
+        id: 32, unit: 'u6', chapter: `الفصل 11`, category: 'math',
+        stem: `بعد تدريب نموذج الانحدار الخطي للتنبؤ بالمبيعات، حصلنا على المعادلة: <bdi dir="ltr">Sales = 3.5 + 0.05(TV) + 0.20(Radio)</bdi>. إذا كان الإنفاق <bdi dir="ltr">TV = 100</bdi> و<bdi dir="ltr">Radio = 20</bdi>، فما قيمة المبيعات المتوقعة؟`,
+        code: ``,
+        options: [
+          `<code>10.5</code>`,
+          `<code>12.5</code>`,
+          `<code>15.5</code>`,
+          `<code>9.0</code>`
+        ],
+        correct: 1,
+        explanation: `نعوض في المعادلة مباشرة:<br><bdi dir="ltr">Sales = 3.5 + (0.05 × 100) + (0.20 × 20) = 3.5 + 5.0 + 4.0 = 12.5</bdi>.`
+      },
+      {
+        id: 33, unit: 'u6', chapter: `الفصل 11`, category: 'theory',
+        stem: `ما الهدف الأساسي من دالة الخسارة (<bdi dir="ltr">Loss Function</bdi>)، وماذا يحدث للمعاملات في انحدار <bdi dir="ltr">Lasso (L1)</bdi> إذا كانت قيمة معامل التنظيم <code>λ</code> كبيرة جداً؟`,
+        code: ``,
+        options: [
+          `تقليل معدل الخطأ بين القيم الفعلية والمتوقعة؛ وتصبح كثير من المعاملات صفراً تماماً مما يحقق اختيار السمات تلقائياً`,
+          `زيادة التباين على بيانات التدريب؛ وتكبر المعاملات نحو اللانهاية`,
+          `رسم البيانات فقط؛ ولا تتغير المعاملات في Lasso`,
+          `تقسيم البيانات؛ وتتحول جميع المعاملات إلى قيم سالبة`
+        ],
+        correct: 0,
+        explanation: `دالة الخسارة تقيس الانحراف بين التوقع والحقيقة لتقليله؛ وعند رفع قيمة <code>λ</code> في <code>Lasso</code> (بعكس <code>Ridge</code> الذي يقلص المعاملات دون تصفيرها غالباً)، تصبح معاملات السمات الضعيفة صفراً (كما حدث مع سمة <code>Newspaper</code> في مثال المنهج).`
+      },
+      {
+        id: 34, unit: 'u6', chapter: `الفصل 11`, category: 'code',
+        stem: `ما ناتج تنفيذ الكود التالي لتحويل السمات قبل تطبيق <bdi dir="ltr">Polynomial Regression</bdi> بالدرجة الثانية؟`,
+        code: `from sklearn.preprocessing import PolynomialFeatures\nimport numpy as np\nX = np.array([[2], [3]])\npoly = PolynomialFeatures(degree=2)\nprint(poly.fit_transform(X))`,
+        options: [
+          `<code>[[1., 2., 4.], [1., 3., 9.]]</code>`,
+          `<code>[[2., 4.], [3., 9.]]</code>`,
+          `<code>[[1., 4.], [1., 9.]]</code>`,
+          `<code>[[2., 2.], [3., 3.]]</code>`
+        ],
+        correct: 0,
+        explanation: `تُنتج <code>PolynomialFeatures(degree=2)</code> لكل قيمة <code>x</code> ثلاثة حدود هي <bdi dir="ltr">[1, x, x²]</bdi> (حيث العمود الأول للحد الثابت bias). لذا <code>2</code> تصبح <code>[1., 2., 4.]</code> و<code>3</code> تصبح <code>[1., 3., 9.]</code>.`
+      },
+      {
+        id: 35, unit: 'u6', chapter: `الفصل 11`, category: 'code',
+        stem: `في الكود التالي المماثل لتجربة الانحدار الخطي بالفصل 11، ما حجم بيانات التدريب والاختبار المطبوع؟`,
+        code: `from sklearn.model_selection import train_test_split\nimport numpy as np\nX = np.zeros((100, 3))\ny = np.zeros(100)\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)\nprint(len(X_train), len(X_test))`,
+        options: [
+          `<code>70 30</code>`,
+          `<code>75 25</code>`,
+          `<code>80 20</code>`,
+          `<code>25 75</code>`
+        ],
+        correct: 1,
+        explanation: `تحديد <code>test_size=0.25</code> يخصص <bdi dir="ltr">25%</bdi> من البيانات للاختبار (<bdi dir="ltr">25</bdi> عينة) ويبقي <bdi dir="ltr">75%</bdi> للتدريب (<bdi dir="ltr">75</bdi> عينة).`
+      },
+      {
+        id: 36, unit: 'u6', chapter: `الفصل 11`, category: 'theory',
+        stem: `إذا حقق نموذج الانحدار دقة شبه مثالية (<bdi dir="ltr">MSE ≈ 0</bdi>) على بيانات التدريب، لكنه أعطى خطأً ضخماً على بيانات الاختبار، فما هذه الظاهرة وكيف تعالَج؟`,
+        code: ``,
+        options: [
+          `نقص التخصيص (<bdi dir="ltr">Underfitting</bdi>)، وتُعالج بزيادة تعقيد النموذج`,
+          `فرط التخصيص (<bdi dir="ltr">Overfitting</bdi>)، وتُعالج بالتنظيم (<bdi dir="ltr">Ridge/Lasso</bdi>) أو تقليل درجة كثير الحدود أو زيادة بيانات التدريب`,
+          `التعميم المثالي، ولا يحتاج أي تعديل`,
+          `خطأ في دالة <code>describe()</code>`
+        ],
+        correct: 1,
+        explanation: `عندما يحفظ النموذج ضوضاء التدريب ويفشل في التعميم على بيانات جديدة يُعرف ذلك بـ <strong>Overfitting</strong>، ونكبحه عبر تقنيات التنظيم (<code>Ridge / Lasso</code>) أو تبسيط النموذج.`
+      },
+
+      // ================= UNIT 7 (Ch 12–14) =================
+      {
+        id: 37, unit: 'u7', chapter: `الفصل 12–13`, category: 'math',
+        stem: `في مصفوفة الارتباك (<bdi dir="ltr">Confusion Matrix</bdi>) لنموذج تصنيف ثنائي كانت النتائج: <bdi dir="ltr">TP = 60 , FP = 20 , FN = 40 , TN = 80</bdi>. احسب قيم كل من <code>Precision</code> و<code>Recall</code> و<code>F1-score</code> على الترتيب:`,
+        code: ``,
+        options: [
+          `<code>0.75 , 0.60 , 0.667</code>`,
+          `<code>0.60 , 0.75 , 0.667</code>`,
+          `<code>0.80 , 0.60 , 0.686</code>`,
+          `<code>0.75 , 0.80 , 0.774</code>`
+        ],
+        correct: 0,
+        explanation: `• <bdi dir="ltr">Precision = TP / (TP + FP) = 60 / (60 + 20) = 60 / 80 = 0.75</bdi>.<br>• <bdi dir="ltr">Recall = TP / (TP + FN) = 60 / (60 + 40) = 60 / 100 = 0.60</bdi>.<br>• <bdi dir="ltr">F1-score = 2 × (0.75 × 0.60) / (0.75 + 0.60) = 0.90 / 1.35 ≈ 0.667</bdi>.`
+      },
+      {
+        id: 38, unit: 'u7', chapter: `الفصل 12–13`, category: 'math',
+        stem: `في نموذج الانحدار اللوجستي، كانت نتيجة التركيب الخطي لعينة <bdi dir="ltr">z = 2</bdi> (علماً أن <bdi dir="ltr">e⁻² ≈ 0.135</bdi>). باستخدام دالة <bdi dir="ltr">Sigmoid: σ(z) = 1 / (1 + e⁻ᶻ)</bdi>، ما الاحتمال المحسوب وما الفئة المتوقعة عند عتبة <bdi dir="ltr">0.5</bdi>؟`,
+        code: ``,
+        options: [
+          `<code>0.12</code> وتُصنّف كفئة <code>0</code>`,
+          `<code>0.88</code> وتُصنّف كفئة <code>1</code>`,
+          `<code>0.50</code> وتُصنّف كفئة <code>0</code>`,
+          `<code>1.135</code> وتُصنّف كفئة <code>1</code>`
+        ],
+        correct: 1,
+        explanation: `بالتعويض في دالة Sigmoid:<br><bdi dir="ltr">σ(2) = 1 / (1 + 0.135) = 1 / 1.135 ≈ 0.881</bdi>. وبما أن الاحتمال <bdi dir="ltr">0.88 ≥ 0.5</bdi>، تُصنَّف العينة في الفئة <code>1</code>.`
+      },
+      {
+        id: 39, unit: 'u7', chapter: `الفصل 12–13`, category: 'math',
+        stem: `تحتوي عقدة في شجرة قرار (<bdi dir="ltr">Decision Tree</bdi>) على <bdi dir="ltr">10</bdi> عينات: <bdi dir="ltr">6</bdi> موجبة و<bdi dir="ltr">4</bdi> سالبة. ما قيمة عدم نقاء جيني (<bdi dir="ltr">Gini Impurity = 1 − ∑pᵢ²</bdi>) لهذه العقدة؟`,
+        code: ``,
+        options: [
+          `<code>0.50</code>`,
+          `<code>0.48</code>`,
+          `<code>0.52</code>`,
+          `<code>0.36</code>`
+        ],
+        correct: 1,
+        explanation: `نحسب الاحتمالات: <bdi dir="ltr">p₁ = 6/10 = 0.6</bdi> و<bdi dir="ltr">p₂ = 4/10 = 0.4</bdi>.<br><bdi dir="ltr">Gini = 1 − (0.6² + 0.4²) = 1 − (0.36 + 0.16) = 1 − 0.52 = 0.48</bdi>.`
+      },
+      {
+        id: 40, unit: 'u7', chapter: `الفصل 12–13`, category: 'math',
+        stem: `في مصنف <bdi dir="ltr">Naïve Bayes</bdi> لتصنيف الرسائل، لدينا <bdi dir="ltr">P(Spam) = 0.4</bdi> و<bdi dir="ltr">P(Normal) = 0.6</bdi>. ولرسالة تحوي الكلمتين <bdi dir="ltr">(Free, Win)</bdi> كانت الاحتمالات: <bdi dir="ltr">P(Free|Spam)=0.5, P(Win|Spam)=0.5</bdi> و<bdi dir="ltr">P(Free|Normal)=0.1, P(Win|Normal)=0.2</bdi>. ما درجتا الترجيح غير المطبّع لكل فئة وما التصنيف؟`,
+        code: ``,
+        options: [
+          `<code>Spam: 0.10</code> مقابل <code>Normal: 0.012</code> ← التصنيف <code>Spam</code>`,
+          `<code>Spam: 0.012</code> مقابل <code>Normal: 0.10</code> ← التصنيف <code>Normal</code>`,
+          `<code>Spam: 0.40</code> مقابل <code>Normal: 0.60</code> ← التصنيف <code>Normal</code>`,
+          `<code>Spam: 0.25</code> مقابل <code>Normal: 0.02</code> ← التصنيف <code>Spam</code>`
+        ],
+        correct: 0,
+        explanation: `• لـ <code>Spam</code>: <bdi dir="ltr">0.4 × 0.5 × 0.5 = 0.10</bdi>.<br>• لـ <code>Normal</code>: <bdi dir="ltr">0.6 × 0.1 × 0.2 = 0.012</bdi>.<br>بما أن <bdi dir="ltr">0.10 &gt; 0.012</bdi>، تُصنَّف الرسالة كـ <code>Spam</code>.`
+      },
+      {
+        id: 41, unit: 'u7', chapter: `الفصل 13`, category: 'code',
+        stem: `في كود تصنيف مرضى السكري التالي، ما فائدة المعامل <code>stratify=target</code> وماذا يحدد المعامل <code>n_estimators=10</code> في مصنف الغابات العشوائية؟`,
+        code: `X_tr, X_te, y_tr, y_te = train_test_split(X, target, test_size=0.3, stratify=target)\nknn = KNeighborsClassifier(n_neighbors=3)\nrf = RandomForestClassifier(n_estimators=10)`,
+        options: [
+          `<code>stratify=target</code> يحافظ على نفس نسبة توزيع الفئات غير المتوازنة في التدريب والاختبار، و<code>n_estimators=10</code> يحدد عدد أشجار القرار (10 أشجار) داخل النموذج التجميعي`,
+          `<code>stratify=target</code> يملأ القيم المفقودة، و<code>n_estimators=10</code> يحدد عدد الجيران في K-NN`,
+          `<code>stratify=target</code> يرسم منحنى ROC، و<code>n_estimators=10</code> يحدد نسبة بيانات الاختبار`,
+          `<code>stratify=target</code> يحذف الفئة الأقل تكراراً، و<code>n_estimators=10</code> يحدد عدد الفئات الهدف`
+        ],
+        correct: 0,
+        explanation: `عند وجود عدم توازن بين الفئات، يضمن <code>stratify=target</code> تطابق نسب الفئات في جزئي التدريب (<bdi dir="ltr">70%</bdi>) والتقييم (<bdi dir="ltr">30%</bdi>). وتعد <code>RandomForest</code> خوارزمية Ensemble تدمج عدداً من أشجار القرار يحدده <code>n_estimators</code>.`
+      },
+      {
+        id: 42, unit: 'u7', chapter: `الفصل 12–14`, category: 'theory',
+        stem: `ما الفرق بين <code>Macro Average</code> و<code>Weighted Average</code> في تقرير التصنيف، وما الركيزة الأساسية في الفصل الرابع عشر عند إعداد التقارير وعرض النتائج لصناع القرار؟`,
+        code: ``,
+        options: [
+          `<code>Macro</code> يحسب المتوسط البسيط لكل الفئات بالتساوي بينما <code>Weighted</code> يوزنها بعدد عينات كل فئة؛ وفي إعداد التقارير يجب سرد قصة البيانات بوضوح وحيادية وتوجيه العرض حسب الجمهور مع توصيات عملية قابلة للتنفيذ`,
+          `<code>Macro</code> يجمع <code>TP, FP, FN</code> أولاً بينما <code>Weighted</code> يتجاهل الدقة؛ وفي التقارير يُفضل إخفاء قيود النموذج`,
+          `كلاهما متطابق دائماً؛ وفي التقارير نعرض الأكواد البرمجية فقط دون رسوم بيانية`,
+          `<code>Weighted</code> خاص بالانحدار الخطي فقط؛ وفي التقارير نعتمد على المخططات ثلاثية الأبعاد المبالغ فيها`
+        ],
+        correct: 0,
+        explanation: `يحسب <code>Macro Average</code> متوسط المقاييس لجميع الفئات دون ترجيح، بينما يزنها <code>Weighted Average</code> بنسبة عينات كل فئة (أما <code>Micro</code> فيجمع <code>TP, FP, FN</code> أولاً). ويركز الفصل 14 على السرد القصصي بالبيانات (Storytelling)، والوضوح، والشفافية في الرسوم البيانية، وربط الرؤى بتوصيات عملية.`
+      }
+    ];
+
+    // State object persisted via notebookAppApi
+    let appState = {
+      answers: {},       // { questionId: selectedOptionIndex }
+      flagged: {},       // { questionId: true }
+      unitFilter: 'all',
+      catFilter: 'all',
+      mistakesOnly: false,
+      flaggedOnly: false,
+      examMode: 'instant', // 'instant' | 'simulation'
+      simSubmitted: false,
+      showFormulas: false
+    };
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    function isQuestionRevealed(qId) {
+      if (appState.examMode === 'instant') {
+        return typeof appState.answers[qId] === 'number';
+      }
+      return appState.simSubmitted;
+    }
+
+    function computeStats() {
+      let answered = 0;
+      let correct = 0;
+      let wrong = 0;
+      let flaggedCount = 0;
+      const byCat = {
+        math: { total: 0, correct: 0 },
+        code: { total: 0, correct: 0 },
+        theory: { total: 0, correct: 0 }
+      };
+      const byUnit = {};
+      UNITS.forEach(function (u) {
+        byUnit[u.id] = { total: 0, answered: 0, correct: 0 };
+      });
+
+      QUESTIONS.forEach(function (q) {
+        byCat[q.category].total += 1;
+        byUnit[q.unit].total += 1;
+        if (appState.flagged[q.id]) flaggedCount += 1;
+
+        const ans = appState.answers[q.id];
+        if (typeof ans === 'number') {
+          answered += 1;
+          byUnit[q.unit].answered += 1;
+          if (isQuestionRevealed(q.id)) {
+            if (ans === q.correct) {
+              correct += 1;
+              byCat[q.category].correct += 1;
+              byUnit[q.unit].correct += 1;
+            } else {
+              wrong += 1;
+            }
+          }
+        }
+      });
+
+      return { answered, correct, wrong, flaggedCount, byCat, byUnit };
+    }
+
+    function updateScoreboard(stats) {
+      const total = QUESTIONS.length;
+      const scoreEl = document.getElementById('score-display');
+      const scoreBadge = document.getElementById('score-badge');
+      const scoreSub = document.getElementById('score-sub');
+      const accEl = document.getElementById('accuracy-display');
+      const ansBadge = document.getElementById('answered-badge');
+      const mistakesSub = document.getElementById('mistakes-sub');
+      const remEl = document.getElementById('remaining-display');
+      const flaggedSub = document.getElementById('flagged-sub');
+      const modePill = document.getElementById('mode-pill');
+      const modeBtnText = document.getElementById('mode-btn-text');
+      const mistakesBtnText = document.getElementById('mistakes-btn-text');
+      const flaggedBtnText = document.getElementById('flagged-btn-text');
+      const simBanner = document.getElementById('sim-banner');
+      const navSummary = document.getElementById('nav-summary');
+
+      const revealedCount = appState.examMode === 'instant'
+        ? stats.answered
+        : (appState.simSubmitted ? stats.answered : 0);
+
+      const pctTotal = Math.round((stats.correct / total) * 100);
+      if (scoreEl) {
+        scoreEl.textContent = appState.examMode === 'simulation' && !appState.simSubmitted
+          ? `— / ${total}`
+          : `${stats.correct} / ${total}`;
+      }
+      if (scoreBadge) {
+        scoreBadge.textContent = appState.examMode === 'simulation' && !appState.simSubmitted
+          ? `قيد الاختبار`
+          : `${pctTotal}%`;
+        scoreBadge.className = 'score-pill' + (pctTotal >= 75 ? ' good' : (pctTotal >= 50 ? ' warn' : ''));
+      }
+      if (scoreSub) {
+        if (appState.examMode === 'simulation' && !appState.simSubmitted) {
+          scoreSub.textContent = `تُحسب الدرجة النهائية بعد تسليم الاختبار`;
+        } else if (stats.answered === 0) {
+          scoreSub.textContent = `ابدأ بالإجابة عن أي سؤال لاحتساب الدرجة`;
+        } else {
+          scoreSub.textContent = `أجبت عن ${stats.answered} من أصل ${total} سؤالاً`;
+        }
+      }
+
+      if (ansBadge) ansBadge.textContent = `${stats.answered} مُجاب`;
+      if (accEl) {
+        if (revealedCount === 0) {
+          accEl.textContent = `—`;
+        } else {
+          accEl.textContent = `${Math.round((stats.correct / revealedCount) * 100)}%`;
+        }
+      }
+      if (mistakesSub) mistakesSub.textContent = `الأخطاء المسجلة للمراجعة: ${stats.wrong}`;
+      if (remEl) remEl.textContent = `${total - stats.answered} سؤالاً متبقياً`;
+      if (flaggedSub) flaggedSub.textContent = `المحددة للمراجعة (Flag): ${stats.flaggedCount}`;
+      if (navSummary) navSummary.textContent = `${stats.answered} / ${total}`;
+
+      ['math', 'code', 'theory'].forEach(function (cat) {
+        const bar = document.getElementById(`bar-${cat}`);
+        const stat = document.getElementById(`stat-${cat}`);
+        const cData = stats.byCat[cat];
+        const ratio = cData.total > 0 ? Math.round((cData.correct / cData.total) * 100) : 0;
+        if (bar) bar.style.width = `${ratio}%`;
+        if (stat) stat.textContent = `${cData.correct}/${cData.total}`;
+      });
+
+      if (modePill) {
+        if (appState.examMode === 'instant') {
+          modePill.textContent = `تصحيح فوري`;
+          modePill.className = `score-pill good`;
+        } else {
+          modePill.textContent = appState.simSubmitted ? `محاكاة (مُسلَّم)` : `محاكاة اختبار`;
+          modePill.className = `score-pill warn`;
+        }
+      }
+      if (modeBtnText) {
+        modeBtnText.textContent = appState.examMode === 'instant'
+          ? `التبديل لوضع المحاكاة`
+          : `العودة للتصحيح الفوري`;
+      }
+      if (simBanner) {
+        simBanner.hidden = !(appState.examMode === 'simulation' && !appState.simSubmitted);
+      }
+
+      if (mistakesBtnText) mistakesBtnText.textContent = `مراجعة الأخطاء (${stats.wrong})`;
+      if (flaggedBtnText) flaggedBtnText.textContent = `المحددة (${stats.flaggedCount})`;
+    }
+
+    function updateFilterButtons() {
+      const unitSelect = document.getElementById('unit-filter');
+      if (unitSelect) unitSelect.value = appState.unitFilter;
+
+      ['all', 'math', 'code', 'theory'].forEach(function (cat) {
+        const btn = document.getElementById(`cat-btn-${cat}`);
+        if (!btn) return;
+        if (appState.catFilter === cat) {
+          btn.classList.add('btn-active');
+        } else {
+          btn.classList.remove('btn-active');
+        }
+      });
+
+      const mBtn = document.getElementById('btn-mistakes');
+      if (mBtn) mBtn.classList.toggle('btn-active', appState.mistakesOnly);
+
+      const fBtn = document.getElementById('btn-flagged');
+      if (fBtn) fBtn.classList.toggle('btn-active', appState.flaggedOnly);
+
+      const dBtn = document.getElementById('btn-formulas');
+      const drawer = document.getElementById('formula-drawer');
+      if (dBtn) dBtn.classList.toggle('btn-active', appState.showFormulas);
+      if (drawer) drawer.hidden = !appState.showFormulas;
+    }
+
+    function renderSidebar(stats) {
+      const navGrid = document.getElementById('nav-map-grid');
+      if (navGrid) {
+        let navHtml = '';
+        QUESTIONS.forEach(function (q) {
+          const ans = appState.answers[q.id];
+          const revealed = isQuestionRevealed(q.id);
+          let cls = 'nav-cell';
+          if (typeof ans === 'number') {
+            if (revealed) {
+              cls += ans === q.correct ? ' correct' : ' wrong';
+            } else {
+              cls += ' answered-pending';
+            }
+          }
+          if (appState.flagged[q.id]) cls += ' flagged';
+          const numStr = q.id < 10 ? `0${q.id}` : `${q.id}`;
+          navHtml += `<button type="button" class="${cls}" onclick="jumpToQuestion(${q.id})" title="الانتقال إلى السؤال ${q.id}">${numStr}</button>`;
+        });
+        navGrid.innerHTML = navHtml;
+      }
+
+      const unitList = document.getElementById('unit-progress-list');
+      if (unitList) {
+        let uHtml = '';
+        UNITS.forEach(function (u) {
+          const st = stats.byUnit[u.id];
+          const pct = st.total > 0 ? Math.round((st.answered / st.total) * 100) : 0;
+          const isCur = appState.unitFilter === u.id;
+          uHtml += `
+            <button type="button" class="unit-progress-btn${isCur ? ' current' : ''}" onclick="setUnitFilter('${u.id}')">
+              <div class="unit-progress-head">
+                <span>${u.short}</span>
+                <span dir="ltr">${st.answered}/${st.total}</span>
+              </div>
+              <div class="unit-progress-bar">
+                <div class="unit-progress-fill" style="width: ${pct}%;"></div>
+              </div>
+            </button>
+          `;
+        });
+        unitList.innerHTML = uHtml;
+      }
+    }
+
+    function getCategoryLabel(cat) {
+      if (cat === 'math') return `مسألة حسابية`;
+      if (cat === 'code') return `مخرج كود بايثون`;
+      return `مفهوم نظري`;
+    }
+
+    function renderQuestions() {
+      const container = document.getElementById('questions-container');
+      if (!container) return;
+
+      const filtered = QUESTIONS.filter(function (q) {
+        if (appState.unitFilter !== 'all' && q.unit !== appState.unitFilter) return false;
+        if (appState.catFilter !== 'all' && q.category !== appState.catFilter) return false;
+        if (appState.mistakesOnly) {
+          const ans = appState.answers[q.id];
+          const revealed = isQuestionRevealed(q.id);
+          if (!(revealed && typeof ans === 'number' && ans !== q.correct)) return false;
+        }
+        if (appState.flaggedOnly && !appState.flagged[q.id]) return false;
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        let msg = `لا توجد أسئلة مطابقة لمعايير التصفية الحالية.`;
+        if (appState.mistakesOnly) {
+          msg = `لا توجد أخطاء مسجلة حتى الآن ضمن هذا النطاق — أحسنت!`;
+        } else if (appState.flaggedOnly) {
+          msg = `لم تحدد أي سؤال للمراجعة بعلامة الإشارة المرجعية (Flag) بعد.`;
+        }
+        container.innerHTML = `
+          <div class="empty-state">
+            <p class="question-stem">${msg}</p>
+            <button type="button" class="btn btn-primary" onclick="clearAllFilters()">عرض جميع الأسئلة</button>
+          </div>
+        `;
+        return;
+      }
+
+      let html = '';
+      let lastUnit = '';
+
+      filtered.forEach(function (q) {
+        if (q.unit !== lastUnit) {
+          lastUnit = q.unit;
+          const unitObj = UNITS.find(function (u) { return u.id === q.unit; });
+          if (unitObj) {
+            html += `
+              <div class="module-divider">
+                <h2 class="module-divider-title">${unitObj.title}</h2>
+                <span class="module-divider-meta">${unitObj.short}</span>
+              </div>
+            `;
+          }
+        }
+
+        const userAns = appState.answers[q.id];
+        const hasAnswered = typeof userAns === 'number';
+        const revealed = isQuestionRevealed(q.id);
+        const isCorrect = revealed && hasAnswered && userAns === q.correct;
+        const isWrong = revealed && hasAnswered && userAns !== q.correct;
+        const isFlagged = Boolean(appState.flagged[q.id]);
+        const numStr = q.id < 10 ? `0${q.id}` : `${q.id}`;
+
+        let cardCls = 'question-card';
+        if (isCorrect) cardCls += ' state-correct';
+        if (isWrong) cardCls += ' state-wrong';
+
+        let codeHtml = '';
+        if (q.code) {
+          codeHtml = `
+            <div class="code-block" dir="ltr">
+              <div class="code-header"><span>Python 3 • Data Analysis</span><span>In [${q.id}]</span></div>
+              <pre style="margin:0; font-family: inherit;"><code>${escapeHtml(q.code)}</code></pre>
+            </div>
+          `;
+        }
+
+        let optionsHtml = '';
+        q.options.forEach(function (optText, idx) {
+          let optCls = 'option-btn';
+          const isLocked = appState.examMode === 'instant' ? hasAnswered : appState.simSubmitted;
+          if (revealed) {
+            if (idx === q.correct) {
+              optCls += ' is-correct';
+            } else if (hasAnswered && idx === userAns) {
+              optCls += ' is-wrong';
+            }
+          } else if (hasAnswered && idx === userAns) {
+            optCls += ' selected-pending';
+          }
+
+          optionsHtml += `
+            <button type="button" class="${optCls}" ${isLocked ? 'disabled' : ''} onclick="selectOption(${q.id}, ${idx})">
+              <span class="option-letter">${LETTERS[idx]}</span>
+              <span class="option-text">${optText}</span>
+            </button>
+          `;
+        });
+
+        let expHtml = '';
+        if (revealed) {
+          const verdictText = hasAnswered
+            ? (userAns === q.correct
+                ? `إجابة صحيحة — أحسنت! (${LETTERS[q.correct]})`
+                : `إجابة غير صحيحة — الإجابة الصحيحة هي (${LETTERS[q.correct]})`)
+            : `لم تتم الإجابة — الإجابة الصحيحة هي (${LETTERS[q.correct]})`;
+
+          expHtml = `
+            <div class="explanation-box ${isCorrect ? 'correct' : 'wrong'}">
+              <div class="explanation-verdict">${verdictText}</div>
+              <p class="explanation-body">${q.explanation}</p>
+            </div>
+          `;
+        }
+
+        html += `
+          <article id="q-card-${q.id}" class="${cardCls}">
+            <div class="question-top">
+              <div class="question-badges">
+                <span class="index-num">${numStr}</span>
+                <span class="unit-tag">${q.chapter}</span>
+                <span class="cat-tag ${q.category}">${getCategoryLabel(q.category)}</span>
+              </div>
+              <button type="button" class="flag-btn${isFlagged ? ' flagged' : ''}" onclick="toggleFlag(${q.id})">
+                <i data-lucide="bookmark" aria-hidden="true" width="14" height="14"></i>
+                <span>${isFlagged ? 'محدد للمراجعة' : 'تحديد'}</span>
+              </button>
+            </div>
+            <p class="question-stem">${q.stem}</p>
+            ${codeHtml}
+            <div class="options-list" role="group" aria-label="خيارات السؤال ${q.id}">
+              ${optionsHtml}
+            </div>
+            ${expHtml}
+          </article>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function renderAll() {
+      const stats = computeStats();
+      updateScoreboard(stats);
+      updateFilterButtons();
+      renderSidebar(stats);
+      renderQuestions();
+
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+      }
+      if (typeof renderMathInElement === 'function') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '\\(', right: '\\)', display: false },
+            { left: '\\[', right: '\\]', display: true }
+          ],
+          throwOnError: false
+        });
+      }
+    }
+
+    async function persistState() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === 'function') {
+        try {
+          await window.notebookAppApi.setAppState(appState);
+        } catch (err) {
+          const status = document.getElementById('status-message');
+          if (status) status.textContent = `تعذر حفظ التقدم مؤقتاً، لكنه ما زال نشطاً في الجلسة.`;
+        }
+      }
+    }
+
+    function selectOption(qId, optIndex) {
+      if (appState.examMode === 'instant' && typeof appState.answers[qId] === 'number') {
+        return;
+      }
+      if (appState.examMode === 'simulation' && appState.simSubmitted) {
+        return;
+      }
+      appState.answers[qId] = optIndex;
+      renderAll();
+      persistState();
+    }
+
+    function toggleFlag(qId) {
+      if (appState.flagged[qId]) {
+        delete appState.flagged[qId];
+      } else {
+        appState.flagged[qId] = true;
+      }
+      renderAll();
+      persistState();
+    }
+
+    function setUnitFilter(unitId) {
+      appState.unitFilter = unitId;
+      renderAll();
+      persistState();
+    }
+
+    function setCategoryFilter(cat) {
+      appState.catFilter = cat;
+      renderAll();
+      persistState();
+    }
+
+    function toggleMistakesOnly() {
+      appState.mistakesOnly = !appState.mistakesOnly;
+      if (appState.mistakesOnly) appState.flaggedOnly = false;
+      renderAll();
+      persistState();
+    }
+
+    function toggleFlaggedOnly() {
+      appState.flaggedOnly = !appState.flaggedOnly;
+      if (appState.flaggedOnly) appState.mistakesOnly = false;
+      renderAll();
+      persistState();
+    }
+
+    function toggleFormulas() {
+      appState.showFormulas = !appState.showFormulas;
+      renderAll();
+      persistState();
+    }
+
+    function toggleExamMode() {
+      if (appState.examMode === 'instant') {
+        appState.examMode = 'simulation';
+        appState.simSubmitted = false;
+      } else {
+        appState.examMode = 'instant';
+      }
+      renderAll();
+      persistState();
+    }
+
+    function submitSimulationExam() {
+      appState.simSubmitted = true;
+      renderAll();
+      persistState();
+      const status = document.getElementById('status-message');
+      if (status) status.textContent = `تم تسليم الاختبار واحتساب الدرجة الكاملة وعرض الشرح التفصيلي.`;
+    }
+
+    function clearAllFilters() {
+      appState.unitFilter = 'all';
+      appState.catFilter = 'all';
+      appState.mistakesOnly = false;
+      appState.flaggedOnly = false;
+      renderAll();
+      persistState();
+    }
+
+    function jumpToQuestion(qId) {
+      let el = document.getElementById(`q-card-${qId}`);
+      if (!el) {
+        appState.unitFilter = 'all';
+        appState.catFilter = 'all';
+        appState.mistakesOnly = false;
+        appState.flaggedOnly = false;
+        renderAll();
+        el = document.getElementById(`q-card-${qId}`);
+      }
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    function handleResetClick(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== 'true') {
+        btn.dataset.armed = 'true';
+        btn.classList.add('armed');
+        btn.innerHTML = `<i data-lucide="alert-triangle" aria-hidden="true" width="16" height="16"></i><span>اضغط مجدداً لتأكيد المسح</span>`;
+        if (window.lucide && typeof window.lucide.createIcons === 'function') {
+          window.lucide.createIcons();
+        }
+        setTimeout(function () {
+          if (btn.dataset.armed === 'true') {
+            btn.dataset.armed = 'false';
+            btn.classList.remove('armed');
+            btn.innerHTML = `<i data-lucide="rotate-ccw" aria-hidden="true" width="16" height="16"></i><span>إعادة تعيين</span>`;
+            if (window.lucide && typeof window.lucide.createIcons === 'function') {
+              window.lucide.createIcons();
+            }
+          }
+        }, 4000);
+        return;
+      }
+
+      btn.dataset.armed = 'false';
+      btn.classList.remove('armed');
+      btn.innerHTML = `<i data-lucide="rotate-ccw" aria-hidden="true" width="16" height="16"></i><span>إعادة تعيين</span>`;
+
+      appState.answers = {};
+      appState.flagged = {};
+      appState.mistakesOnly = false;
+      appState.flaggedOnly = false;
+      appState.simSubmitted = false;
+
+      renderAll();
+      persistState();
+      const status = document.getElementById('status-message');
+      if (status) status.textContent = `تم مسح جميع الإجابات وإعادة ضبط الاختبار.`;
+    }
+
+    function exportResultsCsv() {
+      const rows = [['Question_ID', 'Unit', 'Chapter', 'Category', 'User_Choice', 'Correct_Choice', 'Status']];
+      QUESTIONS.forEach(function (q) {
+        const ans = appState.answers[q.id];
+        const hasAns = typeof ans === 'number';
+        const userLetter = hasAns ? LETTERS[ans] : 'Unanswered';
+        const correctLetter = LETTERS[q.correct];
+        const status = !hasAns ? 'Unanswered' : (ans === q.correct ? 'Correct' : 'Incorrect');
+        rows.push([q.id, q.unit, q.chapter, q.category, userLetter, correctLetter, status]);
+      });
+
+      const csvContent = '\uFEFF' + rows.map(function (r) {
+        return r.map(function (cell) {
+          return `"${String(cell).replace(/"/g, '""')}"`;
+        }).join(',');
+      }).join('\n');
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.triggerFileDownload === 'function') {
+        window.notebookAppApi.triggerFileDownload({
+          content: csvContent,
+          contentType: 'text/csv',
+          encoding: 'UTF-8',
+          filename: 'data_analysis_exam_report.csv'
+        });
+      }
+      const status = document.getElementById('status-message');
+      if (status) status.textContent = `تم تصدير تقرير النتائج بصيغة CSV.`;
+    }
+
+    async function initApp() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === 'function') {
+        try {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === 'object') {
+            appState = Object.assign(appState, saved);
+            if (!appState.answers || typeof appState.answers !== 'object') appState.answers = {};
+            if (!appState.flagged || typeof appState.flagged !== 'object') appState.flagged = {};
+          }
+        } catch (err) {
+          // Proceed with fresh default state
+        }
+      }
+
+      renderAll();
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === 'function') {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', function () {
+      initApp();
+    });
+  </script>
+</body>
+</html>
