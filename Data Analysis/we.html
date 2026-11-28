@@ -1,0 +1,3369 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="handbook">
+  <title>الدليل التفاعلي للأمثلة الرياضية والخوارزميات — تحليل وتمثيل البيانات</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=Noto+Sans+Arabic:wght@400;500;700;800&family=Public+Sans:ital,wght@0,400..800;1,400..800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/katex.min.css">
+
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Handbook style tokens */
+      --background: #ffffff;
+      --surface-container-low: #f3f2f1;
+      --surface-container: #e8e7e5;
+      --surface-container-high: #dbdad9;
+
+      --on-surface: #0b0c0c;
+      --on-surface-variant: #505a5f;
+
+      --outline: #0b0c0c;
+      --outline-variant: #b1b4b6;
+
+      --primary: #162e51;
+      --on-primary: #ffffff;
+      --primary-container: #d2e2f1;
+      --on-primary-container: #0c2d4a;
+      --secondary: #4c2c92;
+      --tertiary: #1a569e;
+      --error: #d4351c;
+      --on-error: #ffffff;
+
+      /* Data series */
+      --data-1: #1a569e;
+      --data-2: #c75a0a;
+      --data-3: #28a197;
+      --data-4: #4c2c92;
+      --data-context: #b1b4b6;
+
+      /* Fonts (Arabic first per RTL guidelines) */
+      --font-headline: 'Noto Sans Arabic', 'Public Sans', sans-serif;
+      --font-body: 'Noto Sans Arabic', 'Public Sans', sans-serif;
+      --font-label: 'IBM Plex Mono', 'Noto Sans Arabic', monospace;
+
+      /* Shape (strictly square in Handbook) */
+      --rounded: 0;
+      --rounded-lg: 0;
+      --rounded-full: 0;
+
+      /* Handbook effects */
+      --top-index-rule: 6px solid var(--primary);
+      --inset-rule: 5px solid var(--tertiary);
+      --inset-rule-error: 5px solid var(--error);
+      --inset-rule-positive: 5px solid var(--positive);
+      --button-ground: 0 2px 0 #091526;
+      --button-ground-secondary: 0 2px 0 #858686;
+      --focus-yellow: #ffdd00;
+      --focus-ring: 3px solid var(--focus-yellow);
+      --focus-bar: inset 0 0 0 2px var(--on-surface);
+      --focus-underline: 0 -2px var(--focus-yellow), 0 4px var(--on-surface);
+
+      /* Shared semantic & focus tokens */
+      --positive: #00703c;
+      --positive-bg: #e6f2ec;
+      --warning: #9a4b06;
+      --warning-bg: #fdf3e7;
+      --error-bg: #fcebe8;
+      --focus: #ffdd00;
+
+      /* Narrative type scale */
+      --display-size: clamp(2rem, 1.4rem + 2.4vw, 3.25rem);
+      --headline-size: clamp(1.5rem, 1.15rem + 1.4vw, 2.15rem);
+      --subhead-size: clamp(1.15rem, 1.05rem + 0.5vw, 1.4rem);
+      --body-size: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+      --label-size: clamp(0.75rem, 0.72rem + 0.15vw, 0.85rem);
+
+      /* Spacing scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.65;
+    }
+    header { position: static !important; }
+    button, input, select, textarea { font-family: inherit; }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: minmax(220px, 260px) minmax(0, 1fr);
+      gap: var(--space-xl);
+      padding: var(--space-lg);
+      max-width: 1280px;
+      margin: 0 auto;
+      align-items: start;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Top Index Header */
+    .site-header {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: var(--space-lg) var(--space-lg) 0 var(--space-lg);
+    }
+    .index-header {
+      border-top: var(--top-index-rule);
+      border-bottom: 1px solid var(--on-surface);
+      padding: var(--space-sm) 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: var(--label-size);
+    }
+    .hero-block {
+      padding: var(--space-xl) 0 var(--space-lg) 0;
+      border-bottom: 2px solid var(--on-surface);
+    }
+    .hero-title {
+      font-family: var(--font-headline);
+      font-weight: 800;
+      font-size: var(--display-size);
+      line-height: 1.15;
+      margin: 0 0 var(--space-md) 0;
+      max-width: 24ch;
+    }
+    .hero-lede {
+      color: var(--on-surface-variant);
+      max-width: 68ch;
+      margin: 0 0 var(--space-lg) 0;
+      font-size: var(--subhead-size);
+      line-height: 1.55;
+    }
+
+    /* Mastery Bar */
+    .mastery-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+      gap: var(--space-md);
+      background: var(--surface-container-low);
+      border-inline-start: var(--inset-rule);
+      padding: var(--space-md) var(--space-lg);
+      align-items: center;
+    }
+    .mastery-metric-label {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      font-weight: 700;
+    }
+    .mastery-metric-value {
+      font-family: var(--font-label);
+      font-size: var(--headline-size);
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      line-height: 1.15;
+    }
+    .progress-track {
+      height: 10px;
+      background: var(--surface-container-high);
+      width: 100%;
+      margin-top: var(--space-xs);
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--primary);
+      width: 0%;
+      transition: width var(--dur-short) var(--ease-out);
+    }
+    .mastery-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+    /* Sidebar Navigation (TOC) */
+    .toc-aside {
+      position: sticky;
+      top: var(--space-lg);
+      border-top: 3px solid var(--primary);
+      padding-top: var(--space-md);
+    }
+    .toc-title {
+      font-weight: 800;
+      font-size: var(--body-size);
+      margin: 0 0 var(--space-sm) 0;
+    }
+    .toc-group {
+      margin-bottom: var(--space-md);
+    }
+    .toc-group-label {
+      font-size: var(--label-size);
+      font-weight: 700;
+      color: var(--on-surface-variant);
+      margin-bottom: var(--space-xs);
+      border-bottom: 1px solid var(--outline-variant);
+      padding-bottom: var(--space-xs);
+    }
+    .toc-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .toc-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-xs);
+      padding: var(--space-xs) var(--space-sm);
+      color: var(--tertiary);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      font-size: 0.92rem;
+      line-height: 1.35;
+      min-height: 36px;
+    }
+    .toc-link:hover {
+      background: var(--surface-container-low);
+      text-decoration-thickness: 3px;
+    }
+    .toc-link:focus-visible {
+      outline: none;
+      background: var(--focus-yellow);
+      color: var(--on-surface);
+      text-decoration: none;
+      box-shadow: var(--focus-underline);
+    }
+    .toc-status {
+      font-family: var(--font-label);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      background: var(--surface-container);
+      color: var(--on-surface-variant);
+      flex-shrink: 0;
+    }
+    .toc-status.done {
+      background: var(--positive-bg);
+      color: var(--positive);
+    }
+
+    /* Main Column */
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2xl);
+    }
+
+    /* Chapter Headings */
+    .chapter-banner {
+      border-top: var(--top-index-rule);
+      padding-top: var(--space-md);
+      margin-top: var(--space-md);
+    }
+    .chapter-kicker {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      color: var(--tertiary);
+      margin-bottom: var(--space-xs);
+    }
+    .chapter-title {
+      font-family: var(--font-headline);
+      font-weight: 800;
+      font-size: var(--headline-size);
+      line-height: 1.2;
+      margin: 0 0 var(--space-sm) 0;
+    }
+    .chapter-desc {
+      color: var(--on-surface-variant);
+      max-width: 65ch;
+      margin: 0;
+    }
+
+    /* Module Block */
+    .algo-module {
+      border-top: 2px solid var(--on-surface);
+      padding-top: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+      scroll-margin-top: var(--space-lg);
+    }
+    .algo-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+    .algo-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 32px;
+      height: 32px;
+      padding: 0 var(--space-xs);
+      background: var(--primary);
+      color: var(--on-primary);
+      font-family: var(--font-label);
+      font-weight: 800;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+    .algo-title {
+      font-family: var(--font-headline);
+      font-weight: 800;
+      font-size: var(--subhead-size);
+      line-height: 1.25;
+      margin: 0;
+    }
+    .status-tag {
+      display: inline-block;
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: var(--label-size);
+      padding: var(--space-xs) var(--space-sm);
+    }
+    .status-tag.done {
+      background: var(--positive-bg);
+      color: var(--positive);
+    }
+
+    /* Inset Panels & Formula Blocks */
+    .inset {
+      border-inline-start: var(--inset-rule);
+      background: var(--surface-container-low);
+      padding: var(--space-md) var(--space-lg);
+    }
+    .inset-positive {
+      border-inline-start: var(--inset-rule-positive);
+      background: var(--positive-bg);
+    }
+    .inset-error {
+      border-inline-start: var(--inset-rule-error);
+      background: var(--error-bg);
+    }
+    .inset-title {
+      font-weight: 800;
+      margin: 0 0 var(--space-xs) 0;
+      color: var(--on-surface);
+    }
+
+    .formula-box {
+      background: var(--surface-container-low);
+      border-bottom: 1px solid var(--outline-variant);
+      border-top: 1px solid var(--outline-variant);
+      padding: var(--space-md);
+      overflow-x: auto;
+      text-align: center;
+    }
+    .math-ltr {
+      direction: ltr;
+      unicode-bidi: isolate;
+      display: inline-block;
+    }
+
+    /* Two-column split inside module (Given + Steps) */
+    .module-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+      gap: var(--space-lg);
+      align-items: start;
+    }
+
+    /* Step-by-step ordered steps */
+    .steps-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .step-item {
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr);
+      gap: var(--space-sm);
+      align-items: start;
+      padding-bottom: var(--space-sm);
+      border-bottom: 1px solid var(--outline-variant);
+    }
+    .step-item:last-child { border-bottom: 0; }
+    .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      background: var(--primary);
+      color: var(--on-primary);
+      font-family: var(--font-label);
+      font-weight: 800;
+      font-size: 0.8rem;
+      margin-top: 2px;
+    }
+    .step-body p {
+      margin: 0 0 var(--space-xs) 0;
+    }
+    .step-body p:last-child { margin-bottom: 0; }
+
+    /* Ruled Handbook Tables */
+    .table-wrap {
+      overflow-x: auto;
+      width: 100%;
+    }
+    table.hb-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-variant-numeric: tabular-nums;
+      font-size: 0.95rem;
+    }
+    table.hb-table th {
+      text-align: start;
+      font-weight: 800;
+      padding: var(--space-sm) var(--space-sm);
+      border-bottom: 2px solid var(--on-surface);
+      white-space: nowrap;
+    }
+    table.hb-table td {
+      padding: var(--space-sm) var(--space-sm);
+      border-bottom: 1px solid var(--outline-variant);
+      vertical-align: middle;
+    }
+    table.hb-table td.num, table.hb-table th.num {
+      font-family: var(--font-label);
+      direction: ltr;
+      text-align: right;
+    }
+    table.hb-table tr.highlight-row td {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-weight: 700;
+    }
+
+    /* Interactive Lab Panel */
+    .lab-panel {
+      border: 2px solid var(--on-surface);
+      padding: var(--space-lg);
+      background: var(--background);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .lab-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: var(--space-sm);
+      border-bottom: 1px solid var(--outline-variant);
+      padding-bottom: var(--space-sm);
+    }
+    .lab-title {
+      font-weight: 800;
+      font-size: 1.05rem;
+      margin: 0;
+    }
+    .lab-sub {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      margin: 0;
+    }
+
+    .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      align-items: end;
+    }
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      min-width: 140px;
+    }
+    .field-label {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--on-surface);
+    }
+    .field-hint {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+    }
+    .hb-input, .hb-select {
+      border: 2px solid var(--outline);
+      border-radius: var(--rounded);
+      background: var(--background);
+      color: var(--on-surface);
+      padding: var(--space-sm) var(--space-md);
+      font-size: 0.95rem;
+      min-height: 44px;
+    }
+    .hb-select {
+      padding-inline-end: var(--space-xl);
+    }
+    .hb-range {
+      accent-color: var(--primary);
+      min-height: 44px;
+      cursor: pointer;
+    }
+    .hb-input:focus-visible, .hb-select:focus-visible, .hb-range:focus-visible {
+      outline: var(--focus-ring);
+      outline-offset: 0;
+      box-shadow: var(--focus-bar);
+    }
+
+    /* Buttons (Handbook Treatment 3) */
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      font-weight: 700;
+      font-size: 0.95rem;
+      line-height: 1.2;
+      background: var(--primary);
+      color: var(--on-primary);
+      border: 0;
+      border-radius: var(--rounded);
+      padding: var(--space-sm) var(--space-md);
+      min-height: 44px;
+      box-shadow: var(--button-ground);
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), transform var(--dur-micro) var(--ease-out);
+    }
+    .button:hover { background: var(--tertiary); }
+    .button:active { transform: translateY(2px); box-shadow: none; }
+    .button--secondary {
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      box-shadow: var(--button-ground-secondary);
+      border: 1px solid var(--outline-variant);
+    }
+    .button--secondary:hover { background: var(--surface-container-high); }
+    .button--active-tab {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      box-shadow: var(--button-ground-secondary);
+      border: 2px solid var(--primary);
+    }
+    .button:focus-visible {
+      outline: var(--focus-ring);
+      outline-offset: 0;
+      box-shadow: var(--focus-bar);
+    }
+    .button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .hb-input.hb-input--compact {
+      width: 5rem;
+      min-height: 36px;
+      padding: var(--space-xs) var(--space-sm);
+    }
+    .hb-divider {
+      border: 0;
+      border-top: 1px solid var(--outline-variant);
+      width: 100%;
+      margin: 0;
+    }
+    .kpi-row--centered { align-self: center; }
+    .is-hidden { display: none; }
+    .hier-log-text { margin: 0; }
+    /* Key Figure KPI Row */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(155px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .kpi-box {
+      border-inline-start: var(--inset-rule);
+      background: var(--surface-container-low);
+      padding: var(--space-sm) var(--space-md);
+    }
+    .kpi-label {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      font-weight: 700;
+    }
+    .kpi-val {
+      font-family: var(--font-label);
+      font-size: 1.35rem;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      direction: ltr;
+      text-align: start;
+      margin-top: 2px;
+    }
+
+    /* SVG Plot Container */
+    .svg-box {
+      width: 100%;
+      min-height: 300px;
+      background: var(--surface-container-low);
+      border-bottom: 1px solid var(--on-surface);
+      padding: var(--space-sm);
+    }
+    .svg-box svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      min-height: 280px;
+    }
+
+    /* Practice Check Box */
+    .quiz-box {
+      background: var(--surface-container-low);
+      border-inline-start: var(--inset-rule);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .quiz-box.is-solved {
+      border-inline-start: var(--inset-rule-positive);
+    }
+    .quiz-box.is-error {
+      border-inline-start: var(--inset-rule-error);
+    }
+    .quiz-question {
+      font-weight: 700;
+      margin: 0;
+    }
+    .quiz-feedback {
+      font-size: 0.95rem;
+      font-weight: 700;
+      min-height: 1.4em;
+    }
+    .quiz-feedback.ok { color: var(--positive); }
+    .quiz-feedback.bad { color: var(--error); }
+
+    /* Interactive word chips for Naive Bayes */
+    .chip-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    .word-chip {
+      border: 2px solid var(--outline);
+      background: var(--background);
+      color: var(--on-surface);
+      padding: var(--space-xs) var(--space-md);
+      min-height: 44px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .word-chip[aria-pressed="true"] {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+    .word-chip:focus-visible {
+      outline: var(--focus-ring);
+      box-shadow: var(--focus-bar);
+    }
+
+    /* Confusion Matrix 2x2 Grid */
+    .cm-grid {
+      display: grid;
+      grid-template-columns: auto minmax(110px, 1fr) minmax(110px, 1fr);
+      gap: var(--space-xs);
+      align-items: center;
+      max-width: 480px;
+    }
+    .cm-head {
+      font-weight: 800;
+      font-size: 0.85rem;
+      text-align: center;
+      padding: var(--space-xs);
+      background: var(--surface-container);
+    }
+    .cm-cell {
+      padding: var(--space-sm);
+      border: 2px solid var(--outline);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      background: var(--background);
+    }
+    .cm-cell.tp, .cm-cell.tn { background: var(--positive-bg); }
+    .cm-cell.fp, .cm-cell.fn { background: var(--warning-bg); }
+
+    /* Footer */
+    .site-footer {
+      max-width: 1280px;
+      margin: var(--space-2xl) auto 0 auto;
+      padding: var(--space-lg);
+      border-top: var(--top-index-rule);
+      color: var(--on-surface-variant);
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 640px) {
+      .page-grid {
+        grid-template-columns: 1fr;
+        padding: var(--space-md);
+      }
+      aside.toc-aside { display: none; }
+      .site-header { padding: var(--space-md) var(--space-md) 0 var(--space-md); }
+      .lab-panel { padding: var(--space-md); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="index-header">
+      <span>دليل المقرر التفاعلي: تحليل وتمثيل البيانات</span>
+      <span><bdi dir="ltr">12</bdi> خوارزمية ومثالاً محلولاً خطوة بخطوة</span>
+    </div>
+
+    <div class="hero-block">
+      <h1 class="hero-title">الأمثلة العملية والرياضية في تحليل وتمثيل البيانات</h1>
+      <p class="hero-lede">
+        مرجع تفاعلي متكامل يجمع كل مسائل الملخص الدراسي بالمعطيات الأصلية، ويشرح الاشتقاق الرياضي خطوة بخطوة، ويتيح لك تعديل المتغيرات ومحاكاة الخوارزميات بصرياً واختبار فهمك مباشرة.
+      </p>
+
+      <div class="mastery-strip" id="mastery-strip">
+        <div>
+          <div class="mastery-metric-label">تقدم التدريب العملي</div>
+          <div class="mastery-metric-value" id="mastery-count">0 / 12</div>
+          <div class="progress-track" aria-hidden="true">
+            <div class="progress-fill" id="mastery-bar"></div>
+          </div>
+        </div>
+        <div>
+          <div class="mastery-metric-label">نسبة الإنجاز</div>
+          <div class="mastery-metric-value" id="mastery-pct">0%</div>
+          <div class="field-hint" id="mastery-status-msg">ابدأ بحل أي سؤال تحقق داخل الوحدات لحفظ تقدمك تلقائياً.</div>
+        </div>
+        <div class="mastery-actions">
+          <button type="button" class="button" onclick="exportProgressCsv()">تصدير سجل التدريب (<bdi dir="ltr">CSV</bdi>)</button>
+          <button type="button" class="button button--secondary" id="btn-reset-all" onclick="resetAllProgress(this)">إعادة ضبط التقدم</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="page-grid">
+    <aside class="toc-aside" aria-label="فهرس الخوارزميات">
+      <h2 class="toc-title">فهرس الأمثلة التفاعلية</h2>
+
+      <div class="toc-group">
+        <div class="toc-group-label">١. اختيار وتقليص السمات</div>
+        <ul class="toc-list">
+          <li><a class="toc-link" href="#mod-chi2"><span><bdi dir="ltr">01.</bdi> اختبار مربع كاي <bdi dir="ltr">Chi²</bdi></span><span class="toc-status" id="toc-st-chi2">غير مكتمل</span></a></li>
+          <li><a class="toc-link" href="#mod-mi"><span><bdi dir="ltr">02.</bdi> المعلومات المتبادلة <bdi dir="ltr">MI</bdi></span><span class="toc-status" id="toc-st-mi">غير مكتمل</span></a></li>
+          <li><a class="toc-link" href="#mod-pca"><span><bdi dir="ltr">03.</bdi> المكونات الرئيسية <bdi dir="ltr">PCA</bdi></span><span class="toc-status" id="toc-st-pca">غير مكتمل</span></a></li>
+        </ul>
+      </div>
+
+      <div class="toc-group">
+        <div class="toc-group-label">٢. التجميع بدون إشراف</div>
+        <ul class="toc-list">
+          <li><a class="toc-link" href="#mod-kmeans"><span><bdi dir="ltr">04.</bdi> تجميع <bdi dir="ltr">K-Means &amp; Elbow</bdi></span><span class="toc-status" id="toc-st-kmeans">غير مكتمل</span></a></li>
+          <li><a class="toc-link" href="#mod-dbscan"><span><bdi dir="ltr">05.</bdi> خوارزمية <bdi dir="ltr">DBSCAN</bdi></span><span class="toc-status" id="toc-st-dbscan">غير مكتمل</span></a></li>
+          <li><a class="toc-link" href="#mod-hier"><span><bdi dir="ltr">06.</bdi> التجمع الهرمي والربط</span><span class="toc-status" id="toc-st-hier">غير مكتمل</span></a></li>
+        </ul>
+      </div>
+
+      <div class="toc-group">
+        <div class="toc-group-label">٣. الانحدار والتحسين</div>
+        <ul class="toc-list">
+          <li><a class="toc-link" href="#mod-gd"><span><bdi dir="ltr">07.</bdi> <bdi dir="ltr">MSE</bdi> والنزول التدريجي</span><span class="toc-status" id="toc-st-gd">غير مكتمل</span></a></li>
+          <li><a class="toc-link" href="#mod-reg"><span><bdi dir="ltr">08.</bdi> <bdi dir="ltr">Poly / Ridge / Lasso</bdi></span><span class="toc-status" id="toc-st-reg">غير مكتمل</span></a></li>
+        </ul>
+      </div>
+
+      <div class="toc-group">
+        <div class="toc-group-label">٤. التصنيف وتقييم النماذج</div>
+        <ul class="toc-list">
+          <li><a class="toc-link" href="#mod-knn"><span><bdi dir="ltr">09.</bdi> أقرب الجيران <bdi dir="ltr">K-NN</bdi></span><span class="toc-status" id="toc-st-knn">غير مكتمل</span></a></li>
+          <li><a class="toc-link" href="#mod-nb"><span><bdi dir="ltr">10.</bdi> بايز الساذجة <bdi dir="ltr">Naïve Bayes</bdi></span><span class="toc-status" id="toc-st-nb">غير مكتمل</span></a></li>
+          <li><a class="toc-link" href="#mod-logsvm"><span><bdi dir="ltr">11.</bdi> <bdi dir="ltr">Sigmoid</bdi> و <bdi dir="ltr">SVM</bdi></span><span class="toc-status" id="toc-st-logsvm">غير مكتمل</span></a></li>
+          <li><a class="toc-link" href="#mod-tree-cm"><span><bdi dir="ltr">12.</bdi> <bdi dir="ltr">Gini</bdi> ومصفوفة الارتباك</span><span class="toc-status" id="toc-st-tree_cm">غير مكتمل</span></a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <main class="main-content">
+
+      <!-- ===============================================================
+           CHAPTER 1: FEATURE SELECTION & REDUCTION
+           =============================================================== -->
+      <div class="chapter-banner">
+        <div class="chapter-kicker">الفصل التاسع: اختيار السمات وتقليصها</div>
+        <h2 class="chapter-title">تصفية السمات الأكثر ارتباطاً بالهدف وضغط الأبعاد</h2>
+        <p class="chapter-desc">
+          تُقاس أهمية السمات المستقلة إما باختبار الاستقلالية الإحصائية (<bdi dir="ltr">Chi-squared</bdi> و <bdi dir="ltr">Mutual Information</bdi>) على مسألة <bdi dir="ltr">Play Tennis</bdi>، أو بإسقاط البيانات على المحاور المعظّمة للتباين عبر <bdi dir="ltr">PCA</bdi>.
+        </p>
+      </div>
+
+      <!-- MODULE 1: CHI-SQUARED -->
+      <section class="algo-module" id="mod-chi2">
+        <div class="algo-header">
+          <div class="algo-title-wrap">
+            <span class="step-badge">01</span>
+            <h3 class="algo-title">اختبار مربع كاي (<bdi dir="ltr">Chi-squared Test</bdi>) لمسألة <bdi dir="ltr">Play Tennis</bdi></h3>
+          </div>
+          <span class="status-tag" id="badge-chi2">قيد التدريب</span>
+        </div>
+
+        <div class="formula-box">
+          <span class="math-ltr">$$\chi^2 = \sum_{i}\sum_{j} \frac{(O_{ij} - E_{ij})^2}{E_{ij}} \qquad , \qquad E_{ij} = \frac{\text{RowTotal}_i \times \text{ColTotal}_j}{N}$$</span>
+        </div>
+
+        <div class="module-grid">
+          <div class="inset">
+            <h4 class="inset-title">معطيات المثال من الملخص</h4>
+            <p>مجموعة بيانات <bdi dir="ltr">Play Tennis</bdi> تضم <bdi dir="ltr">N = 14</bdi> عنصراً بمتغيرين مستقلين (<bdi dir="ltr">Outlook</bdi> و <bdi dir="ltr">Wind</bdi>) وسمة هدف (<bdi dir="ltr">Yes = 9</bdi>، <bdi dir="ltr">No = 5</bdi>). في خلية <bdi dir="ltr">(Sunny, Yes)</bdi>: التكرار الملاحظ <bdi dir="ltr">O = 2</bdi> والمتوقع <bdi dir="ltr">E = (5 × 9) / 14 = 3.214</bdi>. كلما ارتفعت <bdi dir="ltr">χ²</bdi> زاد اعتماد الهدف على السمة.</p>
+          </div>
+
+          <ol class="steps-list">
+            <li class="step-item">
+              <span class="step-num">١</span>
+              <div class="step-body">
+                <p><strong>بناء جدول التوافق (<bdi dir="ltr">Contingency Table</bdi>):</strong> حصر التكرارات الملاحظة <bdi dir="ltr">O<sub>ij</sub></bdi> ومجاميع الصفوف والأعمدة.</p>
+              </div>
+            </li>
+            <li class="step-item">
+              <span class="step-num">٢</span>
+              <div class="step-body">
+                <p><strong>حساب التكرارات المتوقعة <bdi dir="ltr">E<sub>ij</sub></bdi>:</strong> لـ <bdi dir="ltr">Sunny</bdi> مع <bdi dir="ltr">Yes</bdi>: <bdi dir="ltr">5 × 9 / 14 = 3.214</bdi>، ومع <bdi dir="ltr">No</bdi>: <bdi dir="ltr">5 × 5 / 14 = 1.786</bdi>.</p>
+              </div>
+            </li>
+            <li class="step-item">
+              <span class="step-num">٣</span>
+              <div class="step-body">
+                <p><strong>جمع مربعات الفروق النسبية والمقارنة:</strong> نحسب <bdi dir="ltr">χ²</bdi> لكل من <bdi dir="ltr">Outlook</bdi> و <bdi dir="ltr">Wind</bdi> ونرتبهما تنازلياً لاختيار السمة الأعلى أهمية.</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="lab-panel">
+          <div class="lab-header">
+            <h4 class="lab-title">المختبر التفاعلي: حاسبة جدول التوافق ومربع كاي</h4>
+            <p class="lab-sub">اختر السمة أو عدّل التكرارات الملاحظة لرؤية التغيّر الفوري في القيم المتوقعة <bdi dir="ltr">E</bdi> وقيمة <bdi dir="ltr">χ²</bdi>.</p>
+          </div>
+
+          <div class="controls-row">
+            <div class="field-group">
+              <label class="field-label" for="chi2-feature">السمة المستقلة</label>
+              <select class="hb-select" id="chi2-feature" onchange="renderChi2Lab()">
+                <option value="outlook">Outlook (الطقس: Sunny / Overcast / Rain)</option>
+                <option value="wind">Wind (الرياح: Weak / Strong)</option>
+              </select>
+            </div>
+            <button type="button" class="button button--secondary" onclick="resetChi2Defaults()">استعادة بيانات الملخص</button>
+          </div>
+
+          <div class="table-wrap" id="chi2-table-wrap"></div>
+
+          <div class="kpi-row">
+            <div class="kpi-box">
+              <div class="kpi-label">إجمالي <bdi dir="ltr">χ²</bdi> للسمة المختارة</div>
+              <div class="kpi-val" id="chi2-total">3.546</div>
+            </div>
+            <div class="kpi-box">
+              <div class="kpi-label">مقارنة الملخص (<bdi dir="ltr">Outlook vs Wind</bdi>)</div>
+              <div class="kpi-val" id="chi2-compare">3.546 vs 4.393</div>
+            </div>
+            <div class="kpi-box">
+              <div class="kpi-label">القرار وفق الملخص</div>
+              <div class="kpi-val" id="chi2-winner">Wind أعلى أهمية</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="quiz-box" id="quiz-chi2">
+          <p class="quiz-question">تحقق من فهمك: إذا كان إجمالي صف <bdi dir="ltr">Sunny</bdi> هو <bdi dir="ltr">5</bdi>، وإجمالي عمود <bdi dir="ltr">No</bdi> هو <bdi dir="ltr">5</bdi> من أصل <bdi dir="ltr">14</bdi> عنصراً، والتكرار الملاحظ <bdi dir="ltr">O = 3</bdi>، فما قيمة التكرار المتوقع <bdi dir="ltr">E</bdi> (مقربة لرقمين عشريين)؟</p>
+          <div class="controls-row">
+            <div class="field-group">
+              <label class="field-label" for="ans-chi2">إجابتك الرقمية</label>
+              <input class="hb-input" id="ans-chi2" type="number" step="0.01" placeholder="مثال: 1.79">
+            </div>
+            <button type="button" class="button" onclick="checkModuleQuiz('chi2')">تحقق من الإجابة</button>
+          </div>
+          <div class="quiz-feedback" id="fb-chi2"></div>
+        </div>
+      </section>
+
+      <!-- MODULE 2: MUTUAL INFORMATION -->
+      <section class="algo-module" id="mod-mi">
+        <div class="algo-header">
+          <div class="algo-title-wrap">
+            <span class="step-badge">02</span>
+            <h3 class="algo-title">المعلومات المتبادلة (<bdi dir="ltr">Mutual Information</bdi>) لمسألة <bdi dir="ltr">Play Tennis</bdi></h3>
+          </div>
+          <span class="status-tag" id="badge-mi">قيد التدريب</span>
+        </div>
+
+        <div class="formula-box">
+          <span class="math-ltr">$$I(X; Y) = \sum_{x \in X}\sum_{y \in Y} p(x, y)\,\log_2\!\left(\frac{p(x, y)}{p(x)\,p(y)}\right)$$</span>
+        </div>
+
+        <div class="module-grid">
+          <div class="inset">
+            <h4 class="inset-title">معطيات المثال من الملخص</h4>
+            <p>نفس جدول <bdi dir="ltr">Play Tennis</bdi> المكون من <bdi dir="ltr">14</bdi> سجلاً (<bdi dir="ltr">Yes = 9/14</bdi>، <bdi dir="ltr">No = 5/14</bdi>). تقيس المعلومات المتبادلة مقدار الاعتمادية المشتركة بين <bdi dir="ltr">X</bdi> و <bdi dir="ltr">Y</bdi> بالبت (<bdi dir="ltr">bits</bdi>) عند استخدام اللوغاريتم الثنائي.</p>
+          </div>
+
+          <ol class="steps-list">
+            <li class="step-item">
+              <span class="step-num">١</span>
+              <div class="step-body">
+                <p><strong>تكوين جدول الاحتمالات المشتركة:</strong> نقسم كل تكرار على <bdi dir="ltr">14</bdi>؛ فمثلاً <bdi dir="ltr">p(Sunny, Yes) = 2/14 = 0.143</bdi>.</p>
+              </div>
+            </li>
+            <li class="step-item">
+              <span class="step-num">٢</span>
+              <div class="step-body">
+                <p><strong>الاحتمالات الهامشية:</strong> <bdi dir="ltr">p(Sunny) = 5/14 = 0.357</bdi> و <bdi dir="ltr">p(Yes) = 9/14 = 0.643</bdi>.</p>
+              </div>
+            </li>
+            <li class="step-item">
+              <span class="step-num">٣</span>
+              <div class="step-body">
+                <p><strong>حساب مساهمة كل خلية:</strong> عندما يكون <bdi dir="ltr">p(x,y) = 0</bdi> (مثل <bdi dir="ltr">Overcast, No</bdi>) تكون مساهمة الخلية صفراً، ثم نجمع الحدود الموجبة والسالبة لنحصل على <bdi dir="ltr">I(X;Y)</bdi>.</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="lab-panel">
+          <div class="lab-header">
+            <h4 class="lab-title">المختبر التفاعلي: تفكيك حدود المعلومات المتبادلة خليةً بخلية</h4>
+            <p class="lab-sub">استعرض جدول الاحتمالات لكل سمة وشاهد مساهمة كل خلية في إجمالي <bdi dir="ltr">I(X; Y)</bdi>.</p>
+          </div>
+          <div class="controls-row">
+            <div class="field-group">
+              <label class="field-label" for="mi-feature">اختر السمة لتحليل <bdi dir="ltr">I(X; Y)</bdi></label>
+              <select class="hb-select" id="mi-feature" onchange="renderMiLab()">
+                <option value="outlook">Outlook (الطقس)</option>
+                <option value="wind">Wind (الرياح)</option>
+              </select>
+            </div>
+          </div>
+          <div class="table-wrap" id="mi-table-wrap"></div>
+          <div class="kpi-row">
+            <div class="kpi-box">
+              <div class="kpi-label"><bdi dir="ltr">I(X; PlayTennis)</bdi> بالبت</div>
+              <div class="kpi-val" id="mi-total-bits">0.2467</div>
+            </div>
+            <div class="kpi-box">
+              <div class="kpi-label">إجمالي العينات <bdi dir="ltr">N</bdi></div>
+              <div class="kpi-val">14</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="quiz-box" id="quiz-mi">
+          <p class="quiz-question">تحقق من فهمك: في جدول الاحتمالات لسمة <bdi dir="ltr">Outlook</bdi>، إذا كانت <bdi dir="ltr">p(Overcast, No) = 0</bdi>، فما مساهمة هذه الخلية في مجموع <bdi dir="ltr">Mutual Information</bdi>؟</p>
+          <div class="controls-row">
+            <div class="field-group">
+              <label class="field-label" for="ans-mi">إجابتك الرقمية</label>
+              <input class="hb-input" id="ans-mi" type="number" step="0.01" placeholder="أدخل رقماً">
+            </div>
+            <button type="button" class="button" onclick="checkModuleQuiz('mi')">تحقق من الإجابة</button>
+          </div>
+          <div class="quiz-feedback" id="fb-mi"></div>
+        </div>
+      </section>
+
+      <!-- MODULE 3: PCA -->
+      <section class="algo-module" id="mod-pca">
+        <div class="algo-header">
+          <div class="algo-title-wrap">
+            <span class="step-badge">03</span>
+            <h3 class="algo-title">تحليل المكونات الرئيسية (<bdi dir="ltr">PCA</bdi>) لمسألة سعر العقار والمساحة</h3>
+          </div>
+          <span class="status-tag" id="badge-pca">قيد التدريب</span>
+        </div>
+
+        <div class="formula-box">
+          <span class="math-ltr">$$X_{\text{centered}} = x - \mu \quad \longrightarrow \quad \Sigma = \frac{1}{N-1} X^T X \quad \longrightarrow \quad X' = X\,e_1$$</span>
+        </div>
+
+        <div class="module-grid">
+          <div>
+            <h4 class="inset-title">بيانات العقارات الخمسة من الملخص</h4>
+            <div class="table-wrap">
+              <table class="hb-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th class="num">المساحة (<bdi dir="ltr">Area</bdi>)</th>
+                    <th class="num">السعر (<bdi dir="ltr">House Price</bdi>)</th>
+                    <th class="num"><bdi dir="ltr">x₁ - μ₁</bdi></th>
+                    <th class="num"><bdi dir="ltr">x₂ - μ₂</bdi></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>1</td><td class="num">9.0</td><td class="num">10.0</td><td class="num">4.4</td><td class="num">5.4</td></tr>
+                  <tr><td>2</td><td class="num">3.0</td><td class="num">2.0</td><td class="num">-1.6</td><td class="num">-2.6</td></tr>
+                  <tr><td>3</td><td class="num">2.0</td><td class="num">1.0</td><td class="num">-2.6</td><td class="num">-3.6</td></tr>
+                  <tr><td>4</td><td class="num">6.5</td><td class="num">7.0</td><td class="num">1.9</td><td class="num">2.4</td></tr>
+                  <tr><td>5</td><td class="num">2.5</td><td class="num">3.0</td><td class="num">-2.1</td><td class="num">-1.6</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <ol class="steps-list">
+            <li class="step-item">
+              <span class="step-num">١</span>
+              <div class="step-body">
+                <p><strong>حساب المتوسط (<bdi dir="ltr">Mean</bdi>):</strong> <bdi dir="ltr">μ(Area) = 23/5 = 4.6</bdi>، و <bdi dir="ltr">μ(Price) = 23/5 = 4.6</bdi>.</p>
+              </div>
+            </li>
+            <li class="step-item">
+              <span class="step-num">٢</span>
+              <div class="step-body">
+                <p><strong>طرح المتوسط (<bdi dir="ltr">Mean-Centered Data</bdi>):</strong> نطرح <bdi dir="ltr">4.6</bdi> من كل قيمة كما يظهر في العمودين الأخيرين بالجدول.</p>
+              </div>
+            </li>
+            <li class="step-item">
+              <span class="step-num">٣</span>
+              <div class="step-body">
+                <p><strong>مصفوفة التغاير و <bdi dir="ltr">SVD</bdi>:</strong> نحصل على <bdi dir="ltr">Σ = [[9.175, 11.30], [11.30, 14.30]]</bdi>، وأكبر قيمة ذاتية <bdi dir="ltr">λ₁ = 23.324</bdi> (تفسر <bdi dir="ltr">99.36%</bdi> من التباين) والمتجه الذاتي الأول <bdi dir="ltr">e₁ = [0.625, 0.781]ᵀ</bdi>.</p>
+              </div>
+            </li>
+            <li class="step-item">
+              <span class="step-num">٤</span>
+              <div class="step-body">
+                <p><strong>تقليص السمات (<bdi dir="ltr">X' = X·e₁</bdi>):</strong> نضرب كل صف موسط في <bdi dir="ltr">e₁</bdi> لتتحول السمتان إلى سمة جديدة واحدة لكل عقار.</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="lab-panel">
+          <div class="lab-header">
+            <h4 class="lab-title">المختبر التفاعلي: إسقاط العقارات على المكون الرئيسي الأول (<bdi dir="ltr">PC1</bdi>)</h4>
+            <p class="lab-sub">عدّل إحداثيات العقار الأول وشاهد دوران محور <bdi dir="ltr">PC1</bdi>، مصفوفة التغاير، ونسبة التباين المفسّر مباشرة.</p>
+          </div>
+
+          <div class="controls-row">
+            <div class="field-group">
+              <label class="field-label" for="pca-p1x">مساحة العقار #1 (<bdi dir="ltr">Area</bdi>): <span id="pca-p1x-val">9.0</span></label>
+              <input class="hb-range" id="pca-p1x" type="range" min="4" max="12" step="0.5" value="9.0" oninput="renderPcaLab()">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="pca-p1y">سعر العقار #1 (<bdi dir="ltr">Price</bdi>): <span id="pca-p1y-val">10.0</span></label>
+              <input class="hb-range" id="pca-p1y" type="range" min="4" max="12" step="0.5" value="10.0" oninput="renderPcaLab()">
+            </div>
+            <button type="button" class="button button--secondary" onclick="resetPcaLab()">استعادة (9, 10)</button>
+          </div>
+
+          <div class="svg-box" id="pca-svg-box"></div>
+
+          <div class="kpi-row">
+            <div class="kpi-box">
+              <div class="kpi-label">المتوسط (<bdi dir="ltr">μ₁, μ₂</bdi>)</div>
+              <div class="kpi-val" id="pca-mean">(4.60, 4.60)</div>
+            </div>
+            <div class="kpi-box">
+              <div class="kpi-label">المتجه الذاتي الأول <bdi dir="ltr">e₁</bdi></div>
+              <div class="kpi-val" id="pca-e1">[0.625, 0.781]</div>
+            </div>
+            <div class="kpi-box">
+              <div class="kpi-label">التباين المفسّر بـ <bdi dir="ltr">PC1</bdi></div>
+              <div class="kpi-val" id="pca-var">99.36%</div>
+            </div>
+            <div class="kpi-box">
+              <div class="kpi-label">الإسقاط <bdi dir="ltr">X'₁</bdi> للعقار #1</div>
+              <div class="kpi-val" id="pca-proj1">6.97</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="quiz-box" id="quiz-pca">
+          <p class="quiz-question">تحقق من فهمك: إذا كانت مساحة العقار #4 هي <bdi dir="ltr">6.5</bdi> ومتوسط المساحة في الملخص هو <bdi dir="ltr">4.6</bdi>، فما القيمة الموسطة (<bdi dir="ltr">Mean-centered</bdi>) لمساحة هذا العقار؟</p>
+          <div class="controls-row">
+            <div class="field-group">
+              <label class="field-label" for="ans-pca">إجابتك الرقمية</label>
+              <input class="hb-input" id="ans-pca" type="number" step="0.1" placeholder="مثال: 1.9">
+            </div>
+            <button type="button" class="button" onclick="checkModuleQuiz('pca')">تحقق من الإجابة</button>
+          </div>
+          <div class="quiz-feedback" id="fb-pca"></div>
+        </div>
+      </section>
+
+
+      <!-- ===============================================================
+           CHAPTER 2: UNSUPERVISED LEARNING (CLUSTERING)
+           =============================================================== -->
+      <div class="chapter-banner">
+        <div class="chapter-kicker">الفصل العاشر: التعلم الآلي بدون إشراف</div>
+        <h2 class="chapter-title">خوارزميات تجميع البيانات (<bdi dir="ltr">Clustering</bdi>) بدون سمة هدف</h2>
+        <p class="chapter-desc">
+          تكتشف خوارزميات التجميع الأنماط عبر التشابه والتقارب المكاني: بالتجميع حول المراكز (<bdi dir="ltr">K-Means</bdi>)، أو المناطق الكثيفة (<bdi dir="ltr">DBSCAN</bdi>)، أو البناء الشجري المتسلسل (<bdi dir="ltr">Hierarchical</bdi>).
+        </p>
+      </div>
+
+      <!-- MODULE 4: K-MEANS & ELBOW -->
+      <section class="algo-module" id="mod-kmeans">
+        <div class="algo-header">
+          <div class="algo-title-wrap">
+            <span class="step-badge">04</span>
+            <h3 class="algo-title">خوارزمية <bdi dir="ltr">K-Means</bdi> وتحديث المراكز وطريقة المرفق (<bdi dir="ltr">Elbow</bdi>)</h3>
+          </div>
+          <span class="status-tag" id="badge-kmeans">قيد التدريب</span>
+        </div>
+
+        <div class="formula-box">
+          <span class="math-ltr">$$\text{WCSS} = \sum_{k=1}^{K}\sum_{x_i \in C_k} \|x_i - \mu_k\|^2 \qquad , \qquad \mu_k^{\text{new}} = \frac{1}{|C_k|}\sum_{x_i \in C_k} x_i$$</span>
+        </div>
+
+        <div class="module-grid">
+          <div class="inset">
+            <h4 class="inset-title">معطيات المثال من الملخص</h4>
+            <p>النقاط الثماني: <bdi dir="ltr">(5,8), (6,9), (7,8), (8,7), (6,3), (5,2), (4,3), (3,2)</bdi> مع تحديد <bdi dir="ltr">K = 2</bdi> واختيار المركزين الأوليين <bdi dir="ltr">C₁ = (3,2)</bdi> و <bdi dir="ltr">C₂ = (7,8)</bdi>.</p>
+          </div>
+
+          <ol class="steps-list">
+            <li class="step-item">
+              <span class="step-num">١</span>
+              <div class="step-body">
+                <p><strong>التعيين لأقرب مركز:</strong> تتجمع النقاط <bdi dir="ltr">(3,2), (4,3), (5,2), (6,3)</bdi> مع <bdi dir="ltr">C₁</bdi>، والنقاط <bdi dir="ltr">(5,8), (6,9), (7,8), (8,7)</bdi> مع <bdi dir="ltr">C₂</bdi>.</p>
+              </div>
+            </li>
+            <li class="step-item">
+              <span class="step-num">٢</span>
+              <div class="step-body">
+                <p><strong>تحديث المراكز:</strong> المتوسط الجديد للمجموعة الأولى: <bdi dir="ltr">((3+4+5+6)/4, (2+3+2+3)/4) = (4.5, 2.5)</bdi>، وللثانية: <bdi dir="ltr">((5+6+7+8)/4, (8+9+8+7)/4) = (6.5, 8)</bdi>.</p>
+              </div>
+            </li>
+            <li class="step-item">
+              <span class="step-num">٣</span>
+              <div class="step-body">
+                <p><strong>التقارب وتحديد <bdi dir="ltr">K</bdi>:</strong> لا يتغير التعيين بعد التحديث فتتوقف الخوارزمية. ولاختيار <bdi dir="ltr">K</bdi> الأمثل نرسم <bdi dir="ltr">WCSS</bdi> عبر <bdi dir="ltr">Elbow Method</bdi> ونختار نقطة الانعطاف.</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="lab-panel">
+          <div class="lab-header">
+            <h4 class="lab-title">المختبر التفاعلي: متتبع خطوات <bdi dir="ltr">K-Means</bdi> ومنحنى <bdi dir="ltr">Elbow</bdi></h4>
+            <p class="lab-sub">تنقّل بين مراحل التهيئة والتعيين والتحديث أو شاهد كيف تهبط قيمة <bdi dir="ltr">WCSS</bdi> مع زيادة <bdi dir="ltr">K</bdi>.</p>
+          </div>
+
+          <div class="controls-row">
+            <button type="button" class="button" onclick="stepKmeans(1)">الخطوة التالية</button>
+            <button type="button" class="button button--secondary" onclick="setKmeansStep(0)">إعادة للتهيئة (الخطوة 0)</button>
+            <div class="field-group">
+              <label class="field-label" for="kmeans-view">نمط الرسم</label>
+              <select class="hb-select" id="kmeans-view" onchange="renderKmeansLab()">
+                <option value="clusters">خريطة التجميع والمراكز</option>
+                <option value="elbow">منحنى المرفق (WCSS vs K)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="svg-box" id="kmeans-svg-box"></div>
+
+          <div class="kpi-row">
+            <div class="kpi-box">
+              <div class="kpi-label">المرحلة الحالية</div>
+              <div class="kpi-val" id="km-stage-txt">0: التهيئة</div>
+            </div>
+            <div class="kpi-box">
+              <div class="kpi-label">المركز الأول <bdi dir="ltr">C₁</bdi></div>
+              <div class="kpi-val" id="km-c1">(3.0, 2.0)</div>
+            </div>
+            <div class="kpi-box">
+              <div class="kpi-label">المركز الثاني <bdi dir="ltr">C₂</bdi></div>
+              <div class="kpi-val" id="km-c2">(7.0, 8.0)</div>
+            </div>
+            <div class="kpi-box">
+              <div class="kpi-label">مجموع المربعات <bdi dir="ltr">WCSS</bdi></div>
+              <div class="kpi-val" id="km-wcss">24.00</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="quiz-box" id="quiz-kmeans">
+          <p class="quiz-question">تحقق من فهمك: ما الإحداثي السيني (<bdi dir="ltr">x</bdi>) للمركز الجديد للمجموعة الأولى التي تضم النقاط <bdi dir="ltr">(3,2), (4,3), (5,2), (6,3)</bdi>؟</p>
+          <div class="controls-row">
+            <div class="field-group">
+              <label class="field-label" for="ans-kmeans">إجابتك الرقمية</label>
+              <input class="hb-input" id="ans-kmeans" type="number" step="0.1" placeholder="مثال: 4.5">
+            </div>
+            <button type="button" class="button" onclick="checkModuleQuiz('kmeans')">تحقق من الإجابة</button>
+          </div>
+          <div class="quiz-feedback" id="fb-kmeans"></div>
+        </div>
+      </section>
+
+      <!-- MODULE 5: DBSCAN -->
+      <section class="algo-module" id="mod-dbscan">
+        <div class="algo-header">
+          <div class="algo-title-wrap">
+            <span class="step-badge">05</span>
+            <h3 class="algo-title">خوارزمية <bdi dir="ltr">DBSCAN</bdi> وتصنيف النقاط الأساسية والحدية والضجيج</h3>
+          </div>
+          <span class="status-tag" id="badge-dbscan">قيد التدريب</span>
+        </div>
+
+        <div class="formula-box">
+          <span class="math-ltr">$$N_{\varepsilon}(p) = \{q \in D \mid \text{dist}(p, q) \le \varepsilon\} \qquad , \qquad |N_{\varepsilon}(p)| \ge \text{minPts} \implies \text{Core Point}$$</span>
+        </div>
+
+        <div class="module-grid">
+          <div class="inset">
+            <h4 class="inset-title">معطيات المثال من الملخص</h4>
+            <p>النقاط الست: <bdi dir="ltr">(1,2), (2,2), (2,3), (8,7), (8,8), (25,80)</bdi>، والمعاملات المختارة: نصف القطر <bdi dir="ltr">eps = 1.5</bdi> والحد الأدنى للنقاط <bdi dir="ltr">minPts = 2</bdi>.</p>
+          </div>
+
+          <ol class="steps-list">
+            <li class="step-item">
+              <span class="step-num">١</span>
+              <div class="step-body">
+                <p><strong>المجموعة الأولى:</strong> حول <bdi dir="ltr">(1,2)</bdi> ضمن <bdi dir="ltr">1.5</bdi> توجد <bdi dir="ltr">(2,2)</bdi> و <bdi dir="ltr">(2,3)</bdi> (بمسافة <bdi dir="ltr">1.41</bdi>)، وحول <bdi dir="ltr">(2,2)</bdi> توجد <bdi dir="ltr">3</bdi> نقاط؛ كلها أساسية وتشكل <bdi dir="ltr">{(1,2), (2,2), (2,3)}</bdi>.</p>
+              </div>
+            </li>
+            <li class="step-item">
+              <span class="step-num">٢</span>
+              <div class="step-body">
+                <p><strong>المجموعة الثانية:</strong> النقطة <bdi dir="ltr">(8,7)</bdi> تجاورها <bdi dir="ltr">(8,8)</bdi> بمسافة <bdi dir="ltr">1.0 ≤ 1.5</bdi> (العدد = 2 ≥ minPts)، فتتشكل <bdi dir="ltr">{(8,7), (8,8)}</bdi>.</p>
+              </div>
+            </li>
+            <li class="step-item">
+              <span class="step-num">٣</span>
+              <div class="step-body">
+                <p><strong>كشف الضجيج (<bdi dir="ltr">Noise</bdi>):</strong> النقطة <bdi dir="ltr">(25,80)</bdi> معزولة ولا تقع ضمن جوار أي نقطة أخرى، فتُصنف كنقطة ضجيج خارجية.</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="lab-panel">
+          <div class="lab-header">
+            <h4 class="lab-title">المختبر التفاعلي: تأثير <bdi dir="ltr">eps</bdi> و <bdi dir="ltr">minPts</bdi> على النقاط الأساسية والحدية والضجيج</h4>
+            <p class="lab-sub">حرّك المعاملات وشاهد كيف تتحول النقاط بين أساسية (<bdi dir="ltr">Core</bdi>) وحدية (<bdi dir="ltr">Border</bdi>) وضجيج (<bdi dir="ltr">Noise</bdi>) (تم تضمين نقطة حدية اختبارية عند <bdi dir="ltr">(3.3, 3.0)</bdi> عند تفعيلها).</p>
+          </div>
+
+          <div class="controls-row">
+            <div class="field-group">
+              <label class="field-label" for="db-eps">نصف القطر (<bdi dir="ltr">eps</bdi>): <span id="db-eps-val">1.5</span></label>
+              <input class="hb-range" id="db-eps" type="range" min="0.8" max="2.5" step="0.1" value="1.5" oninput="renderDbscanLab()">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="db-minpts">الحد الأدنى (<bdi dir="ltr">minPts</bdi>): <span id="db-minpts-val">2</span></label>
+              <input class="hb-range" id="db-minpts" type="range" min="2" max="4" step="1" value="2" oninput="renderDbscanLab()">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="db-extra">نقطة حدية إضافية</label>
+              <select class="hb-select" id="db-extra" onchange="renderDbscanLab()">
+                <option value="no">بيانات الملخص الأصلية فقط</option>
+                <option value="yes">إضافة (3.3, 3.0) لاختبار النقطة الحدية</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="svg-box" id="dbscan-svg-box"></div>
+          <div class="table-wrap" id="dbscan-table-wrap"></div>
+        </div>
+
+        <div class="quiz-box" id="quiz-dbscan">
+          <p class="quiz-question">تحقق من فهمك: عند <bdi dir="ltr">eps = 1.5</bdi> و <bdi dir="ltr">minPts = 2</bdi> في مثال الملخص، كم عدد المجموعات (<bdi dir="ltr">Clusters</bdi>) الناتجة (دون احتساب الضجيج)؟</p>
+          <div class="controls-row">
+            <div class="field-group">
+              <label class="field-label" for="ans-dbscan">عدد المجموعات</label>
+              <input class="hb-input" id="ans-dbscan" type="number" step="1" placeholder="أدخل عدداً صحيحاً">
+            </div>
+            <button type="button" class="button" onclick="checkModuleQuiz('dbscan')">تحقق من الإجابة</button>
+          </div>
+          <div class="quiz-feedback" id="fb-dbscan"></div>
+        </div>
+      </section>
+
+      <!-- MODULE 6: HIERARCHICAL CLUSTERING -->
+      <section class="algo-module" id="mod-hier">
+        <div class="algo-header">
+          <div class="algo-title-wrap">
+            <span class="step-badge">06</span>
+            <h3 class="algo-title">التجمع الهرمي (<bdi dir="ltr">Hierarchical Clustering</bdi>) وطرق الربط الأربع</h3>
+          </div>
+          <span class="status-tag" id="badge-hier">قيد التدريب</span>
+        </div>
+
+        <div class="module-grid">
+          <div class="inset">
+            <h4 class="inset-title">أنواع التجمع الهرمي في الملخص</h4>
+            <p><strong>التصاعدي (<bdi dir="ltr">Agglomerative</bdi>):</strong> يبدأ بكل نقطة كعنقود منفصل ويدمج الأقرب تدريجياً حتى عنقود واحد. <strong>التنازلي (<bdi dir="ltr">Divisive</bdi>):</strong> يبدأ بالجميع في عنقود واحد ويقسمها تدريجياً.</p>
+          </div>
+          <div class="inset">
+            <h4 class="inset-title">مقاييس المسافة بين المجموعات (<bdi dir="ltr">Linkage</bdi>)</h4>
+            <p><bdi dir="ltr">Single</bdi>: أقرب نقطتين | <bdi dir="ltr">Complete</bdi>: أبعد نقطتين | <bdi dir="ltr">Average</bdi>: متوسط المسافات بين كل زوجين | <bdi dir="ltr">Ward</bdi>: تقليل الزيادة في التباين داخل العنقود.</p>
+          </div>
+        </div>
+
+        <div class="lab-panel">
+          <div class="lab-header">
+            <h4 class="lab-title">المختبر التفاعلي: التجميع التصاعدي خطوة بخطوة وشجرة <bdi dir="ltr">Dendrogram</bdi></h4>
+            <p class="lab-sub">اختر طريقة الربط وتابع اندماج النقاط الخمس <bdi dir="ltr">A(1), B(2), C(5), D(7), E(11)</bdi> في خطوات متتالية.</p>
+          </div>
+
+          <div class="controls-row">
+            <div class="field-group">
+              <label class="field-label" for="hier-linkage">طريقة الربط (<bdi dir="ltr">Linkage</bdi>)</label>
+              <select class="hb-select" id="hier-linkage" onchange="resetHierStep()">
+                <option value="single">Single Linkage (أدنى مسافة)</option>
+                <option value="complete">Complete Linkage (أقصى مسافة)</option>
+                <option value="average">Average Linkage (متوسط المسافات)</option>
+                <option value="ward">Ward Linkage (تباين العنقود)</option>
+              </select>
+            </div>
+            <button type="button" class="button" onclick="advanceHierStep()">الدمج التالي</button>
+            <button type="button" class="button button--secondary" onclick="resetHierStep()">إعادة البدء</button>
+          </div>
+
+          <div class="svg-box" id="hier-svg-box"></div>
+          <div class="inset" id="hier-log"></div>
+        </div>
+
+        <div class="quiz-box" id="quiz-hier">
+          <p class="quiz-question">تحقق من فهمك: ما طريقة الربط التي تحسب المسافة بين مجموعتين بناءً على <strong>أبعد</strong> نقطتين تنتميان للمجموعتين المختلفتين؟</p>
+          <div class="controls-row">
+            <div class="field-group">
+              <label class="field-label" for="ans-hier">اختر الإجابة الصحيحة</label>
+              <select class="hb-select" id="ans-hier">
+                <option value="">-- اختر طريقة الربط --</option>
+                <option value="single">Single Linkage</option>
+                <option value="complete">Complete Linkage</option>
+                <option value="average">Average Linkage</option>
+                <option value="ward">Ward Linkage</option>
+              </select>
+            </div>
+            <button type="button" class="button" onclick="checkModuleQuiz('hier')">تحقق من الإجابة</button>
+          </div>
+          <div class="quiz-feedback" id="fb-hier"></div>
+        </div>
+      </section>
+
+
+      <!-- ===============================================================
+           CHAPTER 3: REGRESSION & OPTIMIZATION
+           =============================================================== -->
+      <div class="chapter-banner">
+        <div class="chapter-kicker">الفصل الحادي عشر: التعلم الآلي بإشراف — الانحدار والتحسين</div>
+        <h2 class="chapter-title">دوال الخسارة والنزول التدريجي والانحدار الخطي والمنظّم</h2>
+        <p class="chapter-desc">
+          التنبؤ بالقيم الرقمية المستمرة عبر تقليل متوسط مربعات الخطأ (<bdi dir="ltr">MSE</bdi>) باستخدام خوارزمية <bdi dir="ltr">Gradient Descent</bdi>، ومعالجة العلاقات غير الخطية والتعددية الخطية عبر <bdi dir="ltr">Polynomial, Ridge, Lasso</bdi>.
+        </p>
+      </div>
+
+      <!-- MODULE 7: MSE & GRADIENT DESCENT -->
+      <section class="algo-module" id="mod-gd">
+        <div class="algo-header">
+          <div class="algo-title-wrap">
+            <span class="step-badge">07</span>
+            <h3 class="algo-title">دالة الخسارة <bdi dir="ltr">MSE</bdi> وخوارزمية النزول التدريجي (<bdi dir="ltr">Gradient Descent</bdi>)</h3>
+          </div>
+          <span class="status-tag" id="badge-gd">قيد التدريب</span>
+        </div>
+
+        <div class="formula-box">
+          <span class="math-ltr">$$\text{MSE} = \frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2 \qquad , \qquad \theta_{\text{new}} = \theta - \alpha\,\frac{\partial J(\theta)}{\partial \theta}$$</span>
+        </div>
+
+        <div class="module-grid">
+          <div class="inset">
+            <h4 class="inset-title">مثال حساب <bdi dir="ltr">MSE</bdi> من اللقاء المباشر</h4>
+            <p>إذا كانت القيم الفعلية <bdi dir="ltr">y = [10, 20, 30]</bdi> والقيم المتوقعة <bdi dir="ltr">ŷ = [12, 18, 33]</bdi>:</p>
+            <p>الأخطاء المربعة: <bdi dir="ltr">(10-12)² = 4</bdi>، <bdi dir="ltr">(20-18)² = 4</bdi>، <bdi dir="ltr">(30-33)² = 9</bdi>.<br>
+            المجموع = <bdi dir="ltr">17</bdi>، إذاً <bdi dir="ltr">MSE = 17 / 3 ≈ 5.67</bdi>.</p>
+          </div>
+
+          <ol class="steps-list">
+            <li class="step-item">
+              <span class="step-num">١</span>
+              <div class="step-body">
+                <p><strong>الغرض من <bdi dir="ltr">Gradient Descent</bdi>:</strong> تقليل قيمة دالة الخسارة <bdi dir="ltr">J(θ)</bdi> إلى أدنى مستوى عبر تعديل المعاملات <bdi dir="ltr">θ</bdi> تكرارياً.</p>
+              </div>
+            </li>
+            <li class="step-item">
+              <span class="step-num">٢</span>
+              <div class="step-body">
+                <p><strong>حساب المشتقة (الميل):</strong> عند أي نقطة <bdi dir="ltr">θ</bdi> يحدد الميل <bdi dir="ltr">∂J/∂θ</bdi> اتجاه الصعود، فنتحرك عكسه بمقدار معدل التعلم <bdi dir="ltr">α</bdi>.</p>
+              </div>
+            </li>
+            <li class="step-item">
+              <span class="step-num">٣</span>
+              <div class="step-body">
+                <p><strong>اختيار معدل التعلم <bdi dir="ltr">α</bdi>:</strong> المعدل الصغير يبطئ التقارب، والمعدل الكبير جداً قد يقفز فوق نقطة القاع ويسبب تذبذباً.</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="lab-panel">
+          <div class="lab-header">
+            <h4 class="lab-title">المختبر التفاعلي: محاكي النزول التدريجي لإيجاد الميل الأمثل <bdi dir="ltr">θ</bdi></h4>
+            <p class="lab-sub">نفّذ خطوات النزول التدريجي على منحنى الخسارة <bdi dir="ltr">J(θ) = (θ - 2.5)² + 1</bdi> وراقب انحدار الميل نحو القاع.</p>
+          </div>
+
+          <div class="controls-row">
+            <div class="field-group">
+              <label class="field-label" for="gd-alpha">معدل التعلم (<bdi dir="ltr">α</bdi>): <span id="gd-alpha-val">0.20</span></label>
+              <input class="hb-range" id="gd-alpha" type="range" min="0.05" max="0.95" step="0.05" value="0.20" oninput="updateGdControls()">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="gd-theta0">نقطة البداية (<bdi dir="ltr">θ₀</bdi>): <span id="gd-theta0-val">-2.0</span></label>
+              <input class="hb-range" id="gd-theta0" type="range" min="-3" max="7" step="0.5" value="-2.0" oninput="resetGd()">
+            </div>
+            <button type="button" class="button" onclick="stepGd()">خطوة نزول واحدة</button>
+            <button type="button" class="button button--secondary" onclick="resetGd()">تصفير المحاكاة</button>
+          </div>
+
+          <div class="svg-box" id="gd-svg-box"></div>
+
+          <div class="kpi-row">
+            <div class="kpi-box">
+              <div class="kpi-label">التكرار الحالي</div>
+              <div class="kpi-val" id="gd-iter">0</div>
+            </div>
+            <div class="kpi-box">
+              <div class="kpi-label">قيمة المعامل <bdi dir="ltr">θ</bdi></div>
+              <div class="kpi-val" id="gd-theta">-2.000</div>
+            </div>
+            <div class="kpi-box">
+              <div class="kpi-label">قيمة الخسارة <bdi dir="ltr">J(θ)</bdi></div>
+              <div class="kpi-val" id="gd-loss">21.250</div>
+            </div>
+            <div class="kpi-box">
+              <div class="kpi-label">الميل <bdi dir="ltr">∂J/∂θ</bdi></div>
+              <div class="kpi-val" id="gd-grad">-9.000</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="quiz-box" id="quiz-gd">
+          <p class="quiz-question">تحقق من فهمك: إذا كانت <bdi dir="ltr">θ = 4.5</bdi>، والميل <bdi dir="ltr">∂J/∂θ = 4.0</bdi>، ومعدل التعلم <bdi dir="ltr">α = 0.25</bdi>، فما قيمة <bdi dir="ltr">θ_new</bdi> بعد خطوة واحدة؟</p>
+          <div class="controls-row">
+            <div class="field-group">
+              <label class="field-label" for="ans-gd">إجابتك الرقمية</label>
+              <input class="hb-input" id="ans-gd" type="number" step="0.1" placeholder="مثال: 3.5">
+            </div>
+            <button type="button" class="button" onclick="checkModuleQuiz('gd')">تحقق من الإجابة</button>
+          </div>
+          <div class="quiz-feedback" id="fb-gd"></div>
+        </div>
+      </section>
+
+      <!-- MODULE 8: POLYNOMIAL, RIDGE, LASSO -->
+      <section class="algo-module" id="mod-reg">
+        <div class="algo-header">
+          <div class="algo-title-wrap">
+            <span class="step-badge">08</span>
+            <h3 class="algo-title">الانحدار متعدد الحدود (<bdi dir="ltr">Polynomial</bdi>) والتنظيم (<bdi dir="ltr">Ridge vs Lasso</bdi>)</h3>
+          </div>
+          <span class="status-tag" id="badge-reg">قيد التدريب</span>
+        </div>
+
+        <div class="formula-box">
+          <span class="math-ltr">$$J_{\text{Ridge}} = \text{RSS} + \lambda\sum a_i^2 \qquad \Big| \qquad J_{\text{Lasso}} = \text{RSS} + \lambda\sum |a_i|$$</span>
+        </div>
+
+        <div class="module-grid">
+          <div class="inset">
+            <h4 class="inset-title">متى نستخدم كل نموذج؟ (من الملخص واللقاء المباشر)</h4>
+            <p><strong><bdi dir="ltr">Polynomial</bdi>:</strong> عندما تكون العلاقة غير خطية (<bdi dir="ltr">y = a₀ + a₁x + a₂x² + …</bdi>).<br>
+            <strong><bdi dir="ltr">Ridge (L2)</bdi>:</strong> يعالج التعددية الخطية بتقليص المعاملات دون إلغائها تماماً.<br>
+            <strong><bdi dir="ltr">Lasso (L1)</bdi>:</strong> يقلص المعاملات الضعيفة إلى <strong>صفر</strong> عند زيادة <bdi dir="ltr">λ</bdi> (مثل استبعاد معامل <bdi dir="ltr">Newspaper</bdi> في مثال المبيعات).</p>
+          </div>
+
+          <ol class="steps-list">
+            <li class="step-item">
+              <span class="step-num">١</span>
+              <div class="step-body">
+                <p><strong>تحويل السمات:</strong> نُنشئ قوى <bdi dir="ltr">x², x³</bdi> عبر <bdi dir="ltr">PolynomialFeatures(degree=d)</bdi> قبل التدريب.</p>
+              </div>
+            </li>
+            <li class="step-item">
+              <span class="step-num">٢</span>
+              <div class="step-body">
+                <p><strong>أثر معامل التنظيم <bdi dir="ltr">λ</bdi> في <bdi dir="ltr">Ridge</bdi>:</strong> يقترب <bdi dir="ltr">a_i</bdi> من الصفر تدريجياً وبشكل مستمر <bdi dir="ltr">a_i / (1 + λ)</bdi> لكنه لا يبلغ الصفر تماماً.</p>
+              </div>
+            </li>
+            <li class="step-item">
+              <span class="step-num">٣</span>
+              <div class="step-body">
+                <p><strong>الاختيار الضمني في <bdi dir="ltr">Lasso</bdi>:</strong> عبر العتبة المرنة (<bdi dir="ltr">Soft Thresholding</bdi>) أي سمة أثرها أضعف من <bdi dir="ltr">λ</bdi> يصبح معاملها <bdi dir="ltr">0</bdi> تماماً.</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="lab-panel">
+          <div class="lab-header">
+            <h4 class="lab-title">المختبر التفاعلي: مقارنة درجة كثير الحدود وأثر <bdi dir="ltr">λ</bdi> على أوزان <bdi dir="ltr">Ridge</bdi> و <bdi dir="ltr">Lasso</bdi></h4>
+            <p class="lab-sub">جرّب الدرجات غير الخطية ثم زد قيمة <bdi dir="ltr">λ</bdi> لترى كيف يصفر <bdi dir="ltr">Lasso</bdi> معامل <bdi dir="ltr">Newspaper</bdi>.</p>
+          </div>
+
+          <div class="controls-row">
+            <div class="field-group">
+              <label class="field-label" for="reg-deg">درجة كثير الحدود (<bdi dir="ltr">Degree</bdi>)</label>
+              <select class="hb-select" id="reg-deg" onchange="renderRegLab()">
+                <option value="1">1 (خطي — نقص ملاءمة Underfitting)</option>
+                <option value="2" selected>2 (تربيعي — ملاءمة متوازنة)</option>
+                <option value="3">3 (تكعيبي — مرونة أعلى)</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="reg-lambda">قوة التنظيم (<bdi dir="ltr">λ</bdi>): <span id="reg-lambda-val">1.5</span></label>
+              <input class="hb-range" id="reg-lambda" type="range" min="0" max="5" step="0.5" value="1.5" oninput="renderRegLab()">
+            </div>
+          </div>
+
+          <div class="svg-box" id="reg-svg-box"></div>
+          <div class="table-wrap" id="reg-table-wrap"></div>
+        </div>
+
+        <div class="quiz-box" id="quiz-reg">
+          <p class="quiz-question">تحقق من فهمك: في نموذج <bdi dir="ltr">Lasso Regression</bdi>، إذا رفعنا قيمة معامل التنظيم <bdi dir="ltr">λ</bdi> لتصبح كبيرة جداً، فماذا يحدث لكثير من معاملات النموذج؟</p>
+          <div class="controls-row">
+            <div class="field-group">
+              <label class="field-label" for="ans-reg">اختر السلوك الصحيح</label>
+              <select class="hb-select" id="ans-reg">
+                <option value="">-- اختر الإجابة --</option>
+                <option value="grow">تكبر قيمتها إلى ما لا نهاية</option>
+                <option value="zero">تصبح كثير منها صفراً (استبعاد سمات)</option>
+                <option value="unchanged">تبقى ثابتة لا تتغير</option>
+              </select>
+            </div>
+            <button type="button" class="button" onclick="checkModuleQuiz('reg')">تحقق من الإجابة</button>
+          </div>
+          <div class="quiz-feedback" id="fb-reg"></div>
+        </div>
+      </section>
+
+
+      <!-- ===============================================================
+           CHAPTER 4: CLASSIFICATION & EVALUATION
+           =============================================================== -->
+      <div class="chapter-banner">
+        <div class="chapter-kicker">الفصل الحادي عشر والثاني عشر: التصنيف وتقييم النماذج</div>
+        <h2 class="chapter-title">خوارزميات التصنيف ومصفوفة الارتباك (<bdi dir="ltr">Confusion Matrix</bdi>)</h2>
+        <p class="chapter-desc">
+          إعطاء وسم فئوي للبيانات الجديدة عبر الجيران الأقرب (<bdi dir="ltr">K-NN</bdi>)، بايز الساذجة (<bdi dir="ltr">Naïve Bayes</bdi>)، الدالة اللوجستية (<bdi dir="ltr">Sigmoid</bdi>)، الحد الفاصل (<bdi dir="ltr">SVM</bdi>)، أشجار القرار (<bdi dir="ltr">Gini</bdi>)، ثم قياس الدقة والـ <bdi dir="ltr">F1-Score</bdi>.
+        </p>
+      </div>
+
+      <!-- MODULE 9: K-NN -->
+      <section class="algo-module" id="mod-knn">
+        <div class="algo-header">
+          <div class="algo-title-wrap">
+            <span class="step-badge">09</span>
+            <h3 class="algo-title">خوارزمية أقرب الجيران (<bdi dir="ltr">K-Nearest Neighbors — K-NN</bdi>)</h3>
+          </div>
+          <span class="status-tag" id="badge-knn">قيد التدريب</span>
+        </div>
+
+        <div class="formula-box">
+          <span class="math-ltr">$$d(p, q) = \sqrt{(p_1 - q_1)^2 + (p_2 - q_2)^2}$$</span>
+        </div>
+
+        <div class="module-grid">
+          <div class="inset">
+            <h4 class="inset-title">معطيات المثال التطبيقي</h4>
+            <p>نقطة اختبار جديدة <bdi dir="ltr">Q = (4, 4)</bdi> وسط <bdi dir="ltr">7</bdi> نقاط مصنفة إلى فئتين: <strong>فئة A (زرقاء)</strong> و<strong>فئة B (برتقالية)</strong>. نصنّف <bdi dir="ltr">Q</bdi> حسب تصويت الأغلبية بين أقرب <bdi dir="ltr">K</bdi> جيران.</p>
+          </div>
+
+          <ol class="steps-list">
+            <li class="step-item">
+              <span class="step-num">١</span>
+              <div class="step-body">
+                <p><strong>حساب المسافة الإقليدية:</strong> نقيس البعد بين <bdi dir="ltr">Q</bdi> وكل نقطة تدريبية في المستوى.</p>
+              </div>
+            </li>
+            <li class="step-item">
+              <span class="step-num">٢</span>
+              <div class="step-body">
+                <p><strong>ترتيب المسافات تصاعدياً:</strong> ننتقي أصغر <bdi dir="ltr">K</bdi> مسافات (أقرب دائرة حول <bdi dir="ltr">Q</bdi>).</p>
+              </div>
+            </li>
+            <li class="step-item">
+              <span class="step-num">٣</span>
+              <div class="step-body">
+                <p><strong>تصويت الأغلبية:</strong> نختار <bdi dir="ltr">K</bdi> فردياً في التصنيف الثنائي لتجنب التعادل، وتأخذ <bdi dir="ltr">Q</bdi> فئة الأغلبية.</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="lab-panel">
+          <div class="lab-header">
+            <h4 class="lab-title">المختبر التفاعلي: غيّر قيمة <bdi dir="ltr">K</bdi> وموقع نقطة الاختبار <bdi dir="ltr">Q</bdi></h4>
+            <p class="lab-sub">لاحظ كيف يتغير تصنيف <bdi dir="ltr">Q</bdi> أحياناً عند تغيير <bdi dir="ltr">K</bdi> من <bdi dir="ltr">1</bdi> إلى <bdi dir="ltr">5</bdi>.</p>
+          </div>
+
+          <div class="controls-row">
+            <div class="field-group">
+              <label class="field-label" for="knn-k">عدد الجيران (<bdi dir="ltr">K</bdi>)</label>
+              <select class="hb-select" id="knn-k" onchange="renderKnnLab()">
+                <option value="1">K = 1</option>
+                <option value="3" selected>K = 3</option>
+                <option value="5">K = 5</option>
+                <option value="7">K = 7</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="knn-qx"><bdi dir="ltr">Q.x</bdi>: <span id="knn-qx-val">4.0</span></label>
+              <input class="hb-range" id="knn-qx" type="range" min="1" max="8" step="0.5" value="4.0" oninput="renderKnnLab()">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="knn-qy"><bdi dir="ltr">Q.y</bdi>: <span id="knn-qy-val">4.0</span></label>
+              <input class="hb-range" id="knn-qy" type="range" min="1" max="8" step="0.5" value="4.0" oninput="renderKnnLab()">
+            </div>
+          </div>
+
+          <div class="svg-box" id="knn-svg-box"></div>
+
+          <div class="kpi-row">
+            <div class="kpi-box">
+              <div class="kpi-label">التصنيف المتوقع لـ <bdi dir="ltr">Q</bdi></div>
+              <div class="kpi-val" id="knn-pred">فئة A</div>
+            </div>
+            <div class="kpi-box">
+              <div class="kpi-label">أصوات الفئة A / الفئة B</div>
+              <div class="kpi-val" id="knn-votes">2 A / 1 B</div>
+            </div>
+            <div class="kpi-box">
+              <div class="kpi-label">أقرب مسافة</div>
+              <div class="kpi-val" id="knn-min-d">1.00</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="quiz-box" id="quiz-knn">
+          <p class="quiz-question">تحقق من فهمك: ما المسافة الإقليدية بين نقطة الاختبار <bdi dir="ltr">(4, 4)</bdi> والنقطة التدريبية <bdi dir="ltr">(1, 0)</bdi>؟</p>
+          <div class="controls-row">
+            <div class="field-group">
+              <label class="field-label" for="ans-knn">إجابتك الرقمية</label>
+              <input class="hb-input" id="ans-knn" type="number" step="0.1" placeholder="أدخل المسافة">
+            </div>
+            <button type="button" class="button" onclick="checkModuleQuiz('knn')">تحقق من الإجابة</button>
+          </div>
+          <div class="quiz-feedback" id="fb-knn"></div>
+        </div>
+      </section>
+
+      <!-- MODULE 10: NAIVE BAYES -->
+      <section class="algo-module" id="mod-nb">
+        <div class="algo-header">
+          <div class="algo-title-wrap">
+            <span class="step-badge">10</span>
+            <h3 class="algo-title">خوارزمية بايز الساذجة (<bdi dir="ltr">Naïve Bayes</bdi>) لتصنيف الرسائل (<bdi dir="ltr">Spam / Ham</bdi>)</h3>
+          </div>
+          <span class="status-tag" id="badge-nb">قيد التدريب</span>
+        </div>
+
+        <div class="formula-box">
+          <span class="math-ltr">$$P(C \mid w_1,\dots,w_m) \propto P(C)\prod_{i=1}^{m} P(w_i \mid C) \qquad , \qquad P(w_i \mid C) = \frac{\text{count}(w_i, C) + 1}{N_C + |V|}$$</span>
+        </div>
+
+        <div class="module-grid">
+          <div class="inset">
+            <h4 class="inset-title">معطيات مثال تصنيف الرسائل</h4>
+            <p>لدينا <bdi dir="ltr">10</bdi> رسائل تدريبية: <bdi dir="ltr">4</bdi> مزعجة (<bdi dir="ltr">Spam: P=0.4</bdi>) و <bdi dir="ltr">6</bdi> عادية (<bdi dir="ltr">Ham: P=0.6</bdi>)، وحجم المفردات <bdi dir="ltr">|V| = 4</bdi> كلمات مع استخدام تنعيم لابلاس (<bdi dir="ltr">+1</bdi>) لمنع الاحتمال الصفري.</p>
+          </div>
+
+          <ol class="steps-list">
+            <li class="step-item">
+              <span class="step-num">١</span>
+              <div class="step-body">
+                <p><strong>الاحتمالات القبلية (<bdi dir="ltr">Priors</bdi>):</strong> <bdi dir="ltr">P(Spam) = 0.4</bdi>، <bdi dir="ltr">P(Ham) = 0.6</bdi>.</p>
+              </div>
+            </li>
+            <li class="step-item">
+              <span class="step-num">٢</span>
+              <div class="step-body">
+                <p><strong>الاحتمالات الشرطية بافتراض الاستقلال:</strong> نضرب <bdi dir="ltr">P(w_i | Spam)</bdi> لكل كلمة موجودة بالرسالة.</p>
+              </div>
+            </li>
+            <li class="step-item">
+              <span class="step-num">٣</span>
+              <div class="step-body">
+                <p><strong>المقارنة والتصنيف:</strong> نحسب الدرجة البعدية غير المعايرة لـ <bdi dir="ltr">Spam</bdi> مقابل <bdi dir="ltr">Ham</bdi> ونطبّعهما للحصول على نسبة مئوية.</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="lab-panel">
+          <div class="lab-header">
+            <h4 class="lab-title">المختبر التفاعلي: كوّن نص رسالة وراقب حساب بايز خطوة بخطوة</h4>
+            <p class="lab-sub">اضغط على الكلمات لتضمينها في الرسالة الواردة وشاهد تغير احتمالات <bdi dir="ltr">Spam</bdi> و <bdi dir="ltr">Ham</bdi>.</p>
+          </div>
+
+          <div class="chip-grid" id="nb-chips">
+            <button type="button" class="word-chip" data-word="عرض" aria-pressed="true" onclick="toggleNbWord(this)">«عرض» (مزعجة غالباً)</button>
+            <button type="button" class="word-chip" data-word="مجاني" aria-pressed="true" onclick="toggleNbWord(this)">«مجاني» (مزعجة غالباً)</button>
+            <button type="button" class="word-chip" data-word="اجتماع" aria-pressed="false" onclick="toggleNbWord(this)">«اجتماع» (عادية غالباً)</button>
+            <button type="button" class="word-chip" data-word="مشروع" aria-pressed="false" onclick="toggleNbWord(this)">«مشروع» (عادية غالباً)</button>
+          </div>
+
+          <div class="table-wrap" id="nb-table-wrap"></div>
+
+          <div class="kpi-row">
+            <div class="kpi-box">
+              <div class="kpi-label">احتمال <bdi dir="ltr">Spam</bdi> المطبّع</div>
+              <div class="kpi-val" id="nb-p-spam">92.8%</div>
+            </div>
+            <div class="kpi-box">
+              <div class="kpi-label">احتمال <bdi dir="ltr">Ham</bdi> المطبّع</div>
+              <div class="kpi-val" id="nb-p-ham">7.2%</div>
+            </div>
+            <div class="kpi-box">
+              <div class="kpi-label">قرار المصنف</div>
+              <div class="kpi-val" id="nb-decision">رسالة مزعجة (Spam)</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="quiz-box" id="quiz-nb">
+          <p class="quiz-question">تحقق من فهمك: لماذا نضيف <bdi dir="ltr">+1</bdi> في البسط (<bdi dir="ltr">Laplace Smoothing</bdi>) عند حساب <bdi dir="ltr">P(w_i | C)</bdi>؟</p>
+          <div class="controls-row">
+            <div class="field-group">
+              <label class="field-label" for="ans-nb">اختر السبب الصحيح</label>
+              <select class="hb-select" id="ans-nb">
+                <option value="">-- اختر الإجابة --</option>
+                <option value="zero">لتجنب تحوّل حاصل الضرب كله إلى صفر عند ظهور كلمة جديدة</option>
+                <option value="speed">لتسريع فرز البيانات في الذاكرة فقط</option>
+                <option value="norm">لإلغاء الاحتمالات القبلية P(C)</option>
+              </select>
+            </div>
+            <button type="button" class="button" onclick="checkModuleQuiz('nb')">تحقق من الإجابة</button>
+          </div>
+          <div class="quiz-feedback" id="fb-nb"></div>
+        </div>
+      </section>
+
+      <!-- MODULE 11: LOGISTIC REGRESSION (SIGMOID) & SVM -->
+      <section class="algo-module" id="mod-logsvm">
+        <div class="algo-header">
+          <div class="algo-title-wrap">
+            <span class="step-badge">11</span>
+            <h3 class="algo-title">الانحدار اللوجستي (<bdi dir="ltr">Sigmoid</bdi>) وآلة المتجهات الداعمة (<bdi dir="ltr">SVM</bdi>)</h3>
+          </div>
+          <span class="status-tag" id="badge-logsvm">قيد التدريب</span>
+        </div>
+
+        <div class="formula-box">
+          <span class="math-ltr">$$\sigma(z) = \frac{1}{1 + e^{-z}} \;\; (z = w_0 + w_1 x) \qquad \Big| \qquad \text{SVM Margin} = \frac{2}{\|w\|} = \frac{2}{\sqrt{w_1^2 + w_2^2}}$$</span>
+        </div>
+
+        <div class="module-grid">
+          <div class="inset">
+            <h4 class="inset-title">١. الانحدار اللوجستي ودالة <bdi dir="ltr">Sigmoid</bdi></h4>
+            <p>يحوّل التركيبة الخطية <bdi dir="ltr">z</bdi> إلى احتمال محصور بين <bdi dir="ltr">0</bdi> و <bdi dir="ltr">1</bdi>. فمثلاً عند <bdi dir="ltr">w₀ = -4, w₁ = 1, x = 5</bdi>: يصبح <bdi dir="ltr">z = 1</bdi>، وبالتالي <bdi dir="ltr">σ(1) = 1 / (1 + e⁻¹) = 0.731 ≥ 0.5</bdi> فيُصنف <bdi dir="ltr">1</bdi>.</p>
+          </div>
+
+          <div class="inset">
+            <h4 class="inset-title">٢. الحد الفاصل والهامش في <bdi dir="ltr">SVM</bdi></h4>
+            <p>يُعرّف المستوي الفاصل بالمعادلة <bdi dir="ltr">w₁x₁ + w₂x₂ + b = 0</bdi>، وتقع المتجهات الداعمة على <bdi dir="ltr">±1</bdi>. فإذا كان <bdi dir="ltr">w = (3, 4), b = -10</bdi> يكون <bdi dir="ltr">‖w‖ = √(3²+4²) = 5</bdi> وعرض الهامش الكلي <bdi dir="ltr">2 / 5 = 0.40</bdi>.</p>
+          </div>
+        </div>
+
+        <div class="lab-panel">
+          <div class="lab-header">
+            <h4 class="lab-title">المختبر التفاعلي المزدوج: منحنى <bdi dir="ltr">Sigmoid</bdi> ومستوي <bdi dir="ltr">SVM</bdi> الفاصل</h4>
+            <p class="lab-sub">بدّل بين النموذجين لتجربة معاملات الدالة اللوجستية أو تعديل أوزان الحد الفاصل في <bdi dir="ltr">SVM</bdi>.</p>
+          </div>
+
+          <div class="controls-row">
+            <button type="button" class="button" id="btn-mode-sig" onclick="setLogSvmMode('sigmoid')">وضع الانحدار اللوجستي (Sigmoid)</button>
+            <button type="button" class="button button--secondary" id="btn-mode-svm" onclick="setLogSvmMode('svm')">وضع الحد الفاصل (SVM)</button>
+          </div>
+
+          <div id="controls-sigmoid" class="controls-row">
+            <div class="field-group">
+              <label class="field-label" for="sig-w0"><bdi dir="ltr">w₀</bdi> (الانحياز): <span id="sig-w0-val">-4.0</span></label>
+              <input class="hb-range" id="sig-w0" type="range" min="-8" max="2" step="0.5" value="-4.0" oninput="renderLogSvmLab()">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="sig-w1"><bdi dir="ltr">w₁</bdi> (الميل): <span id="sig-w1-val">1.0</span></label>
+              <input class="hb-range" id="sig-w1" type="range" min="0.2" max="2.5" step="0.1" value="1.0" oninput="renderLogSvmLab()">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="sig-x">قيمة الاختبار <bdi dir="ltr">x</bdi>: <span id="sig-x-val">5.0</span></label>
+              <input class="hb-range" id="sig-x" type="range" min="0" max="10" step="0.5" value="5.0" oninput="renderLogSvmLab()">
+            </div>
+          </div>
+
+          <div id="controls-svm" class="controls-row is-hidden">
+            <div class="field-group">
+              <label class="field-label" for="svm-w1"><bdi dir="ltr">w₁</bdi>: <span id="svm-w1-val">1.0</span></label>
+              <input class="hb-range" id="svm-w1" type="range" min="0.5" max="3.0" step="0.5" value="1.0" oninput="renderLogSvmLab()">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="svm-w2"><bdi dir="ltr">w₂</bdi>: <span id="svm-w2-val">1.0</span></label>
+              <input class="hb-range" id="svm-w2" type="range" min="0.5" max="3.0" step="0.5" value="1.0" oninput="renderLogSvmLab()">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="svm-b"><bdi dir="ltr">b</bdi>: <span id="svm-b-val">-6.0</span></label>
+              <input class="hb-range" id="svm-b" type="range" min="-12" max="-2" step="0.5" value="-6.0" oninput="renderLogSvmLab()">
+            </div>
+          </div>
+
+          <div class="svg-box" id="logsvm-svg-box"></div>
+          <div class="kpi-row" id="logsvm-kpis"></div>
+        </div>
+
+        <div class="quiz-box" id="quiz-logsvm">
+          <p class="quiz-question">تحقق من فهمك: في <bdi dir="ltr">SVM</bdi>، إذا كان متجه الأوزان <bdi dir="ltr">w = (3, 4)</bdi>، فما عرض الهامش الكلي (<bdi dir="ltr">2 / ‖w‖</bdi>)؟</p>
+          <div class="controls-row">
+            <div class="field-group">
+              <label class="field-label" for="ans-logsvm">إجابتك الرقمية</label>
+              <input class="hb-input" id="ans-logsvm" type="number" step="0.01" placeholder="مثال: 0.4">
+            </div>
+            <button type="button" class="button" onclick="checkModuleQuiz('logsvm')">تحقق من الإجابة</button>
+          </div>
+          <div class="quiz-feedback" id="fb-logsvm"></div>
+        </div>
+      </section>
+
+      <!-- MODULE 12: DECISION TREES (GINI) & CONFUSION MATRIX -->
+      <section class="algo-module" id="mod-tree-cm">
+        <div class="algo-header">
+          <div class="algo-title-wrap">
+            <span class="step-badge">12</span>
+            <h3 class="algo-title">أشجار القرار (<bdi dir="ltr">Gini Impurity</bdi>) ومصفوفة الارتباك (<bdi dir="ltr">Confusion Matrix</bdi>)</h3>
+          </div>
+          <span class="status-tag" id="badge-tree_cm">قيد التدريب</span>
+        </div>
+
+        <div class="formula-box">
+          <span class="math-ltr">$$\text{Gini}(D) = 1 - \sum_{i=1}^{c} p_i^2 \qquad \Big| \qquad F_1 = \frac{2 \times \text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}$$</span>
+        </div>
+
+        <div class="module-grid">
+          <div class="inset">
+            <h4 class="inset-title">١. حساب نقاء جيني (<bdi dir="ltr">Gini Impurity</bdi>)</h4>
+            <p>في مجموعة من <bdi dir="ltr">10</bdi> عينات (<bdi dir="ltr">6 Yes, 4 No</bdi>): <bdi dir="ltr">Gini = 1 - (0.6² + 0.4²) = 1 - 0.52 = 0.48</bdi>. عند تقسيمها إلى فرعين <bdi dir="ltr">L</bdi> و <bdi dir="ltr">R</bdi> نختار التقسيم الذي يقلل <bdi dir="ltr">Gini_split = (n_L/n)G_L + (n_R/n)G_R</bdi> إلى أدنى قيمة.</p>
+          </div>
+
+          <div class="inset">
+            <h4 class="inset-title">٢. مصفوفة الارتباك وتقييم النموذج</h4>
+            <p>في المرحلة الخامسة من <bdi dir="ltr">CRISP-DM</bdi> نقيّم النموذج بمقاييس <bdi dir="ltr">Accuracy</bdi> و <bdi dir="ltr">Precision</bdi> و <bdi dir="ltr">Recall</bdi> و <bdi dir="ltr">F1-Score</bdi> استناداً إلى قيم <bdi dir="ltr">TP, FP, FN, TN</bdi>.</p>
+          </div>
+        </div>
+
+        <div class="lab-panel">
+          <div class="lab-header">
+            <h4 class="lab-title">المختبر التفاعلي: حاسبة تقسيم <bdi dir="ltr">Gini</bdi> ومصفوفة الارتباك</h4>
+            <p class="lab-sub">اختبر أثر تغيير توزيع الفروع في شجرة القرار، ثم عدّل قيم مصفوفة الارتباك لحساب مقاييس التقييم لحظياً.</p>
+          </div>
+
+          <div class="controls-row">
+            <div class="field-group">
+              <label class="field-label" for="gini-ly">عينات <bdi dir="ltr">Yes</bdi> في الفرع الأيسر (<bdi dir="ltr">من 5</bdi>): <span id="gini-ly-val">5</span></label>
+              <input class="hb-range" id="gini-ly" type="range" min="0" max="5" step="1" value="5" oninput="renderTreeCmLab()">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="gini-ry">عينات <bdi dir="ltr">Yes</bdi> في الفرع الأيمن (<bdi dir="ltr">من 5</bdi>): <span id="gini-ry-val">1</span></label>
+              <input class="hb-range" id="gini-ry" type="range" min="0" max="5" step="1" value="1" oninput="renderTreeCmLab()">
+            </div>
+          </div>
+
+          <div class="kpi-row">
+            <div class="kpi-box">
+              <div class="kpi-label"><bdi dir="ltr">Gini(Left)</bdi></div>
+              <div class="kpi-val" id="gini-gl">0.000</div>
+            </div>
+            <div class="kpi-box">
+              <div class="kpi-label"><bdi dir="ltr">Gini(Right)</bdi></div>
+              <div class="kpi-val" id="gini-gr">0.320</div>
+            </div>
+            <div class="kpi-box">
+              <div class="kpi-label"><bdi dir="ltr">Gini_split</bdi> الموزون</div>
+              <div class="kpi-val" id="gini-split">0.160</div>
+            </div>
+            <div class="kpi-box">
+              <div class="kpi-label">مكسب التقسيم (<bdi dir="ltr">Gini Gain</bdi>)</div>
+              <div class="kpi-val" id="gini-gain">0.320</div>
+            </div>
+          </div>
+
+          <hr class="hb-divider">
+
+          <div class="module-grid">
+            <div>
+              <h5 class="inset-title">مصفوفة الارتباك التفاعلية (<bdi dir="ltr">2×2</bdi>)</h5>
+              <div class="cm-grid">
+                <div></div>
+                <div class="cm-head">توقع: موجب (+)</div>
+                <div class="cm-head">توقع: سالب (-)</div>
+
+                <div class="cm-head">فعلي: موجب (+)</div>
+                <div class="cm-cell tp">
+                  <label class="field-label" for="cm-tp"><bdi dir="ltr">TP</bdi> (صحيح موجب)</label>
+                  <input class="hb-input" id="cm-tp" type="number" min="0" value="45" oninput="renderTreeCmLab()">
+                </div>
+                <div class="cm-cell fn">
+                  <label class="field-label" for="cm-fn"><bdi dir="ltr">FN</bdi> (خطأ سالب)</label>
+                  <input class="hb-input" id="cm-fn" type="number" min="0" value="5" oninput="renderTreeCmLab()">
+                </div>
+
+                <div class="cm-head">فعلي: سالب (-)</div>
+                <div class="cm-cell fp">
+                  <label class="field-label" for="cm-fp"><bdi dir="ltr">FP</bdi> (خطأ موجب)</label>
+                  <input class="hb-input" id="cm-fp" type="number" min="0" value="10" oninput="renderTreeCmLab()">
+                </div>
+                <div class="cm-cell tn">
+                  <label class="field-label" for="cm-tn"><bdi dir="ltr">TN</bdi> (صحيح سالب)</label>
+                  <input class="hb-input" id="cm-tn" type="number" min="0" value="40" oninput="renderTreeCmLab()">
+                </div>
+              </div>
+            </div>
+
+            <div class="kpi-row kpi-row--centered">
+              <div class="kpi-box">
+                <div class="kpi-label">الدقة الكلية (<bdi dir="ltr">Accuracy</bdi>)</div>
+                <div class="kpi-val" id="cm-acc">85.0%</div>
+              </div>
+              <div class="kpi-box">
+                <div class="kpi-label">الضبط (<bdi dir="ltr">Precision</bdi>)</div>
+                <div class="kpi-val" id="cm-prec">81.8%</div>
+              </div>
+              <div class="kpi-box">
+                <div class="kpi-label">الاسترجاع (<bdi dir="ltr">Recall</bdi>)</div>
+                <div class="kpi-val" id="cm-rec">90.0%</div>
+              </div>
+              <div class="kpi-box">
+                <div class="kpi-label">معامل <bdi dir="ltr">F1-Score</bdi></div>
+                <div class="kpi-val" id="cm-f1">85.7%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="quiz-box" id="quiz-tree_cm">
+          <p class="quiz-question">تحقق من فهمك: إذا كانت قيمة <bdi dir="ltr">Precision = 0.80</bdi> و <bdi dir="ltr">Recall = 0.80</bdi>، فما قيمة <bdi dir="ltr">F1-Score</bdi>؟</p>
+          <div class="controls-row">
+            <div class="field-group">
+              <label class="field-label" for="ans-tree_cm">إجابتك الرقمية</label>
+              <input class="hb-input" id="ans-tree_cm" type="number" step="0.01" placeholder="مثال: 0.80">
+            </div>
+            <button type="button" class="button" onclick="checkModuleQuiz('tree_cm')">تحقق من الإجابة</button>
+          </div>
+          <div class="quiz-feedback" id="fb-tree_cm"></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <footer class="site-footer">
+    <strong>المصادر المرجعية:</strong> ملخص مقرر تحليل وتمثيل البيانات (الفصول الأول حتى الثاني عشر)، اللقاء المباشر 3 لمادة تحليل البيانات، وبنك أسئلة تحليل وتمثيل البيانات. تم بناء هذا المرجع التفاعلي لتدريب الطلاب على الحل الرياضي خطوة بخطوة.
+  </footer>
+
+  <api-shim></api-shim>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/contrib/auto-render.min.js"></script>
+  <script>
+    /* =========================================================================
+       STATE MANAGEMENT (Persisted via window.notebookAppApi)
+       ========================================================================= */
+    const MODULE_IDS = [
+      'chi2', 'mi', 'pca', 'kmeans', 'dbscan', 'hier',
+      'gd', 'reg', 'knn', 'nb', 'logsvm', 'tree_cm'
+    ];
+
+    let appState = {
+      solved: {},
+      answers: {}
+    };
+
+    const QUIZ_ANSWERS = {
+      chi2: { type: 'num', val: 1.79, tol: 0.05, hint: `E = (5 × 5) / 14 = 25 / 14 ≈ 1.79` },
+      mi: { type: 'num', val: 0, tol: 0.01, hint: `في تعريف المعلومات المتبادلة، عندما يكون p(x,y)=0 فإن 0·log(0) = 0.` },
+      pca: { type: 'num', val: 1.9, tol: 0.05, hint: `القيمة الموسطة = 6.5 - 4.6 = 1.9` },
+      kmeans: { type: 'num', val: 4.5, tol: 0.05, hint: `المتوسط السيني = (3 + 4 + 5 + 6) / 4 = 18 / 4 = 4.5` },
+      dbscan: { type: 'num', val: 2, tol: 0.01, hint: `المجموعة الأولى {(1,2),(2,2),(2,3)} والثانية {(8,7),(8,8)}، والنقطة (25,80) ضجيج.` },
+      hier: { type: 'str', val: 'complete', hint: `Complete Linkage يعتمد على المسافة بين أبعد نقطتين، بينما Single يعتمد على الأقرب.` },
+      gd: { type: 'num', val: 3.5, tol: 0.05, hint: `θ_new = 4.5 - (0.25 × 4.0) = 4.5 - 1.0 = 3.5` },
+      reg: { type: 'str', val: 'zero', hint: `في Lasso يفرض معامل التنظيم L1 تصفير المعاملات الضعيفة ضمنياً لاختيار السمات.` },
+      knn: { type: 'num', val: 5, tol: 0.05, hint: `d = √((4-1)² + (4-0)²) = √(9 + 16) = √25 = 5` },
+      nb: { type: 'str', val: 'zero', hint: `بدون تنعيم لابلاس (+1)، ظهور أي كلمة بصفر تكرار يحوّل حاصل الضرب الكلي إلى 0.` },
+      logsvm: { type: 'num', val: 0.4, tol: 0.02, hint: `‖w‖ = √(3² + 4²) = 5، وبالتالي عرض الهامش = 2 / 5 = 0.4` },
+      tree_cm: { type: 'num', val: 0.80, tol: 0.02, hint: `F1 = (2 × 0.8 × 0.8) / (0.8 + 0.8) = 1.28 / 1.6 = 0.80` }
+    };
+
+    async function saveState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === 'function') {
+          await window.notebookAppApi.setAppState(appState);
+        }
+      } catch (e) {
+        /* ignore storage error in standalone mode */
+      }
+    }
+
+    function updateProgressUI() {
+      const total = MODULE_IDS.length;
+      let doneCount = 0;
+      for (let i = 0; i < total; i++) {
+        const id = MODULE_IDS[i];
+        const isDone = Boolean(appState.solved[id]);
+        if (isDone) doneCount++;
+
+        const badge = document.getElementById(`badge-${id}`);
+        if (badge) {
+          badge.textContent = isDone ? `مكتمل` : `قيد التدريب`;
+          badge.classList.toggle(`done`, isDone);
+        }
+        const tocSt = document.getElementById(`toc-st-${id}`);
+        if (tocSt) {
+          tocSt.textContent = isDone ? `تم` : `غير مكتمل`;
+          tocSt.classList.toggle(`done`, isDone);
+        }
+      }
+      const pct = Math.round((doneCount / total) * 100);
+      const countEl = document.getElementById(`mastery-count`);
+      const pctEl = document.getElementById(`mastery-pct`);
+      const barEl = document.getElementById(`mastery-bar`);
+      const msgEl = document.getElementById(`mastery-status-msg`);
+
+      if (countEl) countEl.textContent = `${doneCount} / ${total}`;
+      if (pctEl) pctEl.textContent = `${pct}%`;
+      if (barEl) barEl.style.width = `${pct}%`;
+      if (msgEl) {
+        msgEl.textContent = doneCount === total
+          ? `أتممت جميع الأمثلة التفاعلية الـ 12 بنجاح!`
+          : `متبقي ${total - doneCount} وحدات لإتمام كامل الدليل التفاعلي.`;
+      }
+    }
+
+    function checkModuleQuiz(id) {
+      const input = document.getElementById(`ans-${id}`);
+      const fb = document.getElementById(`fb-${id}`);
+      const box = document.getElementById(`quiz-${id}`);
+      if (!input || !fb || !box) return;
+
+      const spec = QUIZ_ANSWERS[id];
+      const raw = input.value.trim();
+      if (!raw) {
+        box.classList.remove(`is-solved`);
+        box.classList.add(`is-error`);
+        fb.className = `quiz-feedback bad`;
+        fb.textContent = `يرجى إدخال أو اختيار إجابة أولاً.`;
+        return;
+      }
+
+      let correct = false;
+      if (spec.type === 'num') {
+        const num = parseFloat(raw);
+        correct = !Number.isNaN(num) && Math.abs(num - spec.val) <= spec.tol;
+      } else {
+        correct = raw === spec.val;
+      }
+
+      appState.answers[id] = raw;
+      if (correct) {
+        appState.solved[id] = true;
+        box.classList.remove(`is-error`);
+        box.classList.add(`is-solved`);
+        fb.className = `quiz-feedback ok`;
+        fb.textContent = `إجابة صحيحة! ${spec.hint}`;
+      } else {
+        appState.solved[id] = false;
+        box.classList.remove(`is-solved`);
+        box.classList.add(`is-error`);
+        fb.className = `quiz-feedback bad`;
+        fb.textContent = `حاول مرة أخرى. تلميح: ${spec.hint}`;
+      }
+
+      updateProgressUI();
+      saveState();
+    }
+
+    function resetAllProgress(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== 'true') {
+        btn.dataset.armed = 'true';
+        btn.textContent = `اضغط مرة أخرى لتأكيد التصفير`;
+        return;
+      }
+      btn.dataset.armed = 'false';
+      btn.textContent = `إعادة ضبط التقدم`;
+      appState = { solved: {}, answers: {} };
+      for (let i = 0; i < MODULE_IDS.length; i++) {
+        const id = MODULE_IDS[i];
+        const inp = document.getElementById(`ans-${id}`);
+        const fb = document.getElementById(`fb-${id}`);
+        const box = document.getElementById(`quiz-${id}`);
+        if (inp) inp.value = ``;
+        if (fb) { fb.textContent = ``; fb.className = `quiz-feedback`; }
+        if (box) { box.classList.remove(`is-solved`, `is-error`); }
+      }
+      updateProgressUI();
+      saveState();
+    }
+
+    function exportProgressCsv() {
+      const lines = [`Module,Status,LastAnswer`];
+      for (let i = 0; i < MODULE_IDS.length; i++) {
+        const id = MODULE_IDS[i];
+        const st = appState.solved[id] ? `Solved` : `Pending`;
+        const ans = appState.answers[id] || ``;
+        lines.push(`${id},${st},${ans}`);
+      }
+      const csv = lines.join(`\n`);
+      if (window.notebookAppApi && typeof window.notebookAppApi.triggerFileDownload === 'function') {
+        window.notebookAppApi.triggerFileDownload({
+          content: csv,
+          contentType: `text/csv`,
+          encoding: `UTF-8`,
+          filename: `data_analysis_progress.csv`
+        });
+      }
+    }
+
+    /* =========================================================================
+       01. CHI-SQUARED LAB
+       ========================================================================= */
+    const CHI2_DEFAULTS = {
+      outlook: [
+        { label: `Sunny`, yes: 2, no: 3 },
+        { label: `Overcast`, yes: 4, no: 0 },
+        { label: `Rain`, yes: 3, no: 2 }
+      ],
+      wind: [
+        { label: `Weak`, yes: 7, no: 1 },
+        { label: `Strong`, yes: 2, no: 4 }
+      ]
+    };
+
+    let chi2Data = JSON.parse(JSON.stringify(CHI2_DEFAULTS));
+
+    function resetChi2Defaults() {
+      chi2Data = JSON.parse(JSON.stringify(CHI2_DEFAULTS));
+      renderChi2Lab();
+    }
+
+    function updateChi2Cell(feat, idx, col, val) {
+      const parsed = Math.max(0, parseInt(val, 10) || 0);
+      if (chi2Data[feat] && chi2Data[feat][idx]) {
+        chi2Data[feat][idx][col] = parsed;
+      }
+      renderChi2Lab();
+    }
+
+    function computeChi2(rows) {
+      let totYes = 0;
+      let totNo = 0;
+      for (let i = 0; i < rows.length; i++) {
+        totYes += rows[i].yes;
+        totNo += rows[i].no;
+      }
+      const n = totYes + totNo || 1;
+      let totalChi = 0;
+      const details = [];
+      for (let i = 0; i < rows.length; i++) {
+        const r = rows[i];
+        const rTot = r.yes + r.no;
+        const eYes = (rTot * totYes) / n;
+        const eNo = (rTot * totNo) / n;
+        const cYes = eYes > 0 ? Math.pow(r.yes - eYes, 2) / eYes : 0;
+        const cNo = eNo > 0 ? Math.pow(r.no - eNo, 2) / eNo : 0;
+        totalChi += cYes + cNo;
+        details.push({ label: r.label, yes: r.yes, no: r.no, rTot: rTot, eYes: eYes, eNo: eNo, cYes: cYes, cNo: cNo });
+      }
+      return { totalChi: totalChi, totYes: totYes, totNo: totNo, n: n, details: details };
+    }
+
+    function renderChi2Lab() {
+      const sel = document.getElementById(`chi2-feature`);
+      const wrap = document.getElementById(`chi2-table-wrap`);
+      if (!sel || !wrap) return;
+      const feat = sel.value;
+      const res = computeChi2(chi2Data[feat]);
+      const resOutlook = computeChi2(chi2Data.outlook);
+      const resWind = computeChi2(chi2Data.wind);
+
+      let html = `<table class="hb-table"><thead><tr>
+        <th>القيمة</th>
+        <th class="num">Yes (الملاحظ O)</th>
+        <th class="num">Yes (المتوقع E)</th>
+        <th class="num">No (الملاحظ O)</th>
+        <th class="num">No (المتوقع E)</th>
+        <th class="num">مساهمة χ²</th>
+      </tr></thead><tbody>`;
+
+      for (let i = 0; i < res.details.length; i++) {
+        const d = res.details[i];
+        html += `<tr>
+          <td><strong>${d.label}</strong></td>
+          <td class="num"><input class="hb-input hb-input--compact" type="number" min="0" value="${d.yes}" onchange="updateChi2Cell('${feat}',${i},'yes',this.value)" aria-label="${d.label} Yes"></td>
+          <td class="num">${d.eYes.toFixed(2)}</td>
+          <td class="num"><input class="hb-input hb-input--compact" type="number" min="0" value="${d.no}" onchange="updateChi2Cell('${feat}',${i},'no',this.value)" aria-label="${d.label} No"></td>
+          <td class="num">${d.eNo.toFixed(2)}</td>
+          <td class="num"><strong>${(d.cYes + d.cNo).toFixed(3)}</strong></td>
+        </tr>`;
+      }
+      html += `<tr class="highlight-row">
+        <td>المجموع (N=${res.n})</td>
+        <td class="num">${res.totYes}</td>
+        <td class="num">${res.totYes.toFixed(2)}</td>
+        <td class="num">${res.totNo}</td>
+        <td class="num">${res.totNo.toFixed(2)}</td>
+        <td class="num">${res.totalChi.toFixed(3)}</td>
+      </tr></tbody></table>`;
+      wrap.innerHTML = html;
+
+      const totEl = document.getElementById(`chi2-total`);
+      const cmpEl = document.getElementById(`chi2-compare`);
+      const winEl = document.getElementById(`chi2-winner`);
+      if (totEl) totEl.textContent = res.totalChi.toFixed(3);
+      if (cmpEl) cmpEl.textContent = `${resOutlook.totalChi.toFixed(2)} vs ${resWind.totalChi.toFixed(2)}`;
+      if (winEl) {
+        winEl.textContent = resWind.totalChi >= resOutlook.totalChi ? `Wind أعلى أهمية` : `Outlook أعلى أهمية`;
+      }
+    }
+
+    /* =========================================================================
+       02. MUTUAL INFORMATION LAB
+       ========================================================================= */
+    function renderMiLab() {
+      const sel = document.getElementById(`mi-feature`);
+      const wrap = document.getElementById(`mi-table-wrap`);
+      const totEl = document.getElementById(`mi-total-bits`);
+      if (!sel || !wrap) return;
+
+      const rows = chi2Data[sel.value];
+      let totYes = 0;
+      let totNo = 0;
+      for (let i = 0; i < rows.length; i++) {
+        totYes += rows[i].yes;
+        totNo += rows[i].no;
+      }
+      const n = totYes + totNo || 1;
+      const pYes = totYes / n;
+      const pNo = totNo / n;
+
+      let totalMi = 0;
+      let html = `<table class="hb-table"><thead><tr>
+        <th>القيمة x</th>
+        <th class="num">p(x)</th>
+        <th class="num">p(x, Yes)</th>
+        <th class="num">p(x, No)</th>
+        <th class="num">حد Yes (bits)</th>
+        <th class="num">حد No (bits)</th>
+      </tr></thead><tbody>`;
+
+      for (let i = 0; i < rows.length; i++) {
+        const r = rows[i];
+        const px = (r.yes + r.no) / n;
+        const pxyY = r.yes / n;
+        const pxyN = r.no / n;
+        const tY = pxyY > 0 && px > 0 && pYes > 0 ? pxyY * Math.log2(pxyY / (px * pYes)) : 0;
+        const tN = pxyN > 0 && px > 0 && pNo > 0 ? pxyN * Math.log2(pxyN / (px * pNo)) : 0;
+        totalMi += tY + tN;
+
+        html += `<tr>
+          <td><strong>${r.label}</strong></td>
+          <td class="num">${px.toFixed(3)}</td>
+          <td class="num">${pxyY.toFixed(3)}</td>
+          <td class="num">${pxyN.toFixed(3)}</td>
+          <td class="num">${tY.toFixed(4)}</td>
+          <td class="num">${tN.toFixed(4)}</td>
+        </tr>`;
+      }
+      html += `</tbody></table>`;
+      wrap.innerHTML = html;
+      if (totEl) totEl.textContent = totalMi.toFixed(4);
+    }
+
+    /* =========================================================================
+       03. PCA LAB (Real Estate Area & Price)
+       ========================================================================= */
+    const PCA_BASE = [
+      { area: 9.0, price: 10.0 },
+      { area: 3.0, price: 2.0 },
+      { area: 2.0, price: 1.0 },
+      { area: 6.5, price: 7.0 },
+      { area: 2.5, price: 3.0 }
+    ];
+
+    function resetPcaLab() {
+      const sx = document.getElementById(`pca-p1x`);
+      const sy = document.getElementById(`pca-p1y`);
+      if (sx) sx.value = 9.0;
+      if (sy) sy.value = 10.0;
+      renderPcaLab();
+    }
+
+    function renderPcaLab() {
+      const sx = document.getElementById(`pca-p1x`);
+      const sy = document.getElementById(`pca-p1y`);
+      const box = document.getElementById(`pca-svg-box`);
+      if (!sx || !sy || !box) return;
+
+      const x1 = parseFloat(sx.value);
+      const y1 = parseFloat(sy.value);
+      const v1 = document.getElementById(`pca-p1x-val`);
+      const v2 = document.getElementById(`pca-p1y-val`);
+      if (v1) v1.textContent = x1.toFixed(1);
+      if (v2) v2.textContent = y1.toFixed(1);
+
+      const pts = PCA_BASE.map(function(p, idx) {
+        return idx === 0 ? { area: x1, price: y1 } : { area: p.area, price: p.price };
+      });
+
+      const n = pts.length;
+      let sumX = 0;
+      let sumY = 0;
+      for (let i = 0; i < n; i++) {
+        sumX += pts[i].area;
+        sumY += pts[i].price;
+      }
+      const mx = sumX / n;
+      const my = sumY / n;
+
+      let sxx = 0;
+      let syy = 0;
+      let sxy = 0;
+      for (let i = 0; i < n; i++) {
+        const dx = pts[i].area - mx;
+        const dy = pts[i].price - my;
+        sxx += dx * dx;
+        syy += dy * dy;
+        sxy += dx * dy;
+      }
+      const cxx = sxx / (n - 1);
+      const cyy = syy / (n - 1);
+      const cxy = sxy / (n - 1);
+
+      // 2x2 symmetric eigendecomposition
+      const trace = cxx + cyy;
+      const det = cxx * cyy - cxy * cxy;
+      const disc = Math.sqrt(Math.max(0, trace * trace - 4 * det));
+      const l1 = (trace + disc) / 2;
+      const l2 = (trace - disc) / 2;
+      let ex = l1 - cyy;
+      let ey = cxy;
+      const norm = Math.hypot(ex, ey) || 1;
+      ex /= norm;
+      ey /= norm;
+      if (ex < 0) { ex = -ex; ey = -ey; }
+
+      const varPct = trace > 0 ? (l1 / trace) * 100 : 100;
+      const proj1 = (pts[0].area - mx) * ex + (pts[0].price - my) * ey;
+
+      const meanEl = document.getElementById(`pca-mean`);
+      const e1El = document.getElementById(`pca-e1`);
+      const varEl = document.getElementById(`pca-var`);
+      const projEl = document.getElementById(`pca-proj1`);
+      if (meanEl) meanEl.textContent = `(${mx.toFixed(2)}, ${my.toFixed(2)})`;
+      if (e1El) e1El.textContent = `[${ex.toFixed(3)}, ${ey.toFixed(3)}]`;
+      if (varEl) varEl.textContent = `${varPct.toFixed(2)}%`;
+      if (projEl) projEl.textContent = proj1.toFixed(2);
+
+      // Build SVG
+      const W = 560;
+      const H = 300;
+      const pad = 40;
+      function mapX(val) { return pad + ((val - 0) / 13) * (W - 2 * pad); }
+      function mapY(val) { return H - pad - ((val - 0) / 13) * (H - 2 * pad); }
+
+      const lineStart = { x: mx - 6 * ex, y: my - 6 * ey };
+      const lineEnd = { x: mx + 6 * ex, y: my + 6 * ey };
+
+      let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="رسم بياني لتحليل المكونات الرئيسية">`;
+      for (let g = 0; g <= 12; g += 2) {
+        svg += `<line x1="${mapX(0)}" y1="${mapY(g)}" x2="${mapX(12)}" y2="${mapY(g)}" stroke="var(--data-context)" stroke-dasharray="3 3" stroke-width="1"/>`;
+        svg += `<text x="${mapX(0) - 8}" y="${mapY(g) + 4}" font-family="var(--font-label)" font-size="11" fill="var(--on-surface-variant)" text-anchor="end">${g}</text>`;
+        svg += `<text x="${mapX(g)}" y="${mapY(0) + 16}" font-family="var(--font-label)" font-size="11" fill="var(--on-surface-variant)" text-anchor="middle">${g}</text>`;
+      }
+      svg += `<line x1="${mapX(0)}" y1="${mapY(0)}" x2="${mapX(12.5)}" y2="${mapY(0)}" stroke="var(--on-surface)" stroke-width="1.5"/>`;
+      svg += `<line x1="${mapX(0)}" y1="${mapY(0)}" x2="${mapX(0)}" y2="${mapY(12.5)}" stroke="var(--on-surface)" stroke-width="1.5"/>`;
+
+      // PC1 axis
+      svg += `<line x1="${mapX(lineStart.x)}" y1="${mapY(lineStart.y)}" x2="${mapX(lineEnd.x)}" y2="${mapY(lineEnd.y)}" stroke="var(--data-1)" stroke-width="2.5"/>`;
+      svg += `<text x="${mapX(lineEnd.x)}" y="${mapY(lineEnd.y) - 6}" font-family="var(--font-label)" font-size="12" font-weight="700" fill="var(--data-1)">PC1</text>`;
+
+      // Orthogonal projections and points
+      for (let i = 0; i < n; i++) {
+        const p = pts[i];
+        const t = (p.area - mx) * ex + (p.price - my) * ey;
+        const px = mx + t * ex;
+        const py = my + t * ey;
+        svg += `<line x1="${mapX(p.area)}" y1="${mapY(p.price)}" x2="${mapX(px)}" y2="${mapY(py)}" stroke="var(--data-2)" stroke-dasharray="3 2" stroke-width="1.5"/>`;
+        svg += `<circle cx="${mapX(px)}" cy="${mapY(py)}" r="4" fill="var(--data-2)"/>`;
+        svg += `<circle cx="${mapX(p.area)}" cy="${mapY(p.price)}" r="${i === 0 ? 7 : 5}" fill="${i === 0 ? 'var(--primary)' : 'var(--data-1)'}"/>`;
+        svg += `<text x="${mapX(p.area) + 8}" y="${mapY(p.price) - 6}" font-family="var(--font-label)" font-size="11" fill="var(--on-surface)">#${i + 1}</text>`;
+      }
+      // Mean point
+      svg += `<rect x="${mapX(mx) - 5}" y="${mapY(my) - 5}" width="10" height="10" fill="var(--data-3)"/>`;
+      svg += `<text x="${mapX(mx) + 8}" y="${mapY(my) + 14}" font-family="var(--font-label)" font-size="11" font-weight="700" fill="var(--data-3)">Mean</text>`;
+      svg += `</svg>`;
+      box.innerHTML = svg;
+    }
+
+    /* =========================================================================
+       04. K-MEANS & ELBOW LAB
+       ========================================================================= */
+    const KM_POINTS = [
+      { x: 5, y: 8 }, { x: 6, y: 9 }, { x: 7, y: 8 }, { x: 8, y: 7 },
+      { x: 6, y: 3 }, { x: 5, y: 2 }, { x: 4, y: 3 }, { x: 3, y: 2 }
+    ];
+    let kmStep = 0; // 0: Init, 1: Assign 1, 2: Update, 3: Converged
+
+    function setKmeansStep(s) {
+      kmStep = s;
+      renderKmeansLab();
+    }
+
+    function stepKmeans(delta) {
+      kmStep = (kmStep + delta) % 4;
+      renderKmeansLab();
+    }
+
+    function renderKmeansLab() {
+      const box = document.getElementById(`kmeans-svg-box`);
+      const viewSel = document.getElementById(`kmeans-view`);
+      if (!box || !viewSel) return;
+
+      let c1 = { x: 3.0, y: 2.0 };
+      let c2 = { x: 7.0, y: 8.0 };
+      if (kmStep >= 2) {
+        c1 = { x: 4.5, y: 2.5 };
+        c2 = { x: 6.5, y: 8.0 };
+      }
+
+      let wcss = 0;
+      const assignments = KM_POINTS.map(function(p) {
+        const d1 = Math.pow(p.x - c1.x, 2) + Math.pow(p.y - c1.y, 2);
+        const d2 = Math.pow(p.x - c2.x, 2) + Math.pow(p.y - c2.y, 2);
+        const cl = d1 <= d2 ? 1 : 2;
+        wcss += cl === 1 ? d1 : d2;
+        return cl;
+      });
+
+      const stages = [`0: التهيئة`, `1: التعيين الأول`, `2: تحديث المراكز`, `3: التقارب النهائي`];
+      const stEl = document.getElementById(`km-stage-txt`);
+      const c1El = document.getElementById(`km-c1`);
+      const c2El = document.getElementById(`km-c2`);
+      const wEl = document.getElementById(`km-wcss`);
+      if (stEl) stEl.textContent = stages[kmStep];
+      if (c1El) c1El.textContent = `(${c1.x.toFixed(1)}, ${c1.y.toFixed(1)})`;
+      if (c2El) c2El.textContent = `(${c2.x.toFixed(1)}, ${c2.y.toFixed(1)})`;
+      if (wEl) wEl.textContent = wcss.toFixed(2);
+
+      const W = 560;
+      const H = 290;
+      const pad = 42;
+
+      if (viewSel.value === 'elbow') {
+        const elbowData = [
+          { k: 1, w: 69.5 }, { k: 2, w: 12.0 }, { k: 3, w: 7.5 }, { k: 4, w: 4.5 }, { k: 5, w: 3.5 }
+        ];
+        function ex(k) { return pad + ((k - 1) / 4) * (W - 2 * pad); }
+        function ey(w) { return H - pad - (w / 75) * (H - 2 * pad); }
+        let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="منحنى المرفق">`;
+        for (let y = 0; y <= 75; y += 15) {
+          svg += `<line x1="${pad}" y1="${ey(y)}" x2="${W - pad}" y2="${ey(y)}" stroke="var(--data-context)" stroke-dasharray="3 3"/>`;
+          svg += `<text x="${pad - 8}" y="${ey(y) + 4}" font-family="var(--font-label)" font-size="11" fill="var(--on-surface-variant)" text-anchor="end">${y}</text>`;
+        }
+        svg += `<line x1="${pad}" y1="${ey(0)}" x2="${W - pad}" y2="${ey(0)}" stroke="var(--on-surface)" stroke-width="1.5"/>`;
+        let pathD = ``;
+        for (let i = 0; i < elbowData.length; i++) {
+          const pt = elbowData[i];
+          pathD += (i === 0 ? `M` : `L`) + `${ex(pt.k)},${ey(pt.w)} `;
+        }
+        svg += `<path d="${pathD}" fill="none" stroke="var(--data-1)" stroke-width="3"/>`;
+        for (let i = 0; i < elbowData.length; i++) {
+          const pt = elbowData[i];
+          const isElbow = pt.k === 2;
+          svg += `<circle cx="${ex(pt.k)}" cy="${ey(pt.w)}" r="${isElbow ? 7 : 5}" fill="${isElbow ? 'var(--data-2)' : 'var(--data-1)'}"/>`;
+          svg += `<text x="${ex(pt.k)}" y="${ey(0) + 18}" font-family="var(--font-label)" font-size="11" fill="var(--on-surface)" text-anchor="middle">K=${pt.k}</text>`;
+          if (isElbow) {
+            svg += `<text x="${ex(pt.k) + 12}" y="${ey(pt.w) - 10}" font-family="var(--font-label)" font-size="12" font-weight="700" fill="var(--data-2)">Elbow (K=2, WCSS=12)</text>`;
+          }
+        }
+        svg += `</svg>`;
+        box.innerHTML = svg;
+        return;
+      }
+
+      function mx(x) { return pad + ((x - 1) / 9) * (W - 2 * pad); }
+      function my(y) { return H - pad - ((y - 1) / 9) * (H - 2 * pad); }
+
+      let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="تجميع K-Means">`;
+      for (let g = 2; g <= 10; g += 2) {
+        svg += `<line x1="${mx(1)}" y1="${my(g)}" x2="${mx(10)}" y2="${my(g)}" stroke="var(--data-context)" stroke-dasharray="3 3"/>`;
+        svg += `<text x="${mx(1) - 8}" y="${my(g) + 4}" font-family="var(--font-label)" font-size="11" fill="var(--on-surface-variant)" text-anchor="end">${g}</text>`;
+        svg += `<text x="${mx(g)}" y="${my(1) + 18}" font-family="var(--font-label)" font-size="11" fill="var(--on-surface-variant)" text-anchor="middle">${g}</text>`;
+      }
+      svg += `<line x1="${mx(1)}" y1="${my(1)}" x2="${mx(10)}" y2="${my(1)}" stroke="var(--on-surface)" stroke-width="1.5"/>`;
+
+      for (let i = 0; i < KM_POINTS.length; i++) {
+        const p = KM_POINTS[i];
+        const cl = assignments[i];
+        const color = kmStep === 0 ? `var(--on-surface-variant)` : (cl === 1 ? `var(--data-1)` : `var(--data-2)`);
+        if (kmStep >= 1) {
+          const target = cl === 1 ? c1 : c2;
+          svg += `<line x1="${mx(p.x)}" y1="${my(p.y)}" x2="${mx(target.x)}" y2="${my(target.y)}" stroke="${color}" stroke-dasharray="2 2" stroke-width="1"/>`;
+        }
+        svg += `<circle cx="${mx(p.x)}" cy="${my(p.y)}" r="6" fill="${color}"/>`;
+        svg += `<text x="${mx(p.x) + 8}" y="${my(p.y) - 5}" font-family="var(--font-label)" font-size="10" fill="var(--on-surface)">(${p.x},${p.y})</text>`;
+      }
+
+      // Centroids as squares
+      svg += `<rect x="${mx(c1.x) - 7}" y="${my(c1.y) - 7}" width="14" height="14" fill="var(--primary)" stroke="var(--background)" stroke-width="2"/>`;
+      svg += `<text x="${mx(c1.x) - 10}" y="${my(c1.y) + 18}" font-family="var(--font-label)" font-size="11" font-weight="700" fill="var(--primary)">C1(${c1.x},${c1.y})</text>`;
+
+      svg += `<rect x="${mx(c2.x) - 7}" y="${my(c2.y) - 7}" width="14" height="14" fill="var(--data-2)" stroke="var(--background)" stroke-width="2"/>`;
+      svg += `<text x="${mx(c2.x) + 10}" y="${my(c2.y) - 10}" font-family="var(--font-label)" font-size="11" font-weight="700" fill="var(--data-2)">C2(${c2.x},${c2.y})</text>`;
+
+      svg += `</svg>`;
+      box.innerHTML = svg;
+    }
+
+    /* =========================================================================
+       05. DBSCAN LAB
+       ========================================================================= */
+    const DB_POINTS_BASE = [
+      { id: `P1`, x: 1, y: 2 },
+      { id: `P2`, x: 2, y: 2 },
+      { id: `P3`, x: 2, y: 3 },
+      { id: `P4`, x: 8, y: 7 },
+      { id: `P5`, x: 8, y: 8 },
+      { id: `P6`, x: 25, y: 80, outlier: true }
+    ];
+
+    function renderDbscanLab() {
+      const epsEl = document.getElementById(`db-eps`);
+      const minEl = document.getElementById(`db-minpts`);
+      const extEl = document.getElementById(`db-extra`);
+      const box = document.getElementById(`dbscan-svg-box`);
+      const tbl = document.getElementById(`dbscan-table-wrap`);
+      if (!epsEl || !minEl || !extEl || !box || !tbl) return;
+
+      const eps = parseFloat(epsEl.value);
+      const minPts = parseInt(minEl.value, 10);
+      const v1 = document.getElementById(`db-eps-val`);
+      const v2 = document.getElementById(`db-minpts-val`);
+      if (v1) v1.textContent = eps.toFixed(1);
+      if (v2) v2.textContent = minPts;
+
+      const pts = DB_POINTS_BASE.map(function(p) { return Object.assign({}, p); });
+      if (extEl.value === 'yes') {
+        pts.push({ id: `P_test`, x: 3.3, y: 3.0 });
+      }
+
+      // Compute neighbors
+      const neighbors = pts.map(function(p, i) {
+        const list = [];
+        for (let j = 0; j < pts.length; j++) {
+          const d = Math.hypot(p.x - pts[j].x, p.y - pts[j].y);
+          if (d <= eps + 1e-9) list.push(j);
+        }
+        return list;
+      });
+
+      const isCore = neighbors.map(function(list) { return list.length >= minPts; });
+      const clusterOf = new Array(pts.length).fill(-1);
+      let cid = 0;
+
+      for (let i = 0; i < pts.length; i++) {
+        if (!isCore[i] || clusterOf[i] !== -1) continue;
+        cid++;
+        const queue = [i];
+        clusterOf[i] = cid;
+        while (queue.length > 0) {
+          const curr = queue.shift();
+          if (!isCore[curr]) continue;
+          const nbs = neighbors[curr];
+          for (let k = 0; k < nbs.length; k++) {
+            const nb = nbs[k];
+            if (clusterOf[nb] === -1) {
+              clusterOf[nb] = cid;
+              if (isCore[nb]) queue.push(nb);
+            }
+          }
+        }
+      }
+
+      const roleAr = pts.map(function(p, i) {
+        if (isCore[i]) return `أساسية (Core)`;
+        if (clusterOf[i] !== -1) return `حدية (Border)`;
+        return `ضجيج (Noise)`;
+      });
+
+      // Plot local cluster area [0..10] + inset label for (25,80)
+      const W = 560;
+      const H = 290;
+      const pad = 42;
+      function mx(x) { return pad + (x / 10.5) * (W - 2 * pad); }
+      function my(y) { return H - pad - (y / 10.5) * (H - 2 * pad); }
+      const rxScale = (W - 2 * pad) / 10.5;
+      const ryScale = (H - 2 * pad) / 10.5;
+
+      let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="رسم DBSCAN">`;
+      for (let g = 0; g <= 10; g += 2) {
+        svg += `<line x1="${mx(0)}" y1="${my(g)}" x2="${mx(10)}" y2="${my(g)}" stroke="var(--data-context)" stroke-dasharray="3 3"/>`;
+        svg += `<text x="${mx(0) - 8}" y="${my(g) + 4}" font-family="var(--font-label)" font-size="11" fill="var(--on-surface-variant)" text-anchor="end">${g}</text>`;
+        svg += `<text x="${mx(g)}" y="${my(0) + 18}" font-family="var(--font-label)" font-size="11" fill="var(--on-surface-variant)" text-anchor="middle">${g}</text>`;
+      }
+      svg += `<line x1="${mx(0)}" y1="${my(0)}" x2="${mx(10.2)}" y2="${my(0)}" stroke="var(--on-surface)" stroke-width="1.5"/>`;
+
+      const palette = [`var(--error)`, `var(--data-1)`, `var(--data-2)`, `var(--data-3)`, `var(--data-4)`];
+      for (let i = 0; i < pts.length; i++) {
+        const p = pts[i];
+        const col = clusterOf[i] === -1 ? `var(--error)` : palette[((clusterOf[i] - 1) % 4) + 1];
+        if (p.outlier) {
+          svg += `<rect x="${W - 155}" y="16" width="140" height="38" fill="var(--error-bg)" stroke="var(--error)" stroke-width="1.5"/>`;
+          svg += `<text x="${W - 85}" y="39" font-family="var(--font-label)" font-size="11" font-weight="700" fill="var(--error)" text-anchor="middle">Noise: (25, 80)</text>`;
+          continue;
+        }
+        svg += `<ellipse cx="${mx(p.x)}" cy="${my(p.y)}" rx="${(eps * rxScale).toFixed(1)}" ry="${(eps * ryScale).toFixed(1)}" fill="none" stroke="${col}" stroke-opacity="0.45" stroke-dasharray="4 3" stroke-width="1.5"/>`;
+        svg += `<circle cx="${mx(p.x)}" cy="${my(p.y)}" r="${isCore[i] ? 7 : 5}" fill="${col}" stroke="var(--on-surface)" stroke-width="${isCore[i] ? 0 : 1.5}"/>`;
+        svg += `<text x="${mx(p.x) + 8}" y="${my(p.y) - 6}" font-family="var(--font-label)" font-size="10" fill="var(--on-surface)">${p.id}(${p.x},${p.y})</text>`;
+      }
+      svg += `</svg>`;
+      box.innerHTML = svg;
+
+      let html = `<table class="hb-table"><thead><tr>
+        <th>النقطة</th><th class="num">عدد الجيران ضمن eps</th><th>التصنيف</th><th class="num">المجموعة</th>
+      </tr></thead><tbody>`;
+      for (let i = 0; i < pts.length; i++) {
+        html += `<tr>
+          <td><strong>${pts[i].id}</strong> <bdi dir="ltr">(${pts[i].x}, ${pts[i].y})</bdi></td>
+          <td class="num">${neighbors[i].length}</td>
+          <td>${roleAr[i]}</td>
+          <td class="num">${clusterOf[i] === -1 ? `ضجيج` : `C${clusterOf[i]}`}</td>
+        </tr>`;
+      }
+      html += `</tbody></table>`;
+      tbl.innerHTML = html;
+    }
+
+    /* =========================================================================
+       06. HIERARCHICAL CLUSTERING LAB
+       ========================================================================= */
+    const HIER_ITEMS = [
+      { id: `A`, x: 1 }, { id: `B`, x: 2 }, { id: `C`, x: 5 }, { id: `D`, x: 7 }, { id: `E`, x: 11 }
+    ];
+    let hierStep = 0;
+    let hierHistory = [];
+
+    function computeHierHistory(linkage) {
+      let clusters = HIER_ITEMS.map(function(it) { return { label: it.id, pts: [it.x] }; });
+      const steps = [{ clusters: clusters.map(function(c) { return c.label; }), msg: `البداية: 5 عناقيد منفصلة {A}, {B}, {C}, {D}, {E}.`, merges: [] }];
+      const merges = [];
+
+      function clusterDist(c1, c2) {
+        if (linkage === 'single') {
+          let m = Infinity;
+          for (let a = 0; a < c1.pts.length; a++)
+            for (let b = 0; b < c2.pts.length; b++)
+              m = Math.min(m, Math.abs(c1.pts[a] - c2.pts[b]));
+          return m;
+        }
+        if (linkage === 'complete') {
+          let m = 0;
+          for (let a = 0; a < c1.pts.length; a++)
+            for (let b = 0; b < c2.pts.length; b++)
+              m = Math.max(m, Math.abs(c1.pts[a] - c2.pts[b]));
+          return m;
+        }
+        if (linkage === 'average') {
+          let s = 0;
+          for (let a = 0; a < c1.pts.length; a++)
+            for (let b = 0; b < c2.pts.length; b++)
+              s += Math.abs(c1.pts[a] - c2.pts[b]);
+          return s / (c1.pts.length * c2.pts.length);
+        }
+        // ward
+        const m1 = c1.pts.reduce(function(u, v) { return u + v; }, 0) / c1.pts.length;
+        const m2 = c2.pts.reduce(function(u, v) { return u + v; }, 0) / c2.pts.length;
+        const n1 = c1.pts.length;
+        const n2 = c2.pts.length;
+        return Math.sqrt((2 * n1 * n2) / (n1 + n2)) * Math.abs(m1 - m2);
+      }
+
+      while (clusters.length > 1) {
+        let bestI = 0;
+        let bestJ = 1;
+        let bestD = Infinity;
+        for (let i = 0; i < clusters.length; i++) {
+          for (let j = i + 1; j < clusters.length; j++) {
+            const d = clusterDist(clusters[i], clusters[j]);
+            if (d < bestD) { bestD = d; bestI = i; bestJ = j; }
+          }
+        }
+        const mergedLabel = `(${clusters[bestI].label}+${clusters[bestJ].label})`;
+        merges.push({ left: clusters[bestI].label, right: clusters[bestJ].label, label: mergedLabel, dist: bestD });
+        const newPts = clusters[bestI].pts.concat(clusters[bestJ].pts);
+        const nextClusters = [];
+        for (let k = 0; k < clusters.length; k++) {
+          if (k !== bestI && k !== bestJ) nextClusters.push(clusters[k]);
+        }
+        nextClusters.push({ label: mergedLabel, pts: newPts });
+        clusters = nextClusters;
+        steps.push({
+          clusters: clusters.map(function(c) { return c.label; }),
+          msg: `الدمج ${steps.length}: دمج ${merges[merges.length - 1].left} مع ${merges[merges.length - 1].right} عند مسافة ${bestD.toFixed(2)}.`,
+          merges: merges.slice()
+        });
+      }
+      return steps;
+    }
+
+    function resetHierStep() {
+      const sel = document.getElementById(`hier-linkage`);
+      hierHistory = computeHierHistory(sel ? sel.value : `single`);
+      hierStep = 0;
+      renderHierLab();
+    }
+
+    function advanceHierStep() {
+      if (hierHistory.length === 0) resetHierStep();
+      hierStep = (hierStep + 1) % hierHistory.length;
+      renderHierLab();
+    }
+
+    function renderHierLab() {
+      const box = document.getElementById(`hier-svg-box`);
+      const log = document.getElementById(`hier-log`);
+      if (!box || !log) return;
+      if (hierHistory.length === 0) resetHierStep();
+
+      const cur = hierHistory[hierStep];
+      log.innerHTML = `<p class="hier-log-text"><strong>${cur.msg}</strong> — العناقيد الحالية: <bdi dir="ltr">${cur.clusters.join(' | ')}</bdi></p>`;
+
+      const W = 560;
+      const H = 260;
+      const baseY = 225;
+      const xPos = { A: 80, B: 170, C: 280, D: 370, E: 480 };
+      const nodeCoords = {
+        A: { x: 80, y: baseY },
+        B: { x: 170, y: baseY },
+        C: { x: 280, y: baseY },
+        D: { x: 370, y: baseY },
+        E: { x: 480, y: baseY }
+      };
+
+      const maxD = hierHistory[hierHistory.length - 1].merges.reduce(function(m, g) { return Math.max(m, g.dist); }, 1);
+      let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="شجرة التجمع الهرمي">`;
+      svg += `<line x1="40" y1="${baseY}" x2="${W - 30}" y2="${baseY}" stroke="var(--data-context)" stroke-width="1"/>`;
+
+      const keys = Object.keys(xPos);
+      for (let i = 0; i < keys.length; i++) {
+        const k = keys[i];
+        svg += `<circle cx="${xPos[k]}" cy="${baseY}" r="5" fill="var(--primary)"/>`;
+        svg += `<text x="${xPos[k]}" y="${baseY + 20}" font-family="var(--font-label)" font-size="12" font-weight="700" fill="var(--on-surface)" text-anchor="middle">${k}(${HIER_ITEMS[i].x})</text>`;
+      }
+
+      for (let i = 0; i < cur.merges.length; i++) {
+        const m = cur.merges[i];
+        const p1 = nodeCoords[m.left];
+        const p2 = nodeCoords[m.right];
+        if (!p1 || !p2) continue;
+        const yTop = baseY - (m.dist / (maxD * 1.15)) * 175;
+        svg += `<line x1="${p1.x}" y1="${p1.y}" x2="${p1.x}" y2="${yTop}" stroke="var(--data-1)" stroke-width="2.5"/>`;
+        svg += `<line x1="${p2.x}" y1="${p2.y}" x2="${p2.x}" y2="${yTop}" stroke="var(--data-1)" stroke-width="2.5"/>`;
+        svg += `<line x1="${p1.x}" y1="${yTop}" x2="${p2.x}" y2="${yTop}" stroke="var(--data-2)" stroke-width="2.5"/>`;
+        const midX = (p1.x + p2.x) / 2;
+        svg += `<text x="${midX}" y="${yTop - 5}" font-family="var(--font-label)" font-size="10" font-weight="700" fill="var(--data-2)" text-anchor="middle">d=${m.dist.toFixed(1)}</text>`;
+        nodeCoords[m.label] = { x: midX, y: yTop };
+      }
+
+      svg += `</svg>`;
+      box.innerHTML = svg;
+    }
+
+    /* =========================================================================
+       07. GRADIENT DESCENT LAB
+       ========================================================================= */
+    let gdHistory = [{ iter: 0, theta: -2.0 }];
+
+    function updateGdControls() {
+      const a = document.getElementById(`gd-alpha`);
+      const v = document.getElementById(`gd-alpha-val`);
+      if (a && v) v.textContent = parseFloat(a.value).toFixed(2);
+    }
+
+    function resetGd() {
+      const t0El = document.getElementById(`gd-theta0`);
+      const vEl = document.getElementById(`gd-theta0-val`);
+      const t0 = t0El ? parseFloat(t0El.value) : -2.0;
+      if (vEl) vEl.textContent = t0.toFixed(1);
+      gdHistory = [{ iter: 0, theta: t0 }];
+      updateGdControls();
+      renderGdLab();
+    }
+
+    function stepGd() {
+      const alphaEl = document.getElementById(`gd-alpha`);
+      const alpha = alphaEl ? parseFloat(alphaEl.value) : 0.2;
+      const last = gdHistory[gdHistory.length - 1];
+      const grad = 2 * (last.theta - 2.5);
+      const nextTheta = Math.max(-4.5, Math.min(9.5, last.theta - alpha * grad));
+      gdHistory.push({ iter: last.iter + 1, theta: nextTheta });
+      if (gdHistory.length > 18) gdHistory.shift();
+      renderGdLab();
+    }
+
+    function renderGdLab() {
+      const box = document.getElementById(`gd-svg-box`);
+      if (!box) return;
+      const cur = gdHistory[gdHistory.length - 1];
+      const loss = Math.pow(cur.theta - 2.5, 2) + 1;
+      const grad = 2 * (cur.theta - 2.5);
+
+      const iEl = document.getElementById(`gd-iter`);
+      const tEl = document.getElementById(`gd-theta`);
+      const lEl = document.getElementById(`gd-loss`);
+      const gEl = document.getElementById(`gd-grad`);
+      if (iEl) iEl.textContent = cur.iter;
+      if (tEl) tEl.textContent = cur.theta.toFixed(3);
+      if (lEl) lEl.textContent = loss.toFixed(3);
+      if (gEl) gEl.textContent = grad.toFixed(3);
+
+      const W = 560;
+      const H = 280;
+      const pad = 42;
+      function mx(th) { return pad + ((th + 3.5) / 12) * (W - 2 * pad); }
+      function my(j) { return H - pad - (Math.min(40, j) / 42) * (H - 2 * pad); }
+
+      let pathD = ``;
+      for (let t = -3.5; t <= 8.5; t += 0.2) {
+        const j = Math.pow(t - 2.5, 2) + 1;
+        pathD += (t === -3.5 ? `M` : `L`) + `${mx(t).toFixed(1)},${my(j).toFixed(1)} `;
+      }
+
+      let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="منحنى النزول التدريجي">`;
+      svg += `<line x1="${pad}" y1="${my(0)}" x2="${W - pad}" y2="${my(0)}" stroke="var(--on-surface)" stroke-width="1.5"/>`;
+      svg += `<line x1="${mx(2.5)}" y1="${my(0)}" x2="${mx(2.5)}" y2="${my(1)}" stroke="var(--data-3)" stroke-dasharray="3 3" stroke-width="1.5"/>`;
+      svg += `<text x="${mx(2.5)}" y="${my(0) + 16}" font-family="var(--font-label)" font-size="11" font-weight="700" fill="var(--data-3)" text-anchor="middle">Min θ*=2.5</text>`;
+      svg += `<path d="${pathD}" fill="none" stroke="var(--data-context)" stroke-width="2.5"/>`;
+
+      for (let i = 0; i < gdHistory.length; i++) {
+        const h = gdHistory[i];
+        const hj = Math.pow(h.theta - 2.5, 2) + 1;
+        if (i > 0) {
+          const prev = gdHistory[i - 1];
+          const pj = Math.pow(prev.theta - 2.5, 2) + 1;
+          svg += `<line x1="${mx(prev.theta)}" y1="${my(pj)}" x2="${mx(h.theta)}" y2="${my(hj)}" stroke="var(--data-1)" stroke-width="2"/>`;
+        }
+        svg += `<circle cx="${mx(h.theta)}" cy="${my(hj)}" r="${i === gdHistory.length - 1 ? 6 : 3.5}" fill="${i === gdHistory.length - 1 ? 'var(--data-2)' : 'var(--data-1)'}"/>`;
+      }
+      svg += `</svg>`;
+      box.innerHTML = svg;
+    }
+
+    /* =========================================================================
+       08. POLYNOMIAL, RIDGE & LASSO LAB
+       ========================================================================= */
+    const REG_PTS = [
+      { x: 1, y: 2.1 }, { x: 2, y: 2.8 }, { x: 3, y: 4.9 },
+      { x: 4, y: 8.6 }, { x: 5, y: 14.2 }, { x: 6, y: 21.5 }
+    ];
+
+    function renderRegLab() {
+      const degEl = document.getElementById(`reg-deg`);
+      const lamEl = document.getElementById(`reg-lambda`);
+      const lamVal = document.getElementById(`reg-lambda-val`);
+      const box = document.getElementById(`reg-svg-box`);
+      const tbl = document.getElementById(`reg-table-wrap`);
+      if (!degEl || !lamEl || !box || !tbl) return;
+
+      const deg = parseInt(degEl.value, 10);
+      const lam = parseFloat(lamEl.value);
+      if (lamVal) lamVal.textContent = lam.toFixed(1);
+
+      const W = 560;
+      const H = 260;
+      const pad = 42;
+      function mx(x) { return pad + ((x - 0.5) / 6) * (W - 2 * pad); }
+      function my(y) { return H - pad - (y / 25) * (H - 2 * pad); }
+
+      function evalModel(x) {
+        if (deg === 1) return -3.8 + 3.8 * x;
+        if (deg === 2) return 1.8 - 0.5 * x + 0.62 * x * x;
+        return 2.4 - 1.3 * x + 0.9 * x * x - 0.03 * x * x * x;
+      }
+
+      let pathD = ``;
+      for (let x = 0.8; x <= 6.2; x += 0.1) {
+        pathD += (x === 0.8 ? `M` : `L`) + `${mx(x).toFixed(1)},${my(evalModel(x)).toFixed(1)} `;
+      }
+
+      let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="الانحدار متعدد الحدود">`;
+      svg += `<line x1="${pad}" y1="${my(0)}" x2="${W - pad}" y2="${my(0)}" stroke="var(--on-surface)" stroke-width="1.5"/>`;
+      svg += `<path d="${pathD}" fill="none" stroke="var(--data-1)" stroke-width="3"/>`;
+      for (let i = 0; i < REG_PTS.length; i++) {
+        svg += `<circle cx="${mx(REG_PTS[i].x)}" cy="${my(REG_PTS[i].y)}" r="5" fill="var(--data-2)"/>`;
+      }
+      svg += `</svg>`;
+      box.innerHTML = svg;
+
+      // Ridge vs Lasso coefficient shrinkage comparison (mirroring Advertising example: TV, Radio, Newspaper)
+      const baseCoefs = [
+        { name: `TV (قوي)`, w: 4.5 },
+        { name: `Radio (متوسط)`, w: 2.8 },
+        { name: `Newspaper (ضعيف)`, w: 0.9 }
+      ];
+      let html = `<table class="hb-table"><thead><tr>
+        <th>السمة (نموذج المبيعات)</th>
+        <th class="num">OLS (λ=0)</th>
+        <th class="num">Ridge (L2)</th>
+        <th class="num">Lasso (L1)</th>
+      </tr></thead><tbody>`;
+
+      for (let i = 0; i < baseCoefs.length; i++) {
+        const c = baseCoefs[i];
+        const ridgeW = c.w / (1 + 0.35 * lam);
+        const lassoW = Math.max(0, c.w - 0.45 * lam);
+        const isZero = lassoW === 0;
+        html += `<tr class="${isZero ? 'highlight-row' : ''}">
+          <td><strong>${c.name}</strong></td>
+          <td class="num">${c.w.toFixed(2)}</td>
+          <td class="num">${ridgeW.toFixed(2)}</td>
+          <td class="num">${lassoW.toFixed(2)}${isZero ? ' (مستبعد!)' : ''}</td>
+        </tr>`;
+      }
+      html += `</tbody></table>`;
+      tbl.innerHTML = html;
+    }
+
+    /* =========================================================================
+       09. K-NN LAB
+       ========================================================================= */
+    const KNN_TRAIN = [
+      { x: 2, y: 2, cls: `A` }, { x: 2, y: 5, cls: `A` }, { x: 3, y: 4, cls: `A` }, { x: 1, y: 3, cls: `A` },
+      { x: 6, y: 5, cls: `B` }, { x: 7, y: 3, cls: `B` }, { x: 5, y: 6, cls: `B` }, { x: 7, y: 7, cls: `B` }
+    ];
+
+    function renderKnnLab() {
+      const kEl = document.getElementById(`knn-k`);
+      const qxEl = document.getElementById(`knn-qx`);
+      const qyEl = document.getElementById(`knn-qy`);
+      const box = document.getElementById(`knn-svg-box`);
+      if (!kEl || !qxEl || !qyEl || !box) return;
+
+      const k = parseInt(kEl.value, 10);
+      const qx = parseFloat(qxEl.value);
+      const qy = parseFloat(qyEl.value);
+      const vx = document.getElementById(`knn-qx-val`);
+      const vy = document.getElementById(`knn-qy-val`);
+      if (vx) vx.textContent = qx.toFixed(1);
+      if (vy) vy.textContent = qy.toFixed(1);
+
+      const dists = KNN_TRAIN.map(function(p, i) {
+        return { idx: i, x: p.x, y: p.y, cls: p.cls, d: Math.hypot(p.x - qx, p.y - qy) };
+      }).sort(function(a, b) { return a.d - b.d; });
+
+      const topK = dists.slice(0, k);
+      let votesA = 0;
+      let votesB = 0;
+      for (let i = 0; i < topK.length; i++) {
+        if (topK[i].cls === `A`) votesA++; else votesB++;
+      }
+      const radius = topK[topK.length - 1].d;
+      const pred = votesA >= votesB ? `فئة A` : `فئة B`;
+
+      const pEl = document.getElementById(`knn-pred`);
+      const vEl = document.getElementById(`knn-votes`);
+      const dEl = document.getElementById(`knn-min-d`);
+      if (pEl) pEl.textContent = pred;
+      if (vEl) vEl.textContent = `${votesA} A / ${votesB} B`;
+      if (dEl) dEl.textContent = dists[0].d.toFixed(2);
+
+      const W = 560;
+      const H = 280;
+      const pad = 42;
+      function mx(x) { return pad + (x / 9) * (W - 2 * pad); }
+      function my(y) { return H - pad - (y / 9) * (H - 2 * pad); }
+      const rx = (radius / 9) * (W - 2 * pad);
+      const ry = (radius / 9) * (H - 2 * pad);
+
+      let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="تصنيف K-NN">`;
+      for (let g = 0; g <= 8; g += 2) {
+        svg += `<line x1="${mx(0)}" y1="${my(g)}" x2="${mx(9)}" y2="${my(g)}" stroke="var(--data-context)" stroke-dasharray="3 3"/>`;
+        svg += `<text x="${mx(0) - 8}" y="${my(g) + 4}" font-family="var(--font-label)" font-size="11" fill="var(--on-surface-variant)" text-anchor="end">${g}</text>`;
+        svg += `<text x="${mx(g)}" y="${my(0) + 18}" font-family="var(--font-label)" font-size="11" fill="var(--on-surface-variant)" text-anchor="middle">${g}</text>`;
+      }
+      svg += `<ellipse cx="${mx(qx)}" cy="${my(qy)}" rx="${rx.toFixed(1)}" ry="${ry.toFixed(1)}" fill="none" stroke="var(--primary)" stroke-dasharray="4 3" stroke-width="2"/>`;
+
+      for (let i = 0; i < topK.length; i++) {
+        svg += `<line x1="${mx(qx)}" y1="${my(qy)}" x2="${mx(topK[i].x)}" y2="${my(topK[i].y)}" stroke="var(--on-surface-variant)" stroke-width="1.5"/>`;
+      }
+      for (let i = 0; i < KNN_TRAIN.length; i++) {
+        const p = KNN_TRAIN[i];
+        const col = p.cls === `A` ? `var(--data-1)` : `var(--data-2)`;
+        svg += `<circle cx="${mx(p.x)}" cy="${my(p.y)}" r="6" fill="${col}"/>`;
+        svg += `<text x="${mx(p.x) + 8}" y="${my(p.y) - 4}" font-family="var(--font-label)" font-size="10" fill="${col}">${p.cls}</text>`;
+      }
+      svg += `<rect x="${mx(qx) - 6}" y="${my(qy) - 6}" width="12" height="12" fill="var(--data-3)" stroke="var(--on-surface)" stroke-width="2"/>`;
+      svg += `<text x="${mx(qx) + 10}" y="${my(qy) + 14}" font-family="var(--font-label)" font-size="11" font-weight="700" fill="var(--on-surface)">Q(${qx},${qy})</text>`;
+      svg += `</svg>`;
+      box.innerHTML = svg;
+    }
+
+    /* =========================================================================
+       10. NAIVE BAYES LAB
+       ========================================================================= */
+    const NB_COUNTS = {
+      'عرض':   { spam: 8, ham: 1 },
+      'مجاني': { spam: 7, ham: 0 },
+      'اجتماع':{ spam: 0, ham: 9 },
+      'مشروع': { spam: 1, ham: 8 }
+    };
+    const NB_TOTAL_SPAM_WORDS = 16;
+    const NB_TOTAL_HAM_WORDS = 18;
+    const NB_VOCAB = 4;
+
+    function toggleNbWord(btn) {
+      if (!btn) return;
+      const pressed = btn.getAttribute(`aria-pressed`) === `true`;
+      btn.setAttribute(`aria-pressed`, pressed ? `false` : `true`);
+      renderNbLab();
+    }
+
+    function renderNbLab() {
+      const chips = document.querySelectorAll(`#nb-chips .word-chip`);
+      const tbl = document.getElementById(`nb-table-wrap`);
+      if (!tbl) return;
+
+      const activeWords = [];
+      for (let i = 0; i < chips.length; i++) {
+        if (chips[i].getAttribute(`aria-pressed`) === `true`) {
+          activeWords.push(chips[i].getAttribute(`data-word`));
+        }
+      }
+
+      let scoreSpam = 0.4;
+      let scoreHam = 0.6;
+      let html = `<table class="hb-table"><thead><tr>
+        <th>الكلمة المختارة</th>
+        <th class="num">P(w | Spam)</th>
+        <th class="num">P(w | Ham)</th>
+      </tr></thead><tbody>`;
+
+      if (activeWords.length === 0) {
+        html += `<tr><td colspan="3">اختر كلمة واحدة على الأقل بالأعلى لحساب الاحتمال الشرطي.</td></tr>`;
+      } else {
+        for (let i = 0; i < activeWords.length; i++) {
+          const w = activeWords[i];
+          const c = NB_COUNTS[w];
+          const pwS = (c.spam + 1) / (NB_TOTAL_SPAM_WORDS + NB_VOCAB);
+          const pwH = (c.ham + 1) / (NB_TOTAL_HAM_WORDS + NB_VOCAB);
+          scoreSpam *= pwS;
+          scoreHam *= pwH;
+          html += `<tr>
+            <td><strong>${w}</strong></td>
+            <td class="num">${pwS.toFixed(3)}</td>
+            <td class="num">${pwH.toFixed(3)}</td>
+          </tr>`;
+        }
+      }
+      html += `</tbody></table>`;
+      tbl.innerHTML = html;
+
+      const sumS = scoreSpam + scoreHam || 1;
+      const pS = (scoreSpam / sumS) * 100;
+      const pH = (scoreHam / sumS) * 100;
+
+      const sEl = document.getElementById(`nb-p-spam`);
+      const hEl = document.getElementById(`nb-p-ham`);
+      const dEl = document.getElementById(`nb-decision`);
+      if (sEl) sEl.textContent = `${pS.toFixed(1)}%`;
+      if (hEl) hEl.textContent = `${pH.toFixed(1)}%`;
+      if (dEl) dEl.textContent = pS >= pH ? `رسالة مزعجة (Spam)` : `رسالة عادية (Ham)`;
+    }
+
+    /* =========================================================================
+       11. LOGISTIC REGRESSION & SVM DUAL LAB
+       ========================================================================= */
+    let logSvmMode = `sigmoid`;
+
+    function setLogSvmMode(mode) {
+      logSvmMode = mode;
+      const cSig = document.getElementById(`controls-sigmoid`);
+      const cSvm = document.getElementById(`controls-svm`);
+      const bSig = document.getElementById(`btn-mode-sig`);
+      const bSvm = document.getElementById(`btn-mode-svm`);
+      if (cSig) cSig.classList.toggle(`is-hidden`, mode !== `sigmoid`);
+      if (cSvm) cSvm.classList.toggle(`is-hidden`, mode !== `svm`);
+      if (bSig) bSig.className = mode === `sigmoid` ? `button` : `button button--secondary`;
+      if (bSvm) bSvm.className = mode === `svm` ? `button` : `button button--secondary`;
+      renderLogSvmLab();
+    }
+
+    function renderLogSvmLab() {
+      const box = document.getElementById(`logsvm-svg-box`);
+      const kpis = document.getElementById(`logsvm-kpis`);
+      if (!box || !kpis) return;
+
+      const W = 560;
+      const H = 270;
+      const pad = 42;
+
+      if (logSvmMode === `sigmoid`) {
+        const w0 = parseFloat(document.getElementById(`sig-w0`).value);
+        const w1 = parseFloat(document.getElementById(`sig-w1`).value);
+        const xTest = parseFloat(document.getElementById(`sig-x`).value);
+        document.getElementById(`sig-w0-val`).textContent = w0.toFixed(1);
+        document.getElementById(`sig-w1-val`).textContent = w1.toFixed(1);
+        document.getElementById(`sig-x-val`).textContent = xTest.toFixed(1);
+
+        const z = w0 + w1 * xTest;
+        const p = 1 / (1 + Math.exp(-z));
+        const xBound = -w0 / w1;
+
+        kpis.innerHTML = `
+          <div class="kpi-box"><div class="kpi-label">قيمة <bdi dir="ltr">z = w₀ + w₁x</bdi></div><div class="kpi-val">${z.toFixed(2)}</div></div>
+          <div class="kpi-box"><div class="kpi-label">الاحتمال <bdi dir="ltr">σ(z)</bdi></div><div class="kpi-val">${p.toFixed(3)}</div></div>
+          <div class="kpi-box"><div class="kpi-label">حد القرار (<bdi dir="ltr">σ=0.5</bdi>)</div><div class="kpi-val">x = ${xBound.toFixed(2)}</div></div>
+          <div class="kpi-box"><div class="kpi-label">التصنيف</div><div class="kpi-val">${p >= 0.5 ? 'الفئة 1 (Yes)' : 'الفئة 0 (No)'}</div></div>
+        `;
+
+        function mx(x) { return pad + (x / 10) * (W - 2 * pad); }
+        function my(y) { return H - pad - y * (H - 2 * pad); }
+
+        let pathD = ``;
+        for (let x = 0; x <= 10; x += 0.2) {
+          const sig = 1 / (1 + Math.exp(-(w0 + w1 * x)));
+          pathD += (x === 0 ? `M` : `L`) + `${mx(x).toFixed(1)},${my(sig).toFixed(1)} `;
+        }
+
+        let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="منحنى Sigmoid">`;
+        svg += `<line x1="${pad}" y1="${my(0)}" x2="${W - pad}" y2="${my(0)}" stroke="var(--on-surface)" stroke-width="1.5"/>`;
+        svg += `<line x1="${pad}" y1="${my(0.5)}" x2="${W - pad}" y2="${my(0.5)}" stroke="var(--data-context)" stroke-dasharray="4 3" stroke-width="1.5"/>`;
+        svg += `<text x="${pad - 6}" y="${my(0.5) + 4}" font-family="var(--font-label)" font-size="11" fill="var(--on-surface-variant)" text-anchor="end">0.5</text>`;
+        svg += `<path d="${pathD}" fill="none" stroke="var(--data-1)" stroke-width="3"/>`;
+        svg += `<circle cx="${mx(xTest)}" cy="${my(p)}" r="6" fill="var(--data-2)"/>`;
+        svg += `<text x="${mx(xTest) + 8}" y="${my(p) - 8}" font-family="var(--font-label)" font-size="11" font-weight="700" fill="var(--data-2)">σ=${p.toFixed(2)}</text>`;
+        svg += `</svg>`;
+        box.innerHTML = svg;
+        return;
+      }
+
+      // SVM Mode
+      const w1 = parseFloat(document.getElementById(`svm-w1`).value);
+      const w2 = parseFloat(document.getElementById(`svm-w2`).value);
+      const b = parseFloat(document.getElementById(`svm-b`).value);
+      document.getElementById(`svm-w1-val`).textContent = w1.toFixed(1);
+      document.getElementById(`svm-w2-val`).textContent = w2.toFixed(1);
+      document.getElementById(`svm-b-val`).textContent = b.toFixed(1);
+
+      const norm = Math.hypot(w1, w2);
+      const margin = 2 / norm;
+
+      kpis.innerHTML = `
+        <div class="kpi-box"><div class="kpi-label">معادلة الحد الفاصل</div><div class="kpi-val">${w1}x₁ + ${w2}x₂ ${b >= 0 ? '+' : ''}${b} = 0</div></div>
+        <div class="kpi-box"><div class="kpi-label">طول المتجه <bdi dir="ltr">‖w‖</bdi></div><div class="kpi-val">${norm.toFixed(3)}</div></div>
+        <div class="kpi-box"><div class="kpi-label">عرض الهامش الكلي</div><div class="kpi-val">${margin.toFixed(3)}</div></div>
+      `;
+
+      function mx(x) { return pad + (x / 10) * (W - 2 * pad); }
+      function my(y) { return H - pad - (y / 10) * (H - 2 * pad); }
+      function linePts(offset) {
+        const yAt0 = (-b + offset) / w2;
+        const yAt10 = (-b + offset - w1 * 10) / w2;
+        return { x1: 0, y1: yAt0, x2: 10, y2: yAt10 };
+      }
+      const lMain = linePts(0);
+      const lPlus = linePts(1);
+      const lMinus = linePts(-1);
+
+      let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="الحد الفاصل SVM">`;
+      svg += `<defs><clipPath id="svm-clip"><rect x="${pad}" y="${pad / 2}" width="${W - 2 * pad}" height="${H - 1.5 * pad}"/></clipPath></defs>`;
+      svg += `<line x1="${pad}" y1="${my(0)}" x2="${W - pad}" y2="${my(0)}" stroke="var(--on-surface)" stroke-width="1.5"/>`;
+      svg += `<line x1="${mx(0)}" y1="${my(0)}" x2="${mx(0)}" y2="${my(10)}" stroke="var(--on-surface)" stroke-width="1.5"/>`;
+      svg += `<g clip-path="url(#svm-clip)">`;
+      svg += `<line x1="${mx(lMain.x1)}" y1="${my(lMain.y1)}" x2="${mx(lMain.x2)}" y2="${my(lMain.y2)}" stroke="var(--primary)" stroke-width="3"/>`;
+      svg += `<line x1="${mx(lPlus.x1)}" y1="${my(lPlus.y1)}" x2="${mx(lPlus.x2)}" y2="${my(lPlus.y2)}" stroke="var(--data-1)" stroke-dasharray="5 3" stroke-width="1.5"/>`;
+      svg += `<line x1="${mx(lMinus.x1)}" y1="${my(lMinus.y1)}" x2="${mx(lMinus.x2)}" y2="${my(lMinus.y2)}" stroke="var(--data-2)" stroke-dasharray="5 3" stroke-width="1.5"/>`;
+      svg += `</g>`;
+
+      const samplePts = [
+        { x: 1.5, y: 2.0 }, { x: 2.0, y: 3.0 }, { x: 2.5, y: 1.5 },
+        { x: 6.5, y: 6.0 }, { x: 7.0, y: 5.0 }, { x: 8.0, y: 7.0 }
+      ];
+      for (let i = 0; i < samplePts.length; i++) {
+        const sp = samplePts[i];
+        const val = w1 * sp.x + w2 * sp.y + b;
+        const col = val >= 0 ? `var(--data-1)` : `var(--data-2)`;
+        svg += `<circle cx="${mx(sp.x)}" cy="${my(sp.y)}" r="5.5" fill="${col}"/>`;
+      }
+      svg += `</svg>`;
+      box.innerHTML = svg;
+    }
+
+    /* =========================================================================
+       12. DECISION TREE GINI & CONFUSION MATRIX LAB
+       ========================================================================= */
+    function giniOf(yes, total) {
+      if (total <= 0) return 0;
+      const p1 = yes / total;
+      const p0 = (total - yes) / total;
+      return 1 - (p1 * p1 + p0 * p0);
+    }
+
+    function renderTreeCmLab() {
+      const lyEl = document.getElementById(`gini-ly`);
+      const ryEl = document.getElementById(`gini-ry`);
+      if (lyEl && ryEl) {
+        const ly = parseInt(lyEl.value, 10);
+        const ry = parseInt(ryEl.value, 10);
+        const v1 = document.getElementById(`gini-ly-val`);
+        const v2 = document.getElementById(`gini-ry-val`);
+        if (v1) v1.textContent = ly;
+        if (v2) v2.textContent = ry;
+
+        const gParent = giniOf(ly + ry, 10);
+        const gL = giniOf(ly, 5);
+        const gR = giniOf(ry, 5);
+        const gSplit = 0.5 * gL + 0.5 * gR;
+        const gain = gParent - gSplit;
+
+        const glEl = document.getElementById(`gini-gl`);
+        const grEl = document.getElementById(`gini-gr`);
+        const gsEl = document.getElementById(`gini-split`);
+        const ggEl = document.getElementById(`gini-gain`);
+        if (glEl) glEl.textContent = gL.toFixed(3);
+        if (grEl) grEl.textContent = gR.toFixed(3);
+        if (gsEl) gsEl.textContent = gSplit.toFixed(3);
+        if (ggEl) ggEl.textContent = gain.toFixed(3);
+      }
+
+      const tp = Math.max(0, parseInt(document.getElementById(`cm-tp`).value, 10) || 0);
+      const fn = Math.max(0, parseInt(document.getElementById(`cm-fn`).value, 10) || 0);
+      const fp = Math.max(0, parseInt(document.getElementById(`cm-fp`).value, 10) || 0);
+      const tn = Math.max(0, parseInt(document.getElementById(`cm-tn`).value, 10) || 0);
+
+      const tot = tp + fn + fp + tn;
+      const acc = tot > 0 ? (tp + tn) / tot : 0;
+      const prec = (tp + fp) > 0 ? tp / (tp + fp) : 0;
+      const rec = (tp + fn) > 0 ? tp / (tp + fn) : 0;
+      const f1 = (prec + rec) > 0 ? (2 * prec * rec) / (prec + rec) : 0;
+
+      const aEl = document.getElementById(`cm-acc`);
+      const pEl = document.getElementById(`cm-prec`);
+      const rEl = document.getElementById(`cm-rec`);
+      const fEl = document.getElementById(`cm-f1`);
+      if (aEl) aEl.textContent = `${(acc * 100).toFixed(1)}%`;
+      if (pEl) pEl.textContent = `${(prec * 100).toFixed(1)}%`;
+      if (rEl) rEl.textContent = `${(rec * 100).toFixed(1)}%`;
+      if (fEl) fEl.textContent = `${(f1 * 100).toFixed(1)}%`;
+    }
+
+    /* =========================================================================
+       INIT & BOOTSTRAP
+       ========================================================================= */
+    async function initApp() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === 'function') {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === 'object') {
+            appState.solved = saved.solved || {};
+            appState.answers = saved.answers || {};
+            for (let i = 0; i < MODULE_IDS.length; i++) {
+              const id = MODULE_IDS[i];
+              if (appState.answers[id] !== undefined) {
+                const inp = document.getElementById(`ans-${id}`);
+                if (inp) inp.value = appState.answers[id];
+              }
+              if (appState.solved[id]) {
+                const box = document.getElementById(`quiz-${id}`);
+                const fb = document.getElementById(`fb-${id}`);
+                if (box) box.classList.add(`is-solved`);
+                if (fb) {
+                  fb.className = `quiz-feedback ok`;
+                  fb.textContent = `تم الحل مسبقاً: ${QUIZ_ANSWERS[id].hint}`;
+                }
+              }
+            }
+          }
+        }
+      } catch (e) {
+        /* fallback cleanly */
+      }
+
+      renderChi2Lab();
+      renderMiLab();
+      renderPcaLab();
+      renderKmeansLab();
+      renderDbscanLab();
+      resetHierStep();
+      renderGdLab();
+      renderRegLab();
+      renderKnnLab();
+      renderNbLab();
+      renderLogSvmLab();
+      renderTreeCmLab();
+      updateProgressUI();
+
+      if (typeof renderMathInElement === 'function') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: `$$`, right: `$$`, display: true },
+            { left: `$`, right: `$`, display: false }
+          ],
+          throwOnError: false
+        });
+      }
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === 'function') {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    document.addEventListener(`DOMContentLoaded`, initApp);
+  </script>
+</body>
+</html>
